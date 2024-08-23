@@ -6,6 +6,13 @@ namespace Store.Core.Interfaces
     public interface IGenericRepository<T> where T : BaseEntity<int>
     {
         Task<IReadOnlyList<T>> GetAllAsync();
+        List<T> GetDataByUser(string userId);
+        List<T> SearchAll(string searchItem);
+        List<T> SearchByUser(string userId, string searchItem);
+        T Find(string id);
+
+
+
         IEnumerable<T> GetAll();
         Task<T> GetAsync(int id);
         T Get(int id);
@@ -14,8 +21,9 @@ namespace Store.Core.Interfaces
         Task<T> GetByIdAsync(int id, params Expression<Func<T, object>>[] includes);
         T GetById(int id, params Expression<Func<T, object>>[] includes);
 
-        Task<bool> AddAsync(T entity);
-        Task<bool> UpdateAsync(int id, T entity);
-        Task<bool> DeleteAsync(int id);
+        bool IsConnected();
+        Task<string> AddAsync(T entity); // 1 == succeded ? Error
+        Task<string> UpdateAsync(string id, T entity);
+        Task<string> DeleteAsync(string id);
     }
 }

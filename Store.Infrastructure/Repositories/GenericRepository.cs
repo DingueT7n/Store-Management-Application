@@ -16,21 +16,52 @@ namespace Store.Infrastructure.Repositories
         }
 
 
-        public async Task<bool> AddAsync(T entity)
+        public async Task<string> AddAsync(T entity)
         {
-            await _context.Set<T>().AddAsync(entity);
-            await _context.SaveChangesAsync();
-            return true;
+            try
+            {
+                await _context.Set<T>().AddAsync(entity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Message;
+            }
+
+            return "1";
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<string> DeleteAsync(string id)
         {
-            var entity = await _context.Set<T>().FindAsync(id);
-            if (entity is null)
-                return false;
-            _context.Set<T>().Remove(entity);
-            await _context.SaveChangesAsync();
-            return true;
+            try
+            {
+                var entity = await _context.Set<T>().FindAsync(Convert.ToInt32(id));
+                _context.Set<T>().Remove(entity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Message;
+            }
+
+            return "1";
+        }
+
+        public T Find(string id)
+        {
+            try
+            {
+                IQueryable<T> query = _context.Set<T>().Where(x => x.Id.ToString() == id);
+                return (query).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+
+                return null;
+            }
+
         }
 
         public T Get(int id)
@@ -81,37 +112,91 @@ namespace Store.Infrastructure.Repositories
             return await (query).FirstOrDefaultAsync();
         }
 
-        public async Task<bool> UpdateAsync(int id, T entity)
+        public List<T> GetDataByUser(string userId)
         {
-
-
-            if (entity == null)
-            {
-                return false;
-            }
-
-
-            var existingEntity = await _context.Set<T>().FindAsync(id);
-
-            if (existingEntity == null)
-            {
-                return false;
-            }
-
-
-            _context.Entry(existingEntity).CurrentValues.SetValues(entity);
-
-
             try
             {
-                await _context.SaveChangesAsync();
-                return true;
+                return _context.Set<T>().Where(x => x.Id.ToString() == userId).ToList();
             }
-            catch (DbUpdateException ex)
+            catch (Exception)
             {
 
-                return false;
+                return new List<T>();
             }
+        }
+
+        public bool IsConnected()
+        {
+            return _context.Database.CanConnect();
+        }
+
+        public List<T> SearchAll(string searchItem)
+        {
+            if (string.IsNullOrWhiteSpace(searchItem))
+            {
+                return new List<T>();
+            }
+            try
+            {
+                var properties = typeof(T).GetProperties();
+                IQueryable<T> query = _context.Set<T>();
+
+                // Dynamically build the query by checking each property
+                query = query.Where(x => properties.Any(p =>
+                    p.GetValue(x) != null &&
+                    p.GetValue(x).ToString().Contains(searchItem, StringComparison.OrdinalIgnoreCase)
+                ));
+
+                return query.ToList();
+            }
+            catch (Exception)
+            {
+                // If there's an error, return an empty list
+                return new List<T>();
+            }
+        }
+
+        public List<T> SearchByUser(string userId, string searchItem)
+        {
+            if (string.IsNullOrWhiteSpace(searchItem))
+            {
+                return new List<T>();
+            }
+            try
+            {
+                var properties = typeof(T).GetProperties();
+                IQueryable<T> query = _context.Set<T>();
+
+                // Dynamically build the query by checking each property
+                query = query.Where(x => x.Id.ToString() == userId).Where(x => properties.Any(p =>
+                    p.GetValue(x) != null &&
+                    p.GetValue(x).ToString().Contains(searchItem, StringComparison.OrdinalIgnoreCase)
+                ));
+
+                return query.ToList();
+            }
+            catch (Exception)
+            {
+                // If there's an error, return an empty list
+                return new List<T>();
+            }
+        }
+
+        public async Task<string> UpdateAsync(string id, T entity)
+        {
+            try
+            {
+                var existingEntity = await _context.Set<T>().FindAsync(Convert.ToInt32(id));
+                _context.Entry(existingEntity).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Message;
+            }
+            return "1";
         }
     }
 }
