@@ -1,23 +1,193 @@
-﻿namespace Store.ApplicationUI.Gui.ProductsGui
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Infrastructure.Repositories;
+
+namespace Store.ApplicationUI.Gui.ProductsGui
 {
     public partial class ProductsUserControl : UserControl
     {
         private static ProductsGui.ProductsUserControl? _productsUserControl;
+        private static MainForm? _main;
+        private AddProductForm addProductForm;
+        public static ProductsRepository? productsRepository;
+        public static CategorysRepository? categoryRepository;
+
+
+
+
         public ProductsUserControl()
         {
             InitializeComponent();
-        }
-        public static ProductsUserControl Instance()
-        {
 
+
+
+
+        }
+        public static ProductsUserControl Instance(MainForm main)
+        {
+            _main = main;
             // If the instance is null, create a new one and assign it to the static field
             if (_productsUserControl == null)
             {
+                productsRepository = new ProductsRepository(MainForm.Context);
+                categoryRepository = new CategorysRepository(MainForm.Context);
                 _productsUserControl = new ProductsUserControl();
+
             }
 
             // Return the singleton instance
+            _productsUserControl.LoadData();
             return _productsUserControl;
+        }
+
+        private void btnAddProduct_Click(object sender, EventArgs e)
+        {
+            if (addProductForm == null || addProductForm.IsDisposed)
+            {
+                addProductForm = new AddProductForm(_main);
+                addProductForm.Show();
+            }
+            else
+            {
+                addProductForm.Focus();
+            }
+
+        }
+
+        public async void SetProductsToDgv()
+        {
+            //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
+            DgvProducts.DataSource = MainForm.Context.Products.
+                Include(x => x.Category).ToList();
+        }
+
+        public static void RefreshDgv()
+        {
+            //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAllProducts());
+            _productsUserControl.LoadData();
+        }
+        // methodes 
+        public async void LoadData()
+        {
+
+
+            //ShowLoading
+            LoadingForm.Instance(_main).Show();
+            if (await Task.Run(() => productsRepository.IsConnected()))
+            {
+                //Start Load Data
+
+                // if its an admin or Normal user 
+
+                SetProductsToDgv();
+                SetColumns();
+                //_data.Clear();
+            }
+            else
+            {
+
+                LoadingForm.Instance(_main).Hide();
+                //No Connection
+                MsgHelper.ShowServerError();
+            }
+            //Hideloading
+            LoadingForm.Instance(_main).Hide();
+            // Show EmptyDAta
+            lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
+        }
+
+        private void SetColumns()
+        {
+            //DgvProducts.Columns[0].HeaderCell.Value = "المعرف";
+            DgvProducts.Columns[0].HeaderCell.Value = "باركود";
+            DgvProducts.Columns[1].HeaderCell.Value = "اسم المنتج";
+            DgvProducts.Columns[2].HeaderCell.Value = "الكمية";
+            DgvProducts.Columns[3].HeaderCell.Value = "سعر الشراء";
+            DgvProducts.Columns[4].HeaderCell.Value = "سعر البيع";
+            DgvProducts.Columns[5].HeaderCell.Value = "سعر الجملة";
+            DgvProducts.Columns[6].HeaderCell.Value = "قيمة الضريبة";
+            DgvProducts.Columns[7].HeaderCell.Value = "سعر البيع باحتساب الضريبة";
+            DgvProducts.Columns[8].HeaderCell.Value = "خاضع للضريبة؟";
+            DgvProducts.Columns[9].HeaderCell.Value = "تاريخ انتهاء الصلاحية";
+            DgvProducts.Columns[10].HeaderCell.Value = "كمية التنبيه";
+            DgvProducts.Columns[11].HeaderCell.Value = "اقصى تخفيض";
+            DgvProducts.Columns[12].HeaderCell.Value = "معرف الصنف";
+            DgvProducts.Columns[13].HeaderCell.Value = "اسم الصنف";
+            DgvProducts.Columns[14].HeaderCell.Value = "معرف المنتج";
+
+
+
+            // Visible of Columns
+            //DgvProducts.Columns[0].Visible = false;
+            DgvProducts.Columns[6].Visible = false;
+            DgvProducts.Columns[9].Visible = false;
+            DgvProducts.Columns[8].Visible = false;
+            DgvProducts.Columns[11].Visible = false;
+            DgvProducts.Columns[12].Visible = false;
+            //DgvProducts.Columns[13].Visible = false;
+            //DgvProducts.Columns[14].Visible = false;
+            //DgvProducts.Columns[13].Visible = false;
+            //DgvProducts.Columns[15].Visible = false;
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            LoadData();
+
+        }
+
+        private void btnEditProduct_Click(object sender, EventArgs e)
+        {
+            if (DgvProducts.Rows.Count > 0)
+            {
+                if (addProductForm == null || addProductForm.IsDisposed)
+                {
+                    addProductForm = new AddProductForm(_main);
+
+
+                    addProductForm.SetDataToEdit(
+                        DgvProducts.CurrentRow.Cells[1].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[0].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[12].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[10].Value?.ToString(),
+                        Convert.ToBoolean(DgvProducts.CurrentRow.Cells[8].Value),
+                        DgvProducts.CurrentRow.Cells[6].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[3].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[2].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[5].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[4].Value.ToString(),
+                       Convert.ToDateTime(DgvProducts.CurrentRow.Cells[9].Value),
+                        DgvProducts.CurrentRow.Cells[11].Value?.ToString(),
+                        DgvProducts.CurrentRow.Cells[7].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[14].Value.ToString()
+
+
+                        );
+
+                    addProductForm.Show();
+                }
+                else
+                {
+                    addProductForm.Focus();
+                }
+            }
+        }
+
+        private void btnDeleteProduct_Click(object sender, EventArgs e)
+        {
+            if (MsgHelper.ShowDeleteDialog())
+            {
+                productsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[14].Value.ToString());
+            }
+            RefreshDgv();
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            DgvProducts.DataSource = productsRepository.SearchAll(txtSearch.Text);
+            lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
+            txtSearch.Text = string.Empty;
         }
     }
 }

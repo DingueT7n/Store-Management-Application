@@ -30,6 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddProductForm));
             GbInfoProduct = new GroupBox();
+            lblProductId = new Label();
+            label13 = new Label();
             DtpExperation = new DateTimePicker();
             label12 = new Label();
             label11 = new Label();
@@ -69,6 +71,8 @@
             // 
             // GbInfoProduct
             // 
+            GbInfoProduct.Controls.Add(lblProductId);
+            GbInfoProduct.Controls.Add(label13);
             GbInfoProduct.Controls.Add(DtpExperation);
             GbInfoProduct.Controls.Add(label12);
             GbInfoProduct.Controls.Add(label11);
@@ -103,11 +107,31 @@
             GbInfoProduct.TabStop = false;
             GbInfoProduct.Text = "بيانات المنتج";
             // 
+            // lblProductId
+            // 
+            lblProductId.AutoSize = true;
+            lblProductId.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblProductId.Location = new Point(114, 289);
+            lblProductId.Name = "lblProductId";
+            lblProductId.Size = new Size(0, 19);
+            lblProductId.TabIndex = 27;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label13.Location = new Point(189, 289);
+            label13.Name = "label13";
+            label13.Size = new Size(82, 19);
+            label13.TabIndex = 26;
+            label13.Text = "معرف المنتج:";
+            // 
             // DtpExperation
             // 
             DtpExperation.CustomFormat = "yyyy-MM-dd";
             DtpExperation.Format = DateTimePickerFormat.Short;
             DtpExperation.Location = new Point(63, 243);
+            DtpExperation.MaxDate = new DateTime(2101, 1, 1, 0, 0, 0, 0);
             DtpExperation.Name = "DtpExperation";
             DtpExperation.Size = new Size(119, 27);
             DtpExperation.TabIndex = 25;
@@ -384,6 +408,7 @@
             btnAddProduct.TabIndex = 3;
             btnAddProduct.Text = "   اضافة";
             btnAddProduct.UseVisualStyleBackColor = true;
+            btnAddProduct.Click += btnAddProduct_Click;
             // 
             // btnEditProduct
             // 
@@ -397,6 +422,7 @@
             btnEditProduct.Text = "   تعديل";
             btnEditProduct.UseVisualStyleBackColor = true;
             btnEditProduct.Visible = false;
+            btnEditProduct.Click += btnEditProduct_Click;
             // 
             // btnPrintBarCode
             // 
@@ -431,12 +457,14 @@
             Controls.Add(GbInfoProduct);
             Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(3, 4, 3, 4);
+            MinimizeBox = false;
+            MinimumSize = new Size(723, 520);
             Name = "AddProductForm";
             RightToLeft = RightToLeft.Yes;
             RightToLeftLayout = true;
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "اضافة منتج جديد";
+            Text = "اضافة/تعديل منتج ";
             GbInfoProduct.ResumeLayout(false);
             GbInfoProduct.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)PbImageProduct).EndInit();
@@ -479,5 +507,7 @@
         private Label label12;
         private Button button1;
         private DateTimePicker DtpExperation;
+        private Label lblProductId;
+        private Label label13;
     }
 }

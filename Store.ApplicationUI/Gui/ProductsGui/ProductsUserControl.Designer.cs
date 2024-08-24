@@ -28,20 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProductsUserControl));
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             OperationsflowLayoutPanel = new FlowLayoutPanel();
             btnAddProduct = new Button();
             btnEditProduct = new Button();
             btnDeleteProduct = new Button();
             btnExportProduct = new Button();
             SearchPanel = new Panel();
-            btnSearch = new Button();
             txtSearch = new TextBox();
+            btnSearch = new Button();
             DgvProducts = new DataGridView();
+            lblEmptyData = new Label();
+            btnRefresh = new Button();
+            toolTip1 = new ToolTip(components);
             OperationsflowLayoutPanel.SuspendLayout();
             SearchPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DgvProducts).BeginInit();
@@ -73,6 +77,7 @@
             btnAddProduct.TabIndex = 3;
             btnAddProduct.Text = "   اضافة";
             btnAddProduct.UseVisualStyleBackColor = true;
+            btnAddProduct.Click += btnAddProduct_Click;
             // 
             // btnEditProduct
             // 
@@ -85,6 +90,7 @@
             btnEditProduct.TabIndex = 4;
             btnEditProduct.Text = "   تعديل";
             btnEditProduct.UseVisualStyleBackColor = true;
+            btnEditProduct.Click += btnEditProduct_Click;
             // 
             // btnDeleteProduct
             // 
@@ -98,6 +104,7 @@
             btnDeleteProduct.TabIndex = 5;
             btnDeleteProduct.Text = "   حذف";
             btnDeleteProduct.UseVisualStyleBackColor = true;
+            btnDeleteProduct.Click += btnDeleteProduct_Click;
             // 
             // btnExportProduct
             // 
@@ -120,6 +127,18 @@
             SearchPanel.Size = new Size(340, 40);
             SearchPanel.TabIndex = 7;
             // 
+            // txtSearch
+            // 
+            txtSearch.Dock = DockStyle.Fill;
+            txtSearch.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtSearch.Location = new Point(50, 0);
+            txtSearch.Multiline = true;
+            txtSearch.Name = "txtSearch";
+            txtSearch.PlaceholderText = "ابحث عن منتج";
+            txtSearch.Size = new Size(290, 40);
+            txtSearch.TabIndex = 9;
+            txtSearch.TextAlign = HorizontalAlignment.Center;
+            // 
             // btnSearch
             // 
             btnSearch.Dock = DockStyle.Left;
@@ -129,47 +148,38 @@
             btnSearch.Size = new Size(50, 40);
             btnSearch.TabIndex = 7;
             btnSearch.UseVisualStyleBackColor = true;
-            // 
-            // txtSearch
-            // 
-            txtSearch.BorderStyle = BorderStyle.FixedSingle;
-            txtSearch.Dock = DockStyle.Fill;
-            txtSearch.Location = new Point(50, 0);
-            txtSearch.Multiline = true;
-            txtSearch.Name = "txtSearch";
-            txtSearch.Size = new Size(290, 40);
-            txtSearch.TabIndex = 9;
+            btnSearch.Click += btnSearch_Click;
             // 
             // DgvProducts
             // 
             DgvProducts.AllowUserToAddRows = false;
             DgvProducts.AllowUserToResizeColumns = false;
             DgvProducts.AllowUserToResizeRows = false;
-            dataGridViewCellStyle5.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvProducts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvProducts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             DgvProducts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             DgvProducts.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             DgvProducts.BackgroundColor = Color.White;
             DgvProducts.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             DgvProducts.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle6.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle6.ForeColor = Color.White;
-            dataGridViewCellStyle6.SelectionBackColor = Color.DodgerBlue;
-            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
-            DgvProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = Color.DodgerBlue;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            DgvProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             DgvProducts.ColumnHeadersHeight = 40;
             DgvProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.BackColor = SystemColors.Window;
-            dataGridViewCellStyle7.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle7.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.False;
-            DgvProducts.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = SystemColors.Window;
+            dataGridViewCellStyle3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            DgvProducts.DefaultCellStyle = dataGridViewCellStyle3;
             DgvProducts.Dock = DockStyle.Fill;
             DgvProducts.EnableHeadersVisualStyles = false;
             DgvProducts.GridColor = SystemColors.ControlDark;
@@ -179,18 +189,48 @@
             DgvProducts.ReadOnly = true;
             DgvProducts.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
             DgvProducts.RowHeadersVisible = false;
-            DgvProducts.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
-            dataGridViewCellStyle8.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvProducts.RowsDefaultCellStyle = dataGridViewCellStyle8;
+            DgvProducts.RowHeadersWidth = 21;
+            DgvProducts.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dataGridViewCellStyle4.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvProducts.RowsDefaultCellStyle = dataGridViewCellStyle4;
             DgvProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DgvProducts.Size = new Size(1034, 630);
             DgvProducts.TabIndex = 9;
+            // 
+            // lblEmptyData
+            // 
+            lblEmptyData.Anchor = AnchorStyles.None;
+            lblEmptyData.AutoSize = true;
+            lblEmptyData.BackColor = Color.Transparent;
+            lblEmptyData.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 7);
+            lblEmptyData.ForeColor = Color.Crimson;
+            lblEmptyData.Location = new Point(451, 331);
+            lblEmptyData.Name = "lblEmptyData";
+            lblEmptyData.Size = new Size(133, 19);
+            lblEmptyData.TabIndex = 8;
+            lblEmptyData.Text = "لا توجد بيانات لعرضها";
+            lblEmptyData.TextAlign = ContentAlignment.MiddleCenter;
+            lblEmptyData.Visible = false;
+            // 
+            // btnRefresh
+            // 
+            btnRefresh.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnRefresh.Image = (Image)resources.GetObject("btnRefresh.Image");
+            btnRefresh.Location = new Point(981, 638);
+            btnRefresh.Name = "btnRefresh";
+            btnRefresh.Size = new Size(50, 40);
+            btnRefresh.TabIndex = 10;
+            toolTip1.SetToolTip(btnRefresh, "اعادة التحميل");
+            btnRefresh.UseVisualStyleBackColor = true;
+            btnRefresh.Click += btnRefresh_Click;
             // 
             // ProductsUserControl
             // 
             AutoScaleDimensions = new SizeF(8F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
+            Controls.Add(btnRefresh);
+            Controls.Add(lblEmptyData);
             Controls.Add(DgvProducts);
             Controls.Add(OperationsflowLayoutPanel);
             Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -203,6 +243,7 @@
             SearchPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)DgvProducts).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -216,5 +257,8 @@
         private Button btnSearch;
         private TextBox txtSearch;
         private DataGridView DgvProducts;
+        private Label lblEmptyData;
+        private Button btnRefresh;
+        private ToolTip toolTip1;
     }
 }

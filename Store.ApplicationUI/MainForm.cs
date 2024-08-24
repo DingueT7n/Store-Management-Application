@@ -1,10 +1,13 @@
 using Store.ApplicationUI.Code.Helper;
+using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI
 {
     public partial class MainForm : Form
     {
         private PageHelper pageHelper;
+
+        public static ApplicationDbContext? Context { get; set; }
         public MainForm()
         {
             InitializeComponent();
@@ -12,8 +15,9 @@ namespace Store.ApplicationUI
             // Set Home Page Default!!
             pageHelper = new(this);
             pageHelper.SetNewPage(Gui.HomeGui.HomeUserControl.Instance());
-            // Retrive Last Window State
 
+            // Retrive Last Window State
+            Context = new ApplicationDbContext();
             SetScreenState(Properties.Settings.Default.IsMaxScreen);
         }
         private void SetScreenState(bool isMax)
@@ -43,7 +47,7 @@ namespace Store.ApplicationUI
 
         private void BtnProducts_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.ProductsGui.ProductsUserControl.Instance());
+            pageHelper.SetNewPage(Gui.ProductsGui.ProductsUserControl.Instance(this));
         }
     }
 }

@@ -20,9 +20,9 @@
         public int CategoryId { get; set; } // Group
         public virtual Category Category { get; set; }
 
-        public virtual IEnumerable<ProductOutStore> ProductOutStore { get; set; } = new HashSet<ProductOutStore>();
-        public virtual IEnumerable<ProductsQuantitie> ProductsQuantitie { get; set; } = new HashSet<ProductsQuantitie>();
-        public virtual IEnumerable<ProductTransfer> ProductTransfer { get; set; } = new HashSet<ProductTransfer>();
+        //public virtual IEnumerable<ProductOutStore> ProductOutStore { get; set; } = new HashSet<ProductOutStore>();
+        //public virtual IEnumerable<ProductsQuantitie> ProductsQuantitie { get; set; } = new HashSet<ProductsQuantitie>();
+        //public virtual IEnumerable<ProductTransfer> ProductTransfer { get; set; } = new HashSet<ProductTransfer>();
 
 
         //public virtual ICollection<BuyDetail> BuyDetails { get; set; } // to navigate the buys

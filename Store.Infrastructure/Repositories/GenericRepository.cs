@@ -8,20 +8,32 @@ namespace Store.Infrastructure.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity<int>
     {
-        private ApplicationDbContext _context;
+        internal ApplicationDbContext _context;
 
         public GenericRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-
-        public async Task<string> AddAsync(T entity)
+        public List<T> GetAllData()
         {
             try
             {
-                await _context.Set<T>().AddAsync(entity);
-                await _context.SaveChangesAsync();
+
+                return _context.Set<T>().ToList();
+
+            }
+            catch
+            {
+                return new List<T>();
+            }
+        }
+        public string AddAsync(T entity)
+        {
+            try
+            {
+                _context.Set<T>().Add(entity);
+                _context.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -32,13 +44,13 @@ namespace Store.Infrastructure.Repositories
             return "1";
         }
 
-        public async Task<string> DeleteAsync(string id)
+        public string DeleteAsync(string id)
         {
             try
             {
-                var entity = await _context.Set<T>().FindAsync(Convert.ToInt32(id));
+                var entity = _context.Set<T>().Find(Convert.ToInt32(id));
                 _context.Set<T>().Remove(entity);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -69,7 +81,7 @@ namespace Store.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<T> GetAll() => _context.Set<T>().AsNoTracking().ToList();
+        public List<T> GetAll() => _context.Set<T>().AsNoTracking().ToList();
 
 
         public IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includes)
@@ -82,7 +94,7 @@ namespace Store.Infrastructure.Repositories
             return query.ToList();
         }
 
-        public async Task<IReadOnlyList<T>> GetAllAsync() => await _context.Set<T>().AsNoTracking().ToListAsync();
+        public async Task<List<T>> GetAllAsync() => await _context.Set<T>().AsNoTracking().ToListAsync();
 
         public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
         {
@@ -182,13 +194,13 @@ namespace Store.Infrastructure.Repositories
             }
         }
 
-        public async Task<string> UpdateAsync(string id, T entity)
+        public string UpdateAsync(string id, T entity)
         {
             try
             {
-                var existingEntity = await _context.Set<T>().FindAsync(Convert.ToInt32(id));
+                var existingEntity = _context.Set<T>().Find(Convert.ToInt32(id));
                 _context.Entry(existingEntity).CurrentValues.SetValues(entity);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
 
             }
             catch (Exception ex)
