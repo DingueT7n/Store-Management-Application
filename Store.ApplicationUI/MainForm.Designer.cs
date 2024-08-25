@@ -207,6 +207,7 @@
             button3.TabIndex = 3;
             button3.Text = "اضافة عميل";
             button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click_1;
             // 
             // button4
             // 
@@ -219,6 +220,7 @@
             button4.TabIndex = 4;
             button4.Text = "حسابات العملاء";
             button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
             // 
             // button1
             // 

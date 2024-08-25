@@ -175,5 +175,18 @@ namespace Store.ApplicationUI
         {
             pageHelper.SetNewPage(Gui.CustomersGui.CustomersUserControl.Instance(this));
         }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            AddCustomerForm addProductForm = new AddCustomerForm(this);
+
+            addProductForm.Show();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.CustomersGui.CustomerAccountGui.CustomerAccountUserControl.Instance(this));
+
+        }
     }
 }
