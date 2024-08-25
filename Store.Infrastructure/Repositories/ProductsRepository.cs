@@ -65,7 +65,6 @@ namespace Store.Infrastructure.Repositories
                 x.Category.CategoryName.Contains(searchIteam)
                 )
                     .OrderBy(x => x.Id).ToList();
-
             }
             catch
             {

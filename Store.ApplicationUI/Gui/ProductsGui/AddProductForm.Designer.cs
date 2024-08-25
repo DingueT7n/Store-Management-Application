@@ -100,9 +100,12 @@
             GbInfoProduct.Controls.Add(label2);
             GbInfoProduct.Controls.Add(txtNameProduct);
             GbInfoProduct.Controls.Add(label1);
-            GbInfoProduct.Location = new Point(12, 12);
+            GbInfoProduct.Dock = DockStyle.Fill;
+            GbInfoProduct.Location = new Point(0, 0);
+            GbInfoProduct.MaximumSize = new Size(707, 481);
+            GbInfoProduct.MinimumSize = new Size(707, 481);
             GbInfoProduct.Name = "GbInfoProduct";
-            GbInfoProduct.Size = new Size(683, 400);
+            GbInfoProduct.Size = new Size(707, 481);
             GbInfoProduct.TabIndex = 0;
             GbInfoProduct.TabStop = false;
             GbInfoProduct.Text = "بيانات المنتج";
@@ -115,6 +118,7 @@
             lblProductId.Name = "lblProductId";
             lblProductId.Size = new Size(0, 19);
             lblProductId.TabIndex = 27;
+            lblProductId.Visible = false;
             // 
             // label13
             // 
@@ -125,6 +129,7 @@
             label13.Size = new Size(82, 19);
             label13.TabIndex = 26;
             label13.Text = "معرف المنتج:";
+            label13.Visible = false;
             // 
             // DtpExperation
             // 
@@ -149,6 +154,7 @@
             // 
             // label11
             // 
+            label11.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label11.AutoSize = true;
             label11.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label11.Location = new Point(591, 289);
@@ -159,6 +165,7 @@
             // 
             // PbImageProduct
             // 
+            PbImageProduct.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             PbImageProduct.Image = (Image)resources.GetObject("PbImageProduct.Image");
             PbImageProduct.Location = new Point(368, 289);
             PbImageProduct.Name = "PbImageProduct";
@@ -169,6 +176,7 @@
             // 
             // txtBuyPrice
             // 
+            txtBuyPrice.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             txtBuyPrice.Location = new Point(368, 240);
             txtBuyPrice.Name = "txtBuyPrice";
             txtBuyPrice.Size = new Size(217, 27);
@@ -178,6 +186,7 @@
             // 
             // label10
             // 
+            label10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label10.AutoSize = true;
             label10.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label10.Location = new Point(600, 243);
@@ -283,15 +292,18 @@
             // 
             // btnAddCategory
             // 
+            btnAddCategory.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnAddCategory.Image = (Image)resources.GetObject("btnAddCategory.Image");
             btnAddCategory.Location = new Point(368, 114);
             btnAddCategory.Name = "btnAddCategory";
             btnAddCategory.Size = new Size(34, 35);
             btnAddCategory.TabIndex = 8;
             btnAddCategory.UseVisualStyleBackColor = true;
+            btnAddCategory.Click += btnAddCategory_Click;
             // 
             // txtTaxValue
             // 
+            txtTaxValue.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             txtTaxValue.Location = new Point(368, 201);
             txtTaxValue.Name = "txtTaxValue";
             txtTaxValue.Size = new Size(71, 27);
@@ -302,6 +314,7 @@
             // 
             // CbIsTaxed
             // 
+            CbIsTaxed.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             CbIsTaxed.AutoSize = true;
             CbIsTaxed.Location = new Point(466, 203);
             CbIsTaxed.Name = "CbIsTaxed";
@@ -312,6 +325,7 @@
             // 
             // CMBCategory
             // 
+            CMBCategory.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             CMBCategory.FormattingEnabled = true;
             CMBCategory.Location = new Point(406, 117);
             CMBCategory.Name = "CMBCategory";
@@ -320,6 +334,7 @@
             // 
             // label4
             // 
+            label4.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label4.AutoSize = true;
             label4.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label4.Location = new Point(620, 120);
@@ -330,6 +345,7 @@
             // 
             // txtMinQty
             // 
+            txtMinQty.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             txtMinQty.Location = new Point(406, 159);
             txtMinQty.Name = "txtMinQty";
             txtMinQty.Size = new Size(143, 27);
@@ -339,6 +355,7 @@
             // 
             // label3
             // 
+            label3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label3.AutoSize = true;
             label3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label3.Location = new Point(563, 163);
@@ -349,6 +366,7 @@
             // 
             // txtBarCode
             // 
+            txtBarCode.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             txtBarCode.Location = new Point(368, 74);
             txtBarCode.Name = "txtBarCode";
             txtBarCode.Size = new Size(219, 27);
@@ -358,6 +376,7 @@
             // 
             // label2
             // 
+            label2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label2.AutoSize = true;
             label2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label2.Location = new Point(595, 78);
@@ -368,6 +387,7 @@
             // 
             // txtNameProduct
             // 
+            txtNameProduct.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             txtNameProduct.Location = new Point(368, 33);
             txtNameProduct.Name = "txtNameProduct";
             txtNameProduct.Size = new Size(219, 27);
@@ -375,6 +395,7 @@
             // 
             // label1
             // 
+            label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label1.AutoSize = true;
             label1.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label1.Location = new Point(600, 36);
@@ -457,6 +478,7 @@
             Controls.Add(GbInfoProduct);
             Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(3, 4, 3, 4);
+            MaximizeBox = false;
             MinimizeBox = false;
             MinimumSize = new Size(723, 520);
             Name = "AddProductForm";
@@ -477,37 +499,37 @@
         private GroupBox GbInfoProduct;
         private Label label1;
         private TextBox txtNameProduct;
-        private TextBox txtMinQty;
-        private Label label3;
-        private TextBox txtBarCode;
-        private Label label2;
-        private CheckBox CbIsTaxed;
-        private ComboBox CMBCategory;
-        private Label label4;
-        private TextBox txtTaxValue;
-        private Button btnAddCategory;
-        private TextBox txtSalePrice;
-        private Label label5;
-        private TextBox txtWholeSalePrice;
-        private Label label6;
-        private TextBox txtDiscountAllowed;
-        private Label label7;
-        private TextBox txtSaleAfterTax;
-        private Label label8;
-        private TextBox txtTotalQty;
-        private Label label9;
-        private TextBox txtBuyPrice;
-        private Label label10;
-        private Label label11;
-        private PictureBox PbImageProduct;
         private FlowLayoutPanel OperationsflowLayoutPanel;
         private Button btnAddProduct;
         private Button btnEditProduct;
         private Button btnPrintBarCode;
-        private Label label12;
         private Button button1;
-        private DateTimePicker DtpExperation;
         private Label lblProductId;
         private Label label13;
+        private DateTimePicker DtpExperation;
+        private Label label12;
+        private Label label11;
+        private PictureBox PbImageProduct;
+        private TextBox txtBuyPrice;
+        private Label label10;
+        private TextBox txtTotalQty;
+        private Label label9;
+        private TextBox txtSaleAfterTax;
+        private Label label8;
+        private TextBox txtDiscountAllowed;
+        private Label label7;
+        private TextBox txtSalePrice;
+        private Label label5;
+        private TextBox txtWholeSalePrice;
+        private Label label6;
+        private Button btnAddCategory;
+        private TextBox txtTaxValue;
+        private CheckBox CbIsTaxed;
+        private ComboBox CMBCategory;
+        private Label label4;
+        private TextBox txtMinQty;
+        private Label label3;
+        private TextBox txtBarCode;
+        private Label label2;
     }
 }

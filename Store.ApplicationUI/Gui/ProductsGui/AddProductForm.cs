@@ -1,25 +1,26 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.ApplicationUI.Gui.ProductsGui.Category;
 using Store.Core.Entities.Products;
+using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.ProductsGui
 {
     public partial class AddProductForm : Form
     {
         private readonly MainForm _main;
-        private List<Category> _data;
-
+        private ProductsRepository? productsRepository;
+        private CategorysRepository? categoryRepository;
         public AddProductForm(MainForm main)
         {
             InitializeComponent();
             _main = main;
             this.Owner = _main;
-
+            productsRepository = new ProductsRepository(MainForm.Context);
+            categoryRepository = new CategorysRepository(MainForm.Context);
             LoadData();
             ConfigDate();
-
         }
-
         private void ConfigDate()
         {
             DtpExperation.Value = DateTime.Now;
@@ -32,7 +33,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => ProductsUserControl.categoryRepository.IsConnected()))
+            if (await Task.Run(() => MainForm.Context.Database.CanConnect()))
             {
                 //Start Load Data
 
@@ -175,6 +176,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             lblProductId.Text = productId;
             btnAddProduct.Visible = false;
             btnEditProduct.Visible = true;
+            lblProductId.Visible = true;
+            label13.Visible = true;
         }
         private void btnAddProduct_Click(object sender, EventArgs e)
         {
@@ -197,9 +200,12 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             //{
             //    product.CategoryId = categoryId;
             //}
-            var result = ProductsUserControl.productsRepository.AddAsync(product);
+            var result = productsRepository.AddAsync(product);
             vider();
-            ProductsUserControl.RefreshDgv();
+            if (!ProductsUserControl.CheckInstance())
+            {
+                ProductsUserControl.RefreshDgv();
+            }
 
         }
 
@@ -216,7 +222,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         private void btnEditProduct_Click(object sender, EventArgs e)
         {
 
-            Product product = ProductsUserControl.productsRepository.Find(lblProductId.Text);
+            Product product = productsRepository.Find(lblProductId.Text);
             product.ProductName = txtNameProduct.Text;
             product.CodeBar = txtBarCode.Text;
             product.CategoryId = Convert.ToInt32(CMBCategory.SelectedValue);
@@ -230,9 +236,25 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             product.MaxDiscount = ConvertToFloat(txtDiscountAllowed.Text);
             product.SalePriceTax = ConvertToFloat(txtSaleAfterTax.Text);
             product.DateExperation = DtpExperation.Value;
-            var result = ProductsUserControl.productsRepository.UpdateAsync(lblProductId.Text, product);
-            ProductsUserControl.RefreshDgv();
+            var result = productsRepository.UpdateAsync(lblProductId.Text, product);
+
+            if (!ProductsUserControl.CheckInstance())
+            {
+                ProductsUserControl.RefreshDgv();
+            }
             product = null;
+        }
+
+
+        private void btnAddCategory_Click(object sender, EventArgs e)
+        {
+
+            AddCategoryForm addCategoryForm = AddCategoryForm.Instance(_main);
+            this.Hide();
+            addCategoryForm.ShowDialog();
+            this.Show();
+
+
         }
     }
 }

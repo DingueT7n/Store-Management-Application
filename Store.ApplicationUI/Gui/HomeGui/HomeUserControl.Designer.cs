@@ -482,11 +482,11 @@
             // 
             // groupBox1
             // 
-            groupBox1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            groupBox1.Dock = DockStyle.Top;
             groupBox1.ForeColor = Color.FromArgb(64, 64, 64);
-            groupBox1.Location = new Point(19, 3);
+            groupBox1.Location = new Point(4, 3);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1012, 18);
+            groupBox1.Size = new Size(1027, 18);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = " موجز العمليات والأنشطة :";
@@ -603,10 +603,9 @@
             // 
             lblhora.AutoSize = true;
             lblhora.BackColor = Color.Transparent;
-            lblhora.Dock = DockStyle.Top;
             lblhora.Font = new Font("Calibri", 80.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblhora.ForeColor = Color.FromArgb(64, 64, 64);
-            lblhora.Location = new Point(0, 0);
+            lblhora.Location = new Point(43, 101);
             lblhora.Margin = new Padding(0);
             lblhora.Name = "lblhora";
             lblhora.RightToLeft = RightToLeft.Yes;
@@ -621,7 +620,7 @@
             lblFecha.BackColor = Color.Transparent;
             lblFecha.Font = new Font("Calibri", 24.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblFecha.ForeColor = Color.FromArgb(0, 122, 204);
-            lblFecha.Location = new Point(60, 131);
+            lblFecha.Location = new Point(110, 221);
             lblFecha.Margin = new Padding(0);
             lblFecha.Name = "lblFecha";
             lblFecha.RightToLeft = RightToLeft.Yes;

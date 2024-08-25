@@ -1,4 +1,6 @@
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Gui.ProductsGui;
+using Store.ApplicationUI.Gui.ProductsGui.Category;
 using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI
@@ -12,13 +14,15 @@ namespace Store.ApplicationUI
         {
             InitializeComponent();
 
-            // Set Home Page Default!!
+
             pageHelper = new(this);
             pageHelper.SetNewPage(Gui.HomeGui.HomeUserControl.Instance());
 
-            // Retrive Last Window State
+
             Context = new ApplicationDbContext();
             SetScreenState(Properties.Settings.Default.IsMaxScreen);
+
+            isPanelNull = true;
         }
         private void SetScreenState(bool isMax)
         {
@@ -32,10 +36,60 @@ namespace Store.ApplicationUI
             }
 
         }
+        private int panelHeightIncrement = 5;
+        FlowLayoutPanel generalFlowLayout;
+
+        public bool isPanelOpen()
+        {
+
+            return isPanelNull;
+        }
+        public void CloseSubPanels()
+        {
+            if (isPanelAnimating)
+                return;
+
+            if (generalFlowLayout is null) return;
+            if (generalFlowLayout.Height == generalFlowLayout.MaximumSize.Height)
+            {
+                isPanelCollapsing = true;
+                isPanelAnimating = true;
+                animationTimer.Start();
+
+            }
+        }
+        public void ShowSubPanel(FlowLayoutPanel flowLayoutPanel)
+        {
+
+            if (isPanelAnimating)
+                return;
+
+            generalFlowLayout = flowLayoutPanel;
+
+            if (generalFlowLayout.Visible == true)
+            {
+                CloseSubPanels();
+                return;
+            }
+            generalFlowLayout.Height = 0;
+
+            if (generalFlowLayout.Height == 0)
+            {
+                isPanelExpanding = true;
+                isPanelAnimating = true;
+                generalFlowLayout.Show();
+                animationTimer.Start();
+            }
+        }
+
+        private bool isPanelExpanding = false;
+        private bool isPanelCollapsing = false;
+        private bool isPanelAnimating = false;
+        private bool isPanelNull;
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // Save the Windows State in the Settings
+
             Properties.Settings.Default.IsMaxScreen = this.WindowState == FormWindowState.Maximized;
             Properties.Settings.Default.Save();
         }
@@ -47,7 +101,74 @@ namespace Store.ApplicationUI
 
         private void BtnProducts_Click(object sender, EventArgs e)
         {
+            //pageHelper.SetNewPage(Gui.ProductsGui.ProductsUserControl.Instance(this));
+            CloseSubPanels();
+            ShowSubPanel(ProductsflowLayoutPanel);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
             pageHelper.SetNewPage(Gui.ProductsGui.ProductsUserControl.Instance(this));
+        }
+
+        private void animationTimer_Tick(object sender, EventArgs e)
+        {
+
+            if (!isPanelAnimating)
+                return;
+
+            if (isPanelExpanding)
+            {
+                if (generalFlowLayout.Height < generalFlowLayout.MaximumSize.Height)
+                {
+                    generalFlowLayout.Height += panelHeightIncrement;
+                }
+                else
+                {
+                    generalFlowLayout.Height = generalFlowLayout.MaximumSize.Height;
+                    isPanelExpanding = false;
+                    isPanelAnimating = false;
+                    animationTimer.Stop();
+                }
+            }
+
+            if (isPanelCollapsing)
+            {
+                if (generalFlowLayout.Height > 0)
+                {
+                    generalFlowLayout.Height -= panelHeightIncrement;
+                }
+                else
+                {
+                    generalFlowLayout.Height = 0;
+                    isPanelCollapsing = false;
+                    isPanelAnimating = false;
+                    generalFlowLayout.Hide();
+                    animationTimer.Stop();
+                }
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+            AddProductForm addProductForm = new AddProductForm(this);
+
+            addProductForm.Show();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            AddCategoryForm addCategoryForm = AddCategoryForm.Instance(this); ;
+            addCategoryForm.ShowDialog();
+
+        }
+
+        private void btnCustomers_Click(object sender, EventArgs e)
+        {
+            CloseSubPanels();
+
+            ShowSubPanel(CustomersflowLayoutPaneel);
         }
     }
 }

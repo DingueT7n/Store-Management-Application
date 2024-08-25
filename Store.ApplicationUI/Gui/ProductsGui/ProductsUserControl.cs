@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.ApplicationUI.Gui.ProductsGui.Category;
 using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.ProductsGui
@@ -10,6 +11,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         private static ProductsGui.ProductsUserControl? _productsUserControl;
         private static MainForm? _main;
         private AddProductForm addProductForm;
+        public AddCategoryForm addCategoryForm;
         public static ProductsRepository? productsRepository;
         public static CategorysRepository? categoryRepository;
 
@@ -39,6 +41,14 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             // Return the singleton instance
             _productsUserControl.LoadData();
             return _productsUserControl;
+        }
+        public static bool CheckInstance()
+        {
+
+
+            return (_productsUserControl == null);
+
+
         }
 
         private void btnAddProduct_Click(object sender, EventArgs e)
@@ -188,6 +198,19 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             DgvProducts.DataSource = productsRepository.SearchAll(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
             txtSearch.Text = string.Empty;
+        }
+
+        private void btnAddCategory_Click(object sender, EventArgs e)
+        {
+            if (addCategoryForm == null || addCategoryForm.IsDisposed)
+            {
+                addCategoryForm = new AddCategoryForm(_main);
+                addCategoryForm.Show();
+            }
+            else
+            {
+                addCategoryForm.Focus();
+            }
         }
     }
 }

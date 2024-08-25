@@ -29,6 +29,15 @@
                 pageUserControl.Dock = DockStyle.Fill;
                 _main.ContainerPanel.Controls.Add(pageUserControl);
             }
+            if (_main.isPanelOpen())
+                _main.CloseSubPanels();
+
+        }
+        public void CreateNewPage(UserControl pageUserControl)
+        {
+
+            if (_main.isPanelOpen())
+                _main.CloseSubPanels();
 
         }
 

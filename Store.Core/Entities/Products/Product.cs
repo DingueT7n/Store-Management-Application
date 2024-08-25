@@ -30,6 +30,17 @@
         //public virtual ICollection<ReturnDetail> ReturnsDetails { get; set; } // to navigate the returned items
 
     }
+    public class ProductDiscount : BaseEntity<int>
+    {
+        public int Pro_Id { get; set; }
+        public int Store_Id { get; set; }
+        public float DiscountValue { get; set; }
+        public float Quentity { get; set; }
+        public DateTime DateStart { get; set; }
+        public string TimeStart { get; set; }
+        public DateTime DateEnd { get; set; }
+        public string TimeEnd { get; set; }
+    }
 
 
 }

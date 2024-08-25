@@ -51,6 +51,20 @@
                 return false;
             }
         }
+        public static bool ShowEditDialog()
+        {
+            var result = MessageBox.Show("هل انت متأكد من هذا الاجراء؟ لا يمكن استرجاع البيانات السابقة",
+                   "اجراء تعديل"
+                   , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         public static void ShowNumberValid()
         {
