@@ -7,9 +7,10 @@
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
         public string Notes { get; set; }
+        public float? MaxDebtAllowed { get; set; }
+        public float? TotalDebts { get; set; }
 
-        ICollection<CustomerMoney> DebtMoney { get; set; } = new List<CustomerMoney>();
-        ICollection<CustomerReport> Reports { get; set; } = new List<CustomerReport>();
+
 
     }
 }

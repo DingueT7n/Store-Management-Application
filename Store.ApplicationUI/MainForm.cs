@@ -170,5 +170,10 @@ namespace Store.ApplicationUI
 
             ShowSubPanel(CustomersflowLayoutPaneel);
         }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.CustomersGui.CustomersUserControl.Instance(this));
+        }
     }
 }

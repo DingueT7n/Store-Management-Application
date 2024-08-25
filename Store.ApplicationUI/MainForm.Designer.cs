@@ -194,6 +194,7 @@
             button2.TabIndex = 2;
             button2.Text = "جميع العملاء";
             button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click_1;
             // 
             // button3
             // 

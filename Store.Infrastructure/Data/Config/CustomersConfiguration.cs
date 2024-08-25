@@ -12,9 +12,9 @@ namespace Store.Infrastructure.Data.Config
             builder.Property(x => x.CustomerName).HasMaxLength(75);
             builder.Property(x => x.PhoneNumber).HasMaxLength(30);
             builder.HasData(
-                new Customer { Id = 1, CustomerName = "Customer One ", Address = "Ben Smara", PhoneNumber = "0697357397", Notes = "Seeded Data" },
-                new Customer { Id = 2, CustomerName = "Customer two ", Address = "Mermad", PhoneNumber = "0754653721", Notes = "Seeded Data" },
-                new Customer { Id = 3, CustomerName = "Customer Three ", Address = "HadjMEssaoud", PhoneNumber = "0697357546", Notes = "Seeded Data" }
+                new Customer { Id = 1, CustomerName = "قربوز علاء", Address = "بن سمارة", PhoneNumber = "0697357397", Notes = "Seeded Data" },
+                new Customer { Id = 2, CustomerName = "بن خليفة", Address = "مرماد", PhoneNumber = "0754653721", Notes = "Seeded Data" },
+                new Customer { Id = 3, CustomerName = "دوادي", Address = "حاج مسعود", PhoneNumber = "0697357546", Notes = "Seeded Data" }
 
                 );
 

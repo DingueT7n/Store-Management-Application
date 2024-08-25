@@ -1,8 +1,10 @@
 ﻿using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Store.Core.Entities.AllDeserved;
+using Store.Core.Entities.Banks;
 using Store.Core.Entities.Buys;
 using Store.Core.Entities.Caisses;
+using Store.Core.Entities.Customers;
 using Store.Core.Entities.Helpers;
 using Store.Core.Entities.Products;
 using Store.Core.Entities.Returns;
@@ -30,12 +32,10 @@ namespace Store.Infrastructure.Data
 
         }
 
-        //DbSet<Customer> Customers { get; set; }
-        //DbSet<CustomerReport> CustomersReports { get; set; }
-        //DbSet<CustomerMoney> CustomersMonies { get; set; }
-        //DbSet<Bank> Banks { get; set; }
-        //DbSet<BankDeposit> BankDeposits { get; set; }
-        //DbSet<BankWithdraw> BankWithdraws { get; set; }
+
+        DbSet<Bank> Banks { get; set; }
+        DbSet<BankDeposit> BankDeposits { get; set; }
+        DbSet<BankWithdraw> BankWithdraws { get; set; }
 
         //DbSet<Employee> Employees { get; set; }
         //DbSet<EmployeeSalaryMinus> EmployeesSalaryMinus { get; set; }
@@ -55,6 +55,9 @@ namespace Store.Infrastructure.Data
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<SupplierMoney> SuppliersMoneys { get; set; }
         public DbSet<SupplierReport> SuppliersReports { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<CustomerMoney> CustomersMoneys { get; set; }
+        public DbSet<CustomerReport> CustomersReports { get; set; }
         public DbSet<Buy> Buys { get; set; }
         public DbSet<BuyDetail> BuyDetails { get; set; }
         public DbSet<Deserved> Deserveds { get; set; }

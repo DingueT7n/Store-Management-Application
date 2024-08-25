@@ -118,7 +118,7 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<float>("Money")
                         .HasColumnType("real");
 
-                    b.ToTable("Bank");
+                    b.ToTable("Banks");
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Banks.BankDeposit", b =>
@@ -149,7 +149,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BankDeposit");
+                    b.ToTable("BankDeposits");
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Banks.BankWithdraw", b =>
@@ -180,7 +180,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BankWithdraw");
+                    b.ToTable("BankWithdraws");
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Buys.Buy", b =>
@@ -437,6 +437,9 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasMaxLength(75)
                         .HasColumnType("nvarchar(75)");
 
+                    b.Property<float?>("MaxDebtAllowed")
+                        .HasColumnType("real");
+
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
@@ -444,32 +447,35 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<float?>("TotalDebts")
+                        .HasColumnType("real");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Customer");
+                    b.ToTable("Customers");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            Address = "Ben Smara",
-                            CustomerName = "Customer One ",
+                            Address = "بن سمارة",
+                            CustomerName = "قربوز علاء",
                             Notes = "Seeded Data",
                             PhoneNumber = "0697357397"
                         },
                         new
                         {
                             Id = 2,
-                            Address = "Mermad",
-                            CustomerName = "Customer two ",
+                            Address = "مرماد",
+                            CustomerName = "بن خليفة",
                             Notes = "Seeded Data",
                             PhoneNumber = "0754653721"
                         },
                         new
                         {
                             Id = 3,
-                            Address = "HadjMEssaoud",
-                            CustomerName = "Customer Three ",
+                            Address = "حاج مسعود",
+                            CustomerName = "دوادي",
                             Notes = "Seeded Data",
                             PhoneNumber = "0697357546"
                         });
@@ -503,7 +509,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Cust_ID");
 
-                    b.ToTable("CustomerMoney");
+                    b.ToTable("CustomersMoneys");
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Customers.CustomerReport", b =>
@@ -531,7 +537,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Cust_ID");
 
-                    b.ToTable("CustomerReport");
+                    b.ToTable("CustomersReports");
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Helpers.BarcodePrint", b =>
@@ -1360,7 +1366,7 @@ namespace Store.Infrastructure.Data.Migrations
             modelBuilder.Entity("Store.Core.Entities.Products.Product", b =>
                 {
                     b.HasOne("Store.Core.Entities.Products.Category", "Category")
-                        .WithMany("Products")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1371,7 +1377,7 @@ namespace Store.Infrastructure.Data.Migrations
             modelBuilder.Entity("Store.Core.Entities.Products.ProductOutStore", b =>
                 {
                     b.HasOne("Store.Core.Entities.Products.Product", "Product")
-                        .WithMany("ProductOutStore")
+                        .WithMany()
                         .HasForeignKey("Pro_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1382,7 +1388,7 @@ namespace Store.Infrastructure.Data.Migrations
             modelBuilder.Entity("Store.Core.Entities.Products.ProductTransfer", b =>
                 {
                     b.HasOne("Store.Core.Entities.Products.Product", "Product")
-                        .WithMany("ProductTransfer")
+                        .WithMany()
                         .HasForeignKey("Pro_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1393,7 +1399,7 @@ namespace Store.Infrastructure.Data.Migrations
             modelBuilder.Entity("Store.Core.Entities.Products.ProductsQuantitie", b =>
                 {
                     b.HasOne("Store.Core.Entities.Products.Product", "Product")
-                        .WithMany("ProductsQuantitie")
+                        .WithMany()
                         .HasForeignKey("Pro_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1539,20 +1545,6 @@ namespace Store.Infrastructure.Data.Migrations
             modelBuilder.Entity("Store.Core.Entities.Buys.Buy", b =>
                 {
                     b.Navigation("SupplierMoney");
-                });
-
-            modelBuilder.Entity("Store.Core.Entities.Products.Category", b =>
-                {
-                    b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("Store.Core.Entities.Products.Product", b =>
-                {
-                    b.Navigation("ProductOutStore");
-
-                    b.Navigation("ProductTransfer");
-
-                    b.Navigation("ProductsQuantitie");
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Sales.Sale", b =>

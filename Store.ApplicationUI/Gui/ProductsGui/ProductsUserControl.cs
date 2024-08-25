@@ -21,10 +21,6 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         public ProductsUserControl()
         {
             InitializeComponent();
-
-
-
-
         }
         public static ProductsUserControl Instance(MainForm main)
         {
