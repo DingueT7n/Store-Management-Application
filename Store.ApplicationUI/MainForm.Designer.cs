@@ -38,6 +38,7 @@
             btnAllProducts = new Button();
             btnAddProduct = new Button();
             btnAllCategories = new Button();
+            button5 = new Button();
             btnCustomers = new Button();
             CustomersflowLayoutPaneel = new FlowLayoutPanel();
             button2 = new Button();
@@ -121,10 +122,11 @@
             ProductsflowLayoutPanel.Controls.Add(btnAllProducts);
             ProductsflowLayoutPanel.Controls.Add(btnAddProduct);
             ProductsflowLayoutPanel.Controls.Add(btnAllCategories);
+            ProductsflowLayoutPanel.Controls.Add(button5);
             ProductsflowLayoutPanel.Location = new Point(2, 218);
-            ProductsflowLayoutPanel.MaximumSize = new Size(209, 148);
+            ProductsflowLayoutPanel.MaximumSize = new Size(209, 187);
             ProductsflowLayoutPanel.Name = "ProductsflowLayoutPanel";
-            ProductsflowLayoutPanel.Size = new Size(209, 148);
+            ProductsflowLayoutPanel.Size = new Size(209, 187);
             ProductsflowLayoutPanel.TabIndex = 3;
             ProductsflowLayoutPanel.Visible = false;
             // 
@@ -167,11 +169,24 @@
             btnAllCategories.UseVisualStyleBackColor = true;
             btnAllCategories.Click += button3_Click;
             // 
+            // button5
+            // 
+            button5.Image = Properties.Resources.Open_Box;
+            button5.ImageAlign = ContentAlignment.MiddleLeft;
+            button5.Location = new Point(2, 146);
+            button5.Margin = new Padding(4, 5, 4, 5);
+            button5.Name = "button5";
+            button5.Size = new Size(203, 37);
+            button5.TabIndex = 5;
+            button5.Text = "جميع المخازن";
+            button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
+            // 
             // btnCustomers
             // 
             btnCustomers.Image = Properties.Resources.Open_Box;
             btnCustomers.ImageAlign = ContentAlignment.MiddleLeft;
-            btnCustomers.Location = new Point(-2, 374);
+            btnCustomers.Location = new Point(-2, 413);
             btnCustomers.Margin = new Padding(4, 5, 4, 5);
             btnCustomers.Name = "btnCustomers";
             btnCustomers.Size = new Size(212, 37);
@@ -186,7 +201,7 @@
             CustomersflowLayoutPaneel.Controls.Add(button3);
             CustomersflowLayoutPaneel.Controls.Add(button4);
             CustomersflowLayoutPaneel.Controls.Add(button1);
-            CustomersflowLayoutPaneel.Location = new Point(2, 419);
+            CustomersflowLayoutPaneel.Location = new Point(2, 458);
             CustomersflowLayoutPaneel.MaximumSize = new Size(209, 190);
             CustomersflowLayoutPaneel.Name = "CustomersflowLayoutPaneel";
             CustomersflowLayoutPaneel.Size = new Size(209, 190);
@@ -249,7 +264,7 @@
             // 
             btnSupplierPanel.Image = Properties.Resources.Open_Box;
             btnSupplierPanel.ImageAlign = ContentAlignment.MiddleLeft;
-            btnSupplierPanel.Location = new Point(-2, 617);
+            btnSupplierPanel.Location = new Point(-2, 656);
             btnSupplierPanel.Margin = new Padding(4, 5, 4, 5);
             btnSupplierPanel.Name = "btnSupplierPanel";
             btnSupplierPanel.Size = new Size(212, 37);
@@ -264,7 +279,7 @@
             SuppliersflowLayoutPanel.Controls.Add(btnAddSupplier);
             SuppliersflowLayoutPanel.Controls.Add(btnSupplierAccount);
             SuppliersflowLayoutPanel.Controls.Add(btnSupplierReports);
-            SuppliersflowLayoutPanel.Location = new Point(2, 662);
+            SuppliersflowLayoutPanel.Location = new Point(2, 701);
             SuppliersflowLayoutPanel.MaximumSize = new Size(209, 190);
             SuppliersflowLayoutPanel.Name = "SuppliersflowLayoutPanel";
             SuppliersflowLayoutPanel.Size = new Size(209, 190);
@@ -388,5 +403,6 @@
         private Button btnAddSupplier;
         private Button btnSupplierAccount;
         private Button btnSupplierReports;
+        private Button button5;
     }
 }

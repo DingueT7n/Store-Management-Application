@@ -39,6 +39,7 @@
             btnEditProduct = new Button();
             btnDeleteProduct = new Button();
             btnAddCategory = new Button();
+            btnAddStore = new Button();
             btnExportProduct = new Button();
             SearchPanel = new Panel();
             txtSearch = new TextBox();
@@ -59,6 +60,7 @@
             OperationsflowLayoutPanel.Controls.Add(btnEditProduct);
             OperationsflowLayoutPanel.Controls.Add(btnDeleteProduct);
             OperationsflowLayoutPanel.Controls.Add(btnAddCategory);
+            OperationsflowLayoutPanel.Controls.Add(btnAddStore);
             OperationsflowLayoutPanel.Controls.Add(btnExportProduct);
             OperationsflowLayoutPanel.Controls.Add(SearchPanel);
             OperationsflowLayoutPanel.Dock = DockStyle.Top;
@@ -121,12 +123,25 @@
             btnAddCategory.UseVisualStyleBackColor = true;
             btnAddCategory.Click += btnAddCategory_Click;
             // 
+            // btnAddStore
+            // 
+            btnAddStore.Anchor = AnchorStyles.None;
+            btnAddStore.Image = (Image)resources.GetObject("btnAddStore.Image");
+            btnAddStore.ImageAlign = ContentAlignment.MiddleLeft;
+            btnAddStore.Location = new Point(467, 3);
+            btnAddStore.Name = "btnAddStore";
+            btnAddStore.Size = new Size(119, 40);
+            btnAddStore.TabIndex = 9;
+            btnAddStore.Text = "    اضافة مخزن";
+            btnAddStore.UseVisualStyleBackColor = true;
+            btnAddStore.Click += btnAddStore_Click;
+            // 
             // btnExportProduct
             // 
             btnExportProduct.Anchor = AnchorStyles.None;
             btnExportProduct.Image = (Image)resources.GetObject("btnExportProduct.Image");
             btnExportProduct.ImageAlign = ContentAlignment.MiddleLeft;
-            btnExportProduct.Location = new Point(486, 3);
+            btnExportProduct.Location = new Point(361, 3);
             btnExportProduct.Name = "btnExportProduct";
             btnExportProduct.Size = new Size(100, 40);
             btnExportProduct.TabIndex = 6;
@@ -137,7 +152,7 @@
             // 
             SearchPanel.Controls.Add(txtSearch);
             SearchPanel.Controls.Add(btnSearch);
-            SearchPanel.Location = new Point(140, 3);
+            SearchPanel.Location = new Point(15, 3);
             SearchPanel.Name = "SearchPanel";
             SearchPanel.Size = new Size(340, 40);
             SearchPanel.TabIndex = 7;
@@ -276,5 +291,6 @@
         private Button btnRefresh;
         private ToolTip toolTip1;
         private Button btnAddCategory;
+        private Button btnAddStore;
     }
 }

@@ -1,6 +1,7 @@
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.ProductsGui;
 using Store.ApplicationUI.Gui.ProductsGui.Category;
+using Store.ApplicationUI.Gui.ProductsGui.StoreGui;
 using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI
@@ -224,6 +225,12 @@ namespace Store.ApplicationUI
         {
             pageHelper.SetNewPage(Gui.SupplierGui.SupplierReportsGui.SupplierReportsUserControl.Instance(this));
 
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            AddStoreForm addStoreForm = AddStoreForm.Instance(this); ;
+            addStoreForm.ShowDialog();
         }
     }
 }

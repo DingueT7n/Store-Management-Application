@@ -31,7 +31,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
 
             return _addCategoryForm;
         }
-        public async void SetCategoryToDgv()
+        public void SetCategoryToDgv()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             DgvCategory.DataSource = MainForm.Context.Categories
