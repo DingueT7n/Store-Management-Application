@@ -9,12 +9,154 @@ namespace Store.Infrastructure.Repositories
         public SuppliersRepository(ApplicationDbContext context) : base(context)
         {
         }
+
+        public List<Supplier> SearchAll(string searchIteam)
+        {
+
+            try
+            {
+                return _context.Suppliers.Where(x => x.Id.ToString() == searchIteam ||
+                x.SupplierName.ToString().Contains(searchIteam) ||
+                x.Address.Contains(searchIteam) ||
+                x.TotalDebts.ToString() == (searchIteam) ||
+                x.Notes.Contains(searchIteam)
+
+                )
+                    .OrderBy(x => x.SupplierName).ToList();
+
+            }
+            catch
+            {
+                return new List<Supplier>();
+            }
+        }
+
+
+
     }
     public class SupplierMoneyRepository : GenericRepository<SupplierMoney>, ISupplierMoneyRepository
     {
         public SupplierMoneyRepository(ApplicationDbContext context) : base(context)
         {
         }
+
+        public List<SupplierMoney> SearchAll(string searchIteam)
+        {
+            try
+            {
+                return _context.SuppliersMoneys.Where(x =>
+                x.SupplierName.ToString().Contains(searchIteam) ||
+                x.Price.ToString() == (searchIteam)
+                )
+                    .OrderBy(x => x.Id).ToList();
+
+            }
+            catch
+            {
+                return new List<SupplierMoney>();
+            }
+        }
+
+        public bool DeleteFacture(string order_Id, string cust_Id, string price)
+        {
+
+            try
+            {
+                var supplierMoney = _context.SuppliersMoneys.FirstOrDefault(x =>
+                  x.Sup_ID.ToString() == order_Id && x.Order_ID.ToString() == order_Id &&
+                  x.Price.ToString() == (price)
+                  );
+                _context.Remove(supplierMoney);
+                _context.SaveChanges();
+                return true;
+
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        float ConvertToFloat(string value)
+        {
+            float quantity;
+            if (float.TryParse(value, out quantity))
+            {
+                return quantity;
+            }
+            return quantity;
+        }
+        public bool TransactionOfCustomerDebt(string order_Id, string sup_Id, string price, string sup_Name, DateTime date, string time)
+        {
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    DeleteFacture(order_Id, sup_Id, price);
+                    SupplierReport supplierReport = new SupplierReport();
+                    supplierReport.Sup_ID = Convert.ToInt32(sup_Id);
+                    supplierReport.SupplierName = sup_Name;
+                    supplierReport.Date = date;
+                    supplierReport.Order_ID = Convert.ToInt32(order_Id);
+                    supplierReport.Price = ConvertToFloat(price);
+                    supplierReport.Time = time;
+                    _context.Add(supplierReport);
+                    _context.SaveChanges();
+                    transaction.CommitAsync();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
+        public bool UpdateFacture(string order_Id, string sup_Id, string price, string PayedValue)
+        {
+            try
+            {
+                var suppliersMoneys = _context.SuppliersMoneys.FirstOrDefault(x =>
+                  x.Sup_ID.ToString() == sup_Id && x.Order_ID.ToString() == order_Id
+                  );
+                suppliersMoneys.Price = ConvertToFloat(price);
+                _context.Update(suppliersMoneys);
+                _context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public bool TransactionOfEditingCustomerDebt(string order_Id, string sup_Id, string price, string sup_Name, string PayedValue, DateTime date, string time)
+        {
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    if (Convert.ToDouble(price) - Convert.ToDouble(PayedValue) <= 0)
+                        DeleteFacture(order_Id, sup_Id, price);
+                    else
+                        UpdateFacture(order_Id, sup_Id, price, PayedValue);
+
+                    SupplierReport supplierReport = new SupplierReport();
+                    supplierReport.Sup_ID = Convert.ToInt32(sup_Id);
+                    supplierReport.SupplierName = sup_Name;
+                    supplierReport.Date = date;
+                    supplierReport.Order_ID = Convert.ToInt32(order_Id);
+                    supplierReport.Price = ConvertToFloat(PayedValue);
+                    _context.Add(supplierReport);
+                    _context.SaveChanges();
+                    transaction.CommitAsync();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
+
     }
     public class SupplierReportRepository : GenericRepository<SupplierReport>, ISupplierReportRepository
     {

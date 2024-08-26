@@ -44,16 +44,24 @@
             button3 = new Button();
             button4 = new Button();
             button1 = new Button();
+            btnSupplierPanel = new Button();
+            SuppliersflowLayoutPanel = new FlowLayoutPanel();
+            btnAllSuppliers = new Button();
+            btnAddSupplier = new Button();
+            btnSupplierAccount = new Button();
+            btnSupplierReports = new Button();
             ContainerPanel = new Panel();
             animationTimer = new System.Windows.Forms.Timer(components);
             flowLayoutPanelNavBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ProductsflowLayoutPanel.SuspendLayout();
             CustomersflowLayoutPaneel.SuspendLayout();
+            SuppliersflowLayoutPanel.SuspendLayout();
             SuspendLayout();
             // 
             // flowLayoutPanelNavBar
             // 
+            flowLayoutPanelNavBar.AutoScroll = true;
             flowLayoutPanelNavBar.BackColor = Color.WhiteSmoke;
             flowLayoutPanelNavBar.Controls.Add(pictureBox1);
             flowLayoutPanelNavBar.Controls.Add(btnHomeSummary);
@@ -61,6 +69,8 @@
             flowLayoutPanelNavBar.Controls.Add(ProductsflowLayoutPanel);
             flowLayoutPanelNavBar.Controls.Add(btnCustomers);
             flowLayoutPanelNavBar.Controls.Add(CustomersflowLayoutPaneel);
+            flowLayoutPanelNavBar.Controls.Add(btnSupplierPanel);
+            flowLayoutPanelNavBar.Controls.Add(SuppliersflowLayoutPanel);
             flowLayoutPanelNavBar.Dock = DockStyle.Left;
             flowLayoutPanelNavBar.Location = new Point(0, 0);
             flowLayoutPanelNavBar.Name = "flowLayoutPanelNavBar";
@@ -72,7 +82,7 @@
             // 
             pictureBox1.Anchor = AnchorStyles.None;
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(0, 6);
+            pictureBox1.Location = new Point(-2, 6);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(213, 112);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -84,7 +94,7 @@
             btnHomeSummary.Anchor = AnchorStyles.None;
             btnHomeSummary.Image = Properties.Resources.Open_Box;
             btnHomeSummary.ImageAlign = ContentAlignment.MiddleLeft;
-            btnHomeSummary.Location = new Point(0, 126);
+            btnHomeSummary.Location = new Point(-2, 126);
             btnHomeSummary.Margin = new Padding(4, 5, 4, 5);
             btnHomeSummary.Name = "btnHomeSummary";
             btnHomeSummary.Size = new Size(212, 37);
@@ -97,7 +107,7 @@
             // 
             BtnProducts.Image = Properties.Resources.Open_Box;
             BtnProducts.ImageAlign = ContentAlignment.MiddleLeft;
-            BtnProducts.Location = new Point(0, 173);
+            BtnProducts.Location = new Point(-2, 173);
             BtnProducts.Margin = new Padding(4, 5, 4, 5);
             BtnProducts.Name = "BtnProducts";
             BtnProducts.Size = new Size(212, 37);
@@ -111,7 +121,7 @@
             ProductsflowLayoutPanel.Controls.Add(btnAllProducts);
             ProductsflowLayoutPanel.Controls.Add(btnAddProduct);
             ProductsflowLayoutPanel.Controls.Add(btnAllCategories);
-            ProductsflowLayoutPanel.Location = new Point(4, 218);
+            ProductsflowLayoutPanel.Location = new Point(2, 218);
             ProductsflowLayoutPanel.MaximumSize = new Size(209, 148);
             ProductsflowLayoutPanel.Name = "ProductsflowLayoutPanel";
             ProductsflowLayoutPanel.Size = new Size(209, 148);
@@ -161,7 +171,7 @@
             // 
             btnCustomers.Image = Properties.Resources.Open_Box;
             btnCustomers.ImageAlign = ContentAlignment.MiddleLeft;
-            btnCustomers.Location = new Point(0, 374);
+            btnCustomers.Location = new Point(-2, 374);
             btnCustomers.Margin = new Padding(4, 5, 4, 5);
             btnCustomers.Name = "btnCustomers";
             btnCustomers.Size = new Size(212, 37);
@@ -176,7 +186,7 @@
             CustomersflowLayoutPaneel.Controls.Add(button3);
             CustomersflowLayoutPaneel.Controls.Add(button4);
             CustomersflowLayoutPaneel.Controls.Add(button1);
-            CustomersflowLayoutPaneel.Location = new Point(4, 419);
+            CustomersflowLayoutPaneel.Location = new Point(2, 419);
             CustomersflowLayoutPaneel.MaximumSize = new Size(209, 190);
             CustomersflowLayoutPaneel.Name = "CustomersflowLayoutPaneel";
             CustomersflowLayoutPaneel.Size = new Size(209, 190);
@@ -235,6 +245,83 @@
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click_1;
             // 
+            // btnSupplierPanel
+            // 
+            btnSupplierPanel.Image = Properties.Resources.Open_Box;
+            btnSupplierPanel.ImageAlign = ContentAlignment.MiddleLeft;
+            btnSupplierPanel.Location = new Point(-2, 617);
+            btnSupplierPanel.Margin = new Padding(4, 5, 4, 5);
+            btnSupplierPanel.Name = "btnSupplierPanel";
+            btnSupplierPanel.Size = new Size(212, 37);
+            btnSupplierPanel.TabIndex = 7;
+            btnSupplierPanel.Text = "الموردين";
+            btnSupplierPanel.UseVisualStyleBackColor = true;
+            btnSupplierPanel.Click += btnSupplierPanel_Click;
+            // 
+            // SuppliersflowLayoutPanel
+            // 
+            SuppliersflowLayoutPanel.Controls.Add(btnAllSuppliers);
+            SuppliersflowLayoutPanel.Controls.Add(btnAddSupplier);
+            SuppliersflowLayoutPanel.Controls.Add(btnSupplierAccount);
+            SuppliersflowLayoutPanel.Controls.Add(btnSupplierReports);
+            SuppliersflowLayoutPanel.Location = new Point(2, 662);
+            SuppliersflowLayoutPanel.MaximumSize = new Size(209, 190);
+            SuppliersflowLayoutPanel.Name = "SuppliersflowLayoutPanel";
+            SuppliersflowLayoutPanel.Size = new Size(209, 190);
+            SuppliersflowLayoutPanel.TabIndex = 8;
+            SuppliersflowLayoutPanel.Visible = false;
+            // 
+            // btnAllSuppliers
+            // 
+            btnAllSuppliers.Image = Properties.Resources.Open_Box;
+            btnAllSuppliers.ImageAlign = ContentAlignment.MiddleLeft;
+            btnAllSuppliers.Location = new Point(2, 5);
+            btnAllSuppliers.Margin = new Padding(4, 5, 4, 5);
+            btnAllSuppliers.Name = "btnAllSuppliers";
+            btnAllSuppliers.Size = new Size(203, 37);
+            btnAllSuppliers.TabIndex = 2;
+            btnAllSuppliers.Text = "جميع الموردين";
+            btnAllSuppliers.UseVisualStyleBackColor = true;
+            btnAllSuppliers.Click += btnAllSuppliers_Click;
+            // 
+            // btnAddSupplier
+            // 
+            btnAddSupplier.Image = Properties.Resources.Open_Box;
+            btnAddSupplier.ImageAlign = ContentAlignment.MiddleLeft;
+            btnAddSupplier.Location = new Point(2, 52);
+            btnAddSupplier.Margin = new Padding(4, 5, 4, 5);
+            btnAddSupplier.Name = "btnAddSupplier";
+            btnAddSupplier.Size = new Size(203, 37);
+            btnAddSupplier.TabIndex = 3;
+            btnAddSupplier.Text = "اضافة مورد";
+            btnAddSupplier.UseVisualStyleBackColor = true;
+            btnAddSupplier.Click += btnAddSupplier_Click;
+            // 
+            // btnSupplierAccount
+            // 
+            btnSupplierAccount.Image = Properties.Resources.Open_Box;
+            btnSupplierAccount.ImageAlign = ContentAlignment.MiddleLeft;
+            btnSupplierAccount.Location = new Point(2, 99);
+            btnSupplierAccount.Margin = new Padding(4, 5, 4, 5);
+            btnSupplierAccount.Name = "btnSupplierAccount";
+            btnSupplierAccount.Size = new Size(203, 37);
+            btnSupplierAccount.TabIndex = 4;
+            btnSupplierAccount.Text = "حسابات الموردين";
+            btnSupplierAccount.UseVisualStyleBackColor = true;
+            btnSupplierAccount.Click += btnSupplierAccount_Click;
+            // 
+            // btnSupplierReports
+            // 
+            btnSupplierReports.Image = Properties.Resources.Open_Box;
+            btnSupplierReports.ImageAlign = ContentAlignment.MiddleLeft;
+            btnSupplierReports.Location = new Point(2, 146);
+            btnSupplierReports.Margin = new Padding(4, 5, 4, 5);
+            btnSupplierReports.Name = "btnSupplierReports";
+            btnSupplierReports.Size = new Size(203, 37);
+            btnSupplierReports.TabIndex = 5;
+            btnSupplierReports.Text = "تقارير الموردين";
+            btnSupplierReports.UseVisualStyleBackColor = true;
+            // 
             // ContainerPanel
             // 
             ContainerPanel.BackColor = Color.White;
@@ -272,6 +359,7 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ProductsflowLayoutPanel.ResumeLayout(false);
             CustomersflowLayoutPaneel.ResumeLayout(false);
+            SuppliersflowLayoutPanel.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -293,5 +381,11 @@
         private Button button3;
         private Button button4;
         private Button button1;
+        private Button btnSupplierPanel;
+        private FlowLayoutPanel SuppliersflowLayoutPanel;
+        private Button btnAllSuppliers;
+        private Button btnAddSupplier;
+        private Button btnSupplierAccount;
+        private Button btnSupplierReports;
     }
 }

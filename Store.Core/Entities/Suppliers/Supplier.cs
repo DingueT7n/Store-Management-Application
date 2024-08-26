@@ -7,10 +7,10 @@
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
         public string Notes { get; set; }
-        public virtual IEnumerable<SupplierMoney> SupplierMoney { get; set; } = new HashSet<SupplierMoney>();
+        public float? MaxDebtAllowed { get; set; }
+        public float? TotalDebts { get; set; }
 
 
-        //public virtual IEnumerable<BuyDetail> BuyDetails { get; set; }
     }
 
 }

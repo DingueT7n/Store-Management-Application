@@ -1064,6 +1064,9 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<float?>("MaxDebtAllowed")
+                        .HasColumnType("real");
+
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
@@ -1074,6 +1077,9 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<string>("SupplierName")
                         .HasMaxLength(75)
                         .HasColumnType("nvarchar(75)");
+
+                    b.Property<float?>("TotalDebts")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
@@ -1114,6 +1120,9 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<int>("Sup_ID")
                         .HasColumnType("int");
 
+                    b.Property<int?>("BuyId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
@@ -1134,6 +1143,8 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Order_ID", "Sup_ID");
+
+                    b.HasIndex("BuyId");
 
                     b.HasIndex("Sup_ID");
 
@@ -1501,14 +1512,18 @@ namespace Store.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Store.Core.Entities.Suppliers.SupplierMoney", b =>
                 {
-                    b.HasOne("Store.Core.Entities.Buys.Buy", "Buy")
+                    b.HasOne("Store.Core.Entities.Buys.Buy", null)
                         .WithMany("SupplierMoney")
+                        .HasForeignKey("BuyId");
+
+                    b.HasOne("Store.Core.Entities.Buys.Buy", "Buy")
+                        .WithMany()
                         .HasForeignKey("Order_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Store.Core.Entities.Suppliers.Supplier", "Supplier")
-                        .WithMany("SupplierMoney")
+                        .WithMany()
                         .HasForeignKey("Sup_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1552,11 +1567,6 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Navigation("SaleProfits");
 
                     b.Navigation("SalesDetails");
-                });
-
-            modelBuilder.Entity("Store.Core.Entities.Suppliers.Supplier", b =>
-                {
-                    b.Navigation("SupplierMoney");
                 });
 #pragma warning restore 612, 618
         }

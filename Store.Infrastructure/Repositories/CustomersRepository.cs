@@ -111,7 +111,7 @@ namespace Store.Infrastructure.Repositories
             try
             {
                 var customerMoney = _context.CustomersMoneys.FirstOrDefault(x =>
-                  x.Cust_ID.ToString() == order_Id && x.Order_ID.ToString() == order_Id
+                  x.Cust_ID.ToString() == cust_Id && x.Order_ID.ToString() == order_Id
                   );
                 customerMoney.Price = ConvertToFloat(price);
                 _context.Update(customerMoney);

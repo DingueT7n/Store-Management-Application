@@ -129,7 +129,6 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
             {
                 if (rbPayFacture.Checked)
                 {
-
                     customersRepository.TransactionOfCustomerDebt(
                         DgvِCustomer.CurrentRow.Cells[7].Value.ToString(),
                         DgvِCustomer.CurrentRow.Cells[6].Value.ToString(),
@@ -137,7 +136,6 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                         DgvِCustomer.CurrentRow.Cells[0].Value.ToString(),
                         DateTime.Now
                         );
-
                 }
                 else if (rbPayPartialFacture.Checked)
                 {

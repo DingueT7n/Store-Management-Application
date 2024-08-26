@@ -25,8 +25,8 @@ namespace Store.Infrastructure.Data.Config
         {
             builder.HasKey(bd => new { bd.Order_ID, bd.Sup_ID });
             builder.Property(x => x.SupplierName).HasMaxLength(75);
-            builder.HasOne(x => x.Supplier).WithMany(c => c.SupplierMoney).HasForeignKey(x => x.Sup_ID);
-            builder.HasOne(x => x.Buy).WithMany(c => c.SupplierMoney).HasForeignKey(x => x.Order_ID);
+            builder.HasOne(x => x.Supplier).WithMany().HasForeignKey(x => x.Sup_ID);
+            builder.HasOne(x => x.Buy).WithMany().HasForeignKey(x => x.Order_ID);
         }
     }
     public class SupplierReportConfiguration : IEntityTypeConfiguration<SupplierReport>

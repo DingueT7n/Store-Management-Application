@@ -194,5 +194,30 @@ namespace Store.ApplicationUI
             pageHelper.SetNewPage(Gui.CustomersGui.CustomerReportsGui.CustomerReportsUserControl.Instance(this));
 
         }
+
+        private void btnSupplierPanel_Click(object sender, EventArgs e)
+        {
+            CloseSubPanels();
+
+            ShowSubPanel(SuppliersflowLayoutPanel);
+        }
+
+        private void btnAddSupplier_Click(object sender, EventArgs e)
+        {
+            AddSupplierForm addSupplierForm = new AddSupplierForm(this);
+
+            addSupplierForm.Show();
+        }
+
+        private void btnAllSuppliers_Click(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.SupplierGui.SuppliersUserControl.Instance(this));
+        }
+
+        private void btnSupplierAccount_Click(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.SupplierGui.SupplierAccountGui.SupplierAccountUserControl.Instance(this));
+
+        }
     }
 }
