@@ -122,5 +122,58 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
             txtSearch.Text = string.Empty;
         }
+
+        private void btnPay_Click(object sender, EventArgs e)
+        {
+            if (DgvِCustomer.SelectedRows.Count > 0 && dgvHelper.IsEmpty(DgvِCustomer))
+            {
+                if (rbPayFacture.Checked)
+                {
+
+                    customersRepository.TransactionOfCustomerDebt(
+                        DgvِCustomer.CurrentRow.Cells[7].Value.ToString(),
+                        DgvِCustomer.CurrentRow.Cells[6].Value.ToString(),
+                        DgvِCustomer.CurrentRow.Cells[1].Value.ToString(),
+                        DgvِCustomer.CurrentRow.Cells[0].Value.ToString(),
+                        DateTime.Now
+                        );
+
+                }
+                else if (rbPayPartialFacture.Checked)
+                {
+                    customersRepository.TransactionOfEditingCustomerDebt(
+                       DgvِCustomer.CurrentRow.Cells[7].Value.ToString(),
+                       DgvِCustomer.CurrentRow.Cells[6].Value.ToString(),
+                       DgvِCustomer.CurrentRow.Cells[1].Value.ToString(),
+                       DgvِCustomer.CurrentRow.Cells[0].Value.ToString(),
+                       txtPayAmout.Text,
+                       DateTime.Now
+                       );
+                }
+                else
+                {
+                    for (int i = 0; i < DgvِCustomer.Rows.Count; i++)
+                    {
+                        var row = DgvِCustomer.Rows[i];
+                        customersRepository.TransactionOfCustomerDebt(
+                            row.Cells[7].Value?.ToString(),
+                            row.Cells[6].Value?.ToString(),
+                            row.Cells[1].Value?.ToString(),
+                            row.Cells[0].Value?.ToString(),
+                            DateTime.Now
+                        );
+                    }
+
+                }
+
+
+            }
+
+        }
+
+        private void btnRefresh_Click_1(object sender, EventArgs e)
+        {
+            LoadData();
+        }
     }
 }

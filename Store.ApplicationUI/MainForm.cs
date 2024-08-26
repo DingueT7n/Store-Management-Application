@@ -188,5 +188,11 @@ namespace Store.ApplicationUI
             pageHelper.SetNewPage(Gui.CustomersGui.CustomerAccountGui.CustomerAccountUserControl.Instance(this));
 
         }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.CustomersGui.CustomerReportsGui.CustomerReportsUserControl.Instance(this));
+
+        }
     }
 }

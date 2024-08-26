@@ -54,7 +54,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Gui\CustomersGui\CustomerReportsGui\" />
+    <Folder Include="Gui\SupplierGui\" />
   </ItemGroup>
 
 </Project>

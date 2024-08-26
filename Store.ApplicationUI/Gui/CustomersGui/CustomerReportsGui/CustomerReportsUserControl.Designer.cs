@@ -1,0 +1,451 @@
+﻿namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
+{
+    partial class CustomerReportsUserControl
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomerReportsUserControl));
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            OperationsflowLayoutPanel = new FlowLayoutPanel();
+            gbPayChoiches = new GroupBox();
+            dtpFrom = new DateTimePicker();
+            dtpTo = new DateTimePicker();
+            lblTo = new Label();
+            lblFrom = new Label();
+            rbBoth = new RadioButton();
+            rbCustomerAndOrder = new RadioButton();
+            rbDateSearch = new RadioButton();
+            panelstatisticsandOperations = new Panel();
+            lblTitleForm = new Label();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            lblTotalDebt = new Label();
+            lblTotalCustomers = new Label();
+            SearchPanel = new Panel();
+            txtSearch = new TextBox();
+            btnSearch = new Button();
+            panelButtons = new Panel();
+            button2 = new Button();
+            button1 = new Button();
+            btnExportCustomer = new Button();
+            btnRefresh = new Button();
+            lblEmptyData = new Label();
+            DgvِCustomer = new DataGridView();
+            toolTip1 = new ToolTip(components);
+            OperationsflowLayoutPanel.SuspendLayout();
+            gbPayChoiches.SuspendLayout();
+            panelstatisticsandOperations.SuspendLayout();
+            flowLayoutPanel1.SuspendLayout();
+            SearchPanel.SuspendLayout();
+            panelButtons.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)DgvِCustomer).BeginInit();
+            SuspendLayout();
+            // 
+            // OperationsflowLayoutPanel
+            // 
+            OperationsflowLayoutPanel.AutoScroll = true;
+            OperationsflowLayoutPanel.Controls.Add(gbPayChoiches);
+            OperationsflowLayoutPanel.Controls.Add(panelstatisticsandOperations);
+            OperationsflowLayoutPanel.Controls.Add(panelButtons);
+            OperationsflowLayoutPanel.Dock = DockStyle.Top;
+            OperationsflowLayoutPanel.Location = new Point(0, 0);
+            OperationsflowLayoutPanel.Margin = new Padding(5);
+            OperationsflowLayoutPanel.Name = "OperationsflowLayoutPanel";
+            OperationsflowLayoutPanel.Size = new Size(1034, 168);
+            OperationsflowLayoutPanel.TabIndex = 11;
+            // 
+            // gbPayChoiches
+            // 
+            gbPayChoiches.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            gbPayChoiches.Controls.Add(dtpFrom);
+            gbPayChoiches.Controls.Add(dtpTo);
+            gbPayChoiches.Controls.Add(lblTo);
+            gbPayChoiches.Controls.Add(lblFrom);
+            gbPayChoiches.Controls.Add(rbBoth);
+            gbPayChoiches.Controls.Add(rbCustomerAndOrder);
+            gbPayChoiches.Controls.Add(rbDateSearch);
+            gbPayChoiches.Location = new Point(574, 3);
+            gbPayChoiches.Name = "gbPayChoiches";
+            gbPayChoiches.Size = new Size(457, 158);
+            gbPayChoiches.TabIndex = 8;
+            gbPayChoiches.TabStop = false;
+            gbPayChoiches.Text = "اختيارات البحث";
+            // 
+            // dtpFrom
+            // 
+            dtpFrom.CustomFormat = "yyyy-MM-dd";
+            dtpFrom.Format = DateTimePickerFormat.Short;
+            dtpFrom.Location = new Point(181, 27);
+            dtpFrom.MaxDate = new DateTime(2101, 1, 1, 0, 0, 0, 0);
+            dtpFrom.Name = "dtpFrom";
+            dtpFrom.Size = new Size(119, 27);
+            dtpFrom.TabIndex = 27;
+            dtpFrom.Value = new DateTime(2024, 8, 23, 21, 42, 30, 0);
+            // 
+            // dtpTo
+            // 
+            dtpTo.CustomFormat = "yyyy-MM-dd";
+            dtpTo.Format = DateTimePickerFormat.Short;
+            dtpTo.Location = new Point(19, 27);
+            dtpTo.MaxDate = new DateTime(2101, 1, 1, 0, 0, 0, 0);
+            dtpTo.Name = "dtpTo";
+            dtpTo.Size = new Size(119, 27);
+            dtpTo.TabIndex = 26;
+            dtpTo.Value = new DateTime(2024, 8, 23, 21, 42, 30, 0);
+            // 
+            // lblTo
+            // 
+            lblTo.AutoSize = true;
+            lblTo.ImeMode = ImeMode.NoControl;
+            lblTo.Location = new Point(144, 29);
+            lblTo.Name = "lblTo";
+            lblTo.Size = new Size(27, 19);
+            lblTo.TabIndex = 11;
+            lblTo.Text = "الى:";
+            // 
+            // lblFrom
+            // 
+            lblFrom.AutoSize = true;
+            lblFrom.ImeMode = ImeMode.NoControl;
+            lblFrom.Location = new Point(301, 30);
+            lblFrom.Name = "lblFrom";
+            lblFrom.Size = new Size(28, 19);
+            lblFrom.TabIndex = 9;
+            lblFrom.Text = "من:";
+            // 
+            // rbBoth
+            // 
+            rbBoth.AutoSize = true;
+            rbBoth.Checked = true;
+            rbBoth.ImeMode = ImeMode.NoControl;
+            rbBoth.Location = new Point(211, 109);
+            rbBoth.Name = "rbBoth";
+            rbBoth.Size = new Size(227, 23);
+            rbBoth.TabIndex = 8;
+            rbBoth.TabStop = true;
+            rbBoth.Text = "البحث عن عميل او رقم فاتورة في فترة";
+            rbBoth.UseVisualStyleBackColor = true;
+            rbBoth.CheckedChanged += rbBoth_CheckedChanged;
+            // 
+            // rbCustomerAndOrder
+            // 
+            rbCustomerAndOrder.AutoSize = true;
+            rbCustomerAndOrder.ImeMode = ImeMode.NoControl;
+            rbCustomerAndOrder.Location = new Point(249, 68);
+            rbCustomerAndOrder.Name = "rbCustomerAndOrder";
+            rbCustomerAndOrder.Size = new Size(189, 23);
+            rbCustomerAndOrder.TabIndex = 6;
+            rbCustomerAndOrder.Text = "البحث عن عميل او رقم فاتورة";
+            rbCustomerAndOrder.UseVisualStyleBackColor = true;
+            rbCustomerAndOrder.CheckedChanged += rbCustomerAndOrder_CheckedChanged;
+            // 
+            // rbDateSearch
+            // 
+            rbDateSearch.AutoSize = true;
+            rbDateSearch.ImeMode = ImeMode.NoControl;
+            rbDateSearch.Location = new Point(333, 28);
+            rbDateSearch.Name = "rbDateSearch";
+            rbDateSearch.Size = new Size(105, 23);
+            rbDateSearch.TabIndex = 5;
+            rbDateSearch.Text = "البحث في فترة:";
+            rbDateSearch.UseVisualStyleBackColor = true;
+            rbDateSearch.CheckedChanged += rbDateSearch_CheckedChanged;
+            // 
+            // panelstatisticsandOperations
+            // 
+            panelstatisticsandOperations.Controls.Add(lblTitleForm);
+            panelstatisticsandOperations.Controls.Add(flowLayoutPanel1);
+            panelstatisticsandOperations.Controls.Add(SearchPanel);
+            panelstatisticsandOperations.Location = new Point(268, 3);
+            panelstatisticsandOperations.Name = "panelstatisticsandOperations";
+            panelstatisticsandOperations.Size = new Size(300, 158);
+            panelstatisticsandOperations.TabIndex = 10;
+            // 
+            // lblTitleForm
+            // 
+            lblTitleForm.AutoSize = true;
+            lblTitleForm.Font = new Font("Calibri", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblTitleForm.ForeColor = Color.Red;
+            lblTitleForm.ImeMode = ImeMode.NoControl;
+            lblTitleForm.Location = new Point(52, 5);
+            lblTitleForm.Margin = new Padding(3);
+            lblTitleForm.Name = "lblTitleForm";
+            lblTitleForm.Size = new Size(214, 23);
+            lblTitleForm.TabIndex = 13;
+            lblTitleForm.Text = "تقارير العملاء وجميع المدفوعات:";
+            // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.Controls.Add(lblTotalDebt);
+            flowLayoutPanel1.Controls.Add(lblTotalCustomers);
+            flowLayoutPanel1.Location = new Point(25, 79);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(247, 76);
+            flowLayoutPanel1.TabIndex = 12;
+            // 
+            // lblTotalDebt
+            // 
+            lblTotalDebt.AutoSize = true;
+            lblTotalDebt.ImeMode = ImeMode.NoControl;
+            lblTotalDebt.Location = new Point(41, 3);
+            lblTotalDebt.Margin = new Padding(3);
+            lblTotalDebt.Name = "lblTotalDebt";
+            lblTotalDebt.Size = new Size(203, 19);
+            lblTotalDebt.TabIndex = 9;
+            lblTotalDebt.Text = "مجموع مدفوعات العملاء في الجدول:";
+            // 
+            // lblTotalCustomers
+            // 
+            lblTotalCustomers.AutoSize = true;
+            lblTotalCustomers.ImeMode = ImeMode.NoControl;
+            lblTotalCustomers.Location = new Point(131, 28);
+            lblTotalCustomers.Margin = new Padding(3);
+            lblTotalCustomers.Name = "lblTotalCustomers";
+            lblTotalCustomers.Size = new Size(113, 19);
+            lblTotalCustomers.TabIndex = 10;
+            lblTotalCustomers.Text = "مجموع العملاء:000";
+            // 
+            // SearchPanel
+            // 
+            SearchPanel.Controls.Add(txtSearch);
+            SearchPanel.Controls.Add(btnSearch);
+            SearchPanel.Location = new Point(3, 33);
+            SearchPanel.Name = "SearchPanel";
+            SearchPanel.Size = new Size(294, 40);
+            SearchPanel.TabIndex = 8;
+            // 
+            // txtSearch
+            // 
+            txtSearch.Dock = DockStyle.Fill;
+            txtSearch.Font = new Font("Calibri", 12F);
+            txtSearch.Location = new Point(50, 0);
+            txtSearch.Multiline = true;
+            txtSearch.Name = "txtSearch";
+            txtSearch.PlaceholderText = "اختر طريقة البحث (على اليمين)";
+            txtSearch.Size = new Size(244, 40);
+            txtSearch.TabIndex = 9;
+            txtSearch.TextAlign = HorizontalAlignment.Center;
+            // 
+            // btnSearch
+            // 
+            btnSearch.Dock = DockStyle.Left;
+            btnSearch.Image = (Image)resources.GetObject("btnSearch.Image");
+            btnSearch.ImeMode = ImeMode.NoControl;
+            btnSearch.Location = new Point(0, 0);
+            btnSearch.Name = "btnSearch";
+            btnSearch.Size = new Size(50, 40);
+            btnSearch.TabIndex = 7;
+            btnSearch.UseVisualStyleBackColor = true;
+            btnSearch.Click += btnSearch_Click;
+            // 
+            // panelButtons
+            // 
+            panelButtons.Controls.Add(button2);
+            panelButtons.Controls.Add(button1);
+            panelButtons.Controls.Add(btnExportCustomer);
+            panelButtons.Location = new Point(11, 3);
+            panelButtons.Name = "panelButtons";
+            panelButtons.Size = new Size(251, 158);
+            panelButtons.TabIndex = 9;
+            // 
+            // button2
+            // 
+            button2.Anchor = AnchorStyles.None;
+            button2.Image = (Image)resources.GetObject("button2.Image");
+            button2.ImageAlign = ContentAlignment.MiddleLeft;
+            button2.ImeMode = ImeMode.NoControl;
+            button2.Location = new Point(4, 110);
+            button2.Name = "button2";
+            button2.Size = new Size(244, 40);
+            button2.TabIndex = 8;
+            button2.Text = "      تصدير/طباعة جميع الفاتورات";
+            button2.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            button1.Anchor = AnchorStyles.None;
+            button1.Image = (Image)resources.GetObject("button1.Image");
+            button1.ImageAlign = ContentAlignment.MiddleLeft;
+            button1.ImeMode = ImeMode.NoControl;
+            button1.Location = new Point(4, 61);
+            button1.Name = "button1";
+            button1.Size = new Size(244, 40);
+            button1.TabIndex = 7;
+            button1.Text = "       تصدير/طباعة جميع فاتورات العميل";
+            button1.UseVisualStyleBackColor = true;
+            // 
+            // btnExportCustomer
+            // 
+            btnExportCustomer.Anchor = AnchorStyles.None;
+            btnExportCustomer.Image = (Image)resources.GetObject("btnExportCustomer.Image");
+            btnExportCustomer.ImageAlign = ContentAlignment.MiddleLeft;
+            btnExportCustomer.ImeMode = ImeMode.NoControl;
+            btnExportCustomer.Location = new Point(4, 11);
+            btnExportCustomer.Name = "btnExportCustomer";
+            btnExportCustomer.Size = new Size(244, 40);
+            btnExportCustomer.TabIndex = 6;
+            btnExportCustomer.Text = "   تصدير/طباعة الفاتورة";
+            btnExportCustomer.UseVisualStyleBackColor = true;
+            // 
+            // btnRefresh
+            // 
+            btnRefresh.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnRefresh.Image = (Image)resources.GetObject("btnRefresh.Image");
+            btnRefresh.ImeMode = ImeMode.NoControl;
+            btnRefresh.Location = new Point(981, 638);
+            btnRefresh.Name = "btnRefresh";
+            btnRefresh.Size = new Size(50, 40);
+            btnRefresh.TabIndex = 18;
+            toolTip1.SetToolTip(btnRefresh, "اعادة التحميل");
+            btnRefresh.UseVisualStyleBackColor = true;
+            btnRefresh.Click += btnRefresh_Click;
+            // 
+            // lblEmptyData
+            // 
+            lblEmptyData.Anchor = AnchorStyles.None;
+            lblEmptyData.AutoSize = true;
+            lblEmptyData.BackColor = Color.Transparent;
+            lblEmptyData.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            lblEmptyData.ForeColor = Color.Crimson;
+            lblEmptyData.ImeMode = ImeMode.NoControl;
+            lblEmptyData.Location = new Point(451, 353);
+            lblEmptyData.Name = "lblEmptyData";
+            lblEmptyData.Size = new Size(133, 19);
+            lblEmptyData.TabIndex = 16;
+            lblEmptyData.Text = "لا توجد بيانات لعرضها";
+            lblEmptyData.TextAlign = ContentAlignment.MiddleCenter;
+            lblEmptyData.Visible = false;
+            // 
+            // DgvِCustomer
+            // 
+            DgvِCustomer.AllowUserToAddRows = false;
+            DgvِCustomer.AllowUserToResizeColumns = false;
+            DgvِCustomer.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvِCustomer.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            DgvِCustomer.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            DgvِCustomer.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            DgvِCustomer.BackgroundColor = Color.White;
+            DgvِCustomer.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            DgvِCustomer.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = Color.DodgerBlue;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            DgvِCustomer.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            DgvِCustomer.ColumnHeadersHeight = 40;
+            DgvِCustomer.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = SystemColors.Window;
+            dataGridViewCellStyle3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            DgvِCustomer.DefaultCellStyle = dataGridViewCellStyle3;
+            DgvِCustomer.Dock = DockStyle.Fill;
+            DgvِCustomer.EnableHeadersVisualStyles = false;
+            DgvِCustomer.GridColor = SystemColors.ControlDark;
+            DgvِCustomer.Location = new Point(0, 168);
+            DgvِCustomer.MultiSelect = false;
+            DgvِCustomer.Name = "DgvِCustomer";
+            DgvِCustomer.ReadOnly = true;
+            DgvِCustomer.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            DgvِCustomer.RowHeadersVisible = false;
+            DgvِCustomer.RowHeadersWidth = 21;
+            DgvِCustomer.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dataGridViewCellStyle4.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvِCustomer.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            DgvِCustomer.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            DgvِCustomer.Size = new Size(1034, 513);
+            DgvِCustomer.TabIndex = 17;
+            // 
+            // CustomerReportsUserControl
+            // 
+            AutoScaleDimensions = new SizeF(8F, 19F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
+            Controls.Add(btnRefresh);
+            Controls.Add(lblEmptyData);
+            Controls.Add(DgvِCustomer);
+            Controls.Add(OperationsflowLayoutPanel);
+            Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Margin = new Padding(3, 4, 3, 4);
+            Name = "CustomerReportsUserControl";
+            RightToLeft = RightToLeft.Yes;
+            Size = new Size(1034, 681);
+            Load += CustomerReportsUserControl_Load;
+            OperationsflowLayoutPanel.ResumeLayout(false);
+            gbPayChoiches.ResumeLayout(false);
+            gbPayChoiches.PerformLayout();
+            panelstatisticsandOperations.ResumeLayout(false);
+            panelstatisticsandOperations.PerformLayout();
+            flowLayoutPanel1.ResumeLayout(false);
+            flowLayoutPanel1.PerformLayout();
+            SearchPanel.ResumeLayout(false);
+            SearchPanel.PerformLayout();
+            panelButtons.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)DgvِCustomer).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
+        }
+
+        #endregion
+
+        private FlowLayoutPanel OperationsflowLayoutPanel;
+        private GroupBox gbPayChoiches;
+        private RadioButton rbBoth;
+        private RadioButton rbCustomerAndOrder;
+        private RadioButton rbDateSearch;
+        private Panel panelstatisticsandOperations;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private Label lblTotalDebt;
+        private Label lblTotalCustomers;
+        private Panel SearchPanel;
+        private TextBox txtSearch;
+        private Button btnSearch;
+        private Panel panelButtons;
+        private Button button2;
+        private Button button1;
+        private Button btnExportCustomer;
+        private Button btnRefresh;
+        private Label lblEmptyData;
+        private DataGridView DgvِCustomer;
+        private ToolTip toolTip1;
+        private Label lblTitleForm;
+        private Label lblTo;
+        private Label lblFrom;
+        private DateTimePicker dtpFrom;
+        private DateTimePicker dtpTo;
+    }
+}

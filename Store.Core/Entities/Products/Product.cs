@@ -42,5 +42,6 @@
         public string TimeEnd { get; set; }
     }
 
+    //Table BadProduct
 
 }

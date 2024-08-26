@@ -233,6 +233,7 @@
             button1.TabIndex = 5;
             button1.Text = "تقارير العملاء";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click_1;
             // 
             // ContainerPanel
             // 

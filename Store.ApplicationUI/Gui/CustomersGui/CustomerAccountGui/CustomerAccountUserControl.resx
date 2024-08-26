@@ -117,7 +117,424 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="OperationsflowLayoutPanel.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="gbPayChoiches.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="&gt;&gt;lblPayAllDebts.Name" xml:space="preserve">
+    <value>lblPayAllDebts</value>
+  </data>
+  <data name="&gt;&gt;lblPayAllDebts.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblPayAllDebts.Parent" xml:space="preserve">
+    <value>gbPayChoiches</value>
+  </data>
+  <data name="&gt;&gt;lblPayAllDebts.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;lblPayFacture.Name" xml:space="preserve">
+    <value>lblPayFacture</value>
+  </data>
+  <data name="&gt;&gt;lblPayFacture.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblPayFacture.Parent" xml:space="preserve">
+    <value>gbPayChoiches</value>
+  </data>
+  <data name="&gt;&gt;lblPayFacture.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;rbPayAllFactures.Name" xml:space="preserve">
+    <value>rbPayAllFactures</value>
+  </data>
+  <data name="&gt;&gt;rbPayAllFactures.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbPayAllFactures.Parent" xml:space="preserve">
+    <value>gbPayChoiches</value>
+  </data>
+  <data name="&gt;&gt;rbPayAllFactures.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;txtPayAmout.Name" xml:space="preserve">
+    <value>txtPayAmout</value>
+  </data>
+  <data name="&gt;&gt;txtPayAmout.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtPayAmout.Parent" xml:space="preserve">
+    <value>gbPayChoiches</value>
+  </data>
+  <data name="&gt;&gt;txtPayAmout.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;rbPayPartialFacture.Name" xml:space="preserve">
+    <value>rbPayPartialFacture</value>
+  </data>
+  <data name="&gt;&gt;rbPayPartialFacture.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbPayPartialFacture.Parent" xml:space="preserve">
+    <value>gbPayChoiches</value>
+  </data>
+  <data name="&gt;&gt;rbPayPartialFacture.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;rbPayFacture.Name" xml:space="preserve">
+    <value>rbPayFacture</value>
+  </data>
+  <data name="&gt;&gt;rbPayFacture.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbPayFacture.Parent" xml:space="preserve">
+    <value>gbPayChoiches</value>
+  </data>
+  <data name="&gt;&gt;rbPayFacture.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;btnPay.Name" xml:space="preserve">
+    <value>btnPay</value>
+  </data>
+  <data name="&gt;&gt;btnPay.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnPay.Parent" xml:space="preserve">
+    <value>gbPayChoiches</value>
+  </data>
+  <data name="&gt;&gt;btnPay.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="gbPayChoiches.Location" type="System.Drawing.Point, System.Drawing">
+    <value>574, 3</value>
+  </data>
+  <data name="gbPayChoiches.Size" type="System.Drawing.Size, System.Drawing">
+    <value>457, 158</value>
+  </data>
+  <data name="gbPayChoiches.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="gbPayChoiches.Text" xml:space="preserve">
+    <value>اختيارات الدفع</value>
+  </data>
+  <data name="&gt;&gt;gbPayChoiches.Name" xml:space="preserve">
+    <value>gbPayChoiches</value>
+  </data>
+  <data name="&gt;&gt;gbPayChoiches.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbPayChoiches.Parent" xml:space="preserve">
+    <value>OperationsflowLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;gbPayChoiches.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;lblTitleForm.Name" xml:space="preserve">
+    <value>lblTitleForm</value>
+  </data>
+  <data name="&gt;&gt;lblTitleForm.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblTitleForm.Parent" xml:space="preserve">
+    <value>panelstatisticsandOperations</value>
+  </data>
+  <data name="&gt;&gt;lblTitleForm.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanel1.Name" xml:space="preserve">
+    <value>flowLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.FlowLayoutPanel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanel1.Parent" xml:space="preserve">
+    <value>panelstatisticsandOperations</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanel1.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;SearchPanel.Name" xml:space="preserve">
+    <value>SearchPanel</value>
+  </data>
+  <data name="&gt;&gt;SearchPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;SearchPanel.Parent" xml:space="preserve">
+    <value>panelstatisticsandOperations</value>
+  </data>
+  <data name="&gt;&gt;SearchPanel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="panelstatisticsandOperations.Location" type="System.Drawing.Point, System.Drawing">
+    <value>268, 3</value>
+  </data>
+  <data name="panelstatisticsandOperations.Size" type="System.Drawing.Size, System.Drawing">
+    <value>300, 158</value>
+  </data>
+  <data name="panelstatisticsandOperations.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="&gt;&gt;panelstatisticsandOperations.Name" xml:space="preserve">
+    <value>panelstatisticsandOperations</value>
+  </data>
+  <data name="&gt;&gt;panelstatisticsandOperations.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panelstatisticsandOperations.Parent" xml:space="preserve">
+    <value>OperationsflowLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;panelstatisticsandOperations.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;button2.Name" xml:space="preserve">
+    <value>button2</value>
+  </data>
+  <data name="&gt;&gt;button2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button2.Parent" xml:space="preserve">
+    <value>panelButtons</value>
+  </data>
+  <data name="&gt;&gt;button2.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;button1.Name" xml:space="preserve">
+    <value>button1</value>
+  </data>
+  <data name="&gt;&gt;button1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button1.Parent" xml:space="preserve">
+    <value>panelButtons</value>
+  </data>
+  <data name="&gt;&gt;button1.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;btnExportCustomer.Name" xml:space="preserve">
+    <value>btnExportCustomer</value>
+  </data>
+  <data name="&gt;&gt;btnExportCustomer.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnExportCustomer.Parent" xml:space="preserve">
+    <value>panelButtons</value>
+  </data>
+  <data name="&gt;&gt;btnExportCustomer.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="panelButtons.Location" type="System.Drawing.Point, System.Drawing">
+    <value>11, 3</value>
+  </data>
+  <data name="panelButtons.Size" type="System.Drawing.Size, System.Drawing">
+    <value>251, 158</value>
+  </data>
+  <data name="panelButtons.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="&gt;&gt;panelButtons.Name" xml:space="preserve">
+    <value>panelButtons</value>
+  </data>
+  <data name="&gt;&gt;panelButtons.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panelButtons.Parent" xml:space="preserve">
+    <value>OperationsflowLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;panelButtons.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="OperationsflowLayoutPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="OperationsflowLayoutPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="OperationsflowLayoutPanel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="OperationsflowLayoutPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1034, 168</value>
+  </data>
+  <data name="OperationsflowLayoutPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="&gt;&gt;OperationsflowLayoutPanel.Name" xml:space="preserve">
+    <value>OperationsflowLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;OperationsflowLayoutPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.FlowLayoutPanel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;OperationsflowLayoutPanel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;OperationsflowLayoutPanel.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="lblPayAllDebts.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblPayAllDebts.Location" type="System.Drawing.Point, System.Drawing">
+    <value>112, 106</value>
+  </data>
+  <data name="lblPayAllDebts.Size" type="System.Drawing.Size, System.Drawing">
+    <value>81, 19</value>
+  </data>
+  <data name="lblPayAllDebts.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="lblPayAllDebts.Text" xml:space="preserve">
+    <value>000000000</value>
+  </data>
+  <data name="&gt;&gt;lblPayAllDebts.Name" xml:space="preserve">
+    <value>lblPayAllDebts</value>
+  </data>
+  <data name="&gt;&gt;lblPayAllDebts.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblPayAllDebts.Parent" xml:space="preserve">
+    <value>gbPayChoiches</value>
+  </data>
+  <data name="&gt;&gt;lblPayAllDebts.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lblPayFacture.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblPayFacture.Location" type="System.Drawing.Point, System.Drawing">
+    <value>106, 30</value>
+  </data>
+  <data name="lblPayFacture.Size" type="System.Drawing.Size, System.Drawing">
+    <value>144, 19</value>
+  </data>
+  <data name="lblPayFacture.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="lblPayFacture.Text" xml:space="preserve">
+    <value>فاتورة رقم 0 الدين : 000</value>
+  </data>
+  <data name="&gt;&gt;lblPayFacture.Name" xml:space="preserve">
+    <value>lblPayFacture</value>
+  </data>
+  <data name="&gt;&gt;lblPayFacture.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblPayFacture.Parent" xml:space="preserve">
+    <value>gbPayChoiches</value>
+  </data>
+  <data name="&gt;&gt;lblPayFacture.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="rbPayAllFactures.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbPayAllFactures.Location" type="System.Drawing.Point, System.Drawing">
+    <value>196, 104</value>
+  </data>
+  <data name="rbPayAllFactures.Size" type="System.Drawing.Size, System.Drawing">
+    <value>248, 23</value>
+  </data>
+  <data name="rbPayAllFactures.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="rbPayAllFactures.Text" xml:space="preserve">
+    <value>دفع جميع الديون في الجدول المقدرة ب :</value>
+  </data>
+  <data name="&gt;&gt;rbPayAllFactures.Name" xml:space="preserve">
+    <value>rbPayAllFactures</value>
+  </data>
+  <data name="&gt;&gt;rbPayAllFactures.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbPayAllFactures.Parent" xml:space="preserve">
+    <value>gbPayChoiches</value>
+  </data>
+  <data name="&gt;&gt;rbPayAllFactures.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="txtPayAmout.Location" type="System.Drawing.Point, System.Drawing">
+    <value>106, 65</value>
+  </data>
+  <data name="txtPayAmout.Size" type="System.Drawing.Size, System.Drawing">
+    <value>181, 27</value>
+  </data>
+  <data name="txtPayAmout.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;txtPayAmout.Name" xml:space="preserve">
+    <value>txtPayAmout</value>
+  </data>
+  <data name="&gt;&gt;txtPayAmout.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtPayAmout.Parent" xml:space="preserve">
+    <value>gbPayChoiches</value>
+  </data>
+  <data name="&gt;&gt;txtPayAmout.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="rbPayPartialFacture.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbPayPartialFacture.Location" type="System.Drawing.Point, System.Drawing">
+    <value>304, 66</value>
+  </data>
+  <data name="rbPayPartialFacture.Size" type="System.Drawing.Size, System.Drawing">
+    <value>140, 23</value>
+  </data>
+  <data name="rbPayPartialFacture.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="rbPayPartialFacture.Text" xml:space="preserve">
+    <value>دفع جزء من الفاتورة:</value>
+  </data>
+  <data name="&gt;&gt;rbPayPartialFacture.Name" xml:space="preserve">
+    <value>rbPayPartialFacture</value>
+  </data>
+  <data name="&gt;&gt;rbPayPartialFacture.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbPayPartialFacture.Parent" xml:space="preserve">
+    <value>gbPayChoiches</value>
+  </data>
+  <data name="&gt;&gt;rbPayPartialFacture.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="rbPayFacture.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbPayFacture.Location" type="System.Drawing.Point, System.Drawing">
+    <value>319, 26</value>
+  </data>
+  <data name="rbPayFacture.Size" type="System.Drawing.Size, System.Drawing">
+    <value>125, 23</value>
+  </data>
+  <data name="rbPayFacture.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="rbPayFacture.Text" xml:space="preserve">
+    <value>دفع الفاتورة كاملة:</value>
+  </data>
+  <data name="&gt;&gt;rbPayFacture.Name" xml:space="preserve">
+    <value>rbPayFacture</value>
+  </data>
+  <data name="&gt;&gt;rbPayFacture.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbPayFacture.Parent" xml:space="preserve">
+    <value>gbPayChoiches</value>
+  </data>
+  <data name="&gt;&gt;rbPayFacture.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="btnPay.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left</value>
+  </data>
   <data name="btnPay.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAjRJREFUWEft
@@ -132,6 +549,264 @@
         C4NW8F37aZ+BJPlcf7n0LPt/Hr+m8598z8DdPYXejwzEbgbQR5XV+b6yRXlWVU9b9U9+I90TcLsnIQ+l
         nMbcyHxa1X5+iYSEhBBSqb/J9kTlLnIC3AAAAABJRU5ErkJggg==
 </value>
+  </data>
+  <data name="btnPay.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="btnPay.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 112</value>
+  </data>
+  <data name="btnPay.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 40</value>
+  </data>
+  <data name="btnPay.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="btnPay.Text" xml:space="preserve">
+    <value>       دفع الآن </value>
+  </data>
+  <data name="&gt;&gt;btnPay.Name" xml:space="preserve">
+    <value>btnPay</value>
+  </data>
+  <data name="&gt;&gt;btnPay.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnPay.Parent" xml:space="preserve">
+    <value>gbPayChoiches</value>
+  </data>
+  <data name="&gt;&gt;btnPay.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;lblTotalDebt.Name" xml:space="preserve">
+    <value>lblTotalDebt</value>
+  </data>
+  <data name="&gt;&gt;lblTotalDebt.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblTotalDebt.Parent" xml:space="preserve">
+    <value>flowLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;lblTotalDebt.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;lblTotalCustomers.Name" xml:space="preserve">
+    <value>lblTotalCustomers</value>
+  </data>
+  <data name="&gt;&gt;lblTotalCustomers.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblTotalCustomers.Parent" xml:space="preserve">
+    <value>flowLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;lblTotalCustomers.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;lblTotalFactures.Name" xml:space="preserve">
+    <value>lblTotalFactures</value>
+  </data>
+  <data name="&gt;&gt;lblTotalFactures.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblTotalFactures.Parent" xml:space="preserve">
+    <value>flowLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;lblTotalFactures.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="flowLayoutPanel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>27, 79</value>
+  </data>
+  <data name="flowLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>247, 76</value>
+  </data>
+  <data name="flowLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanel1.Name" xml:space="preserve">
+    <value>flowLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.FlowLayoutPanel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanel1.Parent" xml:space="preserve">
+    <value>panelstatisticsandOperations</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanel1.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="lblTotalDebt.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblTotalDebt.Location" type="System.Drawing.Point, System.Drawing">
+    <value>92, 3</value>
+  </data>
+  <data name="lblTotalDebt.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lblTotalDebt.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 19</value>
+  </data>
+  <data name="lblTotalDebt.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="lblTotalDebt.Text" xml:space="preserve">
+    <value>مجموع الديون على العملاء:</value>
+  </data>
+  <data name="&gt;&gt;lblTotalDebt.Name" xml:space="preserve">
+    <value>lblTotalDebt</value>
+  </data>
+  <data name="&gt;&gt;lblTotalDebt.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblTotalDebt.Parent" xml:space="preserve">
+    <value>flowLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;lblTotalDebt.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lblTotalCustomers.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblTotalCustomers.Location" type="System.Drawing.Point, System.Drawing">
+    <value>131, 28</value>
+  </data>
+  <data name="lblTotalCustomers.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lblTotalCustomers.Size" type="System.Drawing.Size, System.Drawing">
+    <value>113, 19</value>
+  </data>
+  <data name="lblTotalCustomers.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="lblTotalCustomers.Text" xml:space="preserve">
+    <value>مجموع العملاء:000</value>
+  </data>
+  <data name="&gt;&gt;lblTotalCustomers.Name" xml:space="preserve">
+    <value>lblTotalCustomers</value>
+  </data>
+  <data name="&gt;&gt;lblTotalCustomers.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblTotalCustomers.Parent" xml:space="preserve">
+    <value>flowLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;lblTotalCustomers.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="lblTotalFactures.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblTotalFactures.Location" type="System.Drawing.Point, System.Drawing">
+    <value>72, 53</value>
+  </data>
+  <data name="lblTotalFactures.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lblTotalFactures.Size" type="System.Drawing.Size, System.Drawing">
+    <value>172, 19</value>
+  </data>
+  <data name="lblTotalFactures.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="lblTotalFactures.Text" xml:space="preserve">
+    <value>مجموع الفواتير في الجدول:000</value>
+  </data>
+  <data name="&gt;&gt;lblTotalFactures.Name" xml:space="preserve">
+    <value>lblTotalFactures</value>
+  </data>
+  <data name="&gt;&gt;lblTotalFactures.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblTotalFactures.Parent" xml:space="preserve">
+    <value>flowLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;lblTotalFactures.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;txtSearch.Name" xml:space="preserve">
+    <value>txtSearch</value>
+  </data>
+  <data name="&gt;&gt;txtSearch.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtSearch.Parent" xml:space="preserve">
+    <value>SearchPanel</value>
+  </data>
+  <data name="&gt;&gt;txtSearch.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;btnSearch.Name" xml:space="preserve">
+    <value>btnSearch</value>
+  </data>
+  <data name="&gt;&gt;btnSearch.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnSearch.Parent" xml:space="preserve">
+    <value>SearchPanel</value>
+  </data>
+  <data name="&gt;&gt;btnSearch.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="SearchPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 33</value>
+  </data>
+  <data name="SearchPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>294, 40</value>
+  </data>
+  <data name="SearchPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;SearchPanel.Name" xml:space="preserve">
+    <value>SearchPanel</value>
+  </data>
+  <data name="&gt;&gt;SearchPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;SearchPanel.Parent" xml:space="preserve">
+    <value>panelstatisticsandOperations</value>
+  </data>
+  <data name="&gt;&gt;SearchPanel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="txtSearch.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="txtSearch.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Calibri, 12pt</value>
+  </data>
+  <data name="txtSearch.Location" type="System.Drawing.Point, System.Drawing">
+    <value>50, 0</value>
+  </data>
+  <data name="txtSearch.Multiline" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="txtSearch.PlaceholderText" xml:space="preserve">
+    <value>ابحث عن عميل او رقم فاتورة</value>
+  </data>
+  <data name="txtSearch.Size" type="System.Drawing.Size, System.Drawing">
+    <value>244, 40</value>
+  </data>
+  <data name="txtSearch.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="txtSearch.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;txtSearch.Name" xml:space="preserve">
+    <value>txtSearch</value>
+  </data>
+  <data name="&gt;&gt;txtSearch.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtSearch.Parent" xml:space="preserve">
+    <value>SearchPanel</value>
+  </data>
+  <data name="&gt;&gt;txtSearch.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="btnSearch.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Left</value>
   </data>
   <data name="btnSearch.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -153,6 +828,30 @@
         AElFTkSuQmCC
 </value>
   </data>
+  <data name="btnSearch.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="btnSearch.Size" type="System.Drawing.Size, System.Drawing">
+    <value>50, 40</value>
+  </data>
+  <data name="btnSearch.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;btnSearch.Name" xml:space="preserve">
+    <value>btnSearch</value>
+  </data>
+  <data name="&gt;&gt;btnSearch.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnSearch.Parent" xml:space="preserve">
+    <value>SearchPanel</value>
+  </data>
+  <data name="&gt;&gt;btnSearch.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="button2.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>None</value>
+  </data>
   <data name="button2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAgVJREFUWEft
@@ -166,6 +865,36 @@
         Q/ej0PEvwEfxTBzu3h/BjRxNDksIj0q40WqkFC27PEBbC13U5iwzqR2N4xKueQf9TE4GUPn9FCqukyHg
         rOj/M+QsM8YevVtG8nE2CHU+AOQRMxJ/5D5TKPwFGFbsrnmk/JsAAAAASUVORK5CYII=
 </value>
+  </data>
+  <data name="button2.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="button2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 110</value>
+  </data>
+  <data name="button2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>244, 40</value>
+  </data>
+  <data name="button2.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="button2.Text" xml:space="preserve">
+    <value>      تصدير/طباعة جميع الفاتورات</value>
+  </data>
+  <data name="&gt;&gt;button2.Name" xml:space="preserve">
+    <value>button2</value>
+  </data>
+  <data name="&gt;&gt;button2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button2.Parent" xml:space="preserve">
+    <value>panelButtons</value>
+  </data>
+  <data name="&gt;&gt;button2.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="button1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>None</value>
   </data>
   <data name="button1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -181,6 +910,36 @@
         zGVT811gikY4VRA9fWM9E/jqKeZG8fD/CjoLG1wrMPB42RJ568wdugl9cMci4Bv44Hg1QxRfCp36Flr4
         jxGLXQLXILwugfgHAAAAAABJRU5ErkJggg==
 </value>
+  </data>
+  <data name="button1.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="button1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 61</value>
+  </data>
+  <data name="button1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>244, 40</value>
+  </data>
+  <data name="button1.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="button1.Text" xml:space="preserve">
+    <value>       تصدير/طباعة جميع فاتورات العميل</value>
+  </data>
+  <data name="&gt;&gt;button1.Name" xml:space="preserve">
+    <value>button1</value>
+  </data>
+  <data name="&gt;&gt;button1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button1.Parent" xml:space="preserve">
+    <value>panelButtons</value>
+  </data>
+  <data name="&gt;&gt;button1.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="btnExportCustomer.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>None</value>
   </data>
   <data name="btnExportCustomer.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -201,9 +960,39 @@
         qYbw/zN/LD+KyEwMKSEzU4cFoeDLIvq8rP9NjvMLQmrtWorEHKgAAAAASUVORK5CYII=
 </value>
   </data>
+  <data name="btnExportCustomer.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="btnExportCustomer.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 11</value>
+  </data>
+  <data name="btnExportCustomer.Size" type="System.Drawing.Size, System.Drawing">
+    <value>244, 40</value>
+  </data>
+  <data name="btnExportCustomer.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="btnExportCustomer.Text" xml:space="preserve">
+    <value>   تصدير/طباعة الفاتورة</value>
+  </data>
+  <data name="&gt;&gt;btnExportCustomer.Name" xml:space="preserve">
+    <value>btnExportCustomer</value>
+  </data>
+  <data name="&gt;&gt;btnExportCustomer.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnExportCustomer.Parent" xml:space="preserve">
+    <value>panelButtons</value>
+  </data>
+  <data name="&gt;&gt;btnExportCustomer.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="btnRefresh.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
   <data name="btnRefresh.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAxJJREFUWEft
@@ -223,7 +1012,166 @@
         BCncKbf9GAAAAABJRU5ErkJggg==
 </value>
   </data>
+  <data name="btnRefresh.Location" type="System.Drawing.Point, System.Drawing">
+    <value>981, 638</value>
+  </data>
+  <data name="btnRefresh.Size" type="System.Drawing.Size, System.Drawing">
+    <value>50, 40</value>
+  </data>
+  <data name="btnRefresh.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
+  </data>
+  <data name="btnRefresh.ToolTip" xml:space="preserve">
+    <value>اعادة التحميل</value>
+  </data>
+  <data name="&gt;&gt;btnRefresh.Name" xml:space="preserve">
+    <value>btnRefresh</value>
+  </data>
+  <data name="&gt;&gt;btnRefresh.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnRefresh.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnRefresh.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lblEmptyData.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="lblEmptyData.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblEmptyData.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Calibri, 12pt, style=Bold</value>
+  </data>
+  <data name="lblEmptyData.Location" type="System.Drawing.Point, System.Drawing">
+    <value>451, 353</value>
+  </data>
+  <data name="lblEmptyData.Size" type="System.Drawing.Size, System.Drawing">
+    <value>133, 19</value>
+  </data>
+  <data name="lblEmptyData.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="lblEmptyData.Text" xml:space="preserve">
+    <value>لا توجد بيانات لعرضها</value>
+  </data>
+  <data name="lblEmptyData.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="lblEmptyData.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;lblEmptyData.Name" xml:space="preserve">
+    <value>lblEmptyData</value>
+  </data>
+  <data name="&gt;&gt;lblEmptyData.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblEmptyData.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;lblEmptyData.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="DgvِCustomer.ColumnHeadersHeight" type="System.Int32, mscorlib">
+    <value>40</value>
+  </data>
+  <data name="DgvِCustomer.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="DgvِCustomer.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 168</value>
+  </data>
+  <data name="DgvِCustomer.RowHeadersWidth" type="System.Int32, mscorlib">
+    <value>21</value>
+  </data>
+  <data name="DgvِCustomer.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1034, 513</value>
+  </data>
+  <data name="DgvِCustomer.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="&gt;&gt;DgvِCustomer.Name" xml:space="preserve">
+    <value>DgvِCustomer</value>
+  </data>
+  <data name="&gt;&gt;DgvِCustomer.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;DgvِCustomer.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;DgvِCustomer.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="lblTitleForm.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblTitleForm.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Calibri, 14.25pt</value>
+  </data>
+  <data name="lblTitleForm.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lblTitleForm.Location" type="System.Drawing.Point, System.Drawing">
+    <value>51, 5</value>
+  </data>
+  <data name="lblTitleForm.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lblTitleForm.Size" type="System.Drawing.Size, System.Drawing">
+    <value>199, 23</value>
+  </data>
+  <data name="lblTitleForm.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="lblTitleForm.Text" xml:space="preserve">
+    <value>حسابات العملاء والدين عليهم:</value>
+  </data>
+  <data name="&gt;&gt;lblTitleForm.Name" xml:space="preserve">
+    <value>lblTitleForm</value>
+  </data>
+  <data name="&gt;&gt;lblTitleForm.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblTitleForm.Parent" xml:space="preserve">
+    <value>panelstatisticsandOperations</value>
+  </data>
+  <data name="&gt;&gt;lblTitleForm.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>25</value>
   </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>8, 19</value>
+  </data>
+  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Calibri, 12pt</value>
+  </data>
+  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 4, 3, 4</value>
+  </data>
+  <data name="$this.RightToLeft" type="System.Windows.Forms.RightToLeft, System.Windows.Forms">
+    <value>Yes</value>
+  </data>
+  <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1034, 681</value>
+  </data>
+  <data name="&gt;&gt;toolTip1.Name" xml:space="preserve">
+    <value>toolTip1</value>
+  </data>
+  <data name="&gt;&gt;toolTip1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolTip, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>CustomerAccountUserControl</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.UserControl, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

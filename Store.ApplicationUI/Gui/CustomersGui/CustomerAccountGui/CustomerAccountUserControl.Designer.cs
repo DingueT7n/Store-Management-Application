@@ -30,18 +30,18 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomerAccountUserControl));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
             OperationsflowLayoutPanel = new FlowLayoutPanel();
             gbPayChoiches = new GroupBox();
             lblPayAllDebts = new Label();
             lblPayFacture = new Label();
-            radioButton3 = new RadioButton();
+            rbPayAllFactures = new RadioButton();
             txtPayAmout = new TextBox();
-            radioButton2 = new RadioButton();
-            radioButton1 = new RadioButton();
+            rbPayPartialFacture = new RadioButton();
+            rbPayFacture = new RadioButton();
             btnPay = new Button();
             panelstatisticsandOperations = new Panel();
             flowLayoutPanel1 = new FlowLayoutPanel();
@@ -59,6 +59,7 @@
             btnRefresh = new Button();
             lblEmptyData = new Label();
             DgvِCustomer = new DataGridView();
+            lblTitleForm = new Label();
             OperationsflowLayoutPanel.SuspendLayout();
             gbPayChoiches.SuspendLayout();
             panelstatisticsandOperations.SuspendLayout();
@@ -70,182 +71,114 @@
             // 
             // OperationsflowLayoutPanel
             // 
-            OperationsflowLayoutPanel.AutoScroll = true;
+            resources.ApplyResources(OperationsflowLayoutPanel, "OperationsflowLayoutPanel");
             OperationsflowLayoutPanel.Controls.Add(gbPayChoiches);
             OperationsflowLayoutPanel.Controls.Add(panelstatisticsandOperations);
             OperationsflowLayoutPanel.Controls.Add(panelButtons);
-            OperationsflowLayoutPanel.Dock = DockStyle.Top;
-            OperationsflowLayoutPanel.Location = new Point(0, 0);
-            OperationsflowLayoutPanel.Margin = new Padding(5);
             OperationsflowLayoutPanel.Name = "OperationsflowLayoutPanel";
-            OperationsflowLayoutPanel.Size = new Size(1034, 164);
-            OperationsflowLayoutPanel.TabIndex = 10;
             // 
             // gbPayChoiches
             // 
-            gbPayChoiches.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            resources.ApplyResources(gbPayChoiches, "gbPayChoiches");
             gbPayChoiches.Controls.Add(lblPayAllDebts);
             gbPayChoiches.Controls.Add(lblPayFacture);
-            gbPayChoiches.Controls.Add(radioButton3);
+            gbPayChoiches.Controls.Add(rbPayAllFactures);
             gbPayChoiches.Controls.Add(txtPayAmout);
-            gbPayChoiches.Controls.Add(radioButton2);
-            gbPayChoiches.Controls.Add(radioButton1);
+            gbPayChoiches.Controls.Add(rbPayPartialFacture);
+            gbPayChoiches.Controls.Add(rbPayFacture);
             gbPayChoiches.Controls.Add(btnPay);
-            gbPayChoiches.Location = new Point(584, 3);
             gbPayChoiches.Name = "gbPayChoiches";
-            gbPayChoiches.Size = new Size(447, 155);
-            gbPayChoiches.TabIndex = 8;
             gbPayChoiches.TabStop = false;
-            gbPayChoiches.Text = "اختيارات الدفع";
             // 
             // lblPayAllDebts
             // 
-            lblPayAllDebts.AutoSize = true;
-            lblPayAllDebts.Location = new Point(151, 105);
+            resources.ApplyResources(lblPayAllDebts, "lblPayAllDebts");
             lblPayAllDebts.Name = "lblPayAllDebts";
-            lblPayAllDebts.Size = new Size(41, 19);
-            lblPayAllDebts.TabIndex = 10;
-            lblPayAllDebts.Text = "0000";
             // 
             // lblPayFacture
             // 
-            lblPayFacture.AutoSize = true;
-            lblPayFacture.Location = new Point(106, 30);
+            resources.ApplyResources(lblPayFacture, "lblPayFacture");
             lblPayFacture.Name = "lblPayFacture";
-            lblPayFacture.Size = new Size(144, 19);
-            lblPayFacture.TabIndex = 9;
-            lblPayFacture.Text = "فاتورة رقم 0 الدين : 000";
             // 
-            // radioButton3
+            // rbPayAllFactures
             // 
-            radioButton3.AutoSize = true;
-            radioButton3.Location = new Point(243, 105);
-            radioButton3.Name = "radioButton3";
-            radioButton3.Size = new Size(190, 23);
-            radioButton3.TabIndex = 8;
-            radioButton3.TabStop = true;
-            radioButton3.Text = "دفع جميع الديون المقدرة ب :";
-            radioButton3.UseVisualStyleBackColor = true;
+            resources.ApplyResources(rbPayAllFactures, "rbPayAllFactures");
+            rbPayAllFactures.Name = "rbPayAllFactures";
+            rbPayAllFactures.UseVisualStyleBackColor = true;
             // 
             // txtPayAmout
             // 
-            txtPayAmout.Location = new Point(106, 65);
+            resources.ApplyResources(txtPayAmout, "txtPayAmout");
             txtPayAmout.Name = "txtPayAmout";
-            txtPayAmout.Size = new Size(181, 27);
-            txtPayAmout.TabIndex = 7;
             // 
-            // radioButton2
+            // rbPayPartialFacture
             // 
-            radioButton2.AutoSize = true;
-            radioButton2.Location = new Point(293, 66);
-            radioButton2.Name = "radioButton2";
-            radioButton2.Size = new Size(140, 23);
-            radioButton2.TabIndex = 6;
-            radioButton2.TabStop = true;
-            radioButton2.Text = "دفع جزء من الفاتورة:";
-            radioButton2.UseVisualStyleBackColor = true;
+            resources.ApplyResources(rbPayPartialFacture, "rbPayPartialFacture");
+            rbPayPartialFacture.Name = "rbPayPartialFacture";
+            rbPayPartialFacture.UseVisualStyleBackColor = true;
             // 
-            // radioButton1
+            // rbPayFacture
             // 
-            radioButton1.AutoSize = true;
-            radioButton1.Location = new Point(308, 26);
-            radioButton1.Name = "radioButton1";
-            radioButton1.Size = new Size(125, 23);
-            radioButton1.TabIndex = 5;
-            radioButton1.TabStop = true;
-            radioButton1.Text = "دفع الفاتورة كاملة:";
-            radioButton1.UseVisualStyleBackColor = true;
+            resources.ApplyResources(rbPayFacture, "rbPayFacture");
+            rbPayFacture.Checked = true;
+            rbPayFacture.Name = "rbPayFacture";
+            rbPayFacture.TabStop = true;
+            rbPayFacture.UseVisualStyleBackColor = true;
             // 
             // btnPay
             // 
-            btnPay.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnPay.Image = (Image)resources.GetObject("btnPay.Image");
-            btnPay.ImageAlign = ContentAlignment.MiddleLeft;
-            btnPay.Location = new Point(6, 109);
+            resources.ApplyResources(btnPay, "btnPay");
             btnPay.Name = "btnPay";
-            btnPay.Size = new Size(100, 40);
-            btnPay.TabIndex = 4;
-            btnPay.Text = "       دفع الآن ";
             btnPay.UseVisualStyleBackColor = true;
+            btnPay.Click += btnPay_Click;
             // 
             // panelstatisticsandOperations
             // 
+            panelstatisticsandOperations.Controls.Add(lblTitleForm);
             panelstatisticsandOperations.Controls.Add(flowLayoutPanel1);
             panelstatisticsandOperations.Controls.Add(SearchPanel);
-            panelstatisticsandOperations.Location = new Point(278, 3);
+            resources.ApplyResources(panelstatisticsandOperations, "panelstatisticsandOperations");
             panelstatisticsandOperations.Name = "panelstatisticsandOperations";
-            panelstatisticsandOperations.Size = new Size(300, 155);
-            panelstatisticsandOperations.TabIndex = 10;
             // 
             // flowLayoutPanel1
             // 
             flowLayoutPanel1.Controls.Add(lblTotalDebt);
             flowLayoutPanel1.Controls.Add(lblTotalCustomers);
             flowLayoutPanel1.Controls.Add(lblTotalFactures);
-            flowLayoutPanel1.Location = new Point(20, 55);
+            resources.ApplyResources(flowLayoutPanel1, "flowLayoutPanel1");
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(247, 94);
-            flowLayoutPanel1.TabIndex = 12;
             // 
             // lblTotalDebt
             // 
-            lblTotalDebt.AutoSize = true;
-            lblTotalDebt.Location = new Point(92, 3);
-            lblTotalDebt.Margin = new Padding(3);
+            resources.ApplyResources(lblTotalDebt, "lblTotalDebt");
             lblTotalDebt.Name = "lblTotalDebt";
-            lblTotalDebt.Size = new Size(152, 19);
-            lblTotalDebt.TabIndex = 9;
-            lblTotalDebt.Text = "مجموع الديون على العملاء:";
             // 
             // lblTotalCustomers
             // 
-            lblTotalCustomers.AutoSize = true;
-            lblTotalCustomers.Location = new Point(131, 28);
-            lblTotalCustomers.Margin = new Padding(3);
+            resources.ApplyResources(lblTotalCustomers, "lblTotalCustomers");
             lblTotalCustomers.Name = "lblTotalCustomers";
-            lblTotalCustomers.Size = new Size(113, 19);
-            lblTotalCustomers.TabIndex = 10;
-            lblTotalCustomers.Text = "مجموع العملاء:000";
             // 
             // lblTotalFactures
             // 
-            lblTotalFactures.AutoSize = true;
-            lblTotalFactures.Location = new Point(72, 53);
-            lblTotalFactures.Margin = new Padding(3);
+            resources.ApplyResources(lblTotalFactures, "lblTotalFactures");
             lblTotalFactures.Name = "lblTotalFactures";
-            lblTotalFactures.Size = new Size(172, 19);
-            lblTotalFactures.TabIndex = 11;
-            lblTotalFactures.Text = "مجموع الفواتير في الجدول:000";
             // 
             // SearchPanel
             // 
             SearchPanel.Controls.Add(txtSearch);
             SearchPanel.Controls.Add(btnSearch);
-            SearchPanel.Location = new Point(3, 9);
+            resources.ApplyResources(SearchPanel, "SearchPanel");
             SearchPanel.Name = "SearchPanel";
-            SearchPanel.Size = new Size(294, 40);
-            SearchPanel.TabIndex = 8;
             // 
             // txtSearch
             // 
-            txtSearch.Dock = DockStyle.Fill;
-            txtSearch.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtSearch.Location = new Point(50, 0);
-            txtSearch.Multiline = true;
+            resources.ApplyResources(txtSearch, "txtSearch");
             txtSearch.Name = "txtSearch";
-            txtSearch.PlaceholderText = "ابحث عن عميل او رقم فاتورة";
-            txtSearch.Size = new Size(244, 40);
-            txtSearch.TabIndex = 9;
-            txtSearch.TextAlign = HorizontalAlignment.Center;
             // 
             // btnSearch
             // 
-            btnSearch.Dock = DockStyle.Left;
-            btnSearch.Image = (Image)resources.GetObject("btnSearch.Image");
-            btnSearch.Location = new Point(0, 0);
+            resources.ApplyResources(btnSearch, "btnSearch");
             btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(50, 40);
-            btnSearch.TabIndex = 7;
             btnSearch.UseVisualStyleBackColor = true;
             btnSearch.Click += btnSearch_Click;
             // 
@@ -254,138 +187,105 @@
             panelButtons.Controls.Add(button2);
             panelButtons.Controls.Add(button1);
             panelButtons.Controls.Add(btnExportCustomer);
-            panelButtons.Location = new Point(21, 3);
+            resources.ApplyResources(panelButtons, "panelButtons");
             panelButtons.Name = "panelButtons";
-            panelButtons.Size = new Size(251, 155);
-            panelButtons.TabIndex = 9;
             // 
             // button2
             // 
-            button2.Anchor = AnchorStyles.None;
-            button2.Image = (Image)resources.GetObject("button2.Image");
-            button2.ImageAlign = ContentAlignment.MiddleLeft;
-            button2.Location = new Point(4, 108);
+            resources.ApplyResources(button2, "button2");
             button2.Name = "button2";
-            button2.Size = new Size(244, 40);
-            button2.TabIndex = 8;
-            button2.Text = "      تصدير/طباعة جميع الفاتورات";
             button2.UseVisualStyleBackColor = true;
             // 
             // button1
             // 
-            button1.Anchor = AnchorStyles.None;
-            button1.Image = (Image)resources.GetObject("button1.Image");
-            button1.ImageAlign = ContentAlignment.MiddleLeft;
-            button1.Location = new Point(4, 59);
+            resources.ApplyResources(button1, "button1");
             button1.Name = "button1";
-            button1.Size = new Size(244, 40);
-            button1.TabIndex = 7;
-            button1.Text = "       تصدير/طباعة جميع فاتورات العميل";
             button1.UseVisualStyleBackColor = true;
             // 
             // btnExportCustomer
             // 
-            btnExportCustomer.Anchor = AnchorStyles.None;
-            btnExportCustomer.Image = (Image)resources.GetObject("btnExportCustomer.Image");
-            btnExportCustomer.ImageAlign = ContentAlignment.MiddleLeft;
-            btnExportCustomer.Location = new Point(4, 9);
+            resources.ApplyResources(btnExportCustomer, "btnExportCustomer");
             btnExportCustomer.Name = "btnExportCustomer";
-            btnExportCustomer.Size = new Size(244, 40);
-            btnExportCustomer.TabIndex = 6;
-            btnExportCustomer.Text = "   تصدير/طباعة الفاتورة";
             btnExportCustomer.UseVisualStyleBackColor = true;
             // 
             // btnRefresh
             // 
-            btnRefresh.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnRefresh.Image = (Image)resources.GetObject("btnRefresh.Image");
-            btnRefresh.Location = new Point(981, 638);
+            resources.ApplyResources(btnRefresh, "btnRefresh");
             btnRefresh.Name = "btnRefresh";
-            btnRefresh.Size = new Size(50, 40);
-            btnRefresh.TabIndex = 15;
-            toolTip1.SetToolTip(btnRefresh, "اعادة التحميل");
+            toolTip1.SetToolTip(btnRefresh, resources.GetString("btnRefresh.ToolTip"));
             btnRefresh.UseVisualStyleBackColor = true;
+            btnRefresh.Click += btnRefresh_Click_1;
             // 
             // lblEmptyData
             // 
-            lblEmptyData.Anchor = AnchorStyles.None;
-            lblEmptyData.AutoSize = true;
+            resources.ApplyResources(lblEmptyData, "lblEmptyData");
             lblEmptyData.BackColor = Color.Transparent;
-            lblEmptyData.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 7);
             lblEmptyData.ForeColor = Color.Crimson;
-            lblEmptyData.Location = new Point(451, 353);
             lblEmptyData.Name = "lblEmptyData";
-            lblEmptyData.Size = new Size(133, 19);
-            lblEmptyData.TabIndex = 13;
-            lblEmptyData.Text = "لا توجد بيانات لعرضها";
-            lblEmptyData.TextAlign = ContentAlignment.MiddleCenter;
-            lblEmptyData.Visible = false;
             // 
             // DgvِCustomer
             // 
             DgvِCustomer.AllowUserToAddRows = false;
             DgvِCustomer.AllowUserToResizeColumns = false;
             DgvِCustomer.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvِCustomer.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvِCustomer.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
             DgvِCustomer.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             DgvِCustomer.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             DgvِCustomer.BackgroundColor = Color.White;
             DgvِCustomer.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             DgvِCustomer.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle2.ForeColor = Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = Color.DodgerBlue;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            DgvِCustomer.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            DgvِCustomer.ColumnHeadersHeight = 40;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle6.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle6.ForeColor = Color.White;
+            dataGridViewCellStyle6.SelectionBackColor = Color.DodgerBlue;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            DgvِCustomer.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            resources.ApplyResources(DgvِCustomer, "DgvِCustomer");
             DgvِCustomer.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Window;
-            dataGridViewCellStyle3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
-            DgvِCustomer.DefaultCellStyle = dataGridViewCellStyle3;
-            DgvِCustomer.Dock = DockStyle.Fill;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.BackColor = SystemColors.Window;
+            dataGridViewCellStyle7.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle7.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.False;
+            DgvِCustomer.DefaultCellStyle = dataGridViewCellStyle7;
             DgvِCustomer.EnableHeadersVisualStyles = false;
             DgvِCustomer.GridColor = SystemColors.ControlDark;
-            DgvِCustomer.Location = new Point(0, 164);
             DgvِCustomer.MultiSelect = false;
             DgvِCustomer.Name = "DgvِCustomer";
             DgvِCustomer.ReadOnly = true;
             DgvِCustomer.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
             DgvِCustomer.RowHeadersVisible = false;
-            DgvِCustomer.RowHeadersWidth = 21;
             DgvِCustomer.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle4.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvِCustomer.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle8.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvِCustomer.RowsDefaultCellStyle = dataGridViewCellStyle8;
             DgvِCustomer.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DgvِCustomer.Size = new Size(1034, 517);
-            DgvِCustomer.TabIndex = 14;
+            // 
+            // lblTitleForm
+            // 
+            resources.ApplyResources(lblTitleForm, "lblTitleForm");
+            lblTitleForm.ForeColor = Color.Red;
+            lblTitleForm.Name = "lblTitleForm";
             // 
             // CustomerAccountUserControl
             // 
-            AutoScaleDimensions = new SizeF(8F, 19F);
+            resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             Controls.Add(btnRefresh);
             Controls.Add(lblEmptyData);
             Controls.Add(DgvِCustomer);
             Controls.Add(OperationsflowLayoutPanel);
-            Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Margin = new Padding(3, 4, 3, 4);
             Name = "CustomerAccountUserControl";
-            RightToLeft = RightToLeft.Yes;
-            Size = new Size(1034, 681);
             OperationsflowLayoutPanel.ResumeLayout(false);
             gbPayChoiches.ResumeLayout(false);
             gbPayChoiches.PerformLayout();
             panelstatisticsandOperations.ResumeLayout(false);
+            panelstatisticsandOperations.PerformLayout();
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
             SearchPanel.ResumeLayout(false);
@@ -408,9 +308,9 @@
         private DataGridView DgvِCustomer;
         private GroupBox gbPayChoiches;
         private TextBox txtPayAmout;
-        private RadioButton radioButton2;
-        private RadioButton radioButton1;
-        private RadioButton radioButton3;
+        private RadioButton rbPayPartialFacture;
+        private RadioButton rbPayFacture;
+        private RadioButton rbPayAllFactures;
         private Label lblPayFacture;
         private Label lblPayAllDebts;
         private Panel panelButtons;
@@ -424,5 +324,6 @@
         private Label lblTotalFactures;
         private Label lblTotalCustomers;
         private FlowLayoutPanel flowLayoutPanel1;
+        private Label lblTitleForm;
     }
 }
