@@ -219,5 +219,11 @@ namespace Store.ApplicationUI
             pageHelper.SetNewPage(Gui.SupplierGui.SupplierAccountGui.SupplierAccountUserControl.Instance(this));
 
         }
+
+        private void btnSupplierReports_Click(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.SupplierGui.SupplierReportsGui.SupplierReportsUserControl.Instance(this));
+
+        }
     }
 }

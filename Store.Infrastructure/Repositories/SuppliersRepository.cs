@@ -163,5 +163,59 @@ namespace Store.Infrastructure.Repositories
         public SupplierReportRepository(ApplicationDbContext context) : base(context)
         {
         }
+
+        public List<SupplierReport> SearchBoth(string searchItem, DateTime fromDate, DateTime toDate)
+        {
+
+            try
+            {
+                return _context.SuppliersReports
+             .Where(x =>
+                 (x.SupplierName.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
+                  x.Order_ID.ToString() == searchItem) &&
+                 fromDate <= x.Date && x.Date <= toDate)
+             .OrderBy(x => x.Date)
+             .ToList();
+
+            }
+            catch
+            {
+                return new List<SupplierReport>();
+            }
+        }
+        public List<SupplierReport> SearchOnlyDate(DateTime fromDate, DateTime toDate)
+        {
+
+            try
+            {
+                return _context.SuppliersReports
+             .Where(x => (fromDate <= x.Date && x.Date <= toDate))
+             .OrderBy(x => x.Date)
+             .ToList();
+
+            }
+            catch
+            {
+                return new List<SupplierReport>();
+            }
+        }
+        public List<SupplierReport> SearchOnlyCustomer(string searchItem)
+        {
+
+            try
+            {
+                return _context.SuppliersReports
+             .Where(x =>
+                 x.SupplierName.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
+                  x.Order_ID.ToString() == searchItem)
+             .OrderBy(x => x.Date)
+             .ToList();
+
+            }
+            catch
+            {
+                return new List<SupplierReport>();
+            }
+        }
     }
 }

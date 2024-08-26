@@ -321,6 +321,7 @@
             btnSupplierReports.TabIndex = 5;
             btnSupplierReports.Text = "تقارير الموردين";
             btnSupplierReports.UseVisualStyleBackColor = true;
+            btnSupplierReports.Click += btnSupplierReports_Click;
             // 
             // ContainerPanel
             // 
