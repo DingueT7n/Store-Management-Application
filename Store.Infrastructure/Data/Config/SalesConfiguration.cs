@@ -18,24 +18,24 @@ namespace Store.Infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<SaleDetail> builder)
         {
-            builder.HasKey(bd => new { bd.Pro_ID, bd.Cust_ID, bd.Order_ID });
+            builder.HasKey(bd => bd.Id);
 
             builder.HasOne(x => x.Customer)
                 .WithMany()
-                .HasForeignKey(x => x.Cust_ID).OnDelete(DeleteBehavior.Restrict); ;
+                .HasForeignKey(x => x.Cust_ID).OnDelete(DeleteBehavior.Restrict);
             builder.HasOne(x => x.Sale)
                 .WithMany()
-                .HasForeignKey(x => x.Order_ID).OnDelete(DeleteBehavior.Restrict); ;
+                .HasForeignKey(x => x.Order_ID).OnDelete(DeleteBehavior.Restrict);
             builder.HasOne(x => x.Product)
                 .WithMany()
-                .HasForeignKey(x => x.Pro_ID).OnDelete(DeleteBehavior.Restrict); ;
+                .HasForeignKey(x => x.Pro_ID).OnDelete(DeleteBehavior.Restrict);
         }
     }
     public class SaleProfitConfiguration : IEntityTypeConfiguration<SaleProfit>
     {
         public void Configure(EntityTypeBuilder<SaleProfit> builder)
         {
-            builder.HasKey(bd => new { bd.Pro_ID, bd.Order_ID });
+            builder.HasKey(bd => bd.Id);
             builder.HasOne(x => x.Sale).WithMany().HasForeignKey(x => x.Order_ID);
             builder.HasOne(x => x.Product).WithMany().HasForeignKey(x => x.Pro_ID);
         }

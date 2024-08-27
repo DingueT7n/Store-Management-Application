@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Store.Core.Entities.Products;
+﻿using Store.Core.Entities.Products;
 namespace Store.Core.Entities.Sales
 {
     public class SaleProfit : BaseEntity<int>
@@ -16,9 +15,9 @@ namespace Store.Core.Entities.Sales
         public string Time { get; set; }
         public float? Buy_Price { get; set; }
 
-        [ForeignKey("Order_ID")]
+
         public virtual Sale Sale { get; set; }
-        [ForeignKey("Pro_ID")]
+
         public virtual Product Product { get; set; }
     }
 

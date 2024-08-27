@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Store.Core.Entities.Employees
+﻿namespace Store.Core.Entities.Employees
 {
     public class EmployeeBorrowMoney : BaseEntity<int>
     {
@@ -11,7 +9,7 @@ namespace Store.Core.Entities.Employees
         public DateTime DateReminder { get; set; }
         public float Value { get; set; }
         public string Notes { get; set; }
-        [ForeignKey("Emp_ID")]
+
         public virtual Employee Employee { get; set; }
     }
 

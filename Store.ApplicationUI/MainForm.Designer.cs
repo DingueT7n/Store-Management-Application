@@ -51,6 +51,11 @@
             btnAddSupplier = new Button();
             btnSupplierAccount = new Button();
             btnSupplierReports = new Button();
+            btnBuysPanel = new Button();
+            BuysflowLayoutPanel = new FlowLayoutPanel();
+            btnNewBuy = new Button();
+            btnBuysReports = new Button();
+            btnEditBuy = new Button();
             ContainerPanel = new Panel();
             animationTimer = new System.Windows.Forms.Timer(components);
             flowLayoutPanelNavBar.SuspendLayout();
@@ -58,6 +63,7 @@
             ProductsflowLayoutPanel.SuspendLayout();
             CustomersflowLayoutPaneel.SuspendLayout();
             SuppliersflowLayoutPanel.SuspendLayout();
+            BuysflowLayoutPanel.SuspendLayout();
             SuspendLayout();
             // 
             // flowLayoutPanelNavBar
@@ -72,6 +78,8 @@
             flowLayoutPanelNavBar.Controls.Add(CustomersflowLayoutPaneel);
             flowLayoutPanelNavBar.Controls.Add(btnSupplierPanel);
             flowLayoutPanelNavBar.Controls.Add(SuppliersflowLayoutPanel);
+            flowLayoutPanelNavBar.Controls.Add(btnBuysPanel);
+            flowLayoutPanelNavBar.Controls.Add(BuysflowLayoutPanel);
             flowLayoutPanelNavBar.Dock = DockStyle.Left;
             flowLayoutPanelNavBar.Location = new Point(0, 0);
             flowLayoutPanelNavBar.Name = "flowLayoutPanelNavBar";
@@ -338,6 +346,68 @@
             btnSupplierReports.UseVisualStyleBackColor = true;
             btnSupplierReports.Click += btnSupplierReports_Click;
             // 
+            // btnBuysPanel
+            // 
+            btnBuysPanel.Image = Properties.Resources.Open_Box;
+            btnBuysPanel.ImageAlign = ContentAlignment.MiddleLeft;
+            btnBuysPanel.Location = new Point(-2, 899);
+            btnBuysPanel.Margin = new Padding(4, 5, 4, 5);
+            btnBuysPanel.Name = "btnBuysPanel";
+            btnBuysPanel.Size = new Size(212, 37);
+            btnBuysPanel.TabIndex = 9;
+            btnBuysPanel.Text = "المشتريات";
+            btnBuysPanel.UseVisualStyleBackColor = true;
+            btnBuysPanel.Click += btnBuysPanel_Click;
+            // 
+            // BuysflowLayoutPanel
+            // 
+            BuysflowLayoutPanel.Controls.Add(btnNewBuy);
+            BuysflowLayoutPanel.Controls.Add(btnBuysReports);
+            BuysflowLayoutPanel.Controls.Add(btnEditBuy);
+            BuysflowLayoutPanel.Location = new Point(2, 944);
+            BuysflowLayoutPanel.MaximumSize = new Size(209, 143);
+            BuysflowLayoutPanel.Name = "BuysflowLayoutPanel";
+            BuysflowLayoutPanel.Size = new Size(209, 143);
+            BuysflowLayoutPanel.TabIndex = 10;
+            BuysflowLayoutPanel.Visible = false;
+            // 
+            // btnNewBuy
+            // 
+            btnNewBuy.Image = Properties.Resources.Open_Box;
+            btnNewBuy.ImageAlign = ContentAlignment.MiddleLeft;
+            btnNewBuy.Location = new Point(2, 5);
+            btnNewBuy.Margin = new Padding(4, 5, 4, 5);
+            btnNewBuy.Name = "btnNewBuy";
+            btnNewBuy.Size = new Size(203, 37);
+            btnNewBuy.TabIndex = 2;
+            btnNewBuy.Text = "شراء جديد";
+            btnNewBuy.UseVisualStyleBackColor = true;
+            btnNewBuy.Click += btnNewBuy_Click;
+            // 
+            // btnBuysReports
+            // 
+            btnBuysReports.Image = Properties.Resources.Open_Box;
+            btnBuysReports.ImageAlign = ContentAlignment.MiddleLeft;
+            btnBuysReports.Location = new Point(2, 52);
+            btnBuysReports.Margin = new Padding(4, 5, 4, 5);
+            btnBuysReports.Name = "btnBuysReports";
+            btnBuysReports.Size = new Size(203, 37);
+            btnBuysReports.TabIndex = 3;
+            btnBuysReports.Text = "تقارير المشتريات";
+            btnBuysReports.UseVisualStyleBackColor = true;
+            // 
+            // btnEditBuy
+            // 
+            btnEditBuy.Image = Properties.Resources.Open_Box;
+            btnEditBuy.ImageAlign = ContentAlignment.MiddleLeft;
+            btnEditBuy.Location = new Point(2, 99);
+            btnEditBuy.Margin = new Padding(4, 5, 4, 5);
+            btnEditBuy.Name = "btnEditBuy";
+            btnEditBuy.Size = new Size(203, 37);
+            btnEditBuy.TabIndex = 4;
+            btnEditBuy.Text = "تعديل فاتورة";
+            btnEditBuy.UseVisualStyleBackColor = true;
+            // 
             // ContainerPanel
             // 
             ContainerPanel.BackColor = Color.White;
@@ -376,6 +446,7 @@
             ProductsflowLayoutPanel.ResumeLayout(false);
             CustomersflowLayoutPaneel.ResumeLayout(false);
             SuppliersflowLayoutPanel.ResumeLayout(false);
+            BuysflowLayoutPanel.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -404,5 +475,10 @@
         private Button btnSupplierAccount;
         private Button btnSupplierReports;
         private Button button5;
+        private Button btnBuysPanel;
+        private FlowLayoutPanel BuysflowLayoutPanel;
+        private Button btnNewBuy;
+        private Button btnBuysReports;
+        private Button btnEditBuy;
     }
 }

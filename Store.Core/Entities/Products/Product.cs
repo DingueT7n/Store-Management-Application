@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Store.Core.Entities.Products
+﻿namespace Store.Core.Entities.Products
 {
     public class Product : BaseEntity<int>
     {
@@ -29,7 +27,7 @@ namespace Store.Core.Entities.Products
         public string CodeBar { get; set; }
         public string ProductName { get; set; }
         public byte[] ProductImage { get; set; }
-        [ForeignKey("Pro_Id")]
+
         public virtual Product Product { get; set; }
     }
     public class ProductDiscount : BaseEntity<int>
@@ -42,7 +40,7 @@ namespace Store.Core.Entities.Products
         public string? TimeStart { get; set; }
         public DateTime? DateEnd { get; set; }
         public string? TimeEnd { get; set; }
-        [ForeignKey("Pro_Id")]
+
         public virtual Product Product { get; set; }
     }
 

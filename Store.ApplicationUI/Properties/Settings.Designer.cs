@@ -46,5 +46,17 @@ namespace Store.ApplicationUI.Properties {
                 this["DecimalSEP"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public float TaxValue {
+            get {
+                return ((float)(this["TaxValue"]));
+            }
+            set {
+                this["TaxValue"] = value;
+            }
+        }
     }
 }

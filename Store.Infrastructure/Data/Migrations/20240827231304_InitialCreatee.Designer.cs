@@ -12,8 +12,8 @@ using Store.Infrastructure.Data;
 namespace Store.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240825141652_CustomerandBanks")]
-    partial class CustomerandBanks
+    [Migration("20240827231304_InitialCreatee")]
+    partial class InitialCreatee
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,9 +36,6 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DeservedTypeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
@@ -52,8 +49,6 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DeservedTypeId");
 
                     b.HasIndex("TypeId");
 
@@ -225,19 +220,13 @@ namespace Store.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Store.Core.Entities.Buys.BuyDetail", b =>
                 {
-                    b.Property<int>("Pro_ID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Sup_ID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Order_ID")
-                        .HasColumnType("int");
-
                     b.Property<float>("Discount")
                         .HasColumnType("real");
 
                     b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Order_ID")
                         .HasColumnType("int");
 
                     b.Property<float>("Price")
@@ -246,8 +235,14 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<float>("PriceWithTax")
                         .HasColumnType("real");
 
+                    b.Property<int>("Pro_ID")
+                        .HasColumnType("int");
+
                     b.Property<float>("Quentity")
                         .HasColumnType("real");
+
+                    b.Property<int>("Sup_ID")
+                        .HasColumnType("int");
 
                     b.Property<float>("TaxValue")
                         .HasColumnType("real");
@@ -255,9 +250,9 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<float>("Total")
                         .HasColumnType("real");
 
-                    b.HasKey("Pro_ID", "Sup_ID", "Order_ID");
-
                     b.HasIndex("Order_ID");
+
+                    b.HasIndex("Pro_ID");
 
                     b.HasIndex("Sup_ID");
 
@@ -463,31 +458,40 @@ namespace Store.Infrastructure.Data.Migrations
                             Id = 1,
                             Address = "بن سمارة",
                             CustomerName = "قربوز علاء",
-                            Notes = "Seeded Data",
-                            PhoneNumber = "0697357397"
+                            MaxDebtAllowed = 0f,
+                            Notes = "معلومات مشحونة",
+                            PhoneNumber = "0697357397",
+                            TotalDebts = 0f
                         },
                         new
                         {
                             Id = 2,
                             Address = "مرماد",
                             CustomerName = "بن خليفة",
-                            Notes = "Seeded Data",
-                            PhoneNumber = "0754653721"
+                            MaxDebtAllowed = 0f,
+                            Notes = "معلومات مشحونة",
+                            PhoneNumber = "0754653721",
+                            TotalDebts = 0f
                         },
                         new
                         {
                             Id = 3,
                             Address = "حاج مسعود",
                             CustomerName = "دوادي",
-                            Notes = "Seeded Data",
-                            PhoneNumber = "0697357546"
+                            MaxDebtAllowed = 0f,
+                            Notes = "معلومات مشحونة",
+                            PhoneNumber = "0697357546",
+                            TotalDebts = 0f
                         });
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Customers.CustomerMoney", b =>
                 {
-                    b.Property<int>("Order_ID")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Cust_ID")
                         .HasColumnType("int");
@@ -496,11 +500,11 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasMaxLength(75)
                         .HasColumnType("nvarchar(75)");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Order_Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Order_ID")
+                        .HasColumnType("int");
 
                     b.Property<float>("Price")
                         .HasColumnType("real");
@@ -508,17 +512,22 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<DateTime>("Reminder_Date")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Order_ID", "Cust_ID");
+                    b.HasKey("Id");
 
                     b.HasIndex("Cust_ID");
+
+                    b.HasIndex("Order_ID");
 
                     b.ToTable("CustomersMoneys");
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Customers.CustomerReport", b =>
                 {
-                    b.Property<int>("Order_ID")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Cust_ID")
                         .HasColumnType("int");
@@ -530,15 +539,17 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("Order_ID")
                         .HasColumnType("int");
 
                     b.Property<float>("Price")
                         .HasColumnType("real");
 
-                    b.HasKey("Order_ID", "Cust_ID");
+                    b.HasKey("Id");
 
                     b.HasIndex("Cust_ID");
+
+                    b.HasIndex("Order_ID");
 
                     b.ToTable("CustomersReports");
                 });
@@ -627,17 +638,42 @@ namespace Store.Infrastructure.Data.Migrations
                         new
                         {
                             Id = 1,
-                            CategoryName = "Category One "
+                            CategoryName = "اغذية عادية"
                         },
                         new
                         {
                             Id = 2,
-                            CategoryName = "Category two "
+                            CategoryName = "اغذية الاطفال"
                         },
                         new
                         {
                             Id = 3,
-                            CategoryName = "Category Three "
+                            CategoryName = "محفظات اطفال"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CategoryName = "اغذية الاطفال"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CategoryName = "مشروبات غازية"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CategoryName = "هواتف رادمي"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CategoryName = "هاتف سامسونغ"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CategoryName = "فرماج"
                         });
                 });
 
@@ -670,6 +706,9 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<float?>("MinQty")
                         .HasColumnType("real");
 
+                    b.Property<byte[]>("ProductImage")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("ProductName")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -694,6 +733,45 @@ namespace Store.Infrastructure.Data.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Products.ProductDiscount", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("DateEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateStart")
+                        .HasColumnType("datetime2");
+
+                    b.Property<float>("DiscountValue")
+                        .HasColumnType("real");
+
+                    b.Property<int>("Pro_Id")
+                        .HasColumnType("int");
+
+                    b.Property<float?>("Quentity")
+                        .HasColumnType("real");
+
+                    b.Property<int>("Store_Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TimeEnd")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TimeStart")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Pro_Id");
+
+                    b.ToTable("ProductDiscounts");
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Products.ProductOutStore", b =>
@@ -736,6 +814,34 @@ namespace Store.Infrastructure.Data.Migrations
                     b.HasIndex("Pro_ID");
 
                     b.ToTable("ProductsOutStore");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Products.ProductQuickAccess", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CodeBar")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Pro_Id")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("ProductImage")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ProductName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Pro_Id");
+
+                    b.ToTable("ProductQuickAccess");
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Products.ProductTransfer", b =>
@@ -806,6 +912,9 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<float>("Buy_Price")
                         .HasColumnType("real");
 
+                    b.Property<DateTime>("DateExpiration")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("Pro_ID")
                         .HasColumnType("int");
 
@@ -867,11 +976,11 @@ namespace Store.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Store.Core.Entities.Returns.ReturnDetail", b =>
                 {
-                    b.Property<int>("Pro_ID")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("Order_ID")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Cust_Name")
                         .HasColumnType("nvarchar(max)");
@@ -879,7 +988,7 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<string>("Date")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("Order_ID")
                         .HasColumnType("int");
 
                     b.Property<float>("Price")
@@ -887,6 +996,9 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.Property<float>("PriceWithTax")
                         .HasColumnType("real");
+
+                    b.Property<int>("Pro_ID")
+                        .HasColumnType("int");
 
                     b.Property<float>("Qty")
                         .HasColumnType("real");
@@ -900,9 +1012,11 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<float>("Total")
                         .HasColumnType("real");
 
-                    b.HasKey("Pro_ID", "Order_ID");
+                    b.HasKey("Id");
 
                     b.HasIndex("Order_ID");
+
+                    b.HasIndex("Pro_ID");
 
                     b.ToTable("ReturnsDetails");
                 });
@@ -946,19 +1060,19 @@ namespace Store.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Store.Core.Entities.Sales.SaleDetail", b =>
                 {
-                    b.Property<int>("Pro_ID")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Cust_ID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Order_ID")
                         .HasColumnType("int");
 
                     b.Property<float>("Discount")
                         .HasColumnType("real");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("Order_ID")
                         .HasColumnType("int");
 
                     b.Property<float>("Price")
@@ -967,11 +1081,11 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<float>("PriceWithTax")
                         .HasColumnType("real");
 
+                    b.Property<int>("Pro_ID")
+                        .HasColumnType("int");
+
                     b.Property<float>("Quentity")
                         .HasColumnType("real");
-
-                    b.Property<int?>("SaleId")
-                        .HasColumnType("int");
 
                     b.Property<float>("TaxValue")
                         .HasColumnType("real");
@@ -979,24 +1093,24 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<float>("Total")
                         .HasColumnType("real");
 
-                    b.HasKey("Pro_ID", "Cust_ID", "Order_ID");
+                    b.HasKey("Id");
 
                     b.HasIndex("Cust_ID");
 
                     b.HasIndex("Order_ID");
 
-                    b.HasIndex("SaleId");
+                    b.HasIndex("Pro_ID");
 
                     b.ToTable("SalesDetails");
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Sales.SaleProfit", b =>
                 {
-                    b.Property<int>("Pro_ID")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("Order_ID")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<float?>("Buy_Price")
                         .HasColumnType("real");
@@ -1007,7 +1121,7 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<float?>("Discount")
                         .HasColumnType("real");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("Order_ID")
                         .HasColumnType("int");
 
                     b.Property<float?>("Price")
@@ -1016,11 +1130,11 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<float?>("Price_Tax")
                         .HasColumnType("real");
 
+                    b.Property<int>("Pro_ID")
+                        .HasColumnType("int");
+
                     b.Property<float?>("Quentity")
                         .HasColumnType("real");
-
-                    b.Property<int?>("SaleId")
-                        .HasColumnType("int");
 
                     b.Property<float?>("Tax_Value")
                         .HasColumnType("real");
@@ -1031,11 +1145,11 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<float?>("Total")
                         .HasColumnType("real");
 
-                    b.HasKey("Pro_ID", "Order_ID");
+                    b.HasKey("Id");
 
                     b.HasIndex("Order_ID");
 
-                    b.HasIndex("SaleId");
+                    b.HasIndex("Pro_ID");
 
                     b.ToTable("SalesProfits");
                 });
@@ -1067,6 +1181,9 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<float?>("MaxDebtAllowed")
+                        .HasColumnType("real");
+
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
@@ -1078,6 +1195,9 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasMaxLength(75)
                         .HasColumnType("nvarchar(75)");
 
+                    b.Property<float?>("TotalDebts")
+                        .HasColumnType("real");
+
                     b.HasKey("Id");
 
                     b.ToTable("Suppliers");
@@ -1086,48 +1206,57 @@ namespace Store.Infrastructure.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Address = "Ben Smara",
-                            Notes = "Seeded Data",
+                            Address = "بوهراوة",
+                            MaxDebtAllowed = 400f,
+                            Notes = "معلومات مشحونة",
                             PhoneNumber = "0697357397",
-                            SupplierName = "Supplier One "
+                            SupplierName = "مورد سعيدة",
+                            TotalDebts = 0f
                         },
                         new
                         {
                             Id = 2,
-                            Address = "Mermad",
-                            Notes = "Seeded Data",
+                            Address = "مراماد",
+                            MaxDebtAllowed = 5000f,
+                            Notes = "معلومات مشحونة",
                             PhoneNumber = "0754653721",
-                            SupplierName = "Supplier two "
+                            SupplierName = "مورد الزعيم",
+                            TotalDebts = 0f
                         },
                         new
                         {
                             Id = 3,
-                            Address = "HadjMEssaoud",
-                            Notes = "Seeded Data",
+                            Address = "العطف",
+                            MaxDebtAllowed = 5500f,
+                            Notes = "معلومات مشحونة",
                             PhoneNumber = "0697357546",
-                            SupplierName = "Supplier Three "
+                            SupplierName = "مورد القولية",
+                            TotalDebts = 0f
                         });
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Suppliers.SupplierMoney", b =>
                 {
-                    b.Property<int>("Order_ID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Sup_ID")
-                        .HasColumnType("int");
-
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Order_Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Order_ID")
+                        .HasColumnType("int");
 
                     b.Property<float?>("Price")
                         .HasColumnType("real");
 
                     b.Property<DateTime>("Reminder_Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Sup_ID")
+                        .HasColumnType("int");
 
                     b.Property<string>("SupplierName")
                         .HasMaxLength(75)
@@ -1136,7 +1265,9 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<string>("Time")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Order_ID", "Sup_ID");
+                    b.HasKey("Id");
+
+                    b.HasIndex("Order_ID");
 
                     b.HasIndex("Sup_ID");
 
@@ -1145,20 +1276,23 @@ namespace Store.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Store.Core.Entities.Suppliers.SupplierReport", b =>
                 {
-                    b.Property<int>("Order_ID")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("Sup_ID")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("Order_ID")
                         .HasColumnType("int");
 
                     b.Property<float?>("Price")
                         .HasColumnType("real");
+
+                    b.Property<int>("Sup_ID")
+                        .HasColumnType("int");
 
                     b.Property<string>("SupplierName")
                         .HasMaxLength(75)
@@ -1167,7 +1301,9 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<string>("Time")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Order_ID", "Sup_ID");
+                    b.HasKey("Id");
+
+                    b.HasIndex("Order_ID");
 
                     b.HasIndex("Sup_ID");
 
@@ -1238,10 +1374,6 @@ namespace Store.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Store.Core.Entities.AllDeserved.Deserved", b =>
                 {
-                    b.HasOne("Store.Core.Entities.AllDeserved.DeservedType", null)
-                        .WithMany("Deserveds")
-                        .HasForeignKey("DeservedTypeId");
-
                     b.HasOne("Store.Core.Entities.AllDeserved.DeservedType", "DeservedType")
                         .WithMany()
                         .HasForeignKey("TypeId");
@@ -1377,11 +1509,33 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Store.Core.Entities.Products.ProductDiscount", b =>
+                {
+                    b.HasOne("Store.Core.Entities.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("Pro_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Store.Core.Entities.Products.ProductOutStore", b =>
                 {
                     b.HasOne("Store.Core.Entities.Products.Product", "Product")
                         .WithMany()
                         .HasForeignKey("Pro_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Products.ProductQuickAccess", b =>
+                {
+                    b.HasOne("Store.Core.Entities.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("Pro_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1468,10 +1622,6 @@ namespace Store.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Store.Core.Entities.Sales.Sale", null)
-                        .WithMany("SalesDetails")
-                        .HasForeignKey("SaleId");
-
                     b.Navigation("Customer");
 
                     b.Navigation("Product");
@@ -1493,10 +1643,6 @@ namespace Store.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Store.Core.Entities.Sales.Sale", null)
-                        .WithMany("SaleProfits")
-                        .HasForeignKey("SaleId");
-
                     b.Navigation("Product");
 
                     b.Navigation("Sale");
@@ -1505,13 +1651,13 @@ namespace Store.Infrastructure.Data.Migrations
             modelBuilder.Entity("Store.Core.Entities.Suppliers.SupplierMoney", b =>
                 {
                     b.HasOne("Store.Core.Entities.Buys.Buy", "Buy")
-                        .WithMany("SupplierMoney")
+                        .WithMany()
                         .HasForeignKey("Order_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Store.Core.Entities.Suppliers.Supplier", "Supplier")
-                        .WithMany("SupplierMoney")
+                        .WithMany()
                         .HasForeignKey("Sup_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1538,28 +1684,6 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Navigation("Buy");
 
                     b.Navigation("Supplier");
-                });
-
-            modelBuilder.Entity("Store.Core.Entities.AllDeserved.DeservedType", b =>
-                {
-                    b.Navigation("Deserveds");
-                });
-
-            modelBuilder.Entity("Store.Core.Entities.Buys.Buy", b =>
-                {
-                    b.Navigation("SupplierMoney");
-                });
-
-            modelBuilder.Entity("Store.Core.Entities.Sales.Sale", b =>
-                {
-                    b.Navigation("SaleProfits");
-
-                    b.Navigation("SalesDetails");
-                });
-
-            modelBuilder.Entity("Store.Core.Entities.Suppliers.Supplier", b =>
-                {
-                    b.Navigation("SupplierMoney");
                 });
 #pragma warning restore 612, 618
         }

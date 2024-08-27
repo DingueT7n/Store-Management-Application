@@ -1,5 +1,6 @@
 ﻿using Store.Core.Entities.Buys;
 using Store.Core.Entities.Products;
+using Store.Core.Entities.Suppliers;
 using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
 
@@ -32,11 +33,31 @@ namespace Store.Infrastructure.Repositories
 
             try
             {
-                return (_context.Buys.Last().Id + 1).ToString();
+                var lastBuy = _context.Buys.OrderByDescending(b => b.Id).FirstOrDefault();
+                int nextId = (lastBuy != null) ? lastBuy.Id + 1 : 1;
+                return nextId.ToString();
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+
+                throw new Exception("Error retrieving the last facture number", ex);
+            }
+
+        }
+        public bool TransactionOfEditingCustomerDebt(Buy buy, BuyDetail buyDetail, SupplierReport supplierReport)
+        {
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    transaction.CommitAsync();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
     }

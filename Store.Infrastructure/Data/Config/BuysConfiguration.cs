@@ -8,6 +8,7 @@ namespace Store.Infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<Buy> builder)
         {
+            builder.Ignore(x => x.BuyDetails);
             builder.Property(x => x.Id).IsRequired();
             builder.HasKey(x => x.Id);
             builder.Property(x => x.User_Name).HasMaxLength(50);
@@ -19,7 +20,7 @@ namespace Store.Infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<BuyDetail> builder)
         {
-            builder.HasKey(bd => new { bd.Pro_ID, bd.Sup_ID, bd.Order_ID });
+            builder.HasNoKey();
 
             builder.HasOne(x => x.Supplier).WithMany().HasForeignKey(x => x.Sup_ID);
             builder.HasOne(x => x.Buy).WithMany().HasForeignKey(x => x.Order_ID);

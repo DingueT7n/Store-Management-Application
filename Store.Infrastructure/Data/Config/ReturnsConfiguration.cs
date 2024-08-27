@@ -18,7 +18,7 @@ namespace Store.Infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<ReturnDetail> builder)
         {
-            builder.HasKey(x => new { x.Pro_ID, x.Order_ID });
+            builder.HasKey(x => x.Id);
             builder.HasOne(x => x.Product).WithMany().HasForeignKey(x => x.Pro_ID);
             builder.HasOne(x => x.Returns).WithMany().HasForeignKey(x => x.Order_ID);
 

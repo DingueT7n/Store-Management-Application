@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Store.Core.Entities.Buys;
+﻿using Store.Core.Entities.Buys;
 
 namespace Store.Core.Entities.Suppliers
 {
@@ -15,9 +14,9 @@ namespace Store.Core.Entities.Suppliers
         public DateTime Reminder_Date { get; set; }
 
 
-        [ForeignKey("Order_ID")]
+
         public virtual Buy Buy { get; set; }
-        [ForeignKey("Sup_ID")]
+
         public virtual Supplier Supplier { get; set; }
     }
 

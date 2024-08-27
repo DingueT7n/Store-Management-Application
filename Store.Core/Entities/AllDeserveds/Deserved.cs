@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Store.Core.Entities.AllDeserved
+﻿namespace Store.Core.Entities.AllDeserved
 {
     public class Deserved : BaseEntity<int>
     {
@@ -10,7 +8,7 @@ namespace Store.Core.Entities.AllDeserved
         public string Notes { get; set; }
         public int? TypeId { get; set; }
 
-        [ForeignKey("TypeId")]
+
         public virtual DeservedType DeservedType { get; set; }
 
     }

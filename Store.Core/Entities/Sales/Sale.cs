@@ -13,8 +13,7 @@ namespace Store.Core.Entities.Sales
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
 
-        public virtual ICollection<SaleDetail> SalesDetails { get; set; }
-        public virtual ICollection<SaleProfit> SaleProfits { get; set; }
+
 
 
     }

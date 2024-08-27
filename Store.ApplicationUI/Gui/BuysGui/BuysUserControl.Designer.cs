@@ -29,16 +29,16 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BuysUserControl));
-            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             OperationsflowLayoutPanel = new FlowLayoutPanel();
             gbPayChoiches = new GroupBox();
+            label1 = new Label();
             DtpDateFacture = new DateTimePicker();
             lblDateFacture = new Label();
             cmbStores = new ComboBox();
-            this.lblStore = new Label();
             cmbSuppliers = new ComboBox();
             lblSuppliers = new Label();
             lblFacture = new Label();
@@ -47,7 +47,7 @@
             SearchPanel = new Panel();
             lblTitleForm = new Label();
             gpSearchAvailable = new GroupBox();
-            this.lblFastSearch = new Label();
+            label2 = new Label();
             lblBarCode = new Label();
             txtSearchBarCode = new TextBox();
             btnSearchImage = new Button();
@@ -81,7 +81,6 @@
             dtpDateExpiration = new DateTimePicker();
             txtPriceWithTax = new TextBox();
             txtWholeSalePrice = new TextBox();
-            txtSalePrice = new TextBox();
             txtTotalBuyProduct = new TextBox();
             txtQty = new TextBox();
             txtBuyPrice = new TextBox();
@@ -94,6 +93,7 @@
             lblWholesaleprice = new Label();
             lblSalePrice = new Label();
             lblBuyPrice = new Label();
+            txtSalePrice = new TextBox();
             OperationsflowLayoutPanel.SuspendLayout();
             gbPayChoiches.SuspendLayout();
             panelstatisticsandOperations.SuspendLayout();
@@ -123,11 +123,11 @@
             // 
             // gbPayChoiches
             // 
-            gbPayChoiches.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            gbPayChoiches.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            gbPayChoiches.Controls.Add(label1);
             gbPayChoiches.Controls.Add(DtpDateFacture);
             gbPayChoiches.Controls.Add(lblDateFacture);
             gbPayChoiches.Controls.Add(cmbStores);
-            gbPayChoiches.Controls.Add(this.lblStore);
             gbPayChoiches.Controls.Add(cmbSuppliers);
             gbPayChoiches.Controls.Add(lblSuppliers);
             gbPayChoiches.Controls.Add(lblFacture);
@@ -138,6 +138,16 @@
             gbPayChoiches.TabIndex = 8;
             gbPayChoiches.TabStop = false;
             gbPayChoiches.Text = "معلومات حول الفاتورة:";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.ImeMode = ImeMode.NoControl;
+            label1.Location = new Point(365, 106);
+            label1.Name = "label1";
+            label1.Size = new Size(51, 19);
+            label1.TabIndex = 27;
+            label1.Text = "المخزن:";
             // 
             // DtpDateFacture
             // 
@@ -168,16 +178,6 @@
             cmbStores.Size = new Size(181, 27);
             cmbStores.TabIndex = 13;
             cmbStores.Text = "اختر مخزن";
-            // 
-            // lblStore
-            // 
-            this.lblStore.AutoSize = true;
-            this.lblStore.ImeMode = ImeMode.NoControl;
-            this.lblStore.Location = new Point(366, 106);
-            this.lblStore.Name = "lblStore";
-            this.lblStore.Size = new Size(51, 19);
-            this.lblStore.TabIndex = 12;
-            this.lblStore.Text = "المخزن:";
             // 
             // cmbSuppliers
             // 
@@ -221,22 +221,25 @@
             // 
             panelstatisticsandOperations.Controls.Add(SearchPanel);
             panelstatisticsandOperations.Controls.Add(panelButtons);
-            panelstatisticsandOperations.Location = new Point(3, 3);
+            panelstatisticsandOperations.Dock = DockStyle.Fill;
+            panelstatisticsandOperations.Location = new Point(5, 3);
             panelstatisticsandOperations.Name = "panelstatisticsandOperations";
-            panelstatisticsandOperations.Size = new Size(603, 137);
+            panelstatisticsandOperations.Size = new Size(601, 137);
             panelstatisticsandOperations.TabIndex = 10;
             // 
             // SearchPanel
             // 
+            SearchPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             SearchPanel.Controls.Add(lblTitleForm);
             SearchPanel.Controls.Add(gpSearchAvailable);
             SearchPanel.Location = new Point(292, 3);
             SearchPanel.Name = "SearchPanel";
-            SearchPanel.Size = new Size(311, 134);
+            SearchPanel.Size = new Size(309, 134);
             SearchPanel.TabIndex = 8;
             // 
             // lblTitleForm
             // 
+            lblTitleForm.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblTitleForm.AutoSize = true;
             lblTitleForm.Font = new Font("Calibri", 14.25F);
             lblTitleForm.ForeColor = Color.Red;
@@ -250,26 +253,27 @@
             // 
             // gpSearchAvailable
             // 
-            gpSearchAvailable.Controls.Add(this.lblFastSearch);
+            gpSearchAvailable.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            gpSearchAvailable.Controls.Add(label2);
             gpSearchAvailable.Controls.Add(lblBarCode);
             gpSearchAvailable.Controls.Add(txtSearchBarCode);
             gpSearchAvailable.Controls.Add(btnSearchImage);
             gpSearchAvailable.Location = new Point(3, 19);
             gpSearchAvailable.Name = "gpSearchAvailable";
-            gpSearchAvailable.Size = new Size(308, 115);
+            gpSearchAvailable.Size = new Size(306, 115);
             gpSearchAvailable.TabIndex = 17;
             gpSearchAvailable.TabStop = false;
             gpSearchAvailable.Text = "عمليات البحث المتاحة";
             // 
-            // lblFastSearch
+            // label2
             // 
-            this.lblFastSearch.AutoSize = true;
-            this.lblFastSearch.ImeMode = ImeMode.NoControl;
-            this.lblFastSearch.Location = new Point(214, 80);
-            this.lblFastSearch.Name = "lblFastSearch";
-            this.lblFastSearch.Size = new Size(90, 19);
-            this.lblFastSearch.TabIndex = 20;
-            this.lblFastSearch.Text = "البحث السريع:";
+            label2.AutoSize = true;
+            label2.ImeMode = ImeMode.NoControl;
+            label2.Location = new Point(212, 84);
+            label2.Name = "label2";
+            label2.Size = new Size(90, 19);
+            label2.TabIndex = 28;
+            label2.Text = "البحث السريع:";
             // 
             // lblBarCode
             // 
@@ -308,6 +312,7 @@
             // 
             // panelButtons
             // 
+            panelButtons.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             panelButtons.Controls.Add(gbOperations);
             panelButtons.Location = new Point(8, 3);
             panelButtons.Name = "panelButtons";
@@ -316,6 +321,7 @@
             // 
             // gbOperations
             // 
+            gbOperations.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             gbOperations.Controls.Add(btnDeleteSelected);
             gbOperations.Controls.Add(lblDelete);
             gbOperations.Controls.Add(btnEditSelected);
@@ -324,9 +330,9 @@
             gbOperations.Controls.Add(lblDown);
             gbOperations.Controls.Add(lblUp);
             gbOperations.Controls.Add(btnUp);
-            gbOperations.Location = new Point(1, 3);
+            gbOperations.Location = new Point(3, 3);
             gbOperations.Name = "gbOperations";
-            gbOperations.Size = new Size(277, 131);
+            gbOperations.Size = new Size(275, 131);
             gbOperations.TabIndex = 23;
             gbOperations.TabStop = false;
             gbOperations.Text = "العمليات المتاحة على الجدول";
@@ -336,7 +342,7 @@
             btnDeleteSelected.Anchor = AnchorStyles.None;
             btnDeleteSelected.Image = (Image)resources.GetObject("btnDeleteSelected.Image");
             btnDeleteSelected.ImeMode = ImeMode.NoControl;
-            btnDeleteSelected.Location = new Point(126, 83);
+            btnDeleteSelected.Location = new Point(125, 83);
             btnDeleteSelected.Name = "btnDeleteSelected";
             btnDeleteSelected.Size = new Size(37, 34);
             btnDeleteSelected.TabIndex = 30;
@@ -359,7 +365,7 @@
             btnEditSelected.Anchor = AnchorStyles.None;
             btnEditSelected.Image = (Image)resources.GetObject("btnEditSelected.Image");
             btnEditSelected.ImeMode = ImeMode.NoControl;
-            btnEditSelected.Location = new Point(126, 24);
+            btnEditSelected.Location = new Point(125, 24);
             btnEditSelected.Name = "btnEditSelected";
             btnEditSelected.Size = new Size(37, 34);
             btnEditSelected.TabIndex = 28;
@@ -381,7 +387,7 @@
             btnDown.Anchor = AnchorStyles.None;
             btnDown.Image = (Image)resources.GetObject("btnDown.Image");
             btnDown.ImeMode = ImeMode.NoControl;
-            btnDown.Location = new Point(11, 24);
+            btnDown.Location = new Point(10, 24);
             btnDown.Name = "btnDown";
             btnDown.Size = new Size(37, 34);
             btnDown.TabIndex = 26;
@@ -414,7 +420,7 @@
             btnUp.Anchor = AnchorStyles.None;
             btnUp.Image = (Image)resources.GetObject("btnUp.Image");
             btnUp.ImeMode = ImeMode.NoControl;
-            btnUp.Location = new Point(12, 83);
+            btnUp.Location = new Point(11, 83);
             btnUp.Name = "btnUp";
             btnUp.Size = new Size(37, 34);
             btnUp.TabIndex = 23;
@@ -434,6 +440,7 @@
             btnPay.TabIndex = 4;
             btnPay.Text = "       دفع الآن ";
             btnPay.UseVisualStyleBackColor = true;
+            btnPay.Click += btnPay_Click;
             // 
             // flowLayoutPanel2
             // 
@@ -573,7 +580,7 @@
             // 
             // btnRefresh
             // 
-            btnRefresh.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnRefresh.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnRefresh.Image = (Image)resources.GetObject("btnRefresh.Image");
             btnRefresh.ImeMode = ImeMode.NoControl;
             btnRefresh.Location = new Point(3, 490);
@@ -604,31 +611,31 @@
             DgvِProducts.AllowUserToAddRows = false;
             DgvِProducts.AllowUserToResizeColumns = false;
             DgvِProducts.AllowUserToResizeRows = false;
-            dataGridViewCellStyle9.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvِProducts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle1.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvِProducts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             DgvِProducts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             DgvِProducts.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             DgvِProducts.BackgroundColor = Color.White;
             DgvِProducts.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             DgvِProducts.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle10.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle10.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle10.ForeColor = Color.White;
-            dataGridViewCellStyle10.SelectionBackColor = Color.DodgerBlue;
-            dataGridViewCellStyle10.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = DataGridViewTriState.True;
-            DgvِProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = Color.DodgerBlue;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            DgvِProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             DgvِProducts.ColumnHeadersHeight = 40;
             DgvِProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle11.BackColor = SystemColors.Window;
-            dataGridViewCellStyle11.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle11.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle11.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle11.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = DataGridViewTriState.False;
-            DgvِProducts.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = SystemColors.Window;
+            dataGridViewCellStyle3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            DgvِProducts.DefaultCellStyle = dataGridViewCellStyle3;
             DgvِProducts.Dock = DockStyle.Fill;
             DgvِProducts.EnableHeadersVisualStyles = false;
             DgvِProducts.GridColor = SystemColors.ControlDark;
@@ -640,27 +647,28 @@
             DgvِProducts.RowHeadersVisible = false;
             DgvِProducts.RowHeadersWidth = 21;
             DgvِProducts.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle12.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvِProducts.RowsDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle4.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvِProducts.RowsDefaultCellStyle = dataGridViewCellStyle4;
             DgvِProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DgvِProducts.Size = new Size(1034, 322);
             DgvِProducts.TabIndex = 20;
+            DgvِProducts.RowsAdded += DgvِProducts_RowsAdded;
+            DgvِProducts.RowsRemoved += DgvِProducts_RowsRemoved;
             // 
             // tableLayoutPanel
             // 
             tableLayoutPanel.ColumnCount = 8;
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 176F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 104F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 191F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 108F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 105F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 124F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 102F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 109F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 145F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 28F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 106F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 105F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 110F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 137F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 46F));
             tableLayoutPanel.Controls.Add(dtpDateExpiration, 7, 1);
             tableLayoutPanel.Controls.Add(txtPriceWithTax, 6, 1);
             tableLayoutPanel.Controls.Add(txtWholeSalePrice, 5, 1);
-            tableLayoutPanel.Controls.Add(txtSalePrice, 4, 1);
             tableLayoutPanel.Controls.Add(txtTotalBuyProduct, 3, 1);
             tableLayoutPanel.Controls.Add(txtQty, 2, 1);
             tableLayoutPanel.Controls.Add(txtBuyPrice, 1, 1);
@@ -673,6 +681,7 @@
             tableLayoutPanel.Controls.Add(lblWholesaleprice, 5, 0);
             tableLayoutPanel.Controls.Add(lblSalePrice, 4, 0);
             tableLayoutPanel.Controls.Add(lblBuyPrice, 1, 0);
+            tableLayoutPanel.Controls.Add(txtSalePrice, 4, 1);
             tableLayoutPanel.Dock = DockStyle.Top;
             tableLayoutPanel.Location = new Point(0, 147);
             tableLayoutPanel.Margin = new Padding(5, 3, 5, 3);
@@ -686,65 +695,59 @@
             // 
             // dtpDateExpiration
             // 
+            dtpDateExpiration.Anchor = AnchorStyles.None;
             dtpDateExpiration.CustomFormat = "yyyy-MM-dd";
             dtpDateExpiration.Format = DateTimePickerFormat.Short;
-            dtpDateExpiration.Location = new Point(5, 34);
+            dtpDateExpiration.Location = new Point(22, 36);
             dtpDateExpiration.MaxDate = new DateTime(2101, 1, 1, 0, 0, 0, 0);
             dtpDateExpiration.Name = "dtpDateExpiration";
-            dtpDateExpiration.Size = new Size(161, 27);
+            dtpDateExpiration.Size = new Size(128, 27);
             dtpDateExpiration.TabIndex = 27;
             dtpDateExpiration.Value = new DateTime(2024, 8, 27, 0, 0, 0, 0);
             // 
             // txtPriceWithTax
             // 
+            txtPriceWithTax.Anchor = AnchorStyles.None;
             txtPriceWithTax.Enabled = false;
             txtPriceWithTax.Font = new Font("Calibri", 12F);
-            txtPriceWithTax.Location = new Point(172, 34);
+            txtPriceWithTax.Location = new Point(175, 34);
             txtPriceWithTax.Multiline = true;
             txtPriceWithTax.Name = "txtPriceWithTax";
             txtPriceWithTax.PlaceholderText = "9999";
-            txtPriceWithTax.Size = new Size(139, 32);
+            txtPriceWithTax.Size = new Size(131, 32);
             txtPriceWithTax.TabIndex = 25;
             txtPriceWithTax.TextAlign = HorizontalAlignment.Center;
             // 
             // txtWholeSalePrice
             // 
+            txtWholeSalePrice.Anchor = AnchorStyles.None;
             txtWholeSalePrice.Font = new Font("Calibri", 12F);
-            txtWholeSalePrice.Location = new Point(317, 34);
+            txtWholeSalePrice.Location = new Point(315, 34);
             txtWholeSalePrice.Multiline = true;
             txtWholeSalePrice.Name = "txtWholeSalePrice";
             txtWholeSalePrice.PlaceholderText = "9999";
-            txtWholeSalePrice.Size = new Size(103, 32);
+            txtWholeSalePrice.Size = new Size(99, 32);
             txtWholeSalePrice.TabIndex = 24;
             txtWholeSalePrice.TextAlign = HorizontalAlignment.Center;
             // 
-            // txtSalePrice
-            // 
-            txtSalePrice.Font = new Font("Calibri", 12F);
-            txtSalePrice.Location = new Point(426, 34);
-            txtSalePrice.Multiline = true;
-            txtSalePrice.Name = "txtSalePrice";
-            txtSalePrice.PlaceholderText = "9999";
-            txtSalePrice.Size = new Size(96, 32);
-            txtSalePrice.TabIndex = 23;
-            txtSalePrice.TextAlign = HorizontalAlignment.Center;
-            // 
             // txtTotalBuyProduct
             // 
+            txtTotalBuyProduct.Anchor = AnchorStyles.None;
             txtTotalBuyProduct.Enabled = false;
             txtTotalBuyProduct.Font = new Font("Calibri", 12F);
-            txtTotalBuyProduct.Location = new Point(528, 34);
+            txtTotalBuyProduct.Location = new Point(527, 34);
             txtTotalBuyProduct.Multiline = true;
             txtTotalBuyProduct.Name = "txtTotalBuyProduct";
             txtTotalBuyProduct.PlaceholderText = "9999";
-            txtTotalBuyProduct.Size = new Size(118, 32);
+            txtTotalBuyProduct.Size = new Size(100, 32);
             txtTotalBuyProduct.TabIndex = 22;
             txtTotalBuyProduct.TextAlign = HorizontalAlignment.Center;
             // 
             // txtQty
             // 
+            txtQty.Anchor = AnchorStyles.None;
             txtQty.Font = new Font("Calibri", 12F);
-            txtQty.Location = new Point(652, 34);
+            txtQty.Location = new Point(633, 34);
             txtQty.Multiline = true;
             txtQty.Name = "txtQty";
             txtQty.PlaceholderText = "9999";
@@ -757,12 +760,13 @@
             // 
             // txtBuyPrice
             // 
+            txtBuyPrice.Anchor = AnchorStyles.None;
             txtBuyPrice.Font = new Font("Calibri", 12F);
-            txtBuyPrice.Location = new Point(757, 34);
+            txtBuyPrice.Location = new Point(738, 34);
             txtBuyPrice.Multiline = true;
             txtBuyPrice.Name = "txtBuyPrice";
             txtBuyPrice.PlaceholderText = "9999";
-            txtBuyPrice.Size = new Size(98, 32);
+            txtBuyPrice.Size = new Size(102, 32);
             txtBuyPrice.TabIndex = 20;
             txtBuyPrice.TextAlign = HorizontalAlignment.Center;
             txtBuyPrice.KeyDown += txtBuyPrice_KeyDown;
@@ -771,22 +775,23 @@
             // 
             // txtProductName
             // 
+            txtProductName.Anchor = AnchorStyles.None;
             txtProductName.Enabled = false;
             txtProductName.Font = new Font("Calibri", 12F);
-            txtProductName.Location = new Point(861, 34);
+            txtProductName.Location = new Point(846, 34);
             txtProductName.Multiline = true;
             txtProductName.Name = "txtProductName";
             txtProductName.PlaceholderText = "اسم المنتج";
-            txtProductName.Size = new Size(170, 32);
+            txtProductName.Size = new Size(185, 32);
             txtProductName.TabIndex = 19;
             txtProductName.TextAlign = HorizontalAlignment.Center;
             // 
             // lblDateExpiration
             // 
-            lblDateExpiration.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblDateExpiration.Anchor = AnchorStyles.None;
             lblDateExpiration.AutoSize = true;
             lblDateExpiration.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblDateExpiration.Location = new Point(5, 5);
+            lblDateExpiration.Location = new Point(7, 7);
             lblDateExpiration.Margin = new Padding(3, 5, 5, 3);
             lblDateExpiration.Name = "lblDateExpiration";
             lblDateExpiration.Size = new Size(160, 19);
@@ -795,11 +800,11 @@
             // 
             // lblPriceWithTax
             // 
-            lblPriceWithTax.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblPriceWithTax.Anchor = AnchorStyles.None;
             lblPriceWithTax.AutoSize = true;
             lblPriceWithTax.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblPriceWithTax.Location = new Point(179, 5);
-            lblPriceWithTax.Margin = new Padding(3, 5, 10, 3);
+            lblPriceWithTax.Location = new Point(175, 6);
+            lblPriceWithTax.Margin = new Padding(3);
             lblPriceWithTax.Name = "lblPriceWithTax";
             lblPriceWithTax.Size = new Size(131, 19);
             lblPriceWithTax.TabIndex = 7;
@@ -807,11 +812,11 @@
             // 
             // lblTotalBuy
             // 
-            lblTotalBuy.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblTotalBuy.Anchor = AnchorStyles.None;
             lblTotalBuy.AutoSize = true;
             lblTotalBuy.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblTotalBuy.Location = new Point(545, 5);
-            lblTotalBuy.Margin = new Padding(3, 5, 20, 3);
+            lblTotalBuy.Location = new Point(538, 6);
+            lblTotalBuy.Margin = new Padding(3);
             lblTotalBuy.Name = "lblTotalBuy";
             lblTotalBuy.Size = new Size(79, 19);
             lblTotalBuy.TabIndex = 6;
@@ -819,11 +824,11 @@
             // 
             // lblProductName
             // 
-            lblProductName.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblProductName.Anchor = AnchorStyles.None;
             lblProductName.AutoSize = true;
             lblProductName.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblProductName.Location = new Point(908, 5);
-            lblProductName.Margin = new Padding(3, 5, 50, 3);
+            lblProductName.Location = new Point(905, 6);
+            lblProductName.Margin = new Padding(3);
             lblProductName.Name = "lblProductName";
             lblProductName.Size = new Size(67, 19);
             lblProductName.TabIndex = 1;
@@ -831,11 +836,11 @@
             // 
             // lblQuentity
             // 
-            lblQuentity.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblQuentity.Anchor = AnchorStyles.None;
             lblQuentity.AutoSize = true;
             lblQuentity.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblQuentity.Location = new Point(679, 5);
-            lblQuentity.Margin = new Padding(3, 5, 30, 3);
+            lblQuentity.Location = new Point(662, 6);
+            lblQuentity.Margin = new Padding(3);
             lblQuentity.Name = "lblQuentity";
             lblQuentity.Size = new Size(41, 19);
             lblQuentity.TabIndex = 3;
@@ -843,11 +848,11 @@
             // 
             // lblWholesaleprice
             // 
-            lblWholesaleprice.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblWholesaleprice.Anchor = AnchorStyles.None;
             lblWholesaleprice.AutoSize = true;
             lblWholesaleprice.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblWholesaleprice.Location = new Point(324, 5);
-            lblWholesaleprice.Margin = new Padding(3, 5, 10, 3);
+            lblWholesaleprice.Location = new Point(318, 6);
+            lblWholesaleprice.Margin = new Padding(3);
             lblWholesaleprice.Name = "lblWholesaleprice";
             lblWholesaleprice.Size = new Size(93, 19);
             lblWholesaleprice.TabIndex = 5;
@@ -855,11 +860,11 @@
             // 
             // lblSalePrice
             // 
-            lblSalePrice.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblSalePrice.Anchor = AnchorStyles.None;
             lblSalePrice.AutoSize = true;
             lblSalePrice.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblSalePrice.Location = new Point(443, 5);
-            lblSalePrice.Margin = new Padding(3, 5, 20, 3);
+            lblSalePrice.Location = new Point(441, 6);
+            lblSalePrice.Margin = new Padding(3);
             lblSalePrice.Name = "lblSalePrice";
             lblSalePrice.Size = new Size(61, 19);
             lblSalePrice.TabIndex = 4;
@@ -867,15 +872,27 @@
             // 
             // lblBuyPrice
             // 
-            lblBuyPrice.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblBuyPrice.Anchor = AnchorStyles.None;
             lblBuyPrice.AutoSize = true;
             lblBuyPrice.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblBuyPrice.Location = new Point(774, 5);
-            lblBuyPrice.Margin = new Padding(3, 5, 20, 3);
+            lblBuyPrice.Location = new Point(756, 6);
+            lblBuyPrice.Margin = new Padding(3);
             lblBuyPrice.Name = "lblBuyPrice";
             lblBuyPrice.Size = new Size(67, 19);
             lblBuyPrice.TabIndex = 2;
             lblBuyPrice.Text = "سعر الشراء";
+            // 
+            // txtSalePrice
+            // 
+            txtSalePrice.Anchor = AnchorStyles.None;
+            txtSalePrice.Font = new Font("Calibri", 12F);
+            txtSalePrice.Location = new Point(422, 34);
+            txtSalePrice.Multiline = true;
+            txtSalePrice.Name = "txtSalePrice";
+            txtSalePrice.PlaceholderText = "9999";
+            txtSalePrice.Size = new Size(99, 32);
+            txtSalePrice.TabIndex = 23;
+            txtSalePrice.TextAlign = HorizontalAlignment.Center;
             // 
             // BuysUserControl
             // 
@@ -886,8 +903,8 @@
             Controls.Add(lblEmptyData);
             Controls.Add(DgvِProducts);
             Controls.Add(tableLayoutPanel);
-            Controls.Add(flowLayoutPanel2);
             Controls.Add(OperationsflowLayoutPanel);
+            Controls.Add(flowLayoutPanel2);
             Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(3, 4, 3, 4);
             Name = "BuysUserControl";
@@ -981,5 +998,7 @@
         private TextBox txtBuyPrice;
         private TextBox txtProductName;
         private DateTimePicker dtpDateExpiration;
+        private Label label1;
+        private Label label2;
     }
 }

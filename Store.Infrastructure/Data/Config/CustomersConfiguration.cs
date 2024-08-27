@@ -12,9 +12,9 @@ namespace Store.Infrastructure.Data.Config
             builder.Property(x => x.CustomerName).HasMaxLength(75);
             builder.Property(x => x.PhoneNumber).HasMaxLength(30);
             builder.HasData(
-                new Customer { Id = 1, CustomerName = "قربوز علاء", Address = "بن سمارة", PhoneNumber = "0697357397", Notes = "Seeded Data" },
-                new Customer { Id = 2, CustomerName = "بن خليفة", Address = "مرماد", PhoneNumber = "0754653721", Notes = "Seeded Data" },
-                new Customer { Id = 3, CustomerName = "دوادي", Address = "حاج مسعود", PhoneNumber = "0697357546", Notes = "Seeded Data" }
+                new Customer { Id = 1, CustomerName = "قربوز علاء", Address = "بن سمارة", PhoneNumber = "0697357397", Notes = "معلومات مشحونة", MaxDebtAllowed = 0, TotalDebts = 0 },
+                new Customer { Id = 2, CustomerName = "بن خليفة", Address = "مرماد", PhoneNumber = "0754653721", Notes = "معلومات مشحونة", MaxDebtAllowed = 0, TotalDebts = 0 },
+                new Customer { Id = 3, CustomerName = "دوادي", Address = "حاج مسعود", PhoneNumber = "0697357546", Notes = "معلومات مشحونة", MaxDebtAllowed = 0, TotalDebts = 0 }
 
                 );
 
@@ -24,7 +24,7 @@ namespace Store.Infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<CustomerMoney> builder)
         {
-            builder.HasKey(bd => new { bd.Order_ID, bd.Cust_ID });
+            builder.HasKey(bd => bd.Id);
             builder.Property(x => x.Cust_Name).HasMaxLength(75);
             builder.HasOne(x => x.Customer).WithMany().HasForeignKey(x => x.Cust_ID);
             builder.HasOne(x => x.Sale).WithMany().HasForeignKey(x => x.Order_ID);
@@ -36,7 +36,7 @@ namespace Store.Infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<CustomerReport> builder)
         {
-            builder.HasKey(bd => new { bd.Order_ID, bd.Cust_ID });
+            builder.HasKey(bd => bd.Id);
             builder.Property(x => x.Cust_Name).HasMaxLength(75);
             builder.HasOne(x => x.Customer).WithMany().HasForeignKey(x => x.Cust_ID);
             builder.HasOne(x => x.Sale).WithMany().HasForeignKey(x => x.Order_ID);

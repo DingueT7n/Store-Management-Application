@@ -39,11 +39,11 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
         public async void SetProductsToDgv()
         {
             //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            var CustomerMoneyList = MainForm.Context.CustomersReports.
-                Include(x => x.Customer).Include(x => x.Sale)
+            var CustomerMoneyList = MainForm.Context.SuppliersReports.
+                Include(x => x.Supplier).Include(x => x.Buy)
                 .ToList();
             var uniqueCustomerCount = CustomerMoneyList
-                .Select(x => x.Customer.Id) // Replace CustomerId with the actual unique identifier property
+                .Select(x => x.Supplier.Id) // Replace CustomerId with the actual unique identifier property
                 .Distinct()
                 .Count();
             DgvِCustomer.DataSource = CustomerMoneyList;
@@ -98,14 +98,19 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
         private void SetColumns()
         {
             //DgvِCustomer.Columns[0].HeaderCell.Value = "المعرف";
-            DgvِCustomer.Columns[0].HeaderCell.Value = "اسم المورد";
-            DgvِCustomer.Columns[1].HeaderCell.Value = "الدين";
-            DgvِCustomer.Columns[2].HeaderCell.Value = "تاريخ الفاتورة";
-            DgvِCustomer.Columns[3].HeaderCell.Value = "وقت العملية";
-            DgvِCustomer.Columns[5].HeaderCell.Value = "معرف العملية";
-            DgvِCustomer.Columns[6].HeaderCell.Value = "معرف الفاتورة";
-            DgvِCustomer.Columns[4].HeaderCell.Value = "معرف المورد";
-            DgvِCustomer.Columns[7].HeaderCell.Value = "معرف التقرير";
+            DgvِCustomer.Columns[0].HeaderCell.Value = "معرف المورد";
+            DgvِCustomer.Columns[1].HeaderCell.Value = "معرف الفاتورة";
+            DgvِCustomer.Columns[2].HeaderCell.Value = "اسم المورد";
+            DgvِCustomer.Columns[3].HeaderCell.Value = "الدين";
+            DgvِCustomer.Columns[4].HeaderCell.Value = "تاريخ الفاتورة";
+            DgvِCustomer.Columns[5].HeaderCell.Value = "وقت العملية";
+            DgvِCustomer.Columns[6].HeaderCell.Value = "شراء";
+            DgvِCustomer.Columns[7].HeaderCell.Value = "مورد";
+            DgvِCustomer.Columns[8].HeaderCell.Value = "رقم التقرير";
+
+            DgvِCustomer.Columns[6].Visible = false;
+            DgvِCustomer.Columns[7].Visible = false;
+            DgvِCustomer.Columns[0].Visible = false;
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)

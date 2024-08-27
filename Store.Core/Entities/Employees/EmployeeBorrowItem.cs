@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Store.Core.Entities.Products;
+﻿using Store.Core.Entities.Products;
 
 namespace Store.Core.Entities.Employees
 {
@@ -12,10 +11,10 @@ namespace Store.Core.Entities.Employees
         public string Time { get; set; }
         public float Quentity { get; set; }
 
-        [ForeignKey("Emp_ID")]
+
         public virtual Employee Employee { get; set; }
 
-        [ForeignKey("Item_ID")]
+
         public virtual Product Product { get; set; }
     }
 

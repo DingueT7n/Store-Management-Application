@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Store.Core.Entities.Products
+﻿namespace Store.Core.Entities.Products
 {
     public class ProductsQuantitie : BaseEntity<int>
     {
@@ -10,12 +8,8 @@ namespace Store.Core.Entities.Products
         public float Qty { get; set; }
         public float Buy_Price { get; set; }
         public float Sale_PriceTax { get; set; }
-
-
-        [ForeignKey("Pro_ID")]
+        public DateTime DateExpiration { get; set; }
         public virtual Product Product { get; set; }
-
-        [ForeignKey("Store_ID")]
         public virtual Core.Entities.Stores.Store Store { get; set; }
     }
 

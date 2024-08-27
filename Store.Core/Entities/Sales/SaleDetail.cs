@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Store.Core.Entities.Customers;
+﻿using Store.Core.Entities.Customers;
 using Store.Core.Entities.Products;
 
 namespace Store.Core.Entities.Sales
@@ -17,12 +16,12 @@ namespace Store.Core.Entities.Sales
         public float TaxValue { get; set; }
         public float PriceWithTax { get; set; }
 
-        [ForeignKey("Order_ID")]
+
         public virtual Sale Sale { get; set; }
 
-        [ForeignKey("Pro_ID")]
+
         public virtual Product Product { get; set; }
-        [ForeignKey("Cust_ID")]
+
         public virtual Customer Customer { get; set; }
     }
 }

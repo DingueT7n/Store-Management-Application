@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Store.Core.Entities.Employees
+﻿namespace Store.Core.Entities.Employees
 {
     public class EmployeeSalaryMinus : BaseEntity<int>
     {
@@ -12,7 +10,7 @@ namespace Store.Core.Entities.Employees
         public float Price { get; set; }
         public string Pay { get; set; }
 
-        [ForeignKey("Emp_ID")]
+
         public virtual Employee Employee { get; set; }
     }
 

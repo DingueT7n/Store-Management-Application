@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Store.Core.Entities.Products
+﻿namespace Store.Core.Entities.Products
 {
     public class ProductOutStore : BaseEntity<int>
     {
@@ -14,7 +12,7 @@ namespace Store.Core.Entities.Products
         public string Time { get; set; }
         public string Name { get; set; }
         public string Reason { get; set; }
-        [ForeignKey("Pro_ID")]
+
         public virtual Product Product { get; set; }
     }
 

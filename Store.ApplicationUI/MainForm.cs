@@ -241,5 +241,17 @@ namespace Store.ApplicationUI
             }
             return quantity;
         }
+
+        private void btnBuysPanel_Click(object sender, EventArgs e)
+        {
+            CloseSubPanels();
+
+            ShowSubPanel(BuysflowLayoutPanel);
+        }
+
+        private void btnNewBuy_Click(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.BuysGui.BuysUserControl.Instance(this));
+        }
     }
 }

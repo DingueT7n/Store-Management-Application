@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Store.Core.Entities.Products;
+﻿using Store.Core.Entities.Products;
 
 namespace Store.Core.Entities.Returns
 {
@@ -19,11 +18,11 @@ namespace Store.Core.Entities.Returns
 
 
         // Navigation property for the relationship with Returns
-        [ForeignKey("Order_ID")]
+
         public virtual Return Returns { get; set; }
 
 
-        [ForeignKey("Pro_ID")]
+
         public virtual Product Product { get; set; }
     }
 }

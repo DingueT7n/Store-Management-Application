@@ -1,4 +1,5 @@
-﻿using Store.Core.Entities.Suppliers;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Store.Core.Entities.Suppliers;
 
 namespace Store.Core.Entities.Buys
 {
@@ -12,10 +13,11 @@ namespace Store.Core.Entities.Buys
         public float Remain { get; set; }
         public int SupplierId { get; set; }
         public Supplier Supplier { get; set; }
+        [NotMapped]
+        public ICollection<BuyDetail> BuyDetails { get; set; }
 
 
-        public virtual IEnumerable<SupplierMoney> SupplierMoney { get; set; } = new HashSet<SupplierMoney>();
 
-        //public virtual IEnumerable<BuyDetail> BuyDetails { get; set; }
+
     }
 }

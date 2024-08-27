@@ -11,9 +11,14 @@ namespace Store.Infrastructure.Data.Config
             builder.Property(x => x.Id).IsRequired();
             builder.Property(x => x.CategoryName).HasMaxLength(30);
             builder.HasData(
-                new Category { Id = 1, CategoryName = "Category One " },
-                new Category { Id = 2, CategoryName = "Category two " },
-                new Category { Id = 3, CategoryName = "Category Three " }
+                new Category { Id = 1, CategoryName = "اغذية عادية" },
+                new Category { Id = 2, CategoryName = "اغذية الاطفال" },
+                new Category { Id = 3, CategoryName = "محفظات اطفال" },
+                 new Category { Id = 4, CategoryName = "اغذية الاطفال" },
+                new Category { Id = 5, CategoryName = "مشروبات غازية" },
+                new Category { Id = 6, CategoryName = "هواتف رادمي" },
+                new Category { Id = 7, CategoryName = "هاتف سامسونغ" },
+                new Category { Id = 8, CategoryName = "فرماج" }
 
                 );
         }

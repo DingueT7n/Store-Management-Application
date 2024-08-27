@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Store.Core.Entities.Products
+﻿namespace Store.Core.Entities.Products
 {
     public class ProductTransfer : BaseEntity<int>
     {
@@ -18,7 +16,7 @@ namespace Store.Core.Entities.Products
         public float PriceTax { get; set; }
         public float SalePriceTax { get; set; }
 
-        [ForeignKey("Pro_ID")]
+
         public virtual Product Product { get; set; }
     }
 

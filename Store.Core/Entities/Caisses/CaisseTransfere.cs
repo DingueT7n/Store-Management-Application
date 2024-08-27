@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Store.Core.Entities.Caisses
+﻿namespace Store.Core.Entities.Caisses
 {
     public class CaisseTransfere : BaseEntity<int>
     {
@@ -12,10 +10,10 @@ namespace Store.Core.Entities.Caisses
 
         public int Caisse_From { get; set; }
         public int Caisse_To { get; set; }
-        [ForeignKey("Caisse_From")]
+
         public virtual Caisse CaisseFrom { get; set; }
 
-        [ForeignKey("Caisse_To")]
+
         public virtual Caisse CaisseTo { get; set; }
     }
 

@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Data;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.ApplicationUI.Gui.PaymentGui;
+using Store.Core.Entities.Buys;
 using Store.Core.Entities.Products;
+using Store.Core.Entities.Suppliers;
 using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.BuysGui
@@ -12,6 +15,10 @@ namespace Store.ApplicationUI.Gui.BuysGui
         private static BuysUserControl? _buysUserControl;
         private static MainForm? _main;
         public static BuysRepository? buysRepository;
+        public static float PaidUp;
+        public static float Remain;
+
+        private DataTable Dt = new DataTable();
         public BuysUserControl()
         {
             InitializeComponent();
@@ -30,7 +37,6 @@ namespace Store.ApplicationUI.Gui.BuysGui
             _buysUserControl.LoadData();
             return _buysUserControl;
         }
-
         public static void RefreshDgv()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAllProducts());
@@ -55,10 +61,10 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 cmbSuppliers.ValueMember = "Id";
                 cmbSuppliers.Text = "اختر مورد";
 
-                cmbSuppliers.DataSource = MainForm.Context.Stores.ToList();
-                cmbSuppliers.DisplayMember = "StoreName";
-                cmbSuppliers.ValueMember = "Id";
-                cmbSuppliers.Text = "اختر مخزن";
+                cmbStores.DataSource = MainForm.Context.Stores.ToList();
+                cmbStores.DisplayMember = "StoreName";
+                cmbStores.ValueMember = "Id";
+                cmbStores.Text = "اختر مخزن";
 
                 DtpDateFacture.Value = DateTime.Now;
                 dtpReminderDate.Value = DateTime.Now.AddDays(30);
@@ -80,19 +86,25 @@ namespace Store.ApplicationUI.Gui.BuysGui
         }
         private void SetColumns()
         {
-            //DgvProducts.Columns[0].HeaderCell.Value = "الماسم المنتجعرف";
-            DgvِProducts.Columns[0].HeaderCell.Value = "اسم المنتج";
-            DgvِProducts.Columns[1].HeaderCell.Value = " سعر الشراء";
-            DgvِProducts.Columns[2].HeaderCell.Value = "الكمية";
-            DgvِProducts.Columns[3].HeaderCell.Value = "اجمالي الشراء";
-            DgvِProducts.Columns[4].HeaderCell.Value = "سعر البيع";
-            DgvِProducts.Columns[5].HeaderCell.Value = "سعر الجملة";
-            DgvِProducts.Columns[6].HeaderCell.Value = "سعر البيع باحتساب الضريبة";
-            DgvِProducts.Columns[7].HeaderCell.Value = "تاريخ انتهاء الصلاحية";
+            if (DgvِProducts.Columns.Count == 0) // Ensure columns are added only once
+            {
+                DgvِProducts.Columns.Add("اسم المنتج", "اسم المنتج"); // String column
+                DgvِProducts.Columns.Add("سعر الشراء", "سعر الشراء"); // String or decimal column
+                DgvِProducts.Columns.Add("الكمية", "الكمية"); // String or decimal column
+                DgvِProducts.Columns.Add("اجمالي الشراء", "اجمالي الشراء"); // String or decimal column
+                DgvِProducts.Columns.Add("سعر البيع", "سعر البيع"); // String or decimal column
+                DgvِProducts.Columns.Add("سعر الجملة", "سعر الجملة"); // String or decimal column
+                DgvِProducts.Columns.Add("سعر البيع باحتساب الضريبة", "سعر البيع باحتساب الضريبة"); // String or decimal column
 
+                // DateTime column for expiration date
+                DataGridViewColumn dateColumn = new DataGridViewTextBoxColumn();
+                dateColumn.Name = "تاريخ انتهاء الصلاحية";
+                dateColumn.HeaderText = "تاريخ انتهاء الصلاحية";
+                DgvِProducts.Columns.Add(dateColumn);
 
-
-
+                DgvِProducts.Columns.Add("معرف المنتوج", "معرف المنتوج"); // ID column
+                DgvِProducts.Columns.Add("باركود", "باركود"); // String column for barcode
+            }
 
 
 
@@ -114,8 +126,8 @@ namespace Store.ApplicationUI.Gui.BuysGui
         public async void SetProductsToDgv()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            DgvِProducts.DataSource = MainForm.Context.Products.
-                Include(x => x.Category).ToList();
+            //DgvِProducts.DataSource = MainForm.Context.Products.
+            //    Include(x => x.Category).ToList();
         }
         public void InitializeTextBoxesAndLables(Product product)
         {
@@ -128,6 +140,11 @@ namespace Store.ApplicationUI.Gui.BuysGui
             txtPriceWithTax.Text = product.SalePriceTax.ToString();
             dtpDateExpiration.Value = product.DateExperation;
 
+        }
+        public static void InitializeData(string paidUp, string remain)
+        {
+            PaidUp = _main.ConvertToFloat(paidUp);
+            Remain = _main.ConvertToFloat(remain);
         }
         public void ClearBoxes()
         {
@@ -150,15 +167,15 @@ namespace Store.ApplicationUI.Gui.BuysGui
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
-
+        private Product _product;
         public async void SetProductsToTable()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            Product product = buysRepository.GetProductBarCode(txtSearchBarCode.Text);
-            if (product is not null)
+            _product = buysRepository.GetProductBarCode(txtSearchBarCode.Text);
+            if (_product is not null)
             {
-                InitializeTextBoxesAndLables(product);
-                txtSearchBarCode.Clear();
+                InitializeTextBoxesAndLables(_product);
+
                 txtQty.Focus();
                 txtQty.SelectAll();
                 CalculateAmount();
@@ -166,7 +183,11 @@ namespace Store.ApplicationUI.Gui.BuysGui
             else
             {
                 MsgHelper.ShowEmptyResult();
+                txtSearchBarCode.Focus();
+
             }
+            txtSearchBarCode.Clear();
+
         }
         private void tableLayoutPanel_Paint(object sender, PaintEventArgs e)
         {
@@ -175,7 +196,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            DgvِProducts.DataSource = new List<Product>();
+            DgvِProducts.Rows.Clear();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِProducts);
         }
 
@@ -194,12 +215,69 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 e.Handled = true;
             }
         }
+        void new_row()
+        {
+            try
+            {
+                int rowIndex = DgvِProducts.Rows.Add(); // Add a new row to the DataGridView
+                DataGridViewRow newRow = DgvِProducts.Rows[rowIndex];
 
+                // Set values in the new row
+                newRow.Cells[0].Value = txtProductName.Text;
+                newRow.Cells[1].Value = txtBuyPrice.Text;
+                newRow.Cells[2].Value = txtQty.Text;
+                newRow.Cells[3].Value = txtTotalBuyProduct.Text;
+                newRow.Cells[4].Value = txtSalePrice.Text;
+                newRow.Cells[5].Value = txtWholeSalePrice.Text;
+                newRow.Cells[6].Value = txtPriceWithTax.Text;
+                newRow.Cells[7].Value = dtpDateExpiration.Value.ToString("MM/dd/yyyy");
+                newRow.Cells[8].Value = _product.Id;
+                newRow.Cells[9].Value = _product.CodeBar;
+                DgvِProducts.CurrentCell = DgvِProducts[0, DgvِProducts.Rows.Count - 1];
+
+                ClearBoxes();
+                txtSearchBarCode.Focus();
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+
+        }
+        void AddNewRow()
+        {
+            if (txtProductName.Text != string.Empty && txtProductName.Text != "")
+            {
+                try
+                {
+
+                    for (int i = 0; i < DgvِProducts.Rows.Count; i++)
+                    {
+                        if (DgvِProducts.Rows[i].Cells[9].Value.ToString() == _product.Id.ToString())
+                        {
+                            MsgHelper.ShowDuplicatedItems();
+                            txtSearchBarCode.Focus();
+                            ClearBoxes();
+                            return;
+                        }
+
+                    }
+
+                    new_row();
+                    CalculateStatistics();
+                }
+                catch (Exception ex) { MessageBox.Show(ex.Message); }
+
+
+
+
+
+            }
+            else { MsgHelper.ShowEmptyResult(); }
+            CalculateStatistics();
+        }
         private void txtQty_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-
+                AddNewRow();
             }
         }
 
@@ -220,7 +298,14 @@ namespace Store.ApplicationUI.Gui.BuysGui
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
-
+        public bool ValidatePay()
+        {
+            if (cmbSuppliers.Text == "اختر مورد") { MessageBox.Show("يرجى اختيار مورد , راجع البيانات من فضلك", "بيانات غير كاملة"); cmbSuppliers.Focus(); return false; }
+            if (cmbStores.Text == "اختر مخزن") { MessageBox.Show("يرجى اختيار مخزن , راجع البيانات من فضلك", "بيانات غير كاملة"); cmbStores.Focus(); return false; }
+            if (txtProductName.Text != string.Empty)
+            { MessageBox.Show("لديك منتج قيد الاضافة , راجع البيانات من فضلك", "بيانات غير كاملة"); return false; }
+            return true;
+        }
         private void txtBuyPrice_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -242,6 +327,8 @@ namespace Store.ApplicationUI.Gui.BuysGui
             CalculateAmount();
         }
         int rowIndex;
+        private double TotalFacture;
+
         private void btnUp_Click(object sender, EventArgs e)
         {
             try
@@ -288,19 +375,23 @@ namespace Store.ApplicationUI.Gui.BuysGui
         {
             try
             {
-                if (DgvِProducts.Rows.Count > 0)
+                lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِProducts);
+                if (DgvِProducts.Rows.Count >= 0)
                 {
-                    lblTotalPriceinFacture.Text =
+                    lblTotalPriceinFacture.Text = "المبلغ الاجمالي في الفاتورة :" +
                                          (from DataGridViewRow row in DgvِProducts.Rows
-                                          where row.Cells[7].FormattedValue.ToString() != string.Empty
-                                          select Convert.ToDouble(row.Cells[7].FormattedValue)).Sum()
-                                          .ToString("f2") + "المبلغ الاجمالي في الفاتورة:";
-                    lblTotalQuentity.Text =
+                                          where row.Cells[3].FormattedValue.ToString() != string.Empty
+                                          select Convert.ToDouble(row.Cells[3].FormattedValue)).Sum()
+                                          .ToString("f2");
+                    TotalFacture = (from DataGridViewRow row in DgvِProducts.Rows
+                                    where row.Cells[3].FormattedValue.ToString() != string.Empty
+                                    select Convert.ToDouble(row.Cells[3].FormattedValue)).Sum();
+                    lblTotalQuentity.Text = "اجمالي الكميات في الجدول :" +
                               (from DataGridViewRow row in DgvِProducts.Rows
                                where row.Cells[2].FormattedValue.ToString() != string.Empty
                                select Convert.ToDouble(row.Cells[2].FormattedValue)).Sum()
-                               .ToString("f2") + "المبلغ الاجمالي في الفاتورة:";
-                    lblTotalProductsInTable.Text = $"اجمالي الكميات في الجدول: {DgvِProducts.Rows.Count}";
+                               .ToString("f2");
+                    lblTotalProductsInTable.Text = $"مجموع المنتجات في الجدول: {DgvِProducts.Rows.Count}";
                 }
 
             }
@@ -310,6 +401,36 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 throw;
             }
 
+        }
+        private void ResetForm()
+        {
+            // Clear all textboxes
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is TextBox)
+                {
+                    ((TextBox)ctrl).Clear();
+                }
+                else if (ctrl is ComboBox)
+                {
+                    ((ComboBox)ctrl).SelectedIndex = -1; // Deselect ComboBox
+                }
+                else if (ctrl is CheckBox)
+                {
+                    ((CheckBox)ctrl).Checked = false; // Uncheck CheckBox
+                }
+                // Add more control types if needed
+            }
+
+            // Reset any DataGridView
+            DgvِProducts.Rows.Clear();
+            CalculateStatistics();
+
+            // Reinitialize form data (e.g., reload initial data)
+            LoadData(); // This is a method where you load initial data
+
+            // Optionally reset focus to the first control
+            // Set focus to the first control
         }
         private void btnDeleteSelected_Click(object sender, EventArgs e)
         {
@@ -328,6 +449,256 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 DgvِProducts.Focus();
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
+        }
+
+        private void DgvِProducts_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            CalculateStatistics();
+        }
+
+        private void DgvِProducts_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
+        {
+            CalculateStatistics();
+        }
+        Buy SetBuy()
+        {
+
+            Buy buy = new Buy();
+
+            buy.Total = _main.ConvertToFloat(TotalFacture.ToString());
+            buy.SupplierId = Convert.ToInt32(cmbSuppliers.SelectedValue);
+            buy.Date = DtpDateFacture.Value;
+            buy.PaidUP = _main.ConvertToFloat(PaidUp.ToString());
+            buy.Remain = _main.ConvertToFloat(Remain.ToString());
+            buy.Time = DateTime.Now.ToString("HH:mm");
+            buy.User_Name = "Alaa";
+            return buy;
+        }
+        SupplierReport SetSupReport()
+        {
+
+            SupplierReport suppReport = new SupplierReport();
+            suppReport.Order_ID = Convert.ToInt32(txtFactureNumber.Text);
+            suppReport.Sup_ID = Convert.ToInt32(cmbSuppliers.SelectedValue);
+            suppReport.SupplierName = cmbSuppliers.Text;
+            suppReport.Date = DtpDateFacture.Value;
+            suppReport.Price = _main.ConvertToFloat(PaidUp.ToString());
+            suppReport.Time = DateTime.Now.ToString("HH:mm");
+            return suppReport;
+        }
+        SupplierMoney SetSupMoney()
+        {
+
+            SupplierMoney supplierMoney = new SupplierMoney();
+            supplierMoney.Order_ID = Convert.ToInt32(txtFactureNumber.Text);
+            supplierMoney.Sup_ID = Convert.ToInt32(cmbSuppliers.SelectedValue);
+            supplierMoney.SupplierName = cmbSuppliers.Text;
+            supplierMoney.Order_Date = DtpDateFacture.Value;
+            supplierMoney.Price = _main.ConvertToFloat(Remain.ToString());
+            supplierMoney.Time = DateTime.Now.ToString("HH:mm");
+            supplierMoney.Reminder_Date = dtpReminderDate.Value;
+            return supplierMoney;
+        }
+        BuyDetail SetBuyDetail(int i)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+            BuyDetail buyDetail = new BuyDetail();
+            buyDetail.Order_ID = Convert.ToInt32(txtFactureNumber.Text);
+            buyDetail.Sup_ID = Convert.ToInt32(cmbSuppliers.SelectedValue);
+            buyDetail.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[8].Value.ToString());
+            buyDetail.Quentity = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+            buyDetail.Price = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
+            buyDetail.Total = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[3].Value.ToString());
+            buyDetail.TaxValue = Properties.Settings.Default.TaxValue;
+            buyDetail.PriceWithTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
+            return buyDetail;
+        }
+        Product SetProduct(int i)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+            var proId = DgvِProducts.Rows[i].Cells[8].Value.ToString();
+            Product product = MainForm.Context.Products.Where(x => x.Id.ToString() == proId).FirstOrDefault();
+            if (product is not null)
+            {
+                product.Quentity = product.Quentity + _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+
+            }
+            return product;
+        }
+        Supplier SetSupplier()
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+            var supId = Convert.ToInt32(cmbSuppliers.SelectedValue);
+            Supplier supplier = MainForm.Context.Suppliers.Where(x => x.Id == supId).FirstOrDefault();
+            if (supplier is not null)
+            {
+                supplier.TotalDebts = supplier.TotalDebts + Remain;
+
+            }
+            return supplier;
+        }
+        ProductsQuantitie SetProductQuentity(int i)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+            ProductsQuantitie productQty = new();
+            if (productQty is not null)
+            {
+                productQty.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[8].Value.ToString());
+                productQty.Store_ID = Convert.ToInt32(cmbStores.SelectedValue);
+                productQty.StoreName = cmbStores.Text;
+                productQty.Qty = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+                productQty.Buy_Price = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
+                productQty.Sale_PriceTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
+                productQty.DateExpiration = Convert.ToDateTime(DgvِProducts.Rows[i].Cells[7].Value);
+            }
+            return productQty;
+        }
+        private async void btnPay_Click(object sender, EventArgs e)
+        {
+            if (ValidatePay())
+            {
+                AddPaymentForm addPaymentForm = new(_main);
+
+                if (rBPayCash.Checked)
+                {
+                    addPaymentForm.LoadData(TotalFacture.ToString(), TotalFacture.ToString(), "0");
+                    addPaymentForm.ShowDialog();
+                    if (PaidUp >= TotalFacture)
+                    {
+                        using (var transaction = MainForm.Context.Database.BeginTransaction())
+                        {
+                            try
+                            {
+                                MainForm.Context.Add(SetBuy());
+                                await MainForm.Context.SaveChangesAsync();
+                                MainForm.Context.SaveChanges();
+                                if (PaidUp > 0)
+                                    MainForm.Context.Add(SetSupReport());
+                                if (Remain > 0)
+                                {
+                                    MainForm.Context.Add(SetSupMoney());
+                                    MainForm.Context.Update(SetSupplier());
+                                };
+
+                                MainForm.Context.Add(SetSupplier());
+
+
+                                BuyDetailRepository buyDetailRepository = new(MainForm.Context);
+
+                                for (int i = 0; i <= DgvِProducts.Rows.Count - 1; i++)
+                                {
+                                    buyDetailRepository.AddAsync(SetBuyDetail(i));
+                                    MainForm.Context.Update(SetProduct(i));
+                                    MainForm.Context.Add(SetProductQuentity(i));
+
+
+                                }
+                                await MainForm.Context.SaveChangesAsync();
+                                await transaction.CommitAsync();
+
+                            }
+                            catch (Exception ex)
+                            {
+                                await transaction.RollbackAsync();
+                                MessageBox.Show(ex.Message);
+                            }
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else if (rBPayDebt.Checked)
+                {
+                    addPaymentForm.LoadData(TotalFacture.ToString(), "0", TotalFacture.ToString());
+                    addPaymentForm.ShowDialog();
+                    if (PaidUp < TotalFacture)
+                    {
+                        using (var transaction = MainForm.Context.Database.BeginTransaction())
+                        {
+                            try
+                            {
+                                MainForm.Context.Add(SetBuy());
+                                await MainForm.Context.SaveChangesAsync();
+                                if (PaidUp > 0)
+                                    MainForm.Context.Add(SetSupReport());
+                                if (Remain > 0)
+                                {
+                                    MainForm.Context.Add(SetSupMoney()); MainForm.Context.Update(SetSupplier());
+                                };
+                                BuyDetailRepository buyDetailRepository = new(MainForm.Context);
+
+                                for (int i = 0; i <= DgvِProducts.Rows.Count - 1; i++)
+                                {
+                                    buyDetailRepository.AddAsync(SetBuyDetail(i));
+                                    MainForm.Context.Update(SetProduct(i));
+                                    MainForm.Context.Add(SetProductQuentity(i));
+
+
+                                }
+                                await MainForm.Context.SaveChangesAsync();
+                                await transaction.CommitAsync();
+
+                            }
+                            catch (Exception ex)
+                            {
+                                await transaction.RollbackAsync();
+                                MessageBox.Show(ex.Message);
+                            }
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else
+                {
+                    addPaymentForm.LoadData(TotalFacture.ToString(), TotalFacture.ToString(), "0");
+                    addPaymentForm.ShowDialog();
+                    if (PaidUp <= TotalFacture)
+                    {
+                        using (var transaction = MainForm.Context.Database.BeginTransaction())
+                        {
+                            try
+                            {
+                                MainForm.Context.Add(SetBuy());
+                                await MainForm.Context.SaveChangesAsync();
+                                if (PaidUp > 0)
+                                    MainForm.Context.Add(SetSupReport());
+                                if (Remain > 0)
+                                {
+                                    MainForm.Context.Add(SetSupMoney());
+                                    MainForm.Context.Update(SetSupplier());
+                                };
+                                BuyDetailRepository buyDetailRepository = new(MainForm.Context);
+
+                                for (int i = 0; i <= DgvِProducts.Rows.Count - 1; i++)
+                                {
+                                    buyDetailRepository.AddAsync(SetBuyDetail(i));
+                                    MainForm.Context.Update(SetProduct(i));
+                                    MainForm.Context.Add(SetProductQuentity(i));
+                                }
+                                await MainForm.Context.SaveChangesAsync();
+                                await transaction.CommitAsync();
+
+                            }
+                            catch (Exception ex)
+                            {
+                                await transaction.RollbackAsync();
+                                MessageBox.Show(ex.Message);
+                            }
+                        }
+                    }
+                    else
+                    {
+
+                    }
+
+                }
+                //ResetForm();
+            }
         }
     }
 }

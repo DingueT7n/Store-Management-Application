@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Store.Core.Entities.Buys;
+﻿using Store.Core.Entities.Buys;
 
 namespace Store.Core.Entities.Suppliers
 {
@@ -13,9 +12,9 @@ namespace Store.Core.Entities.Suppliers
         public DateTime Date { get; set; }
         public string Time { get; set; }
 
-        [ForeignKey("Order_ID")]
+
         public virtual Buy Buy { get; set; }
-        [ForeignKey("Sup_ID")]
+
         public virtual Supplier Supplier { get; set; }
     }
 
