@@ -53,7 +53,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         {
             if (addProductForm == null || addProductForm.IsDisposed)
             {
-                addProductForm = new AddProductForm(_main);
+                addProductForm = AddProductForm.Instance(_main);
                 addProductForm.Show();
             }
             else
@@ -120,9 +120,13 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             DgvProducts.Columns[9].HeaderCell.Value = "تاريخ انتهاء الصلاحية";
             DgvProducts.Columns[10].HeaderCell.Value = "كمية التنبيه";
             DgvProducts.Columns[11].HeaderCell.Value = "اقصى تخفيض";
-            DgvProducts.Columns[12].HeaderCell.Value = "معرف الصنف";
-            DgvProducts.Columns[13].HeaderCell.Value = "اسم الصنف";
-            DgvProducts.Columns[14].HeaderCell.Value = "معرف المنتج";
+            DgvProducts.Columns[12].HeaderCell.Value = "صورة المنتج";
+
+            DgvProducts.Columns[13].HeaderCell.Value = "معرف الصنف";
+            DgvProducts.Columns[14].HeaderCell.Value = "اسم الصنف";
+            DgvProducts.Columns[15].HeaderCell.Value = "معرف المنتج";
+
+
 
 
 
@@ -133,6 +137,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             DgvProducts.Columns[8].Visible = false;
             DgvProducts.Columns[11].Visible = false;
             DgvProducts.Columns[12].Visible = false;
+            DgvProducts.Columns[15].Visible = false;
+            DgvProducts.Columns[13].Visible = false;
             //DgvProducts.Columns[13].Visible = false;
             //DgvProducts.Columns[14].Visible = false;
             //DgvProducts.Columns[13].Visible = false;
@@ -151,13 +157,13 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             {
                 if (addProductForm == null || addProductForm.IsDisposed)
                 {
-                    addProductForm = new AddProductForm(_main);
+                    addProductForm = AddProductForm.Instance(_main);
 
 
                     addProductForm.SetDataToEdit(
                         DgvProducts.CurrentRow.Cells[1].Value.ToString(),
                         DgvProducts.CurrentRow.Cells[0].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[12].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[13].Value.ToString(),
                         DgvProducts.CurrentRow.Cells[10].Value?.ToString(),
                         Convert.ToBoolean(DgvProducts.CurrentRow.Cells[8].Value),
                         DgvProducts.CurrentRow.Cells[6].Value.ToString(),
@@ -168,9 +174,9 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                        Convert.ToDateTime(DgvProducts.CurrentRow.Cells[9].Value),
                         DgvProducts.CurrentRow.Cells[11].Value?.ToString(),
                         DgvProducts.CurrentRow.Cells[7].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[14].Value.ToString()
-
-
+                        DgvProducts.CurrentRow.Cells[15].Value.ToString(),
+                        (byte[])DgvProducts.CurrentRow.Cells[12].Value,
+                          DgvProducts.CurrentRow.Cells[14].Value.ToString()
                         );
 
                     addProductForm.Show();
@@ -186,7 +192,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         {
             if (MsgHelper.ShowDeleteDialog())
             {
-                productsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[14].Value.ToString());
+                productsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[15].Value.ToString());
             }
             RefreshDgv();
         }

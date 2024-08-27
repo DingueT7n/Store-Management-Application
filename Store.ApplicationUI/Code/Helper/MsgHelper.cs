@@ -29,6 +29,12 @@
                   "لا يوجد بيانات"
                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+        public static void ShowEmptyResult()
+        {
+            MessageBox.Show("لا توجد بيانات ,يرجى التحقق من معلوماتك ",
+                  "لا يوجد بيانات"
+                  , MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
 
         public static void ShowDeleteSelectRow()
         {

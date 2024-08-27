@@ -667,6 +667,9 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<float?>("MinQty")
                         .HasColumnType("real");
 
+                    b.Property<byte[]>("ProductImage")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("ProductName")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -691,6 +694,45 @@ namespace Store.Infrastructure.Data.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Products.ProductDiscount", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("DateEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateStart")
+                        .HasColumnType("datetime2");
+
+                    b.Property<float>("DiscountValue")
+                        .HasColumnType("real");
+
+                    b.Property<int>("Pro_Id")
+                        .HasColumnType("int");
+
+                    b.Property<float?>("Quentity")
+                        .HasColumnType("real");
+
+                    b.Property<int>("Store_Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TimeEnd")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TimeStart")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Pro_Id");
+
+                    b.ToTable("ProductDiscounts");
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Products.ProductOutStore", b =>
@@ -733,6 +775,34 @@ namespace Store.Infrastructure.Data.Migrations
                     b.HasIndex("Pro_ID");
 
                     b.ToTable("ProductsOutStore");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Products.ProductQuickAccess", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CodeBar")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Pro_Id")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("ProductImage")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ProductName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Pro_Id");
+
+                    b.ToTable("ProductQuickAccess");
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Products.ProductTransfer", b =>
@@ -1385,11 +1455,33 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Store.Core.Entities.Products.ProductDiscount", b =>
+                {
+                    b.HasOne("Store.Core.Entities.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("Pro_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Store.Core.Entities.Products.ProductOutStore", b =>
                 {
                     b.HasOne("Store.Core.Entities.Products.Product", "Product")
                         .WithMany()
                         .HasForeignKey("Pro_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Products.ProductQuickAccess", b =>
+                {
+                    b.HasOne("Store.Core.Entities.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("Pro_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

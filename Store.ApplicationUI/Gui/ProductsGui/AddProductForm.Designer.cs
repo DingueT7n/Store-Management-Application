@@ -30,6 +30,13 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddProductForm));
             GbInfoProduct = new GroupBox();
+            label1 = new Label();
+            txtNameProduct = new TextBox();
+            label2 = new Label();
+            txtBarCode = new TextBox();
+            label16 = new Label();
+            label15 = new Label();
+            label14 = new Label();
             lblProductId = new Label();
             label13 = new Label();
             DtpExperation = new DateTimePicker();
@@ -55,10 +62,6 @@
             label4 = new Label();
             txtMinQty = new TextBox();
             label3 = new Label();
-            txtBarCode = new TextBox();
-            label2 = new Label();
-            txtNameProduct = new TextBox();
-            label1 = new Label();
             OperationsflowLayoutPanel = new FlowLayoutPanel();
             btnAddProduct = new Button();
             btnEditProduct = new Button();
@@ -71,6 +74,13 @@
             // 
             // GbInfoProduct
             // 
+            GbInfoProduct.Controls.Add(label1);
+            GbInfoProduct.Controls.Add(txtNameProduct);
+            GbInfoProduct.Controls.Add(label2);
+            GbInfoProduct.Controls.Add(txtBarCode);
+            GbInfoProduct.Controls.Add(label16);
+            GbInfoProduct.Controls.Add(label15);
+            GbInfoProduct.Controls.Add(label14);
             GbInfoProduct.Controls.Add(lblProductId);
             GbInfoProduct.Controls.Add(label13);
             GbInfoProduct.Controls.Add(DtpExperation);
@@ -96,10 +106,6 @@
             GbInfoProduct.Controls.Add(label4);
             GbInfoProduct.Controls.Add(txtMinQty);
             GbInfoProduct.Controls.Add(label3);
-            GbInfoProduct.Controls.Add(txtBarCode);
-            GbInfoProduct.Controls.Add(label2);
-            GbInfoProduct.Controls.Add(txtNameProduct);
-            GbInfoProduct.Controls.Add(label1);
             GbInfoProduct.Dock = DockStyle.Fill;
             GbInfoProduct.Location = new Point(0, 0);
             GbInfoProduct.MaximumSize = new Size(707, 481);
@@ -109,6 +115,88 @@
             GbInfoProduct.TabIndex = 0;
             GbInfoProduct.TabStop = false;
             GbInfoProduct.Text = "بيانات المنتج";
+            // 
+            // label1
+            // 
+            label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            label1.AutoSize = true;
+            label1.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label1.Location = new Point(600, 36);
+            label1.Name = "label1";
+            label1.Size = new Size(71, 19);
+            label1.TabIndex = 0;
+            label1.Text = "اسم المنتج:";
+            // 
+            // txtNameProduct
+            // 
+            txtNameProduct.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            txtNameProduct.Location = new Point(368, 33);
+            txtNameProduct.Name = "txtNameProduct";
+            txtNameProduct.Size = new Size(219, 27);
+            txtNameProduct.TabIndex = 1;
+            // 
+            // label2
+            // 
+            label2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            label2.AutoSize = true;
+            label2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label2.Location = new Point(595, 78);
+            label2.Name = "label2";
+            label2.Size = new Size(76, 19);
+            label2.TabIndex = 2;
+            label2.Text = "رقم الباركود:";
+            // 
+            // txtBarCode
+            // 
+            txtBarCode.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            txtBarCode.Location = new Point(368, 74);
+            txtBarCode.Name = "txtBarCode";
+            txtBarCode.Size = new Size(219, 27);
+            txtBarCode.TabIndex = 3;
+            txtBarCode.TextAlign = HorizontalAlignment.Center;
+            txtBarCode.KeyPress += txtBarCode_KeyPress;
+            // 
+            // label16
+            // 
+            label16.Anchor = AnchorStyles.None;
+            label16.AutoSize = true;
+            label16.BackColor = Color.Transparent;
+            label16.Font = new Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label16.ForeColor = Color.Crimson;
+            label16.Location = new Point(589, 37);
+            label16.Name = "label16";
+            label16.Size = new Size(13, 14);
+            label16.TabIndex = 31;
+            label16.Text = "*";
+            label16.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // label15
+            // 
+            label15.Anchor = AnchorStyles.None;
+            label15.AutoSize = true;
+            label15.BackColor = Color.Transparent;
+            label15.Font = new Font("Calibri", 9F);
+            label15.ForeColor = Color.Crimson;
+            label15.Location = new Point(586, 77);
+            label15.Name = "label15";
+            label15.Size = new Size(13, 14);
+            label15.TabIndex = 30;
+            label15.Text = "*";
+            label15.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // label14
+            // 
+            label14.Anchor = AnchorStyles.None;
+            label14.AutoSize = true;
+            label14.BackColor = Color.Transparent;
+            label14.Font = new Font("Calibri", 9F);
+            label14.ForeColor = Color.Crimson;
+            label14.Location = new Point(609, 116);
+            label14.Name = "label14";
+            label14.Size = new Size(13, 14);
+            label14.TabIndex = 29;
+            label14.Text = "*";
+            label14.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblProductId
             // 
@@ -173,6 +261,7 @@
             PbImageProduct.SizeMode = PictureBoxSizeMode.StretchImage;
             PbImageProduct.TabIndex = 22;
             PbImageProduct.TabStop = false;
+            PbImageProduct.Click += PbImageProduct_Click;
             // 
             // txtBuyPrice
             // 
@@ -331,6 +420,7 @@
             CMBCategory.Name = "CMBCategory";
             CMBCategory.Size = new Size(179, 27);
             CMBCategory.TabIndex = 7;
+            CMBCategory.Text = "اختر صنف";
             // 
             // label4
             // 
@@ -363,46 +453,6 @@
             label3.Size = new Size(108, 19);
             label3.TabIndex = 4;
             label3.Text = "الحد الادنى للكمية:";
-            // 
-            // txtBarCode
-            // 
-            txtBarCode.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            txtBarCode.Location = new Point(368, 74);
-            txtBarCode.Name = "txtBarCode";
-            txtBarCode.Size = new Size(219, 27);
-            txtBarCode.TabIndex = 3;
-            txtBarCode.TextAlign = HorizontalAlignment.Center;
-            txtBarCode.KeyPress += txtBarCode_KeyPress;
-            // 
-            // label2
-            // 
-            label2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            label2.AutoSize = true;
-            label2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label2.Location = new Point(595, 78);
-            label2.Name = "label2";
-            label2.Size = new Size(76, 19);
-            label2.TabIndex = 2;
-            label2.Text = "رقم الباركود:";
-            // 
-            // txtNameProduct
-            // 
-            txtNameProduct.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            txtNameProduct.Location = new Point(368, 33);
-            txtNameProduct.Name = "txtNameProduct";
-            txtNameProduct.Size = new Size(219, 27);
-            txtNameProduct.TabIndex = 1;
-            // 
-            // label1
-            // 
-            label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            label1.AutoSize = true;
-            label1.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.Location = new Point(600, 36);
-            label1.Name = "label1";
-            label1.Size = new Size(71, 19);
-            label1.TabIndex = 0;
-            label1.Text = "اسم المنتج:";
             // 
             // OperationsflowLayoutPanel
             // 
@@ -531,5 +581,8 @@
         private Label label3;
         private TextBox txtBarCode;
         private Label label2;
+        private Label label14;
+        private Label label16;
+        private Label label15;
     }
 }

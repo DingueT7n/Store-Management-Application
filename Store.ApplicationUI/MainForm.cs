@@ -14,7 +14,7 @@ namespace Store.ApplicationUI
         public MainForm()
         {
             InitializeComponent();
-
+            KeyPreview = true;
 
             pageHelper = new(this);
             pageHelper.SetNewPage(Gui.HomeGui.HomeUserControl.Instance());
@@ -231,6 +231,15 @@ namespace Store.ApplicationUI
         {
             AddStoreForm addStoreForm = AddStoreForm.Instance(this); ;
             addStoreForm.ShowDialog();
+        }
+        public float ConvertToFloat(string value)
+        {
+            float quantity;
+            if (float.TryParse(value, out quantity))
+            {
+                return quantity;
+            }
+            return quantity;
         }
     }
 }

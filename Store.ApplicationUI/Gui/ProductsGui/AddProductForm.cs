@@ -8,8 +8,9 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 {
     public partial class AddProductForm : Form
     {
-        private readonly MainForm _main;
+        private static MainForm _main;
         private ProductsRepository? productsRepository;
+        private static AddProductForm _addProductForm;
         private CategorysRepository? categoryRepository;
         public AddProductForm(MainForm main)
         {
@@ -21,19 +22,46 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             LoadData();
             ConfigDate();
         }
+        public static bool CheckInstance()
+        {
+            return (_addProductForm == null);
+        }
+        public static void LoadCategory()
+        {
+            var s = _addProductForm.CMBCategory.SelectedValue;
+            _addProductForm.LoadData();
+            _addProductForm.CMBCategory.SelectedValue = s;
+        }
+
+        public static AddProductForm Instance(MainForm main)
+        {
+            _main = main;
+            // If the instance is null, create a new one and assign it to the static field
+
+
+            _addProductForm = new AddProductForm(_main);
+
+
+
+            // Return the singleton instance
+
+            return _addProductForm;
+        }
         private void ConfigDate()
         {
             DtpExperation.Value = DateTime.Now;
 
             DtpExperation.CustomFormat = DtpExperation.CustomFormat = "yyyy-MM-dd";
         }
-        public async void LoadData()
+        public void LoadData()
         {
 
 
             //ShowLoading
+
+
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => MainForm.Context.Database.CanConnect()))
+            if (/*await Task.Run(() =>*/ MainForm.Context.Database.CanConnect())/*)*/
             {
                 //Start Load Data
 
@@ -45,16 +73,9 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
                 CMBCategory.DisplayMember = "CategoryName"; // Set the property to display
                 CMBCategory.ValueMember = "Id"; // Set the property to use as the value
+                CMBCategory.Text = "اختر صنف";
 
                 // Optionally select the first item if needed
-
-
-
-                if (CMBCategory.Items.Count > 0)
-                {
-                    CMBCategory.SelectedIndex = 0;  // Select the first item
-                }
-
             }
             else
             {
@@ -156,11 +177,13 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         public void SetDataToEdit(string NameProduct, string BarCode, string categoryId, string MinQty
             , bool IsTaxed, string TaxValue, string BuyPrice, string Quentity, string WholesalePrice
-            , string SalePrice, DateTime DateExpiration, string MaxDiscount, string SaleAfterTax, string productId)
+            , string SalePrice, DateTime DateExpiration, string MaxDiscount, string SaleAfterTax, string productId, byte[] image
+            , string catName)
         {
+            LoadData();
             txtNameProduct.Text = NameProduct;
             txtBarCode.Text = BarCode;
-            CMBCategory.SelectedValue = categoryId;
+            CMBCategory.SelectedValue = Convert.ToInt32(categoryId);
             txtMinQty.Text = MinQty;
             CbIsTaxed.Checked = IsTaxed;
             txtTaxValue.Text = TaxValue;
@@ -174,6 +197,10 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             txtDiscountAllowed.Text = MaxDiscount;
             txtSaleAfterTax.Text = SaleAfterTax;
             lblProductId.Text = productId;
+            if (image is not null)
+            {
+                SetImage(image);
+            }
             btnAddProduct.Visible = false;
             btnEditProduct.Visible = true;
             lblProductId.Visible = true;
@@ -181,32 +208,36 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         }
         private void btnAddProduct_Click(object sender, EventArgs e)
         {
-
-            Product product = new Product();
-            product.ProductName = txtNameProduct.Text;
-            product.CodeBar = txtBarCode.Text;
-            product.CategoryId = Convert.ToInt32(CMBCategory.SelectedValue);
-            product.MinQty = ConvertToFloat(txtMinQty.Text);
-            product.IsTaxed = CbIsTaxed.Checked;
-            product.TaxValue = ConvertToFloat(txtTaxValue.Text);
-            product.BuyPrice = ConvertToFloat(txtBuyPrice.Text);
-            product.Quentity = ConvertToFloat(txtTotalQty.Text);
-            product.WholesalePrice = ConvertToFloat(txtWholeSalePrice.Text);
-            product.SalePrice = ConvertToFloat(txtSalePrice.Text);
-            product.MaxDiscount = ConvertToFloat(txtDiscountAllowed.Text);
-            product.SalePriceTax = ConvertToFloat(txtSaleAfterTax.Text);
-            product.DateExperation = DtpExperation.Value;
-            //if (CMBCategory.SelectedValue != null && int.TryParse(CMBCategory.SelectedValue.ToString(), out int categoryId))
-            //{
-            //    product.CategoryId = categoryId;
-            //}
-            var result = productsRepository.AddAsync(product);
-            vider();
-            if (!ProductsUserControl.CheckInstance())
+            if (CMBCategory.Text != "اختر صنف")
             {
-                ProductsUserControl.RefreshDgv();
-            }
+                Product product = new Product();
+                product.ProductName = txtNameProduct.Text;
+                product.CodeBar = txtBarCode.Text;
+                product.CategoryId = Convert.ToInt32(CMBCategory.SelectedValue);
+                product.MinQty = ConvertToFloat(txtMinQty.Text);
+                product.IsTaxed = CbIsTaxed.Checked;
+                product.TaxValue = ConvertToFloat(txtTaxValue.Text);
+                product.BuyPrice = ConvertToFloat(txtBuyPrice.Text);
+                product.Quentity = ConvertToFloat(txtTotalQty.Text);
+                product.WholesalePrice = ConvertToFloat(txtWholeSalePrice.Text);
+                product.SalePrice = ConvertToFloat(txtSalePrice.Text);
+                product.MaxDiscount = ConvertToFloat(txtDiscountAllowed.Text);
+                product.SalePriceTax = ConvertToFloat(txtSaleAfterTax.Text);
+                product.DateExperation = DtpExperation.Value;
+                product.ProductImage = RetriveImage();
+                //if (CMBCategory.SelectedValue != null && int.TryParse(CMBCategory.SelectedValue.ToString(), out int categoryId))
+                //{
+                //    product.CategoryId = categoryId;
+                //}
+                var result = productsRepository.AddAsync(product);
+                vider();
+                if (!ProductsUserControl.CheckInstance())
+                {
+                    ProductsUserControl.RefreshDgv();
+                }
 
+            }
+            MsgHelper.ShowRequiredFields();
         }
 
         float ConvertToFloat(string value)
@@ -236,6 +267,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             product.MaxDiscount = ConvertToFloat(txtDiscountAllowed.Text);
             product.SalePriceTax = ConvertToFloat(txtSaleAfterTax.Text);
             product.DateExperation = DtpExperation.Value;
+            product.ProductImage = RetriveImage();
             var result = productsRepository.UpdateAsync(lblProductId.Text, product);
 
             if (!ProductsUserControl.CheckInstance())
@@ -255,6 +287,49 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             this.Show();
 
 
+        }
+
+        public byte[] RetriveImage()
+        {
+            try
+            {
+                MemoryStream ms = new MemoryStream();
+                PbImageProduct.Image.Save(ms, PbImageProduct.Image.RawFormat);
+                byte[] byteImage = ms.ToArray();
+                return byteImage;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+        public void SetImage(byte[] retrivedData)
+        {
+            try
+            {
+                byte[] Picture = (byte[])retrivedData;
+                MemoryStream ms = new MemoryStream(Picture);
+                PbImageProduct.Image = Image.FromStream(ms);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+        private void PbImageProduct_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "ملفات الصور |*.JPG; *.PNG; *.GIF; *.BMP";
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    PbImageProduct.Image = Image.FromFile(openFileDialog.FileName);
+                }
+            }
         }
     }
 }

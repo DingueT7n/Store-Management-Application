@@ -18,8 +18,6 @@ namespace Store.Infrastructure.Data
     {
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
@@ -43,6 +41,8 @@ namespace Store.Infrastructure.Data
         //DbSet<EmployeeBorrowMoney> EmployeesBorrowMonies { get; set; }
         //DbSet<EmployeeSalary> EmployeesSalaries { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductDiscount> ProductDiscounts { get; set; }
+        public DbSet<ProductQuickAccess> ProductQuickAccess { get; set; }
         public DbSet<ReceiptVoucher> ReceiptVouchers { get; set; }
         public DbSet<SendVoucher> SendVouchers { get; set; }
         public DbSet<OrderPrintData> OrderPrintData { get; set; }

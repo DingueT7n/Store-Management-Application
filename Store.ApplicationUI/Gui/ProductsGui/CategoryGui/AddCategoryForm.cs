@@ -89,6 +89,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
                 category.CategoryName = txtNameِCategory.Text;
                 MainForm.Context.Categories.Add(category);
                 MainForm.Context.SaveChanges();
+
             }
             RefreshDgv();
 
@@ -119,6 +120,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
                 MainForm.Context.Update(category);
                 MainForm.Context.SaveChanges();
                 vider();
+
             }
         }
 

@@ -53,6 +53,27 @@ namespace Store.Infrastructure.Data.Config
 
         }
     }
+    public class ProductDiscountConfiguration : IEntityTypeConfiguration<ProductDiscount>
+    {
+        public void Configure(EntityTypeBuilder<ProductDiscount> builder)
+        {
+            builder.Property(x => x.Id).IsRequired();
 
+            builder.HasKey(x => x.Id);
+            builder.HasOne(x => x.Product).WithMany().HasForeignKey(x => x.Pro_Id);
+
+        }
+    }
+    public class ProductQuickAccessConfiguration : IEntityTypeConfiguration<ProductQuickAccess>
+    {
+        public void Configure(EntityTypeBuilder<ProductQuickAccess> builder)
+        {
+            builder.Property(x => x.Id).IsRequired();
+            builder.Property(x => x.ProductName).HasMaxLength(50);
+            builder.HasKey(x => x.Id);
+            builder.HasOne(x => x.Product).WithMany().HasForeignKey(x => x.Pro_Id);
+
+        }
+    }
 
 }

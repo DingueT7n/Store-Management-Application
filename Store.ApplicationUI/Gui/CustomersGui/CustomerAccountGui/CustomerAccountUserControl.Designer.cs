@@ -30,10 +30,10 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomerAccountUserControl));
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             OperationsflowLayoutPanel = new FlowLayoutPanel();
             gbPayChoiches = new GroupBox();
             lblPayAllDebts = new Label();
@@ -44,6 +44,7 @@
             rbPayFacture = new RadioButton();
             btnPay = new Button();
             panelstatisticsandOperations = new Panel();
+            lblTitleForm = new Label();
             flowLayoutPanel1 = new FlowLayoutPanel();
             lblTotalDebt = new Label();
             lblTotalCustomers = new Label();
@@ -59,7 +60,6 @@
             btnRefresh = new Button();
             lblEmptyData = new Label();
             DgvِCustomer = new DataGridView();
-            lblTitleForm = new Label();
             OperationsflowLayoutPanel.SuspendLayout();
             gbPayChoiches.SuspendLayout();
             panelstatisticsandOperations.SuspendLayout();
@@ -139,6 +139,12 @@
             panelstatisticsandOperations.Controls.Add(SearchPanel);
             resources.ApplyResources(panelstatisticsandOperations, "panelstatisticsandOperations");
             panelstatisticsandOperations.Name = "panelstatisticsandOperations";
+            // 
+            // lblTitleForm
+            // 
+            resources.ApplyResources(lblTitleForm, "lblTitleForm");
+            lblTitleForm.ForeColor = Color.Red;
+            lblTitleForm.Name = "lblTitleForm";
             // 
             // flowLayoutPanel1
             // 
@@ -228,31 +234,31 @@
             DgvِCustomer.AllowUserToAddRows = false;
             DgvِCustomer.AllowUserToResizeColumns = false;
             DgvِCustomer.AllowUserToResizeRows = false;
-            dataGridViewCellStyle5.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvِCustomer.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvِCustomer.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             DgvِCustomer.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             DgvِCustomer.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             DgvِCustomer.BackgroundColor = Color.White;
             DgvِCustomer.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             DgvِCustomer.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle6.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle6.ForeColor = Color.White;
-            dataGridViewCellStyle6.SelectionBackColor = Color.DodgerBlue;
-            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
-            DgvِCustomer.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = Color.DodgerBlue;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            DgvِCustomer.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             resources.ApplyResources(DgvِCustomer, "DgvِCustomer");
             DgvِCustomer.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.BackColor = SystemColors.Window;
-            dataGridViewCellStyle7.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle7.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.False;
-            DgvِCustomer.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = SystemColors.Window;
+            dataGridViewCellStyle3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            DgvِCustomer.DefaultCellStyle = dataGridViewCellStyle3;
             DgvِCustomer.EnableHeadersVisualStyles = false;
             DgvِCustomer.GridColor = SystemColors.ControlDark;
             DgvِCustomer.MultiSelect = false;
@@ -261,15 +267,9 @@
             DgvِCustomer.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
             DgvِCustomer.RowHeadersVisible = false;
             DgvِCustomer.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle8.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvِCustomer.RowsDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle4.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvِCustomer.RowsDefaultCellStyle = dataGridViewCellStyle4;
             DgvِCustomer.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            // 
-            // lblTitleForm
-            // 
-            resources.ApplyResources(lblTitleForm, "lblTitleForm");
-            lblTitleForm.ForeColor = Color.Red;
-            lblTitleForm.Name = "lblTitleForm";
             // 
             // CustomerAccountUserControl
             // 

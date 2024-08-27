@@ -1,4 +1,6 @@
-﻿namespace Store.Core.Entities.Products
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Store.Core.Entities.Products
 {
     public class Product : BaseEntity<int>
     {
@@ -14,32 +16,34 @@
         public DateTime DateExperation { get; set; }
         public float? MinQty { get; set; }
         public float? MaxDiscount { get; set; }
+        public byte[] ProductImage { get; set; }
 
 
         // Navigation Properties
         public int CategoryId { get; set; } // Group
         public virtual Category Category { get; set; }
-
-        //public virtual IEnumerable<ProductOutStore> ProductOutStore { get; set; } = new HashSet<ProductOutStore>();
-        //public virtual IEnumerable<ProductsQuantitie> ProductsQuantitie { get; set; } = new HashSet<ProductsQuantitie>();
-        //public virtual IEnumerable<ProductTransfer> ProductTransfer { get; set; } = new HashSet<ProductTransfer>();
-
-
-        //public virtual ICollection<BuyDetail> BuyDetails { get; set; } // to navigate the buys
-        //public virtual ICollection<SaleDetail> SellDetails { get; set; } // to navigate the sales
-        //public virtual ICollection<ReturnDetail> ReturnsDetails { get; set; } // to navigate the returned items
-
+    }
+    public class ProductQuickAccess : BaseEntity<int>
+    {
+        public int Pro_Id { get; set; }
+        public string CodeBar { get; set; }
+        public string ProductName { get; set; }
+        public byte[] ProductImage { get; set; }
+        [ForeignKey("Pro_Id")]
+        public virtual Product Product { get; set; }
     }
     public class ProductDiscount : BaseEntity<int>
     {
         public int Pro_Id { get; set; }
         public int Store_Id { get; set; }
         public float DiscountValue { get; set; }
-        public float Quentity { get; set; }
-        public DateTime DateStart { get; set; }
-        public string TimeStart { get; set; }
-        public DateTime DateEnd { get; set; }
-        public string TimeEnd { get; set; }
+        public float? Quentity { get; set; }
+        public DateTime? DateStart { get; set; }
+        public string? TimeStart { get; set; }
+        public DateTime? DateEnd { get; set; }
+        public string? TimeEnd { get; set; }
+        [ForeignKey("Pro_Id")]
+        public virtual Product Product { get; set; }
     }
 
     //Table BadProduct
