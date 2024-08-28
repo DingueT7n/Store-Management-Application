@@ -57,6 +57,20 @@
                 return false;
             }
         }
+        public static bool ShowErrorValidating()
+        {
+            var result = MessageBox.Show("هل انت متأكد من تجاهل الأخطاء؟  ",
+                   "التأكد من الاخطاء"
+                   , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public static bool ShowEditDialog()
         {
             var result = MessageBox.Show("هل انت متأكد من هذا الاجراء؟ لا يمكن استرجاع البيانات السابقة",

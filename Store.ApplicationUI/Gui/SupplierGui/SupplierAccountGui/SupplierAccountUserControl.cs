@@ -51,7 +51,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
             {
                 if (DgvِCustomer.SelectedRows.Count > 0)
                 {
-                    lblPayFacture.Text = $" فاتورة رقم {DgvِCustomer.Columns[7].HeaderCell.Value} الدين : {DgvِCustomer.Columns[1].HeaderCell.Value} دج";
+                    lblPayFacture.Text = $" فاتورة رقم {DgvِCustomer.CurrentRow.Cells[1].Value} الدين : {DgvِCustomer.CurrentRow.Cells[3].Value} دج";
                     lblPayAllDebts.Text = $"دج {CustomerMoneyList.Sum(x => x.Price)}";
                     lblTotalDebt.Text = $"مجموع الديون على الموردين:{CustomerMoneyList.Sum(x => x.Price)}";
                     lblTotalCustomers.Text = $"مجموع الموردين:{uniqueCustomerCount}";
@@ -98,17 +98,22 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
         private void SetColumns()
         {
             //DgvِCustomer.Columns[0].HeaderCell.Value = "المعرف";
-            DgvِCustomer.Columns[0].HeaderCell.Value = "اسم المورد";
-            DgvِCustomer.Columns[1].HeaderCell.Value = "الدين";
-            DgvِCustomer.Columns[2].HeaderCell.Value = "تاريخ الفاتورة";
-            DgvِCustomer.Columns[3].HeaderCell.Value = "وقت الفاتورة";
+            DgvِCustomer.Columns[0].HeaderCell.Value = "معرف المورد";
+            DgvِCustomer.Columns[1].HeaderCell.Value = "معرف الفاتورة";
+            DgvِCustomer.Columns[2].HeaderCell.Value = "اسم المورد";
+            DgvِCustomer.Columns[3].HeaderCell.Value = "الدين المتبقي";
+            DgvِCustomer.Columns[4].HeaderCell.Value = "تاريخ الفاتورة";
+            DgvِCustomer.Columns[5].HeaderCell.Value = "وقت الفاتورة";
+            DgvِCustomer.Columns[6].HeaderCell.Value = "تاريخ التذكير";
+            DgvِCustomer.Columns[7].HeaderCell.Value = "الشراء";
+            DgvِCustomer.Columns[8].HeaderCell.Value = "المورد";
+            DgvِCustomer.Columns[9].HeaderCell.Value = "معرف الحسبة";
 
-            DgvِCustomer.Columns[4].HeaderCell.Value = "تاريخ تذكير";
-            DgvِCustomer.Columns[5].HeaderCell.Value = "معرف المورد";
-            DgvِCustomer.Columns[6].HeaderCell.Value = "معرف الفاتورة";
-            DgvِCustomer.Columns[7].HeaderCell.Value = "معرف العملية";
 
 
+            DgvِCustomer.Columns[0].Visible = false;
+            //DgvِCustomer.Columns[1].Visible = false;
+            DgvِCustomer.Columns[7].Visible = false;
             DgvِCustomer.Columns[8].Visible = false;
             //DgvِCustomer.Columns[9].Visible = false;
 

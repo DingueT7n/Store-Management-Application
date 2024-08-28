@@ -20,7 +20,7 @@ namespace Store.Infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<BuyDetail> builder)
         {
-            builder.HasNoKey();
+            builder.HasKey(x => x.Id);
 
             builder.HasOne(x => x.Supplier).WithMany().HasForeignKey(x => x.Sup_ID);
             builder.HasOne(x => x.Buy).WithMany().HasForeignKey(x => x.Order_ID);

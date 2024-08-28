@@ -15,9 +15,5 @@ namespace Store.Core.Entities.Buys
         public Supplier Supplier { get; set; }
         [NotMapped]
         public ICollection<BuyDetail> BuyDetails { get; set; }
-
-
-
-
     }
 }

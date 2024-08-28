@@ -217,11 +217,14 @@ namespace Store.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Store.Core.Entities.Buys.BuyDetail", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<float>("Discount")
                         .HasColumnType("real");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
 
                     b.Property<int>("Order_ID")
                         .HasColumnType("int");
@@ -246,6 +249,8 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.Property<float>("Total")
                         .HasColumnType("real");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("Order_ID");
 

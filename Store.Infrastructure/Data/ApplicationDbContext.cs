@@ -25,7 +25,8 @@ namespace Store.Infrastructure.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string conString = @"Server=.\SQLEXPRESS; Database=StoreDbEFCore;Encrypt=false; Integrated Security = true;";
-            optionsBuilder.UseSqlServer(conString);
+            optionsBuilder.UseSqlServer(conString).EnableSensitiveDataLogging() // Enables detailed logging
+                  .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information); ;
             base.OnConfiguring(optionsBuilder);
 
         }

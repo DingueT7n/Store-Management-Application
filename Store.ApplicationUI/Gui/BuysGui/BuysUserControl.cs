@@ -18,7 +18,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
         public static float PaidUp;
         public static float Remain;
 
-        private DataTable Dt = new DataTable();
+
         public BuysUserControl()
         {
             InitializeComponent();
@@ -39,7 +39,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
         }
         public static void RefreshDgv()
         {
-            //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAllProducts());
+            //DgvِProducts.DataSource = await Task.Run(() => productsRepository.GetAllProducts());
             _buysUserControl.LoadData();
         }
         // methodes 
@@ -164,6 +164,14 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 if (txtBuyPrice.Text != string.Empty && txtQty.Text != string.Empty)
 
                     txtTotalBuyProduct.Text = (_main.ConvertToFloat(txtBuyPrice.Text) * Convert.ToInt32(txtQty.Text)).ToString();
+
+                if (txtSalePrice.Text != string.Empty && _product is not null)
+                {
+                    if (_product.IsTaxed)
+                        txtPriceWithTax.Text = ((_main.ConvertToFloat(txtSalePrice.Text) / 100) * _product.TaxValue).ToString();
+                    else txtPriceWithTax.Text = txtSalePrice.Text;
+
+                }
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
@@ -243,7 +251,11 @@ namespace Store.ApplicationUI.Gui.BuysGui
         }
         void AddNewRow()
         {
-            if (txtProductName.Text != string.Empty && txtProductName.Text != "")
+            if (labelError1.Visible)
+                if (!MsgHelper.ShowErrorValidating()) return;
+            if (txtProductName.Text != string.Empty && txtProductName.Text != "" && txtSalePrice.Text != string.Empty
+                && txtWholeSalePrice.Text != string.Empty
+                )
             {
                 try
                 {
@@ -310,7 +322,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
         {
             if (e.KeyCode == Keys.Enter)
             {
-
+                AddNewRow();
             }
         }
 
@@ -375,6 +387,8 @@ namespace Store.ApplicationUI.Gui.BuysGui
         {
             try
             {
+                ErrorDetection();
+
                 lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِProducts);
                 if (DgvِProducts.Rows.Count >= 0)
                 {
@@ -569,29 +583,39 @@ namespace Store.ApplicationUI.Gui.BuysGui
                         {
                             try
                             {
-                                MainForm.Context.Add(SetBuy());
+                                var buy = SetBuy();
+                                MainForm.Context.Add(buy);
                                 await MainForm.Context.SaveChangesAsync();
-                                MainForm.Context.SaveChanges();
-                                if (PaidUp > 0)
-                                    MainForm.Context.Add(SetSupReport());
-                                if (Remain > 0)
-                                {
-                                    MainForm.Context.Add(SetSupMoney());
-                                    MainForm.Context.Update(SetSupplier());
-                                };
-
-                                MainForm.Context.Add(SetSupplier());
-
-
-                                BuyDetailRepository buyDetailRepository = new(MainForm.Context);
 
                                 for (int i = 0; i <= DgvِProducts.Rows.Count - 1; i++)
                                 {
-                                    buyDetailRepository.AddAsync(SetBuyDetail(i));
+                                    var buyDetail = SetBuyDetail(i);
+                                    buyDetail.Order_ID = buy.Id; // Set foreign key reference to Buy
+
+                                    MainForm.Context.BuyDetails.Add(buyDetail);
+
+                                    // Update product and add quantity
                                     MainForm.Context.Update(SetProduct(i));
                                     MainForm.Context.Add(SetProductQuentity(i));
 
 
+                                }
+
+                                await MainForm.Context.SaveChangesAsync();
+                                if (PaidUp > 0)
+                                {
+                                    var supplierReport = SetSupReport();
+                                    supplierReport.Order_ID = buy.Id; // Set foreign key reference to Buy
+                                    MainForm.Context.Add(supplierReport);
+                                }
+                                if (Remain > 0)
+                                {
+                                    var supplierMoney = SetSupMoney();
+                                    supplierMoney.Order_ID = buy.Id; // Set foreign key reference to Buy
+                                    MainForm.Context.Add(supplierMoney);
+
+                                    // Update supplier details
+                                    MainForm.Context.Update(SetSupplier());
                                 }
                                 await MainForm.Context.SaveChangesAsync();
                                 await transaction.CommitAsync();
@@ -619,7 +643,8 @@ namespace Store.ApplicationUI.Gui.BuysGui
                         {
                             try
                             {
-                                MainForm.Context.Add(SetBuy());
+                                var buy = SetBuy();
+                                MainForm.Context.Add(buy);
                                 await MainForm.Context.SaveChangesAsync();
                                 if (PaidUp > 0)
                                     MainForm.Context.Add(SetSupReport());
@@ -631,11 +656,32 @@ namespace Store.ApplicationUI.Gui.BuysGui
 
                                 for (int i = 0; i <= DgvِProducts.Rows.Count - 1; i++)
                                 {
-                                    buyDetailRepository.AddAsync(SetBuyDetail(i));
+                                    var buyDetail = SetBuyDetail(i);
+                                    buyDetail.Order_ID = buy.Id; // Set foreign key reference to Buy
+
+                                    MainForm.Context.BuyDetails.Add(buyDetail);
+
+                                    // Update product and add quantity
                                     MainForm.Context.Update(SetProduct(i));
                                     MainForm.Context.Add(SetProductQuentity(i));
 
 
+                                }
+                                await MainForm.Context.SaveChangesAsync();
+                                if (PaidUp > 0)
+                                {
+                                    var supplierReport = SetSupReport();
+                                    supplierReport.Order_ID = buy.Id; // Set foreign key reference to Buy
+                                    MainForm.Context.Add(supplierReport);
+                                }
+                                if (Remain > 0)
+                                {
+                                    var supplierMoney = SetSupMoney();
+                                    supplierMoney.Order_ID = buy.Id; // Set foreign key reference to Buy
+                                    MainForm.Context.Add(supplierMoney);
+
+                                    // Update supplier details
+                                    MainForm.Context.Update(SetSupplier());
                                 }
                                 await MainForm.Context.SaveChangesAsync();
                                 await transaction.CommitAsync();
@@ -663,25 +709,44 @@ namespace Store.ApplicationUI.Gui.BuysGui
                         {
                             try
                             {
-                                MainForm.Context.Add(SetBuy());
+                                var buy = SetBuy();
+                                MainForm.Context.Add(buy);
                                 await MainForm.Context.SaveChangesAsync();
-                                if (PaidUp > 0)
-                                    MainForm.Context.Add(SetSupReport());
-                                if (Remain > 0)
-                                {
-                                    MainForm.Context.Add(SetSupMoney());
-                                    MainForm.Context.Update(SetSupplier());
-                                };
-                                BuyDetailRepository buyDetailRepository = new(MainForm.Context);
+
+
 
                                 for (int i = 0; i <= DgvِProducts.Rows.Count - 1; i++)
                                 {
-                                    buyDetailRepository.AddAsync(SetBuyDetail(i));
+                                    var buyDetail = SetBuyDetail(i);
+                                    buyDetail.Order_ID = buy.Id; // Set foreign key reference to Buy
+
+                                    MainForm.Context.BuyDetails.Add(buyDetail);
+
+                                    // Update product and add quantity
                                     MainForm.Context.Update(SetProduct(i));
                                     MainForm.Context.Add(SetProductQuentity(i));
+
+
+                                }
+                                await MainForm.Context.SaveChangesAsync();
+                                if (PaidUp > 0)
+                                {
+                                    var supplierReport = SetSupReport();
+                                    supplierReport.Order_ID = buy.Id; // Set foreign key reference to Buy
+                                    MainForm.Context.Add(supplierReport);
+                                }
+                                if (Remain > 0)
+                                {
+                                    var supplierMoney = SetSupMoney();
+                                    supplierMoney.Order_ID = buy.Id; // Set foreign key reference to Buy
+                                    MainForm.Context.Add(supplierMoney);
+
+                                    // Update supplier details
+                                    MainForm.Context.Update(SetSupplier());
                                 }
                                 await MainForm.Context.SaveChangesAsync();
                                 await transaction.CommitAsync();
+
 
                             }
                             catch (Exception ex)
@@ -697,8 +762,107 @@ namespace Store.ApplicationUI.Gui.BuysGui
                     }
 
                 }
-                //ResetForm();
+                ResetForm();
             }
+        }
+
+        private void txtSalePrice_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtSalePrice_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                AddNewRow();
+            }
+        }
+
+        private void txtWholeSalePrice_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtSalePrice_KeyUp(object sender, KeyEventArgs e)
+        {
+            ErrorDetection();
+            CalculateAmount();
+
+        }
+
+        private void txtWholeSalePrice_TextChanged(object sender, EventArgs e)
+        {
+            ErrorDetection();
+        }
+        void ErrorDetection()
+        {
+            if (txtWholeSalePrice.Text == string.Empty || txtPriceWithTax.Text == string.Empty)
+            {
+                labelError1.Visible = false;
+                return;
+            }
+            try
+            {
+                if (Convert.ToDouble(txtWholeSalePrice.Text) > Convert.ToDouble(txtPriceWithTax.Text))
+                {
+                    labelError1.Visible = true;
+                }
+                else labelError1.Visible = false;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        private void txtSalePrice_TextChanged(object sender, EventArgs e)
+        {
+            ErrorDetection();
+        }
+        void EditFromTable()
+        {
+            try
+            {
+                txtProductName.Text = this.DgvِProducts.CurrentRow.Cells[0].Value.ToString();
+                txtBuyPrice.Text = this.DgvِProducts.CurrentRow.Cells[1].Value.ToString();
+                txtQty.Text = this.DgvِProducts.CurrentRow.Cells[2].Value.ToString();
+                txtTotalBuyProduct.Text = this.DgvِProducts.CurrentRow.Cells[3].Value.ToString();
+                txtSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[4].Value.ToString();
+                txtWholeSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[5].Value.ToString();
+                txtPriceWithTax.Text = this.DgvِProducts.CurrentRow.Cells[6].Value.ToString();
+                dtpDateExpiration.Value = Convert.ToDateTime(this.DgvِProducts.CurrentRow.Cells[7].Value.ToString());
+                DgvِProducts.Rows.RemoveAt(DgvِProducts.CurrentRow.Index);
+                txtQty.Focus();
+                CalculateAmount();
+                CalculateStatistics();
+
+
+
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+
+        }
+        private void DgvِProducts_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            EditFromTable();
+        }
+
+        private void txtWholeSalePrice_KeyUp(object sender, KeyEventArgs e)
+        {
+            ErrorDetection();
+
+        }
+
+        private void btnEditSelected_Click(object sender, EventArgs e)
+        {
+            EditFromTable();
         }
     }
 }

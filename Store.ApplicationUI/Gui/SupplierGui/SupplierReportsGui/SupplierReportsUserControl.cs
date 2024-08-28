@@ -101,7 +101,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
             DgvِCustomer.Columns[0].HeaderCell.Value = "معرف المورد";
             DgvِCustomer.Columns[1].HeaderCell.Value = "معرف الفاتورة";
             DgvِCustomer.Columns[2].HeaderCell.Value = "اسم المورد";
-            DgvِCustomer.Columns[3].HeaderCell.Value = "الدين";
+            DgvِCustomer.Columns[3].HeaderCell.Value = "الدين المدفوع";
             DgvِCustomer.Columns[4].HeaderCell.Value = "تاريخ الفاتورة";
             DgvِCustomer.Columns[5].HeaderCell.Value = "وقت العملية";
             DgvِCustomer.Columns[6].HeaderCell.Value = "شراء";
