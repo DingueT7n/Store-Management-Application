@@ -514,6 +514,9 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<DateTime>("Reminder_Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Time")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Cust_ID");
@@ -546,6 +549,9 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.Property<float>("Price")
                         .HasColumnType("real");
+
+                    b.Property<string>("Time")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

@@ -39,22 +39,22 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
         public async void SetProductsToDgv()
         {
             //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            var CustomerMoneyList = MainForm.Context.SuppliersReports.
+            var SuppliersMoneyList = MainForm.Context.SuppliersReports.
                 Include(x => x.Supplier).Include(x => x.Buy)
                 .ToList();
-            var uniqueCustomerCount = CustomerMoneyList
+            var uniqueSupplierCount = SuppliersMoneyList
                 .Select(x => x.Supplier.Id) // Replace CustomerId with the actual unique identifier property
                 .Distinct()
                 .Count();
-            DgvِCustomer.DataSource = CustomerMoneyList;
+            DgvِCustomer.DataSource = SuppliersMoneyList;
             if (DgvِCustomer.Rows.Count > 0)
             {
                 if (DgvِCustomer.SelectedRows.Count > 0)
                 {
                     //lblPayFacture.Text = $" فاتورة رقم {DgvِCustomer.Columns[7].HeaderCell.Value} الدين : {DgvِCustomer.Columns[1].HeaderCell.Value} دج";
                     //lblPayAllDebts.Text = $"دج {CustomerMoneyList.Sum(x => x.Price)}";
-                    lblTotalDebt.Text = $"مجموع مدفوعات الموردين في الجدول:{CustomerMoneyList.Sum(x => x.Price)}";
-                    lblTotalCustomers.Text = $"مجموع الموردين:{uniqueCustomerCount}";
+                    lblTotalDebt.Text = $"مجموع مدفوعات الموردين في الجدول:{SuppliersMoneyList.Sum(x => x.Price)}";
+                    lblTotalCustomers.Text = $"مجموع الموردين:{uniqueSupplierCount}";
 
                 }
             }

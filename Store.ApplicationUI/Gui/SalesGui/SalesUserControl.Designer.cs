@@ -29,17 +29,18 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SalesUserControl));
-            DataGridViewCellStyle dataGridViewCellStyle21 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle22 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle23 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle24 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             OperationsflowLayoutPanel = new FlowLayoutPanel();
             gbPayChoiches = new GroupBox();
+            cbWholsale = new CheckBox();
             label1 = new Label();
             DtpDateFacture = new DateTimePicker();
             lblDateFacture = new Label();
             cmbStores = new ComboBox();
-            cmbSuppliers = new ComboBox();
+            cmbCustomers = new ComboBox();
             lblSuppliers = new Label();
             lblFacture = new Label();
             txtFactureNumber = new TextBox();
@@ -62,18 +63,18 @@
             lblUp = new Label();
             btnUp = new Button();
             tableLayoutPanel = new TableLayoutPanel();
-            txtWholeSalePrice = new TextBox();
-            txtTotalSaleProduct = new TextBox();
             txtQty = new TextBox();
             txtProductName = new TextBox();
-            lblTotalSale = new Label();
             lblProductName = new Label();
             lblQuentity = new Label();
-            lblWholesaleprice = new Label();
-            lblBuyPrice = new Label();
             lblSalePrice = new Label();
-            txtSaleDiscount = new TextBox();
             txtSalePrice = new TextBox();
+            lblBuyPrice = new Label();
+            txtSaleDiscount = new TextBox();
+            lblWholesaleprice = new Label();
+            lblTotalSale = new Label();
+            txtWholeSalePrice = new TextBox();
+            txtTotalSaleProduct = new TextBox();
             flowLayoutPanelstatistics = new FlowLayoutPanel();
             gBPayOptions = new GroupBox();
             dtpReminderDate = new DateTimePicker();
@@ -92,7 +93,6 @@
             btnRefresh = new Button();
             lblEmptyData = new Label();
             DgvِProducts = new DataGridView();
-            cbWholsale = new CheckBox();
             OperationsflowLayoutPanel.SuspendLayout();
             gbPayChoiches.SuspendLayout();
             panelstatisticsandOperations.SuspendLayout();
@@ -116,7 +116,6 @@
             OperationsflowLayoutPanel.Controls.Add(panelstatisticsandOperations);
             OperationsflowLayoutPanel.Dock = DockStyle.Top;
             OperationsflowLayoutPanel.Location = new Point(0, 0);
-            OperationsflowLayoutPanel.Margin = new Padding(5);
             OperationsflowLayoutPanel.Name = "OperationsflowLayoutPanel";
             OperationsflowLayoutPanel.Size = new Size(1034, 146);
             OperationsflowLayoutPanel.TabIndex = 13;
@@ -129,7 +128,7 @@
             gbPayChoiches.Controls.Add(DtpDateFacture);
             gbPayChoiches.Controls.Add(lblDateFacture);
             gbPayChoiches.Controls.Add(cmbStores);
-            gbPayChoiches.Controls.Add(cmbSuppliers);
+            gbPayChoiches.Controls.Add(cmbCustomers);
             gbPayChoiches.Controls.Add(lblSuppliers);
             gbPayChoiches.Controls.Add(lblFacture);
             gbPayChoiches.Controls.Add(txtFactureNumber);
@@ -139,6 +138,16 @@
             gbPayChoiches.TabIndex = 8;
             gbPayChoiches.TabStop = false;
             gbPayChoiches.Text = "معلومات حول الفاتورة:";
+            // 
+            // cbWholsale
+            // 
+            cbWholsale.AutoSize = true;
+            cbWholsale.Location = new Point(8, 102);
+            cbWholsale.Name = "cbWholsale";
+            cbWholsale.Size = new Size(116, 23);
+            cbWholsale.TabIndex = 28;
+            cbWholsale.Text = "بيع بسعر الجملة";
+            cbWholsale.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -180,14 +189,14 @@
             cmbStores.TabIndex = 13;
             cmbStores.Text = "اختر مخزن";
             // 
-            // cmbSuppliers
+            // cmbCustomers
             // 
-            cmbSuppliers.FormattingEnabled = true;
-            cmbSuppliers.Location = new Point(152, 65);
-            cmbSuppliers.Name = "cmbSuppliers";
-            cmbSuppliers.Size = new Size(181, 27);
-            cmbSuppliers.TabIndex = 11;
-            cmbSuppliers.Text = "اختر العميل";
+            cmbCustomers.FormattingEnabled = true;
+            cmbCustomers.Location = new Point(152, 65);
+            cmbCustomers.Name = "cmbCustomers";
+            cmbCustomers.Size = new Size(181, 27);
+            cmbCustomers.TabIndex = 11;
+            cmbCustomers.Text = "اختر العميل";
             // 
             // lblSuppliers
             // 
@@ -211,6 +220,7 @@
             // 
             // txtFactureNumber
             // 
+            txtFactureNumber.Enabled = false;
             txtFactureNumber.Location = new Point(152, 26);
             txtFactureNumber.Name = "txtFactureNumber";
             txtFactureNumber.PlaceholderText = "رقم الفاتورة";
@@ -432,13 +442,14 @@
             // 
             // tableLayoutPanel
             // 
-            tableLayoutPanel.ColumnCount = 6;
+            tableLayoutPanel.ColumnCount = 7;
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 257F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 145F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 166F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 145F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 144F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 148F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 26F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 158F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 155F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 8F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 137F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 46F));
             tableLayoutPanel.Controls.Add(txtQty, 2, 1);
@@ -463,43 +474,15 @@
             tableLayoutPanel.Size = new Size(1034, 69);
             tableLayoutPanel.TabIndex = 23;
             // 
-            // txtWholeSalePrice
-            // 
-            txtWholeSalePrice.Anchor = AnchorStyles.None;
-            txtWholeSalePrice.Enabled = false;
-            txtWholeSalePrice.Font = new Font("Calibri", 12F);
-            txtWholeSalePrice.Location = new Point(178, 34);
-            txtWholeSalePrice.Multiline = true;
-            txtWholeSalePrice.Name = "txtWholeSalePrice";
-            txtWholeSalePrice.PlaceholderText = "9999";
-            txtWholeSalePrice.Size = new Size(140, 32);
-            txtWholeSalePrice.TabIndex = 24;
-            txtWholeSalePrice.TextAlign = HorizontalAlignment.Center;
-            txtWholeSalePrice.KeyPress += txtWholeSalePrice_KeyPress;
-            // 
-            // txtTotalSaleProduct
-            // 
-            txtTotalSaleProduct.Anchor = AnchorStyles.None;
-            txtTotalSaleProduct.Enabled = false;
-            txtTotalSaleProduct.Font = new Font("Calibri", 12F);
-            txtTotalSaleProduct.Location = new Point(3, 34);
-            txtTotalSaleProduct.Multiline = true;
-            txtTotalSaleProduct.Name = "txtTotalSaleProduct";
-            txtTotalSaleProduct.PlaceholderText = "9999";
-            txtTotalSaleProduct.Size = new Size(168, 32);
-            txtTotalSaleProduct.TabIndex = 22;
-            txtTotalSaleProduct.TextAlign = HorizontalAlignment.Center;
-            txtTotalSaleProduct.KeyPress += txtTotalBuyProduct_KeyPress;
-            // 
             // txtQty
             // 
             txtQty.Anchor = AnchorStyles.None;
             txtQty.Font = new Font("Calibri", 12F);
-            txtQty.Location = new Point(471, 34);
+            txtQty.Location = new Point(469, 34);
             txtQty.Multiline = true;
             txtQty.Name = "txtQty";
             txtQty.PlaceholderText = "9999";
-            txtQty.Size = new Size(156, 32);
+            txtQty.Size = new Size(139, 32);
             txtQty.TabIndex = 21;
             txtQty.TextAlign = HorizontalAlignment.Center;
             txtQty.KeyDown += txtQty_KeyDown;
@@ -511,25 +494,14 @@
             txtProductName.Anchor = AnchorStyles.None;
             txtProductName.Enabled = false;
             txtProductName.Font = new Font("Calibri", 12F);
-            txtProductName.Location = new Point(781, 34);
+            txtProductName.Location = new Point(782, 34);
+            txtProductName.Margin = new Padding(3, 3, 5, 3);
             txtProductName.Multiline = true;
             txtProductName.Name = "txtProductName";
             txtProductName.PlaceholderText = "اسم المنتج";
             txtProductName.Size = new Size(249, 32);
             txtProductName.TabIndex = 19;
             txtProductName.TextAlign = HorizontalAlignment.Center;
-            // 
-            // lblTotalSale
-            // 
-            lblTotalSale.Anchor = AnchorStyles.None;
-            lblTotalSale.AutoSize = true;
-            lblTotalSale.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblTotalSale.Location = new Point(51, 6);
-            lblTotalSale.Margin = new Padding(3);
-            lblTotalSale.Name = "lblTotalSale";
-            lblTotalSale.Size = new Size(73, 19);
-            lblTotalSale.TabIndex = 6;
-            lblTotalSale.Text = "اجمالي البيع";
             // 
             // lblProductName
             // 
@@ -548,24 +520,40 @@
             lblQuentity.Anchor = AnchorStyles.None;
             lblQuentity.AutoSize = true;
             lblQuentity.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblQuentity.Location = new Point(529, 6);
+            lblQuentity.Location = new Point(518, 6);
             lblQuentity.Margin = new Padding(3);
             lblQuentity.Name = "lblQuentity";
             lblQuentity.Size = new Size(41, 19);
             lblQuentity.TabIndex = 3;
             lblQuentity.Text = "الكمية";
             // 
-            // lblWholesaleprice
+            // lblSalePrice
             // 
-            lblWholesaleprice.Anchor = AnchorStyles.None;
-            lblWholesaleprice.AutoSize = true;
-            lblWholesaleprice.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblWholesaleprice.Location = new Point(202, 6);
-            lblWholesaleprice.Margin = new Padding(3);
-            lblWholesaleprice.Name = "lblWholesaleprice";
-            lblWholesaleprice.Size = new Size(93, 19);
-            lblWholesaleprice.TabIndex = 5;
-            lblWholesaleprice.Text = "سعر البيع جملة";
+            lblSalePrice.Anchor = AnchorStyles.None;
+            lblSalePrice.AutoSize = true;
+            lblSalePrice.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblSalePrice.Location = new Point(664, 6);
+            lblSalePrice.Margin = new Padding(3);
+            lblSalePrice.Name = "lblSalePrice";
+            lblSalePrice.Size = new Size(61, 19);
+            lblSalePrice.TabIndex = 4;
+            lblSalePrice.Text = "سعر البيع";
+            // 
+            // txtSalePrice
+            // 
+            txtSalePrice.Anchor = AnchorStyles.None;
+            txtSalePrice.Enabled = false;
+            txtSalePrice.Font = new Font("Calibri", 12F);
+            txtSalePrice.Location = new Point(614, 34);
+            txtSalePrice.Multiline = true;
+            txtSalePrice.Name = "txtSalePrice";
+            txtSalePrice.PlaceholderText = "9999";
+            txtSalePrice.Size = new Size(160, 32);
+            txtSalePrice.TabIndex = 23;
+            txtSalePrice.TextAlign = HorizontalAlignment.Center;
+            txtSalePrice.KeyDown += txtSalePrice_KeyDown;
+            txtSalePrice.KeyPress += txtSalePrice_KeyPress;
+            txtSalePrice.KeyUp += txtSalePrice_KeyUp;
             // 
             // lblBuyPrice
             // 
@@ -578,18 +566,6 @@
             lblBuyPrice.Size = new Size(71, 19);
             lblBuyPrice.TabIndex = 2;
             lblBuyPrice.Text = "التخفيض%";
-            // 
-            // lblSalePrice
-            // 
-            lblSalePrice.Anchor = AnchorStyles.None;
-            lblSalePrice.AutoSize = true;
-            lblSalePrice.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblSalePrice.Location = new Point(674, 6);
-            lblSalePrice.Margin = new Padding(3);
-            lblSalePrice.Name = "lblSalePrice";
-            lblSalePrice.Size = new Size(61, 19);
-            lblSalePrice.TabIndex = 4;
-            lblSalePrice.Text = "سعر البيع";
             // 
             // txtSaleDiscount
             // 
@@ -607,21 +583,57 @@
             txtSaleDiscount.KeyPress += txtBuyPrice_KeyPress;
             txtSaleDiscount.KeyUp += txtBuyPrice_KeyUp;
             // 
-            // txtSalePrice
+            // lblWholesaleprice
             // 
-            txtSalePrice.Anchor = AnchorStyles.None;
-            txtSalePrice.Enabled = false;
-            txtSalePrice.Font = new Font("Calibri", 12F);
-            txtSalePrice.Location = new Point(639, 34);
-            txtSalePrice.Multiline = true;
-            txtSalePrice.Name = "txtSalePrice";
-            txtSalePrice.PlaceholderText = "9999";
-            txtSalePrice.Size = new Size(131, 32);
-            txtSalePrice.TabIndex = 23;
-            txtSalePrice.TextAlign = HorizontalAlignment.Center;
-            txtSalePrice.KeyDown += txtSalePrice_KeyDown;
-            txtSalePrice.KeyPress += txtSalePrice_KeyPress;
-            txtSalePrice.KeyUp += txtSalePrice_KeyUp;
+            lblWholesaleprice.Anchor = AnchorStyles.None;
+            lblWholesaleprice.AutoSize = true;
+            lblWholesaleprice.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblWholesaleprice.Location = new Point(197, 6);
+            lblWholesaleprice.Margin = new Padding(3);
+            lblWholesaleprice.Name = "lblWholesaleprice";
+            lblWholesaleprice.Size = new Size(93, 19);
+            lblWholesaleprice.TabIndex = 5;
+            lblWholesaleprice.Text = "سعر البيع جملة";
+            // 
+            // lblTotalSale
+            // 
+            lblTotalSale.Anchor = AnchorStyles.None;
+            lblTotalSale.AutoSize = true;
+            lblTotalSale.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblTotalSale.Location = new Point(50, 6);
+            lblTotalSale.Margin = new Padding(3);
+            lblTotalSale.Name = "lblTotalSale";
+            lblTotalSale.Size = new Size(73, 19);
+            lblTotalSale.TabIndex = 6;
+            lblTotalSale.Text = "اجمالي البيع";
+            // 
+            // txtWholeSalePrice
+            // 
+            txtWholeSalePrice.Anchor = AnchorStyles.Right;
+            txtWholeSalePrice.Enabled = false;
+            txtWholeSalePrice.Font = new Font("Calibri", 12F);
+            txtWholeSalePrice.Location = new Point(167, 34);
+            txtWholeSalePrice.Multiline = true;
+            txtWholeSalePrice.Name = "txtWholeSalePrice";
+            txtWholeSalePrice.PlaceholderText = "9999";
+            txtWholeSalePrice.Size = new Size(152, 32);
+            txtWholeSalePrice.TabIndex = 24;
+            txtWholeSalePrice.TextAlign = HorizontalAlignment.Center;
+            txtWholeSalePrice.KeyPress += txtWholeSalePrice_KeyPress;
+            // 
+            // txtTotalSaleProduct
+            // 
+            txtTotalSaleProduct.Anchor = AnchorStyles.None;
+            txtTotalSaleProduct.Enabled = false;
+            txtTotalSaleProduct.Font = new Font("Calibri", 12F);
+            txtTotalSaleProduct.Location = new Point(12, 34);
+            txtTotalSaleProduct.Multiline = true;
+            txtTotalSaleProduct.Name = "txtTotalSaleProduct";
+            txtTotalSaleProduct.PlaceholderText = "9999999999";
+            txtTotalSaleProduct.Size = new Size(149, 32);
+            txtTotalSaleProduct.TabIndex = 22;
+            txtTotalSaleProduct.TextAlign = HorizontalAlignment.Center;
+            txtTotalSaleProduct.KeyPress += txtTotalBuyProduct_KeyPress;
             // 
             // flowLayoutPanelstatistics
             // 
@@ -831,31 +843,31 @@
             DgvِProducts.AllowUserToAddRows = false;
             DgvِProducts.AllowUserToResizeColumns = false;
             DgvِProducts.AllowUserToResizeRows = false;
-            dataGridViewCellStyle21.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvِProducts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle21;
+            dataGridViewCellStyle1.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvِProducts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             DgvِProducts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             DgvِProducts.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             DgvِProducts.BackgroundColor = Color.White;
             DgvِProducts.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             DgvِProducts.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle22.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle22.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle22.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle22.ForeColor = Color.White;
-            dataGridViewCellStyle22.SelectionBackColor = Color.DodgerBlue;
-            dataGridViewCellStyle22.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle22.WrapMode = DataGridViewTriState.True;
-            DgvِProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle22;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = Color.DodgerBlue;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            DgvِProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             DgvِProducts.ColumnHeadersHeight = 40;
             DgvِProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle23.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle23.BackColor = SystemColors.Window;
-            dataGridViewCellStyle23.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle23.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle23.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle23.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle23.WrapMode = DataGridViewTriState.False;
-            DgvِProducts.DefaultCellStyle = dataGridViewCellStyle23;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = SystemColors.Window;
+            dataGridViewCellStyle3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            DgvِProducts.DefaultCellStyle = dataGridViewCellStyle3;
             DgvِProducts.Dock = DockStyle.Fill;
             DgvِProducts.EnableHeadersVisualStyles = false;
             DgvِProducts.GridColor = SystemColors.ControlDark;
@@ -867,24 +879,14 @@
             DgvِProducts.RowHeadersVisible = false;
             DgvِProducts.RowHeadersWidth = 21;
             DgvِProducts.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle24.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvِProducts.RowsDefaultCellStyle = dataGridViewCellStyle24;
+            dataGridViewCellStyle4.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvِProducts.RowsDefaultCellStyle = dataGridViewCellStyle4;
             DgvِProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DgvِProducts.Size = new Size(1034, 323);
             DgvِProducts.TabIndex = 26;
             DgvِProducts.CellContentDoubleClick += DgvِProducts_CellContentDoubleClick;
             DgvِProducts.RowsAdded += DgvِProducts_RowsAdded;
             DgvِProducts.RowsRemoved += DgvِProducts_RowsRemoved;
-            // 
-            // cbWholsale
-            // 
-            cbWholsale.AutoSize = true;
-            cbWholsale.Location = new Point(8, 102);
-            cbWholsale.Name = "cbWholsale";
-            cbWholsale.Size = new Size(116, 23);
-            cbWholsale.TabIndex = 28;
-            cbWholsale.Text = "بيع بسعر الجملة";
-            cbWholsale.UseVisualStyleBackColor = true;
             // 
             // SalesUserControl
             // 
@@ -936,7 +938,7 @@
         private DateTimePicker DtpDateFacture;
         private Label lblDateFacture;
         private ComboBox cmbStores;
-        private ComboBox cmbSuppliers;
+        private ComboBox cmbCustomers;
         private Label lblSuppliers;
         private Label lblFacture;
         private TextBox txtFactureNumber;

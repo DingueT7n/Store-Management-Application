@@ -51,7 +51,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
             {
                 if (DgvِCustomer.SelectedRows.Count > 0)
                 {
-                    lblPayFacture.Text = $" فاتورة رقم {DgvِCustomer.Columns[7].HeaderCell.Value} الدين : {DgvِCustomer.Columns[1].HeaderCell.Value} دج";
+                    lblPayFacture.Text = $" فاتورة رقم {DgvِCustomer.Columns[1].HeaderCell.Value} الدين : {DgvِCustomer.Columns[3].HeaderCell.Value} دج";
                     lblPayAllDebts.Text = $"دج {CustomerMoneyList.Sum(x => x.Price)}";
                     lblTotalDebt.Text = $"مجموع الديون على العملاء:{CustomerMoneyList.Sum(x => x.Price)}";
                     lblTotalCustomers.Text = $"مجموع العملاء:{uniqueCustomerCount}";
@@ -97,16 +97,26 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
 
         private void SetColumns()
         {
+
+
             //DgvِCustomer.Columns[0].HeaderCell.Value = "المعرف";
-            DgvِCustomer.Columns[0].HeaderCell.Value = "اسم العميل";
-            DgvِCustomer.Columns[1].HeaderCell.Value = "الدين";
-            DgvِCustomer.Columns[2].HeaderCell.Value = "تاريخ الفاتورة";
-            DgvِCustomer.Columns[3].HeaderCell.Value = "تاريخ تذكير";
-            DgvِCustomer.Columns[4].HeaderCell.Value = "اعلى دين مسموح به";
-            DgvِCustomer.Columns[5].HeaderCell.Value = "مجموع الديون";
-            DgvِCustomer.Columns[6].HeaderCell.Value = "معرف العميل";
-            DgvِCustomer.Columns[7].HeaderCell.Value = "معرف الفاتورة";
-            DgvِCustomer.Columns[8].HeaderCell.Value = "معرف العملية";
+            DgvِCustomer.Columns[0].HeaderCell.Value = "معرف المورد";
+            DgvِCustomer.Columns[1].HeaderCell.Value = "معرف الفاتورة";
+            DgvِCustomer.Columns[2].HeaderCell.Value = "اسم العميل";
+            DgvِCustomer.Columns[3].HeaderCell.Value = "الدين المتبقي";
+            DgvِCustomer.Columns[4].HeaderCell.Value = "تاريخ الفاتورة";
+            DgvِCustomer.Columns[5].HeaderCell.Value = "تاريخ تذكير";
+            DgvِCustomer.Columns[6].HeaderCell.Value = "وقت الفاتورة";
+            DgvِCustomer.Columns[7].HeaderCell.Value = "البيع";
+            DgvِCustomer.Columns[8].HeaderCell.Value = "العميل";
+            DgvِCustomer.Columns[9].HeaderCell.Value = "معرف الحسبة";
+
+
+
+            DgvِCustomer.Columns[0].Visible = false;
+            //DgvِCustomer.Columns[1].Visible = false;
+            DgvِCustomer.Columns[7].Visible = false;
+            DgvِCustomer.Columns[8].Visible = false;
 
 
         }

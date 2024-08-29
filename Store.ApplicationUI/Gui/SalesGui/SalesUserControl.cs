@@ -1,9 +1,9 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.PaymentGui;
-using Store.Core.Entities.Buys;
+using Store.Core.Entities.Customers;
 using Store.Core.Entities.Products;
-using Store.Core.Entities.Suppliers;
+using Store.Core.Entities.Sales;
 using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.SalesGui
@@ -48,14 +48,14 @@ namespace Store.ApplicationUI.Gui.SalesGui
             if (await Task.Run(() => salesRepository.IsConnected()))
             {
                 //Start Load Data
-                //////////////txtFactureNumber.Text = salesRepository.GetFactureNumber();
+                txtFactureNumber.Text = salesRepository.GetFactureNumber();
                 // if its an admin or Normal user 
                 SetColumns();
 
-                cmbSuppliers.DataSource = MainForm.Context.Customers.ToList();
-                cmbSuppliers.DisplayMember = "SupplierName";
-                cmbSuppliers.ValueMember = "Id";
-                cmbSuppliers.Text = "اختر العميل";
+                cmbCustomers.DataSource = MainForm.Context.Customers.ToList();
+                cmbCustomers.DisplayMember = "CustomerName";
+                cmbCustomers.ValueMember = "Id";
+                cmbCustomers.Text = "اختر العميل";
 
                 cmbStores.DataSource = MainForm.Context.Stores.ToList();
                 cmbStores.DisplayMember = "StoreName";
@@ -87,24 +87,17 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 DgvِProducts.Columns.Add("اسم المنتج", "اسم المنتج");
                 DgvِProducts.Columns.Add("سعر البيع", "سعر البيع");
                 DgvِProducts.Columns.Add("الكمية", "الكمية");
-                DgvِProducts.Columns.Add("اجمالي الشراء", "اجمالي الشراء");
-                DgvِProducts.Columns.Add("سعر البيع", "سعر البيع");
-                DgvِProducts.Columns.Add("سعر الجملة", "سعر الجملة");
-                DgvِProducts.Columns.Add("سعر البيع باحتساب الضريبة", "سعر البيع باحتساب الضريبة"); // String or decimal column
-
-                DataGridViewColumn dateColumn = new DataGridViewTextBoxColumn();
-                dateColumn.Name = "تاريخ انتهاء الصلاحية";
-                dateColumn.HeaderText = "تاريخ انتهاء الصلاحية";
-                DgvِProducts.Columns.Add(dateColumn);
-
+                DgvِProducts.Columns.Add("التخفيض%", "التخفيض%");
+                DgvِProducts.Columns.Add("سعر البيع الجملة", "سعر البيع الجملة");
+                DgvِProducts.Columns.Add("اجمالي البيع", "اجمالي البيع");
                 DgvِProducts.Columns.Add("معرف المنتوج", "معرف المنتوج");
                 DgvِProducts.Columns.Add("باركود", "باركود");
             }
             // Visible of Columns
             //DgvProducts.Columns[0].Visible = false;
             ////DgvِProducts.Columns[6].Visible = false;
-            ////DgvِProducts.Columns[9].Visible = false;
-            ////DgvِProducts.Columns[8].Visible = false;
+            DgvِProducts.Columns[6].Visible = false;
+            DgvِProducts.Columns[7].Visible = false;
             ////DgvِProducts.Columns[11].Visible = false;
             ////DgvِProducts.Columns[12].Visible = false;
             ////DgvِProducts.Columns[15].Visible = false;
@@ -117,11 +110,32 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
         public void InitializeTextBoxesAndLables(Product product)
         {
+
+            ProductDiscount productDiscount = MainForm.Context.ProductDiscounts.
+                Where(x => x.Id.ToString() == product.Id.ToString() && x.Quentity > 0
+
+                && x.Store_Id == Convert.ToInt32(cmbStores.SelectedValue)
+                && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
+                ).FirstOrDefault();
             txtProductName.Text = product.ProductName;
-            txtSaleDiscount.Text = product.BuyPrice.ToString();
-            txtQty.Text = "1";
-            txtTotalSaleProduct.Text = product.BuyPrice.ToString();
-            txtSalePrice.Text = product.SalePrice.ToString();
+            if (productDiscount is not null)
+                txtSaleDiscount.Text = productDiscount.DiscountValue.ToString();
+            else txtSaleDiscount.Text = 0.ToString();
+            if (txtQty.Text != string.Empty)
+            {
+                if (product.Quentity < _main.ConvertToFloat(txtQty.Text))
+                {
+                    txtQty.Text = product.Quentity.ToString();
+                }
+            }
+            else
+            {
+                txtQty.Text = "1";
+            }
+
+
+            txtTotalSaleProduct.Text = product.SalePriceTax.ToString();
+            txtSalePrice.Text = product.SalePriceTax.ToString();
             txtWholeSalePrice.Text = product.WholesalePrice.ToString();
 
 
@@ -146,10 +160,25 @@ namespace Store.ApplicationUI.Gui.SalesGui
         {
             try
             {
-                if (txtSaleDiscount.Text != string.Empty && txtQty.Text != string.Empty)
+                if (txtSalePrice.Text != string.Empty && txtQty.Text != string.Empty && txtWholeSalePrice.Text
+                    != string.Empty && txtSaleDiscount.Text != string.Empty)
+                {
+                    if (cbWholsale.Checked)
+                    {
+                        double Discount = Convert.ToDouble(txtSaleDiscount.Text);
+                        double Amount = Convert.ToDouble(txtWholeSalePrice.Text);
+                        double TotalAmount = Amount - (Amount * (Discount / 100));
 
-                    txtTotalSaleProduct.Text = (_main.ConvertToFloat(txtSaleDiscount.Text) * Convert.ToInt32(txtQty.Text)).ToString();
-
+                        txtTotalSaleProduct.Text = (_main.ConvertToFloat(TotalAmount.ToString()) * Convert.ToInt32(txtQty.Text)).ToString();
+                    }
+                    else
+                    {
+                        double Discount = Convert.ToDouble(txtSaleDiscount.Text);
+                        double Amount = Convert.ToDouble(txtSalePrice.Text);
+                        double TotalAmount = Amount - (Amount * (Discount / 100));
+                        txtTotalSaleProduct.Text = (_main.ConvertToFloat(TotalAmount.ToString()) * Convert.ToInt32(txtQty.Text)).ToString();
+                    }
+                }
                 if (txtSalePrice.Text != string.Empty && _product is not null)
                 {
 
@@ -159,10 +188,12 @@ namespace Store.ApplicationUI.Gui.SalesGui
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
         private Product _product;
+        private ProductDiscount _productDiscount;
+        private ProductsQuantitie _productQuantitie;
         public async void SetProductsToTable()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            //////////////////////_product = salesRepository.GetProductBarCode(txtSearchBarCode.Text);
+            _product = salesRepository.GetProductBarCode(txtSearchBarCode.Text);
             if (_product is not null)
             {
                 InitializeTextBoxesAndLables(_product);
@@ -170,6 +201,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 txtQty.Focus();
                 txtQty.SelectAll();
                 CalculateAmount();
+                CalculateStatistics();
             }
             else
             {
@@ -212,14 +244,14 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
                 // Set values in the new row
                 newRow.Cells[0].Value = txtProductName.Text;
-                newRow.Cells[1].Value = txtSaleDiscount.Text;
+                newRow.Cells[1].Value = txtSalePrice.Text;
                 newRow.Cells[2].Value = txtQty.Text;
-                newRow.Cells[3].Value = txtTotalSaleProduct.Text;
-                newRow.Cells[4].Value = txtSalePrice.Text;
-                newRow.Cells[5].Value = txtWholeSalePrice.Text;
+                newRow.Cells[3].Value = txtSaleDiscount.Text;
+                newRow.Cells[4].Value = txtWholeSalePrice.Text;
+                newRow.Cells[5].Value = txtTotalSaleProduct.Text;
 
-                newRow.Cells[8].Value = _product.Id;
-                newRow.Cells[9].Value = _product.CodeBar;
+                newRow.Cells[6].Value = _product.Id;
+                newRow.Cells[7].Value = _product.CodeBar;
                 DgvِProducts.CurrentCell = DgvِProducts[0, DgvِProducts.Rows.Count - 1];
 
                 ClearBoxes();
@@ -241,7 +273,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
                     for (int i = 0; i < DgvِProducts.Rows.Count; i++)
                     {
-                        if (DgvِProducts.Rows[i].Cells[9].Value.ToString() == _product.Id.ToString())
+                        if (DgvِProducts.Rows[i].Cells[6].Value.ToString() == _product.Id.ToString())
                         {
                             MsgHelper.ShowDuplicatedItems();
                             txtSearchBarCode.Focus();
@@ -252,7 +284,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                     }
 
                     new_row();
-                    //////CalculateStatistics();
+                    CalculateStatistics();
                 }
                 catch (Exception ex) { MessageBox.Show(ex.Message); }
 
@@ -261,8 +293,11 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
 
             }
-            else { MsgHelper.ShowEmptyResult(); }
-            //////CalculateStatistics();
+            else
+            {
+                MsgHelper.ShowEmptyResult();
+            }
+            CalculateStatistics();
         }
 
         private void txtQty_KeyDown(object sender, KeyEventArgs e)
@@ -286,6 +321,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
             try
             {
                 CalculateAmount();
+                InitializeTextBoxesAndLables(_product);
 
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
@@ -293,7 +329,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
         public bool ValidatePay()
         {
-            if (cmbSuppliers.Text == "اختر العميل") { MessageBox.Show("يرجى اختيار عميل , راجع البيانات من فضلك", "بيانات غير كاملة"); cmbSuppliers.Focus(); return false; }
+            if (cmbCustomers.Text == "اختر العميل") { MessageBox.Show("يرجى اختيار عميل , راجع البيانات من فضلك", "بيانات غير كاملة"); cmbCustomers.Focus(); return false; }
             if (cmbStores.Text == "اختر مخزن") { MessageBox.Show("يرجى اختيار مخزن , راجع البيانات من فضلك", "بيانات غير كاملة"); cmbStores.Focus(); return false; }
             if (txtProductName.Text != string.Empty)
             { MessageBox.Show("لديك منتج قيد الاضافة , راجع البيانات من فضلك", "بيانات غير كاملة"); return false; }
@@ -370,18 +406,17 @@ namespace Store.ApplicationUI.Gui.SalesGui
             try
             {
                 ErrorDetection();
-
                 lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِProducts);
                 if (DgvِProducts.Rows.Count >= 0)
                 {
                     lblTotalPriceinFacture.Text = "المبلغ الاجمالي في الفاتورة :" +
                                          (from DataGridViewRow row in DgvِProducts.Rows
-                                          where row.Cells[3].FormattedValue.ToString() != string.Empty
-                                          select Convert.ToDouble(row.Cells[3].FormattedValue)).Sum()
+                                          where row.Cells[5].FormattedValue.ToString() != string.Empty
+                                          select Convert.ToDouble(row.Cells[5].FormattedValue)).Sum()
                                           .ToString("f2");
                     TotalFacture = (from DataGridViewRow row in DgvِProducts.Rows
-                                    where row.Cells[3].FormattedValue.ToString() != string.Empty
-                                    select Convert.ToDouble(row.Cells[3].FormattedValue)).Sum();
+                                    where row.Cells[5].FormattedValue.ToString() != string.Empty
+                                    select Convert.ToDouble(row.Cells[5].FormattedValue)).Sum();
                     lblTotalQuentity.Text = "اجمالي الكميات في الجدول :" +
                               (from DataGridViewRow row in DgvِProducts.Rows
                                where row.Cells[2].FormattedValue.ToString() != string.Empty
@@ -457,105 +492,121 @@ namespace Store.ApplicationUI.Gui.SalesGui
         {
             CalculateStatistics();
         }
-        Buy SetBuy()
+        Sale SetSale()
         {
 
-            Buy buy = new Buy();
+            Sale sale = new Sale();
 
-            buy.Total = _main.ConvertToFloat(TotalFacture.ToString());
-            buy.SupplierId = Convert.ToInt32(cmbSuppliers.SelectedValue);
-            buy.Date = DtpDateFacture.Value;
-            buy.PaidUP = _main.ConvertToFloat(PaidUp.ToString());
-            buy.Remain = _main.ConvertToFloat(Remain.ToString());
-            buy.Time = DateTime.Now.ToString("HH:mm");
-            buy.User_Name = "Alaa";
-            return buy;
+            sale.TotalOrder = _main.ConvertToFloat(TotalFacture.ToString());
+            sale.CustomerId = Convert.ToInt32(cmbCustomers.SelectedValue);
+            sale.Date = DtpDateFacture.Value;
+            sale.PaidUP = _main.ConvertToFloat(PaidUp.ToString());
+            sale.Remain = _main.ConvertToFloat(Remain.ToString());
+            sale.Time = DateTime.Now.ToString("HH:mm");
+            sale.User_Name = "Alaa";
+            return sale;
         }
-        SupplierReport SetSupReport()
+        CustomerReport SetCustReport()
+        {
+            CustomerReport custReport = new CustomerReport();
+            custReport.Order_ID = Convert.ToInt32(txtFactureNumber.Text);
+            custReport.Cust_ID = Convert.ToInt32(cmbCustomers.SelectedValue);
+            custReport.Cust_Name = cmbCustomers.Text;
+            custReport.Date = DtpDateFacture.Value;
+            custReport.Price = _main.ConvertToFloat(PaidUp.ToString());
+            custReport.Time = DateTime.Now.ToString("HH:mm");
+            return custReport;
+        }
+        CustomerMoney SetCustMoney()
         {
 
-            SupplierReport suppReport = new SupplierReport();
-            suppReport.Order_ID = Convert.ToInt32(txtFactureNumber.Text);
-            suppReport.Sup_ID = Convert.ToInt32(cmbSuppliers.SelectedValue);
-            suppReport.SupplierName = cmbSuppliers.Text;
-            suppReport.Date = DtpDateFacture.Value;
-            suppReport.Price = _main.ConvertToFloat(PaidUp.ToString());
-            suppReport.Time = DateTime.Now.ToString("HH:mm");
-            return suppReport;
+            CustomerMoney customerMoney = new CustomerMoney();
+            customerMoney.Order_ID = Convert.ToInt32(txtFactureNumber.Text);
+            customerMoney.Cust_ID = Convert.ToInt32(cmbCustomers.SelectedValue);
+            customerMoney.Cust_Name = cmbCustomers.Text;
+            customerMoney.Order_Date = DtpDateFacture.Value;
+            customerMoney.Price = _main.ConvertToFloat(Remain.ToString());
+            customerMoney.Time = DateTime.Now.ToString("HH:mm");
+            customerMoney.Reminder_Date = dtpReminderDate.Value;
+            return customerMoney;
         }
-        SupplierMoney SetSupMoney()
-        {
-
-            SupplierMoney supplierMoney = new SupplierMoney();
-            supplierMoney.Order_ID = Convert.ToInt32(txtFactureNumber.Text);
-            supplierMoney.Sup_ID = Convert.ToInt32(cmbSuppliers.SelectedValue);
-            supplierMoney.SupplierName = cmbSuppliers.Text;
-            supplierMoney.Order_Date = DtpDateFacture.Value;
-            supplierMoney.Price = _main.ConvertToFloat(Remain.ToString());
-            supplierMoney.Time = DateTime.Now.ToString("HH:mm");
-            supplierMoney.Reminder_Date = dtpReminderDate.Value;
-            return supplierMoney;
-        }
-        BuyDetail SetBuyDetail(int i)
+        SaleDetail SetSaleDetail(int i)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
-            BuyDetail buyDetail = new BuyDetail();
-            buyDetail.Order_ID = Convert.ToInt32(txtFactureNumber.Text);
-            buyDetail.Sup_ID = Convert.ToInt32(cmbSuppliers.SelectedValue);
-            buyDetail.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[8].Value.ToString());
-            buyDetail.Quentity = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
-            buyDetail.Price = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
-            buyDetail.Total = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[3].Value.ToString());
-            buyDetail.TaxValue = Properties.Settings.Default.TaxValue;
-            buyDetail.PriceWithTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
-            return buyDetail;
+            SaleDetail saleDetail = new SaleDetail();
+            saleDetail.Order_ID = Convert.ToInt32(txtFactureNumber.Text);
+            saleDetail.Cust_ID = Convert.ToInt32(cmbCustomers.SelectedValue);
+            saleDetail.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[6].Value.ToString());
+            saleDetail.Quentity = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+            saleDetail.Price = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
+            saleDetail.Total = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[5].Value.ToString());
+            saleDetail.TaxValue = Properties.Settings.Default.TaxValue;
+            saleDetail.PriceWithTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
+            return saleDetail;
         }
         Product SetProduct(int i)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
-            var proId = DgvِProducts.Rows[i].Cells[8].Value.ToString();
-            Product product = MainForm.Context.Products.Where(x => x.Id.ToString() == proId).FirstOrDefault();
+            var proId = DgvِProducts.Rows[i].Cells[6].Value.ToString();
+            Product product = MainForm.Context.Products.Where(x => x.Id.ToString() == proId
+           /* && x.CodeBar == DgvِProducts.Rows[i].Cells[6].Value.ToString()*/).FirstOrDefault();
             if (product is not null)
             {
-                product.Quentity = product.Quentity + _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+                if (product.Quentity - _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()) > 0)
+                    product.Quentity = product.Quentity - _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+                else product.Quentity = 0;
 
             }
             return product;
         }
-        Supplier SetSupplier()
+        void SetProductQuentity(double Quentity, int i)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
-            var supId = Convert.ToInt32(cmbSuppliers.SelectedValue);
-            Supplier supplier = MainForm.Context.Suppliers.Where(x => x.Id == supId).FirstOrDefault();
-            if (supplier is not null)
+            var proId = DgvِProducts.Rows[i].Cells[6].Value.ToString();
+            while (Quentity > 0)
             {
-                supplier.TotalDebts = supplier.TotalDebts + Remain;
 
+                ProductsQuantitie productQty = MainForm.Context.ProductsQuantities.
+                        Where(x => x.Pro_ID.ToString() == proId && x.Qty > 0).FirstOrDefault();
+                if (productQty is not null)
+                {
+                    if (productQty.Qty >= _main.ConvertToFloat(Quentity.ToString()))
+                    {
+                        productQty.Qty = productQty.Qty - _main.ConvertToFloat(Quentity.ToString());
+                        MainForm.Context.ProductsQuantities.Update(productQty);
+                        Quentity = 0;
+
+                    }
+                    else
+                    {
+                        Quentity = Quentity - productQty.Qty;
+                        productQty.Qty = 0;
+                        MainForm.Context.ProductsQuantities.Update(productQty);
+                    }
+
+                }
             }
-            return supplier;
+            //return product;
+
         }
-        ProductsQuantitie SetProductQuentity(int i)
+        Customer SetCustomer()
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
-            ProductsQuantitie productQty = new();
-            if (productQty is not null)
+            var custId = Convert.ToInt32(cmbCustomers.SelectedValue);
+            Customer customer = MainForm.Context.Customers.Where(x => x.Id == custId).FirstOrDefault();
+            if (customer is not null)
             {
-                productQty.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[8].Value.ToString());
-                productQty.Store_ID = Convert.ToInt32(cmbStores.SelectedValue);
-                productQty.StoreName = cmbStores.Text;
-                productQty.Qty = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
-                productQty.Buy_Price = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
-                productQty.Sale_PriceTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
-                productQty.DateExpiration = Convert.ToDateTime(DgvِProducts.Rows[i].Cells[7].Value);
+                customer.TotalDebts = customer.TotalDebts + Remain;
             }
-            return productQty;
+            return customer;
         }
+
 
         private async void btnPay_Click(object sender, EventArgs e)
         {
             if (ValidatePay())
             {
-                AddPaymentForm addPaymentForm = new(_main);
+                AddPaymentForm addPaymentForm = new(_main, 1);
 
                 if (rBPayCash.Checked)
                 {
@@ -567,39 +618,38 @@ namespace Store.ApplicationUI.Gui.SalesGui
                         {
                             try
                             {
-                                var buy = SetBuy();
-                                MainForm.Context.Add(buy);
+                                var sale = SetSale();
+                                MainForm.Context.Add(sale);
                                 await MainForm.Context.SaveChangesAsync();
 
                                 for (int i = 0; i <= DgvِProducts.Rows.Count - 1; i++)
                                 {
-                                    var buyDetail = SetBuyDetail(i);
-                                    buyDetail.Order_ID = buy.Id; // Set foreign key reference to Buy
+                                    var saleDetail = SetSaleDetail(i);
+                                    saleDetail.Order_ID = sale.Id; // Set foreign key reference to Buy
 
-                                    MainForm.Context.BuyDetails.Add(buyDetail);
+                                    MainForm.Context.SalesDetails.Add(saleDetail);
 
                                     // Update product and add quantity
                                     MainForm.Context.Update(SetProduct(i));
-                                    MainForm.Context.Add(SetProductQuentity(i));
+                                    SetProductQuentity(Convert.ToDouble(DgvِProducts.Rows[i].Cells[2].Value.ToString()), i);
 
 
                                 }
-
                                 await MainForm.Context.SaveChangesAsync();
                                 if (PaidUp > 0)
                                 {
-                                    var supplierReport = SetSupReport();
-                                    supplierReport.Order_ID = buy.Id; // Set foreign key reference to Buy
-                                    MainForm.Context.Add(supplierReport);
+                                    var CustReport = SetCustReport();
+                                    CustReport.Order_ID = sale.Id; // Set foreign key reference to Buy
+                                    MainForm.Context.Add(CustReport);
                                 }
                                 if (Remain > 0)
                                 {
-                                    var supplierMoney = SetSupMoney();
-                                    supplierMoney.Order_ID = buy.Id; // Set foreign key reference to Buy
-                                    MainForm.Context.Add(supplierMoney);
+                                    var CustMoney = SetCustMoney();
+                                    CustMoney.Order_ID = sale.Id; // Set foreign key reference to Buy
+                                    MainForm.Context.Add(CustMoney);
 
                                     // Update supplier details
-                                    MainForm.Context.Update(SetSupplier());
+                                    MainForm.Context.Update(SetCustomer());
                                 }
                                 await MainForm.Context.SaveChangesAsync();
                                 await transaction.CommitAsync();
@@ -627,48 +677,42 @@ namespace Store.ApplicationUI.Gui.SalesGui
                         {
                             try
                             {
-                                var buy = SetBuy();
-                                MainForm.Context.Add(buy);
+                                var sale = SetSale();
+                                MainForm.Context.Add(sale);
                                 await MainForm.Context.SaveChangesAsync();
-                                if (PaidUp > 0)
-                                    MainForm.Context.Add(SetSupReport());
-                                if (Remain > 0)
-                                {
-                                    MainForm.Context.Add(SetSupMoney()); MainForm.Context.Update(SetSupplier());
-                                };
-                                BuyDetailRepository buyDetailRepository = new(MainForm.Context);
 
                                 for (int i = 0; i <= DgvِProducts.Rows.Count - 1; i++)
                                 {
-                                    var buyDetail = SetBuyDetail(i);
-                                    buyDetail.Order_ID = buy.Id; // Set foreign key reference to Buy
+                                    var saleDetail = SetSaleDetail(i);
+                                    saleDetail.Order_ID = sale.Id; // Set foreign key reference to Buy
 
-                                    MainForm.Context.BuyDetails.Add(buyDetail);
+                                    MainForm.Context.SalesDetails.Add(saleDetail);
 
                                     // Update product and add quantity
                                     MainForm.Context.Update(SetProduct(i));
-                                    MainForm.Context.Add(SetProductQuentity(i));
+                                    SetProductQuentity(Convert.ToDouble(DgvِProducts.Rows[i].Cells[2].Value.ToString()), i);
 
 
                                 }
                                 await MainForm.Context.SaveChangesAsync();
                                 if (PaidUp > 0)
                                 {
-                                    var supplierReport = SetSupReport();
-                                    supplierReport.Order_ID = buy.Id; // Set foreign key reference to Buy
-                                    MainForm.Context.Add(supplierReport);
+                                    var CustReport = SetCustReport();
+                                    CustReport.Order_ID = sale.Id; // Set foreign key reference to Buy
+                                    MainForm.Context.Add(CustReport);
                                 }
                                 if (Remain > 0)
                                 {
-                                    var supplierMoney = SetSupMoney();
-                                    supplierMoney.Order_ID = buy.Id; // Set foreign key reference to Buy
-                                    MainForm.Context.Add(supplierMoney);
+                                    var CustMoney = SetCustMoney();
+                                    CustMoney.Order_ID = sale.Id; // Set foreign key reference to Buy
+                                    MainForm.Context.Add(CustMoney);
 
                                     // Update supplier details
-                                    MainForm.Context.Update(SetSupplier());
+                                    MainForm.Context.Update(SetCustomer());
                                 }
                                 await MainForm.Context.SaveChangesAsync();
                                 await transaction.CommitAsync();
+
 
                             }
                             catch (Exception ex)
@@ -693,44 +737,41 @@ namespace Store.ApplicationUI.Gui.SalesGui
                         {
                             try
                             {
-                                var buy = SetBuy();
-                                MainForm.Context.Add(buy);
+                                var sale = SetSale();
+                                MainForm.Context.Add(sale);
                                 await MainForm.Context.SaveChangesAsync();
-
-
 
                                 for (int i = 0; i <= DgvِProducts.Rows.Count - 1; i++)
                                 {
-                                    var buyDetail = SetBuyDetail(i);
-                                    buyDetail.Order_ID = buy.Id; // Set foreign key reference to Buy
+                                    var saleDetail = SetSaleDetail(i);
+                                    saleDetail.Order_ID = sale.Id; // Set foreign key reference to Buy
 
-                                    MainForm.Context.BuyDetails.Add(buyDetail);
+                                    MainForm.Context.SalesDetails.Add(saleDetail);
 
                                     // Update product and add quantity
                                     MainForm.Context.Update(SetProduct(i));
-                                    MainForm.Context.Add(SetProductQuentity(i));
+                                    SetProductQuentity(Convert.ToDouble(DgvِProducts.Rows[i].Cells[2].Value.ToString()), i);
 
 
                                 }
                                 await MainForm.Context.SaveChangesAsync();
                                 if (PaidUp > 0)
                                 {
-                                    var supplierReport = SetSupReport();
-                                    supplierReport.Order_ID = buy.Id; // Set foreign key reference to Buy
-                                    MainForm.Context.Add(supplierReport);
+                                    var CustReport = SetCustReport();
+                                    CustReport.Order_ID = sale.Id; // Set foreign key reference to Buy
+                                    MainForm.Context.Add(CustReport);
                                 }
                                 if (Remain > 0)
                                 {
-                                    var supplierMoney = SetSupMoney();
-                                    supplierMoney.Order_ID = buy.Id; // Set foreign key reference to Buy
-                                    MainForm.Context.Add(supplierMoney);
+                                    var CustMoney = SetCustMoney();
+                                    CustMoney.Order_ID = sale.Id; // Set foreign key reference to Buy
+                                    MainForm.Context.Add(CustMoney);
 
                                     // Update supplier details
-                                    MainForm.Context.Update(SetSupplier());
+                                    MainForm.Context.Update(SetCustomer());
                                 }
                                 await MainForm.Context.SaveChangesAsync();
                                 await transaction.CommitAsync();
-
 
                             }
                             catch (Exception ex)
@@ -813,6 +854,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
         {
             try
             {
+                _product = salesRepository.GetProductBarCode(DgvِProducts.CurrentRow.Cells[7].Value.ToString());
                 txtProductName.Text = this.DgvِProducts.CurrentRow.Cells[0].Value.ToString();
                 txtSaleDiscount.Text = this.DgvِProducts.CurrentRow.Cells[1].Value.ToString();
                 txtQty.Text = this.DgvِProducts.CurrentRow.Cells[2].Value.ToString();

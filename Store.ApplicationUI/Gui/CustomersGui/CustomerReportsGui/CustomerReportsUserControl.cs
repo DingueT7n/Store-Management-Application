@@ -99,13 +99,23 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
         private void SetColumns()
         {
             //DgvِCustomer.Columns[0].HeaderCell.Value = "المعرف";
+
+
+
+            DgvِCustomer.Columns[0].HeaderCell.Value = "معرف العميل";
+            DgvِCustomer.Columns[1].HeaderCell.Value = "معرف الفاتورة";
             DgvِCustomer.Columns[2].HeaderCell.Value = "اسم العميل";
-            DgvِCustomer.Columns[0].HeaderCell.Value = "الدين";
-            DgvِCustomer.Columns[1].HeaderCell.Value = "تاريخ الفاتورة";
-            DgvِCustomer.Columns[3].HeaderCell.Value = "تاريخ تذكير";
-            DgvِCustomer.Columns[5].HeaderCell.Value = "معرف العميل";
-            DgvِCustomer.Columns[6].HeaderCell.Value = "معرف الفاتورة";
-            DgvِCustomer.Columns[4].HeaderCell.Value = "معرف العملية";
+            DgvِCustomer.Columns[3].HeaderCell.Value = "الدين المدفوع";
+            DgvِCustomer.Columns[4].HeaderCell.Value = "تاريخ الفاتورة";
+            DgvِCustomer.Columns[5].HeaderCell.Value = "وقت العملية";
+            DgvِCustomer.Columns[6].HeaderCell.Value = "بيع";
+            DgvِCustomer.Columns[7].HeaderCell.Value = "عميل";
+            DgvِCustomer.Columns[8].HeaderCell.Value = "رقم التقرير";
+
+            DgvِCustomer.Columns[6].Visible = false;
+            DgvِCustomer.Columns[7].Visible = false;
+            DgvِCustomer.Columns[4].Visible = false;
+
 
 
         }

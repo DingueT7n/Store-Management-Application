@@ -6,12 +6,14 @@ namespace Store.ApplicationUI.Gui.PaymentGui
     {
 
         private static MainForm _main;
+        private readonly int _form;
         private AddPaymentForm? _addPaymentForm;
 
-        public AddPaymentForm(MainForm userControl)
+        public AddPaymentForm(MainForm userControl, int form)
         {
             InitializeComponent();
             _main = userControl;
+            _form = form;
             this.Owner = _main;
         }
         public async void LoadData(string Total, string paidUp, string remaining)
@@ -28,8 +30,11 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         }
         private void btnSearchImage_Click(object sender, EventArgs e)
         {
+            if (this._form == 1)
 
-            BuysUserControl.InitializeData(txtpaidUp.Text, txtRemain.Text);
+                SalesGui.SalesUserControl.InitializeData(txtpaidUp.Text, txtRemain.Text);
+            else
+                BuysUserControl.InitializeData(txtpaidUp.Text, txtRemain.Text);
             this.Close();
 
         }

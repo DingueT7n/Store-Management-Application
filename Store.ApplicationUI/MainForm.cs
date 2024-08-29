@@ -253,5 +253,17 @@ namespace Store.ApplicationUI
         {
             pageHelper.SetNewPage(Gui.BuysGui.BuysUserControl.Instance(this));
         }
+
+        private void btnSalesPanel_Click(object sender, EventArgs e)
+        {
+            CloseSubPanels();
+
+            ShowSubPanel(SalesflowLayoutPanel);
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.SalesGui.SalesUserControl.Instance(this));
+        }
     }
 }

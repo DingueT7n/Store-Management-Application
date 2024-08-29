@@ -11,7 +11,7 @@ namespace Store.Core.Entities.Customers
         public float Price { get; set; }
         public DateTime Order_Date { get; set; }
         public DateTime Reminder_Date { get; set; }
-
+        public string Time { get; set; }
 
         public virtual Sale Sale { get; set; }
 

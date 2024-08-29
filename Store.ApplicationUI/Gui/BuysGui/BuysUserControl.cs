@@ -168,7 +168,8 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 if (txtSalePrice.Text != string.Empty && _product is not null)
                 {
                     if (_product.IsTaxed)
-                        txtPriceWithTax.Text = ((_main.ConvertToFloat(txtSalePrice.Text) / 100) * _product.TaxValue).ToString();
+                        txtPriceWithTax.Text = (((_main.ConvertToFloat(txtSalePrice.Text) / 100) * _product.TaxValue) + _main.ConvertToFloat
+                            (txtSalePrice.Text)).ToString();
                     else txtPriceWithTax.Text = txtSalePrice.Text;
 
                 }
@@ -571,7 +572,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
         {
             if (ValidatePay())
             {
-                AddPaymentForm addPaymentForm = new(_main);
+                AddPaymentForm addPaymentForm = new(_main, 0);
 
                 if (rBPayCash.Checked)
                 {

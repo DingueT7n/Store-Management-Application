@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BuysUserControl));
-            DataGridViewCellStyle dataGridViewCellStyle13 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle14 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle15 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle16 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             OperationsflowLayoutPanel = new FlowLayoutPanel();
             gbPayChoiches = new GroupBox();
             label1 = new Label();
@@ -80,12 +80,14 @@
             lblEmptyData = new Label();
             DgvِProducts = new DataGridView();
             tableLayoutPanel = new TableLayoutPanel();
+            dtpDateExpiration = new DateTimePicker();
             txtPriceWithTax = new TextBox();
             txtWholeSalePrice = new TextBox();
             txtTotalBuyProduct = new TextBox();
             txtQty = new TextBox();
             txtBuyPrice = new TextBox();
             txtProductName = new TextBox();
+            lblDateExpiration = new Label();
             lblPriceWithTax = new Label();
             lblTotalBuy = new Label();
             lblProductName = new Label();
@@ -94,8 +96,6 @@
             lblSalePrice = new Label();
             lblBuyPrice = new Label();
             txtSalePrice = new TextBox();
-            lblDateExpiration = new Label();
-            dtpDateExpiration = new DateTimePicker();
             OperationsflowLayoutPanel.SuspendLayout();
             gbPayChoiches.SuspendLayout();
             panelstatisticsandOperations.SuspendLayout();
@@ -640,31 +640,31 @@
             DgvِProducts.AllowUserToAddRows = false;
             DgvِProducts.AllowUserToResizeColumns = false;
             DgvِProducts.AllowUserToResizeRows = false;
-            dataGridViewCellStyle13.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvِProducts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle1.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvِProducts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             DgvِProducts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             DgvِProducts.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             DgvِProducts.BackgroundColor = Color.White;
             DgvِProducts.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             DgvِProducts.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle14.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle14.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle14.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle14.ForeColor = Color.White;
-            dataGridViewCellStyle14.SelectionBackColor = Color.DodgerBlue;
-            dataGridViewCellStyle14.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle14.WrapMode = DataGridViewTriState.True;
-            DgvِProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = Color.DodgerBlue;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            DgvِProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             DgvِProducts.ColumnHeadersHeight = 40;
             DgvِProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle15.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle15.BackColor = SystemColors.Window;
-            dataGridViewCellStyle15.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle15.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle15.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle15.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle15.WrapMode = DataGridViewTriState.False;
-            DgvِProducts.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = SystemColors.Window;
+            dataGridViewCellStyle3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            DgvِProducts.DefaultCellStyle = dataGridViewCellStyle3;
             DgvِProducts.Dock = DockStyle.Fill;
             DgvِProducts.EnableHeadersVisualStyles = false;
             DgvِProducts.GridColor = SystemColors.ControlDark;
@@ -676,8 +676,8 @@
             DgvِProducts.RowHeadersVisible = false;
             DgvِProducts.RowHeadersWidth = 21;
             DgvِProducts.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle16.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvِProducts.RowsDefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle4.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvِProducts.RowsDefaultCellStyle = dataGridViewCellStyle4;
             DgvِProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DgvِProducts.Size = new Size(1034, 322);
             DgvِProducts.TabIndex = 20;
@@ -687,7 +687,7 @@
             // 
             // tableLayoutPanel
             // 
-            tableLayoutPanel.ColumnCount = 8;
+            tableLayoutPanel.ColumnCount = 9;
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 191F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 108F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 105F));
@@ -695,7 +695,8 @@
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 105F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 110F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 137F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 46F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 164F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 8F));
             tableLayoutPanel.Controls.Add(dtpDateExpiration, 7, 1);
             tableLayoutPanel.Controls.Add(txtPriceWithTax, 6, 1);
             tableLayoutPanel.Controls.Add(txtWholeSalePrice, 5, 1);
@@ -722,6 +723,18 @@
             tableLayoutPanel.Size = new Size(1034, 69);
             tableLayoutPanel.TabIndex = 22;
             tableLayoutPanel.Paint += tableLayoutPanel_Paint;
+            // 
+            // dtpDateExpiration
+            // 
+            dtpDateExpiration.Anchor = AnchorStyles.None;
+            dtpDateExpiration.CustomFormat = "yyyy-MM-dd";
+            dtpDateExpiration.Format = DateTimePickerFormat.Short;
+            dtpDateExpiration.Location = new Point(26, 36);
+            dtpDateExpiration.MaxDate = new DateTime(2101, 1, 1, 0, 0, 0, 0);
+            dtpDateExpiration.Name = "dtpDateExpiration";
+            dtpDateExpiration.Size = new Size(128, 27);
+            dtpDateExpiration.TabIndex = 27;
+            dtpDateExpiration.Value = new DateTime(2024, 8, 27, 0, 0, 0, 0);
             // 
             // txtPriceWithTax
             // 
@@ -806,6 +819,18 @@
             txtProductName.Size = new Size(185, 32);
             txtProductName.TabIndex = 19;
             txtProductName.TextAlign = HorizontalAlignment.Center;
+            // 
+            // lblDateExpiration
+            // 
+            lblDateExpiration.Anchor = AnchorStyles.None;
+            lblDateExpiration.AutoSize = true;
+            lblDateExpiration.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblDateExpiration.Location = new Point(33, 5);
+            lblDateExpiration.Margin = new Padding(3, 5, 5, 3);
+            lblDateExpiration.Name = "lblDateExpiration";
+            lblDateExpiration.Size = new Size(117, 23);
+            lblDateExpiration.TabIndex = 8;
+            lblDateExpiration.Text = "تاريخ انتهاء صلاحية المنتوج";
             // 
             // lblPriceWithTax
             // 
@@ -906,30 +931,6 @@
             txtSalePrice.KeyDown += txtSalePrice_KeyDown;
             txtSalePrice.KeyPress += txtSalePrice_KeyPress;
             txtSalePrice.KeyUp += txtSalePrice_KeyUp;
-            // 
-            // lblDateExpiration
-            // 
-            lblDateExpiration.Anchor = AnchorStyles.None;
-            lblDateExpiration.AutoSize = true;
-            lblDateExpiration.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblDateExpiration.Location = new Point(7, 7);
-            lblDateExpiration.Margin = new Padding(3, 5, 5, 3);
-            lblDateExpiration.Name = "lblDateExpiration";
-            lblDateExpiration.Size = new Size(160, 19);
-            lblDateExpiration.TabIndex = 8;
-            lblDateExpiration.Text = "تاريخ انتهاء صلاحية المنتوج";
-            // 
-            // dtpDateExpiration
-            // 
-            dtpDateExpiration.Anchor = AnchorStyles.None;
-            dtpDateExpiration.CustomFormat = "yyyy-MM-dd";
-            dtpDateExpiration.Format = DateTimePickerFormat.Short;
-            dtpDateExpiration.Location = new Point(22, 36);
-            dtpDateExpiration.MaxDate = new DateTime(2101, 1, 1, 0, 0, 0, 0);
-            dtpDateExpiration.Name = "dtpDateExpiration";
-            dtpDateExpiration.Size = new Size(128, 27);
-            dtpDateExpiration.TabIndex = 27;
-            dtpDateExpiration.Value = new DateTime(2024, 8, 27, 0, 0, 0, 0);
             // 
             // BuysUserControl
             // 
