@@ -42,9 +42,9 @@ namespace Store.Infrastructure.Repositories
             {
                 return _context.CustomersMoneys.Where(x =>
                 x.Cust_Name.ToString().Contains(searchIteam) ||
-                x.Price.ToString() == (searchIteam)
+                x.Id.ToString() == (searchIteam)
                 )
-                    .OrderBy(x => x.Id).ToList();
+                    .OrderBy(x => x.Order_Date).ToList();
 
             }
             catch
@@ -59,7 +59,7 @@ namespace Store.Infrastructure.Repositories
             try
             {
                 var customerMoney = _context.CustomersMoneys.FirstOrDefault(x =>
-                  x.Cust_ID.ToString() == order_Id && x.Order_ID.ToString() == order_Id &&
+                  x.Cust_ID.ToString() == cust_Id && x.Order_ID.ToString() == order_Id &&
                   x.Price.ToString() == (price)
                   );
                 _context.Remove(customerMoney);
@@ -88,6 +88,12 @@ namespace Store.Infrastructure.Repositories
             {
                 try
                 {
+                    Customer customer = _context.Customers.Where(x => x.Id.ToString() == cust_Id).FirstOrDefault();
+                    if (customer is not null)
+                    {
+                        customer.TotalDebts = customer.TotalDebts - ConvertToFloat(price);
+                    }
+                    _context.Update(customer);
                     DeleteFacture(order_Id, cust_Id, price);
                     CustomerReport customerReport = new CustomerReport();
                     customerReport.Cust_ID = Convert.ToInt32(cust_Id);
@@ -95,6 +101,7 @@ namespace Store.Infrastructure.Repositories
                     customerReport.Date = date;
                     customerReport.Order_ID = Convert.ToInt32(order_Id);
                     customerReport.Price = ConvertToFloat(price);
+                    customerReport.Time = DateTime.Now.ToString("HH:mm");
                     _context.Add(customerReport);
                     _context.SaveChanges();
                     transaction.CommitAsync();
@@ -113,7 +120,7 @@ namespace Store.Infrastructure.Repositories
                 var customerMoney = _context.CustomersMoneys.FirstOrDefault(x =>
                   x.Cust_ID.ToString() == cust_Id && x.Order_ID.ToString() == order_Id
                   );
-                customerMoney.Price = ConvertToFloat(price);
+                customerMoney.Price = customerMoney.Price - ConvertToFloat(price);
                 _context.Update(customerMoney);
                 _context.SaveChanges();
                 return true;
@@ -129,17 +136,28 @@ namespace Store.Infrastructure.Repositories
             {
                 try
                 {
-                    if (Convert.ToDouble(price) - Convert.ToDouble(PayedValue) <= 0)
+                    double diffrence = Convert.ToDouble(PayedValue);
+                    if (Convert.ToDouble(price) - diffrence <= 0)
+                    {
                         DeleteFacture(order_Id, cust_Id, price);
+                        diffrence = Convert.ToDouble(price);
+                    }
                     else
                         UpdateFacture(order_Id, cust_Id, price, PayedValue);
 
+                    Customer customer = _context.Customers.Where(x => x.Id.ToString() == cust_Id).FirstOrDefault();
+                    if (customer is not null)
+                    {
+                        customer.TotalDebts = customer.TotalDebts - ConvertToFloat(diffrence.ToString());
+                    }
+                    _context.Update(customer);
                     CustomerReport customerReport = new CustomerReport();
                     customerReport.Cust_ID = Convert.ToInt32(cust_Id);
                     customerReport.Cust_Name = Cust_Name;
                     customerReport.Date = date;
                     customerReport.Order_ID = Convert.ToInt32(order_Id);
                     customerReport.Price = ConvertToFloat(PayedValue);
+                    customerReport.Time = DateTime.Now.ToString("HH:mm");
                     _context.Add(customerReport);
                     _context.SaveChanges();
                     transaction.CommitAsync();

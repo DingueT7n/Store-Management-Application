@@ -29,7 +29,9 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 _salesUserControl = new SalesUserControl();
             }
             // Return the singleton instance
-            _salesUserControl.LoadData();
+            //_salesUserControl.LoadData();
+
+            _salesUserControl.ResetForm();
             return _salesUserControl;
         }
 
@@ -118,6 +120,13 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
                 ).FirstOrDefault();
             txtProductName.Text = product.ProductName;
+            labelError1.Visible = product.Quentity <= 0;
+
+            ProductsQuantitie productQty = MainForm.Context.ProductsQuantities.
+                      Where(x => x.Pro_ID == product.Id && x.Qty > 0 && x.Store_ID.ToString() == cmbStores.SelectedValue).FirstOrDefault();
+
+            lblError2.Visible = productQty is null;
+
             if (productDiscount is not null)
                 txtSaleDiscount.Text = productDiscount.DiscountValue.ToString();
             else txtSaleDiscount.Text = 0.ToString();
@@ -225,6 +234,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
             {
                 SetProductsToTable();
             }
+            EditUsingPlusMinus(sender, e);
         }
 
         private void txtSearchBarCode_KeyPress(object sender, KeyPressEventArgs e)
@@ -306,6 +316,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
             {
                 AddNewRow();
             }
+            EditUsingPlusMinus(sender, e);
         }
 
         private void txtQty_KeyPress(object sender, KeyPressEventArgs e)
@@ -320,6 +331,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
         {
             try
             {
+                if (cmbStores.Text == "اختر مخزن") { MessageBox.Show("يرجى اختيار مخزن , راجع البيانات من فضلك", "بيانات غير كاملة"); cmbStores.Focus(); return; }
                 CalculateAmount();
                 InitializeTextBoxesAndLables(_product);
 
@@ -567,7 +579,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
             {
 
                 ProductsQuantitie productQty = MainForm.Context.ProductsQuantities.
-                        Where(x => x.Pro_ID.ToString() == proId && x.Qty > 0).FirstOrDefault();
+                        Where(x => x.Pro_ID.ToString() == proId && x.Qty > _main.ConvertToFloat(0.ToString())).FirstOrDefault();
                 if (productQty is not null)
                 {
                     if (productQty.Qty >= _main.ConvertToFloat(Quentity.ToString()))
@@ -583,7 +595,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                         productQty.Qty = 0;
                         MainForm.Context.ProductsQuantities.Update(productQty);
                     }
-
+                    if (productQty.Qty == 0) return;
                 }
             }
             //return product;
@@ -850,22 +862,30 @@ namespace Store.ApplicationUI.Gui.SalesGui
             //    throw;
             //}
         }
-        void EditFromTable()
+        void EditFromTable(int q)
         {
             try
             {
+                if (dgvHelper.IsEmpty(DgvِProducts)) { MsgHelper.ShowEmptyDataGridView(); }
                 _product = salesRepository.GetProductBarCode(DgvِProducts.CurrentRow.Cells[7].Value.ToString());
                 txtProductName.Text = this.DgvِProducts.CurrentRow.Cells[0].Value.ToString();
-                txtSaleDiscount.Text = this.DgvِProducts.CurrentRow.Cells[1].Value.ToString();
-                txtQty.Text = this.DgvِProducts.CurrentRow.Cells[2].Value.ToString();
-                txtTotalSaleProduct.Text = this.DgvِProducts.CurrentRow.Cells[3].Value.ToString();
-                txtSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[4].Value.ToString();
-                txtWholeSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[5].Value.ToString();
+                txtSaleDiscount.Text = this.DgvِProducts.CurrentRow.Cells[3].Value.ToString();
+                txtQty.Text = (_main.ConvertToFloat(DgvِProducts.CurrentRow.Cells[2].Value.ToString()) + q).ToString();
+                txtTotalSaleProduct.Text = this.DgvِProducts.CurrentRow.Cells[5].Value.ToString();
+                txtSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[1].Value.ToString();
+                txtWholeSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[4].Value.ToString();
 
                 DgvِProducts.Rows.RemoveAt(DgvِProducts.CurrentRow.Index);
                 txtQty.Focus();
                 CalculateAmount();
                 CalculateStatistics();
+
+                labelError1.Visible = _product.Quentity <= _main.ConvertToFloat(txtQty.Text);
+
+                ProductsQuantitie productQty = MainForm.Context.ProductsQuantities.
+                          Where(x => x.Pro_ID == _product.Id && x.Qty >= _main.ConvertToFloat(txtQty.Text) && x.Store_ID.ToString() == cmbStores.SelectedValue).FirstOrDefault();
+
+                lblError2.Visible = productQty is null;
 
 
 
@@ -876,12 +896,38 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
         private void btnEditSelected_Click(object sender, EventArgs e)
         {
-            EditFromTable();
+            EditFromTable(0);
         }
 
         private void DgvِProducts_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            EditFromTable();
+            EditFromTable(0);
+        }
+        void EditUsingPlusMinus(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Oemplus)
+            {
+                EditFromTable(1);
+                CalculateAmount();
+                AddNewRow();
+            }
+            else if (e.KeyCode == Keys.OemMinus)
+            {
+                EditFromTable(-1);
+                CalculateAmount();
+                AddNewRow();
+            }
+        }
+        private void DgvِProducts_KeyDown(object sender, KeyEventArgs e)
+        {
+
+            EditUsingPlusMinus(sender, e);
+        }
+
+        private void SalesUserControl_KeyDown(object sender, KeyEventArgs e)
+        {
+
+            EditUsingPlusMinus(sender, e);
         }
     }
 }

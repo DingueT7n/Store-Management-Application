@@ -33,10 +33,11 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
 
             // Return the singleton instance
             _supplierAccountUserControl.LoadData();
+
             return _supplierAccountUserControl;
         }
 
-        public async void SetProductsToDgv()
+        public async void SetDataToDgv()
         {
             //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             var SuppliersMoneyList = MainForm.Context.SuppliersMoneys.
@@ -78,7 +79,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
 
                 // if its an admin or Normal user 
 
-                SetProductsToDgv();
+                SetDataToDgv();
                 SetColumns();
                 //_data.Clear();
             }
@@ -111,7 +112,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
 
 
 
-            DgvِCustomer.Columns[0].Visible = false;
+            //DgvِCustomer.Columns[0].Visible = false;
             //DgvِCustomer.Columns[1].Visible = false;
             DgvِCustomer.Columns[7].Visible = false;
             DgvِCustomer.Columns[8].Visible = false;
@@ -135,27 +136,27 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
 
         private void btnPay_Click(object sender, EventArgs e)
         {
-            if (DgvِCustomer.SelectedRows.Count > 0 && dgvHelper.IsEmpty(DgvِCustomer))
+            if (DgvِCustomer.SelectedRows.Count > 0 && !dgvHelper.IsEmpty(DgvِCustomer))
             {
                 if (rbPayFacture.Checked)
                 {
                     suppliersRepository.TransactionOfCustomerDebt(
-                        DgvِCustomer.CurrentRow.Cells[7].Value.ToString(),
-                        DgvِCustomer.CurrentRow.Cells[6].Value.ToString(),
                         DgvِCustomer.CurrentRow.Cells[1].Value.ToString(),
                         DgvِCustomer.CurrentRow.Cells[0].Value.ToString(),
-                        DateTime.Now, "13:00"
+                        DgvِCustomer.CurrentRow.Cells[3].Value.ToString(),
+                        DgvِCustomer.CurrentRow.Cells[2].Value.ToString(),
+                        DateTime.Now
                         );
                 }
                 else if (rbPayPartialFacture.Checked)
                 {
                     suppliersRepository.TransactionOfEditingCustomerDebt(
-                       DgvِCustomer.CurrentRow.Cells[7].Value.ToString(),
-                       DgvِCustomer.CurrentRow.Cells[6].Value.ToString(),
-                       DgvِCustomer.CurrentRow.Cells[1].Value.ToString(),
-                       DgvِCustomer.CurrentRow.Cells[0].Value.ToString(),
+                        DgvِCustomer.CurrentRow.Cells[1].Value.ToString(),
+                        DgvِCustomer.CurrentRow.Cells[0].Value.ToString(),
+                        DgvِCustomer.CurrentRow.Cells[3].Value.ToString(),
+                        DgvِCustomer.CurrentRow.Cells[2].Value.ToString(),
                        txtPayAmout.Text,
-                       DateTime.Now, "13:00"
+                       DateTime.Now
                        );
                 }
                 else
@@ -164,14 +165,15 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                     {
                         var row = DgvِCustomer.Rows[i];
                         suppliersRepository.TransactionOfCustomerDebt(
-                            row.Cells[7].Value?.ToString(),
-                            row.Cells[6].Value?.ToString(),
                             row.Cells[1].Value?.ToString(),
                             row.Cells[0].Value?.ToString(),
-                            DateTime.Now, "13:00"
+                            row.Cells[3].Value?.ToString(),
+                            row.Cells[2].Value?.ToString(),
+                            DateTime.Now
                         );
                     }
                 }
+                SetDataToDgv();
             }
         }
     }

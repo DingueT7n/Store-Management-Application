@@ -86,6 +86,7 @@
             panelStatistics = new Panel();
             ErrorsflowLayoutPanel = new FlowLayoutPanel();
             labelError1 = new Label();
+            lblError2 = new Label();
             StatisticsflowLayoutPanel = new FlowLayoutPanel();
             lblTotalProductsInTable = new Label();
             lblTotalQuentity = new Label();
@@ -745,6 +746,7 @@
             // ErrorsflowLayoutPanel
             // 
             ErrorsflowLayoutPanel.Controls.Add(labelError1);
+            ErrorsflowLayoutPanel.Controls.Add(lblError2);
             ErrorsflowLayoutPanel.Dock = DockStyle.Fill;
             ErrorsflowLayoutPanel.FlowDirection = FlowDirection.TopDown;
             ErrorsflowLayoutPanel.Location = new Point(0, 0);
@@ -757,13 +759,26 @@
             labelError1.AutoSize = true;
             labelError1.ForeColor = Color.Red;
             labelError1.ImeMode = ImeMode.NoControl;
-            labelError1.Location = new Point(32, 5);
+            labelError1.Location = new Point(22, 5);
             labelError1.Margin = new Padding(5);
             labelError1.Name = "labelError1";
-            labelError1.Size = new Size(207, 38);
+            labelError1.Size = new Size(217, 19);
             labelError1.TabIndex = 10;
-            labelError1.Text = "هل انت متأكد ان سعر الجملة اكبر من سعر التجزئة؟";
+            labelError1.Text = "من المفترض ان الكمية انتهت! حذاري.!";
             labelError1.Visible = false;
+            // 
+            // lblError2
+            // 
+            lblError2.AutoSize = true;
+            lblError2.ForeColor = Color.Red;
+            lblError2.ImeMode = ImeMode.NoControl;
+            lblError2.Location = new Point(42, 34);
+            lblError2.Margin = new Padding(5);
+            lblError2.Name = "lblError2";
+            lblError2.Size = new Size(197, 38);
+            lblError2.TabIndex = 11;
+            lblError2.Text = "من المفترض هاته الكمية لا توجد في المخزن المحدد يرجى نقل المنتج!.";
+            lblError2.Visible = false;
             // 
             // StatisticsflowLayoutPanel
             // 
@@ -887,6 +902,7 @@
             DgvِProducts.CellContentDoubleClick += DgvِProducts_CellContentDoubleClick;
             DgvِProducts.RowsAdded += DgvِProducts_RowsAdded;
             DgvِProducts.RowsRemoved += DgvِProducts_RowsRemoved;
+            DgvِProducts.KeyDown += DgvِProducts_KeyDown;
             // 
             // SalesUserControl
             // 
@@ -904,6 +920,7 @@
             Name = "SalesUserControl";
             RightToLeft = RightToLeft.Yes;
             Size = new Size(1034, 681);
+            KeyDown += SalesUserControl_KeyDown;
             OperationsflowLayoutPanel.ResumeLayout(false);
             gbPayChoiches.ResumeLayout(false);
             gbPayChoiches.PerformLayout();
@@ -992,5 +1009,6 @@
         private Label lblEmptyData;
         private DataGridView DgvِProducts;
         private CheckBox cbWholsale;
+        private Label lblError2;
     }
 }

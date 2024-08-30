@@ -46,9 +46,9 @@ namespace Store.Infrastructure.Repositories
             {
                 return _context.SuppliersMoneys.Where(x =>
                 x.SupplierName.ToString().Contains(searchIteam) ||
-                x.Price.ToString() == (searchIteam)
+                x.Id.ToString() == (searchIteam)
                 )
-                    .OrderBy(x => x.Id).ToList();
+                    .OrderBy(x => x.Order_Date).ToList();
 
             }
             catch
@@ -86,12 +86,18 @@ namespace Store.Infrastructure.Repositories
             }
             return quantity;
         }
-        public bool TransactionOfCustomerDebt(string order_Id, string sup_Id, string price, string sup_Name, DateTime date, string time)
+        public bool TransactionOfCustomerDebt(string order_Id, string sup_Id, string price, string sup_Name, DateTime date)
         {
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
                 {
+                    Supplier supplier = _context.Suppliers.Where(x => x.Id.ToString() == sup_Id).FirstOrDefault();
+                    if (supplier is not null)
+                    {
+                        supplier.TotalDebts = supplier.TotalDebts - ConvertToFloat(price);
+                    }
+                    _context.Update(supplier);
                     DeleteFacture(order_Id, sup_Id, price);
                     SupplierReport supplierReport = new SupplierReport();
                     supplierReport.Sup_ID = Convert.ToInt32(sup_Id);
@@ -99,7 +105,7 @@ namespace Store.Infrastructure.Repositories
                     supplierReport.Date = date;
                     supplierReport.Order_ID = Convert.ToInt32(order_Id);
                     supplierReport.Price = ConvertToFloat(price);
-                    supplierReport.Time = time;
+                    supplierReport.Time = DateTime.Now.ToString("HH:mm");
                     _context.Add(supplierReport);
                     _context.SaveChanges();
                     transaction.CommitAsync();
@@ -118,7 +124,7 @@ namespace Store.Infrastructure.Repositories
                 var suppliersMoneys = _context.SuppliersMoneys.FirstOrDefault(x =>
                   x.Sup_ID.ToString() == sup_Id && x.Order_ID.ToString() == order_Id
                   );
-                suppliersMoneys.Price = ConvertToFloat(price);
+                suppliersMoneys.Price = suppliersMoneys.Price - ConvertToFloat(price);
                 _context.Update(suppliersMoneys);
                 _context.SaveChanges();
                 return true;
@@ -128,23 +134,35 @@ namespace Store.Infrastructure.Repositories
                 return false;
             }
         }
-        public bool TransactionOfEditingCustomerDebt(string order_Id, string sup_Id, string price, string sup_Name, string PayedValue, DateTime date, string time)
+        public bool TransactionOfEditingCustomerDebt(string order_Id, string sup_Id, string price, string sup_Name, string PayedValue, DateTime date
+            )
         {
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
                 {
-                    if (Convert.ToDouble(price) - Convert.ToDouble(PayedValue) <= 0)
+                    double diffrence = Convert.ToDouble(PayedValue);
+                    if (Convert.ToDouble(price) - diffrence <= 0)
+                    {
                         DeleteFacture(order_Id, sup_Id, price);
+                        diffrence = Convert.ToDouble(price);
+                    }
                     else
                         UpdateFacture(order_Id, sup_Id, price, PayedValue);
 
+                    Supplier supplier = _context.Suppliers.Where(x => x.Id.ToString() == sup_Id).FirstOrDefault();
+                    if (supplier is not null)
+                    {
+                        supplier.TotalDebts = supplier.TotalDebts - ConvertToFloat(diffrence.ToString());
+                    }
+                    _context.Update(supplier);
                     SupplierReport supplierReport = new SupplierReport();
                     supplierReport.Sup_ID = Convert.ToInt32(sup_Id);
                     supplierReport.SupplierName = sup_Name;
                     supplierReport.Date = date;
                     supplierReport.Order_ID = Convert.ToInt32(order_Id);
                     supplierReport.Price = ConvertToFloat(PayedValue);
+                    supplierReport.Time = DateTime.Now.ToString("HH:mm");
                     _context.Add(supplierReport);
                     _context.SaveChanges();
                     transaction.CommitAsync();

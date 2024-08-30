@@ -33,10 +33,11 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
 
             // Return the singleton instance
             _customerAccountUserControl.LoadData();
+
             return _customerAccountUserControl;
         }
 
-        public async void SetProductsToDgv()
+        public async void SetDataToDgv()
         {
             //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             var CustomerMoneyList = MainForm.Context.CustomersMoneys.
@@ -51,7 +52,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
             {
                 if (DgvِCustomer.SelectedRows.Count > 0)
                 {
-                    lblPayFacture.Text = $" فاتورة رقم {DgvِCustomer.Columns[1].HeaderCell.Value} الدين : {DgvِCustomer.Columns[3].HeaderCell.Value} دج";
+                    lblPayFacture.Text = $" فاتورة رقم {DgvِCustomer.CurrentRow.Cells[1].Value} الدين : {DgvِCustomer.CurrentRow.Cells[3].Value} دج";
                     lblPayAllDebts.Text = $"دج {CustomerMoneyList.Sum(x => x.Price)}";
                     lblTotalDebt.Text = $"مجموع الديون على العملاء:{CustomerMoneyList.Sum(x => x.Price)}";
                     lblTotalCustomers.Text = $"مجموع العملاء:{uniqueCustomerCount}";
@@ -78,7 +79,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
 
                 // if its an admin or Normal user 
 
-                SetProductsToDgv();
+                SetDataToDgv();
                 SetColumns();
                 //_data.Clear();
             }
@@ -114,9 +115,9 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
 
 
             DgvِCustomer.Columns[0].Visible = false;
-            //DgvِCustomer.Columns[1].Visible = false;
-            DgvِCustomer.Columns[7].Visible = false;
-            DgvِCustomer.Columns[8].Visible = false;
+
+            //DgvِCustomer.Columns[7].Visible = false;
+            //DgvِCustomer.Columns[8].Visible = false;
 
 
         }
@@ -135,25 +136,29 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
 
         private void btnPay_Click(object sender, EventArgs e)
         {
-            if (DgvِCustomer.SelectedRows.Count > 0 && dgvHelper.IsEmpty(DgvِCustomer))
+            if (DgvِCustomer.SelectedRows.Count > 0 && !dgvHelper.IsEmpty(DgvِCustomer))
             {
                 if (rbPayFacture.Checked)
                 {
+                    var v1 = DgvِCustomer.CurrentRow.Cells[1].Value?.ToString();
+                    var v2 = DgvِCustomer.CurrentRow.Cells[0].Value?.ToString();
+                    var v3 = DgvِCustomer.CurrentRow.Cells[3].Value?.ToString();
+                    var v4 = DgvِCustomer.CurrentRow.Cells[2].Value?.ToString();
                     customersRepository.TransactionOfCustomerDebt(
-                        DgvِCustomer.CurrentRow.Cells[7].Value.ToString(),
-                        DgvِCustomer.CurrentRow.Cells[6].Value.ToString(),
-                        DgvِCustomer.CurrentRow.Cells[1].Value.ToString(),
-                        DgvِCustomer.CurrentRow.Cells[0].Value.ToString(),
+                        v1,
+                        v2,
+                        v3,
+                        v4,
                         DateTime.Now
                         );
                 }
                 else if (rbPayPartialFacture.Checked)
                 {
                     customersRepository.TransactionOfEditingCustomerDebt(
-                       DgvِCustomer.CurrentRow.Cells[7].Value.ToString(),
-                       DgvِCustomer.CurrentRow.Cells[6].Value.ToString(),
                        DgvِCustomer.CurrentRow.Cells[1].Value.ToString(),
                        DgvِCustomer.CurrentRow.Cells[0].Value.ToString(),
+                       DgvِCustomer.CurrentRow.Cells[3].Value.ToString(),
+                       DgvِCustomer.CurrentRow.Cells[2].Value.ToString(),
                        txtPayAmout.Text,
                        DateTime.Now
                        );
@@ -164,17 +169,17 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                     {
                         var row = DgvِCustomer.Rows[i];
                         customersRepository.TransactionOfCustomerDebt(
-                            row.Cells[7].Value?.ToString(),
-                            row.Cells[6].Value?.ToString(),
                             row.Cells[1].Value?.ToString(),
                             row.Cells[0].Value?.ToString(),
+                            row.Cells[3].Value?.ToString(),
+                            row.Cells[2].Value?.ToString(),
                             DateTime.Now
                         );
                     }
 
                 }
 
-
+                SetDataToDgv();
             }
 
         }

@@ -114,7 +114,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
 
             DgvِCustomer.Columns[6].Visible = false;
             DgvِCustomer.Columns[7].Visible = false;
-            DgvِCustomer.Columns[4].Visible = false;
+            //DgvِCustomer.Columns[4].Visible = false;
 
 
 
