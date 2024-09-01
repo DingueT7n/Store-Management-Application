@@ -35,6 +35,25 @@ namespace Store.ApplicationUI.Gui.SalesGui
             return _salesUserControl;
         }
 
+        public static bool CheckInstance()
+        {
+            return (_salesUserControl == null);
+        }
+        private void setPrivateProductAndAdditTotable(Product product)
+        {
+            txtSearchBarCode.Text = product.CodeBar;
+            SetProductsToTable();
+            AddNewRow();
+        }
+        public static bool setProductFromSelector(Product product)
+        {
+            if (product is not null)
+            {
+                _salesUserControl.setPrivateProductAndAdditTotable(product);
+                return true;
+            }
+            return false;
+        }
         public static void RefreshDgv()
         {
             //DgvِProducts.DataSource = await Task.Run(() => productsRepository.GetAllProducts());
@@ -290,17 +309,11 @@ namespace Store.ApplicationUI.Gui.SalesGui
                             ClearBoxes();
                             return;
                         }
-
                     }
-
                     new_row();
                     CalculateStatistics();
                 }
                 catch (Exception ex) { MessageBox.Show(ex.Message); }
-
-
-
-
 
             }
             else
@@ -596,6 +609,11 @@ namespace Store.ApplicationUI.Gui.SalesGui
                         MainForm.Context.ProductsQuantities.Update(productQty);
                     }
                     if (productQty.Qty == 0) return;
+                }
+                else
+                {
+
+                    return;
                 }
             }
             //return product;
@@ -928,6 +946,12 @@ namespace Store.ApplicationUI.Gui.SalesGui
         {
 
             EditUsingPlusMinus(sender, e);
+        }
+
+        private void btnSearchImage_Click(object sender, EventArgs e)
+        {
+            SelectProductsForm selectProductsForm = SelectProductsForm.Instance(_main);
+            selectProductsForm.Show();
         }
     }
 }

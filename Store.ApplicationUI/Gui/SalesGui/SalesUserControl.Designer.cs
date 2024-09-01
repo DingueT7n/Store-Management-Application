@@ -321,6 +321,7 @@
             btnSearchImage.TabIndex = 17;
             btnSearchImage.Text = "  ابحث في الجدول او في الصور";
             btnSearchImage.UseVisualStyleBackColor = true;
+            btnSearchImage.Click += btnSearchImage_Click;
             // 
             // panelButtons
             // 

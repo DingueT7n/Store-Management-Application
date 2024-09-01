@@ -59,6 +59,7 @@ namespace Store.ApplicationUI
 
             }
         }
+
         public void ShowSubPanel(FlowLayoutPanel flowLayoutPanel)
         {
 

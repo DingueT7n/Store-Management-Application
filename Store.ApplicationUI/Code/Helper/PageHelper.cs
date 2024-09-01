@@ -33,12 +33,9 @@
                 _main.CloseSubPanels();
 
         }
-        public void CreateNewPage(UserControl pageUserControl)
+        public UserControl? CurrentUserControl(UserControl pageUserControl)
         {
-
-            if (_main.isPanelOpen())
-                _main.CloseSubPanels();
-
+            return _main.ContainerPanel.Controls.OfType<UserControl>().FirstOrDefault();
         }
 
     }

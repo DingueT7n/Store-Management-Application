@@ -229,15 +229,27 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 //{
                 //    product.CategoryId = categoryId;
                 //}
-                var result = productsRepository.AddAsync(product);
-                vider();
+                var result = MainForm.Context.Add(product);
+
                 if (!ProductsUserControl.CheckInstance())
                 {
                     ProductsUserControl.RefreshDgv();
                 }
+                MainForm.Context.SaveChanges();
+                ProductQuickAccess qucik = new ProductQuickAccess
+                {
+                    Pro_Id = product.Id,
+                    CodeBar = txtBarCode.Text,
+                    ProductImage = RetriveImage(),
+                    ProductName = txtNameProduct.Text,
+                };
+                vider();
+                MainForm.Context.AddAsync(qucik);
+                MainForm.Context.SaveChanges();
 
             }
-            MsgHelper.ShowRequiredFields();
+            else
+                MsgHelper.ShowRequiredFields();
         }
 
         float ConvertToFloat(string value)
