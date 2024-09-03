@@ -90,6 +90,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
                 //No Connection
                 MsgHelper.ShowServerError();
             }
+
             //Hideloading
             LoadingForm.Instance(_main).Hide();
             // Show EmptyDAta

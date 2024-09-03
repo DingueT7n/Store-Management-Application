@@ -569,6 +569,20 @@ namespace Store.ApplicationUI.Gui.SalesGui
             saleDetail.PriceWithTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
             return saleDetail;
         }
+        SaleProfit SetSaleProfit(int i)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+            SaleProfit SaleProfit = new SaleProfit();
+            SaleProfit.Order_ID = Convert.ToInt32(txtFactureNumber.Text);
+            SaleProfit.Cust_Name = cmbCustomers.Text;
+            SaleProfit.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[6].Value.ToString());
+            SaleProfit.Quentity = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+            SaleProfit.Price = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
+            SaleProfit.Total = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[5].Value.ToString());
+            //SaleProfit.TaxValue = Properties.Settings.Default.TaxValue;
+            //SaleProfit.PriceWithTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
+            return SaleProfit;
+        }
         Product SetProduct(int i)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()

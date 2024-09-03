@@ -266,5 +266,10 @@ namespace Store.ApplicationUI
         {
             pageHelper.SetNewPage(Gui.SalesGui.SalesUserControl.Instance(this));
         }
+
+        private void btnBuysReports_Click(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.BuysGui.BuysReportsGui.BuysReportsUserControl.Instance(this));
+        }
     }
 }

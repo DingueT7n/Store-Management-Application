@@ -15,7 +15,12 @@
         public static LoadingForm Instance(MainForm main)
         {
             _main = main;
-            return loadingForm ?? (loadingForm = new LoadingForm());
+            if (loadingForm == null)
+            {
+
+                loadingForm = new LoadingForm();
+            }
+            return loadingForm;
         }
 
     }

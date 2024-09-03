@@ -185,12 +185,13 @@ namespace Store.Infrastructure.Repositories
             try
             {
                 return _context.CustomersReports
-             .Where(x =>
-                 (x.Cust_Name.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
-                  x.Order_ID.ToString() == searchItem) &&
-                 fromDate <= x.Date && x.Date <= toDate)
-             .OrderBy(x => x.Date)
-             .ToList();
+                  .AsEnumerable()  // Forces client-side evaluation
+                  .Where(x =>
+                      (x.Cust_Name.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||  // Client-side case-insensitive search
+                      x.Order_ID.ToString() == searchItem) &&
+                      fromDate <= x.Date && x.Date <= toDate)  // Date range filter
+                  .OrderBy(x => x.Date)
+                  .ToList();
 
             }
             catch
@@ -220,11 +221,12 @@ namespace Store.Infrastructure.Repositories
             try
             {
                 return _context.CustomersReports
-             .Where(x =>
-                 x.Cust_Name.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
-                  x.Order_ID.ToString() == searchItem)
-             .OrderBy(x => x.Date)
-             .ToList();
+       .AsEnumerable()  // Forces client-side evaluation
+       .Where(x =>
+           x.Cust_Name.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||  // Client-side case-insensitive search
+           x.Order_ID.ToString() == searchItem)
+       .OrderBy(x => x.Date)
+       .ToList();
 
             }
             catch

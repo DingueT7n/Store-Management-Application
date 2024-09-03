@@ -149,7 +149,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
             }
             else if (rbSupplierAndOrder.Checked)
             {
-                DgvِCustomer.DataSource = supplierReportRepository.SearchOnlyCustomer(txtSearch.Text);
+                DgvِCustomer.DataSource = supplierReportRepository.SearchOnlySupplier(txtSearch.Text);
                 lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
             }
             else

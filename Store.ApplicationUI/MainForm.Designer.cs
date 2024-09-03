@@ -403,6 +403,7 @@
             btnBuysReports.TabIndex = 3;
             btnBuysReports.Text = "تقارير المشتريات";
             btnBuysReports.UseVisualStyleBackColor = true;
+            btnBuysReports.Click += btnBuysReports_Click;
             // 
             // btnEditBuy
             // 

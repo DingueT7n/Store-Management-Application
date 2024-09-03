@@ -140,7 +140,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
             {
                 if (rbPayFacture.Checked)
                 {
-                    suppliersRepository.TransactionOfCustomerDebt(
+                    suppliersRepository.TransactionOfSupplierDebt(
                         DgvِCustomer.CurrentRow.Cells[1].Value.ToString(),
                         DgvِCustomer.CurrentRow.Cells[0].Value.ToString(),
                         DgvِCustomer.CurrentRow.Cells[3].Value.ToString(),
@@ -150,7 +150,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                 }
                 else if (rbPayPartialFacture.Checked)
                 {
-                    suppliersRepository.TransactionOfEditingCustomerDebt(
+                    suppliersRepository.TransactionOfEditingSupplierDebt(
                         DgvِCustomer.CurrentRow.Cells[1].Value.ToString(),
                         DgvِCustomer.CurrentRow.Cells[0].Value.ToString(),
                         DgvِCustomer.CurrentRow.Cells[3].Value.ToString(),
@@ -164,7 +164,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                     for (int i = 0; i < DgvِCustomer.Rows.Count; i++)
                     {
                         var row = DgvِCustomer.Rows[i];
-                        suppliersRepository.TransactionOfCustomerDebt(
+                        suppliersRepository.TransactionOfSupplierDebt(
                             row.Cells[1].Value?.ToString(),
                             row.Cells[0].Value?.ToString(),
                             row.Cells[3].Value?.ToString(),

@@ -86,7 +86,7 @@ namespace Store.Infrastructure.Repositories
             }
             return quantity;
         }
-        public bool TransactionOfCustomerDebt(string order_Id, string sup_Id, string price, string sup_Name, DateTime date)
+        public bool TransactionOfSupplierDebt(string order_Id, string sup_Id, string price, string sup_Name, DateTime date)
         {
             using (var transaction = _context.Database.BeginTransaction())
             {
@@ -134,7 +134,7 @@ namespace Store.Infrastructure.Repositories
                 return false;
             }
         }
-        public bool TransactionOfEditingCustomerDebt(string order_Id, string sup_Id, string price, string sup_Name, string PayedValue, DateTime date
+        public bool TransactionOfEditingSupplierDebt(string order_Id, string sup_Id, string price, string sup_Name, string PayedValue, DateTime date
             )
         {
             using (var transaction = _context.Database.BeginTransaction())
@@ -188,12 +188,12 @@ namespace Store.Infrastructure.Repositories
             try
             {
                 return _context.SuppliersReports
-             .Where(x =>
-                 (x.SupplierName.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
-                  x.Order_ID.ToString() == searchItem) &&
-                 fromDate <= x.Date && x.Date <= toDate)
-             .OrderBy(x => x.Date)
-             .ToList();
+                   .Where(x =>
+                       (x.SupplierName.ToLower().Contains(searchItem.ToLower()) ||  // Case-insensitive search
+                       x.Order_ID.ToString() == searchItem) &&
+                       fromDate <= x.Date && x.Date <= toDate)  // Date range filter
+                   .OrderBy(x => x.Date)
+                   .ToList();
 
             }
             catch
@@ -217,17 +217,17 @@ namespace Store.Infrastructure.Repositories
                 return new List<SupplierReport>();
             }
         }
-        public List<SupplierReport> SearchOnlyCustomer(string searchItem)
+        public List<SupplierReport> SearchOnlySupplier(string searchItem)
         {
 
             try
             {
                 return _context.SuppliersReports
-             .Where(x =>
-                 x.SupplierName.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
-                  x.Order_ID.ToString() == searchItem)
-             .OrderBy(x => x.Date)
-             .ToList();
+                  .Where(x =>
+                      x.SupplierName.ToLower().Contains(searchItem.ToLower()) || // Case-insensitive search
+                      x.Order_ID.ToString() == searchItem)
+                  .OrderBy(x => x.Date)
+                  .ToList();
 
             }
             catch
