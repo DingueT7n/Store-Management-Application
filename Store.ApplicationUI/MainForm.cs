@@ -2,6 +2,7 @@ using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.ProductsGui;
 using Store.ApplicationUI.Gui.ProductsGui.Category;
 using Store.ApplicationUI.Gui.ProductsGui.StoreGui;
+using Store.ApplicationUI.Gui.SalesGui.PosGui;
 using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI
@@ -270,6 +271,14 @@ namespace Store.ApplicationUI
         private void btnBuysReports_Click(object sender, EventArgs e)
         {
             pageHelper.SetNewPage(Gui.BuysGui.BuysReportsGui.BuysReportsUserControl.Instance(this));
+        }
+
+        private void btnComptoire_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            PosForm posForm = new PosForm();
+            posForm.ShowDialog();
+            this.Show();
         }
     }
 }

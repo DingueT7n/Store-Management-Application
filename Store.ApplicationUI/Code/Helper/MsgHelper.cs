@@ -23,6 +23,12 @@
                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        public static void ShowDuplicatedItemsAndInformTeCaiser()
+        {
+            MessageBox.Show("تمت اضافة هذا المنتج بالفعل. لقد تمت تغيير الكمية واضافة 1 ",
+                  "منتج في الجدول بالفعل"
+                  , MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
         public static void ShowEmptyDataGridView()
         {
             MessageBox.Show("لاجراء هذه العملية, يجب ان تختار بيانات ",

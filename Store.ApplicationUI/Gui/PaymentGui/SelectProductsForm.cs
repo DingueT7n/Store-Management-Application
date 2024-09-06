@@ -1,6 +1,7 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.SalesGui;
+using Store.ApplicationUI.Gui.SalesGui.PosGui;
 using Store.Core.Entities.Products;
 
 namespace Store.ApplicationUI.Gui.PaymentGui
@@ -8,20 +9,33 @@ namespace Store.ApplicationUI.Gui.PaymentGui
     public partial class SelectProductsForm : Form
     {
         private static MainForm _main;
+        private static PosForm _PosForm;
         private static SelectProductsForm _selectProductsForm;
 
         public SelectProductsForm(MainForm main)
         {
             InitializeComponent();
             this.Owner = _main;
-
-
+        }
+        public SelectProductsForm(PosForm main)
+        {
+            InitializeComponent();
+            this.Owner = _PosForm;
         }
         public static SelectProductsForm Instance(MainForm main)
         {
             _main = main;
 
             _selectProductsForm = new SelectProductsForm(_main);
+
+            _selectProductsForm.LoadData();
+            return _selectProductsForm;
+        }
+        public static SelectProductsForm Instance(PosForm main)
+        {
+            _PosForm = main;
+
+            _selectProductsForm = new SelectProductsForm(_PosForm);
 
             _selectProductsForm.LoadData();
             return _selectProductsForm;
@@ -59,6 +73,17 @@ namespace Store.ApplicationUI.Gui.PaymentGui
                 {
 
                 }
+
+            }
+            else
+            {
+                var posUserControl = PosForm.GetPosUserControl();
+                if (posUserControl != null)
+                {
+                    posUserControl.setProductFromSelector(MainForm.Context.Products.FirstOrDefault(x => x.Id == productId));
+                }
+
+
             }
             //else if (!BuysUserControl.CheckInstance())
             //{
@@ -179,6 +204,15 @@ namespace Store.ApplicationUI.Gui.PaymentGui
             if (!SalesUserControl.CheckInstance())
             {
                 if (SalesUserControl.setProductFromSelector(MainForm.Context.Products.FirstOrDefault(x => x.Id == Id))) { }
+            }
+            else
+            {
+
+                if (PosForm.GetPosUserControl() is not null)
+                {
+                    PosForm.GetPosUserControl().setProductFromSelector(MainForm.Context.Products.FirstOrDefault(x => x.Id == Id));
+                }
+
             }
         }
     }

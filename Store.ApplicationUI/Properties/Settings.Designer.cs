@@ -58,5 +58,17 @@ namespace Store.ApplicationUI.Properties {
                 this["TaxValue"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int FastSaleStore {
+            get {
+                return ((int)(this["FastSaleStore"]));
+            }
+            set {
+                this["FastSaleStore"] = value;
+            }
+        }
     }
 }

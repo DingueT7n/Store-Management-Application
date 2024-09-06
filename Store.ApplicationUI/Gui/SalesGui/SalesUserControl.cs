@@ -965,7 +965,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
         private void btnSearchImage_Click(object sender, EventArgs e)
         {
             SelectProductsForm selectProductsForm = SelectProductsForm.Instance(_main);
-            selectProductsForm.Show();
+            selectProductsForm.ShowDialog();
         }
     }
 }
