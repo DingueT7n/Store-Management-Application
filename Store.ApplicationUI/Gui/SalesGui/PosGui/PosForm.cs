@@ -10,15 +10,42 @@
             InitializeComponent();
             InitializeTabs();
             posForm = this;
+
+
+
         }
+
         private void InitializeTabs()
         {
             // Add initial tab for client 1
             AddNewClientTab();
-        }
 
-        private void AddNewClientTab()
+        }
+        //private void SetColumns()
+        //{
+
+        //    DgvِProducts.Columns[0].HeaderCell.Value = "معرف المنتوج";
+        //    DgvِProducts.Columns[1].HeaderCell.Value = "باركود";
+        //    DgvِProducts.Columns[2].HeaderCell.Value = "اسم المنتج";
+        //    DgvِProducts.Columns[3].HeaderCell.Value = "صورة المنتج";
+        //    DgvِProducts.Columns[4].HeaderCell.Value = "المنتج";
+
+        //    DgvِProducts.Columns[5].HeaderCell.Value = "معرف السرعة";
+        //    DgvِProducts.Columns[3].Visible = false;
+        //    DgvِProducts.Columns[4].Visible = false;
+        //    DgvِProducts.Columns[5].Visible = false;
+        //    DgvِProducts.Columns[0].Visible = false;
+        //}
+        private async void AddNewClientTab()
         {
+            //if (tabControl.TabCount < 1)
+            //{
+
+            //    DgvِProducts.DataSource = MainForm.Context.ProductQuickAccess.ToList();
+
+            //    lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِProducts);
+            //    SetColumns();
+            //}
             if (tabControl.TabCount < 3)
             {
                 var clientPage = new PosUserControl(this);
@@ -61,7 +88,9 @@
             if (e.KeyCode == Keys.Delete && tabControl.SelectedTab != null && tabControl.TabCount > 1)
             {
                 TabPage selectedTab = tabControl.SelectedTab;
+                int index = tabControl.SelectedIndex;
                 tabControl.TabPages.Remove(selectedTab);
+                tabControl.SelectedIndex = index - 1;
             }
         }
 
@@ -109,7 +138,7 @@
 
         public static PosUserControl GetPosUserControl()
         {
-            TabPage selectedTab = posForm.tabControl.TabPages[posForm.tabControl.TabIndex];
+            TabPage selectedTab = posForm.tabControl.SelectedTab as TabPage;
             if (selectedTab != null)
             {
                 foreach (Control control in selectedTab.Controls)
@@ -124,11 +153,24 @@
             return null;
 
         }
-
         private void PosForm_Load(object sender, EventArgs e)
         {
             posForm = this;
         }
+
+        private void btnDeleteProduct_Click(object sender, EventArgs e)
+        {
+            if (tabControl.SelectedTab != null && tabControl.TabCount > 1)
+            {
+                TabPage selectedTab = tabControl.SelectedTab;
+                int index = tabControl.SelectedIndex;
+                tabControl.TabPages.Remove(selectedTab);
+                tabControl.SelectedIndex = index - 1;
+
+            }
+        }
+
+
     }
 
 }

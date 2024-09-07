@@ -120,7 +120,7 @@ namespace Store.Infrastructure.Repositories
                 var customerMoney = _context.CustomersMoneys.FirstOrDefault(x =>
                   x.Cust_ID.ToString() == cust_Id && x.Order_ID.ToString() == order_Id
                   );
-                customerMoney.Price = customerMoney.Price - ConvertToFloat(price);
+                customerMoney.Price = customerMoney.Price - ConvertToFloat(PayedValue);
                 _context.Update(customerMoney);
                 _context.SaveChanges();
                 return true;
@@ -144,11 +144,10 @@ namespace Store.Infrastructure.Repositories
                     }
                     else
                         UpdateFacture(order_Id, cust_Id, price, PayedValue);
-
                     Customer customer = _context.Customers.Where(x => x.Id.ToString() == cust_Id).FirstOrDefault();
                     if (customer is not null)
                     {
-                        customer.TotalDebts = customer.TotalDebts - ConvertToFloat(diffrence.ToString());
+                        customer.TotalDebts = customer.TotalDebts - ConvertToFloat(PayedValue.ToString());
                     }
                     _context.Update(customer);
                     CustomerReport customerReport = new CustomerReport();
@@ -165,6 +164,7 @@ namespace Store.Infrastructure.Repositories
                 }
                 catch
                 {
+                    transaction.RollbackAsync();
                     return false;
                 }
             }

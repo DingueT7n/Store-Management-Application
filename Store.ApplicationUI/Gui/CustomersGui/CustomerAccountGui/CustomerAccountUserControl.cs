@@ -101,7 +101,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
 
 
             //DgvِCustomer.Columns[0].HeaderCell.Value = "المعرف";
-            DgvِCustomer.Columns[0].HeaderCell.Value = "معرف المورد";
+            DgvِCustomer.Columns[0].HeaderCell.Value = "معرف العميل";
             DgvِCustomer.Columns[1].HeaderCell.Value = "معرف الفاتورة";
             DgvِCustomer.Columns[2].HeaderCell.Value = "اسم العميل";
             DgvِCustomer.Columns[3].HeaderCell.Value = "الدين المتبقي";
@@ -114,10 +114,10 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
 
 
 
-            DgvِCustomer.Columns[0].Visible = false;
+            //DgvِCustomer.Columns[0].Visible = false;
 
-            //DgvِCustomer.Columns[7].Visible = false;
-            //DgvِCustomer.Columns[8].Visible = false;
+            DgvِCustomer.Columns[7].Visible = false;
+            DgvِCustomer.Columns[8].Visible = false;
 
 
         }
@@ -154,11 +154,15 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                 }
                 else if (rbPayPartialFacture.Checked)
                 {
+                    var v1 = DgvِCustomer.CurrentRow.Cells[1].Value?.ToString();
+                    var v2 = DgvِCustomer.CurrentRow.Cells[0].Value?.ToString();
+                    var v3 = DgvِCustomer.CurrentRow.Cells[3].Value?.ToString();
+                    var v4 = DgvِCustomer.CurrentRow.Cells[2].Value?.ToString();
                     customersRepository.TransactionOfEditingCustomerDebt(
-                       DgvِCustomer.CurrentRow.Cells[1].Value.ToString(),
-                       DgvِCustomer.CurrentRow.Cells[0].Value.ToString(),
-                       DgvِCustomer.CurrentRow.Cells[3].Value.ToString(),
-                       DgvِCustomer.CurrentRow.Cells[2].Value.ToString(),
+                        v1,
+                        v2,
+                        v3,
+                        v4,
                        txtPayAmout.Text,
                        DateTime.Now
                        );
@@ -179,7 +183,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
 
                 }
 
-                SetDataToDgv();
+                LoadData();
             }
 
         }

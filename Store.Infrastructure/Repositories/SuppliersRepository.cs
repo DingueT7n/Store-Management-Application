@@ -57,13 +57,13 @@ namespace Store.Infrastructure.Repositories
             }
         }
 
-        public bool DeleteFacture(string order_Id, string cust_Id, string price)
+        public bool DeleteFacture(string order_Id, string sup_id, string price)
         {
 
             try
             {
                 var supplierMoney = _context.SuppliersMoneys.FirstOrDefault(x =>
-                  x.Sup_ID.ToString() == order_Id && x.Order_ID.ToString() == order_Id &&
+                  x.Sup_ID.ToString() == sup_id && x.Order_ID.ToString() == order_Id &&
                   x.Price.ToString() == (price)
                   );
                 _context.Remove(supplierMoney);
@@ -124,7 +124,7 @@ namespace Store.Infrastructure.Repositories
                 var suppliersMoneys = _context.SuppliersMoneys.FirstOrDefault(x =>
                   x.Sup_ID.ToString() == sup_Id && x.Order_ID.ToString() == order_Id
                   );
-                suppliersMoneys.Price = suppliersMoneys.Price - ConvertToFloat(price);
+                suppliersMoneys.Price = suppliersMoneys.Price - ConvertToFloat(PayedValue);
                 _context.Update(suppliersMoneys);
                 _context.SaveChanges();
                 return true;
@@ -153,7 +153,7 @@ namespace Store.Infrastructure.Repositories
                     Supplier supplier = _context.Suppliers.Where(x => x.Id.ToString() == sup_Id).FirstOrDefault();
                     if (supplier is not null)
                     {
-                        supplier.TotalDebts = supplier.TotalDebts - ConvertToFloat(diffrence.ToString());
+                        supplier.TotalDebts = supplier.TotalDebts - ConvertToFloat(PayedValue.ToString());
                     }
                     _context.Update(supplier);
                     SupplierReport supplierReport = new SupplierReport();

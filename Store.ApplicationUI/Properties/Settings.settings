@@ -14,5 +14,20 @@
     <Setting Name="FastSaleStore" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
+    <Setting Name="UserName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">AdminAlaa</Value>
+    </Setting>
+    <Setting Name="DefaultCustomerSale" Type="System.String" Scope="User">
+      <Value Profile="(Default)">مشتري عادي</Value>
+    </Setting>
+    <Setting Name="IdCustomerSale" Type="System.String" Scope="User">
+      <Value Profile="(Default)">4</Value>
+    </Setting>
+    <Setting Name="DefaultStoreSaleId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="DaysAddDebt" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">30</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

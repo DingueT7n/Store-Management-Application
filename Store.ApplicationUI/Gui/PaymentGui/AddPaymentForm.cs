@@ -1,4 +1,5 @@
 ﻿using Store.ApplicationUI.Gui.BuysGui;
+using Store.ApplicationUI.Gui.SalesGui.PosGui;
 
 namespace Store.ApplicationUI.Gui.PaymentGui
 {
@@ -6,6 +7,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
     {
 
         private static MainForm _main;
+        private static PosForm _PosForm;
         private readonly int _form;
         private AddPaymentForm? _addPaymentForm;
 
@@ -13,6 +15,13 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         {
             InitializeComponent();
             _main = userControl;
+            _form = form;
+            this.Owner = _main;
+        }
+        public AddPaymentForm(PosForm userControl, int form)
+        {
+            InitializeComponent();
+            _PosForm = userControl;
             _form = form;
             this.Owner = _main;
         }
@@ -33,8 +42,12 @@ namespace Store.ApplicationUI.Gui.PaymentGui
             if (this._form == 1)
 
                 SalesGui.SalesUserControl.InitializeData(txtpaidUp.Text, txtRemain.Text);
-            else
+            else if (_form == 0)
                 BuysUserControl.InitializeData(txtpaidUp.Text, txtRemain.Text);
+            else if (PosForm.GetPosUserControl() is not null)
+            {
+                PosForm.GetPosUserControl().InitializeData(txtpaidUp.Text, txtRemain.Text);
+            }
             this.Close();
 
         }

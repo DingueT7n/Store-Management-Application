@@ -31,8 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PosForm));
             OperationsflowLayoutPanel = new FlowLayoutPanel();
             btnAddComptoire = new Button();
-            btnEditProduct = new Button();
             btnDeleteProduct = new Button();
+            btnEditProduct = new Button();
             btnAddCategory = new Button();
             btnAddStore = new Button();
             btnExportProduct = new Button();
@@ -46,8 +46,8 @@
             // 
             OperationsflowLayoutPanel.AutoScroll = true;
             OperationsflowLayoutPanel.Controls.Add(btnAddComptoire);
-            OperationsflowLayoutPanel.Controls.Add(btnEditProduct);
             OperationsflowLayoutPanel.Controls.Add(btnDeleteProduct);
+            OperationsflowLayoutPanel.Controls.Add(btnEditProduct);
             OperationsflowLayoutPanel.Controls.Add(btnAddCategory);
             OperationsflowLayoutPanel.Controls.Add(btnAddStore);
             OperationsflowLayoutPanel.Controls.Add(btnExportProduct);
@@ -55,7 +55,7 @@
             OperationsflowLayoutPanel.Location = new Point(0, 0);
             OperationsflowLayoutPanel.Margin = new Padding(5);
             OperationsflowLayoutPanel.Name = "OperationsflowLayoutPanel";
-            OperationsflowLayoutPanel.Size = new Size(1350, 62);
+            OperationsflowLayoutPanel.Size = new Size(1350, 58);
             OperationsflowLayoutPanel.TabIndex = 9;
             // 
             // btnAddComptoire
@@ -63,54 +63,58 @@
             btnAddComptoire.Anchor = AnchorStyles.None;
             btnAddComptoire.Image = (Image)resources.GetObject("btnAddComptoire.Image");
             btnAddComptoire.ImageAlign = ContentAlignment.TopCenter;
-            btnAddComptoire.Location = new Point(1090, 3);
+            btnAddComptoire.Location = new Point(1072, 3);
             btnAddComptoire.Margin = new Padding(160, 3, 3, 3);
             btnAddComptoire.Name = "btnAddComptoire";
-            btnAddComptoire.Size = new Size(100, 52);
+            btnAddComptoire.Size = new Size(118, 52);
             btnAddComptoire.TabIndex = 3;
-            btnAddComptoire.Text = "اضافة";
+            btnAddComptoire.Text = "اضافة سلة جديدة";
             btnAddComptoire.TextAlign = ContentAlignment.BottomCenter;
             btnAddComptoire.UseVisualStyleBackColor = true;
             btnAddComptoire.Click += btnAddComptoire_Click;
-            // 
-            // btnEditProduct
-            // 
-            btnEditProduct.Anchor = AnchorStyles.None;
-            btnEditProduct.Image = (Image)resources.GetObject("btnEditProduct.Image");
-            btnEditProduct.ImageAlign = ContentAlignment.MiddleLeft;
-            btnEditProduct.Location = new Point(927, 3);
-            btnEditProduct.Margin = new Padding(60, 3, 3, 3);
-            btnEditProduct.Name = "btnEditProduct";
-            btnEditProduct.Size = new Size(100, 52);
-            btnEditProduct.TabIndex = 4;
-            btnEditProduct.Text = "   تعديل";
-            btnEditProduct.UseVisualStyleBackColor = true;
             // 
             // btnDeleteProduct
             // 
             btnDeleteProduct.Anchor = AnchorStyles.None;
             btnDeleteProduct.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnDeleteProduct.Image = (Image)resources.GetObject("btnDeleteProduct.Image");
-            btnDeleteProduct.ImageAlign = ContentAlignment.MiddleLeft;
-            btnDeleteProduct.Location = new Point(764, 3);
+            btnDeleteProduct.ImageAlign = ContentAlignment.TopCenter;
+            btnDeleteProduct.Location = new Point(884, 3);
             btnDeleteProduct.Margin = new Padding(60, 3, 3, 3);
             btnDeleteProduct.Name = "btnDeleteProduct";
-            btnDeleteProduct.Size = new Size(100, 52);
+            btnDeleteProduct.Size = new Size(125, 52);
             btnDeleteProduct.TabIndex = 5;
-            btnDeleteProduct.Text = "   حذف";
+            btnDeleteProduct.Text = "حذف السلة الحالية";
+            btnDeleteProduct.TextAlign = ContentAlignment.BottomCenter;
             btnDeleteProduct.UseVisualStyleBackColor = true;
+            btnDeleteProduct.Click += btnDeleteProduct_Click;
+            // 
+            // btnEditProduct
+            // 
+            btnEditProduct.Anchor = AnchorStyles.None;
+            btnEditProduct.Image = (Image)resources.GetObject("btnEditProduct.Image");
+            btnEditProduct.ImageAlign = ContentAlignment.TopCenter;
+            btnEditProduct.Location = new Point(721, 3);
+            btnEditProduct.Margin = new Padding(60, 3, 3, 3);
+            btnEditProduct.Name = "btnEditProduct";
+            btnEditProduct.Size = new Size(100, 52);
+            btnEditProduct.TabIndex = 4;
+            btnEditProduct.Text = "قفل الشاشة";
+            btnEditProduct.TextAlign = ContentAlignment.BottomCenter;
+            btnEditProduct.UseVisualStyleBackColor = true;
             // 
             // btnAddCategory
             // 
             btnAddCategory.Anchor = AnchorStyles.None;
             btnAddCategory.Image = (Image)resources.GetObject("btnAddCategory.Image");
-            btnAddCategory.ImageAlign = ContentAlignment.MiddleLeft;
-            btnAddCategory.Location = new Point(580, 3);
+            btnAddCategory.ImageAlign = ContentAlignment.TopCenter;
+            btnAddCategory.Location = new Point(525, 3);
             btnAddCategory.Margin = new Padding(60, 3, 3, 3);
             btnAddCategory.Name = "btnAddCategory";
-            btnAddCategory.Size = new Size(121, 52);
+            btnAddCategory.Size = new Size(133, 52);
             btnAddCategory.TabIndex = 8;
-            btnAddCategory.Text = "      اضافة صنف";
+            btnAddCategory.Text = "مسح معلومات السلة";
+            btnAddCategory.TextAlign = ContentAlignment.BottomCenter;
             btnAddCategory.UseVisualStyleBackColor = true;
             // 
             // btnAddStore
@@ -119,12 +123,12 @@
             btnAddStore.BackColor = Color.White;
             btnAddStore.Image = (Image)resources.GetObject("btnAddStore.Image");
             btnAddStore.ImageAlign = ContentAlignment.TopCenter;
-            btnAddStore.Location = new Point(398, 3);
+            btnAddStore.Location = new Point(343, 3);
             btnAddStore.Margin = new Padding(60, 3, 3, 3);
             btnAddStore.Name = "btnAddStore";
             btnAddStore.Size = new Size(119, 52);
             btnAddStore.TabIndex = 9;
-            btnAddStore.Text = "الطابعة مشتعلة";
+            btnAddStore.Text = "اطفاء الطابعة";
             btnAddStore.TextAlign = ContentAlignment.BottomCenter;
             btnAddStore.UseVisualStyleBackColor = false;
             // 
@@ -133,7 +137,7 @@
             btnExportProduct.Anchor = AnchorStyles.None;
             btnExportProduct.Image = (Image)resources.GetObject("btnExportProduct.Image");
             btnExportProduct.ImageAlign = ContentAlignment.TopCenter;
-            btnExportProduct.Location = new Point(235, 3);
+            btnExportProduct.Location = new Point(180, 3);
             btnExportProduct.Margin = new Padding(60, 3, 3, 3);
             btnExportProduct.Name = "btnExportProduct";
             btnExportProduct.Size = new Size(100, 52);
@@ -146,9 +150,9 @@
             // 
             ContainerPanel.Controls.Add(tabControl);
             ContainerPanel.Dock = DockStyle.Fill;
-            ContainerPanel.Location = new Point(0, 62);
+            ContainerPanel.Location = new Point(0, 58);
             ContainerPanel.Name = "ContainerPanel";
-            ContainerPanel.Size = new Size(1350, 687);
+            ContainerPanel.Size = new Size(1350, 691);
             ContainerPanel.TabIndex = 10;
             // 
             // tabControl
@@ -160,7 +164,7 @@
             tabControl.Padding = new Point(25, 5);
             tabControl.RightToLeftLayout = true;
             tabControl.SelectedIndex = 0;
-            tabControl.Size = new Size(1350, 687);
+            tabControl.Size = new Size(1350, 691);
             tabControl.TabIndex = 0;
             tabControl.KeyDown += tabControl_KeyDown;
             // 

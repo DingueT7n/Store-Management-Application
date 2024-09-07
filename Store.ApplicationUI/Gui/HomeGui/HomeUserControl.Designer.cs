@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HomeUserControl));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
             SummrayPanel1 = new Panel();
             SummaryPb1 = new PictureBox();
             summurayTopPanel1 = new Panel();
@@ -77,6 +77,7 @@
             flowLayoutPanel1 = new FlowLayoutPanel();
             groupBox2 = new GroupBox();
             leftSidePanel = new Panel();
+            flowLayoutPanel2 = new FlowLayoutPanel();
             SummrayPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)SummaryPb1).BeginInit();
             summurayTopPanel1.SuspendLayout();
@@ -102,6 +103,7 @@
             ((System.ComponentModel.ISupportInitialize)TableOflowQty).BeginInit();
             flowLayoutPanel1.SuspendLayout();
             leftSidePanel.SuspendLayout();
+            flowLayoutPanel2.SuspendLayout();
             SuspendLayout();
             // 
             // SummrayPanel1
@@ -111,8 +113,8 @@
             SummrayPanel1.Controls.Add(SummaryPb1);
             SummrayPanel1.Controls.Add(summurayTopPanel1);
             SummrayPanel1.Controls.Add(SummaryData1);
-            SummrayPanel1.Location = new Point(914, 34);
-            SummrayPanel1.Margin = new Padding(10, 10, 25, 10);
+            SummrayPanel1.Location = new Point(38, 10);
+            SummrayPanel1.Margin = new Padding(10, 10, 40, 10);
             SummrayPanel1.Name = "SummrayPanel1";
             SummrayPanel1.RightToLeft = RightToLeft.Yes;
             SummrayPanel1.Size = new Size(110, 150);
@@ -171,7 +173,7 @@
             SummrayPanel2.Controls.Add(SummaryPb2);
             SummrayPanel2.Controls.Add(panel2);
             SummrayPanel2.Controls.Add(SummaryData2);
-            SummrayPanel2.Location = new Point(769, 34);
+            SummrayPanel2.Location = new Point(183, 10);
             SummrayPanel2.Margin = new Padding(10, 10, 25, 10);
             SummrayPanel2.Name = "SummrayPanel2";
             SummrayPanel2.RightToLeft = RightToLeft.Yes;
@@ -231,7 +233,7 @@
             SummrayPanel3.Controls.Add(SummaryPb3);
             SummrayPanel3.Controls.Add(panel4);
             SummrayPanel3.Controls.Add(SummaryData3);
-            SummrayPanel3.Location = new Point(624, 34);
+            SummrayPanel3.Location = new Point(328, 10);
             SummrayPanel3.Margin = new Padding(10, 10, 25, 10);
             SummrayPanel3.Name = "SummrayPanel3";
             SummrayPanel3.RightToLeft = RightToLeft.Yes;
@@ -291,7 +293,7 @@
             SummrayPanel4.Controls.Add(SummaryPb4);
             SummrayPanel4.Controls.Add(panel6);
             SummrayPanel4.Controls.Add(SummaryData4);
-            SummrayPanel4.Location = new Point(479, 34);
+            SummrayPanel4.Location = new Point(473, 10);
             SummrayPanel4.Margin = new Padding(10, 10, 25, 10);
             SummrayPanel4.Name = "SummrayPanel4";
             SummrayPanel4.RightToLeft = RightToLeft.Yes;
@@ -351,7 +353,7 @@
             SummrayPanel5.Controls.Add(SummaryPb5);
             SummrayPanel5.Controls.Add(panel8);
             SummrayPanel5.Controls.Add(SummaryData5);
-            SummrayPanel5.Location = new Point(334, 34);
+            SummrayPanel5.Location = new Point(908, 10);
             SummrayPanel5.Margin = new Padding(10, 10, 25, 10);
             SummrayPanel5.Name = "SummrayPanel5";
             SummrayPanel5.RightToLeft = RightToLeft.Yes;
@@ -411,7 +413,7 @@
             SummrayPanel6.Controls.Add(SummaryPb6);
             SummrayPanel6.Controls.Add(panel10);
             SummrayPanel6.Controls.Add(SummaryData6);
-            SummrayPanel6.Location = new Point(189, 34);
+            SummrayPanel6.Location = new Point(618, 10);
             SummrayPanel6.Margin = new Padding(10, 10, 25, 10);
             SummrayPanel6.Name = "SummrayPanel6";
             SummrayPanel6.RightToLeft = RightToLeft.Yes;
@@ -467,14 +469,9 @@
             // 
             SummaryflowLayoutPanel.AutoScroll = true;
             SummaryflowLayoutPanel.Controls.Add(groupBox1);
-            SummaryflowLayoutPanel.Controls.Add(SummrayPanel1);
-            SummaryflowLayoutPanel.Controls.Add(SummrayPanel2);
-            SummaryflowLayoutPanel.Controls.Add(SummrayPanel3);
-            SummaryflowLayoutPanel.Controls.Add(SummrayPanel4);
-            SummaryflowLayoutPanel.Controls.Add(SummrayPanel5);
-            SummaryflowLayoutPanel.Controls.Add(SummrayPanel6);
-            SummaryflowLayoutPanel.Controls.Add(SummrayPanel7);
+            SummaryflowLayoutPanel.Controls.Add(flowLayoutPanel2);
             SummaryflowLayoutPanel.Dock = DockStyle.Top;
+            SummaryflowLayoutPanel.FlowDirection = FlowDirection.TopDown;
             SummaryflowLayoutPanel.Location = new Point(0, 0);
             SummaryflowLayoutPanel.Name = "SummaryflowLayoutPanel";
             SummaryflowLayoutPanel.Size = new Size(1034, 195);
@@ -482,11 +479,10 @@
             // 
             // groupBox1
             // 
-            groupBox1.Dock = DockStyle.Top;
             groupBox1.ForeColor = Color.FromArgb(64, 64, 64);
-            groupBox1.Location = new Point(4, 3);
+            groupBox1.Location = new Point(3, 3);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1027, 18);
+            groupBox1.Size = new Size(1028, 18);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = " موجز العمليات والأنشطة :";
@@ -498,7 +494,7 @@
             SummrayPanel7.Controls.Add(SummaryPb7);
             SummrayPanel7.Controls.Add(panel12);
             SummrayPanel7.Controls.Add(SummaryData7);
-            SummrayPanel7.Location = new Point(44, 34);
+            SummrayPanel7.Location = new Point(763, 10);
             SummrayPanel7.Margin = new Padding(10, 10, 25, 10);
             SummrayPanel7.Name = "SummrayPanel7";
             SummrayPanel7.RightToLeft = RightToLeft.Yes;
@@ -562,37 +558,37 @@
             TableOflowQty.BackgroundColor = Color.White;
             TableOflowQty.CellBorderStyle = DataGridViewCellBorderStyle.None;
             TableOflowQty.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = Color.FromArgb(64, 64, 64);
-            dataGridViewCellStyle1.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle1.ForeColor = Color.White;
-            dataGridViewCellStyle1.SelectionBackColor = Color.OrangeRed;
-            dataGridViewCellStyle1.SelectionForeColor = Color.White;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            TableOflowQty.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.BackColor = Color.FromArgb(64, 64, 64);
+            dataGridViewCellStyle7.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle7.ForeColor = Color.White;
+            dataGridViewCellStyle7.SelectionBackColor = Color.OrangeRed;
+            dataGridViewCellStyle7.SelectionForeColor = Color.White;
+            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
+            TableOflowQty.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
             TableOflowQty.ColumnHeadersHeight = 43;
             TableOflowQty.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = Color.White;
-            dataGridViewCellStyle2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(0, 122, 204);
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            TableOflowQty.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = Color.White;
+            dataGridViewCellStyle8.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle8.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = Color.FromArgb(0, 122, 204);
+            dataGridViewCellStyle8.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = DataGridViewTriState.False;
+            TableOflowQty.DefaultCellStyle = dataGridViewCellStyle8;
             TableOflowQty.EnableHeadersVisualStyles = false;
             TableOflowQty.GridColor = Color.FromArgb(64, 64, 64);
             TableOflowQty.Location = new Point(5, 27);
             TableOflowQty.Name = "TableOflowQty";
             TableOflowQty.ReadOnly = true;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = Color.White;
-            dataGridViewCellStyle3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            TableOflowQty.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = Color.White;
+            dataGridViewCellStyle9.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle9.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
+            TableOflowQty.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
             TableOflowQty.RowHeadersVisible = false;
             TableOflowQty.RowTemplate.Height = 22;
             TableOflowQty.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -666,6 +662,21 @@
             leftSidePanel.Size = new Size(523, 486);
             leftSidePanel.TabIndex = 14;
             // 
+            // flowLayoutPanel2
+            // 
+            flowLayoutPanel2.Controls.Add(SummrayPanel5);
+            flowLayoutPanel2.Controls.Add(SummrayPanel7);
+            flowLayoutPanel2.Controls.Add(SummrayPanel6);
+            flowLayoutPanel2.Controls.Add(SummrayPanel4);
+            flowLayoutPanel2.Controls.Add(SummrayPanel3);
+            flowLayoutPanel2.Controls.Add(SummrayPanel2);
+            flowLayoutPanel2.Controls.Add(SummrayPanel1);
+            flowLayoutPanel2.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel2.Location = new Point(3, 27);
+            flowLayoutPanel2.Name = "flowLayoutPanel2";
+            flowLayoutPanel2.Size = new Size(1028, 165);
+            flowLayoutPanel2.TabIndex = 12;
+            // 
             // HomeUserControl
             // 
             AutoScaleDimensions = new SizeF(8F, 19F);
@@ -718,6 +729,7 @@
             flowLayoutPanel1.ResumeLayout(false);
             leftSidePanel.ResumeLayout(false);
             leftSidePanel.PerformLayout();
+            flowLayoutPanel2.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -766,5 +778,6 @@
         private FlowLayoutPanel flowLayoutPanel1;
         private GroupBox groupBox2;
         private Panel leftSidePanel;
+        private FlowLayoutPanel flowLayoutPanel2;
     }
 }

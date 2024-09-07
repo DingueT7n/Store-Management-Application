@@ -200,19 +200,22 @@ namespace Store.ApplicationUI.Gui.PaymentGui
 
         private void DgvProducts_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            int Id = Convert.ToInt32(DgvProducts.CurrentRow.Cells[0].Value.ToString());
-            if (!SalesUserControl.CheckInstance())
+            if (!dgvHelper.IsEmpty(DgvProducts))
             {
-                if (SalesUserControl.setProductFromSelector(MainForm.Context.Products.FirstOrDefault(x => x.Id == Id))) { }
-            }
-            else
-            {
-
-                if (PosForm.GetPosUserControl() is not null)
+                int Id = Convert.ToInt32(DgvProducts.CurrentRow.Cells[0].Value.ToString());
+                if (!SalesUserControl.CheckInstance())
                 {
-                    PosForm.GetPosUserControl().setProductFromSelector(MainForm.Context.Products.FirstOrDefault(x => x.Id == Id));
+                    if (SalesUserControl.setProductFromSelector(MainForm.Context.Products.FirstOrDefault(x => x.Id == Id))) { }
                 }
+                else
+                {
 
+                    if (PosForm.GetPosUserControl() is not null)
+                    {
+                        PosForm.GetPosUserControl().setProductFromSelector(MainForm.Context.Products.FirstOrDefault(x => x.Id == Id));
+                    }
+
+                }
             }
         }
     }

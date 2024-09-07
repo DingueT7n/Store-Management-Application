@@ -263,7 +263,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
 
                     for (int i = 0; i < DgvِProducts.Rows.Count; i++)
                     {
-                        if (DgvِProducts.Rows[i].Cells[9].Value.ToString() == _product.Id.ToString())
+                        if (DgvِProducts.Rows[i].Cells[8].Value.ToString() == _product.Id.ToString())
                         {
                             MsgHelper.ShowDuplicatedItems();
                             txtSearchBarCode.Focus();
@@ -290,6 +290,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
         {
             if (e.KeyCode == Keys.Enter)
             {
+                if (txtQty.Text == string.Empty) { return; }
                 AddNewRow();
             }
         }
@@ -307,6 +308,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
             try
             {
                 CalculateAmount();
+                CalculateStatistics();
 
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
@@ -647,12 +649,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
                                 var buy = SetBuy();
                                 MainForm.Context.Add(buy);
                                 await MainForm.Context.SaveChangesAsync();
-                                if (PaidUp > 0)
-                                    MainForm.Context.Add(SetSupReport());
-                                if (Remain > 0)
-                                {
-                                    MainForm.Context.Add(SetSupMoney()); MainForm.Context.Update(SetSupplier());
-                                };
+
                                 BuyDetailRepository buyDetailRepository = new(MainForm.Context);
 
                                 for (int i = 0; i <= DgvِProducts.Rows.Count - 1; i++)
@@ -795,6 +792,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
         {
             ErrorDetection();
             CalculateAmount();
+            CalculateStatistics();
 
         }
 

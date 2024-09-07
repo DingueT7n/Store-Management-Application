@@ -70,5 +70,65 @@ namespace Store.ApplicationUI.Properties {
                 this["FastSaleStore"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("AdminAlaa")]
+        public string UserName {
+            get {
+                return ((string)(this["UserName"]));
+            }
+            set {
+                this["UserName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("مشتري عادي")]
+        public string DefaultCustomerSale {
+            get {
+                return ((string)(this["DefaultCustomerSale"]));
+            }
+            set {
+                this["DefaultCustomerSale"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("4")]
+        public string IdCustomerSale {
+            get {
+                return ((string)(this["IdCustomerSale"]));
+            }
+            set {
+                this["IdCustomerSale"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public string DefaultStoreSaleId {
+            get {
+                return ((string)(this["DefaultStoreSaleId"]));
+            }
+            set {
+                this["DefaultStoreSaleId"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public int DaysAddDebt {
+            get {
+                return ((int)(this["DaysAddDebt"]));
+            }
+            set {
+                this["DaysAddDebt"] = value;
+            }
+        }
     }
 }
