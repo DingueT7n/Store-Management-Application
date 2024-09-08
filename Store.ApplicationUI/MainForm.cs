@@ -280,5 +280,11 @@ namespace Store.ApplicationUI
             posForm.ShowDialog();
             this.Show();
         }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.SalesGui.SalesReportsGui.SalesReportsUserControl.Instance(this));
+
+        }
     }
 }

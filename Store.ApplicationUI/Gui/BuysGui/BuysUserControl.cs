@@ -112,8 +112,8 @@ namespace Store.ApplicationUI.Gui.BuysGui
             // Visible of Columns
             //DgvProducts.Columns[0].Visible = false;
             ////DgvِProducts.Columns[6].Visible = false;
-            ////DgvِProducts.Columns[9].Visible = false;
-            ////DgvِProducts.Columns[8].Visible = false;
+            DgvِProducts.Columns[9].Visible = false;
+            DgvِProducts.Columns[8].Visible = false;
             ////DgvِProducts.Columns[11].Visible = false;
             ////DgvِProducts.Columns[12].Visible = false;
             ////DgvِProducts.Columns[15].Visible = false;

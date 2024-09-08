@@ -24,4 +24,20 @@ namespace Store.Core.Entities.Sales
 
         public virtual Customer Customer { get; set; }
     }
+    public class SaleDetailDto
+    {
+        public int Order_ID { get; set; }
+        public string CustomerName { get; set; }
+        public DateTime Date { get; set; }
+        public string Time { get; set; }
+        public string ProductName { get; set; }
+        public float Quantity { get; set; }
+        public float PriceWithTax { get; set; }
+        public float Discount { get; set; }
+        public float TotalPrice { get; set; }
+        public string User_Name { get; set; }
+        public float TotalFacture { get; set; }
+        public float PaidUp { get; set; }
+        public float Remain { get; set; }
+    }
 }

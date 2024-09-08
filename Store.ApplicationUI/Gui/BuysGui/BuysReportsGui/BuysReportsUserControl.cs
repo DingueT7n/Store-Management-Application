@@ -88,7 +88,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
                 MsgHelper.ShowServerError();
             }
             //Hideloading
-            Thread.Sleep(1000);
+
             LoadingForm.Instance(_main).Hide();
             // Show EmptyDAta
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvBuys);
@@ -109,7 +109,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
             DgvBuys.Columns[6].HeaderCell.Value = "سعر المنتج";
             DgvBuys.Columns[7].HeaderCell.Value = "التخفيض";
             DgvBuys.Columns[8].HeaderCell.Value = "السعر الاجمالي";
-            DgvBuys.Columns[9].HeaderCell.Value = "البائع";
+            DgvBuys.Columns[9].HeaderCell.Value = "المشتري";
             DgvBuys.Columns[10].HeaderCell.Value = "حسبة الفاتورة";
             DgvBuys.Columns[11].HeaderCell.Value = "المدفوع";
             DgvBuys.Columns[12].HeaderCell.Value = "الباقي";
@@ -124,6 +124,29 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
 
         }
 
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            if (rbBoth.Checked)
+            {
+                DgvBuys.DataSource = buysRepository.SearchBoth(txtSearch.Text, dtpFrom.Value, dtpTo.Value);
+                lblEmptyData.Visible = dgvHelper.IsEmpty(DgvBuys);
 
+            }
+            else if (rbSupplierAndOrder.Checked)
+            {
+                DgvBuys.DataSource = buysRepository.SearchOnlySupplier(txtSearch.Text);
+                lblEmptyData.Visible = dgvHelper.IsEmpty(DgvBuys);
+            }
+            else
+            {
+
+
+                DgvBuys.DataSource = buysRepository.SearchBuysByDate(dtpFrom.Value, dtpTo.Value);
+                lblEmptyData.Visible = dgvHelper.IsEmpty(DgvBuys);
+
+            }
+
+            txtSearch.Text = string.Empty;
+        }
     }
 }

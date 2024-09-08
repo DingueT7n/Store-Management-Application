@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BuysReportsUserControl));
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             OperationsflowLayoutPanel = new FlowLayoutPanel();
             gbPayChoiches = new GroupBox();
             dtpFrom = new DateTimePicker();
@@ -258,6 +258,7 @@
             btnSearch.Size = new Size(50, 40);
             btnSearch.TabIndex = 7;
             btnSearch.UseVisualStyleBackColor = true;
+            btnSearch.Click += btnSearch_Click;
             // 
             // panelButtons
             // 
@@ -340,31 +341,31 @@
             DgvBuys.AllowUserToAddRows = false;
             DgvBuys.AllowUserToResizeColumns = false;
             DgvBuys.AllowUserToResizeRows = false;
-            dataGridViewCellStyle5.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvBuys.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvBuys.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             DgvBuys.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             DgvBuys.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             DgvBuys.BackgroundColor = Color.White;
             DgvBuys.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             DgvBuys.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle6.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle6.ForeColor = Color.White;
-            dataGridViewCellStyle6.SelectionBackColor = Color.DodgerBlue;
-            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
-            DgvBuys.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = Color.DodgerBlue;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            DgvBuys.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             DgvBuys.ColumnHeadersHeight = 40;
             DgvBuys.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.BackColor = SystemColors.Window;
-            dataGridViewCellStyle7.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle7.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.False;
-            DgvBuys.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = SystemColors.Window;
+            dataGridViewCellStyle3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            DgvBuys.DefaultCellStyle = dataGridViewCellStyle3;
             DgvBuys.Dock = DockStyle.Fill;
             DgvBuys.EnableHeadersVisualStyles = false;
             DgvBuys.GridColor = SystemColors.ControlDark;
@@ -376,8 +377,8 @@
             DgvBuys.RowHeadersVisible = false;
             DgvBuys.RowHeadersWidth = 21;
             DgvBuys.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle8.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvBuys.RowsDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle4.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvBuys.RowsDefaultCellStyle = dataGridViewCellStyle4;
             DgvBuys.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DgvBuys.Size = new Size(1034, 517);
             DgvBuys.TabIndex = 20;
@@ -392,7 +393,7 @@
             Controls.Add(DgvBuys);
             Controls.Add(OperationsflowLayoutPanel);
             Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Margin = new Padding(4, 4, 4, 4);
+            Margin = new Padding(4);
             Name = "BuysReportsUserControl";
             RightToLeft = RightToLeft.Yes;
             Size = new Size(1034, 681);

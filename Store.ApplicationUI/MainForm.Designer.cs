@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             flowLayoutPanelNavBar = new FlowLayoutPanel();
             pictureBox1 = new PictureBox();
+            btnComptoire = new Button();
             btnHomeSummary = new Button();
             BtnProducts = new Button();
             ProductsflowLayoutPanel = new FlowLayoutPanel();
@@ -63,7 +64,6 @@
             button9 = new Button();
             ContainerPanel = new Panel();
             animationTimer = new System.Windows.Forms.Timer(components);
-            btnComptoire = new Button();
             flowLayoutPanelNavBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ProductsflowLayoutPanel.SuspendLayout();
@@ -107,6 +107,20 @@
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
+            // 
+            // btnComptoire
+            // 
+            btnComptoire.Anchor = AnchorStyles.None;
+            btnComptoire.Image = Properties.Resources.Open_Box;
+            btnComptoire.ImageAlign = ContentAlignment.MiddleLeft;
+            btnComptoire.Location = new Point(-2, 126);
+            btnComptoire.Margin = new Padding(4, 5, 4, 5);
+            btnComptoire.Name = "btnComptoire";
+            btnComptoire.Size = new Size(212, 37);
+            btnComptoire.TabIndex = 13;
+            btnComptoire.Text = "شاشة البيع السريع";
+            btnComptoire.UseVisualStyleBackColor = true;
+            btnComptoire.Click += btnComptoire_Click;
             // 
             // btnHomeSummary
             // 
@@ -468,6 +482,7 @@
             button8.TabIndex = 3;
             button8.Text = "تقارير المبيعات";
             button8.UseVisualStyleBackColor = true;
+            button8.Click += button8_Click;
             // 
             // button9
             // 
@@ -496,20 +511,6 @@
             animationTimer.Enabled = true;
             animationTimer.Interval = 15;
             animationTimer.Tick += animationTimer_Tick;
-            // 
-            // btnComptoire
-            // 
-            btnComptoire.Anchor = AnchorStyles.None;
-            btnComptoire.Image = Properties.Resources.Open_Box;
-            btnComptoire.ImageAlign = ContentAlignment.MiddleLeft;
-            btnComptoire.Location = new Point(-2, 126);
-            btnComptoire.Margin = new Padding(4, 5, 4, 5);
-            btnComptoire.Name = "btnComptoire";
-            btnComptoire.Size = new Size(212, 37);
-            btnComptoire.TabIndex = 13;
-            btnComptoire.Text = "شاشة البيع السريع";
-            btnComptoire.UseVisualStyleBackColor = true;
-            btnComptoire.Click += btnComptoire_Click;
             // 
             // MainForm
             // 
