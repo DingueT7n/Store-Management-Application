@@ -169,5 +169,17 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
             this.Size = this.MaximumSize;
             PageHelper.SetOperation(WithdrawFromBank.WithdrawFromBankUserControl.Instance(_main, this), this);
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            this.Size = this.MaximumSize;
+            PageHelper.SetOperation(TransferBetweenCaissesGui.TransferBetweenCaissesGuiUserControl.Instance(_main, this), this);
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            this.Size = this.MaximumSize;
+            PageHelper.SetOperation(TransfertBetweenBankAndCaisseGui.TransfertBetweenBankAndCaisseUserControl.Instance(_main, this), this);
+        }
     }
 }

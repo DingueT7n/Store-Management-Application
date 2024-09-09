@@ -84,13 +84,11 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseGui
                 try
                 {
                     var caisse = MainForm.Context.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisse.SelectedValue);
-
                     if (caisse is not null)
                     {
                         if (_main.ConvertToFloat(txtValue.Text) > 0)
                         {
                             caisse.MoneyinCaisse += _main.ConvertToFloat(txtValue.Text);
-
                             var caisseDeposit = new CaisseDeposit
                             {
                                 Caisse_ID = Convert.ToInt32(cmbCaisse.SelectedValue),
@@ -101,7 +99,6 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseGui
                                 Reason = textBox1.Text,
                                 Type = "ايداع عادي (مال اضافي )"
                             };
-
                             MainForm.Context.Caisses.Update(caisse);
                             await MainForm.Context.CaissesDeposits.AddAsync(caisseDeposit);
 

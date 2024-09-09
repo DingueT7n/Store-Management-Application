@@ -388,6 +388,7 @@
             button4.Text = "تحويل بين الصناديق";
             button4.TextAlign = ContentAlignment.BottomCenter;
             button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
             // 
             // button5
             // 
@@ -402,6 +403,7 @@
             button5.Text = "تحويل بين صندوق وبنك";
             button5.TextAlign = ContentAlignment.BottomCenter;
             button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
             // 
             // panelUserControls
             // 
