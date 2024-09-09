@@ -8,9 +8,9 @@ namespace Store.Infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<Bank> builder)
         {
-            builder.HasNoKey();
-
-
+            builder.HasKey(b => b.Id);
+            builder.HasData(
+               new Bank { Id = 1, Money = 0 });
         }
     }
 

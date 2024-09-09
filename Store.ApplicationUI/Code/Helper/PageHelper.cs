@@ -1,4 +1,6 @@
-﻿namespace Store.ApplicationUI.Code.Helper
+﻿using Store.ApplicationUI.Gui.CaisseAndBankGui;
+
+namespace Store.ApplicationUI.Code.Helper
 {
     internal class PageHelper
     {
@@ -31,6 +33,30 @@
             }
             if (_main.isPanelOpen())
                 _main.CloseSubPanels();
+
+        }
+        public static void SetOperation(UserControl pageUserControl, CaisseDetailsForm detailsForm)
+        {
+            var oldPage = detailsForm.panelUserControls.Controls.OfType<UserControl>().FirstOrDefault();
+
+            // Remove and dispose of the old page
+            if (oldPage != null && oldPage != pageUserControl)
+            {
+                detailsForm.panelUserControls.Controls.Remove(oldPage);
+
+                if (oldPage is IDisposable disposableOldPage)
+                {
+                    disposableOldPage.Dispose();
+                }
+            }
+
+            // Add the new page
+            if (pageUserControl != oldPage)
+            {
+                pageUserControl.Dock = DockStyle.Fill;
+                detailsForm.panelUserControls.Controls.Add(pageUserControl);
+                detailsForm.Size = detailsForm.MaximumSize;
+            }
 
         }
         public UserControl? CurrentUserControl(UserControl pageUserControl)

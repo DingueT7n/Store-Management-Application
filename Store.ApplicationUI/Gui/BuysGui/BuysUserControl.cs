@@ -771,7 +771,6 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 e.Handled = true;
             }
         }
-
         private void txtSalePrice_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)

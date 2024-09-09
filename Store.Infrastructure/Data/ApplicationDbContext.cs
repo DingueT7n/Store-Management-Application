@@ -32,9 +32,9 @@ namespace Store.Infrastructure.Data
         }
 
 
-        DbSet<Bank> Banks { get; set; }
-        DbSet<BankDeposit> BankDeposits { get; set; }
-        DbSet<BankWithdraw> BankWithdraws { get; set; }
+        public DbSet<Bank> Banks { get; set; }
+        public DbSet<BankDeposit> BankDeposits { get; set; }
+        public DbSet<BankWithdraw> BankWithdraws { get; set; }
 
         //DbSet<Employee> Employees { get; set; }
         //DbSet<EmployeeSalaryMinus> EmployeesSalaryMinus { get; set; }

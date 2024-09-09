@@ -1,4 +1,5 @@
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Gui.CaisseAndBankGui;
 using Store.ApplicationUI.Gui.ProductsGui;
 using Store.ApplicationUI.Gui.ProductsGui.Category;
 using Store.ApplicationUI.Gui.ProductsGui.StoreGui;
@@ -285,6 +286,12 @@ namespace Store.ApplicationUI
         {
             pageHelper.SetNewPage(Gui.SalesGui.SalesReportsGui.SalesReportsUserControl.Instance(this));
 
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            CaisseDetailsForm caisseDetailsForm = new(this);
+            caisseDetailsForm.Show();
         }
     }
 }

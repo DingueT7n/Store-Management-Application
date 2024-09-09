@@ -64,6 +64,7 @@
             button9 = new Button();
             ContainerPanel = new Panel();
             animationTimer = new System.Windows.Forms.Timer(components);
+            button6 = new Button();
             flowLayoutPanelNavBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ProductsflowLayoutPanel.SuspendLayout();
@@ -90,6 +91,7 @@
             flowLayoutPanelNavBar.Controls.Add(BuysflowLayoutPanel);
             flowLayoutPanelNavBar.Controls.Add(btnSalesPanel);
             flowLayoutPanelNavBar.Controls.Add(SalesflowLayoutPanel);
+            flowLayoutPanelNavBar.Controls.Add(button6);
             flowLayoutPanelNavBar.Dock = DockStyle.Left;
             flowLayoutPanelNavBar.Location = new Point(0, 0);
             flowLayoutPanelNavBar.Name = "flowLayoutPanelNavBar";
@@ -435,6 +437,7 @@
             // 
             // btnSalesPanel
             // 
+            btnSalesPanel.FlatAppearance.BorderSize = 4;
             btnSalesPanel.Image = Properties.Resources.Open_Box;
             btnSalesPanel.ImageAlign = ContentAlignment.MiddleLeft;
             btnSalesPanel.Location = new Point(-2, 1142);
@@ -512,6 +515,20 @@
             animationTimer.Interval = 15;
             animationTimer.Tick += animationTimer_Tick;
             // 
+            // button6
+            // 
+            button6.FlatAppearance.BorderSize = 4;
+            button6.Image = Properties.Resources.Open_Box;
+            button6.ImageAlign = ContentAlignment.MiddleLeft;
+            button6.Location = new Point(-2, 1338);
+            button6.Margin = new Padding(4, 5, 4, 5);
+            button6.Name = "button6";
+            button6.Size = new Size(212, 37);
+            button6.TabIndex = 14;
+            button6.Text = "الصانديق والبنك";
+            button6.UseVisualStyleBackColor = true;
+            button6.Click += button6_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 19F);
@@ -575,5 +592,6 @@
         private Button button8;
         private Button button9;
         private Button btnComptoire;
+        private Button button6;
     }
 }

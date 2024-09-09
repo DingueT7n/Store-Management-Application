@@ -8,6 +8,6 @@
         public string PhoneNumber { get; set; }
         public string Notes { get; set; }
         public float? MaxDebtAllowed { get; set; }
-        public float? TotalDebts { get; set; }
+        public float TotalDebts { get; set; }
     }
 }
