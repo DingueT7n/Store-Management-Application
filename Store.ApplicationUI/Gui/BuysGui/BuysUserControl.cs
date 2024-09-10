@@ -3,6 +3,7 @@ using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.PaymentGui;
 using Store.Core.Entities.Buys;
+using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Products;
 using Store.Core.Entities.Suppliers;
 using Store.Infrastructure.Repositories;
@@ -570,6 +571,38 @@ namespace Store.ApplicationUI.Gui.BuysGui
             }
             return productQty;
         }
+        Caisse SetCaisse(float value)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+
+            Caisse caisse = MainForm.Context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefault();
+            if (caisse is not null)
+            {
+                caisse.MoneyinCaisse -= value;
+            }
+            return caisse;
+
+        }
+        CaisseWithdraw SetCaisseWithdraw(float value)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+
+
+            var caisseWithdraw = new CaisseWithdraw
+            {
+                Caisse_ID = Properties.Settings.Default.DefaultCaisseId,
+                Time = DateTime.Now.ToString("HH:mm:ss"),
+                Date = DateTime.Now,
+                Name = $"  {Properties.Settings.Default.UserName}  المورد {cmbSuppliers.Text} بحساب ",
+                Money = value,
+                Reason = "شراء بالفاتورة لعميل",
+                Type = "سحب عن طريق شراء منتجات (مال مستثمر )"
+            };
+
+            return caisseWithdraw;
+
+        }
+
         private async void btnPay_Click(object sender, EventArgs e)
         {
             if (ValidatePay())
@@ -605,6 +638,17 @@ namespace Store.ApplicationUI.Gui.BuysGui
                                 }
 
                                 await MainForm.Context.SaveChangesAsync();
+                                if (PaidUp <= TotalFacture)
+                                {
+                                    MainForm.Context.Update(SetCaisse(_main.ConvertToFloat((PaidUp).ToString())));
+                                    MainForm.Context.Add(SetCaisseWithdraw(_main.ConvertToFloat((PaidUp).ToString())));
+
+                                }
+                                else
+                                {
+                                    MainForm.Context.Update(SetCaisse(_main.ConvertToFloat((TotalFacture).ToString())));
+                                    MainForm.Context.Add(SetCaisseWithdraw(_main.ConvertToFloat((TotalFacture).ToString())));
+                                }
                                 if (PaidUp > 0)
                                 {
                                     var supplierReport = SetSupReport();
@@ -666,6 +710,17 @@ namespace Store.ApplicationUI.Gui.BuysGui
 
                                 }
                                 await MainForm.Context.SaveChangesAsync();
+                                if (PaidUp <= TotalFacture)
+                                {
+                                    MainForm.Context.Update(SetCaisse(_main.ConvertToFloat((PaidUp).ToString())));
+                                    MainForm.Context.Add(SetCaisseWithdraw(_main.ConvertToFloat((PaidUp).ToString())));
+
+                                }
+                                else
+                                {
+                                    MainForm.Context.Update(SetCaisse(_main.ConvertToFloat((TotalFacture).ToString())));
+                                    MainForm.Context.Add(SetCaisseWithdraw(_main.ConvertToFloat((TotalFacture).ToString())));
+                                }
                                 if (PaidUp > 0)
                                 {
                                     var supplierReport = SetSupReport();
@@ -727,6 +782,17 @@ namespace Store.ApplicationUI.Gui.BuysGui
 
                                 }
                                 await MainForm.Context.SaveChangesAsync();
+                                if (PaidUp <= TotalFacture)
+                                {
+                                    MainForm.Context.Update(SetCaisse(_main.ConvertToFloat((PaidUp).ToString())));
+                                    MainForm.Context.Add(SetCaisseWithdraw(_main.ConvertToFloat((PaidUp).ToString())));
+
+                                }
+                                else
+                                {
+                                    MainForm.Context.Update(SetCaisse(_main.ConvertToFloat((TotalFacture).ToString())));
+                                    MainForm.Context.Add(SetCaisseWithdraw(_main.ConvertToFloat((TotalFacture).ToString())));
+                                }
                                 if (PaidUp > 0)
                                 {
                                     var supplierReport = SetSupReport();

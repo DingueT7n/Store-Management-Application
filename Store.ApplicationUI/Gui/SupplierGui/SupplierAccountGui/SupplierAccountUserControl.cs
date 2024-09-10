@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Entities.Caisses;
 using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
@@ -133,7 +134,37 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
             txtSearch.Text = string.Empty;
         }
+        Caisse SetCaisse(float value)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
 
+            Caisse caisse = MainForm.Context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefault();
+            if (caisse is not null)
+            {
+                caisse.MoneyinCaisse -= value;
+            }
+            return caisse;
+
+        }
+        CaisseWithdraw SetCaisseWithdraw(float value, string suppname)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+
+
+            var caisseWithdraw = new CaisseWithdraw
+            {
+                Caisse_ID = Properties.Settings.Default.DefaultCaisseId,
+                Time = DateTime.Now.ToString("HH:mm:ss"),
+                Date = DateTime.Now,
+                Name = $"  {Properties.Settings.Default.UserName} دين للمورد {suppname} بحساب ",
+                Money = value,
+                Reason = "شراء بالفاتورة لعميل",
+                Type = "سحب عن طريق شراء منتجات (مال مستثمر )"
+            };
+
+            return caisseWithdraw;
+
+        }
         private void btnPay_Click(object sender, EventArgs e)
         {
             if (DgvِCustomer.SelectedRows.Count > 0 && !dgvHelper.IsEmpty(DgvِCustomer))
@@ -147,6 +178,11 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                         DgvِCustomer.CurrentRow.Cells[2].Value.ToString(),
                         DateTime.Now
                         );
+                    MainForm.Context.Update(SetCaisse(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString())));
+                    MainForm.Context.Add(SetCaisseWithdraw(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString()),
+                        DgvِCustomer.CurrentRow.Cells[2].Value.ToString()
+                        ));
+
                 }
                 else if (rbPayPartialFacture.Checked)
                 {
@@ -158,6 +194,10 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                        txtPayAmout.Text,
                        DateTime.Now
                        );
+                    MainForm.Context.Update(SetCaisse(_main.ConvertToFloat(txtPayAmout.Text)));
+                    MainForm.Context.Add(SetCaisseWithdraw(_main.ConvertToFloat(txtPayAmout.Text),
+                         DgvِCustomer.CurrentRow.Cells[2].Value.ToString()));
+
                 }
                 else
                 {
@@ -171,6 +211,11 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                             row.Cells[2].Value?.ToString(),
                             DateTime.Now
                         );
+                        MainForm.Context.Update(SetCaisse(_main.ConvertToFloat(row.Cells[3].Value?.ToString())));
+                        MainForm.Context.Add(SetCaisseWithdraw(
+                            _main.ConvertToFloat(row.Cells[3].Value?.ToString())
+                            , DgvِCustomer.CurrentRow.Cells[2].Value.ToString()));
+
                     }
                 }
                 SetDataToDgv();

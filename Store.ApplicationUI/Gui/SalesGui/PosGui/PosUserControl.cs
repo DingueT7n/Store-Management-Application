@@ -1,5 +1,6 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.PaymentGui;
+using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Customers;
 using Store.Core.Entities.Products;
 using Store.Core.Entities.Sales;
@@ -664,6 +665,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             sale.Remain = ConvertToFloat(Remain.ToString());
             sale.Time = DateTime.Now.ToString("HH:mm");
             sale.User_Name = Properties.Settings.Default.UserName;
+
             return sale;
         }
         CustomerReport SetCustReport()
@@ -778,6 +780,37 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             }
             return customer;
         }
+        Caisse SetCaisse(float value)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+
+            Caisse caisse = MainForm.Context.Caisses.FirstOrDefault((x => x.Id == Properties.Settings.Default.DefaultCaisseId));
+            if (caisse is not null)
+            {
+                caisse.MoneyinCaisse += ConvertToFloat(value.ToString());
+            }
+            return caisse;
+
+        }
+        CaisseDeposit SetCaisseDeposit(float value)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+
+
+            var caisseDeposit = new CaisseDeposit
+            {
+                Caisse_ID = Properties.Settings.Default.DefaultCaisseId,
+                Time = DateTime.Now.ToString("HH:mm:ss"),
+                Date = DateTime.Now,
+                Name = $"  {Properties.Settings.Default.UserName}  مشتري عادي  بحساب ",
+                Money = ConvertToFloat(value.ToString()),
+                Reason = "مبيعة سريعة",
+                Type = "ايداع عن طريق بيع منتجات (مال ربحي )"
+            };
+
+            return caisseDeposit;
+
+        }
         private async void btnPay_Click(object sender, EventArgs e)
         {
             PayNow();
@@ -828,6 +861,17 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
                             }
                             await MainForm.Context.SaveChangesAsync();
+                            if (PaidUp <= TotalFacture)
+                            {
+                                MainForm.Context.Update(SetCaisse(ConvertToFloat((PaidUp).ToString())));
+                                MainForm.Context.Add(SetCaisseDeposit(ConvertToFloat((PaidUp).ToString())));
+
+                            }
+                            else
+                            {
+                                MainForm.Context.Update(SetCaisse(ConvertToFloat((TotalFacture).ToString())));
+                                MainForm.Context.Add(SetCaisseDeposit(ConvertToFloat((TotalFacture).ToString())));
+                            }
                             if (PaidUp > 0)
                             {
                                 var CustReport = SetCustReport();

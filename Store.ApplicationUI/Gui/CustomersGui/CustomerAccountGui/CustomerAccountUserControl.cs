@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Entities.Caisses;
 using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
@@ -121,7 +122,37 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
 
 
         }
+        Caisse SetCaisse(float value)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
 
+            Caisse caisse = MainForm.Context.Caisses.FirstOrDefault((x => x.Id == Properties.Settings.Default.DefaultCaisseId));
+            if (caisse is not null)
+            {
+                caisse.MoneyinCaisse += value;
+            }
+            return caisse;
+
+        }
+        CaisseDeposit SetCaisseDeposit(float value)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+
+
+            var caisseDeposit = new CaisseDeposit
+            {
+                Caisse_ID = Properties.Settings.Default.DefaultCaisseId,
+                Time = DateTime.Now.ToString("HH:mm:ss"),
+                Date = DateTime.Now,
+                Name = $"  {Properties.Settings.Default.UserName}  دين سابق بحساب ",
+                Money = value,
+                Reason = "دين لمبيعة",
+                Type = "ايداع عن طريق استلام دين (مال ربحي )"
+            };
+
+            return caisseDeposit;
+
+        }
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             LoadData();
@@ -151,6 +182,9 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                         v4,
                         DateTime.Now
                         );
+                    MainForm.Context.Update(SetCaisse(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString())));
+                    MainForm.Context.Add(SetCaisseDeposit(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString())));
+
                 }
                 else if (rbPayPartialFacture.Checked)
                 {
@@ -166,6 +200,9 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                        txtPayAmout.Text,
                        DateTime.Now
                        );
+                    MainForm.Context.Update(SetCaisse(_main.ConvertToFloat(txtPayAmout.Text)));
+                    MainForm.Context.Add(SetCaisseDeposit(_main.ConvertToFloat(txtPayAmout.Text)));
+
                 }
                 else
                 {
@@ -179,6 +216,9 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                             row.Cells[2].Value?.ToString(),
                             DateTime.Now
                         );
+                        MainForm.Context.Update(SetCaisse(_main.ConvertToFloat(row.Cells[3].Value?.ToString())));
+                        MainForm.Context.Add(SetCaisseDeposit(_main.ConvertToFloat(row.Cells[3].Value?.ToString())));
+
                     }
 
                 }

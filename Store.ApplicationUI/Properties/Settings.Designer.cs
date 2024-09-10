@@ -130,5 +130,17 @@ namespace Store.ApplicationUI.Properties {
                 this["DaysAddDebt"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int DefaultCaisseId {
+            get {
+                return ((int)(this["DefaultCaisseId"]));
+            }
+            set {
+                this["DefaultCaisseId"] = value;
+            }
+        }
     }
 }
