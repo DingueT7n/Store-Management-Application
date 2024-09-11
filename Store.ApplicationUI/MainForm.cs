@@ -235,14 +235,14 @@ namespace Store.ApplicationUI
             AddStoreForm addStoreForm = AddStoreForm.Instance(this); ;
             addStoreForm.ShowDialog();
         }
-        public float ConvertToFloat(string value)
+        public decimal ConvertToFloat(string value)
         {
-            float quantity;
-            if (float.TryParse(value, out quantity))
-            {
-                return quantity;
-            }
-            return quantity;
+            //decimal quantity;
+            //if (float.TryParse(value, out quantity))
+            //{
+            //    return quantity;
+            //}
+            return Convert.ToDecimal(value);
         }
 
         private void btnBuysPanel_Click(object sender, EventArgs e)

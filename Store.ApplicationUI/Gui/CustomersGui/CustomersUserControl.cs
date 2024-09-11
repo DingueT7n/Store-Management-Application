@@ -1,6 +1,7 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.ProductsGui;
+using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.CustomersGui
@@ -11,6 +12,8 @@ namespace Store.ApplicationUI.Gui.CustomersGui
         private static MainForm? _main;
         private AddCustomerForm addCustomerForm;
         public static CustomersRepository? customersRepository;
+        private static ApplicationDbContext _context;
+
 
         public CustomersUserControl()
         {
@@ -28,7 +31,8 @@ namespace Store.ApplicationUI.Gui.CustomersGui
             // If the instance is null, create a new one and assign it to the static field
             if (CheckInstance())
             {
-                customersRepository = new CustomersRepository(MainForm.Context);
+                _context = new ApplicationDbContext();
+                customersRepository = new CustomersRepository(_context);
 
                 _customersUserControl = new CustomersUserControl();
 
@@ -41,8 +45,8 @@ namespace Store.ApplicationUI.Gui.CustomersGui
         public async void SetProductsToDgv()
         {
             //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            DgvِCustomer.DataSource = MainForm.Context.Customers
-                .ToList();
+            DgvِCustomer.DataSource = customersRepository.GetAllData();
+
         }
 
         public static void RefreshDgv()
@@ -138,11 +142,22 @@ namespace Store.ApplicationUI.Gui.CustomersGui
 
         private void btnDeleteCustomer_Click(object sender, EventArgs e)
         {
-            if (MsgHelper.ShowDeleteDialog())
+            try
             {
-                customersRepository.DeleteAsync(DgvِCustomer.CurrentRow.Cells[6].Value.ToString());
+                if (MsgHelper.ShowDeleteDialog())
+                {
+                    var customer = customersRepository.DeleteAsync(DgvِCustomer.CurrentRow.Cells[6].Value.ToString());
+
+                    _context.SaveChanges();
+                }
+                RefreshDgv();
             }
-            RefreshDgv();
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
         private void btnSearch_Click(object sender, EventArgs e)

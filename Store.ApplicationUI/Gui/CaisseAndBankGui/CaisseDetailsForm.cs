@@ -1,15 +1,18 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.CaisseAndBankGui
 {
     public partial class CaisseDetailsForm : Form
     {
+        private ApplicationDbContext _context;
         private static MainForm _main;
 
         public CaisseDetailsForm(MainForm main)
         {
+            _context = new ApplicationDbContext();
             _main = main;
             InitializeComponent();
             this.Owner = main;
@@ -19,16 +22,16 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
         public void SetCategoryToDgv()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            DgvCaisser.DataSource = MainForm.Context.Caisses
+            DgvCaisser.DataSource = _context.Caisses
                 .ToList();
-            lblidCaisse.Text = (MainForm.Context.Caisses.Count() + 1).ToString();
+            lblidCaisse.Text = (_context.Caisses.Count() + 1).ToString();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvCaisser);
         }
         public async void LoadData()
         {
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => MainForm.Context.Database.CanConnect()))
+            if (await Task.Run(() => _context.Database.CanConnect()))
             {
                 SetCategoryToDgv();
                 SetColumns();
@@ -77,8 +80,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
                 Store.Core.Entities.Caisses.Caisse caisse = new();
                 caisse.CaisseName = txtNameِCategory.Text;
                 caisse.MoneyinCaisse = 0;
-                MainForm.Context.Caisses.Add(caisse);
-                MainForm.Context.SaveChanges();
+                _context.Caisses.Add(caisse);
+                _context.SaveChanges();
             }
             RefreshDgv();
         }
@@ -87,13 +90,13 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
         {
             if (MsgHelper.ShowEditDialog())
             {
-                Store.Core.Entities.Caisses.Caisse caisse = MainForm.Context.Caisses.FirstOrDefault(x => x.Id ==
+                Store.Core.Entities.Caisses.Caisse caisse = _context.Caisses.FirstOrDefault(x => x.Id ==
                 Convert.ToInt32(DgvCaisser.CurrentRow.Cells[2].Value.ToString())
                 );
 
                 caisse.CaisseName = txtNameِCategory.Text;
-                MainForm.Context.Update(caisse);
-                MainForm.Context.SaveChangesAsync();
+                _context.Update(caisse);
+                _context.SaveChangesAsync();
                 vider();
             }
         }
@@ -102,15 +105,15 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
         {
             if (MsgHelper.ShowDeleteDialog())
             {
-                MainForm.Context.Remove(Convert.ToInt32(DgvCaisser.CurrentRow.Cells[2].Value.ToString()));
-                MainForm.Context.SaveChangesAsync();
+                _context.Remove(Convert.ToInt32(DgvCaisser.CurrentRow.Cells[2].Value.ToString()));
+                _context.SaveChangesAsync();
             }
             RefreshDgv();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            DgvCaisser.DataSource = MainForm.Context.Caisses.Where(x => x.Id.ToString() == txtSearch.Text ||
+            DgvCaisser.DataSource = _context.Caisses.Where(x => x.Id.ToString() == txtSearch.Text ||
             x.CaisseName.Contains(txtSearch.Text)).ToList();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvCaisser);
             txtSearch.Text = string.Empty;

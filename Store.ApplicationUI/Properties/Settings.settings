@@ -8,7 +8,7 @@
     <Setting Name="DecimalSEP" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="TaxValue" Type="System.Single" Scope="User">
+    <Setting Name="TaxValue" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="FastSaleStore" Type="System.Int32" Scope="User">
@@ -21,7 +21,7 @@
       <Value Profile="(Default)">مشتري عادي</Value>
     </Setting>
     <Setting Name="IdCustomerSale" Type="System.String" Scope="User">
-      <Value Profile="(Default)">4</Value>
+      <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="DefaultStoreSaleId" Type="System.String" Scope="User">
       <Value Profile="(Default)">1</Value>

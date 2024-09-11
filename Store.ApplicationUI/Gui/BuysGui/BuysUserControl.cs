@@ -6,6 +6,7 @@ using Store.Core.Entities.Buys;
 using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Products;
 using Store.Core.Entities.Suppliers;
+using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.BuysGui
@@ -15,9 +16,10 @@ namespace Store.ApplicationUI.Gui.BuysGui
 
         private static BuysUserControl? _buysUserControl;
         private static MainForm? _main;
+        private static ApplicationDbContext _context;
         public static BuysRepository? buysRepository;
-        public static float PaidUp;
-        public static float Remain;
+        public static decimal PaidUp;
+        public static decimal Remain;
 
 
         public BuysUserControl()
@@ -31,7 +33,9 @@ namespace Store.ApplicationUI.Gui.BuysGui
             // If the instance is null, create a new one and assign it to the static field
             if (_buysUserControl == null)
             {
-                buysRepository = new BuysRepository(MainForm.Context);
+                _context = new ApplicationDbContext();
+
+                buysRepository = new BuysRepository(_context);
                 _buysUserControl = new BuysUserControl();
             }
             // Return the singleton instance
@@ -57,12 +61,12 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 // if its an admin or Normal user 
                 SetColumns();
                 SetProductsToDgv();
-                cmbSuppliers.DataSource = MainForm.Context.Suppliers.ToList();
+                cmbSuppliers.DataSource = _context.Suppliers.ToList();
                 cmbSuppliers.DisplayMember = "SupplierName";
                 cmbSuppliers.ValueMember = "Id";
                 cmbSuppliers.Text = "اختر مورد";
 
-                cmbStores.DataSource = MainForm.Context.Stores.ToList();
+                cmbStores.DataSource = _context.Stores.ToList();
                 cmbStores.DisplayMember = "StoreName";
                 cmbStores.ValueMember = "Id";
                 cmbStores.Text = "اختر مخزن";
@@ -127,7 +131,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
         public async void SetProductsToDgv()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            //DgvِProducts.DataSource = MainForm.Context.Products.
+            //DgvِProducts.DataSource = _context.Products.
             //    Include(x => x.Category).ToList();
         }
         public void InitializeTextBoxesAndLables(Product product)
@@ -343,7 +347,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
             CalculateAmount();
         }
         int rowIndex;
-        private double TotalFacture;
+        private decimal TotalFacture;
 
         private void btnUp_Click(object sender, EventArgs e)
         {
@@ -399,15 +403,15 @@ namespace Store.ApplicationUI.Gui.BuysGui
                     lblTotalPriceinFacture.Text = "المبلغ الاجمالي في الفاتورة :" +
                                          (from DataGridViewRow row in DgvِProducts.Rows
                                           where row.Cells[3].FormattedValue.ToString() != string.Empty
-                                          select Convert.ToDouble(row.Cells[3].FormattedValue)).Sum()
+                                          select Convert.ToDecimal(row.Cells[3].FormattedValue)).Sum()
                                           .ToString("f2");
                     TotalFacture = (from DataGridViewRow row in DgvِProducts.Rows
                                     where row.Cells[3].FormattedValue.ToString() != string.Empty
-                                    select Convert.ToDouble(row.Cells[3].FormattedValue)).Sum();
+                                    select Convert.ToDecimal(row.Cells[3].FormattedValue)).Sum();
                     lblTotalQuentity.Text = "اجمالي الكميات في الجدول :" +
                               (from DataGridViewRow row in DgvِProducts.Rows
                                where row.Cells[2].FormattedValue.ToString() != string.Empty
-                               select Convert.ToDouble(row.Cells[2].FormattedValue)).Sum()
+                               select Convert.ToDecimal(row.Cells[2].FormattedValue)).Sum()
                                .ToString("f2");
                     lblTotalProductsInTable.Text = $"مجموع المنتجات في الجدول: {DgvِProducts.Rows.Count}";
                 }
@@ -535,7 +539,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
             var proId = DgvِProducts.Rows[i].Cells[8].Value.ToString();
-            Product product = MainForm.Context.Products.Where(x => x.Id.ToString() == proId).FirstOrDefault();
+            Product product = _context.Products.Where(x => x.Id.ToString() == proId).FirstOrDefault();
             if (product is not null)
             {
                 product.Quentity = product.Quentity + _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
@@ -547,7 +551,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
             var supId = Convert.ToInt32(cmbSuppliers.SelectedValue);
-            Supplier supplier = MainForm.Context.Suppliers.Where(x => x.Id == supId).FirstOrDefault();
+            Supplier supplier = _context.Suppliers.Where(x => x.Id == supId).FirstOrDefault();
             if (supplier is not null)
             {
                 supplier.TotalDebts = supplier.TotalDebts + Remain;
@@ -571,11 +575,11 @@ namespace Store.ApplicationUI.Gui.BuysGui
             }
             return productQty;
         }
-        Caisse SetCaisse(float value)
+        Caisse SetCaisse(decimal value)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
 
-            Caisse caisse = MainForm.Context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefault();
+            Caisse caisse = _context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefault();
             if (caisse is not null)
             {
                 caisse.MoneyinCaisse -= value;
@@ -583,7 +587,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
             return caisse;
 
         }
-        CaisseWithdraw SetCaisseWithdraw(float value)
+        CaisseWithdraw SetCaisseWithdraw(decimal value)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
 
@@ -602,232 +606,321 @@ namespace Store.ApplicationUI.Gui.BuysGui
             return caisseWithdraw;
 
         }
+        private async Task ProcessPaymentAsync(bool isDebt)
+        {
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var buy = SetBuy();
+                    _context.Add(buy);
+                    await _context.SaveChangesAsync();
 
+                    for (int i = 0; i < DgvِProducts.Rows.Count; i++)
+                    {
+                        var buyDetail = SetBuyDetail(i);
+                        buyDetail.Order_ID = buy.Id;
+
+                        _context.BuyDetails.Add(buyDetail);
+
+                        // Update product and add quantity
+                        _context.Update(SetProduct(i));
+                        _context.Add(SetProductQuentity(i));
+                    }
+
+                    await HandleCaisseAndSupplierAsync(buy);
+
+                    await transaction.CommitAsync();
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+        private async Task HandleCaisseAndSupplierAsync(Buy buy)
+        {
+            if (PaidUp <= TotalFacture)
+            {
+                _context.Update(SetCaisse(_main.ConvertToFloat(PaidUp.ToString())));
+                _context.Add(SetCaisseWithdraw(_main.ConvertToFloat(PaidUp.ToString())));
+            }
+            else
+            {
+                _context.Update(SetCaisse(_main.ConvertToFloat(TotalFacture.ToString())));
+                _context.Add(SetCaisseWithdraw(_main.ConvertToFloat(TotalFacture.ToString())));
+            }
+            if (PaidUp > 0)
+            {
+                var supplierReport = SetSupReport();
+                supplierReport.Order_ID = buy.Id;
+                _context.Add(supplierReport);
+            }
+            if (Remain > 0)
+            {
+                var supplierMoney = SetSupMoney();
+                supplierMoney.Order_ID = buy.Id;
+                _context.Add(supplierMoney);
+
+                _context.Update(SetSupplier());
+            }
+            await _context.SaveChangesAsync();
+        }
         private async void btnPay_Click(object sender, EventArgs e)
         {
+
             if (ValidatePay())
             {
                 AddPaymentForm addPaymentForm = new(_main, 0);
 
-                if (rBPayCash.Checked)
+                // Determine payment type and show the payment form
+                if (rBPayCash.Checked || rBPayPartial.Checked)
                 {
                     addPaymentForm.LoadData(TotalFacture.ToString(), TotalFacture.ToString(), "0");
                     addPaymentForm.ShowDialog();
-                    if (PaidUp >= TotalFacture)
-                    {
-                        using (var transaction = MainForm.Context.Database.BeginTransaction())
-                        {
-                            try
-                            {
-                                var buy = SetBuy();
-                                MainForm.Context.Add(buy);
-                                await MainForm.Context.SaveChangesAsync();
-
-                                for (int i = 0; i <= DgvِProducts.Rows.Count - 1; i++)
-                                {
-                                    var buyDetail = SetBuyDetail(i);
-                                    buyDetail.Order_ID = buy.Id; // Set foreign key reference to Buy
-
-                                    MainForm.Context.BuyDetails.Add(buyDetail);
-
-                                    // Update product and add quantity
-                                    MainForm.Context.Update(SetProduct(i));
-                                    MainForm.Context.Add(SetProductQuentity(i));
-
-
-                                }
-
-                                await MainForm.Context.SaveChangesAsync();
-                                if (PaidUp <= TotalFacture)
-                                {
-                                    MainForm.Context.Update(SetCaisse(_main.ConvertToFloat((PaidUp).ToString())));
-                                    MainForm.Context.Add(SetCaisseWithdraw(_main.ConvertToFloat((PaidUp).ToString())));
-
-                                }
-                                else
-                                {
-                                    MainForm.Context.Update(SetCaisse(_main.ConvertToFloat((TotalFacture).ToString())));
-                                    MainForm.Context.Add(SetCaisseWithdraw(_main.ConvertToFloat((TotalFacture).ToString())));
-                                }
-                                if (PaidUp > 0)
-                                {
-                                    var supplierReport = SetSupReport();
-                                    supplierReport.Order_ID = buy.Id; // Set foreign key reference to Buy
-                                    MainForm.Context.Add(supplierReport);
-                                }
-                                if (Remain > 0)
-                                {
-                                    var supplierMoney = SetSupMoney();
-                                    supplierMoney.Order_ID = buy.Id; // Set foreign key reference to Buy
-                                    MainForm.Context.Add(supplierMoney);
-
-                                    // Update supplier details
-                                    MainForm.Context.Update(SetSupplier());
-                                }
-                                await MainForm.Context.SaveChangesAsync();
-                                await transaction.CommitAsync();
-
-                            }
-                            catch (Exception ex)
-                            {
-                                await transaction.RollbackAsync();
-                                MessageBox.Show(ex.Message);
-                            }
-                        }
-                    }
-                    else
-                    {
-
-                    }
                 }
                 else if (rBPayDebt.Checked)
                 {
                     addPaymentForm.LoadData(TotalFacture.ToString(), "0", TotalFacture.ToString());
                     addPaymentForm.ShowDialog();
-                    if (PaidUp < TotalFacture)
-                    {
-                        using (var transaction = MainForm.Context.Database.BeginTransaction())
-                        {
-                            try
-                            {
-                                var buy = SetBuy();
-                                MainForm.Context.Add(buy);
-                                await MainForm.Context.SaveChangesAsync();
-
-                                BuyDetailRepository buyDetailRepository = new(MainForm.Context);
-
-                                for (int i = 0; i <= DgvِProducts.Rows.Count - 1; i++)
-                                {
-                                    var buyDetail = SetBuyDetail(i);
-                                    buyDetail.Order_ID = buy.Id; // Set foreign key reference to Buy
-
-                                    MainForm.Context.BuyDetails.Add(buyDetail);
-
-                                    // Update product and add quantity
-                                    MainForm.Context.Update(SetProduct(i));
-                                    MainForm.Context.Add(SetProductQuentity(i));
-
-
-                                }
-                                await MainForm.Context.SaveChangesAsync();
-                                if (PaidUp <= TotalFacture)
-                                {
-                                    MainForm.Context.Update(SetCaisse(_main.ConvertToFloat((PaidUp).ToString())));
-                                    MainForm.Context.Add(SetCaisseWithdraw(_main.ConvertToFloat((PaidUp).ToString())));
-
-                                }
-                                else
-                                {
-                                    MainForm.Context.Update(SetCaisse(_main.ConvertToFloat((TotalFacture).ToString())));
-                                    MainForm.Context.Add(SetCaisseWithdraw(_main.ConvertToFloat((TotalFacture).ToString())));
-                                }
-                                if (PaidUp > 0)
-                                {
-                                    var supplierReport = SetSupReport();
-                                    supplierReport.Order_ID = buy.Id; // Set foreign key reference to Buy
-                                    MainForm.Context.Add(supplierReport);
-                                }
-                                if (Remain > 0)
-                                {
-                                    var supplierMoney = SetSupMoney();
-                                    supplierMoney.Order_ID = buy.Id; // Set foreign key reference to Buy
-                                    MainForm.Context.Add(supplierMoney);
-
-                                    // Update supplier details
-                                    MainForm.Context.Update(SetSupplier());
-                                }
-                                await MainForm.Context.SaveChangesAsync();
-                                await transaction.CommitAsync();
-
-                            }
-                            catch (Exception ex)
-                            {
-                                await transaction.RollbackAsync();
-                                MessageBox.Show(ex.Message);
-                            }
-                        }
-                    }
-                    else
-                    {
-
-                    }
                 }
-                else
+
+                // Proceed if payment is valid
+                if (PaidUp >= TotalFacture)
                 {
-                    addPaymentForm.LoadData(TotalFacture.ToString(), TotalFacture.ToString(), "0");
-                    addPaymentForm.ShowDialog();
-                    if (PaidUp <= TotalFacture)
-                    {
-                        using (var transaction = MainForm.Context.Database.BeginTransaction())
-                        {
-                            try
-                            {
-                                var buy = SetBuy();
-                                MainForm.Context.Add(buy);
-                                await MainForm.Context.SaveChangesAsync();
-
-
-
-                                for (int i = 0; i <= DgvِProducts.Rows.Count - 1; i++)
-                                {
-                                    var buyDetail = SetBuyDetail(i);
-                                    buyDetail.Order_ID = buy.Id; // Set foreign key reference to Buy
-
-                                    MainForm.Context.BuyDetails.Add(buyDetail);
-
-                                    // Update product and add quantity
-                                    MainForm.Context.Update(SetProduct(i));
-                                    MainForm.Context.Add(SetProductQuentity(i));
-
-
-                                }
-                                await MainForm.Context.SaveChangesAsync();
-                                if (PaidUp <= TotalFacture)
-                                {
-                                    MainForm.Context.Update(SetCaisse(_main.ConvertToFloat((PaidUp).ToString())));
-                                    MainForm.Context.Add(SetCaisseWithdraw(_main.ConvertToFloat((PaidUp).ToString())));
-
-                                }
-                                else
-                                {
-                                    MainForm.Context.Update(SetCaisse(_main.ConvertToFloat((TotalFacture).ToString())));
-                                    MainForm.Context.Add(SetCaisseWithdraw(_main.ConvertToFloat((TotalFacture).ToString())));
-                                }
-                                if (PaidUp > 0)
-                                {
-                                    var supplierReport = SetSupReport();
-                                    supplierReport.Order_ID = buy.Id; // Set foreign key reference to Buy
-                                    MainForm.Context.Add(supplierReport);
-                                }
-                                if (Remain > 0)
-                                {
-                                    var supplierMoney = SetSupMoney();
-                                    supplierMoney.Order_ID = buy.Id; // Set foreign key reference to Buy
-                                    MainForm.Context.Add(supplierMoney);
-
-                                    // Update supplier details
-                                    MainForm.Context.Update(SetSupplier());
-                                }
-                                await MainForm.Context.SaveChangesAsync();
-                                await transaction.CommitAsync();
-
-
-                            }
-                            catch (Exception ex)
-                            {
-                                await transaction.RollbackAsync();
-                                MessageBox.Show(ex.Message);
-                            }
-                        }
-                    }
-                    else
-                    {
-
-                    }
-
+                    await ProcessPaymentAsync(false);
                 }
+                else if (PaidUp < TotalFacture)
+                {
+                    await ProcessPaymentAsync(true);
+                }
+
                 ResetForm();
             }
+            //if (ValidatePay())
+            //{
+            //    AddPaymentForm addPaymentForm = new(_main, 0);
+
+            //    if (rBPayCash.Checked)
+            //    {
+            //        addPaymentForm.LoadData(TotalFacture.ToString(), TotalFacture.ToString(), "0");
+            //        addPaymentForm.ShowDialog();
+            //        if (PaidUp >= TotalFacture)
+            //        {
+            //            using (var transaction = _context.Database.BeginTransaction())
+            //            {
+            //                try
+            //                {
+            //                    var buy = SetBuy();
+            //                    _context.Add(buy);
+            //                    await _context.SaveChangesAsync();
+
+            //                    for (int i = 0; i <= DgvِProducts.Rows.Count - 1; i++)
+            //                    {
+            //                        var buyDetail = SetBuyDetail(i);
+            //                        buyDetail.Order_ID = buy.Id; // Set foreign key reference to Buy
+
+            //                        _context.BuyDetails.Add(buyDetail);
+
+            //                        // Update product and add quantity
+            //                        _context.Update(SetProduct(i));
+            //                        _context.Add(SetProductQuentity(i));
+
+
+            //                    }
+
+            //                    await _context.SaveChangesAsync();
+            //                    if (PaidUp <= TotalFacture)
+            //                    {
+            //                        _context.Update(SetCaisse(_main.ConvertToFloat((PaidUp).ToString())));
+            //                        _context.Add(SetCaisseWithdraw(_main.ConvertToFloat((PaidUp).ToString())));
+
+            //                    }
+            //                    else
+            //                    {
+            //                        _context.Update(SetCaisse(_main.ConvertToFloat((TotalFacture).ToString())));
+            //                        _context.Add(SetCaisseWithdraw(_main.ConvertToFloat((TotalFacture).ToString())));
+            //                    }
+            //                    if (PaidUp > 0)
+            //                    {
+            //                        var supplierReport = SetSupReport();
+            //                        supplierReport.Order_ID = buy.Id; // Set foreign key reference to Buy
+            //                        _context.Add(supplierReport);
+            //                    }
+            //                    if (Remain > 0)
+            //                    {
+            //                        var supplierMoney = SetSupMoney();
+            //                        supplierMoney.Order_ID = buy.Id; // Set foreign key reference to Buy
+            //                        _context.Add(supplierMoney);
+
+            //                        // Update supplier details
+            //                        _context.Update(SetSupplier());
+            //                    }
+            //                    await _context.SaveChangesAsync();
+            //                    await transaction.CommitAsync();
+
+            //                }
+            //                catch (Exception ex)
+            //                {
+            //                    await transaction.RollbackAsync();
+            //                    MessageBox.Show(ex.Message);
+            //                }
+            //            }
+            //        }
+            //        else
+            //        {
+
+            //        }
+            //    }
+            //    else if (rBPayDebt.Checked)
+            //    {
+            //        addPaymentForm.LoadData(TotalFacture.ToString(), "0", TotalFacture.ToString());
+            //        addPaymentForm.ShowDialog();
+            //        if (PaidUp < TotalFacture)
+            //        {
+            //            using (var transaction = _context.Database.BeginTransaction())
+            //            {
+            //                try
+            //                {
+            //                    var buy = SetBuy();
+            //                    _context.Add(buy);
+            //                    await _context.SaveChangesAsync();
+
+            //                    BuyDetailRepository buyDetailRepository = new(_context);
+
+            //                    for (int i = 0; i <= DgvِProducts.Rows.Count - 1; i++)
+            //                    {
+            //                        var buyDetail = SetBuyDetail(i);
+            //                        buyDetail.Order_ID = buy.Id; // Set foreign key reference to Buy
+
+            //                        _context.BuyDetails.Add(buyDetail);
+
+            //                        // Update product and add quantity
+            //                        _context.Update(SetProduct(i));
+            //                        _context.Add(SetProductQuentity(i));
+
+
+            //                    }
+            //                    await _context.SaveChangesAsync();
+            //                    if (PaidUp <= TotalFacture)
+            //                    {
+            //                        _context.Update(SetCaisse(_main.ConvertToFloat((PaidUp).ToString())));
+            //                        _context.Add(SetCaisseWithdraw(_main.ConvertToFloat((PaidUp).ToString())));
+
+            //                    }
+            //                    else
+            //                    {
+            //                        _context.Update(SetCaisse(_main.ConvertToFloat((TotalFacture).ToString())));
+            //                        _context.Add(SetCaisseWithdraw(_main.ConvertToFloat((TotalFacture).ToString())));
+            //                    }
+            //                    if (PaidUp > 0)
+            //                    {
+            //                        var supplierReport = SetSupReport();
+            //                        supplierReport.Order_ID = buy.Id; // Set foreign key reference to Buy
+            //                        _context.Add(supplierReport);
+            //                    }
+            //                    if (Remain > 0)
+            //                    {
+            //                        var supplierMoney = SetSupMoney();
+            //                        supplierMoney.Order_ID = buy.Id; // Set foreign key reference to Buy
+            //                        _context.Add(supplierMoney);
+
+            //                        // Update supplier details
+            //                        _context.Update(SetSupplier());
+            //                    }
+            //                    await _context.SaveChangesAsync();
+            //                    await transaction.CommitAsync();
+
+            //                }
+            //                catch (Exception ex)
+            //                {
+            //                    await transaction.RollbackAsync();
+            //                    MessageBox.Show(ex.Message);
+            //                }
+            //            }
+            //        }
+            //        else
+            //        {
+
+            //        }
+            //    }
+            //    else
+            //    {
+            //        addPaymentForm.LoadData(TotalFacture.ToString(), TotalFacture.ToString(), "0");
+            //        addPaymentForm.ShowDialog();
+            //        if (PaidUp <= TotalFacture)
+            //        {
+            //            using (var transaction = _context.Database.BeginTransaction())
+            //            {
+            //                try
+            //                {
+            //                    var buy = SetBuy();
+            //                    _context.Add(buy);
+            //                    await _context.SaveChangesAsync();
+
+
+
+            //                    for (int i = 0; i <= DgvِProducts.Rows.Count - 1; i++)
+            //                    {
+            //                        var buyDetail = SetBuyDetail(i);
+            //                        buyDetail.Order_ID = buy.Id; // Set foreign key reference to Buy
+
+            //                        _context.BuyDetails.Add(buyDetail);
+
+            //                        // Update product and add quantity
+            //                        _context.Update(SetProduct(i));
+            //                        _context.Add(SetProductQuentity(i));
+
+
+            //                    }
+            //                    await _context.SaveChangesAsync();
+            //                    if (PaidUp <= TotalFacture)
+            //                    {
+            //                        _context.Update(SetCaisse(_main.ConvertToFloat((PaidUp).ToString())));
+            //                        _context.Add(SetCaisseWithdraw(_main.ConvertToFloat((PaidUp).ToString())));
+
+            //                    }
+            //                    else
+            //                    {
+            //                        _context.Update(SetCaisse(_main.ConvertToFloat((TotalFacture).ToString())));
+            //                        _context.Add(SetCaisseWithdraw(_main.ConvertToFloat((TotalFacture).ToString())));
+            //                    }
+            //                    if (PaidUp > 0)
+            //                    {
+            //                        var supplierReport = SetSupReport();
+            //                        supplierReport.Order_ID = buy.Id; // Set foreign key reference to Buy
+            //                        _context.Add(supplierReport);
+            //                    }
+            //                    if (Remain > 0)
+            //                    {
+            //                        var supplierMoney = SetSupMoney();
+            //                        supplierMoney.Order_ID = buy.Id; // Set foreign key reference to Buy
+            //                        _context.Add(supplierMoney);
+
+            //                        // Update supplier details
+            //                        _context.Update(SetSupplier());
+            //                    }
+            //                    await _context.SaveChangesAsync();
+            //                    await transaction.CommitAsync();
+
+
+            //                }
+            //                catch (Exception ex)
+            //                {
+            //                    await transaction.RollbackAsync();
+            //                    MessageBox.Show(ex.Message);
+            //                }
+            //            }
+            //        }
+            //        else
+            //        {
+
+            //        }
+
+            //    }
+            //    ResetForm();
+            //}
         }
 
         private void txtSalePrice_KeyPress(object sender, KeyPressEventArgs e)

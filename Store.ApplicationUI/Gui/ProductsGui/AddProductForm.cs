@@ -2,6 +2,7 @@
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.ProductsGui.Category;
 using Store.Core.Entities.Products;
+using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.ProductsGui
@@ -9,6 +10,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
     public partial class AddProductForm : Form
     {
         private static MainForm _main;
+        private ApplicationDbContext _context;
         private ProductsRepository? productsRepository;
         private static AddProductForm _addProductForm;
         private CategorysRepository? categoryRepository;
@@ -17,8 +19,10 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             InitializeComponent();
             _main = main;
             this.Owner = _main;
-            productsRepository = new ProductsRepository(MainForm.Context);
-            categoryRepository = new CategorysRepository(MainForm.Context);
+            _context = new ApplicationDbContext();
+
+            productsRepository = new ProductsRepository(_context);
+            categoryRepository = new CategorysRepository(_context);
             LoadData();
             ConfigDate();
         }
@@ -61,13 +65,13 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
 
             LoadingForm.Instance(_main).Show();
-            if (/*await Task.Run(() =>*/ MainForm.Context.Database.CanConnect())/*)*/
+            if (/*await Task.Run(() =>*/ _context.Database.CanConnect())/*)*/
             {
                 //Start Load Data
 
                 // if its an admin or Normal user 
 
-                CMBCategory.DataSource = MainForm.Context.Categories.ToList();
+                CMBCategory.DataSource = _context.Categories.ToList();
 
 
 
@@ -229,13 +233,13 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 //{
                 //    product.CategoryId = categoryId;
                 //}
-                var result = MainForm.Context.Add(product);
+                var result = _context.Add(product);
 
                 if (!ProductsUserControl.CheckInstance())
                 {
                     ProductsUserControl.RefreshDgv();
                 }
-                MainForm.Context.SaveChanges();
+                _context.SaveChanges();
                 ProductQuickAccess qucik = new ProductQuickAccess
                 {
                     Pro_Id = product.Id,
@@ -244,22 +248,22 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                     ProductName = txtNameProduct.Text,
                 };
                 vider();
-                MainForm.Context.AddAsync(qucik);
-                MainForm.Context.SaveChanges();
+                _context.Add(qucik);
+                _context.SaveChanges();
 
             }
             else
                 MsgHelper.ShowRequiredFields();
         }
 
-        float ConvertToFloat(string value)
+        decimal ConvertToFloat(string value)
         {
-            float quantity;
-            if (float.TryParse(value, out quantity))
-            {
-                return quantity;
-            }
-            return quantity;
+            //float quantity;
+            //if (float.TryParse(value, out quantity))
+            //{
+            //    return quantity;
+            //}
+            return Convert.ToDecimal(value);
         }
 
         private void btnEditProduct_Click(object sender, EventArgs e)

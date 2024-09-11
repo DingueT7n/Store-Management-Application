@@ -106,14 +106,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
 
         private void SelectCustomerForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.F3)
-            {
-                if (!dgvHelper.IsEmpty(DgvProducts))
-                    if (PosForm.GetPosUserControl() is not null)
-                    {
-                        PosForm.GetPosUserControl().setCustomerFromSelector(DgvProducts.CurrentRow.Cells[6].Value.ToString(), DgvProducts.CurrentRow.Cells[0].Value.ToString());
-                    }
-            }
+
         }
     }
 }

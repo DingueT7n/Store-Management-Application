@@ -2,6 +2,7 @@
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Caisses;
+using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
@@ -9,6 +10,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
     public partial class SupplierAccountUserControl : UserControl
     {
         private static MainForm? _main;
+        private static ApplicationDbContext _context;
         public static SupplierMoneyRepository? suppliersRepository;
         private static SupplierAccountUserControl? _supplierAccountUserControl;
         public SupplierAccountUserControl()
@@ -26,7 +28,9 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
             // If the instance is null, create a new one and assign it to the static field
             if (CheckInstance())
             {
-                suppliersRepository = new SupplierMoneyRepository(MainForm.Context);
+                _context = new ApplicationDbContext();
+
+                suppliersRepository = new SupplierMoneyRepository(_context);
 
                 _supplierAccountUserControl = new SupplierAccountUserControl();
 
@@ -41,7 +45,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
         public async void SetDataToDgv()
         {
             //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            var SuppliersMoneyList = MainForm.Context.SuppliersMoneys.
+            var SuppliersMoneyList = _context.SuppliersMoneys.
                 Include(x => x.Supplier).Include(x => x.Buy)
                 .ToList();
             var uniqueSupplierCount = SuppliersMoneyList
@@ -134,11 +138,11 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
             txtSearch.Text = string.Empty;
         }
-        Caisse SetCaisse(float value)
+        Caisse SetCaisse(decimal value)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
 
-            Caisse caisse = MainForm.Context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefault();
+            Caisse caisse = _context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefault();
             if (caisse is not null)
             {
                 caisse.MoneyinCaisse -= value;
@@ -146,7 +150,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
             return caisse;
 
         }
-        CaisseWithdraw SetCaisseWithdraw(float value, string suppname)
+        CaisseWithdraw SetCaisseWithdraw(decimal value, string suppname)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
 
@@ -178,8 +182,8 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                         DgvِCustomer.CurrentRow.Cells[2].Value.ToString(),
                         DateTime.Now
                         );
-                    MainForm.Context.Update(SetCaisse(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString())));
-                    MainForm.Context.Add(SetCaisseWithdraw(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString()),
+                    _context.Update(SetCaisse(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString())));
+                    _context.Add(SetCaisseWithdraw(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString()),
                         DgvِCustomer.CurrentRow.Cells[2].Value.ToString()
                         ));
 
@@ -194,8 +198,8 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                        txtPayAmout.Text,
                        DateTime.Now
                        );
-                    MainForm.Context.Update(SetCaisse(_main.ConvertToFloat(txtPayAmout.Text)));
-                    MainForm.Context.Add(SetCaisseWithdraw(_main.ConvertToFloat(txtPayAmout.Text),
+                    _context.Update(SetCaisse(_main.ConvertToFloat(txtPayAmout.Text)));
+                    _context.Add(SetCaisseWithdraw(_main.ConvertToFloat(txtPayAmout.Text),
                          DgvِCustomer.CurrentRow.Cells[2].Value.ToString()));
 
                 }
@@ -211,8 +215,8 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                             row.Cells[2].Value?.ToString(),
                             DateTime.Now
                         );
-                        MainForm.Context.Update(SetCaisse(_main.ConvertToFloat(row.Cells[3].Value?.ToString())));
-                        MainForm.Context.Add(SetCaisseWithdraw(
+                        _context.Update(SetCaisse(_main.ConvertToFloat(row.Cells[3].Value?.ToString())));
+                        _context.Add(SetCaisseWithdraw(
                             _main.ConvertToFloat(row.Cells[3].Value?.ToString())
                             , DgvِCustomer.CurrentRow.Cells[2].Value.ToString()));
 

@@ -75,7 +75,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
                 }
 
             }
-            else
+
             {
                 var posUserControl = PosForm.GetPosUserControl();
                 if (posUserControl != null)
@@ -207,7 +207,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
                 {
                     if (SalesUserControl.setProductFromSelector(MainForm.Context.Products.FirstOrDefault(x => x.Id == Id))) { }
                 }
-                else
+
                 {
 
                     if (PosForm.GetPosUserControl() is not null)

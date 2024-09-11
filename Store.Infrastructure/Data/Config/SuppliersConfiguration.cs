@@ -16,7 +16,6 @@ namespace Store.Infrastructure.Data.Config
               new Supplier { Id = 1, SupplierName = "مورد سعيدة", Address = "بوهراوة", PhoneNumber = "0697357397", Notes = "معلومات مشحونة", MaxDebtAllowed = 400, TotalDebts = 0 },
               new Supplier { Id = 2, SupplierName = "مورد الزعيم", Address = "مراماد", PhoneNumber = "0754653721", Notes = "معلومات مشحونة", MaxDebtAllowed = 5000, TotalDebts = 0 },
               new Supplier { Id = 3, SupplierName = "مورد القولية", Address = "العطف", PhoneNumber = "0697357546", Notes = "معلومات مشحونة", MaxDebtAllowed = 5500, TotalDebts = 0 }
-
               );
         }
     }

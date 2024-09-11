@@ -2,6 +2,7 @@
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Caisses;
+using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
@@ -9,6 +10,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
     public partial class CustomerAccountUserControl : UserControl
     {
         private static MainForm? _main;
+        private static ApplicationDbContext _context;
         public static CustomerMoneyRepository? customersRepository;
         private static CustomerAccountUserControl? _customerAccountUserControl;
         public CustomerAccountUserControl()
@@ -26,7 +28,9 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
             // If the instance is null, create a new one and assign it to the static field
             if (CheckInstance())
             {
-                customersRepository = new CustomerMoneyRepository(MainForm.Context);
+                _context = new ApplicationDbContext();
+
+                customersRepository = new CustomerMoneyRepository(_context);
 
                 _customerAccountUserControl = new CustomerAccountUserControl();
 
@@ -41,7 +45,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
         public async void SetDataToDgv()
         {
             //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            var CustomerMoneyList = MainForm.Context.CustomersMoneys.
+            var CustomerMoneyList = _context.CustomersMoneys.
                 Include(x => x.Customer).Include(x => x.Sale)
                 .ToList();
             var uniqueCustomerCount = CustomerMoneyList
@@ -122,11 +126,11 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
 
 
         }
-        Caisse SetCaisse(float value)
+        Caisse SetCaisse(decimal value)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
 
-            Caisse caisse = MainForm.Context.Caisses.FirstOrDefault((x => x.Id == Properties.Settings.Default.DefaultCaisseId));
+            Caisse caisse = _context.Caisses.FirstOrDefault((x => x.Id == Properties.Settings.Default.DefaultCaisseId));
             if (caisse is not null)
             {
                 caisse.MoneyinCaisse += value;
@@ -134,7 +138,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
             return caisse;
 
         }
-        CaisseDeposit SetCaisseDeposit(float value)
+        CaisseDeposit SetCaisseDeposit(decimal value)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
 
@@ -182,8 +186,8 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                         v4,
                         DateTime.Now
                         );
-                    MainForm.Context.Update(SetCaisse(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString())));
-                    MainForm.Context.Add(SetCaisseDeposit(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString())));
+                    _context.Update(SetCaisse(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString())));
+                    _context.Add(SetCaisseDeposit(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString())));
 
                 }
                 else if (rbPayPartialFacture.Checked)
@@ -200,8 +204,8 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                        txtPayAmout.Text,
                        DateTime.Now
                        );
-                    MainForm.Context.Update(SetCaisse(_main.ConvertToFloat(txtPayAmout.Text)));
-                    MainForm.Context.Add(SetCaisseDeposit(_main.ConvertToFloat(txtPayAmout.Text)));
+                    _context.Update(SetCaisse(_main.ConvertToFloat(txtPayAmout.Text)));
+                    _context.Add(SetCaisseDeposit(_main.ConvertToFloat(txtPayAmout.Text)));
 
                 }
                 else
@@ -216,8 +220,8 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                             row.Cells[2].Value?.ToString(),
                             DateTime.Now
                         );
-                        MainForm.Context.Update(SetCaisse(_main.ConvertToFloat(row.Cells[3].Value?.ToString())));
-                        MainForm.Context.Add(SetCaisseDeposit(_main.ConvertToFloat(row.Cells[3].Value?.ToString())));
+                        _context.Update(SetCaisse(_main.ConvertToFloat(row.Cells[3].Value?.ToString())));
+                        _context.Add(SetCaisseDeposit(_main.ConvertToFloat(row.Cells[3].Value?.ToString())));
 
                     }
 

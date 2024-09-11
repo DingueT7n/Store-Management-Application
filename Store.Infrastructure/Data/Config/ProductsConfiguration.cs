@@ -13,6 +13,7 @@ namespace Store.Infrastructure.Data.Config
             builder.HasKey(x => x.Id);
             builder.HasOne(x => x.Category).WithMany().HasForeignKey(x => x.CategoryId);
 
+
         }
     }
     public class ProductOutStoreConfiguration : IEntityTypeConfiguration<ProductOutStore>

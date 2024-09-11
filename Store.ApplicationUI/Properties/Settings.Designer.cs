@@ -50,9 +50,9 @@ namespace Store.ApplicationUI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public float TaxValue {
+        public decimal TaxValue {
             get {
-                return ((float)(this["TaxValue"]));
+                return ((decimal)(this["TaxValue"]));
             }
             set {
                 this["TaxValue"] = value;
@@ -97,7 +97,7 @@ namespace Store.ApplicationUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("4")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public string IdCustomerSale {
             get {
                 return ((string)(this["IdCustomerSale"]));

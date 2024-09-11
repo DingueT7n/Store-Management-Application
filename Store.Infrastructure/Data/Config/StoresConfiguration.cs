@@ -8,7 +8,9 @@ namespace Store.Infrastructure.Data.Config
         public void Configure(EntityTypeBuilder<Core.Entities.Stores.Store> builder)
         {
             builder.Property(x => x.Id).IsRequired();
+            builder.HasData(
 
+                new Core.Entities.Stores.Store { Id = 1, StoreName = "مخزن رئيسي" });
 
         }
     }

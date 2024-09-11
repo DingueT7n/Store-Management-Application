@@ -31,18 +31,18 @@ namespace Store.Infrastructure.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float?>("Price")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Time")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TypeId")
+                    b.Property<int>("TypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -80,9 +80,9 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
-                    b.Property<int?>("Order_Num")
+                    b.Property<int>("Order_Num")
                         .HasColumnType("int");
 
                     b.Property<string>("Order_Type")
@@ -94,14 +94,14 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<string>("TaxType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float?>("TotalAfterTax")
-                        .HasColumnType("real");
+                    b.Property<decimal>("TotalAfterTax")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<float>("TotalOrder")
-                        .HasColumnType("real");
+                    b.Property<decimal>("TotalOrder")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<float?>("TotalTax")
-                        .HasColumnType("real");
+                    b.Property<decimal>("TotalTax")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -116,8 +116,8 @@ namespace Store.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<float>("Money")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Money")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -127,7 +127,7 @@ namespace Store.Infrastructure.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Money = 0f
+                            Money = 0m
                         });
                 });
 
@@ -140,10 +140,10 @@ namespace Store.Infrastructure.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
-                    b.Property<float>("Money")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Money")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -171,10 +171,10 @@ namespace Store.Infrastructure.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
-                    b.Property<float>("Money")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Money")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -202,13 +202,13 @@ namespace Store.Infrastructure.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
-                    b.Property<float>("PaidUP")
-                        .HasColumnType("real");
+                    b.Property<decimal>("PaidUP")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<float>("Remain")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Remain")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("SupplierId")
                         .HasColumnType("int");
@@ -216,8 +216,8 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<string>("Time")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Total")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("User_Name")
                         .HasMaxLength(50)
@@ -238,32 +238,32 @@ namespace Store.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<float>("Discount")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Order_ID")
                         .HasColumnType("int");
 
-                    b.Property<float>("Price")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<float>("PriceWithTax")
-                        .HasColumnType("real");
+                    b.Property<decimal>("PriceWithTax")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Pro_ID")
                         .HasColumnType("int");
 
-                    b.Property<float>("Quentity")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Quentity")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Sup_ID")
                         .HasColumnType("int");
 
-                    b.Property<float>("TaxValue")
-                        .HasColumnType("real");
+                    b.Property<decimal>("TaxValue")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<float>("Total")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -288,12 +288,32 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<float>("MoneyinCaisse")
-                        .HasColumnType("real");
+                    b.Property<decimal>("MoneyinCaisse")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Caisses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CaisseName = "الصندوق الأول",
+                            MoneyinCaisse = 0m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CaisseName = "الصندوق الثاني",
+                            MoneyinCaisse = 0m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CaisseName = "الصندوق الثالث",
+                            MoneyinCaisse = 0m
+                        });
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Caisses.CaisseBankTransfere", b =>
@@ -305,13 +325,13 @@ namespace Store.Infrastructure.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("From_")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float?>("Money")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Money")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -339,10 +359,10 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
-                    b.Property<float>("Money")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Money")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -378,10 +398,10 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
-                    b.Property<float>("Money")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Money")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -413,10 +433,10 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
-                    b.Property<float>("Money")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Money")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -452,8 +472,8 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasMaxLength(75)
                         .HasColumnType("nvarchar(75)");
 
-                    b.Property<float?>("MaxDebtAllowed")
-                        .HasColumnType("real");
+                    b.Property<decimal>("MaxDebtAllowed")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
@@ -462,8 +482,8 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<float>("TotalDebts")
-                        .HasColumnType("real");
+                    b.Property<decimal>("TotalDebts")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -475,30 +495,40 @@ namespace Store.Infrastructure.Data.Migrations
                             Id = 1,
                             Address = "بن سمارة",
                             CustomerName = "قربوز علاء",
-                            MaxDebtAllowed = 0f,
+                            MaxDebtAllowed = 0m,
                             Notes = "معلومات مشحونة",
                             PhoneNumber = "0697357397",
-                            TotalDebts = 0f
+                            TotalDebts = 0m
                         },
                         new
                         {
                             Id = 2,
                             Address = "مرماد",
                             CustomerName = "بن خليفة",
-                            MaxDebtAllowed = 0f,
+                            MaxDebtAllowed = 0m,
                             Notes = "معلومات مشحونة",
                             PhoneNumber = "0754653721",
-                            TotalDebts = 0f
+                            TotalDebts = 0m
                         },
                         new
                         {
                             Id = 3,
                             Address = "حاج مسعود",
                             CustomerName = "دوادي",
-                            MaxDebtAllowed = 0f,
+                            MaxDebtAllowed = 0m,
                             Notes = "معلومات مشحونة",
                             PhoneNumber = "0697357546",
-                            TotalDebts = 0f
+                            TotalDebts = 0m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Address = "",
+                            CustomerName = "مشتري عادي",
+                            MaxDebtAllowed = 0m,
+                            Notes = "معلومات مشحونة",
+                            PhoneNumber = "",
+                            TotalDebts = 0m
                         });
                 });
 
@@ -518,16 +548,16 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(75)");
 
                     b.Property<DateTime>("Order_Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<int>("Order_ID")
                         .HasColumnType("int");
 
-                    b.Property<float>("Price")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("Reminder_Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Time")
                         .HasColumnType("nvarchar(max)");
@@ -557,13 +587,13 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(75)");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<int>("Order_ID")
                         .HasColumnType("int");
 
-                    b.Property<float>("Price")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Time")
                         .HasColumnType("nvarchar(max)");
@@ -635,8 +665,8 @@ namespace Store.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Store.Core.Entities.Helpers.RandomBarcode", b =>
                 {
-                    b.Property<float?>("Barcode")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Barcode")
+                        .HasColumnType("decimal(18,2)");
 
                     b.ToTable("RandomBarcode");
                 });
@@ -708,8 +738,8 @@ namespace Store.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<float>("BuyPrice")
-                        .HasColumnType("real");
+                    b.Property<decimal>("BuyPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -718,16 +748,16 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateExperation")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<bool>("IsTaxed")
                         .HasColumnType("bit");
 
-                    b.Property<float?>("MaxDiscount")
-                        .HasColumnType("real");
+                    b.Property<decimal>("MaxDiscount")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<float?>("MinQty")
-                        .HasColumnType("real");
+                    b.Property<decimal>("MinQty")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<byte[]>("ProductImage")
                         .HasColumnType("varbinary(max)");
@@ -736,20 +766,20 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<float>("Quentity")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Quentity")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<float>("SalePrice")
-                        .HasColumnType("real");
+                    b.Property<decimal>("SalePrice")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<float>("SalePriceTax")
-                        .HasColumnType("real");
+                    b.Property<decimal>("SalePriceTax")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<float>("TaxValue")
-                        .HasColumnType("real");
+                    b.Property<decimal>("TaxValue")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<float>("WholesalePrice")
-                        .HasColumnType("real");
+                    b.Property<decimal>("WholesalePrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -767,19 +797,19 @@ namespace Store.Infrastructure.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("DateEnd")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<DateTime?>("DateStart")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
-                    b.Property<float>("DiscountValue")
-                        .HasColumnType("real");
+                    b.Property<decimal>("DiscountValue")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Pro_Id")
                         .HasColumnType("int");
 
-                    b.Property<float?>("Quentity")
-                        .HasColumnType("real");
+                    b.Property<decimal?>("Quentity")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Store_Id")
                         .HasColumnType("int");
@@ -806,7 +836,7 @@ namespace Store.Infrastructure.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Name")
                         .HasMaxLength(50)
@@ -819,8 +849,8 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<float>("Quentity")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Quentity")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Reason")
                         .HasColumnType("nvarchar(max)");
@@ -875,8 +905,8 @@ namespace Store.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<float>("BuyPrice")
-                        .HasColumnType("real");
+                    b.Property<decimal>("BuyPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Date")
                         .HasColumnType("nvarchar(max)");
@@ -885,8 +915,8 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<float>("PriceTax")
-                        .HasColumnType("real");
+                    b.Property<decimal>("PriceTax")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Pro_ID")
                         .HasColumnType("int");
@@ -894,17 +924,17 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<string>("Pro_Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Quentity")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Quentity")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Reason")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("SalePrice")
-                        .HasColumnType("real");
+                    b.Property<decimal>("SalePrice")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<float>("SalePriceTax")
-                        .HasColumnType("real");
+                    b.Property<decimal>("SalePriceTax")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("StoreFrom")
                         .HasMaxLength(50)
@@ -914,8 +944,8 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<float>("TaxValue")
-                        .HasColumnType("real");
+                    b.Property<decimal>("TaxValue")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -932,20 +962,20 @@ namespace Store.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<float>("Buy_Price")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Buy_Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("DateExpiration")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<int>("Pro_ID")
                         .HasColumnType("int");
 
-                    b.Property<float>("Qty")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Qty")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<float>("Sale_PriceTax")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Sale_PriceTax")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("StoreName")
                         .HasMaxLength(50)
@@ -972,22 +1002,22 @@ namespace Store.Infrastructure.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("OrderType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("PaidUP")
-                        .HasColumnType("real");
+                    b.Property<decimal>("PaidUP")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<float>("Remain")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Remain")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Time")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("TotalOrder")
-                        .HasColumnType("real");
+                    b.Property<decimal>("TotalOrder")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("User_Name")
                         .HasColumnType("nvarchar(max)");
@@ -1014,26 +1044,26 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<int>("Order_ID")
                         .HasColumnType("int");
 
-                    b.Property<float>("Price")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<float>("PriceWithTax")
-                        .HasColumnType("real");
+                    b.Property<decimal>("PriceWithTax")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Pro_ID")
                         .HasColumnType("int");
 
-                    b.Property<float>("Qty")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Qty")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Sup_Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("TaxValue")
-                        .HasColumnType("real");
+                    b.Property<decimal>("TaxValue")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<float>("Total")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -1056,19 +1086,19 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
-                    b.Property<float>("PaidUP")
-                        .HasColumnType("real");
+                    b.Property<decimal>("PaidUP")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<float>("Remain")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Remain")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Time")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("TotalOrder")
-                        .HasColumnType("real");
+                    b.Property<decimal>("TotalOrder")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("User_Name")
                         .HasMaxLength(50)
@@ -1092,29 +1122,29 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<int>("Cust_ID")
                         .HasColumnType("int");
 
-                    b.Property<float>("Discount")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Order_ID")
                         .HasColumnType("int");
 
-                    b.Property<float>("Price")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<float>("PriceWithTax")
-                        .HasColumnType("real");
+                    b.Property<decimal>("PriceWithTax")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Pro_ID")
                         .HasColumnType("int");
 
-                    b.Property<float>("Quentity")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Quentity")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<float>("TaxValue")
-                        .HasColumnType("real");
+                    b.Property<decimal>("TaxValue")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<float>("Total")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -1135,38 +1165,38 @@ namespace Store.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<float?>("Buy_Price")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Buy_Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Cust_Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float?>("Discount")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Order_ID")
                         .HasColumnType("int");
 
-                    b.Property<float?>("Price")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<float?>("Price_Tax")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Price_Tax")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Pro_ID")
                         .HasColumnType("int");
 
-                    b.Property<float?>("Quentity")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Quentity")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<float?>("Tax_Value")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Tax_Value")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Time")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float?>("Total")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -1191,6 +1221,13 @@ namespace Store.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Stores");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            StoreName = "مخزن رئيسي"
+                        });
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Suppliers.Supplier", b =>
@@ -1204,8 +1241,8 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float?>("MaxDebtAllowed")
-                        .HasColumnType("real");
+                    b.Property<decimal>("MaxDebtAllowed")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
@@ -1218,8 +1255,8 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasMaxLength(75)
                         .HasColumnType("nvarchar(75)");
 
-                    b.Property<float?>("TotalDebts")
-                        .HasColumnType("real");
+                    b.Property<decimal>("TotalDebts")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -1230,31 +1267,31 @@ namespace Store.Infrastructure.Data.Migrations
                         {
                             Id = 1,
                             Address = "بوهراوة",
-                            MaxDebtAllowed = 400f,
+                            MaxDebtAllowed = 400m,
                             Notes = "معلومات مشحونة",
                             PhoneNumber = "0697357397",
                             SupplierName = "مورد سعيدة",
-                            TotalDebts = 0f
+                            TotalDebts = 0m
                         },
                         new
                         {
                             Id = 2,
                             Address = "مراماد",
-                            MaxDebtAllowed = 5000f,
+                            MaxDebtAllowed = 5000m,
                             Notes = "معلومات مشحونة",
                             PhoneNumber = "0754653721",
                             SupplierName = "مورد الزعيم",
-                            TotalDebts = 0f
+                            TotalDebts = 0m
                         },
                         new
                         {
                             Id = 3,
                             Address = "العطف",
-                            MaxDebtAllowed = 5500f,
+                            MaxDebtAllowed = 5500m,
                             Notes = "معلومات مشحونة",
                             PhoneNumber = "0697357546",
                             SupplierName = "مورد القولية",
-                            TotalDebts = 0f
+                            TotalDebts = 0m
                         });
                 });
 
@@ -1267,16 +1304,16 @@ namespace Store.Infrastructure.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Order_Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<int>("Order_ID")
                         .HasColumnType("int");
 
-                    b.Property<float?>("Price")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("Reminder_Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<int>("Sup_ID")
                         .HasColumnType("int");
@@ -1306,13 +1343,13 @@ namespace Store.Infrastructure.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<int>("Order_ID")
                         .HasColumnType("int");
 
-                    b.Property<float?>("Price")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Sup_ID")
                         .HasColumnType("int");
@@ -1342,13 +1379,13 @@ namespace Store.Infrastructure.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("From")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float?>("Price")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Reason")
                         .HasColumnType("nvarchar(max)");
@@ -1373,10 +1410,10 @@ namespace Store.Infrastructure.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
-                    b.Property<float?>("Price")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Reason")
                         .HasColumnType("nvarchar(max)");
@@ -1399,7 +1436,9 @@ namespace Store.Infrastructure.Data.Migrations
                 {
                     b.HasOne("Store.Core.Entities.AllDeserved.DeservedType", "DeservedType")
                         .WithMany()
-                        .HasForeignKey("TypeId");
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("DeservedType");
                 });

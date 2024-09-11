@@ -1,12 +1,14 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
 {
     public partial class AddStoreForm : Form
     {
         private static MainForm? _main;
+        private static ApplicationDbContext _context;
         private static AddStoreForm _addStoreForm;
         public AddStoreForm(MainForm main)
         {
@@ -21,6 +23,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
             // If the instance is null, create a new one and assign it to the static field
             if (_addStoreForm == null)
             {
+                _context = new ApplicationDbContext();
+
                 _addStoreForm = new AddStoreForm(_main);
             }
 
@@ -31,16 +35,16 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
         public void SetCategoryToDgv()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            DgvStore.DataSource = MainForm.Context.Stores
+            DgvStore.DataSource = _context.Stores
                 .ToList();
-            lblCategoryId.Text = (MainForm.Context.Stores.Count() + 1).ToString();
+            lblCategoryId.Text = (_context.Stores.Count() + 1).ToString();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvStore);
         }
         public async void LoadData()
         {
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => MainForm.Context.Database.CanConnect()))
+            if (await Task.Run(() => _context.Database.CanConnect()))
             {
                 SetCategoryToDgv();
                 SetColumns();
@@ -84,8 +88,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
             {
                 Store.Core.Entities.Stores.Store store = new();
                 store.StoreName = txtNameِCategory.Text;
-                MainForm.Context.Stores.Add(store);
-                MainForm.Context.SaveChanges();
+                _context.Stores.Add(store);
+                _context.SaveChanges();
             }
             RefreshDgv();
         }
@@ -94,13 +98,13 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
         {
             if (MsgHelper.ShowEditDialog())
             {
-                Store.Core.Entities.Stores.Store store = MainForm.Context.Stores.FirstOrDefault(x => x.Id ==
+                Store.Core.Entities.Stores.Store store = _context.Stores.FirstOrDefault(x => x.Id ==
                 Convert.ToInt32(DgvStore.CurrentRow.Cells[1].Value.ToString())
                 );
 
                 store.StoreName = txtNameِCategory.Text;
-                MainForm.Context.Update(store);
-                MainForm.Context.SaveChanges();
+                _context.Update(store);
+                _context.SaveChanges();
                 vider();
             }
         }
@@ -114,15 +118,15 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
         {
             if (MsgHelper.ShowDeleteDialog())
             {
-                MainForm.Context.Remove(Convert.ToInt32(DgvStore.CurrentRow.Cells[1].Value.ToString()));
-                MainForm.Context.SaveChanges();
+                _context.Remove(Convert.ToInt32(DgvStore.CurrentRow.Cells[1].Value.ToString()));
+                _context.SaveChanges();
             }
             RefreshDgv();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            DgvStore.DataSource = MainForm.Context.Stores.Where(x => x.Id.ToString() == txtSearch.Text ||
+            DgvStore.DataSource = _context.Stores.Where(x => x.Id.ToString() == txtSearch.Text ||
             x.StoreName.Contains(txtSearch.Text)).ToList();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvStore);
             txtSearch.Text = string.Empty;

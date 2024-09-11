@@ -1,5 +1,6 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
@@ -23,7 +24,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
             // If the instance is null, create a new one and assign it to the static field
             if (CheckInstance())
             {
-                salesRepository = new SalesRepository(MainForm.Context);
+                salesRepository = new SalesRepository(new ApplicationDbContext());
 
                 _salesReportsUserControl = new SalesReportsUserControl();
 

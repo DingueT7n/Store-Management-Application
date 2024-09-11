@@ -1,10 +1,12 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.Core.Entities.Caisses;
+using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseGui
 {
     public partial class DepositCaisseUserControl : UserControl
     {
+        private static ApplicationDbContext _context;
         static DepositCaisseUserControl _depositCaisseUserControl;
         private static CaisseDetailsForm _caisse;
         private static MainForm _main;
@@ -20,6 +22,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseGui
             // If the instance is null, create a new one and assign it to the static field
             if (_depositCaisseUserControl == null || _depositCaisseUserControl.IsDisposed)
             {
+                _context = new ApplicationDbContext();
+
                 _depositCaisseUserControl = new DepositCaisseUserControl();
             }
             _depositCaisseUserControl.LoadData();
@@ -39,9 +43,9 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseGui
             lblValue.Text = "0";
             dateTimePicker.Value = DateTime.Now;
 
-            if (await Task.Run(() => MainForm.Context.Database.CanConnect()))
+            if (await Task.Run(() => _context.Database.CanConnect()))
             {
-                cmbCaisse.DataSource = MainForm.Context.Caisses.ToList();
+                cmbCaisse.DataSource = _context.Caisses.ToList();
                 cmbCaisse.DisplayMember = "CaisseName";
                 cmbCaisse.ValueMember = "Id";
                 cmbCaisse.Text = "اختر صندوق";
@@ -67,7 +71,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseGui
             try
             {
                 validate();
-                var value = MainForm.Context.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisse.SelectedValue.ToString()).MoneyinCaisse;
+                var value = _context.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisse.SelectedValue.ToString()).MoneyinCaisse;
                 lblValue.Text = value.ToString();
             }
             catch (Exception)
@@ -79,11 +83,11 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseGui
 
         private async void btnDepositToCaisse_Click(object sender, EventArgs e)
         {
-            using (var transaction = await MainForm.Context.Database.BeginTransactionAsync())
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    var caisse = MainForm.Context.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisse.SelectedValue);
+                    var caisse = _context.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisse.SelectedValue);
                     if (caisse is not null)
                     {
                         if (_main.ConvertToFloat(txtValue.Text) > 0)
@@ -99,18 +103,18 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseGui
                                 Reason = textBox1.Text,
                                 Type = "ايداع عادي (مال اضافي )"
                             };
-                            MainForm.Context.Caisses.Update(caisse);
-                            await MainForm.Context.CaissesDeposits.AddAsync(caisseDeposit);
+                            _context.Caisses.Update(caisse);
+                            await _context.CaissesDeposits.AddAsync(caisseDeposit);
 
-                            // Save all changes to the database
-                            await MainForm.Context.SaveChangesAsync();
+
+                            await _context.SaveChangesAsync();
 
                             // Commit the transaction
                             await transaction.CommitAsync();
                         }
                     }
 
-                    // Load data after successful transaction
+
                     LoadData();
                 }
                 catch (Exception ex)

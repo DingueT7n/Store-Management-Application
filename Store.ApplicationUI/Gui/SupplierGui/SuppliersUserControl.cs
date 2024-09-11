@@ -1,6 +1,7 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.ProductsGui;
+using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.SupplierGui
@@ -9,6 +10,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui
     {
         private static SupplierGui.SuppliersUserControl? _suppliersUserControl;
         private static MainForm? _main;
+        private static ApplicationDbContext _context;
         public static SuppliersRepository? suppliersRepository;
         private AddSupplierForm addSupplierrForm;
         public SuppliersUserControl()
@@ -27,7 +29,9 @@ namespace Store.ApplicationUI.Gui.SupplierGui
             // If the instance is null, create a new one and assign it to the static field
             if (CheckInstance())
             {
-                suppliersRepository = new SuppliersRepository(MainForm.Context);
+                _context = new ApplicationDbContext();
+
+                suppliersRepository = new SuppliersRepository(_context);
 
                 _suppliersUserControl = new SuppliersUserControl();
 

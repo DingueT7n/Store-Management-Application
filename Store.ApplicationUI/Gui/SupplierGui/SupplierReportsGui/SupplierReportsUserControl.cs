@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
@@ -8,6 +9,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
     public partial class SupplierReportsUserControl : UserControl
     {
         private static MainForm? _main;
+        private static ApplicationDbContext _context;
         public static SupplierReportRepository? supplierReportRepository;
         private static SupplierReportsUserControl? _supplierReportsUserControl;  // _supplierReportsUserControl
         public SupplierReportsUserControl()
@@ -25,7 +27,9 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
             // If the instance is null, create a new one and assign it to the static field
             if (CheckInstance())
             {
-                supplierReportRepository = new SupplierReportRepository(MainForm.Context);
+                _context = new ApplicationDbContext();
+
+                supplierReportRepository = new SupplierReportRepository(_context);
 
                 _supplierReportsUserControl = new SupplierReportsUserControl();
 
@@ -39,7 +43,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
         public async void SetProductsToDgv()
         {
             //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            var SuppliersMoneyList = MainForm.Context.SuppliersReports.
+            var SuppliersMoneyList = _context.SuppliersReports.
                 Include(x => x.Supplier).Include(x => x.Buy)
                 .ToList();
             var uniqueSupplierCount = SuppliersMoneyList

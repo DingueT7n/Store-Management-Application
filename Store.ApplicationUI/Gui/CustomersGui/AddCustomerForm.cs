@@ -2,6 +2,7 @@
 using Store.ApplicationUI.Gui.CustomersGui;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Customers;
+using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.ProductsGui
@@ -16,7 +17,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             InitializeComponent();
             _main = main;
             this.Owner = _main;
-            _customersRepository = new CustomersRepository(MainForm.Context);
+            _customersRepository = new CustomersRepository(new ApplicationDbContext());
 
             LoadData();
 
@@ -163,14 +164,14 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         }
 
-        float ConvertToFloat(string value)
+        decimal ConvertToFloat(string value)
         {
-            float quantity;
-            if (float.TryParse(value, out quantity))
-            {
-                return quantity;
-            }
-            return quantity;
+            //float quantity;
+            //if (float.TryParse(value, out quantity))
+            //{
+            //    return quantity;
+            //}
+            return Convert.ToDecimal(value);
         }
 
         private void btnEditProduct_Click(object sender, EventArgs e)

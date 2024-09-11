@@ -1,5 +1,6 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
@@ -7,6 +8,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
     public partial class BuysReportsUserControl : UserControl
     {
         private static MainForm? _main;
+        private static ApplicationDbContext _context;
         public static BuysRepository? buysRepository;
         private static BuysReportsUserControl? _buyReportsUserControl;
         public BuysReportsUserControl()
@@ -23,7 +25,9 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
             // If the instance is null, create a new one and assign it to the static field
             if (CheckInstance())
             {
-                buysRepository = new BuysRepository(MainForm.Context);
+                _context = new ApplicationDbContext();
+
+                buysRepository = new BuysRepository(_context);
 
                 _buyReportsUserControl = new BuysReportsUserControl();
 
@@ -36,7 +40,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
         public async void SetProductsToDgv()
         {
             ////DgvBuys.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            //var CustomerMoneyList = MainForm.Context.CustomersReports.
+            //var CustomerMoneyList = _context.CustomersReports.
             //    Include(x => x.Customer).Include(x => x.Sale)
             //    .ToList();
             DgvBuys.DataSource = buysRepository.GetAllBuysWithDetails();

@@ -2,6 +2,6 @@
 {
     public class RandomBarcode
     {
-        public float? Barcode { get; set; }
+        public decimal Barcode { get; set; }
     }
 }

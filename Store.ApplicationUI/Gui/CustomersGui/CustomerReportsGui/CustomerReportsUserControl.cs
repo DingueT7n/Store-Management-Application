@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
@@ -8,6 +9,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
     public partial class CustomerReportsUserControl : UserControl
     {
         private static MainForm? _main;
+        private static ApplicationDbContext _context;
         public static CustomerReportRepository? customerReportRepository;
         private static CustomerReportsUserControl? _customerReportsUserControl;  // _customerReportsUserControl
 
@@ -26,7 +28,9 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
             // If the instance is null, create a new one and assign it to the static field
             if (CheckInstance())
             {
-                customerReportRepository = new CustomerReportRepository(MainForm.Context);
+                _context = new ApplicationDbContext();
+
+                customerReportRepository = new CustomerReportRepository(_context);
 
                 _customerReportsUserControl = new CustomerReportsUserControl();
 
@@ -40,7 +44,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
         public async void SetProductsToDgv()
         {
             //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            var CustomerMoneyList = MainForm.Context.CustomersReports.
+            var CustomerMoneyList = _context.CustomersReports.
                 Include(x => x.Customer).Include(x => x.Sale)
                 .ToList();
             var uniqueCustomerCount = CustomerMoneyList

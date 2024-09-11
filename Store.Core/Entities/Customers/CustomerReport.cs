@@ -7,7 +7,7 @@ namespace Store.Core.Entities.Customers
         public int Cust_ID { get; set; }
         public int Order_ID { get; set; }
         public string Cust_Name { get; set; }
-        public float Price { get; set; }
+        public decimal Price { get; set; }
         public DateTime Date { get; set; }
         public string Time { get; set; }
         public virtual Sale Sale { get; set; }

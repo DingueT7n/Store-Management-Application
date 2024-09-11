@@ -3,7 +3,7 @@
     public class Bank : BaseEntity<int>
     {
 
-        public float Money { get; set; }
+        public decimal Money { get; set; }
 
     }
 

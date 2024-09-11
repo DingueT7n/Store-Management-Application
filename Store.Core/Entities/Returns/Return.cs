@@ -7,9 +7,9 @@
         public string Time { get; set; }
         public string OrderType { get; set; }
         public string User_Name { get; set; }
-        public float TotalOrder { get; set; }
-        public float PaidUP { get; set; }
-        public float Remain { get; set; }
+        public decimal TotalOrder { get; set; }
+        public decimal PaidUP { get; set; }
+        public decimal Remain { get; set; }
 
         // Navigation property for one-to-many relationship with ReturnsDetails
 

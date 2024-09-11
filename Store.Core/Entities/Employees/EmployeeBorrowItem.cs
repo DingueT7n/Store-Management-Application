@@ -9,7 +9,7 @@ namespace Store.Core.Entities.Employees
         public int? Emp_ID { get; set; }
         public DateTime Date { get; set; }
         public string Time { get; set; }
-        public float Quentity { get; set; }
+        public decimal Quentity { get; set; }
 
 
         public virtual Employee Employee { get; set; }

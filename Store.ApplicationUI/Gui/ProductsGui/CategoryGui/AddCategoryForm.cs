@@ -1,12 +1,14 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.ProductsGui.Category
 {
     public partial class AddCategoryForm : Form
     {
         private static MainForm? _main;
+        private static ApplicationDbContext _context;
         private static AddCategoryForm _addCategoryForm;
 
         public AddCategoryForm(MainForm main)
@@ -22,6 +24,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
             // If the instance is null, create a new one and assign it to the static field
             if (_addCategoryForm == null)
             {
+                _context = new ApplicationDbContext();
 
                 _addCategoryForm = new AddCategoryForm(_main);
 
@@ -34,16 +37,16 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
         public void SetCategoryToDgv()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            DgvCategory.DataSource = MainForm.Context.Categories
+            DgvCategory.DataSource = _context.Categories
                 .ToList();
-            lblCategoryId.Text = (MainForm.Context.Categories.Count() + 1).ToString();
+            lblCategoryId.Text = (_context.Categories.Count() + 1).ToString();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvCategory);
         }
         public async void LoadData()
         {
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => MainForm.Context.Database.CanConnect()))
+            if (await Task.Run(() => _context.Database.CanConnect()))
             {
                 SetCategoryToDgv();
                 SetColumns();
@@ -87,8 +90,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
             {
                 Store.Core.Entities.Products.Category category = new();
                 category.CategoryName = txtNameِCategory.Text;
-                MainForm.Context.Categories.Add(category);
-                MainForm.Context.SaveChanges();
+                _context.Categories.Add(category);
+                _context.SaveChanges();
 
             }
             RefreshDgv();
@@ -112,13 +115,13 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
         {
             if (MsgHelper.ShowEditDialog())
             {
-                Store.Core.Entities.Products.Category category = MainForm.Context.Categories.FirstOrDefault(x => x.Id ==
+                Store.Core.Entities.Products.Category category = _context.Categories.FirstOrDefault(x => x.Id ==
                 Convert.ToInt32(DgvCategory.CurrentRow.Cells[1].Value.ToString())
                 );
 
                 category.CategoryName = txtNameِCategory.Text;
-                MainForm.Context.Update(category);
-                MainForm.Context.SaveChanges();
+                _context.Update(category);
+                _context.SaveChanges();
                 vider();
 
             }
@@ -128,8 +131,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
         {
             if (MsgHelper.ShowDeleteDialog())
             {
-                MainForm.Context.Remove(Convert.ToInt32(DgvCategory.CurrentRow.Cells[1].Value.ToString()));
-                MainForm.Context.SaveChanges();
+                _context.Remove(Convert.ToInt32(DgvCategory.CurrentRow.Cells[1].Value.ToString()));
+                _context.SaveChanges();
             }
             RefreshDgv();
         }
@@ -151,7 +154,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            DgvCategory.DataSource = MainForm.Context.Categories.Where(x => x.Id.ToString() == txtSearch.Text ||
+            DgvCategory.DataSource = _context.Categories.Where(x => x.Id.ToString() == txtSearch.Text ||
             x.CategoryName.Contains(txtSearch.Text)).ToList();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvCategory);
             txtSearch.Text = string.Empty;

@@ -8,7 +8,7 @@ namespace Store.Core.Entities.Suppliers
         public int Sup_ID { get; set; }
         public int Order_ID { get; set; }
         public string SupplierName { get; set; }
-        public float? Price { get; set; }
+        public decimal Price { get; set; }
         public DateTime Date { get; set; }
         public string Time { get; set; }
 

@@ -1,5 +1,6 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.Core.Entities.Banks;
+using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankGui
 {
@@ -8,6 +9,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankGui
         static DepositTobankUserControl _depositTobankUserControl;
         private static CaisseDetailsForm _caisse;
         private static MainForm _main;
+        private static ApplicationDbContext _context;
 
         public DepositTobankUserControl()
         {
@@ -20,6 +22,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankGui
             // If the instance is null, create a new one and assign it to the static field
             if (_depositTobankUserControl == null || _depositTobankUserControl.IsDisposed)
             {
+                _context = new ApplicationDbContext();
                 _depositTobankUserControl = new DepositTobankUserControl();
             }
             _depositTobankUserControl.LoadData();
@@ -34,9 +37,9 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankGui
             lblValue.Text = "0";
             dateTimePicker.Value = DateTime.Now;
 
-            if (await Task.Run(() => MainForm.Context.Database.CanConnect()))
+            if (await Task.Run(() => _context.Database.CanConnect()))
             {
-                lblValue.Text = MainForm.Context.Banks.FirstOrDefault().Money.ToString();
+                lblValue.Text = _context.Banks.FirstOrDefault().Money.ToString();
 
             }
             else
@@ -57,11 +60,11 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankGui
 
         private async void btnDepositToCaisse_Click(object sender, EventArgs e)
         {
-            using (var transaction = await MainForm.Context.Database.BeginTransactionAsync())
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    var Bank = MainForm.Context.Banks.FirstOrDefault();
+                    var Bank = _context.Banks.FirstOrDefault();
 
                     if (Bank is not null)
                     {
@@ -79,11 +82,11 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankGui
                                 Type = "ايداع عادي (مال اضافي )"
                             };
 
-                            MainForm.Context.Banks.Update(Bank);
-                            await MainForm.Context.BankDeposits.AddAsync(BankDeposit);
+                            _context.Banks.Update(Bank);
+                            await _context.BankDeposits.AddAsync(BankDeposit);
 
                             // Save all changes to the database
-                            await MainForm.Context.SaveChangesAsync();
+                            await _context.SaveChangesAsync();
 
                             // Commit the transaction
                             await transaction.CommitAsync();

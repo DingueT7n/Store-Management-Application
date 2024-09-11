@@ -4,6 +4,7 @@ using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Customers;
 using Store.Core.Entities.Products;
 using Store.Core.Entities.Sales;
+using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.SalesGui.PosGui
@@ -13,12 +14,14 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         private static PosUserControl? _PosUserControl;
         private static PosForm? _posForm;
         public static SalesRepository? salesRepository;
-        public static float PaidUp;
-        public static float Remain;
+        public static decimal PaidUp;
+        public static decimal Remain;
+        private ApplicationDbContext _context;
         public PosUserControl(PosForm main)
         {
             InitializeComponent();
             _posForm = main;
+            _context = new ApplicationDbContext();
 
 
         }
@@ -62,12 +65,12 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 //// if its an admin or Normal user 
                 //SetColumns();
 
-                //cmbCustomers.DataSource = MainForm.Context.Customers.ToList();
+                //cmbCustomers.DataSource = _context.Customers.ToList();
                 //cmbCustomers.DisplayMember = "CustomerName";
                 //cmbCustomers.ValueMember = "Id";
                 //cmbCustomers.Text = "اختر العميل";
 
-                //cmbStores.DataSource = MainForm.Context.Stores.ToList();
+                //cmbStores.DataSource = _context.Stores.ToList();
                 //cmbStores.DisplayMember = "StoreName";
                 //cmbStores.ValueMember = "Id";
                 //cmbStores.Text = "اختر مخزن";
@@ -205,11 +208,11 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         async void OnLoad()
         {
             txtSearchBarCode.Focus();
-            salesRepository = new SalesRepository(MainForm.Context);
+            salesRepository = new SalesRepository(_context);
             _PosUserControl = this;
             SetColumns();
-            if (await Task.Run(() => MainForm.Context.Database.CanConnect()))
-                DgvQuickProducts.DataSource = MainForm.Context.ProductQuickAccess.ToList();
+            if (await Task.Run(() => _context.Database.CanConnect()))
+                DgvQuickProducts.DataSource = _context.ProductQuickAccess.ToList();
             SetQuickColumns();
             lblFactureNumber.Text = salesRepository.GetFactureNumber();
             lblUserName.Text = Properties.Settings.Default.UserName;
@@ -262,19 +265,19 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             txtSearchBarCode.Clear();
 
         }
-        public float ConvertToFloat(string value)
+        public decimal ConvertToFloat(string value)
         {
-            float quantity;
-            if (float.TryParse(value, out quantity))
-            {
-                return quantity;
-            }
-            return quantity;
+            //decimal quantity;
+            //if (float.TryParse(value, out quantity))
+            //{
+            //    return quantity;
+            //}
+            return Convert.ToDecimal(value);
         }
         public void InitializeTextBoxesAndLables(Product product)
         {
 
-            ProductDiscount productDiscount = MainForm.Context.ProductDiscounts.
+            ProductDiscount productDiscount = _context.ProductDiscounts.
                 Where(x => x.Id.ToString() == product.Id.ToString() && x.Quentity > 0
 
                 && x.Store_Id == Properties.Settings.Default.FastSaleStore
@@ -282,7 +285,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 ).FirstOrDefault();
             txtProductName.Text = product.ProductName;
 
-            ProductsQuantitie productQty = MainForm.Context.ProductsQuantities.
+            ProductsQuantitie productQty = _context.ProductsQuantities.
                       Where(x => x.Pro_ID == product.Id && x.Qty > 0 && x.Store_ID == Properties.Settings.Default.FastSaleStore).FirstOrDefault();
 
 
@@ -321,9 +324,9 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 if (txtSalePrice.Text != string.Empty && txtQty.Text != string.Empty
                      && txtSaleDiscount.Text != string.Empty)
                 {
-                    double Discount = Convert.ToDouble(txtSaleDiscount.Text);
-                    double Amount = Convert.ToDouble(txtSalePrice.Text);
-                    double TotalAmount = Amount - (Amount * (Discount / 100));
+                    decimal Discount = Convert.ToDecimal(txtSaleDiscount.Text);
+                    decimal Amount = Convert.ToDecimal(txtSalePrice.Text);
+                    decimal TotalAmount = Amount - (Amount * (Discount / 100));
                     txtTotalSaleProduct.Text = (ConvertToFloat(TotalAmount.ToString()) * Convert.ToInt32(txtQty.Text)).ToString();
 
                 }
@@ -335,7 +338,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
         int rowIndex;
-        private double TotalFacture;
+        private decimal TotalFacture;
         void new_row()
         {
             try
@@ -403,15 +406,15 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 {
                     lblValuePrice.Text = (from DataGridViewRow row in DgvِProducts.Rows
                                           where row.Cells[4].FormattedValue.ToString() != string.Empty
-                                          select Convert.ToDouble(row.Cells[4].FormattedValue)).Sum()
+                                          select Convert.ToDecimal(row.Cells[4].FormattedValue)).Sum()
                                           .ToString("f2");
                     TotalFacture = (from DataGridViewRow row in DgvِProducts.Rows
                                     where row.Cells[4].FormattedValue.ToString() != string.Empty
-                                    select Convert.ToDouble(row.Cells[4].FormattedValue)).Sum();
+                                    select Convert.ToDecimal(row.Cells[4].FormattedValue)).Sum();
                     lblQuentityValue.Text =
                               (from DataGridViewRow row in DgvِProducts.Rows
                                where row.Cells[2].FormattedValue.ToString() != string.Empty
-                               select Convert.ToDouble(row.Cells[2].FormattedValue)).Sum()
+                               select Convert.ToDecimal(row.Cells[2].FormattedValue)).Sum()
                                .ToString("f2");
                     lblProductIntable.Text = $"{DgvِProducts.Rows.Count}";
                 }
@@ -457,11 +460,11 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 DeleteItemFromDgv();
             }
         }
-        void PayNowEvent(object sender, KeyEventArgs e)
+        async void PayNowEvent(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.F12)
             {
-                PayNow();
+                await PayNowAsync();
             }
         }
         public void GetTheEventAndSender(object sender, KeyEventArgs e)
@@ -544,7 +547,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 CalculateAmount();
                 CalculateStatistics();
 
-                ProductsQuantitie productQty = MainForm.Context.ProductsQuantities.
+                ProductsQuantitie productQty = _context.ProductsQuantities.
                           Where(x => x.Pro_ID == _product.Id && x.Qty >= ConvertToFloat(txtQty.Text)
                           && x.Store_ID == Properties.Settings.Default.FastSaleStore).FirstOrDefault();
             }
@@ -656,249 +659,246 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         Sale SetSale()
         {
 
-            Sale sale = new Sale();
-
-            sale.TotalOrder = ConvertToFloat(TotalFacture.ToString());
-            sale.CustomerId = Convert.ToInt32(IdCustomer.Text);
-            sale.Date = DateTime.Now;
-            sale.PaidUP = ConvertToFloat(PaidUp.ToString());
-            sale.Remain = ConvertToFloat(Remain.ToString());
-            sale.Time = DateTime.Now.ToString("HH:mm");
-            sale.User_Name = Properties.Settings.Default.UserName;
-
-            return sale;
+            return new Sale
+            {
+                TotalOrder = ConvertToFloat(TotalFacture.ToString()),
+                CustomerId = Convert.ToInt32(IdCustomer.Text),
+                Date = DateTime.Now,
+                PaidUP = ConvertToFloat(PaidUp.ToString()),
+                Remain = ConvertToFloat(Remain.ToString()),
+                Time = DateTime.Now.ToString("HH:mm"),
+                User_Name = Properties.Settings.Default.UserName
+            };
         }
         CustomerReport SetCustReport()
         {
-            CustomerReport custReport = new CustomerReport();
-            custReport.Order_ID = Convert.ToInt32(lblFactureNumber.Text);
-            custReport.Cust_ID = Convert.ToInt32(IdCustomer.Text);
-            custReport.Cust_Name = lblCustomerName.Text;
-            custReport.Date = DateTime.Now;
-            custReport.Price = ConvertToFloat(PaidUp.ToString());
-            custReport.Time = DateTime.Now.ToString("HH:mm");
-            return custReport;
+            return new CustomerReport
+            {
+                Order_ID = Convert.ToInt32(lblFactureNumber.Text),
+                Cust_ID = Convert.ToInt32(IdCustomer.Text),
+                Cust_Name = lblCustomerName.Text,
+                Date = DateTime.Now,
+                Price = ConvertToFloat(PaidUp.ToString()),
+                Time = DateTime.Now.ToString("HH:mm")
+            };
         }
         CustomerMoney SetCustMoney()
         {
 
-            CustomerMoney customerMoney = new CustomerMoney();
-            customerMoney.Order_ID = Convert.ToInt32(lblFactureNumber.Text);
-            customerMoney.Cust_ID = Convert.ToInt32(IdCustomer.Text);
-            customerMoney.Cust_Name = lblCustomerName.Text;
-            customerMoney.Order_Date = DateTime.Now;
-            customerMoney.Price = ConvertToFloat(Remain.ToString());
-            customerMoney.Time = DateTime.Now.ToString("HH:mm");
-            customerMoney.Reminder_Date = DateTime.Now.AddDays(Properties.Settings.Default.DaysAddDebt);
-            return customerMoney;
+            return new CustomerMoney
+            {
+                Order_ID = Convert.ToInt32(lblFactureNumber.Text),
+                Cust_ID = Convert.ToInt32(IdCustomer.Text),
+                Cust_Name = lblCustomerName.Text,
+                Order_Date = DateTime.Now,
+                Price = ConvertToFloat(Remain.ToString()),
+                Time = DateTime.Now.ToString("HH:mm"),
+                Reminder_Date = DateTime.Now.AddDays(Properties.Settings.Default.DaysAddDebt)
+            };
         }
         SaleDetail SetSaleDetail(int i)
         {
-            //dgvProducts.Rows[i].Cells[0].Value.ToString()
-            SaleDetail saleDetail = new SaleDetail();
-            saleDetail.Order_ID = Convert.ToInt32(lblFactureNumber.Text);
-            saleDetail.Cust_ID = Convert.ToInt32(IdCustomer.Text);
-            saleDetail.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[5].Value.ToString());
-            saleDetail.Quentity = ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
-            saleDetail.Price = ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
-            saleDetail.Total = ConvertToFloat(DgvِProducts.Rows[i].Cells[4].Value.ToString());
-            saleDetail.TaxValue = Properties.Settings.Default.TaxValue;
-            saleDetail.PriceWithTax = ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
-            return saleDetail;
+            var row = DgvِProducts.Rows[i];
+            return new SaleDetail
+            {
+                Order_ID = Convert.ToInt32(lblFactureNumber.Text),
+                Cust_ID = Convert.ToInt32(IdCustomer.Text),
+                Pro_ID = Convert.ToInt32(row.Cells[5].Value.ToString()),
+                Quentity = ConvertToFloat(row.Cells[2].Value.ToString()),
+                Price = ConvertToFloat(row.Cells[1].Value.ToString()),
+                Total = ConvertToFloat(row.Cells[4].Value.ToString()),
+                TaxValue = Properties.Settings.Default.TaxValue,
+                PriceWithTax = ConvertToFloat(row.Cells[1].Value.ToString()),
+                Discount = ConvertToFloat(row.Cells[3].Value.ToString())
+            };
         }
-        SaleProfit SetSaleProfit(int i)
+        SaleProfit SetSaleProfit(int i, decimal buyPrice)
         {
-            //dgvProducts.Rows[i].Cells[0].Value.ToString()
-            SaleProfit SaleProfit = new SaleProfit();
-            SaleProfit.Order_ID = Convert.ToInt32(lblFactureNumber.Text);
-            SaleProfit.Cust_Name = IdCustomer.Text;
-            SaleProfit.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[5].Value.ToString());
-            SaleProfit.Quentity = ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
-            SaleProfit.Price = ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
-            SaleProfit.Total = ConvertToFloat(DgvِProducts.Rows[i].Cells[4].Value.ToString());
-            //SaleProfit.TaxValue = Properties.Settings.Default.TaxValue;
-            //SaleProfit.PriceWithTax = ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
-            return SaleProfit;
+            var row = DgvِProducts.Rows[i];
+            return new SaleProfit
+            {
+                Order_ID = Convert.ToInt32(lblFactureNumber.Text),
+                Cust_Name = lblCustomerName.Text,
+                Pro_ID = Convert.ToInt32(row.Cells[5].Value.ToString()),
+                Quentity = ConvertToFloat(row.Cells[2].Value.ToString()),
+                Price = ConvertToFloat(row.Cells[1].Value.ToString()),
+                Total = ConvertToFloat(row.Cells[4].Value.ToString()),
+                Buy_Price = buyPrice,
+                Tax_Value = Properties.Settings.Default.TaxValue,
+                Discount = ConvertToFloat(row.Cells[3].Value.ToString()),
+                Time = DateTime.Now.ToString("HH:mm"),
+                Price_Tax = ConvertToFloat(row.Cells[1].Value.ToString())
+            };
         }
         Product SetProduct(int i)
         {
-            //dgvProducts.Rows[i].Cells[0].Value.ToString()
             var proId = DgvِProducts.Rows[i].Cells[5].Value.ToString();
-            Product product = MainForm.Context.Products.Where(x => x.Id.ToString() == proId
-            /* && x.CodeBar == DgvِProducts.Rows[i].Cells[6].Value.ToString()*/).FirstOrDefault();
-            if (product is not null)
-            {
-                if (product.Quentity - ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()) > 0)
-                    product.Quentity = product.Quentity - ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
-                else product.Quentity = 0;
+            var product = _context.Products.FirstOrDefault(x => x.Id.ToString() == proId);
 
+            if (product != null)
+            {
+                product.Quentity = Math.Max(0, product.Quentity - ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()));
             }
+
             return product;
         }
-        void SetProductQuentity(double Quentity, int i)
+
+        decimal SetProductQuentity(decimal quentity, int i)
         {
-            //dgvProducts.Rows[i].Cells[0].Value.ToString()
-            var proId = DgvِProducts.Rows[i].Cells[5].Value.ToString();
-            while (Quentity > 0)
+            var proId = DgvِProducts.Rows[i].Cells[6].Value.ToString();
+            decimal totalBuyPrice = 0;
+            int count = 0;
+
+            while (quentity > 0)
             {
-                ProductsQuantitie productQty = MainForm.Context.ProductsQuantities.
-                        Where(x => x.Pro_ID.ToString() == proId && x.Qty > ConvertToFloat(0.ToString())).FirstOrDefault();
-                if (productQty is not null)
+                var productQty = _context.ProductsQuantities
+                                 .FirstOrDefault(x => x.Qty > 0 && x.Pro_ID.ToString() == proId);
+
+                if (productQty != null)
                 {
-                    if (productQty.Qty >= ConvertToFloat(Quentity.ToString()))
+                    totalBuyPrice += productQty.Buy_Price;
+                    count++;
+
+                    if (productQty.Qty >= quentity)
                     {
-                        productQty.Qty = productQty.Qty - ConvertToFloat(Quentity.ToString());
-                        MainForm.Context.ProductsQuantities.Update(productQty);
-                        Quentity = 0;
+                        productQty.Qty -= quentity;
+                        quentity = 0;
+                        _context.ProductsQuantities.Update(productQty);
+                        _context.SaveChanges();
 
                     }
                     else
                     {
-                        Quentity = Quentity - productQty.Qty;
+                        quentity -= productQty.Qty;
                         productQty.Qty = 0;
-                        MainForm.Context.ProductsQuantities.Update(productQty);
+                        _context.ProductsQuantities.Update(productQty);
+                        _context.SaveChanges();
+
                     }
-                    if (productQty.Qty == 0) return;
+
                 }
                 else
                 {
-
-                    return;
+                    totalBuyPrice += _context.Products.FirstOrDefault(x => x.Id.ToString() == proId)?.BuyPrice ?? 0;
+                    return count > 0 ? totalBuyPrice / count : totalBuyPrice;
                 }
             }
-            //return product;
 
+            return count > 0 ? totalBuyPrice / count : totalBuyPrice;
         }
         Customer SetCustomer()
         {
-            //dgvProducts.Rows[i].Cells[0].Value.ToString()
             var custId = Convert.ToInt32(IdCustomer.Text);
-            Customer customer = MainForm.Context.Customers.Where(x => x.Id == custId).FirstOrDefault();
-            if (customer is not null)
+            var customer = _context.Customers.FirstOrDefault(x => x.Id == custId);
+
+            if (customer != null)
             {
-                customer.TotalDebts = customer.TotalDebts + Remain;
+                customer.TotalDebts += Remain;
             }
+
             return customer;
         }
-        Caisse SetCaisse(float value)
+        Caisse SetCaisse(decimal value)
         {
-            //dgvProducts.Rows[i].Cells[0].Value.ToString()
-
-            Caisse caisse = MainForm.Context.Caisses.FirstOrDefault((x => x.Id == Properties.Settings.Default.DefaultCaisseId));
-            if (caisse is not null)
+            var caisse = _context.Caisses.FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
+            if (caisse != null)
             {
-                caisse.MoneyinCaisse += ConvertToFloat(value.ToString());
+                caisse.MoneyinCaisse += value;
             }
             return caisse;
 
         }
-        CaisseDeposit SetCaisseDeposit(float value)
+        CaisseDeposit SetCaisseDeposit(decimal value)
         {
-            //dgvProducts.Rows[i].Cells[0].Value.ToString()
-
-
-            var caisseDeposit = new CaisseDeposit
+            return new CaisseDeposit
             {
                 Caisse_ID = Properties.Settings.Default.DefaultCaisseId,
                 Time = DateTime.Now.ToString("HH:mm:ss"),
                 Date = DateTime.Now,
                 Name = $"  {Properties.Settings.Default.UserName}  مشتري عادي  بحساب ",
-                Money = ConvertToFloat(value.ToString()),
+                Money = value,
                 Reason = "مبيعة سريعة",
                 Type = "ايداع عن طريق بيع منتجات (مال ربحي )"
             };
 
-            return caisseDeposit;
-
         }
         private async void btnPay_Click(object sender, EventArgs e)
         {
-            PayNow();
+            await PayNowAsync();
         }
         public void InitializeData(string paidUp, string remain)
         {
             PaidUp = ConvertToFloat(paidUp);
             Remain = ConvertToFloat(remain);
         }
-        async void PayNow()
+        async void HandleCaisseAndDeposits(decimal paidAmount, decimal totalAmount)
         {
-            if (DgvِProducts.Rows.Count > 0)
+            var amountToDeposit = Math.Min(paidAmount, totalAmount);
+            _context.Update(SetCaisse(amountToDeposit));
+            await _context.AddAsync(SetCaisseDeposit(amountToDeposit));
+        }
+        async Task PayNowAsync()
+        {
+            if (DgvِProducts.Rows.Count > 0 && rbSale.Checked)
             {
-
-                if (rbSale.Checked)
+                if (IdCustomer.Text != Properties.Settings.Default.IdCustomerSale)
                 {
-                    if (IdCustomer.Text != "4")
-                    {
-                        AddPaymentForm addPaymentForm = new(_posForm, 3);
-                        addPaymentForm.LoadData(TotalFacture.ToString(), TotalFacture.ToString(), "0");
-                        addPaymentForm.ShowDialog();
-                    }
-                    else
-                    {
-                        PaidUp = ConvertToFloat(TotalFacture.ToString());
-                        Remain = ConvertToFloat(0.ToString());
-                    }
+                    AddPaymentForm addPaymentForm = new(_posForm, 3);
+                    addPaymentForm.LoadData(TotalFacture.ToString(), TotalFacture.ToString(), "0");
+                    addPaymentForm.ShowDialog();
+                }
+                else
+                {
+                    PaidUp = ConvertToFloat(TotalFacture.ToString());
+                    Remain = 0;
+                }
 
-                    using (var transaction = MainForm.Context.Database.BeginTransaction())
+                using (var transaction = await _context.Database.BeginTransactionAsync())
+                {
+                    try
                     {
-                        try
+                        var sale = SetSale();
+                        await _context.AddAsync(sale);
+                        await _context.SaveChangesAsync();
+
+                        for (int i = 0; i < DgvِProducts.Rows.Count; i++)
                         {
-                            var sale = SetSale();
-                            MainForm.Context.Add(sale);
-                            await MainForm.Context.SaveChangesAsync();
+                            var saleDetail = SetSaleDetail(i);
+                            saleDetail.Order_ID = sale.Id;
+                            await _context.SalesDetails.AddAsync(saleDetail);
 
-                            for (int i = 0; i <= DgvِProducts.Rows.Count - 1; i++)
-                            {
-                                var saleDetail = SetSaleDetail(i);
-                                saleDetail.Order_ID = sale.Id; // Set foreign key reference to Buy
-
-                                MainForm.Context.SalesDetails.Add(saleDetail);
-
-                                // Update product and add quantity
-                                MainForm.Context.Update(SetProduct(i));
-                                SetProductQuentity(Convert.ToDouble(DgvِProducts.Rows[i].Cells[2].Value.ToString()), i);
-
-
-                            }
-                            await MainForm.Context.SaveChangesAsync();
-                            if (PaidUp <= TotalFacture)
-                            {
-                                MainForm.Context.Update(SetCaisse(ConvertToFloat((PaidUp).ToString())));
-                                MainForm.Context.Add(SetCaisseDeposit(ConvertToFloat((PaidUp).ToString())));
-
-                            }
-                            else
-                            {
-                                MainForm.Context.Update(SetCaisse(ConvertToFloat((TotalFacture).ToString())));
-                                MainForm.Context.Add(SetCaisseDeposit(ConvertToFloat((TotalFacture).ToString())));
-                            }
-                            if (PaidUp > 0)
-                            {
-                                var CustReport = SetCustReport();
-                                CustReport.Order_ID = sale.Id; // Set foreign key reference to Buy
-                                MainForm.Context.Add(CustReport);
-                            }
-                            if (Remain > 0)
-                            {
-                                var CustMoney = SetCustMoney();
-                                CustMoney.Order_ID = sale.Id; // Set foreign key reference to Buy
-                                MainForm.Context.Add(CustMoney);
-
-                                // Update supplier details
-                                MainForm.Context.Update(SetCustomer());
-                            }
-                            await MainForm.Context.SaveChangesAsync();
-                            await transaction.CommitAsync();
-                            ResetForm();
-
+                            _context.Update(SetProduct(i));
+                            var buyPrice = SetProductQuentity(Convert.ToDecimal(DgvِProducts.Rows[i].Cells[2].Value.ToString()), i);
+                            var profit = SetSaleProfit(i, buyPrice);
+                            profit.Order_ID = sale.Id;
+                            await _context.AddAsync(profit);
                         }
-                        catch (Exception ex)
+                        HandleCaisseAndDeposits(PaidUp, TotalFacture);
+
+                        if (PaidUp > 0)
                         {
-                            await transaction.RollbackAsync();
-                            MessageBox.Show(ex.Message);
+                            var custReport = SetCustReport();
+                            custReport.Order_ID = sale.Id;
+                            await _context.AddAsync(custReport);
                         }
-                    }
 
+                        if (Remain > 0)
+                        {
+                            var custMoney = SetCustMoney();
+                            custMoney.Order_ID = sale.Id;
+                            await _context.AddAsync(custMoney);
+                            _context.Update(SetCustomer());
+                        }
+
+                        await _context.SaveChangesAsync();
+                        await transaction.CommitAsync();
+                        ResetForm();
+                    }
+                    catch (Exception ex)
+                    {
+                        await transaction.RollbackAsync();
+                        MessageBox.Show(ex.Message);
+                    }
                 }
             }
         }

@@ -11,6 +11,11 @@ namespace Store.Infrastructure.Data.Config
             builder.Property(x => x.Id).IsRequired();
             builder.HasKey(x => x.Id);
             builder.Property(x => x.CaisseName).HasMaxLength(50);
+            builder.HasData(
+                new Caisse { Id = 1, CaisseName = "الصندوق الأول", MoneyinCaisse = 0 },
+                     new Caisse { Id = 2, CaisseName = "الصندوق الثاني", MoneyinCaisse = 0 },
+                     new Caisse { Id = 3, CaisseName = "الصندوق الثالث", MoneyinCaisse = 0 }
+                );
 
         }
     }

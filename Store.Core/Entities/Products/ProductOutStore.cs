@@ -6,7 +6,7 @@
         public int Pro_ID { get; set; }
         public string ProductName { get; set; }
         public string StoreName { get; set; } // المخزن
-        public float Quentity { get; set; }
+        public decimal Quentity { get; set; }
 
         public DateTime Date { get; set; }
         public string Time { get; set; }

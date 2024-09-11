@@ -35,6 +35,21 @@ namespace Store.ApplicationUI.Code.Helper
                 _main.CloseSubPanels();
 
         }
+        public bool GetTheCurrentPage(UserControl pageUserControl)
+        {
+            //get the Current Page
+            var oldPage = _main.ContainerPanel.Controls.OfType<UserControl>().FirstOrDefault();
+
+            // Remove the old page
+
+            if (oldPage != null && oldPage == pageUserControl)
+            {
+                return true;
+            }
+
+            return false;
+
+        }
         public static void SetOperation(UserControl pageUserControl, CaisseDetailsForm detailsForm)
         {
             var oldPage = detailsForm.panelUserControls.Controls.OfType<UserControl>().FirstOrDefault();

@@ -138,6 +138,7 @@
 
         public static PosUserControl GetPosUserControl()
         {
+            if (posForm == null) return null;
             TabPage selectedTab = posForm.tabControl.SelectedTab as TabPage;
             if (selectedTab != null)
             {

@@ -73,14 +73,14 @@ namespace Store.Infrastructure.Repositories
             }
         }
 
-        float ConvertToFloat(string value)
+        decimal ConvertToFloat(string value)
         {
-            float quantity;
-            if (float.TryParse(value, out quantity))
-            {
-                return quantity;
-            }
-            return quantity;
+            //float quantity;
+            //if (float.TryParse(value, out quantity))
+            //{
+            //    return quantity;
+            //}
+            return Convert.ToDecimal(value);
         }
         public bool TransactionOfCustomerDebt(string order_Id, string cust_Id, string price, string Cust_Name, DateTime date)
         {

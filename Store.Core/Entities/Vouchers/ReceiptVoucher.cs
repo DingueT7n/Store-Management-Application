@@ -4,7 +4,7 @@
     {
         public string ReciverName { get; set; }
 
-        public float? Price { get; set; }
+        public decimal Price { get; set; }
 
         public DateTime Date { get; set; }
         public string Time { get; set; }

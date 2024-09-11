@@ -6,15 +6,15 @@
         public string Pro_Name { get; set; }
         public string StoreFrom { get; set; }
         public string StoreTo { get; set; }
-        public float Quentity { get; set; }
-        public float BuyPrice { get; set; }
-        public float SalePrice { get; set; }
+        public decimal Quentity { get; set; }
+        public decimal BuyPrice { get; set; }
+        public decimal SalePrice { get; set; }
         public string Date { get; set; }
         public string Name { get; set; }
         public string Reason { get; set; }
-        public float TaxValue { get; set; }
-        public float PriceTax { get; set; }
-        public float SalePriceTax { get; set; }
+        public decimal TaxValue { get; set; }
+        public decimal PriceTax { get; set; }
+        public decimal SalePriceTax { get; set; }
 
 
         public virtual Product Product { get; set; }

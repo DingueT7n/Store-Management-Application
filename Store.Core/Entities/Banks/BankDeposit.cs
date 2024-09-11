@@ -3,7 +3,7 @@
     public class BankDeposit : BaseEntity<int>
     {
 
-        public float Money { get; set; }
+        public decimal Money { get; set; }
         public DateTime Date { get; set; }
         public string Time { get; set; }
         public string Name { get; set; }

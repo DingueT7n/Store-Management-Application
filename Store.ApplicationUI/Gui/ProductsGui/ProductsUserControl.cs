@@ -3,6 +3,7 @@ using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.ProductsGui.Category;
 using Store.ApplicationUI.Gui.ProductsGui.StoreGui;
+using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.ProductsGui
@@ -14,6 +15,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         private AddProductForm addProductForm;
         public AddCategoryForm addCategoryForm;
         public AddStoreForm addStoreForm;
+        private static ApplicationDbContext _context;
         public static ProductsRepository? productsRepository;
         public static CategorysRepository? categoryRepository;
 
@@ -30,8 +32,10 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             // If the instance is null, create a new one and assign it to the static field
             if (_productsUserControl == null)
             {
-                productsRepository = new ProductsRepository(MainForm.Context);
-                categoryRepository = new CategorysRepository(MainForm.Context);
+                _context = new ApplicationDbContext();
+
+                productsRepository = new ProductsRepository(_context);
+                categoryRepository = new CategorysRepository(_context);
                 _productsUserControl = new ProductsUserControl();
 
             }
@@ -66,7 +70,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         public async void SetProductsToDgv()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            DgvProducts.DataSource = MainForm.Context.Products.
+            DgvProducts.DataSource = _context.Products.
                 Include(x => x.Category).ToList();
         }
 

@@ -7,7 +7,7 @@
         public DateTime OrderDate { get; set; }
         public string Time { get; set; }
         public DateTime DateReminder { get; set; }
-        public float Value { get; set; }
+        public decimal Value { get; set; }
         public string Notes { get; set; }
 
         public virtual Employee Employee { get; set; }

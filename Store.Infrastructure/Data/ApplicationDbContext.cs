@@ -28,7 +28,10 @@ namespace Store.Infrastructure.Data
             optionsBuilder.UseSqlServer(conString).EnableSensitiveDataLogging() // Enables detailed logging
                   .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information); ;
             base.OnConfiguring(optionsBuilder);
-
+            //     string conString = "Server=localhost;Database=StoreDbEFCore;User=root;Password=admin;";
+            //optionsBuilder.UseMySql(conString, new MySqlServerVersion(new Version(8, 0, 21))) // Replace with your MySQL version
+            //    .EnableSensitiveDataLogging()
+            //    .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
         }
 
 

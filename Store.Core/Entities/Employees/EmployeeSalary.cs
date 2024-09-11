@@ -4,9 +4,9 @@
     {
 
         public int Emp_ID { get; set; }
-        public float TotalSalary { get; set; }
-        public float TotalBorrow { get; set; }
-        public float NetSalary { get; set; }
+        public decimal TotalSalary { get; set; }
+        public decimal TotalBorrow { get; set; }
+        public decimal NetSalary { get; set; }
         public DateTime OrderDate { get; set; }
         public string Time { get; set; }
         public DateTime DateReminder { get; set; }

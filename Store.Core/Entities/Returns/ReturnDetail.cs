@@ -10,11 +10,11 @@ namespace Store.Core.Entities.Returns
         public string Sup_Name { get; set; }
         public string Cust_Name { get; set; }
         public string Date { get; set; }
-        public float Qty { get; set; }
-        public float Price { get; set; }
-        public float Total { get; set; }
-        public float TaxValue { get; set; }
-        public float PriceWithTax { get; set; }
+        public decimal Qty { get; set; }
+        public decimal Price { get; set; }
+        public decimal Total { get; set; }
+        public decimal TaxValue { get; set; }
+        public decimal PriceWithTax { get; set; }
 
 
         // Navigation property for the relationship with Returns

@@ -4,16 +4,16 @@
     {
         public string CodeBar { get; set; }
         public string ProductName { get; set; }
-        public float Quentity { get; set; }
-        public float BuyPrice { get; set; }
-        public float SalePrice { get; set; }
-        public float WholesalePrice { get; set; }
-        public float TaxValue { get; set; }
-        public float SalePriceTax { get; set; }
+        public decimal Quentity { get; set; }
+        public decimal BuyPrice { get; set; }
+        public decimal SalePrice { get; set; }
+        public decimal WholesalePrice { get; set; }
+        public decimal TaxValue { get; set; }
+        public decimal SalePriceTax { get; set; }
         public bool IsTaxed { get; set; }
         public DateTime DateExperation { get; set; }
-        public float? MinQty { get; set; }
-        public float? MaxDiscount { get; set; }
+        public decimal MinQty { get; set; }
+        public decimal MaxDiscount { get; set; }
         public byte[] ProductImage { get; set; }
 
 
@@ -34,8 +34,8 @@
     {
         public int Pro_Id { get; set; }
         public int Store_Id { get; set; }
-        public float DiscountValue { get; set; }
-        public float? Quentity { get; set; }
+        public decimal DiscountValue { get; set; }
+        public decimal? Quentity { get; set; }
         public DateTime? DateStart { get; set; }
         public string? TimeStart { get; set; }
         public DateTime? DateEnd { get; set; }
