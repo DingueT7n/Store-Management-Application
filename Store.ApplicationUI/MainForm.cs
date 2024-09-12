@@ -293,5 +293,11 @@ namespace Store.ApplicationUI
             CaisseDetailsForm caisseDetailsForm = new(this);
             caisseDetailsForm.Show();
         }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.SalesGui.SaleProfitGui.SalesProfitUserControl.Instance(this));
+
+        }
     }
 }

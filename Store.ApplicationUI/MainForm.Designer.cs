@@ -62,9 +62,9 @@
             button7 = new Button();
             button8 = new Button();
             button9 = new Button();
+            button6 = new Button();
             ContainerPanel = new Panel();
             animationTimer = new System.Windows.Forms.Timer(components);
-            button6 = new Button();
             flowLayoutPanelNavBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ProductsflowLayoutPanel.SuspendLayout();
@@ -496,8 +496,23 @@
             button9.Name = "button9";
             button9.Size = new Size(203, 37);
             button9.TabIndex = 4;
-            button9.Text = "الربح";
+            button9.Text = "الارباح ";
             button9.UseVisualStyleBackColor = true;
+            button9.Click += button9_Click;
+            // 
+            // button6
+            // 
+            button6.FlatAppearance.BorderSize = 4;
+            button6.Image = Properties.Resources.Open_Box;
+            button6.ImageAlign = ContentAlignment.MiddleLeft;
+            button6.Location = new Point(-2, 1338);
+            button6.Margin = new Padding(4, 5, 4, 5);
+            button6.Name = "button6";
+            button6.Size = new Size(212, 37);
+            button6.TabIndex = 14;
+            button6.Text = "الصانديق والبنك";
+            button6.UseVisualStyleBackColor = true;
+            button6.Click += button6_Click;
             // 
             // ContainerPanel
             // 
@@ -514,20 +529,6 @@
             animationTimer.Enabled = true;
             animationTimer.Interval = 15;
             animationTimer.Tick += animationTimer_Tick;
-            // 
-            // button6
-            // 
-            button6.FlatAppearance.BorderSize = 4;
-            button6.Image = Properties.Resources.Open_Box;
-            button6.ImageAlign = ContentAlignment.MiddleLeft;
-            button6.Location = new Point(-2, 1338);
-            button6.Margin = new Padding(4, 5, 4, 5);
-            button6.Name = "button6";
-            button6.Size = new Size(212, 37);
-            button6.TabIndex = 14;
-            button6.Text = "الصانديق والبنك";
-            button6.UseVisualStyleBackColor = true;
-            button6.Click += button6_Click;
             // 
             // MainForm
             // 
