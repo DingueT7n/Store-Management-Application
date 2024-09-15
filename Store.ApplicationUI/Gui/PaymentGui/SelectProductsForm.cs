@@ -1,4 +1,5 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using System.IO;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.SalesGui;
 using Store.ApplicationUI.Gui.SalesGui.PosGui;

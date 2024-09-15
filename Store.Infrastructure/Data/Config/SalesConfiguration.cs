@@ -40,6 +40,13 @@ namespace Store.Infrastructure.Data.Config
             builder.HasOne(x => x.Product).WithMany().HasForeignKey(x => x.Pro_ID);
         }
     }
+    public class sale8cmConfiguration : IEntityTypeConfiguration<sale8cm>
+    {
+        public void Configure(EntityTypeBuilder<sale8cm> builder)
+        {
+            builder.HasNoKey();
+        }
+    }
 
 
 }

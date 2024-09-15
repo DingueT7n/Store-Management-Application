@@ -79,6 +79,7 @@ namespace Store.Infrastructure.Data
         public DbSet<CaisseWithdraw> CaissesWithdraws { get; set; }
         public DbSet<CaisseTransfere> CaissesTransferes { get; set; }
         public DbSet<CaisseBankTransfere> CaissesBankTransferes { get; set; }
+        public DbSet<sale8cm> sale8cms { get; set; }
 
 
 

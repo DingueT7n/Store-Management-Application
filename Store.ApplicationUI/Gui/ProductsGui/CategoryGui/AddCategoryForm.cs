@@ -15,6 +15,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
         {
             InitializeComponent();
             _main = main;
+            _context = new ApplicationDbContext();
             this.Owner = _main;
             LoadData();
         }
@@ -127,12 +128,14 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
             }
         }
 
-        private void btnDeleteCategory_Click(object sender, EventArgs e)
+        private async void btnDeleteCategory_Click(object sender, EventArgs e)
         {
             if (MsgHelper.ShowDeleteDialog())
             {
-                _context.Remove(Convert.ToInt32(DgvCategory.CurrentRow.Cells[1].Value.ToString()));
-                _context.SaveChanges();
+                var cate = _context.Categories.FirstOrDefault
+                    (x => x.Id == Convert.ToInt32(DgvCategory.CurrentRow.Cells[1].Value.ToString()));
+                _context.Categories.Remove(cate);
+                await _context.SaveChangesAsync();
             }
             RefreshDgv();
         }

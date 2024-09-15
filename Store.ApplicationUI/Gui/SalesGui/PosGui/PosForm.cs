@@ -36,6 +36,7 @@
         //    DgvِProducts.Columns[5].Visible = false;
         //    DgvِProducts.Columns[0].Visible = false;
         //}
+        private int count = 1;
         private async void AddNewClientTab()
         {
             //if (tabControl.TabCount < 1)
@@ -49,10 +50,10 @@
             if (tabControl.TabCount < 3)
             {
                 var clientPage = new PosUserControl(this);
-                var count = tabControl.TabCount + 1;
+
                 var newTab = new TabPage
                 {
-                    Text = $"العميل رقم : {count}",
+                    Text = $"العميل رقم : {count++}",
                     ForeColor = Color.Black,
                     BackColor = Color.White,
 
@@ -166,8 +167,7 @@
                 TabPage selectedTab = tabControl.SelectedTab;
                 int index = tabControl.SelectedIndex;
                 tabControl.TabPages.Remove(selectedTab);
-                tabControl.SelectedIndex = index - 1;
-
+                tabControl.SelectedIndex = index == 0 ? 0 : --index;
             }
         }
 

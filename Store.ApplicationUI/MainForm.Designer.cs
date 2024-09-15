@@ -63,6 +63,11 @@
             button8 = new Button();
             button9 = new Button();
             button6 = new Button();
+            button10 = new Button();
+            DeservedflowLayoutPanel = new FlowLayoutPanel();
+            button11 = new Button();
+            button12 = new Button();
+            button13 = new Button();
             ContainerPanel = new Panel();
             animationTimer = new System.Windows.Forms.Timer(components);
             flowLayoutPanelNavBar.SuspendLayout();
@@ -72,6 +77,7 @@
             SuppliersflowLayoutPanel.SuspendLayout();
             BuysflowLayoutPanel.SuspendLayout();
             SalesflowLayoutPanel.SuspendLayout();
+            DeservedflowLayoutPanel.SuspendLayout();
             SuspendLayout();
             // 
             // flowLayoutPanelNavBar
@@ -92,6 +98,8 @@
             flowLayoutPanelNavBar.Controls.Add(btnSalesPanel);
             flowLayoutPanelNavBar.Controls.Add(SalesflowLayoutPanel);
             flowLayoutPanelNavBar.Controls.Add(button6);
+            flowLayoutPanelNavBar.Controls.Add(button10);
+            flowLayoutPanelNavBar.Controls.Add(DeservedflowLayoutPanel);
             flowLayoutPanelNavBar.Dock = DockStyle.Left;
             flowLayoutPanelNavBar.Location = new Point(0, 0);
             flowLayoutPanelNavBar.Name = "flowLayoutPanelNavBar";
@@ -109,6 +117,7 @@
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
+            pictureBox1.Visible = false;
             // 
             // btnComptoire
             // 
@@ -514,6 +523,69 @@
             button6.UseVisualStyleBackColor = true;
             button6.Click += button6_Click;
             // 
+            // button10
+            // 
+            button10.FlatAppearance.BorderSize = 4;
+            button10.Image = Properties.Resources.Open_Box;
+            button10.ImageAlign = ContentAlignment.MiddleLeft;
+            button10.Location = new Point(-2, 1385);
+            button10.Margin = new Padding(4, 5, 4, 5);
+            button10.Name = "button10";
+            button10.Size = new Size(212, 37);
+            button10.TabIndex = 15;
+            button10.Text = "المصاريف والضرائب";
+            button10.UseVisualStyleBackColor = true;
+            button10.Click += button10_Click;
+            // 
+            // DeservedflowLayoutPanel
+            // 
+            DeservedflowLayoutPanel.Controls.Add(button11);
+            DeservedflowLayoutPanel.Controls.Add(button12);
+            DeservedflowLayoutPanel.Controls.Add(button13);
+            DeservedflowLayoutPanel.Location = new Point(2, 1430);
+            DeservedflowLayoutPanel.MaximumSize = new Size(209, 143);
+            DeservedflowLayoutPanel.Name = "DeservedflowLayoutPanel";
+            DeservedflowLayoutPanel.Size = new Size(209, 143);
+            DeservedflowLayoutPanel.TabIndex = 16;
+            DeservedflowLayoutPanel.Visible = false;
+            // 
+            // button11
+            // 
+            button11.Image = Properties.Resources.Open_Box;
+            button11.ImageAlign = ContentAlignment.MiddleLeft;
+            button11.Location = new Point(2, 5);
+            button11.Margin = new Padding(4, 5, 4, 5);
+            button11.Name = "button11";
+            button11.Size = new Size(203, 37);
+            button11.TabIndex = 2;
+            button11.Text = "جميع المصروفات";
+            button11.UseVisualStyleBackColor = true;
+            button11.Click += button11_Click;
+            // 
+            // button12
+            // 
+            button12.Image = Properties.Resources.Open_Box;
+            button12.ImageAlign = ContentAlignment.MiddleLeft;
+            button12.Location = new Point(2, 52);
+            button12.Margin = new Padding(4, 5, 4, 5);
+            button12.Name = "button12";
+            button12.Size = new Size(203, 37);
+            button12.TabIndex = 3;
+            button12.Text = "تقارير المبيعات";
+            button12.UseVisualStyleBackColor = true;
+            // 
+            // button13
+            // 
+            button13.Image = Properties.Resources.Open_Box;
+            button13.ImageAlign = ContentAlignment.MiddleLeft;
+            button13.Location = new Point(2, 99);
+            button13.Margin = new Padding(4, 5, 4, 5);
+            button13.Name = "button13";
+            button13.Size = new Size(203, 37);
+            button13.TabIndex = 4;
+            button13.Text = "الارباح ";
+            button13.UseVisualStyleBackColor = true;
+            // 
             // ContainerPanel
             // 
             ContainerPanel.BackColor = Color.White;
@@ -554,6 +626,7 @@
             SuppliersflowLayoutPanel.ResumeLayout(false);
             BuysflowLayoutPanel.ResumeLayout(false);
             SalesflowLayoutPanel.ResumeLayout(false);
+            DeservedflowLayoutPanel.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -594,5 +667,10 @@
         private Button button9;
         private Button btnComptoire;
         private Button button6;
+        private Button button10;
+        private FlowLayoutPanel DeservedflowLayoutPanel;
+        private Button button11;
+        private Button button12;
+        private Button button13;
     }
 }

@@ -15,6 +15,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
             InitializeComponent();
             _main = main;
             this.Owner = _main;
+            _context = new ApplicationDbContext();
             LoadData();
         }
         public static AddStoreForm Instance(MainForm main)

@@ -1,5 +1,9 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using System.Data;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.PaymentGui;
+using Store.ApplicationUI.Reports.ReportPerviwGui;
 using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Customers;
 using Store.Core.Entities.Products;
@@ -58,8 +62,10 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
             //ShowLoading
             //LoadingForm.Instance(_main).Show();
+
             if (await Task.Run(() => salesRepository.IsConnected()))
             {
+
                 //Start Load Data
                 //txtFactureNumber.Text = salesRepository.GetFactureNumber();
                 //// if its an admin or Normal user 
@@ -825,6 +831,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         private async void btnPay_Click(object sender, EventArgs e)
         {
             await PayNowAsync();
+
+
         }
         public void InitializeData(string paidUp, string remain)
         {
@@ -837,6 +845,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             _context.Update(SetCaisse(amountToDeposit));
             await _context.AddAsync(SetCaisseDeposit(amountToDeposit));
         }
+        private int saleID;
         async Task PayNowAsync()
         {
             if (DgvِProducts.Rows.Count > 0 && rbSale.Checked)
@@ -860,6 +869,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                         var sale = SetSale();
                         await _context.AddAsync(sale);
                         await _context.SaveChangesAsync();
+                        saleID = sale.Id;
 
                         for (int i = 0; i < DgvِProducts.Rows.Count; i++)
                         {
@@ -890,15 +900,56 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                             _context.Update(SetCustomer());
                         }
 
+
+
                         await _context.SaveChangesAsync();
                         await transaction.CommitAsync();
                         ResetForm();
+                        DataTable saleDetailsTable = await GetSellDetailsDataTableAsync(saleID);
+                        Reports.sale8cm sale8Cm = new();
+                        sale8Cm.DataSource = saleDetailsTable;
+                        XtraForm1 xtraForm1 = new(sale8Cm);
+                        xtraForm1.ShowDialog();
                     }
                     catch (Exception ex)
                     {
                         await transaction.RollbackAsync();
                         MessageBox.Show(ex.Message);
                     }
+                }
+            }
+        }
+        private async Task<DataTable> GetSellDetailsDataTableAsync(int orderId)
+        {
+
+            using (var context = new ApplicationDbContext())
+            {
+                var orderIdParam = new SqlParameter("@orderID", orderId);
+                var connection = context.Database.GetDbConnection();
+
+                try
+                {
+                    await connection.OpenAsync();
+
+
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = "EXEC [dbo].[get_all_sell_details] @orderID";
+                        command.CommandType = CommandType.Text;
+                        command.Parameters.Add(orderIdParam);
+
+
+                        using (var reader = await command.ExecuteReaderAsync())
+                        {
+                            DataTable sellDetailsTable = new DataTable();
+                            sellDetailsTable.Load(reader);
+                            return sellDetailsTable;
+                        }
+                    }
+                }
+                finally
+                {
+                    await connection.CloseAsync();
                 }
             }
         }

@@ -299,5 +299,18 @@ namespace Store.ApplicationUI
             pageHelper.SetNewPage(Gui.SalesGui.SaleProfitGui.SalesProfitUserControl.Instance(this));
 
         }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.DeservedGui.DeservedUserControl.Instance(this));
+
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            CloseSubPanels();
+
+            ShowSubPanel(DeservedflowLayoutPanel);
+        }
     }
 }

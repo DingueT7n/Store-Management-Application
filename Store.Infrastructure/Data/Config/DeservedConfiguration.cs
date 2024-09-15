@@ -8,7 +8,7 @@ namespace Store.Infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<Deserved> builder)
         {
-            builder.Property(x => x.Id).IsRequired();
+            builder.Property(x => x.Id);
             builder.HasKey(x => x.Id);
             builder.HasOne(bd => bd.DeservedType).WithMany().HasForeignKey(x => x.TypeId);
 
@@ -18,7 +18,7 @@ namespace Store.Infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<DeservedType> builder)
         {
-            builder.Property(x => x.Id).IsRequired();
+            builder.Property(x => x.Id);
             builder.HasKey(x => x.Id);
 
 
@@ -28,7 +28,7 @@ namespace Store.Infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<TaxesReport> builder)
         {
-            builder.Property(x => x.Id).IsRequired();
+            builder.Property(x => x.Id);
             builder.HasKey(x => x.Id);
         }
     }

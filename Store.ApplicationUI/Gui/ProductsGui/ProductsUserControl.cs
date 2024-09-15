@@ -18,10 +18,6 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         private static ApplicationDbContext _context;
         public static ProductsRepository? productsRepository;
         public static CategorysRepository? categoryRepository;
-
-
-
-
         public ProductsUserControl()
         {
             InitializeComponent();

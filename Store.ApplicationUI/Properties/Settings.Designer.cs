@@ -142,5 +142,17 @@ namespace Store.ApplicationUI.Properties {
                 this["DefaultCaisseId"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public byte ImageStore {
+            get {
+                return ((byte)(this["ImageStore"]));
+            }
+            set {
+                this["ImageStore"] = value;
+            }
+        }
     }
 }
