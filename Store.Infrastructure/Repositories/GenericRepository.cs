@@ -20,7 +20,7 @@ namespace Store.Infrastructure.Repositories
             try
             {
 
-                return _context.Set<T>().ToList();
+                return _context.Set<T>().AsNoTracking().ToList();
 
             }
             catch
@@ -65,7 +65,7 @@ namespace Store.Infrastructure.Repositories
         {
             try
             {
-                IQueryable<T> query = _context.Set<T>().Where(x => x.Id.ToString() == id);
+                IQueryable<T> query = _context.Set<T>().AsNoTracking().Where(x => x.Id.ToString() == id);
                 return (query).FirstOrDefault();
             }
             catch (Exception ex)
@@ -86,7 +86,7 @@ namespace Store.Infrastructure.Repositories
 
         public IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includes)
         {
-            var query = _context.Set<T>().AsQueryable();
+            var query = _context.Set<T>().AsQueryable().AsNoTracking();
             foreach (var item in includes)
             {
                 query = query.Include(item);
@@ -98,7 +98,7 @@ namespace Store.Infrastructure.Repositories
 
         public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
         {
-            var query = _context.Set<T>().AsQueryable();
+            var query = _context.Set<T>().AsNoTracking().AsQueryable();
             foreach (var item in includes)
             {
                 query = query.Include(item);
@@ -115,7 +115,7 @@ namespace Store.Infrastructure.Repositories
 
         public async Task<T> GetByIdAsync(int id, params Expression<Func<T, object>>[] includes)
         {
-            IQueryable<T> query = _context.Set<T>().Where(x => x.Id == id);
+            IQueryable<T> query = _context.Set<T>().AsNoTracking().Where(x => x.Id == id);
             foreach (var item in includes)
             {
                 query = query.Include(item);
@@ -128,7 +128,7 @@ namespace Store.Infrastructure.Repositories
         {
             try
             {
-                return _context.Set<T>().Where(x => x.Id.ToString() == userId).ToList();
+                return _context.Set<T>().AsNoTracking().Where(x => x.Id.ToString() == userId).ToList();
             }
             catch (Exception)
             {
@@ -151,7 +151,7 @@ namespace Store.Infrastructure.Repositories
             try
             {
                 var properties = typeof(T).GetProperties();
-                IQueryable<T> query = _context.Set<T>();
+                IQueryable<T> query = _context.Set<T>().AsNoTracking();
 
                 // Dynamically build the query by checking each property
                 query = query.Where(x => properties.Any(p =>

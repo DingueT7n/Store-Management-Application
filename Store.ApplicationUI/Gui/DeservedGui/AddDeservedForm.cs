@@ -1,5 +1,6 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Entities.AllDeserved;
 using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
@@ -68,7 +69,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
                 // if its an admin or Normal user 
 
-                CMBType.DataSource = _context.Categories.ToList();
+                CMBType.DataSource = _context.DeservedsTypes.ToList();
 
 
 
@@ -93,11 +94,84 @@ namespace Store.ApplicationUI.Gui.DeservedGui
         void vider()
         {
             txtValueDeserved.Text = "";
+            txtUserName.Text = Properties.Settings.Default.UserName;
+            txtNotes.Text = "";
 
         }
         private void button1_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void txtValueDeserved_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
+            {
+                e.Handled = true;
+            }
+        }
+        public void SetDataToEdit(string username, string value, string notes, string typesId,
+             string deservedId, DateTime DateExpiration)
+        {
+            LoadData();
+            txtUserName.Text = username;
+            txtValueDeserved.Text = value;
+            CMBType.SelectedValue = Convert.ToInt32(typesId);
+            txtNotes.Text = notes;
+            DtpExperation.Value = DateExpiration;
+            lblDeservedID.Text = deservedId;
+            btnAddDeserved.Visible = false;
+            btnEditDeserved.Visible = true;
+            lblDeservedID.Visible = true;
+            label13.Visible = true;
+        }
+
+        private void btnAddDeserved_Click(object sender, EventArgs e)
+        {
+            if (CMBType.Text != "اختر نوع")
+            {
+                _context.Deserveds.Add(new Deserved
+                {
+                    TypeId = (int)CMBType.SelectedValue,
+                    UserName = txtUserName.Text,
+                    Price = Convert.ToDecimal(txtValueDeserved.Text),
+                    Date = DtpExperation.Value,
+                    Notes = txtNotes.Text,
+                    Time = DateTime.Now.ToString("HH:mm:ss"),
+                });
+                _context.SaveChanges();
+                if (!DeservedUserControl.CheckInstance())
+                {
+                    DeservedUserControl.RefreshDgv();
+                }
+            }
+            else
+                MsgHelper.ShowRequiredFields();
+        }
+
+        private async void btnEditDeserved_Click(object sender, EventArgs e)
+        {
+            Deserved deserved = _context.Deserveds.FirstOrDefault(x => x.Id.ToString() == lblDeservedID.Text);
+            deserved.TypeId = Convert.ToInt32(CMBType.SelectedValue);
+            deserved.UserName = txtUserName.Text;
+            deserved.Price = Convert.ToDecimal(txtValueDeserved.Text);
+            deserved.Date = DtpExperation.Value;
+            deserved.Notes = txtNotes.Text;
+            _context.Update(deserved);
+            await _context.SaveChangesAsync();
+            if (!DeservedUserControl.CheckInstance())
+            {
+                DeservedUserControl.RefreshDgv();
+            }
+            deserved = null;
+        }
+
+        private void btnAddTypes_Click(object sender, EventArgs e)
+        {
+            AddDeservedTypeForm addDeservedType = AddDeservedTypeForm.Instance(_main);
+            this.Hide();
+            addDeservedType.ShowDialog();
+            this.Show();
         }
     }
 }

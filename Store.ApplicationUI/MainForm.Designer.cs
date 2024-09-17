@@ -83,6 +83,7 @@
             // flowLayoutPanelNavBar
             // 
             flowLayoutPanelNavBar.AutoScroll = true;
+            flowLayoutPanelNavBar.AutoScrollMargin = new Size(5, 5);
             flowLayoutPanelNavBar.BackColor = Color.WhiteSmoke;
             flowLayoutPanelNavBar.Controls.Add(pictureBox1);
             flowLayoutPanelNavBar.Controls.Add(btnComptoire);
@@ -117,7 +118,6 @@
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
-            pictureBox1.Visible = false;
             // 
             // btnComptoire
             // 

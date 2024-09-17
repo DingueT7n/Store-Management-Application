@@ -57,6 +57,10 @@
             btnRefresh = new Button();
             lblEmptyData = new Label();
             DgvSales = new DataGridView();
+            PanelPagination = new Panel();
+            cmbpagination = new ComboBox();
+            btnPrev = new Button();
+            btnNext = new Button();
             OperationsflowLayoutPanel.SuspendLayout();
             gbPayChoiches.SuspendLayout();
             panelstatisticsandOperations.SuspendLayout();
@@ -64,6 +68,7 @@
             SearchPanel.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DgvSales).BeginInit();
+            PanelPagination.SuspendLayout();
             SuspendLayout();
             // 
             // OperationsflowLayoutPanel
@@ -383,11 +388,59 @@
             DgvSales.Size = new Size(1034, 517);
             DgvSales.TabIndex = 23;
             // 
+            // PanelPagination
+            // 
+            PanelPagination.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            PanelPagination.Controls.Add(cmbpagination);
+            PanelPagination.Controls.Add(btnPrev);
+            PanelPagination.Controls.Add(btnNext);
+            PanelPagination.Location = new Point(3, 638);
+            PanelPagination.Name = "PanelPagination";
+            PanelPagination.Size = new Size(169, 40);
+            PanelPagination.TabIndex = 28;
+            // 
+            // cmbpagination
+            // 
+            cmbpagination.Dock = DockStyle.Fill;
+            cmbpagination.Font = new Font("Calibri", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            cmbpagination.FormattingEnabled = true;
+            cmbpagination.Location = new Point(50, 0);
+            cmbpagination.Name = "cmbpagination";
+            cmbpagination.Size = new Size(69, 37);
+            cmbpagination.TabIndex = 28;
+            cmbpagination.SelectedIndexChanged += cmbpagination_SelectedIndexChanged;
+            cmbpagination.SelectionChangeCommitted += cmbpagination_SelectionChangeCommitted;
+            // 
+            // btnPrev
+            // 
+            btnPrev.Dock = DockStyle.Left;
+            btnPrev.Image = (Image)resources.GetObject("btnPrev.Image");
+            btnPrev.ImeMode = ImeMode.NoControl;
+            btnPrev.Location = new Point(0, 0);
+            btnPrev.Name = "btnPrev";
+            btnPrev.Size = new Size(50, 40);
+            btnPrev.TabIndex = 26;
+            btnPrev.UseVisualStyleBackColor = true;
+            btnPrev.Click += btnPrev_Click;
+            // 
+            // btnNext
+            // 
+            btnNext.Dock = DockStyle.Right;
+            btnNext.Image = (Image)resources.GetObject("btnNext.Image");
+            btnNext.ImeMode = ImeMode.NoControl;
+            btnNext.Location = new Point(119, 0);
+            btnNext.Name = "btnNext";
+            btnNext.Size = new Size(50, 40);
+            btnNext.TabIndex = 25;
+            btnNext.UseVisualStyleBackColor = true;
+            btnNext.Click += btnNext_Click;
+            // 
             // SalesReportsUserControl
             // 
             AutoScaleDimensions = new SizeF(8F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
+            Controls.Add(PanelPagination);
             Controls.Add(btnRefresh);
             Controls.Add(lblEmptyData);
             Controls.Add(DgvSales);
@@ -408,6 +461,7 @@
             SearchPanel.PerformLayout();
             panelButtons.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)DgvSales).EndInit();
+            PanelPagination.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -438,5 +492,9 @@
         private Button btnRefresh;
         private Label lblEmptyData;
         private DataGridView DgvSales;
+        private Panel PanelPagination;
+        private ComboBox cmbpagination;
+        private Button btnPrev;
+        private Button btnNext;
     }
 }

@@ -180,5 +180,38 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
         {
             dtpTo.Value = DateTime.Now;
         }
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+
+            if (cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1)
+            {
+                cmbpagination.SelectedIndex += 1;
+                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+                btnSearch_Click(sender, e);
+            }
+        }
+
+        private void btnPrev_Click(object sender, EventArgs e)
+        {
+            if (cmbpagination.SelectedIndex > 0)
+            {
+                cmbpagination.SelectedIndex -= 1;
+                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+                btnSearch_Click(sender, e);
+            }
+        }
+
+        private void cmbpagination_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            if (cmbpagination.SelectedIndex == -1)
+            {
+                cmbpagination.SelectedIndex = 0;
+            }
+            else
+            {
+                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+                btnSearch_Click(sender, e);
+            }
+        }
     }
 }

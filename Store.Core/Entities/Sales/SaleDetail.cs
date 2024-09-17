@@ -40,4 +40,10 @@ namespace Store.Core.Entities.Sales
         public decimal PaidUp { get; set; }
         public decimal Remain { get; set; }
     }
+
+    public class ResultSaleDetailDto
+    {
+        public List<SaleDetailDto> result;
+        public int count;
+    }
 }

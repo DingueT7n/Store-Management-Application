@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Store.Core.Entities.Products;
 using Store.Core.Entities.Sales;
 using Store.Core.Interfaces;
@@ -43,12 +44,12 @@ namespace Store.Infrastructure.Repositories
             }
 
         }
-        public List<SaleDetailDto> GetAllSalesWithDetails()
+        public ResultSaleDetailDto GetAllSalesWithDetails(int take, int skip)
         {
 
             try
             {
-                var lastBuy = _context.SalesDetails
+                var lastBuy = _context.SalesDetails.Skip(skip).Take(take)
                     .Include(x => x.Sale)
                     .Include(x => x.Product)
                     .Include(x => x.Customer).Select(bd => new SaleDetailDto
@@ -68,7 +69,11 @@ namespace Store.Infrastructure.Repositories
                         Discount = bd.Discount,
                     })
                     .ToList();
-                return lastBuy;
+                return new ResultSaleDetailDto
+                {
+                    result = lastBuy,
+                    count = _context.SalesDetails.Count()
+                };
             }
             catch (Exception ex)
             {
@@ -77,56 +82,80 @@ namespace Store.Infrastructure.Repositories
             }
 
         }
-        public List<SaleDetailDto> SearchBoth(string searchItem, DateTime fromDate, DateTime toDate)
+        public ResultSaleDetailDto SearchBoth(string searchItem, DateTime fromDate, DateTime toDate, int take, int skip)
         {
             try
             {
-                var buyDetailsQuery = _context.SalesDetails
+                // Ensure that skip is non-negative
+                skip = Math.Max(0, skip);
+
+                // Query with server-side filtering for both the date range and the search item
+                var query = _context.SalesDetails
                     .Include(bd => bd.Sale)
                     .Include(bd => bd.Product)
                     .Include(bd => bd.Customer)
-                    .Where(bd => fromDate <= bd.Sale.Date && bd.Sale.Date <= toDate) // Filter by date range
-                    .AsEnumerable()  // Switch to client-side evaluation for further filtering
+                    .Where(bd => fromDate <= bd.Sale.Date && bd.Sale.Date <= toDate) // Date range filter
                     .Where(bd =>
-                        bd.Customer.CustomerName.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
-                        bd.Order_ID.ToString() == searchItem) // Client-side case-insensitive search
-                    .OrderBy(bd => bd.Sale.Date);
+                        EF.Functions.Like(bd.Customer.CustomerName, $"%{searchItem}%") ||
+                        bd.Order_ID.ToString() == searchItem);
 
-                var buyDetailDtos = buyDetailsQuery.Select(bd => new SaleDetailDto
+                // Get the result list with pagination
+                var saleDetails = query
+                    .OrderBy(bd => bd.Sale.Date)
+                    .Skip(skip)
+                    .Take(take)
+                    .Select(bd => new SaleDetailDto
+                    {
+                        Order_ID = bd.Order_ID,
+                        Date = bd.Sale.Date,
+                        Time = bd.Sale.Time,
+                        User_Name = bd.Sale.User_Name,
+                        TotalFacture = bd.Sale.TotalOrder,
+                        PaidUp = bd.Sale.PaidUP,
+                        Remain = bd.Sale.Remain,
+                        CustomerName = bd.Customer.CustomerName,
+                        ProductName = bd.Product.ProductName,
+                        Quantity = bd.Quentity,
+                        PriceWithTax = bd.PriceWithTax,
+                        TotalPrice = bd.Total,
+                        Discount = bd.Discount,
+                    })
+                    .ToList();
+
+                // Get the total count of matching records (without pagination)
+                var totalCount = query.Count();
+
+                return new ResultSaleDetailDto
                 {
-                    Order_ID = bd.Order_ID,
-                    Date = bd.Sale.Date,
-                    Time = bd.Sale.Time,
-                    User_Name = bd.Sale.User_Name,
-                    TotalFacture = bd.Sale.TotalOrder,
-                    PaidUp = bd.Sale.PaidUP,
-                    Remain = bd.Sale.Remain,
-                    CustomerName = bd.Customer.CustomerName, // Assuming `SupplierName` is correct
-                    ProductName = bd.Product.ProductName,    // Assuming `ProductName` is correct
-                    Quantity = bd.Quentity,
-                    PriceWithTax = bd.PriceWithTax,
-                    TotalPrice = bd.Total,
-                    Discount = bd.Discount,
-                })
-                .ToList();
-
-                return buyDetailDtos;
+                    result = saleDetails,
+                    count = totalCount
+                };
             }
             catch (Exception ex)
             {
+                // Log or handle the exception as needed
                 throw new Exception("Error retrieving the buy details", ex);
             }
         }
-        public List<SaleDetailDto> SearchSalesByDate(DateTime fromDate, DateTime toDate)
+        public ResultSaleDetailDto SearchSalesByDate(DateTime fromDate, DateTime toDate, int take, int skip)
         {
             try
             {
-                return _context.SalesDetails
+                // Ensure 'skip' is non-negative
+                skip = Math.Max(0, skip);
+
+                // Query for fetching the sale details within the date range
+                var salesDetailsQuery = _context.SalesDetails
                     .Include(x => x.Sale)
                     .Include(x => x.Product)
                     .Include(x => x.Customer)
                     .Where(bd => fromDate <= bd.Sale.Date && bd.Sale.Date <= toDate) // Date range filter
                     .OrderBy(bd => bd.Sale.Date)
+                    .Skip(skip)
+                    .Take(take);
+
+                // Project the result to DTO
+                var saleDetails = salesDetailsQuery
                     .Select(bd => new SaleDetailDto
                     {
                         Order_ID = bd.Order_ID,
@@ -136,34 +165,58 @@ namespace Store.Infrastructure.Repositories
                         TotalFacture = bd.Sale.TotalOrder,
                         PaidUp = bd.Sale.PaidUP,
                         Remain = bd.Sale.Remain,
-                        CustomerName = bd.Customer.CustomerName, // Assuming `SupplierName` is correct
-                        ProductName = bd.Product.ProductName,    // Assuming `ProductName` is correct
+                        CustomerName = bd.Customer.CustomerName,
+                        ProductName = bd.Product.ProductName,
                         Quantity = bd.Quentity,
                         PriceWithTax = bd.PriceWithTax,
                         TotalPrice = bd.Total,
                         Discount = bd.Discount,
                     })
                     .ToList();
+
+                // Get total count of records for the date range (without pagination)
+                var totalCount = _context.SalesDetails
+                    .Where(bd => fromDate <= bd.Sale.Date && bd.Sale.Date <= toDate)
+                    .Count();
+
+                return new ResultSaleDetailDto
+                {
+                    result = saleDetails,
+                    count = totalCount
+                };
+            }
+            catch (SqlException sqlEx)
+            {
+
+                throw new Exception("A database error occurred while retrieving the Sale details.", sqlEx);
             }
             catch (Exception ex)
             {
-                // Log or handle the exception as needed
+
                 throw new Exception("Error retrieving the Sale details", ex);
             }
         }
-        public List<SaleDetailDto> SearchOnlySupplier(string searchItem)
+        public ResultSaleDetailDto SearchOnlySupplier(string searchItem, int take, int skip)
         {
             try
             {
-                return _context.SalesDetails
+                // Ensure that skip is non-negative
+                skip = Math.Max(0, skip); // Prevent negative skip values
+
+                // Server-side filtering and pagination
+                var query = _context.SalesDetails
                     .Include(bd => bd.Sale)
                     .Include(bd => bd.Product)
                     .Include(bd => bd.Customer)
-                    .AsEnumerable()  // Forces client-side evaluation for case-insensitive search
                     .Where(bd =>
-                        bd.Customer.CustomerName.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||  // Client-side case-insensitive search
-                        bd.Order_ID.ToString() == searchItem)
+                        EF.Functions.Like(bd.Customer.CustomerName, $"%{searchItem}%") || // Server-side case-insensitive search
+                        bd.Order_ID.ToString() == searchItem);
+
+                // Get the result list with pagination
+                var saleDetails = query
                     .OrderBy(bd => bd.Sale.Date)
+                    .Skip(skip)
+                    .Take(take)
                     .Select(bd => new SaleDetailDto
                     {
                         Order_ID = bd.Order_ID,
@@ -173,14 +226,23 @@ namespace Store.Infrastructure.Repositories
                         TotalFacture = bd.Sale.TotalOrder,
                         PaidUp = bd.Sale.PaidUP,
                         Remain = bd.Sale.Remain,
-                        CustomerName = bd.Customer.CustomerName, // Assuming `SupplierName` is correct
-                        ProductName = bd.Product.ProductName,    // Assuming `ProductName` is correct
+                        CustomerName = bd.Customer.CustomerName,
+                        ProductName = bd.Product.ProductName,
                         Quantity = bd.Quentity,
                         PriceWithTax = bd.PriceWithTax,
                         TotalPrice = bd.Total,
                         Discount = bd.Discount,
                     })
                     .ToList();
+
+                // Get the total count of matching records (without pagination)
+                var totalCount = query.Count();
+
+                return new ResultSaleDetailDto
+                {
+                    result = saleDetails,
+                    count = totalCount
+                };
             }
             catch (Exception ex)
             {
@@ -252,8 +314,8 @@ namespace Store.Infrastructure.Repositories
                     .Where(bd => fromDate <= bd.Sale.Date && bd.Sale.Date <= toDate) // Filter by date range
                     .AsEnumerable()  // Switch to client-side evaluation for further filtering
                     .Where(bd =>
-                        bd.Sale.Customer.CustomerName.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
-                        bd.Product.ProductName.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
+                        bd.Sale.Customer.CustomerName.ToLower().Contains(searchItem.ToLower()) ||
+                        bd.Product.ProductName.ToLower().Contains(searchItem.ToLower()) ||
 
                         bd.Order_ID.ToString() == searchItem) // Client-side case-insensitive search
                     .OrderBy(bd => bd.Sale.Date);
@@ -335,8 +397,8 @@ namespace Store.Infrastructure.Repositories
 
                     .AsEnumerable()  // Forces client-side evaluation for case-insensitive search
                     .Where(bd =>
-                         bd.Sale.Customer.CustomerName.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
-                        bd.Product.ProductName.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||  // Client-side case-insensitive search
+                         bd.Sale.Customer.CustomerName.ToLower().Contains(searchItem.ToLower()) ||
+                        bd.Product.ProductName.ToLower().Contains(searchItem.ToLower()) ||  // Client-side case-insensitive search
                         bd.Order_ID.ToString() == searchItem)
                     .OrderBy(bd => bd.Sale.Date)
                     .Select(bd => new SaleProfitDto

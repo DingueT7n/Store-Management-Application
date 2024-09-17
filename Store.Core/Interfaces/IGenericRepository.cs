@@ -11,9 +11,6 @@ namespace Store.Core.Interfaces
         List<T> SearchAll(string searchItem);
         List<T> SearchByUser(string userId, string searchItem);
         T Find(string id);
-
-
-
         List<T> GetAll();
         Task<T> GetAsync(int id);
         T Get(int id);

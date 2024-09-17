@@ -13,4 +13,9 @@ namespace Store.Core.Entities.Customers
         public virtual Sale Sale { get; set; }
         public virtual Customer Customer { get; set; }
     }
+    public class CustomerReportDto
+    {
+        public List<CustomerReport> Result { get; set; } = new List<CustomerReport>();
+        public int count { get; set; }
+    }
 }

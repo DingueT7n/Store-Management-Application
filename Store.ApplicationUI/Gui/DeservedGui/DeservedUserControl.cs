@@ -8,7 +8,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
     {
         private static DeservedGui.DeservedUserControl? _deservedUserControl;
         private static MainForm? _main;
-        //private AddDeservedForm addDeservedForm;
+        private AddDeservedForm addDeservedForm;
         public AddDeservedTypeForm addDeservedTypeyForm;
         private static ApplicationDbContext _context;
         public static Infrastructure.Repositories.DeservedsRepository? deservedsRepository;
@@ -16,6 +16,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
         public DeservedUserControl()
         {
             InitializeComponent();
+            dtpTo.Value = DateTime.Now;
         }
         public static DeservedUserControl Instance(MainForm main)
         {
@@ -42,7 +43,9 @@ namespace Store.ApplicationUI.Gui.DeservedGui
         public async void SetProductsToDgv()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            DgvProducts.DataSource = deservedsRepository.GetAll(x => x.DeservedType);
+            _context.SaveChanges();
+            var data = deservedsRepository.GetAll(x => x.DeservedType);
+            DgvProducts.DataSource = data;
         }
 
         public static void RefreshDgv()
@@ -94,25 +97,63 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
         private void btnAddDeserved_Click(object sender, EventArgs e)
         {
-
+            AddDeservedForm addDeservedForm = new(_main);
+            addDeservedForm.ShowDialog();
         }
 
         private void btnEditDeserved_Click(object sender, EventArgs e)
         {
+            if (DgvProducts.Rows.Count > 0)
+            {
+                if (addDeservedForm == null || addDeservedForm.IsDisposed)
+                {
+                    addDeservedForm = AddDeservedForm.Instance(_main);
 
+
+                    addDeservedForm.SetDataToEdit(
+                        DgvProducts.CurrentRow.Cells[0].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[1].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[4].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[5].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[7].Value.ToString(),
+                        Convert.ToDateTime(DgvProducts.CurrentRow.Cells[2].Value)
+                    );
+
+                    addDeservedForm.Show();
+                }
+                else
+                {
+                    addDeservedForm.Focus();
+                }
+            }
         }
 
         private void btnAddDeservedType_Click(object sender, EventArgs e)
         {
             if (addDeservedTypeyForm == null || addDeservedTypeyForm.IsDisposed)
             {
-                addDeservedTypeyForm = AddDeservedTypeForm.Instance(_main);
+                addDeservedTypeyForm = new(_main);
                 addDeservedTypeyForm.Show();
             }
             else
             {
                 addDeservedTypeyForm.Focus();
             }
+
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            LoadData();
+        }
+
+        private void btnDeleteDeserved_Click(object sender, EventArgs e)
+        {
+            if (MsgHelper.ShowDeleteDialog())
+            {
+                deservedsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[7].Value.ToString());
+            }
+            RefreshDgv();
         }
     }
 }

@@ -67,7 +67,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             DgvProducts.DataSource = _context.Products.
-                Include(x => x.Category).ToList();
+                Include(x => x.Category).AsNoTracking().ToList();
         }
 
         public static void RefreshDgv()

@@ -154,5 +154,17 @@ namespace Store.ApplicationUI.Properties {
                 this["ImageStore"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        public int NoOfDataInDgvs {
+            get {
+                return ((int)(this["NoOfDataInDgvs"]));
+            }
+            set {
+                this["NoOfDataInDgvs"] = value;
+            }
+        }
     }
 }

@@ -34,6 +34,8 @@
             btnEditDeserved = new Button();
             button1 = new Button();
             groupBox1 = new GroupBox();
+            lblDeservedID = new Label();
+            label13 = new Label();
             label3 = new Label();
             txtNotes = new TextBox();
             DtpExperation = new DateTimePicker();
@@ -59,7 +61,7 @@
             OperationsflowLayoutPanel.Controls.Add(btnEditDeserved);
             OperationsflowLayoutPanel.Controls.Add(button1);
             OperationsflowLayoutPanel.Dock = DockStyle.Bottom;
-            OperationsflowLayoutPanel.Location = new Point(0, 380);
+            OperationsflowLayoutPanel.Location = new Point(0, 436);
             OperationsflowLayoutPanel.Margin = new Padding(5);
             OperationsflowLayoutPanel.Name = "OperationsflowLayoutPanel";
             OperationsflowLayoutPanel.Size = new Size(410, 51);
@@ -76,6 +78,7 @@
             btnAddDeserved.TabIndex = 3;
             btnAddDeserved.Text = "   اضافة";
             btnAddDeserved.UseVisualStyleBackColor = true;
+            btnAddDeserved.Click += btnAddDeserved_Click;
             // 
             // btnEditDeserved
             // 
@@ -89,6 +92,7 @@
             btnEditDeserved.Text = "   تعديل";
             btnEditDeserved.UseVisualStyleBackColor = true;
             btnEditDeserved.Visible = false;
+            btnEditDeserved.Click += btnEditDeserved_Click;
             // 
             // button1
             // 
@@ -104,6 +108,8 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(lblDeservedID);
+            groupBox1.Controls.Add(label13);
             groupBox1.Controls.Add(label3);
             groupBox1.Controls.Add(txtNotes);
             groupBox1.Controls.Add(DtpExperation);
@@ -121,10 +127,31 @@
             groupBox1.Dock = DockStyle.Fill;
             groupBox1.Location = new Point(0, 0);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(410, 380);
+            groupBox1.Size = new Size(410, 436);
             groupBox1.TabIndex = 11;
             groupBox1.TabStop = false;
             groupBox1.Text = "بيانات المصروفة";
+            // 
+            // lblDeservedID
+            // 
+            lblDeservedID.AutoSize = true;
+            lblDeservedID.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblDeservedID.Location = new Point(246, 384);
+            lblDeservedID.Name = "lblDeservedID";
+            lblDeservedID.Size = new Size(0, 19);
+            lblDeservedID.TabIndex = 47;
+            lblDeservedID.Visible = false;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label13.Location = new Point(299, 384);
+            label13.Name = "label13";
+            label13.Size = new Size(104, 19);
+            label13.TabIndex = 46;
+            label13.Text = "معرف المصروفة :";
+            label13.Visible = false;
             // 
             // label3
             // 
@@ -208,6 +235,7 @@
             txtValueDeserved.Size = new Size(204, 27);
             txtValueDeserved.TabIndex = 35;
             txtValueDeserved.TextAlign = HorizontalAlignment.Center;
+            txtValueDeserved.KeyPress += txtValueDeserved_KeyPress;
             // 
             // label16
             // 
@@ -260,6 +288,7 @@
             btnAddTypes.Size = new Size(34, 32);
             btnAddTypes.TabIndex = 38;
             btnAddTypes.UseVisualStyleBackColor = true;
+            btnAddTypes.Click += btnAddTypes_Click;
             // 
             // CMBType
             // 
@@ -287,7 +316,7 @@
             AutoScaleDimensions = new SizeF(8F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(410, 431);
+            ClientSize = new Size(410, 487);
             Controls.Add(groupBox1);
             Controls.Add(OperationsflowLayoutPanel);
             Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -325,5 +354,7 @@
         private Label label12;
         private Label label3;
         private TextBox txtNotes;
+        private Label lblDeservedID;
+        private Label label13;
     }
 }
