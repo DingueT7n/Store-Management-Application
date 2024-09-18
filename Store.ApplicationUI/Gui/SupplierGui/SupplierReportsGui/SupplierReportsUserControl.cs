@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Store.ApplicationUI.Code.Helper;
+﻿using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Entities.Customers;
+using Store.Core.Entities.Suppliers;
 using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
@@ -40,24 +41,39 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
             return _supplierReportsUserControl;
         }
 
-        public async void SetProductsToDgv()
+        public async void SetProductsToDgv(int skip)
         {
-            //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            var SuppliersMoneyList = _context.SuppliersReports.
-                Include(x => x.Supplier).Include(x => x.Buy)
-                .ToList();
-            var uniqueSupplierCount = SuppliersMoneyList
-                .Select(x => x.Supplier.Id) // Replace CustomerId with the actual unique identifier property
+
+            var SuppliersMoneyList = supplierReportRepository.GetAllData(skip, Properties.Settings.Default.NoOfDataInDgvs);
+
+            var uniqueSupplierCount = SuppliersMoneyList.Result
+                .Select(x => x.Supplier.Id)
                 .Distinct()
                 .Count();
-            DgvِCustomer.DataSource = SuppliersMoneyList;
+            DgvِCustomer.DataSource = SuppliersMoneyList.Result;
+            double value = SuppliersMoneyList.count / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
+            int PageValue = Convert.ToInt32(Math.Round(value, MidpointRounding.AwayFromZero));
+
+            cmbpagination.Items.Clear();
+
+            for (int i = 0; i <= PageValue; i++)
+            {
+                cmbpagination.Items.Add(i);
+
+            }
+            if (cmbpagination.Items.Count > 0)
+            {
+                cmbpagination.SelectedIndex = 0;
+            }
+            PaginationHide();
+
             if (DgvِCustomer.Rows.Count > 0)
             {
                 if (DgvِCustomer.SelectedRows.Count > 0)
                 {
                     //lblPayFacture.Text = $" فاتورة رقم {DgvِCustomer.Columns[7].HeaderCell.Value} الدين : {DgvِCustomer.Columns[1].HeaderCell.Value} دج";
                     //lblPayAllDebts.Text = $"دج {CustomerMoneyList.Sum(x => x.Price)}";
-                    lblTotalDebt.Text = $"مجموع مدفوعات الموردين في الجدول:{SuppliersMoneyList.Sum(x => x.Price)}";
+                    lblTotalDebt.Text = $"مجموع مدفوعات الموردين في الجدول:{SuppliersMoneyList.Result.Sum(x => x.Price)}";
                     lblTotalCustomers.Text = $"مجموع الموردين:{uniqueSupplierCount}";
 
                 }
@@ -82,7 +98,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
 
                 // if its an admin or Normal user 
 
-                SetProductsToDgv();
+                SetProductsToDgv(0);
                 SetColumns();
                 //_data.Clear();
             }
@@ -145,32 +161,129 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+
+            int take = Properties.Settings.Default.NoOfDataInDgvs;
+            int selectedi = cmbpagination.SelectedIndex;
+            //int skip = Convert.ToInt32(cmbpagination.SelectedIndex) * take > -1 ? Convert.ToInt32(cmbpagination.SelectedIndex) * take : 0;
+
+
+            if (selectedi == -1)
+            {
+                selectedi = 0;
+
+            }
+            int skip = selectedi * take;
+            SupplierReportDto a = new SupplierReportDto();
+            DgvِCustomer.DataSource = new List<CustomerReport>();
             if (rbBoth.Checked)
             {
-                DgvِCustomer.DataSource = supplierReportRepository.SearchBoth(txtSearch.Text, dtpFrom.Value, dtpTo.Value);
-                lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
+                a = supplierReportRepository.SearchBoth(txtSearch.Text, dtpFrom.Value, dtpTo.Value, take, skip);
+
 
             }
             else if (rbSupplierAndOrder.Checked)
             {
-                DgvِCustomer.DataSource = supplierReportRepository.SearchOnlySupplier(txtSearch.Text);
-                lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
+                a = supplierReportRepository.SearchOnlySupplier(txtSearch.Text, take, skip);
+
             }
             else
             {
-
-
-                DgvِCustomer.DataSource = supplierReportRepository.SearchOnlyDate(dtpFrom.Value, dtpTo.Value);
-                lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
+                a = supplierReportRepository.SearchOnlyDate(dtpFrom.Value, dtpTo.Value, take, skip);
 
             }
+            DgvِCustomer.DataSource = a.Result;
 
-            txtSearch.Text = string.Empty;
+            PaginationHide();
+            lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
+            int totalRecords = a.count;
+            int pageValue = (int)Math.Ceiling((double)totalRecords / take);
+            cmbpagination.Items.Clear();
+
+
+            for (int i = 0; i < pageValue; i++)
+            {
+                cmbpagination.Items.Add(i);
+            }
+            if (selectedi < cmbpagination.Items.Count && cmbpagination.Items.Count > 0)
+            {
+                cmbpagination.SelectedIndex = selectedi;
+
+            }
+            int uniqueSupplierCount = 0;
+
+            uniqueSupplierCount = a.Result
+               .Select(x => x.Supplier.Id) // Replace CustomerId with the actual unique identifier property
+               .Distinct()
+               .Count();
+
+            if (DgvِCustomer.Rows.Count > 0)
+            {
+                if (DgvِCustomer.SelectedRows.Count > 0)
+                {
+                    //lblPayFacture.Text = $" فاتورة رقم {DgvِCustomer.Columns[7].HeaderCell.Value} الدين : {DgvِCustomer.Columns[1].HeaderCell.Value} دج";
+                    //lblPayAllDebts.Text = $"دج {CustomerMoneyList.Sum(x => x.Price)}";
+                    lblTotalDebt.Text = $"مجموع مدفوعات الموردين في الجدول:{a.Result.Sum(x => x.Price)}";
+                    lblTotalCustomers.Text = $"مجموع الموردين:{uniqueSupplierCount}";
+
+                }
+            }
+            SetColumns();
         }
 
         private void SupplierReportsUserControl_Load(object sender, EventArgs e)
         {
             dtpTo.Value = DateTime.Now;
+        }
+
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+            if (cmbpagination.SelectedIndex == -1)
+            {
+                cmbpagination.SelectedIndex = 0;  // Set to first page if no page is selected
+            }
+
+            if (cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1)
+            {
+                cmbpagination.SelectedIndex += 1;
+                btnSearch_Click(sender, e);
+            }
+        }
+        void PaginationHide()
+        {
+            btnNext.Enabled = cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1 && !dgvHelper.IsEmpty(DgvِCustomer);
+            btnPrev.Enabled = cmbpagination.SelectedIndex > 0 && !dgvHelper.IsEmpty(DgvِCustomer);
+            cmbpagination.Enabled = !dgvHelper.IsEmpty(DgvِCustomer);
+        }
+        private void btnPrev_Click(object sender, EventArgs e)
+        {
+
+            if (cmbpagination.SelectedIndex == -1)
+            {
+                cmbpagination.SelectedIndex = 0;
+            }
+
+            if (cmbpagination.SelectedIndex > 0)
+            {
+                cmbpagination.SelectedIndex -= 1;
+                btnSearch_Click(sender, e);
+            }
+        }
+
+        private void cmbpagination_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            if (cmbpagination.SelectedIndex == -1)
+            {
+                cmbpagination.SelectedIndex = 0;
+            }
+            //else if (cmbpagination.Items.Count == 1)
+            //{
+            //    return;
+            //}
+            else
+            {
+
+                btnSearch_Click(sender, e);
+            }
         }
     }
 }

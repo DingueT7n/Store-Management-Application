@@ -17,5 +17,11 @@ namespace Store.Core.Entities.Suppliers
 
         public virtual Supplier Supplier { get; set; }
     }
+    public class SupplierReportDto
+    {
+
+        public List<SupplierReport> Result { get; set; }
+        public int count { get; set; }
+    }
 
 }

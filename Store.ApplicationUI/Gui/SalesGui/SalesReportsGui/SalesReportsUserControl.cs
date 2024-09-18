@@ -1,5 +1,6 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Entities.Sales;
 using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
@@ -43,17 +44,20 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
             //    Include(x => x.Customer).Include(x => x.Sale)
             //    .ToList();
             var data = salesRepository.GetAllSalesWithDetails(Properties.Settings.Default.NoOfDataInDgvs, skip);
+            DgvSales.DataSource = data.result;
             double value = data.count / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
             int PageValue = Convert.ToInt32(Math.Round(value, MidpointRounding.AwayFromZero));
-            DgvSales.DataSource = data.result;
             cmbpagination.Items.Clear();
-            for (int i = 0; i < PageValue; i++)
+            for (int i = 0; i <= PageValue; i++)
             {
                 cmbpagination.Items.Add(i);
 
             }
-
-            cmbpagination.SelectedIndex = skip / Properties.Settings.Default.NoOfDataInDgvs;
+            if (cmbpagination.Items.Count > 0)
+            {
+                cmbpagination.SelectedIndex = 0;
+            }
+            PaginationHide();
 
             //var uniqueCustomerCount = CustomerMoneyList
             //    .Select(x => x.Customer.Id) // Replace CustomerId with the actual unique identifier property
@@ -142,30 +146,35 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
         private void btnSearch_Click(object sender, EventArgs e)
         {
             int take = Properties.Settings.Default.NoOfDataInDgvs;
-            int skip = cmbpagination.SelectedIndex * take;
             int selectedi = cmbpagination.SelectedIndex;
-            int count = 0;
+
+            if (selectedi == -1)
+            {
+                selectedi = 0;
+
+            }
+            int skip = selectedi * take;
+            ResultSaleDetailDto a = new ResultSaleDetailDto();
+            DgvSales.DataSource = new List<SaleDetailDto>();
             if (rbBoth.Checked)
             {
-                var a = salesRepository.SearchBoth(txtSearch.Text, dtpFrom.Value, dtpTo.Value, take, skip);
-                DgvSales.DataSource = a.result;
-                count = a.count;
+                a = salesRepository.SearchBoth(txtSearch.Text, dtpFrom.Value, dtpTo.Value, take, skip);
+
             }
             else if (rbCustomerAndOrder.Checked)
             {
-                var a = salesRepository.SearchOnlySupplier(txtSearch.Text, take, skip);
-                DgvSales.DataSource = a.result;
-                count = a.count;
+                a = salesRepository.SearchOnlySupplier(txtSearch.Text, take, skip);
+
             }
             else
             {
-                var a = salesRepository.SearchSalesByDate(dtpFrom.Value, dtpTo.Value, take, skip);
-                DgvSales.DataSource = a.result;
-                count = a.count;
+                a = salesRepository.SearchSalesByDate(dtpFrom.Value, dtpTo.Value, take, skip);
+
             }
+            DgvSales.DataSource = a.result;
 
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
-            int totalRecords = count;
+            int totalRecords = a.count;
             int pageValue = (int)Math.Ceiling((double)totalRecords / take);
             cmbpagination.Items.Clear();
 
@@ -173,11 +182,12 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
             {
                 cmbpagination.Items.Add(i);
             }
-            if (selectedi <= cmbpagination.Items.Count)
+            if (selectedi < cmbpagination.Items.Count && cmbpagination.Items.Count > 0)
             {
                 cmbpagination.SelectedIndex = selectedi;
 
             }
+            PaginationHide();
 
 
         }
@@ -194,24 +204,37 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
             //    SetProductsToDgv(skip);
             //}
         }
-
+        void PaginationHide()
+        {
+            btnNext.Enabled = cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1 && !dgvHelper.IsEmpty(DgvSales);
+            btnPrev.Enabled = cmbpagination.SelectedIndex > 0 && !dgvHelper.IsEmpty(DgvSales);
+            cmbpagination.Enabled = !dgvHelper.IsEmpty(DgvSales);
+        }
         private void btnNext_Click(object sender, EventArgs e)
         {
+
+            if (cmbpagination.SelectedIndex == -1)
+            {
+                cmbpagination.SelectedIndex = 0;  // Set to first page if no page is selected
+            }
 
             if (cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1)
             {
                 cmbpagination.SelectedIndex += 1;
-                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
                 btnSearch_Click(sender, e);
             }
         }
 
         private void btnPrev_Click(object sender, EventArgs e)
         {
+            if (cmbpagination.SelectedIndex == -1)
+            {
+                cmbpagination.SelectedIndex = 0;
+            }
+
             if (cmbpagination.SelectedIndex > 0)
             {
                 cmbpagination.SelectedIndex -= 1;
-                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
                 btnSearch_Click(sender, e);
             }
         }
@@ -222,9 +245,13 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
             {
                 cmbpagination.SelectedIndex = 0;
             }
+            //else if (cmbpagination.Items.Count == 1)
+            //{
+            //    return;
+            //}
             else
             {
-                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+
                 btnSearch_Click(sender, e);
             }
         }

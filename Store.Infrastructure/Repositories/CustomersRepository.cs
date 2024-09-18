@@ -1,4 +1,6 @@
-﻿using Store.Core.Entities.Customers;
+﻿using Microsoft.EntityFrameworkCore;
+using MySql.EntityFrameworkCore.Extensions;
+using Store.Core.Entities.Customers;
 using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
 
@@ -177,61 +179,109 @@ namespace Store.Infrastructure.Repositories
         public CustomerReportRepository(ApplicationDbContext context) : base(context)
         {
         }
-
-
-        public List<CustomerReport> SearchBoth(string searchItem, DateTime fromDate, DateTime toDate)
+        public CustomerReportDto GetAllData(int skip, int take)
         {
 
             try
             {
-                return _context.CustomersReports
-                  .AsEnumerable()  // Forces client-side evaluation
-                  .Where(x =>
-                      (x.Cust_Name.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||  // Client-side case-insensitive search
-                      x.Order_ID.ToString() == searchItem) &&
-                      fromDate <= x.Date && x.Date <= toDate)  // Date range filter
-                  .OrderBy(x => x.Date)
-                  .ToList();
+                var query = _context.CustomersReports.AsQueryable();
 
+                var totalCount = query.Count();
+                var result = query.Include(x => x.Sale).Include(x => x.Customer)
+                    .OrderByDescending(x => x.Date).AsNoTracking()
+                    .Skip(skip)
+                    .Take(take)
+                    .ToList();
+
+
+
+                return new CustomerReportDto
+                {
+                    Result = result,
+                    count = totalCount
+                };
             }
             catch
             {
-                return new List<CustomerReport>();
+                return new CustomerReportDto();
+            }
+
+        }
+
+        public CustomerReportDto SearchBoth(string searchItem, DateTime fromDate, DateTime toDate, int take, int skip)
+        {
+            try
+            {
+                var query = _context.CustomersReports
+                    .Where(x =>
+                        (EF.Functions.Like(x.Cust_Name, $"%{searchItem}%") ||
+                        x.Order_ID.ToString() == searchItem) &&
+                        fromDate <= x.Date && x.Date <= toDate);  // Filter by searchItem and date range
+
+                var result = query.Include(x => x.Sale).Include(x => x.Customer)
+                    .OrderByDescending(x => x.Date).AsNoTracking()
+                    .Skip(skip)
+                    .Take(take)
+                    .ToList();
+
+                var totalCount = query.Count();  // Get total count after filtering
+
+                return new CustomerReportDto
+                {
+                    Result = result,
+                    count = totalCount
+                };
+            }
+            catch
+            {
+                return new CustomerReportDto();
             }
         }
-        public List<CustomerReport> SearchOnlyDate(DateTime fromDate, DateTime toDate)
+        public CustomerReportDto SearchOnlyDate(DateTime fromDate, DateTime toDate, int take, int skip)
         {
-
             try
             {
-                return _context.CustomersReports
-             .Where(x => (fromDate <= x.Date && x.Date <= toDate))
-             .OrderBy(x => x.Date)
-             .ToList();
+                var query = _context.CustomersReports.AsNoTracking().Include(x => x.Sale).Include(x => x.Customer)
+                    .Where(x => fromDate <= x.Date && x.Date <= toDate)// Date range filter
+                    .OrderByDescending(x => x.Date); // Order by descending date
 
+                return new CustomerReportDto
+                {
+                    Result = query.Skip(skip).Take(take).ToList(), // Pagination
+                    count = query.Count() // Count of the filtered data
+                };
             }
             catch
             {
-                return new List<CustomerReport>();
+                return new CustomerReportDto();
             }
         }
-        public List<CustomerReport> SearchOnlyCustomer(string searchItem)
+        public CustomerReportDto SearchOnlyCustomer(string searchItem, int take, int skip)
         {
-
             try
             {
-                return _context.CustomersReports
-       .AsEnumerable()  // Forces client-side evaluation
-       .Where(x =>
-           x.Cust_Name.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||  // Client-side case-insensitive search
-           x.Order_ID.ToString() == searchItem)
-       .OrderBy(x => x.Date)
-       .ToList();
+                var query = _context.CustomersReports
+                    .Where(x =>
+                        EF.Functions.Like(x.Cust_Name, $"%{searchItem}%") ||
+                        x.Order_ID.ToString() == searchItem);  // Filter by customer name or order ID
 
+                var result = query.Include(x => x.Sale).Include(x => x.Customer)
+                    .OrderByDescending(x => x.Date).AsNoTracking()  // Order by date in descending order
+                    .Skip(skip)
+                    .Take(take)
+                    .ToList();
+
+                var totalCount = query.Count();  // Get total count after filtering
+
+                return new CustomerReportDto
+                {
+                    Result = result,
+                    count = totalCount
+                };
             }
             catch
             {
-                return new List<CustomerReport>();
+                return new CustomerReportDto();
             }
         }
     }

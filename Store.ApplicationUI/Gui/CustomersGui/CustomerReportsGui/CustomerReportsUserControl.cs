@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Store.ApplicationUI.Code.Helper;
+﻿using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Entities.Customers;
 using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
@@ -41,26 +41,36 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
             return _customerReportsUserControl;
         }
 
-        public async void SetProductsToDgv()
+        public async void SetProductsToDgv(int skip)
         {
-            //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            var CustomerMoneyList = _context.CustomersReports.
-                Include(x => x.Customer).Include(x => x.Sale)
-                .ToList();
-            var uniqueCustomerCount = CustomerMoneyList
+            var CustomerMoneyList = customerReportRepository.GetAllData(skip, Properties.Settings.Default.NoOfDataInDgvs);
+            var uniqueCustomerCount = CustomerMoneyList.Result
                 .Select(x => x.Customer.Id) // Replace CustomerId with the actual unique identifier property
                 .Distinct()
                 .Count();
-            DgvِCustomer.DataSource = CustomerMoneyList;
+
+            DgvِCustomer.DataSource = CustomerMoneyList.Result;
+
+            double value = CustomerMoneyList.count / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
+            int PageValue = Convert.ToInt32(Math.Round(value, MidpointRounding.AwayFromZero));
+
+            cmbpagination.Items.Clear();
+            for (int i = 0; i <= PageValue; i++)
+            {
+                cmbpagination.Items.Add(i);
+
+            }
+            if (cmbpagination.Items.Count > 0)
+            {
+                cmbpagination.SelectedIndex = 0;
+            }
+            PaginationHide();
             if (DgvِCustomer.Rows.Count > 0)
             {
                 if (DgvِCustomer.SelectedRows.Count > 0)
                 {
-                    //lblPayFacture.Text = $" فاتورة رقم {DgvِCustomer.Columns[7].HeaderCell.Value} الدين : {DgvِCustomer.Columns[1].HeaderCell.Value} دج";
-                    //lblPayAllDebts.Text = $"دج {CustomerMoneyList.Sum(x => x.Price)}";
-                    lblTotalDebt.Text = $"مجموع مدفوعات العملاء في الجدول:{CustomerMoneyList.Sum(x => x.Price)}";
+                    lblTotalDebt.Text = $"مجموع مدفوعات العملاء في الجدول:{CustomerMoneyList.Result.Sum(x => x.Price)}";
                     lblTotalCustomers.Text = $"مجموع العملاء:{uniqueCustomerCount}";
-
                 }
             }
         }
@@ -83,7 +93,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
 
                 // if its an admin or Normal user 
 
-                SetProductsToDgv();
+                SetProductsToDgv(0);
                 SetColumns();
                 //_data.Clear();
             }
@@ -129,30 +139,75 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
         {
             LoadData();
         }
-
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            if (rbBoth.Checked)
-            {
-                DgvِCustomer.DataSource = customerReportRepository.SearchBoth(txtSearch.Text, dtpFrom.Value, dtpTo.Value);
-                lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
-
-            }
-            else if (rbCustomerAndOrder.Checked)
-            {
-                DgvِCustomer.DataSource = customerReportRepository.SearchOnlyCustomer(txtSearch.Text);
-                lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
-            }
-            else
+            try
             {
 
 
-                DgvِCustomer.DataSource = customerReportRepository.SearchOnlyDate(dtpFrom.Value, dtpTo.Value);
+                int take = Properties.Settings.Default.NoOfDataInDgvs;
+                int selectedi = cmbpagination.SelectedIndex;
+                //int skip = Convert.ToInt32(cmbpagination.SelectedIndex) * take > -1 ? Convert.ToInt32(cmbpagination.SelectedIndex) * take : 0;
+
+
+                if (selectedi == -1)
+                {
+                    selectedi = 0;
+
+                }
+                int skip = selectedi * take;
+                CustomerReportDto a = new CustomerReportDto();
+                DgvِCustomer.DataSource = new List<CustomerReport>();
+                if (rbBoth.Checked)
+                {
+                    a = customerReportRepository.SearchBoth(txtSearch.Text, dtpFrom.Value, dtpTo.Value, take, skip);
+
+
+                }
+                else if (rbCustomerAndOrder.Checked)
+                {
+                    a = customerReportRepository.SearchOnlyCustomer(txtSearch.Text, take, skip);
+
+                }
+                else
+                {
+                    a = customerReportRepository.SearchOnlyDate(dtpFrom.Value, dtpTo.Value, take, skip);
+                }
+                DgvِCustomer.DataSource = a.Result;
+
+                PaginationHide();
                 lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
+                int totalRecords = a.count;
+                int pageValue = (int)Math.Ceiling((double)totalRecords / take);
+                cmbpagination.Items.Clear();
 
+                for (int i = 0; i < pageValue; i++)
+                {
+                    cmbpagination.Items.Add(i);
+                }
+                if (selectedi < cmbpagination.Items.Count && cmbpagination.Items.Count > 0)
+                {
+                    cmbpagination.SelectedIndex = selectedi;
+
+                }
+                var uniqueCustomerCount = a.Result
+                    .Select(x => x.Customer.Id) // Replace CustomerId with the actual unique identifier property
+                    .Distinct()
+                    .Count();
+                if (DgvِCustomer.Rows.Count > 0)
+                {
+                    if (DgvِCustomer.SelectedRows.Count > 0)
+                    {
+                        lblTotalDebt.Text = $"مجموع مدفوعات العملاء في الجدول:{a.Result.Sum(x => x.Price)}";
+                        lblTotalCustomers.Text = $"مجموع العملاء:{uniqueCustomerCount}";
+                    }
+                }
             }
+            catch (Exception ex)
+            {
 
-            txtSearch.Text = string.Empty;
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void rbCustomerAndOrder_CheckedChanged(object sender, EventArgs e)
@@ -183,20 +238,33 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
         private void btnNext_Click(object sender, EventArgs e)
         {
 
+            if (cmbpagination.SelectedIndex == -1)
+            {
+                cmbpagination.SelectedIndex = 0;  // Set to first page if no page is selected
+            }
+
             if (cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1)
             {
                 cmbpagination.SelectedIndex += 1;
-                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
                 btnSearch_Click(sender, e);
             }
         }
-
+        void PaginationHide()
+        {
+            btnNext.Enabled = cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1 && !dgvHelper.IsEmpty(DgvِCustomer);
+            btnPrev.Enabled = cmbpagination.SelectedIndex > 0 && !dgvHelper.IsEmpty(DgvِCustomer);
+            cmbpagination.Enabled = !dgvHelper.IsEmpty(DgvِCustomer);
+        }
         private void btnPrev_Click(object sender, EventArgs e)
         {
+            if (cmbpagination.SelectedIndex == -1)
+            {
+                cmbpagination.SelectedIndex = 0;
+            }
+
             if (cmbpagination.SelectedIndex > 0)
             {
                 cmbpagination.SelectedIndex -= 1;
-                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
                 btnSearch_Click(sender, e);
             }
         }
@@ -207,10 +275,57 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
             {
                 cmbpagination.SelectedIndex = 0;
             }
+            //else if (cmbpagination.Items.Count == 1)
+            //{
+            //    return;
+            //}
             else
             {
-                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+
                 btnSearch_Click(sender, e);
+            }
+        }
+
+        private void btnDeleteCurrentPage_Click(object sender, EventArgs e)
+        {
+            if (MsgHelper.ShowDeleteDialog())
+            {
+                for (int i = 0; i < DgvِCustomer.Rows.Count; i++)
+                {
+                    customerReportRepository.DeleteAsync(DgvِCustomer.Rows[i].Cells[8].Value.ToString());
+                }
+                LoadData();
+
+            }
+        }
+
+        private async void btnDeleteReportsInPeriod_Click(object sender, EventArgs e)
+        {
+            if (MsgHelper.ShowDeleteDialog())
+            {
+                try
+                {
+                    var query = _context.CustomersReports
+                        .Where(x => dtpFrom.Value <= x.Date && x.Date <= dtpTo.Value)
+                        .ToList();
+
+                    if (query.Any())
+                    {
+                        _context.CustomersReports.RemoveRange(query);
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+
+                        MessageBox.Show("لا توجد بيانات في الفترة المحددة", "معلومة", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    LoadData();
+                }
+                catch (Exception ex)
+                {
+                    // Handle or log the exception
+                    MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }

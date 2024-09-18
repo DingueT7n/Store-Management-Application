@@ -42,6 +42,11 @@ namespace Store.Core.Entities.Sales
 
     }
 
+    public class SaleProfitDtoReturned
+    {
+        public List<SaleProfitDto> Result { get; set; }
+        public int Count { get; set; }
+    }
 
 
 }

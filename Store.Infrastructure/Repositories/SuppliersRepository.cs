@@ -1,4 +1,5 @@
-﻿using Store.Core.Entities.Suppliers;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.Core.Entities.Suppliers;
 using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
 
@@ -181,58 +182,111 @@ namespace Store.Infrastructure.Repositories
         public SupplierReportRepository(ApplicationDbContext context) : base(context)
         {
         }
-
-        public List<SupplierReport> SearchBoth(string searchItem, DateTime fromDate, DateTime toDate)
+        public SupplierReportDto GetAllData(int skip, int take)
         {
 
             try
             {
-                return _context.SuppliersReports
-                   .Where(x =>
-                       (x.SupplierName.ToLower().Contains(searchItem.ToLower()) ||  // Case-insensitive search
-                       x.Order_ID.ToString() == searchItem) &&
-                       fromDate <= x.Date && x.Date <= toDate)  // Date range filter
-                   .OrderBy(x => x.Date)
-                   .ToList();
+                var query = _context.SuppliersReports.AsQueryable();
+                // Filter by searchItem and date range
+                var totalCount = query.Count();
+                var result = query.Include(x => x.Buy).Include(x => x.Supplier)
+                    .OrderByDescending(x => x.Date)
+                    .Skip(skip)
+                    .Take(take)
+                    .ToList();
 
+
+
+                return new SupplierReportDto
+                {
+                    Result = result,
+                    count = totalCount
+                };
             }
             catch
             {
-                return new List<SupplierReport>();
+                return new SupplierReportDto();
+            }
+
+        }
+        public SupplierReportDto SearchBoth(string searchItem, DateTime fromDate, DateTime toDate, int take, int skip)
+        {
+
+            try
+            {
+                var query = _context.SuppliersReports
+                    .Where(x =>
+                        (EF.Functions.Like(x.SupplierName, $"%{searchItem}%") ||
+                        x.Order_ID.ToString() == searchItem) &&
+                        fromDate <= x.Date && x.Date <= toDate);  // Filter by searchItem and date range
+
+                var result = query.Include(x => x.Buy).Include(x => x.Supplier)
+                    .OrderByDescending(x => x.Date)
+                    .Skip(skip)
+                    .Take(take)
+                    .ToList();
+
+                var totalCount = query.Count();  // Get total count after filtering
+
+                return new SupplierReportDto
+                {
+                    Result = result,
+                    count = totalCount
+                };
+            }
+            catch
+            {
+                return new SupplierReportDto();
             }
         }
-        public List<SupplierReport> SearchOnlyDate(DateTime fromDate, DateTime toDate)
+        public SupplierReportDto SearchOnlyDate(DateTime fromDate, DateTime toDate, int take, int skip)
         {
 
             try
             {
-                return _context.SuppliersReports
-             .Where(x => (fromDate <= x.Date && x.Date <= toDate))
-             .OrderBy(x => x.Date)
-             .ToList();
+                var query = _context.SuppliersReports.Include(x => x.Buy).Include(x => x.Supplier)
+                    .Where(x => fromDate <= x.Date && x.Date <= toDate)
+                    .OrderByDescending(x => x.Date);
 
+                return new SupplierReportDto
+                {
+                    Result = query.Skip(skip).Take(take).ToList(),
+                    count = query.Count()
+                };
             }
             catch
             {
-                return new List<SupplierReport>();
+                return new SupplierReportDto();
             }
         }
-        public List<SupplierReport> SearchOnlySupplier(string searchItem)
+        public SupplierReportDto SearchOnlySupplier(string searchItem, int take, int skip)
         {
 
             try
             {
-                return _context.SuppliersReports
-                  .Where(x =>
-                      x.SupplierName.ToLower().Contains(searchItem.ToLower()) || // Case-insensitive search
-                      x.Order_ID.ToString() == searchItem)
-                  .OrderBy(x => x.Date)
-                  .ToList();
+                var query = _context.SuppliersReports
+                    .Where(x =>
+                        EF.Functions.Like(x.SupplierName, $"%{searchItem}%") ||
+                        x.Order_ID.ToString() == searchItem);
 
+                var result = query.Include(x => x.Buy).Include(x => x.Supplier)
+                    .OrderByDescending(x => x.Date)
+                    .Skip(skip)
+                    .Take(take)
+                    .ToList();
+
+                var totalCount = query.Count();
+
+                return new SupplierReportDto
+                {
+                    Result = result,
+                    count = totalCount
+                };
             }
             catch
             {
-                return new List<SupplierReport>();
+                return new SupplierReportDto();
             }
         }
     }
