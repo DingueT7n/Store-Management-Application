@@ -1,5 +1,6 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Entities.Buys;
 using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
@@ -37,13 +38,28 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
             _buyReportsUserControl.LoadData();
             return _buyReportsUserControl;
         }
-        public async void SetProductsToDgv()
+        public async void SetProductsToDgv(int skip)
         {
             ////DgvBuys.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             //var CustomerMoneyList = _context.CustomersReports.
             //    Include(x => x.Customer).Include(x => x.Sale)
             //    .ToList();
-            DgvBuys.DataSource = buysRepository.GetAllBuysWithDetails();
+            var data = buysRepository.GetAllBuysWithDetails(Properties.Settings.Default.NoOfDataInDgvs, skip);
+            DgvBuys.DataSource = data.result;
+            double value = data.Count / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
+            int PageValue = Convert.ToInt32(Math.Round(value, MidpointRounding.AwayFromZero));
+            cmbpagination.Items.Clear();
+            for (int i = 0; i <= PageValue; i++)
+            {
+                cmbpagination.Items.Add(i);
+
+            }
+            if (cmbpagination.Items.Count > 0)
+            {
+                cmbpagination.SelectedIndex = 0;
+            }
+            PaginationHide();
+
             //var uniqueCustomerCount = CustomerMoneyList
             //    .Select(x => x.Customer.Id) // Replace CustomerId with the actual unique identifier property
             //    .Distinct()
@@ -71,6 +87,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
         public async void LoadData()
         {
 
+            dtpTo.Value = DateTime.Now;
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
@@ -80,7 +97,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
 
                 // if its an admin or Normal user 
 
-                SetProductsToDgv();
+                SetProductsToDgv(0);
                 SetColumns();
                 //_data.Clear();
             }
@@ -130,27 +147,98 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            int take = Properties.Settings.Default.NoOfDataInDgvs;
+            int selectedi = cmbpagination.SelectedIndex;
+
+            if (selectedi == -1)
+            {
+                selectedi = 0;
+
+            }
+            int skip = selectedi * take;
+            BuyDetailDtoResult a = new BuyDetailDtoResult();
+            DgvBuys.DataSource = new List<BuyDetailDto>();
             if (rbBoth.Checked)
             {
-                DgvBuys.DataSource = buysRepository.SearchBoth(txtSearch.Text, dtpFrom.Value, dtpTo.Value);
-                lblEmptyData.Visible = dgvHelper.IsEmpty(DgvBuys);
-
+                a = buysRepository.SearchBoth(txtSearch.Text, dtpFrom.Value, dtpTo.Value, take, skip);
             }
             else if (rbSupplierAndOrder.Checked)
             {
-                DgvBuys.DataSource = buysRepository.SearchOnlySupplier(txtSearch.Text);
-                lblEmptyData.Visible = dgvHelper.IsEmpty(DgvBuys);
+                a = buysRepository.SearchOnlySupplier(txtSearch.Text, take, skip);
             }
             else
             {
-
-
-                DgvBuys.DataSource = buysRepository.SearchBuysByDate(dtpFrom.Value, dtpTo.Value);
-                lblEmptyData.Visible = dgvHelper.IsEmpty(DgvBuys);
-
+                a = buysRepository.SearchBuysByDate(dtpFrom.Value, dtpTo.Value, take, skip);
             }
 
-            txtSearch.Text = string.Empty;
+            DgvBuys.DataSource = a.result;
+
+            lblEmptyData.Visible = dgvHelper.IsEmpty(DgvBuys);
+            int totalRecords = a.Count;
+            int pageValue = (int)Math.Ceiling((double)totalRecords / take);
+            cmbpagination.Items.Clear();
+
+            for (int i = 0; i < pageValue; i++)
+            {
+                cmbpagination.Items.Add(i);
+            }
+            if (selectedi < cmbpagination.Items.Count && cmbpagination.Items.Count > 0)
+            {
+                cmbpagination.SelectedIndex = selectedi;
+
+            }
+            PaginationHide();
+        }
+        void PaginationHide()
+        {
+            btnNext.Enabled = cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1 && !dgvHelper.IsEmpty(DgvBuys);
+            btnPrev.Enabled = cmbpagination.SelectedIndex > 0 && !dgvHelper.IsEmpty(DgvBuys);
+            cmbpagination.Enabled = !dgvHelper.IsEmpty(DgvBuys);
+        }
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+
+            if (cmbpagination.SelectedIndex == -1)
+            {
+                cmbpagination.SelectedIndex = 0;  // Set to first page if no page is selected
+            }
+
+            if (cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1)
+            {
+                cmbpagination.SelectedIndex += 1;
+                btnSearch_Click(sender, e);
+            }
+        }
+
+        private void btnPrev_Click(object sender, EventArgs e)
+        {
+            if (cmbpagination.SelectedIndex == -1)
+            {
+                cmbpagination.SelectedIndex = 0;
+            }
+
+            if (cmbpagination.SelectedIndex > 0)
+            {
+                cmbpagination.SelectedIndex -= 1;
+                btnSearch_Click(sender, e);
+            }
+        }
+
+        private void cmbpagination_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            if (cmbpagination.SelectedIndex == -1)
+            {
+                cmbpagination.SelectedIndex = 0;
+            }
+            //else if (cmbpagination.Items.Count == 1)
+            //{
+            //    return;
+            //}
+            else
+            {
+
+                btnSearch_Click(sender, e);
+            }
         }
     }
 }

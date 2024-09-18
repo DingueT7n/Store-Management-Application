@@ -325,6 +325,7 @@
             btnDeleteAllReports.TabIndex = 6;
             btnDeleteAllReports.Text = "مسح جميع التقارير";
             btnDeleteAllReports.UseVisualStyleBackColor = true;
+            btnDeleteAllReports.Click += btnDeleteAllReports_Click;
             // 
             // btnDeleteReportsInPeriod
             // 

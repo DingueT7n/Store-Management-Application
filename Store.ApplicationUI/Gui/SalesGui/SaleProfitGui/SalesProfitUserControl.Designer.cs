@@ -51,6 +51,11 @@
             SearchPanel = new Panel();
             txtSearch = new TextBox();
             btnSearch = new Button();
+            panelDeletes = new Panel();
+            GbDeletes = new GroupBox();
+            btnDeleteCurrentPage = new Button();
+            btnDeleteAllReports = new Button();
+            btnDeleteReportsInPeriod = new Button();
             panelButtons = new Panel();
             button2 = new Button();
             button1 = new Button();
@@ -67,6 +72,8 @@
             panelstatisticsandOperations.SuspendLayout();
             flowLayoutPanel.SuspendLayout();
             SearchPanel.SuspendLayout();
+            panelDeletes.SuspendLayout();
+            GbDeletes.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DgvSalesProfit).BeginInit();
             PanelPagination.SuspendLayout();
@@ -77,6 +84,7 @@
             OperationsflowLayoutPanel.AutoScroll = true;
             OperationsflowLayoutPanel.Controls.Add(gbPayChoiches);
             OperationsflowLayoutPanel.Controls.Add(panelstatisticsandOperations);
+            OperationsflowLayoutPanel.Controls.Add(panelDeletes);
             OperationsflowLayoutPanel.Controls.Add(panelButtons);
             OperationsflowLayoutPanel.Dock = DockStyle.Top;
             OperationsflowLayoutPanel.Location = new Point(0, 0);
@@ -95,7 +103,7 @@
             gbPayChoiches.Controls.Add(rbBoth);
             gbPayChoiches.Controls.Add(rbCustomerAndOrder);
             gbPayChoiches.Controls.Add(rbDateSearch);
-            gbPayChoiches.Location = new Point(574, 3);
+            gbPayChoiches.Location = new Point(557, 3);
             gbPayChoiches.Name = "gbPayChoiches";
             gbPayChoiches.Size = new Size(457, 158);
             gbPayChoiches.TabIndex = 8;
@@ -184,7 +192,7 @@
             panelstatisticsandOperations.Controls.Add(lblTitleForm);
             panelstatisticsandOperations.Controls.Add(flowLayoutPanel);
             panelstatisticsandOperations.Controls.Add(SearchPanel);
-            panelstatisticsandOperations.Location = new Point(268, 3);
+            panelstatisticsandOperations.Location = new Point(251, 3);
             panelstatisticsandOperations.Name = "panelstatisticsandOperations";
             panelstatisticsandOperations.Size = new Size(300, 158);
             panelstatisticsandOperations.TabIndex = 10;
@@ -279,12 +287,75 @@
             btnSearch.UseVisualStyleBackColor = true;
             btnSearch.Click += btnSearch_Click;
             // 
+            // panelDeletes
+            // 
+            panelDeletes.Controls.Add(GbDeletes);
+            panelDeletes.Location = new Point(4, 3);
+            panelDeletes.Name = "panelDeletes";
+            panelDeletes.Size = new Size(241, 159);
+            panelDeletes.TabIndex = 12;
+            // 
+            // GbDeletes
+            // 
+            GbDeletes.Controls.Add(btnDeleteCurrentPage);
+            GbDeletes.Controls.Add(btnDeleteAllReports);
+            GbDeletes.Controls.Add(btnDeleteReportsInPeriod);
+            GbDeletes.Dock = DockStyle.Fill;
+            GbDeletes.Location = new Point(0, 0);
+            GbDeletes.Name = "GbDeletes";
+            GbDeletes.Size = new Size(241, 159);
+            GbDeletes.TabIndex = 28;
+            GbDeletes.TabStop = false;
+            GbDeletes.Text = "خيارات المسح";
+            // 
+            // btnDeleteCurrentPage
+            // 
+            btnDeleteCurrentPage.Anchor = AnchorStyles.None;
+            btnDeleteCurrentPage.Image = (Image)resources.GetObject("btnDeleteCurrentPage.Image");
+            btnDeleteCurrentPage.ImageAlign = ContentAlignment.MiddleLeft;
+            btnDeleteCurrentPage.ImeMode = ImeMode.NoControl;
+            btnDeleteCurrentPage.Location = new Point(6, 19);
+            btnDeleteCurrentPage.Name = "btnDeleteCurrentPage";
+            btnDeleteCurrentPage.Size = new Size(210, 40);
+            btnDeleteCurrentPage.TabIndex = 8;
+            btnDeleteCurrentPage.Text = "مسح الصفحة الحالية";
+            btnDeleteCurrentPage.UseVisualStyleBackColor = true;
+            btnDeleteCurrentPage.Click += btnDeleteCurrentPage_Click;
+            // 
+            // btnDeleteAllReports
+            // 
+            btnDeleteAllReports.Anchor = AnchorStyles.None;
+            btnDeleteAllReports.Image = (Image)resources.GetObject("btnDeleteAllReports.Image");
+            btnDeleteAllReports.ImageAlign = ContentAlignment.MiddleLeft;
+            btnDeleteAllReports.ImeMode = ImeMode.NoControl;
+            btnDeleteAllReports.Location = new Point(6, 110);
+            btnDeleteAllReports.Name = "btnDeleteAllReports";
+            btnDeleteAllReports.Size = new Size(210, 40);
+            btnDeleteAllReports.TabIndex = 6;
+            btnDeleteAllReports.Text = "مسح جميع التقارير";
+            btnDeleteAllReports.UseVisualStyleBackColor = true;
+            btnDeleteAllReports.Click += btnDeleteAllReports_Click;
+            // 
+            // btnDeleteReportsInPeriod
+            // 
+            btnDeleteReportsInPeriod.Anchor = AnchorStyles.None;
+            btnDeleteReportsInPeriod.Image = (Image)resources.GetObject("btnDeleteReportsInPeriod.Image");
+            btnDeleteReportsInPeriod.ImageAlign = ContentAlignment.MiddleLeft;
+            btnDeleteReportsInPeriod.ImeMode = ImeMode.NoControl;
+            btnDeleteReportsInPeriod.Location = new Point(6, 67);
+            btnDeleteReportsInPeriod.Name = "btnDeleteReportsInPeriod";
+            btnDeleteReportsInPeriod.Size = new Size(210, 40);
+            btnDeleteReportsInPeriod.TabIndex = 7;
+            btnDeleteReportsInPeriod.Text = "مسح تقارير في فترة زمنية";
+            btnDeleteReportsInPeriod.UseVisualStyleBackColor = true;
+            btnDeleteReportsInPeriod.Click += btnDeleteReportsInPeriod_Click;
+            // 
             // panelButtons
             // 
             panelButtons.Controls.Add(button2);
             panelButtons.Controls.Add(button1);
             panelButtons.Controls.Add(btnExportCustomer);
-            panelButtons.Location = new Point(11, 3);
+            panelButtons.Location = new Point(763, 168);
             panelButtons.Name = "panelButtons";
             panelButtons.Size = new Size(251, 158);
             panelButtons.TabIndex = 9;
@@ -474,6 +545,8 @@
             flowLayoutPanel.PerformLayout();
             SearchPanel.ResumeLayout(false);
             SearchPanel.PerformLayout();
+            panelDeletes.ResumeLayout(false);
+            GbDeletes.ResumeLayout(false);
             panelButtons.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)DgvSalesProfit).EndInit();
             PanelPagination.ResumeLayout(false);
@@ -512,5 +585,10 @@
         private ComboBox cmbpagination;
         private Button btnPrev;
         private Button btnNext;
+        private Panel panelDeletes;
+        private GroupBox GbDeletes;
+        private Button btnDeleteCurrentPage;
+        private Button btnDeleteAllReports;
+        private Button btnDeleteReportsInPeriod;
     }
 }

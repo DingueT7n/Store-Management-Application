@@ -11,56 +11,26 @@ namespace Store.Infrastructure.Repositories
         public BuysRepository(ApplicationDbContext context) : base(context)
         {
         }
-        public List<BuyDetailDto> SearchBoth(string searchItem, DateTime fromDate, DateTime toDate)
+        public BuyDetailDtoResult SearchBoth(string searchItem, DateTime fromDate, DateTime toDate, int take, int skip)
         {
             try
             {
                 var buyDetailsQuery = _context.BuyDetails
+
                     .Include(bd => bd.Buy)
                     .Include(bd => bd.Product)
                     .Include(bd => bd.Supplier)
                     .Where(bd => fromDate <= bd.Buy.Date && bd.Buy.Date <= toDate) // Filter by date range
                     .AsEnumerable()  // Switch to client-side evaluation for further filtering
                     .Where(bd =>
-                        bd.Supplier.SupplierName.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
+                        bd.Supplier.SupplierName.ToLower().Contains(searchItem.ToLower()) ||
                         bd.Order_ID.ToString() == searchItem) // Client-side case-insensitive search
-                    .OrderBy(bd => bd.Buy.Date);
+                    .OrderByDescending(bd => bd.Buy.Date);
 
-                var buyDetailDtos = buyDetailsQuery.Select(bd => new BuyDetailDto
-                {
-                    Order_ID = bd.Order_ID,
-                    Date = bd.Buy.Date,
-                    Time = bd.Buy.Time,
-                    User_Name = bd.Buy.User_Name,
-                    TotalFacture = bd.Buy.Total,
-                    PaidUp = bd.Buy.PaidUP,
-                    Remain = bd.Buy.Remain,
-                    SupplierName = bd.Supplier.SupplierName, // Assuming `SupplierName` is correct
-                    ProductName = bd.Product.ProductName,    // Assuming `ProductName` is correct
-                    Quantity = bd.Quentity,
-                    PriceWithTax = bd.PriceWithTax,
-                    TotalPrice = bd.Total,
-                    Discount = bd.Discount,
-                })
-                .ToList();
+                var buyDetailDtos = buyDetailsQuery
 
-                return buyDetailDtos;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error retrieving the buy details", ex);
-            }
-        }
-        public List<BuyDetailDto> SearchBuysByDate(DateTime fromDate, DateTime toDate)
-        {
-            try
-            {
-                return _context.BuyDetails
-                    .Include(x => x.Buy)
-                    .Include(x => x.Product)
-                    .Include(x => x.Supplier)
-                    .Where(bd => fromDate <= bd.Buy.Date && bd.Buy.Date <= toDate) // Date range filter
-                    .OrderBy(bd => bd.Buy.Date)
+                     .Skip(skip)
+                    .Take(take)
                     .Select(bd => new BuyDetailDto
                     {
                         Order_ID = bd.Order_ID,
@@ -77,7 +47,53 @@ namespace Store.Infrastructure.Repositories
                         TotalPrice = bd.Total,
                         Discount = bd.Discount,
                     })
-                    .ToList();
+                .ToList();
+
+                return new BuyDetailDtoResult
+                {
+                    result = buyDetailDtos,
+                    Count = buyDetailsQuery.Count()
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error retrieving the buy details", ex);
+            }
+        }
+        public BuyDetailDtoResult SearchBuysByDate(DateTime fromDate, DateTime toDate, int take, int skip)
+        {
+            try
+            {
+                return new BuyDetailDtoResult
+                {
+                    result = _context.BuyDetails
+
+                    .Include(x => x.Buy)
+                    .Include(x => x.Product)
+                    .Include(x => x.Supplier)
+                    .Where(bd => fromDate <= bd.Buy.Date && bd.Buy.Date <= toDate) // Date range filter
+                    .OrderByDescending(bd => bd.Buy.Date)
+                      .Skip(skip)
+                    .Take(take)
+                    .Select(bd => new BuyDetailDto
+                    {
+                        Order_ID = bd.Order_ID,
+                        Date = bd.Buy.Date,
+                        Time = bd.Buy.Time,
+                        User_Name = bd.Buy.User_Name,
+                        TotalFacture = bd.Buy.Total,
+                        PaidUp = bd.Buy.PaidUP,
+                        Remain = bd.Buy.Remain,
+                        SupplierName = bd.Supplier.SupplierName, // Assuming `SupplierName` is correct
+                        ProductName = bd.Product.ProductName,    // Assuming `ProductName` is correct
+                        Quantity = bd.Quentity,
+                        PriceWithTax = bd.PriceWithTax,
+                        TotalPrice = bd.Total,
+                        Discount = bd.Discount,
+                    })
+                    .ToList(),
+                    Count = _context.BuyDetails.Where(bd => fromDate <= bd.Buy.Date && bd.Buy.Date <= toDate).Count()
+                };
             }
             catch (Exception ex)
             {
@@ -85,19 +101,21 @@ namespace Store.Infrastructure.Repositories
                 throw new Exception("Error retrieving the buy details", ex);
             }
         }
-        public List<BuyDetailDto> SearchOnlySupplier(string searchItem)
+        public BuyDetailDtoResult SearchOnlySupplier(string searchItem, int take, int skip)
         {
             try
             {
-                return _context.BuyDetails
+                var searchLower = searchItem.ToLower();
+
+                var query = _context.BuyDetails
                     .Include(bd => bd.Buy)
                     .Include(bd => bd.Product)
                     .Include(bd => bd.Supplier)
-                    .AsEnumerable()  // Forces client-side evaluation for case-insensitive search
-                    .Where(bd =>
-                        bd.Supplier.SupplierName.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||  // Client-side case-insensitive search
-                        bd.Order_ID.ToString() == searchItem)
-                    .OrderBy(bd => bd.Buy.Date)
+                    .Where(bd => bd.Supplier.SupplierName.ToLower().Contains(searchLower) ||
+                                 bd.Order_ID.ToString() == searchItem)
+                    .OrderByDescending(bd => bd.Buy.Date)
+                    .Skip(skip)
+                    .Take(take)
                     .Select(bd => new BuyDetailDto
                     {
                         Order_ID = bd.Order_ID,
@@ -107,14 +125,26 @@ namespace Store.Infrastructure.Repositories
                         TotalFacture = bd.Buy.Total,
                         PaidUp = bd.Buy.PaidUP,
                         Remain = bd.Buy.Remain,
-                        SupplierName = bd.Supplier.SupplierName, // Assuming `SupplierName` is correct
-                        ProductName = bd.Product.ProductName,    // Assuming `ProductName` is correct
+                        SupplierName = bd.Supplier.SupplierName,
+                        ProductName = bd.Product.ProductName,
                         Quantity = bd.Quentity,
                         PriceWithTax = bd.PriceWithTax,
                         TotalPrice = bd.Total,
                         Discount = bd.Discount,
                     })
                     .ToList();
+
+                // Get the total count
+                var totalCount = _context.BuyDetails
+                    .Where(bd => bd.Supplier.SupplierName.ToLower().Contains(searchLower) ||
+                                 bd.Order_ID.ToString() == searchItem)
+                    .Count();
+
+                return new BuyDetailDtoResult
+                {
+                    result = query,
+                    Count = totalCount
+                };
             }
             catch (Exception ex)
             {
@@ -154,15 +184,20 @@ namespace Store.Infrastructure.Repositories
             }
 
         }
-        public List<BuyDetailDto> GetAllBuysWithDetails()
+        public BuyDetailDtoResult GetAllBuysWithDetails(int take, int skip)
         {
 
             try
             {
                 var lastBuy = _context.BuyDetails
+
                     .Include(x => x.Buy)
                     .Include(x => x.Product)
-                    .Include(x => x.Supplier).Select(bd => new BuyDetailDto
+                    .Include(x => x.Supplier).
+                    OrderByDescending(x => x.Buy.Date)
+                     .Skip(skip)
+                    .Take(take)
+                    .Select(bd => new BuyDetailDto
                     {
                         Order_ID = bd.Order_ID,
                         Date = bd.Buy.Date,
@@ -179,7 +214,11 @@ namespace Store.Infrastructure.Repositories
                         Discount = bd.Discount,
                     })
                     .ToList();
-                return lastBuy;
+                return new BuyDetailDtoResult
+                {
+                    result = lastBuy,
+                    Count = _context.BuyDetails.Count()
+                };
             }
             catch (Exception ex)
             {
@@ -188,6 +227,7 @@ namespace Store.Infrastructure.Repositories
             }
 
         }
+
 
     }
     public class BuyDetailRepository : GenericRepository<BuyDetail>, IBuyDetailRepository

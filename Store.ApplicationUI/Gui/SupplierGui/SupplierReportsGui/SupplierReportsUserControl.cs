@@ -56,7 +56,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
 
             cmbpagination.Items.Clear();
 
-            for (int i = 0; i <= PageValue; i++)
+            for (int i = 0; i < PageValue; i++)
             {
                 cmbpagination.Items.Add(i);
 

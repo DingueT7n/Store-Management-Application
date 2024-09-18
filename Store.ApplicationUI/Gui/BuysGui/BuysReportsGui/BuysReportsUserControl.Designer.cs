@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BuysReportsUserControl));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
             OperationsflowLayoutPanel = new FlowLayoutPanel();
             gbPayChoiches = new GroupBox();
             dtpFrom = new DateTimePicker();
@@ -57,6 +57,10 @@
             btnRefresh = new Button();
             lblEmptyData = new Label();
             DgvBuys = new DataGridView();
+            PanelPagination = new Panel();
+            cmbpagination = new ComboBox();
+            btnPrev = new Button();
+            btnNext = new Button();
             OperationsflowLayoutPanel.SuspendLayout();
             gbPayChoiches.SuspendLayout();
             panelstatisticsandOperations.SuspendLayout();
@@ -64,6 +68,7 @@
             SearchPanel.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DgvBuys).BeginInit();
+            PanelPagination.SuspendLayout();
             SuspendLayout();
             // 
             // OperationsflowLayoutPanel
@@ -341,31 +346,31 @@
             DgvBuys.AllowUserToAddRows = false;
             DgvBuys.AllowUserToResizeColumns = false;
             DgvBuys.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvBuys.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle9.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvBuys.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle9;
             DgvBuys.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             DgvBuys.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             DgvBuys.BackgroundColor = Color.White;
             DgvBuys.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             DgvBuys.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle2.ForeColor = Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = Color.DodgerBlue;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            DgvBuys.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle10.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle10.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle10.ForeColor = Color.White;
+            dataGridViewCellStyle10.SelectionBackColor = Color.DodgerBlue;
+            dataGridViewCellStyle10.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = DataGridViewTriState.True;
+            DgvBuys.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
             DgvBuys.ColumnHeadersHeight = 40;
             DgvBuys.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Window;
-            dataGridViewCellStyle3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
-            DgvBuys.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle11.BackColor = SystemColors.Window;
+            dataGridViewCellStyle11.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle11.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle11.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = DataGridViewTriState.False;
+            DgvBuys.DefaultCellStyle = dataGridViewCellStyle11;
             DgvBuys.Dock = DockStyle.Fill;
             DgvBuys.EnableHeadersVisualStyles = false;
             DgvBuys.GridColor = SystemColors.ControlDark;
@@ -377,17 +382,64 @@
             DgvBuys.RowHeadersVisible = false;
             DgvBuys.RowHeadersWidth = 21;
             DgvBuys.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle4.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvBuys.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle12.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvBuys.RowsDefaultCellStyle = dataGridViewCellStyle12;
             DgvBuys.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DgvBuys.Size = new Size(1034, 517);
             DgvBuys.TabIndex = 20;
+            // 
+            // PanelPagination
+            // 
+            PanelPagination.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            PanelPagination.Controls.Add(cmbpagination);
+            PanelPagination.Controls.Add(btnPrev);
+            PanelPagination.Controls.Add(btnNext);
+            PanelPagination.Location = new Point(3, 638);
+            PanelPagination.Name = "PanelPagination";
+            PanelPagination.Size = new Size(169, 40);
+            PanelPagination.TabIndex = 29;
+            // 
+            // cmbpagination
+            // 
+            cmbpagination.Dock = DockStyle.Fill;
+            cmbpagination.Font = new Font("Calibri", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            cmbpagination.FormattingEnabled = true;
+            cmbpagination.Location = new Point(50, 0);
+            cmbpagination.Name = "cmbpagination";
+            cmbpagination.Size = new Size(69, 37);
+            cmbpagination.TabIndex = 28;
+            cmbpagination.SelectionChangeCommitted += cmbpagination_SelectionChangeCommitted;
+            // 
+            // btnPrev
+            // 
+            btnPrev.Dock = DockStyle.Left;
+            btnPrev.Image = (Image)resources.GetObject("btnPrev.Image");
+            btnPrev.ImeMode = ImeMode.NoControl;
+            btnPrev.Location = new Point(0, 0);
+            btnPrev.Name = "btnPrev";
+            btnPrev.Size = new Size(50, 40);
+            btnPrev.TabIndex = 26;
+            btnPrev.UseVisualStyleBackColor = true;
+            btnPrev.Click += btnPrev_Click;
+            // 
+            // btnNext
+            // 
+            btnNext.Dock = DockStyle.Right;
+            btnNext.Image = (Image)resources.GetObject("btnNext.Image");
+            btnNext.ImeMode = ImeMode.NoControl;
+            btnNext.Location = new Point(119, 0);
+            btnNext.Name = "btnNext";
+            btnNext.Size = new Size(50, 40);
+            btnNext.TabIndex = 25;
+            btnNext.UseVisualStyleBackColor = true;
+            btnNext.Click += btnNext_Click;
             // 
             // BuysReportsUserControl
             // 
             AutoScaleDimensions = new SizeF(8F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
+            Controls.Add(PanelPagination);
             Controls.Add(btnRefresh);
             Controls.Add(lblEmptyData);
             Controls.Add(DgvBuys);
@@ -408,6 +460,7 @@
             SearchPanel.PerformLayout();
             panelButtons.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)DgvBuys).EndInit();
+            PanelPagination.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -438,5 +491,9 @@
         private Button btnRefresh;
         private Label lblEmptyData;
         private DataGridView DgvBuys;
+        private Panel PanelPagination;
+        private ComboBox cmbpagination;
+        private Button btnPrev;
+        private Button btnNext;
     }
 }

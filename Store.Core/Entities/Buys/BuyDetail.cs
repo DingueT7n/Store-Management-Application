@@ -36,4 +36,9 @@ namespace Store.Core.Entities.Buys
         public decimal PaidUp { get; set; }
         public decimal Remain { get; set; }
     }
+    public class BuyDetailDtoResult
+    {
+        public List<BuyDetailDto> result { get; set; }
+        public int Count { get; set; }
+    }
 }

@@ -1,4 +1,5 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Customers;
 using Store.Infrastructure.Data;
@@ -325,6 +326,24 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
                 {
                     // Handle or log the exception
                     MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void btnDeleteAllReports_Click(object sender, EventArgs e)
+        {
+            if (MsgHelper.ShowDeleteDialog())
+            {
+                try
+                {
+                    _context.Database.ExecuteSqlRaw($"DELETE FROM [CustomersReports]");
+
+                    LoadData();
+                }
+                catch (Exception ex)
+                {
+                    // Handle or log the exception
+                    MessageBox.Show($"لقد حدث خطأ {ex.Message}", "خطأ برمجي", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

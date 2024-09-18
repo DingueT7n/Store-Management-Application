@@ -1,4 +1,5 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Sales;
 using Store.Infrastructure.Data;
@@ -336,6 +337,69 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
             {
 
                 btnSearch_Click(sender, e);
+            }
+        }
+
+        private async void btnDeleteCurrentPage_Click(object sender, EventArgs e)
+        {
+            if (MsgHelper.ShowDeleteDialog())
+            {
+                for (int i = 0; i < DgvSalesProfit.Rows.Count; i++)
+                {
+                    SaleProfit saleProfit = _context.SalesProfits.FirstOrDefault(x => x.Order_ID.ToString() == DgvSalesProfit.Rows[i].Cells[0].Value.ToString());
+                    _context.SalesProfits.Remove(saleProfit);
+                    await _context.SaveChangesAsync();
+                }
+                LoadData();
+
+            }
+        }
+
+        private async void btnDeleteReportsInPeriod_Click(object sender, EventArgs e)
+        {
+            if (MsgHelper.ShowDeleteDialog())
+            {
+                try
+                {
+                    var query = _context.SalesProfits
+                        .Where(x => dtpFrom.Value <= x.Sale.Date && x.Sale.Date <= dtpTo.Value)
+                        .ToList();
+
+                    if (query.Any())
+                    {
+                        _context.SalesProfits.RemoveRange(query);
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+
+                        MessageBox.Show("لا توجد بيانات في الفترة المحددة", "معلومة", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    LoadData();
+                }
+                catch (Exception ex)
+                {
+                    // Handle or log the exception
+                    MessageBox.Show($"لقد حدث خطأ : {ex.Message}", "خطأ برمجي", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void btnDeleteAllReports_Click(object sender, EventArgs e)
+        {
+            if (MsgHelper.ShowDeleteDialog())
+            {
+                try
+                {
+                    _context.Database.ExecuteSqlRaw($"DELETE FROM [SalesProfits]");
+
+                    LoadData();
+                }
+                catch (Exception ex)
+                {
+                    // Handle or log the exception
+                    MessageBox.Show($"لقد حدث خطأ : {ex.Message}", "خطأ برمجي", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }
