@@ -312,5 +312,11 @@ namespace Store.ApplicationUI
 
             ShowSubPanel(DeservedflowLayoutPanel);
         }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.DeservedGui.VouchersGui.VouchersUserControl.Instance(this));
+
+        }
     }
 }

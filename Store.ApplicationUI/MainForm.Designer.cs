@@ -571,8 +571,9 @@
             button12.Name = "button12";
             button12.Size = new Size(183, 37);
             button12.TabIndex = 3;
-            button12.Text = "تقارير المبيعات";
+            button12.Text = "السندات";
             button12.UseVisualStyleBackColor = true;
+            button12.Click += button12_Click;
             // 
             // button13
             // 

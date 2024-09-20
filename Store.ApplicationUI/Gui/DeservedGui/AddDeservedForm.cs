@@ -24,16 +24,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
             LoadData();
             ConfigDate();
         }
-        public static bool CheckInstance()
-        {
-            return (_adddeservedForm == null);
-        }
-        public static void LoadCategory()
-        {
-            var s = _adddeservedForm.CMBType.SelectedValue;
-            _adddeservedForm.LoadData();
-            _adddeservedForm.CMBType.SelectedValue = s;
-        }
+
 
         public static AddDeservedForm Instance(MainForm main)
         {

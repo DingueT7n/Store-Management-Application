@@ -48,9 +48,9 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
             double value = data.count / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
             int PageValue = Convert.ToInt32(Math.Round(value, MidpointRounding.AwayFromZero));
             cmbpagination.Items.Clear();
-            for (int i = 0; i <= PageValue; i++)
+            for (int i = 0; i < PageValue; i++)
             {
-                cmbpagination.Items.Add(i);
+                cmbpagination.Items.Add(i + 1);
 
             }
             if (cmbpagination.Items.Count > 0)
@@ -180,7 +180,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
 
             for (int i = 0; i < pageValue; i++)
             {
-                cmbpagination.Items.Add(i);
+                cmbpagination.Items.Add(i + 1);
             }
             if (selectedi < cmbpagination.Items.Count && cmbpagination.Items.Count > 0)
             {

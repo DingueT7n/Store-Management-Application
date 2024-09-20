@@ -1,5 +1,6 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Entities.AllDeserved;
 using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.DeservedGui
@@ -152,6 +153,40 @@ namespace Store.ApplicationUI.Gui.DeservedGui
             if (MsgHelper.ShowDeleteDialog())
             {
                 deservedsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[7].Value.ToString());
+            }
+            RefreshDgv();
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            List<Deserved> a = new();
+            DgvProducts.DataSource = new List<Deserved>();
+            if (rbBoth.Checked)
+            {
+                a = deservedsRepository.SearchBoth(txtSearch.Text, dtpFrom.Value, dtpTo.Value);
+
+
+            }
+            else if (rbSupplierAndOrder.Checked)
+            {
+                a = deservedsRepository.SearchOnlyCustomer(txtSearch.Text);
+
+            }
+            else
+            {
+                a = deservedsRepository.SearchOnlyDate(dtpFrom.Value, dtpTo.Value);
+            }
+            DgvProducts.DataSource = a;
+        }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (MsgHelper.ShowDeleteDialog())
+            {
+                for (int i = 0; i < DgvProducts.Rows.Count; i++)
+                {
+
+                    deservedsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[i].Value.ToString());
+                }
             }
             RefreshDgv();
         }

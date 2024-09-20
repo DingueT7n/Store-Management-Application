@@ -13,4 +13,5 @@
 
         public string Reason { get; set; }
     }
+
 }
