@@ -10,8 +10,6 @@ namespace Store.Infrastructure.Data.Config
         {
             builder.Property(x => x.Id).IsRequired();
             builder.HasKey(x => x.Id);
-
-
         }
     }
     public class ReturnDetailConfiguration : IEntityTypeConfiguration<ReturnDetail>
@@ -21,7 +19,6 @@ namespace Store.Infrastructure.Data.Config
             builder.HasKey(x => x.Id);
             builder.HasOne(x => x.Product).WithMany().HasForeignKey(x => x.Pro_ID);
             builder.HasOne(x => x.Returns).WithMany().HasForeignKey(x => x.Order_ID);
-
         }
     }
 

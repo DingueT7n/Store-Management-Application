@@ -10,7 +10,7 @@
         public decimal Sale_PriceTax { get; set; }
         public DateTime DateExpiration { get; set; }
         public virtual Product Product { get; set; }
-        public virtual Core.Entities.Stores.Store Store { get; set; }
+        public virtual Stores.Store Store { get; set; }
     }
 
 

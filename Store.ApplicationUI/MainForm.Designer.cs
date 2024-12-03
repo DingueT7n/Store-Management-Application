@@ -70,6 +70,7 @@
             button13 = new Button();
             ContainerPanel = new Panel();
             animationTimer = new System.Windows.Forms.Timer(components);
+            button14 = new Button();
             flowLayoutPanelNavBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ProductsflowLayoutPanel.SuspendLayout();
@@ -101,6 +102,7 @@
             flowLayoutPanelNavBar.Controls.Add(button6);
             flowLayoutPanelNavBar.Controls.Add(button10);
             flowLayoutPanelNavBar.Controls.Add(DeservedflowLayoutPanel);
+            flowLayoutPanelNavBar.Controls.Add(button14);
             flowLayoutPanelNavBar.Dock = DockStyle.Left;
             flowLayoutPanelNavBar.Location = new Point(0, 0);
             flowLayoutPanelNavBar.Name = "flowLayoutPanelNavBar";
@@ -603,6 +605,20 @@
             animationTimer.Interval = 15;
             animationTimer.Tick += animationTimer_Tick;
             // 
+            // button14
+            // 
+            button14.FlatAppearance.BorderSize = 4;
+            button14.Image = Properties.Resources.Open_Box;
+            button14.ImageAlign = ContentAlignment.MiddleLeft;
+            button14.Location = new Point(6, 1581);
+            button14.Margin = new Padding(4, 5, 4, 5);
+            button14.Name = "button14";
+            button14.Size = new Size(204, 37);
+            button14.TabIndex = 17;
+            button14.Text = "المرتجعات";
+            button14.UseVisualStyleBackColor = true;
+            button14.Click += button14_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 19F);
@@ -673,5 +689,6 @@
         private Button button11;
         private Button button12;
         private Button button13;
+        private Button button14;
     }
 }

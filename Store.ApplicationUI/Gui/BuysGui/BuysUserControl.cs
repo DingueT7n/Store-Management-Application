@@ -563,16 +563,15 @@ namespace Store.ApplicationUI.Gui.BuysGui
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
             ProductsQuantitie productQty = new();
-            if (productQty is not null)
-            {
-                productQty.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[8].Value.ToString());
-                productQty.Store_ID = Convert.ToInt32(cmbStores.SelectedValue);
-                productQty.StoreName = cmbStores.Text;
-                productQty.Qty = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
-                productQty.Buy_Price = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
-                productQty.Sale_PriceTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
-                productQty.DateExpiration = Convert.ToDateTime(DgvِProducts.Rows[i].Cells[7].Value);
-            }
+
+            productQty.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[8].Value.ToString());
+            productQty.Store_ID = Convert.ToInt32(cmbStores.SelectedValue);
+            productQty.StoreName = cmbStores.Text;
+            productQty.Qty = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+            productQty.Buy_Price = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
+            productQty.Sale_PriceTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
+            productQty.DateExpiration = Convert.ToDateTime(DgvِProducts.Rows[i].Cells[7].Value);
+
             return productQty;
         }
         Caisse SetCaisse(decimal value)
@@ -584,7 +583,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
             {
                 caisse.MoneyinCaisse -= value;
             }
-            return caisse;
+            return caisse is not null ? caisse : new Caisse { CaisseName = "CaisseNull" };
 
         }
         CaisseWithdraw SetCaisseWithdraw(decimal value)
@@ -631,6 +630,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
                     await HandleCaisseAndSupplierAsync(buy);
 
                     await transaction.CommitAsync();
+                    ResetForm();
                 }
                 catch (Exception ex)
                 {
@@ -669,18 +669,20 @@ namespace Store.ApplicationUI.Gui.BuysGui
         }
         private async void btnPay_Click(object sender, EventArgs e)
         {
-
+            if (!(DgvِProducts.Rows.Count > 0))
+                return;
             if (ValidatePay())
             {
+                _context = new ApplicationDbContext();
                 AddPaymentForm addPaymentForm = new(_main, 0);
 
                 // Determine payment type and show the payment form
-                if (rBPayCash.Checked || rBPayPartial.Checked)
+                if (rBPayCash.Checked)
                 {
                     addPaymentForm.LoadData(TotalFacture.ToString(), TotalFacture.ToString(), "0");
                     addPaymentForm.ShowDialog();
                 }
-                else if (rBPayDebt.Checked)
+                else if (rBPayDebt.Checked || rBPayPartial.Checked)
                 {
                     addPaymentForm.LoadData(TotalFacture.ToString(), "0", TotalFacture.ToString());
                     addPaymentForm.ShowDialog();
@@ -696,7 +698,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
                     await ProcessPaymentAsync(true);
                 }
 
-                ResetForm();
+
             }
             //if (ValidatePay())
             //{

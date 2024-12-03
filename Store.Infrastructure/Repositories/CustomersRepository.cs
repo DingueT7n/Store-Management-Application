@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MySql.EntityFrameworkCore.Extensions;
+
 using Store.Core.Entities.Customers;
 using Store.Core.Interfaces;
 using Store.Infrastructure.Data;

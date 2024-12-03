@@ -63,6 +63,20 @@
                 return false;
             }
         }
+        public static bool ShowRefundDialog()
+        {
+            var result = MessageBox.Show("هل انت متأكد من هذا الاجراء ؟ لا يمكن استرجاع البيانات ",
+                   "اجراء ارجاع مواد"
+                   , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public static bool ShowErrorValidating()
         {
             var result = MessageBox.Show("هل انت متأكد من تجاهل الأخطاء؟  ",

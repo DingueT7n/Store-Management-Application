@@ -97,7 +97,7 @@
             // BottomMargin
             // 
             this.BottomMargin.Dpi = 254F;
-            this.BottomMargin.HeightF = 63.10686F;
+            this.BottomMargin.HeightF = 0F;
             this.BottomMargin.Name = "BottomMargin";
             // 
             // ReportHeader
@@ -517,7 +517,7 @@
             this.xrLabel16,
             this.pageInfo1});
             this.ReportFooter.Dpi = 254F;
-            this.ReportFooter.HeightF = 581.7609F;
+            this.ReportFooter.HeightF = 622.0591F;
             this.ReportFooter.Name = "ReportFooter";
             // 
             // xrLabel21
@@ -752,7 +752,7 @@
             this.DataSource = this.sqlDataSource1;
             this.Dpi = 254F;
             this.Font = new DevExpress.Drawing.DXFont("Arial", 9.75F);
-            this.Margins = new DevExpress.Drawing.DXMargins(31F, 24F, 1.791678F, 63.10686F);
+            this.Margins = new DevExpress.Drawing.DXMargins(31F, 24F, 1.791678F, 0F);
             this.PageHeight = 3000;
             this.PageWidth = 800;
             this.PaperKind = DevExpress.Drawing.Printing.DXPaperKind.Custom;

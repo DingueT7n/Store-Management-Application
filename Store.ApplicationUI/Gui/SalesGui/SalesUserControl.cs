@@ -528,7 +528,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 Date = DtpDateFacture.Value,
                 PaidUP = _main.ConvertToFloat(PaidUp.ToString()),
                 Remain = _main.ConvertToFloat(Remain.ToString()),
-                Time = DateTime.Now.ToString("HH:mm"),
+                Time = DateTime.Now.ToString("yyyy:MM:dd:HH:mm"),
                 User_Name = Properties.Settings.Default.UserName,
             };
         }
@@ -541,7 +541,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 Cust_Name = cmbCustomers.Text,
                 Date = DtpDateFacture.Value,
                 Price = _main.ConvertToFloat(PaidUp.ToString()),
-                Time = DateTime.Now.ToString("HH:mm"),
+                Time = DateTime.Now.ToString("yyyy:MM:dd:HH:mm"),
             };
         }
         CustomerMoney SetCustMoney()
@@ -553,7 +553,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 Cust_Name = cmbCustomers.Text,
                 Order_Date = DtpDateFacture.Value,
                 Price = _main.ConvertToFloat(Remain.ToString()),
-                Time = DateTime.Now.ToString("HH:mm"),
+                Time = DateTime.Now.ToString("yyyy:MM:dd:HH:mm"),
                 Reminder_Date = dtpReminderDate.Value
             };
         }
@@ -588,7 +588,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 Buy_Price = buyPrice,
                 Tax_Value = Properties.Settings.Default.TaxValue,
                 Discount = _main.ConvertToFloat(row.Cells[3].Value.ToString()),
-                Time = DateTime.Now.ToString("HH:mm"),
+                Time = DateTime.Now.ToString("yyyy:MM:dd:HH:mm"),
                 Price_Tax = _main.ConvertToFloat(row.Cells[1].Value.ToString())
             };
 
@@ -602,7 +602,9 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
             if (product != null)
             {
-                product.Quentity = Math.Max(0, product.Quentity - _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()));
+                product.Quentity -= _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+                if (product.Quentity < 0)
+                    product.Quentity = 0;
             }
 
             return product;
@@ -688,15 +690,16 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
         }
 
-        private async Task ProcessTransaction(decimal paymentAmount, bool isDebt)
+        private void ProcessTransaction(decimal paymentAmount, bool isDebt)
         {
+            _context = new ApplicationDbContext();
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
                 {
                     var sale = SetSale();
                     _context.Add(sale);
-                    await _context.SaveChangesAsync();
+                    _context.SaveChanges();
 
                     for (int i = 0; i <= DgvِProducts.Rows.Count - 1; i++)
                     {
@@ -710,33 +713,37 @@ namespace Store.ApplicationUI.Gui.SalesGui
                         profit.Order_ID = sale.Id;
                         _context.Add(profit);
                     }
-                    await _context.SaveChangesAsync();
+                    _context.SaveChanges();
 
                     // Handle Caisse and Customer updates
-                    await HandleFinancialUpdates(paymentAmount, isDebt, sale.Id);
+                    HandleFinancialUpdates(paymentAmount, isDebt, sale.Id);
 
-                    await transaction.CommitAsync();
+                    transaction.Commit();
                     ResetForm();
                 }
                 catch (Exception ex)
                 {
-                    await transaction.RollbackAsync();
+                    transaction.Rollback();
                     MessageBox.Show(ex.Message);
                 }
             }
         }
 
-        private async Task HandleFinancialUpdates(decimal paymentAmount, bool isDebt, int saleId)
+        private void HandleFinancialUpdates(decimal paymentAmount, bool isDebt, int saleId)
         {
             if (paymentAmount <= TotalFacture)
             {
                 _context.Update(SetCaisse(paymentAmount));
+                _context.SaveChanges();
                 _context.Add(SetCaisseDeposit(paymentAmount));
+                _context.SaveChanges();
             }
             else
             {
                 _context.Update(SetCaisse(TotalFacture));
+                _context.SaveChanges();
                 _context.Add(SetCaisseDeposit(TotalFacture));
+                _context.SaveChanges();
             }
 
             if (PaidUp > 0)
@@ -744,6 +751,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 var custReport = SetCustReport();
                 custReport.Order_ID = saleId;
                 _context.Add(custReport);
+                _context.SaveChanges();
             }
 
             if (Remain > 0)
@@ -751,29 +759,33 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 var custMoney = SetCustMoney();
                 custMoney.Order_ID = saleId;
                 _context.Add(custMoney);
+                _context.SaveChanges();
 
                 _context.Update(SetCustomer());
+                _context.SaveChanges();
             }
 
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
-        private async void btnPay_Click(object sender, EventArgs e)
+        private void btnPay_Click(object sender, EventArgs e)
         {
+            if (!(DgvِProducts.Rows.Count > 0))
+                return;
             if (ValidatePay())
             {
                 AddPaymentForm addPaymentForm = new(_main, 1);
                 if (rBPayPartial.Checked || rBPayDebt.Checked)
                 {
 
-                    addPaymentForm.LoadData(TotalFacture.ToString(), TotalFacture.ToString(), "0");
+                    addPaymentForm.LoadData(TotalFacture.ToString(), "0", TotalFacture.ToString());
                     addPaymentForm.ShowDialog();
-                    await ProcessTransaction(PaidUp, rBPayPartial.Checked || rBPayDebt.Checked || Remain > 0);
+                    ProcessTransaction(PaidUp, rBPayPartial.Checked || rBPayDebt.Checked || Remain > 0);
                 }
-                else
+                else if (rBPayCash.Checked)
                 {
                     addPaymentForm.LoadData(TotalFacture.ToString(), TotalFacture.ToString(), "0");
                     addPaymentForm.ShowDialog();
-                    await ProcessTransaction(PaidUp, false || Remain > 0);
+                    ProcessTransaction(PaidUp, false || Remain > 0);
                 }
 
             }

@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.CaisseAndBankGui;
 using Store.ApplicationUI.Gui.ProductsGui;
@@ -12,6 +13,7 @@ namespace Store.ApplicationUI
     {
         private PageHelper pageHelper;
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public static ApplicationDbContext? Context { get; set; }
         public MainForm()
         {
@@ -316,6 +318,12 @@ namespace Store.ApplicationUI
         private void button12_Click(object sender, EventArgs e)
         {
             pageHelper.SetNewPage(Gui.DeservedGui.VouchersGui.VouchersUserControl.Instance(this));
+
+        }
+
+        private void button14_Click(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.ReturnsGui.ReturnUserControl.Instance(this));
 
         }
     }
