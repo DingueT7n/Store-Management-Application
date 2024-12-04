@@ -2,6 +2,6 @@
 {
     public class RandomBarcode
     {
-        public decimal Barcode { get; set; }
+        public double Barcode { get; set; }
     }
 }

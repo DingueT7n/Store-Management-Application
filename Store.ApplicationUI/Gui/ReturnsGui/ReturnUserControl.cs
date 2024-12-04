@@ -404,7 +404,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
 
             buy.TotalOrder = _main.ConvertToFloat(TotalFacture.ToString());
             //buy.SupplierId = Convert.ToInt32(cmbSuppliers.SelectedValue);
-            buy.OrderDate = DtpDateFacture.Value;
+            buy.OrderDate = DateTime.Now;
             buy.PaidUP = _main.ConvertToFloat(paidUp.ToString());
             buy.Remain = _main.ConvertToFloat(remain.ToString());
             buy.Time = DateTime.Now.ToString("yyyy:MM:dd:HH:mm");

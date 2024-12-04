@@ -66,10 +66,12 @@
             btnAddProduct = new Button();
             btnEditProduct = new Button();
             btnPrintBarCode = new Button();
+            panelcancel = new Panel();
             button1 = new Button();
             GbInfoProduct.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)PbImageProduct).BeginInit();
             OperationsflowLayoutPanel.SuspendLayout();
+            panelcancel.SuspendLayout();
             SuspendLayout();
             // 
             // GbInfoProduct
@@ -460,7 +462,7 @@
             OperationsflowLayoutPanel.Controls.Add(btnAddProduct);
             OperationsflowLayoutPanel.Controls.Add(btnEditProduct);
             OperationsflowLayoutPanel.Controls.Add(btnPrintBarCode);
-            OperationsflowLayoutPanel.Controls.Add(button1);
+            OperationsflowLayoutPanel.Controls.Add(panelcancel);
             OperationsflowLayoutPanel.Dock = DockStyle.Bottom;
             OperationsflowLayoutPanel.Location = new Point(0, 430);
             OperationsflowLayoutPanel.Margin = new Padding(5);
@@ -473,7 +475,7 @@
             btnAddProduct.Anchor = AnchorStyles.None;
             btnAddProduct.Image = (Image)resources.GetObject("btnAddProduct.Image");
             btnAddProduct.ImageAlign = ContentAlignment.MiddleLeft;
-            btnAddProduct.Location = new Point(604, 3);
+            btnAddProduct.Location = new Point(587, 3);
             btnAddProduct.Name = "btnAddProduct";
             btnAddProduct.Size = new Size(100, 40);
             btnAddProduct.TabIndex = 3;
@@ -486,7 +488,7 @@
             btnEditProduct.Anchor = AnchorStyles.None;
             btnEditProduct.Image = (Image)resources.GetObject("btnEditProduct.Image");
             btnEditProduct.ImageAlign = ContentAlignment.MiddleLeft;
-            btnEditProduct.Location = new Point(498, 3);
+            btnEditProduct.Location = new Point(481, 3);
             btnEditProduct.Name = "btnEditProduct";
             btnEditProduct.Size = new Size(100, 40);
             btnEditProduct.TabIndex = 4;
@@ -500,18 +502,27 @@
             btnPrintBarCode.Anchor = AnchorStyles.None;
             btnPrintBarCode.Image = (Image)resources.GetObject("btnPrintBarCode.Image");
             btnPrintBarCode.ImageAlign = ContentAlignment.MiddleLeft;
-            btnPrintBarCode.Location = new Point(376, 3);
+            btnPrintBarCode.Location = new Point(359, 3);
             btnPrintBarCode.Name = "btnPrintBarCode";
             btnPrintBarCode.Size = new Size(116, 40);
             btnPrintBarCode.TabIndex = 6;
             btnPrintBarCode.Text = "      طباعة باركود";
             btnPrintBarCode.UseVisualStyleBackColor = true;
+            btnPrintBarCode.Click += btnPrintBarCode_Click;
+            // 
+            // panelcancel
+            // 
+            panelcancel.Controls.Add(button1);
+            panelcancel.Location = new Point(244, 49);
+            panelcancel.Name = "panelcancel";
+            panelcancel.Size = new Size(443, 42);
+            panelcancel.TabIndex = 32;
             // 
             // button1
             // 
             button1.Image = (Image)resources.GetObject("button1.Image");
             button1.ImageAlign = ContentAlignment.MiddleLeft;
-            button1.Location = new Point(270, 3);
+            button1.Location = new Point(7, -1);
             button1.Name = "button1";
             button1.Size = new Size(100, 40);
             button1.TabIndex = 7;
@@ -541,6 +552,7 @@
             GbInfoProduct.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)PbImageProduct).EndInit();
             OperationsflowLayoutPanel.ResumeLayout(false);
+            panelcancel.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -584,5 +596,6 @@
         private Label label14;
         private Label label16;
         private Label label15;
+        private Panel panelcancel;
     }
 }

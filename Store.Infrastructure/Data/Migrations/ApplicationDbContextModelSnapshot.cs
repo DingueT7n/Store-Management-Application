@@ -17,7 +17,7 @@ namespace Store.Infrastructure.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -668,8 +668,8 @@ namespace Store.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Store.Core.Entities.Helpers.RandomBarcode", b =>
                 {
-                    b.Property<decimal>("Barcode")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Barcode")
+                        .HasColumnType("float");
 
                     b.ToTable("RandomBarcode");
                 });

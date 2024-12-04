@@ -68,9 +68,12 @@
             button11 = new Button();
             button12 = new Button();
             button13 = new Button();
+            button14 = new Button();
+            flowLayoutPaneReturns = new FlowLayoutPanel();
+            button15 = new Button();
+            button16 = new Button();
             ContainerPanel = new Panel();
             animationTimer = new System.Windows.Forms.Timer(components);
-            button14 = new Button();
             flowLayoutPanelNavBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ProductsflowLayoutPanel.SuspendLayout();
@@ -79,6 +82,7 @@
             BuysflowLayoutPanel.SuspendLayout();
             SalesflowLayoutPanel.SuspendLayout();
             DeservedflowLayoutPanel.SuspendLayout();
+            flowLayoutPaneReturns.SuspendLayout();
             SuspendLayout();
             // 
             // flowLayoutPanelNavBar
@@ -103,6 +107,7 @@
             flowLayoutPanelNavBar.Controls.Add(button10);
             flowLayoutPanelNavBar.Controls.Add(DeservedflowLayoutPanel);
             flowLayoutPanelNavBar.Controls.Add(button14);
+            flowLayoutPanelNavBar.Controls.Add(flowLayoutPaneReturns);
             flowLayoutPanelNavBar.Dock = DockStyle.Left;
             flowLayoutPanelNavBar.Location = new Point(0, 0);
             flowLayoutPanelNavBar.Name = "flowLayoutPanelNavBar";
@@ -589,6 +594,57 @@
             button13.Text = "الارباح ";
             button13.UseVisualStyleBackColor = true;
             // 
+            // button14
+            // 
+            button14.FlatAppearance.BorderSize = 4;
+            button14.Image = Properties.Resources.Open_Box;
+            button14.ImageAlign = ContentAlignment.MiddleLeft;
+            button14.Location = new Point(6, 1581);
+            button14.Margin = new Padding(4, 5, 4, 5);
+            button14.Name = "button14";
+            button14.Size = new Size(204, 37);
+            button14.TabIndex = 17;
+            button14.Text = "المرتجعات";
+            button14.UseVisualStyleBackColor = true;
+            button14.Click += button14_Click;
+            // 
+            // flowLayoutPaneReturns
+            // 
+            flowLayoutPaneReturns.Controls.Add(button15);
+            flowLayoutPaneReturns.Controls.Add(button16);
+            flowLayoutPaneReturns.Location = new Point(24, 1626);
+            flowLayoutPaneReturns.MaximumSize = new Size(209, 143);
+            flowLayoutPaneReturns.Name = "flowLayoutPaneReturns";
+            flowLayoutPaneReturns.Size = new Size(187, 98);
+            flowLayoutPaneReturns.TabIndex = 18;
+            flowLayoutPaneReturns.Visible = false;
+            // 
+            // button15
+            // 
+            button15.Image = Properties.Resources.Open_Box;
+            button15.ImageAlign = ContentAlignment.MiddleLeft;
+            button15.Location = new Point(0, 5);
+            button15.Margin = new Padding(4, 5, 4, 5);
+            button15.Name = "button15";
+            button15.Size = new Size(183, 37);
+            button15.TabIndex = 2;
+            button15.Text = "ارجاع المنتجات";
+            button15.UseVisualStyleBackColor = true;
+            button15.Click += button15_Click;
+            // 
+            // button16
+            // 
+            button16.Image = Properties.Resources.Open_Box;
+            button16.ImageAlign = ContentAlignment.MiddleLeft;
+            button16.Location = new Point(0, 52);
+            button16.Margin = new Padding(4, 5, 4, 5);
+            button16.Name = "button16";
+            button16.Size = new Size(183, 37);
+            button16.TabIndex = 3;
+            button16.Text = "تقرير المرتجعات";
+            button16.UseVisualStyleBackColor = true;
+            button16.Click += button16_Click;
+            // 
             // ContainerPanel
             // 
             ContainerPanel.BackColor = Color.White;
@@ -604,20 +660,6 @@
             animationTimer.Enabled = true;
             animationTimer.Interval = 15;
             animationTimer.Tick += animationTimer_Tick;
-            // 
-            // button14
-            // 
-            button14.FlatAppearance.BorderSize = 4;
-            button14.Image = Properties.Resources.Open_Box;
-            button14.ImageAlign = ContentAlignment.MiddleLeft;
-            button14.Location = new Point(6, 1581);
-            button14.Margin = new Padding(4, 5, 4, 5);
-            button14.Name = "button14";
-            button14.Size = new Size(204, 37);
-            button14.TabIndex = 17;
-            button14.Text = "المرتجعات";
-            button14.UseVisualStyleBackColor = true;
-            button14.Click += button14_Click;
             // 
             // MainForm
             // 
@@ -644,6 +686,7 @@
             BuysflowLayoutPanel.ResumeLayout(false);
             SalesflowLayoutPanel.ResumeLayout(false);
             DeservedflowLayoutPanel.ResumeLayout(false);
+            flowLayoutPaneReturns.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -690,5 +733,8 @@
         private Button button12;
         private Button button13;
         private Button button14;
+        private FlowLayoutPanel flowLayoutPaneReturns;
+        private Button button15;
+        private Button button16;
     }
 }

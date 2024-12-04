@@ -891,7 +891,6 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                             custReport.Order_ID = sale.Id;
                             await _context.AddAsync(custReport);
                         }
-
                         if (Remain > 0)
                         {
                             var custMoney = SetCustMoney();
@@ -899,9 +898,6 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                             await _context.AddAsync(custMoney);
                             _context.Update(SetCustomer());
                         }
-
-
-
                         await _context.SaveChangesAsync();
                         await transaction.CommitAsync();
                         ResetForm();

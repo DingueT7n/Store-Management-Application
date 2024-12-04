@@ -323,7 +323,20 @@ namespace Store.ApplicationUI
 
         private void button14_Click(object sender, EventArgs e)
         {
+            CloseSubPanels();
+
+            ShowSubPanel(flowLayoutPaneReturns);
+
+        }
+
+        private void button15_Click(object sender, EventArgs e)
+        {
             pageHelper.SetNewPage(Gui.ReturnsGui.ReturnUserControl.Instance(this));
+        }
+
+        private void button16_Click(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.ReturnsGui.ReturnsReportsGui.ReturnsReportsUserControl.Instance(this));
 
         }
     }

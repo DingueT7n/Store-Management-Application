@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.ProductsGui.Category;
@@ -269,7 +271,6 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void btnEditProduct_Click(object sender, EventArgs e)
         {
-
             Product product = productsRepository.Find(lblProductId.Text);
             product.ProductName = txtNameProduct.Text;
             product.CodeBar = txtBarCode.Text;
@@ -292,6 +293,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 ProductsUserControl.RefreshDgv();
             }
             product = null;
+
         }
 
 
@@ -326,7 +328,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         {
             try
             {
-                byte[] Picture = (byte[])retrivedData;
+                byte[] Picture = retrivedData;
                 MemoryStream ms = new MemoryStream(Picture);
                 PbImageProduct.Image = Image.FromStream(ms);
             }
@@ -335,7 +337,6 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
                 throw;
             }
-
         }
         private void PbImageProduct_Click(object sender, EventArgs e)
         {
@@ -348,5 +349,36 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 }
             }
         }
+        private void btnPrintBarCode_Click(object sender, EventArgs e)
+        {
+            if (txtBarCode.Text.IsNullOrEmpty())
+            {
+                var bc = _context.RandomBarcode
+                    .AsNoTracking()
+                    .OrderBy(x => x.Barcode) // Ensure correct ordering
+                    .LastOrDefault();
+                if (bc != null)
+                {
+                    txtBarCode.Text = (bc.Barcode + 1).ToString(); // Assuming Barcode is a string
+                    string sql = $"INSERT INTO RandomBarcode (Barcode) VALUES ('{txtBarCode.Text}')";
+                    _context.Database.ExecuteSqlRaw(sql);
+                }
+                else
+                {
+                    txtBarCode.Text = "10000000";
+                    string sql = "INSERT INTO RandomBarcode (Barcode) VALUES ('10000000')";
+                    _context.Database.ExecuteSqlRaw(sql);
+                }
+            }
+            BarcodeGui.BarCodeForm barCodeForm = new BarcodeGui.BarCodeForm();
+            barCodeForm.txtBarCode.Text = txtBarCode.Text;
+            barCodeForm.txtPrice.Text = txtSaleAfterTax.Text;
+            barCodeForm.txtProductName.Text = txtNameProduct.Text;
+            barCodeForm.lblBarecode.Text = txtBarCode.Text;
+            this.Hide();
+            barCodeForm.ShowDialog();
+            this.Show();
+        }
+
     }
 }
