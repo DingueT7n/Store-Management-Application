@@ -11,6 +11,8 @@ namespace Store.Infrastructure.Data.Config
             builder.Property(x => x.Id).IsRequired();
             builder.Property(x => x.SupplierName).HasMaxLength(75);
             builder.Property(x => x.PhoneNumber).HasMaxLength(30);
+            builder.Property(p => p.TotalDebts).HasColumnType("decimal(18,2)");
+            builder.Property(p => p.MaxDebtAllowed).HasColumnType("decimal(18,2)");
 
             builder.HasData(
               new Supplier { Id = 1, SupplierName = "مورد سعيدة", Address = "بوهراوة", PhoneNumber = "0697357397", Notes = "معلومات مشحونة", MaxDebtAllowed = 400, TotalDebts = 0 },
@@ -27,6 +29,8 @@ namespace Store.Infrastructure.Data.Config
             builder.Property(x => x.SupplierName).HasMaxLength(75);
             builder.HasOne(x => x.Supplier).WithMany().HasForeignKey(x => x.Sup_ID);
             builder.HasOne(x => x.Buy).WithMany().HasForeignKey(x => x.Order_ID);
+            builder.Property(p => p.Price).HasColumnType("decimal(18,2)");
+
         }
     }
     public class SupplierReportConfiguration : IEntityTypeConfiguration<SupplierReport>
@@ -37,6 +41,8 @@ namespace Store.Infrastructure.Data.Config
             builder.Property(x => x.SupplierName).HasMaxLength(75);
             builder.HasOne(x => x.Supplier).WithMany().HasForeignKey(x => x.Sup_ID);
             builder.HasOne(x => x.Buy).WithMany().HasForeignKey(x => x.Order_ID);
+            builder.Property(p => p.Price).HasColumnType("decimal(18,2)");
+
         }
     }
 

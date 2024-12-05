@@ -2,6 +2,8 @@
 {
     public class EmployeeBorrowMoney : BaseEntity<int>
     {
+        public int Emp_Id { get; set; }
+
         public string BorrowFrom { get; set; }
         public string BorrowTo { get; set; }
         public DateTime OrderDate { get; set; }

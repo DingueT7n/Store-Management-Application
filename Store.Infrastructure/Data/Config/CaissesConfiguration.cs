@@ -10,7 +10,11 @@ namespace Store.Infrastructure.Data.Config
         {
             builder.Property(x => x.Id).IsRequired();
             builder.HasKey(x => x.Id);
+
             builder.Property(x => x.CaisseName).HasMaxLength(50);
+
+            builder.Property(p => p.MoneyinCaisse).HasColumnType("decimal(18,2)");
+
             builder.HasData(
                 new Caisse { Id = 1, CaisseName = "الصندوق الأول", MoneyinCaisse = 0 },
                      new Caisse { Id = 2, CaisseName = "الصندوق الثاني", MoneyinCaisse = 0 },
@@ -26,6 +30,8 @@ namespace Store.Infrastructure.Data.Config
             builder.Property(x => x.Id).IsRequired();
             builder.HasKey(x => x.Id);
             builder.HasOne(bd => bd.Caisse).WithMany().HasForeignKey(bd => bd.Caisse_ID);
+            builder.Property(p => p.Money).HasColumnType("decimal(18,2)");
+
 
         }
     }
@@ -36,6 +42,8 @@ namespace Store.Infrastructure.Data.Config
             builder.Property(x => x.Id).IsRequired();
             builder.HasKey(x => x.Id);
             builder.HasOne(bd => bd.Caisse).WithMany().HasForeignKey(bd => bd.Caisse_ID);
+            builder.Property(p => p.Money).HasColumnType("decimal(18,2)");
+
 
         }
     }
@@ -45,6 +53,8 @@ namespace Store.Infrastructure.Data.Config
         {
             builder.Property(x => x.Id).IsRequired();
             builder.HasKey(x => x.Id);
+            builder.Property(p => p.Money).HasColumnType("decimal(18,2)");
+
 
 
         }
@@ -57,6 +67,8 @@ namespace Store.Infrastructure.Data.Config
             builder.HasKey(x => x.Id);
             builder.HasOne(bd => bd.CaisseFrom).WithMany().HasForeignKey(bd => bd.Caisse_From).OnDelete(DeleteBehavior.Restrict);
             builder.HasOne(bd => bd.CaisseTo).WithMany().HasForeignKey(bd => bd.Caisse_To);
+            builder.Property(p => p.Money).HasColumnType("decimal(18,2)");
+
 
 
         }

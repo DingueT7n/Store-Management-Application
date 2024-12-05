@@ -5,6 +5,7 @@ using Store.Core.Entities.Banks;
 using Store.Core.Entities.Buys;
 using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Customers;
+using Store.Core.Entities.Employees;
 using Store.Core.Entities.Helpers;
 using Store.Core.Entities.Products;
 using Store.Core.Entities.Returns;
@@ -22,6 +23,12 @@ namespace Store.Infrastructure.Data
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         }
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            configurationBuilder.Properties<decimal>()
+       .HavePrecision(18, 2);
+            base.ConfigureConventions(configurationBuilder);
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string conString = @"Server=.\SQLEXPRESS; Database=StoreDbEFCore;Encrypt=false; Integrated Security = true;";
@@ -38,12 +45,11 @@ namespace Store.Infrastructure.Data
         public DbSet<Bank> Banks { get; set; }
         public DbSet<BankDeposit> BankDeposits { get; set; }
         public DbSet<BankWithdraw> BankWithdraws { get; set; }
-
-        //DbSet<Employee> Employees { get; set; }
-        //DbSet<EmployeeSalaryMinus> EmployeesSalaryMinus { get; set; }
-        //DbSet<EmployeeBorrowItem> EmployeesBorrowItems { get; set; }
-        //DbSet<EmployeeBorrowMoney> EmployeesBorrowMonies { get; set; }
-        //DbSet<EmployeeSalary> EmployeesSalaries { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<EmployeeSalaryMinus> EmployeesSalaryMinus { get; set; }
+        public DbSet<EmployeeBorrowItem> EmployeesBorrowItems { get; set; }
+        public DbSet<EmployeeBorrowMoney> EmployeesBorrowMonies { get; set; }
+        public DbSet<EmployeeSalary> EmployeesSalaries { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductDiscount> ProductDiscounts { get; set; }
         public DbSet<ProductQuickAccess> ProductQuickAccess { get; set; }

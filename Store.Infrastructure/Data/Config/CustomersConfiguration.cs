@@ -11,6 +11,12 @@ namespace Store.Infrastructure.Data.Config
             builder.Property(x => x.Id).IsRequired();
             builder.Property(x => x.CustomerName).HasMaxLength(75);
             builder.Property(x => x.PhoneNumber).HasMaxLength(30);
+            builder.Property(p => p.TotalDebts).HasColumnType("decimal(18,2)");
+            builder.Property(p => p.MaxDebtAllowed).HasColumnType("decimal(18,2)");
+
+
+
+
             builder.HasData(
                 new Customer { Id = 1, CustomerName = "قربوز علاء", Address = "بن سمارة", PhoneNumber = "0697357397", Notes = "معلومات مشحونة", MaxDebtAllowed = 0, TotalDebts = 0 },
                 new Customer { Id = 2, CustomerName = "بن خليفة", Address = "مرماد", PhoneNumber = "0754653721", Notes = "معلومات مشحونة", MaxDebtAllowed = 0, TotalDebts = 0 },
@@ -29,6 +35,9 @@ namespace Store.Infrastructure.Data.Config
             builder.HasOne(x => x.Customer).WithMany().HasForeignKey(x => x.Cust_ID);
             builder.HasOne(x => x.Sale).WithMany().HasForeignKey(x => x.Order_ID).OnDelete(DeleteBehavior.Cascade);
 
+            builder.Property(p => p.Price).HasColumnType("decimal(18,2)");
+
+
         }
     }
     public class CustomerReportConfiguration : IEntityTypeConfiguration<CustomerReport>
@@ -39,6 +48,7 @@ namespace Store.Infrastructure.Data.Config
             builder.Property(x => x.Cust_Name).HasMaxLength(75);
             builder.HasOne(x => x.Customer).WithMany().HasForeignKey(x => x.Cust_ID);
             builder.HasOne(x => x.Sale).WithMany().HasForeignKey(x => x.Order_ID).OnDelete(DeleteBehavior.Cascade);
+            builder.Property(p => p.Price).HasColumnType("decimal(18,2)");
 
 
         }

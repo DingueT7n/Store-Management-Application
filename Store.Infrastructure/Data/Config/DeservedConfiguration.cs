@@ -11,6 +11,8 @@ namespace Store.Infrastructure.Data.Config
             builder.Property(x => x.Id);
             builder.HasKey(x => x.Id);
             builder.HasOne(bd => bd.DeservedType).WithMany().HasForeignKey(x => x.TypeId);
+            builder.Property(p => p.Price).HasColumnType("decimal(18,2)");
+
 
         }
     }
@@ -30,6 +32,12 @@ namespace Store.Infrastructure.Data.Config
         {
             builder.Property(x => x.Id);
             builder.HasKey(x => x.Id);
+            builder.Property(p => p.TotalAfterTax).HasColumnType("decimal(18,2)");
+            builder.Property(p => p.TotalOrder).HasColumnType("decimal(18,2)");
+            builder.Property(p => p.TotalTax).HasColumnType("decimal(18,2)");
+
+
+
         }
     }
 

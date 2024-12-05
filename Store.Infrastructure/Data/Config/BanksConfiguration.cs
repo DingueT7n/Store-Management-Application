@@ -9,6 +9,8 @@ namespace Store.Infrastructure.Data.Config
         public void Configure(EntityTypeBuilder<Bank> builder)
         {
             builder.HasKey(b => b.Id);
+            builder.Property(p => p.Money).HasColumnType("decimal(18,2)");
+
             builder.HasData(
                new Bank { Id = 1, Money = 0 });
         }
@@ -19,6 +21,8 @@ namespace Store.Infrastructure.Data.Config
         public void Configure(EntityTypeBuilder<BankDeposit> builder)
         {
             builder.HasKey(bd => bd.Id);
+            builder.Property(p => p.Money).HasColumnType("decimal(18,2)");
+
             builder.Property(x => x.Id).IsRequired();
 
 
@@ -29,6 +33,8 @@ namespace Store.Infrastructure.Data.Config
         public void Configure(EntityTypeBuilder<BankWithdraw> builder)
         {
             builder.HasKey(bd => bd.Id);
+            builder.Property(p => p.Money).HasColumnType("decimal(18,2)");
+
             builder.Property(x => x.Id).IsRequired();
 
 

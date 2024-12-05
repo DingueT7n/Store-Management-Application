@@ -27,7 +27,6 @@
         public string CodeBar { get; set; }
         public string ProductName { get; set; }
         public byte[] ProductImage { get; set; }
-
         public virtual Product Product { get; set; }
     }
     public class ProductDiscount : BaseEntity<int>
