@@ -12,6 +12,22 @@
         public virtual Product Product { get; set; }
         public virtual Stores.Store Store { get; set; }
     }
+    public class ProductQtyDto
+    {
+        public int Pro_ID { get; set; }
+        public string ProductName { get; set; }
+        public string StoreName { get; set; }
+        public decimal Qty { get; set; }
+        public decimal Buy_Price { get; set; }
+        public decimal Sale_PriceTax { get; set; }
+        public DateTime DateExpiration { get; set; }
+        public string BarCode { get; set; }
+    }
+    public class ResultProductQtyDto
+    {
+        public List<ProductQtyDto> result;
+        public int count;
+    }
 
 
 

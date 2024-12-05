@@ -19,6 +19,7 @@ namespace Store.ApplicationUI
                 Properties.Settings.Default.DecimalSEP = numberFormat.NumberDecimalSeparator;
                 Properties.Settings.Default.Save();
             }
+
             Application.Run(new MainForm());
         }
     }

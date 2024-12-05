@@ -191,7 +191,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui.ReturnsReportsGui
                         }
                     }
                 }
-                DgvSales.Rows.Clear();
+                DgvSales.DataSource = null;
             }
             catch (Exception)
             {

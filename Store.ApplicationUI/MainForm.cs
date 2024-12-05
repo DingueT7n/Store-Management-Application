@@ -158,7 +158,7 @@ namespace Store.ApplicationUI
         private void button2_Click(object sender, EventArgs e)
         {
 
-            AddProductForm addProductForm = new AddProductForm(this);
+            AddProductForm addProductForm = AddProductForm.Instance(this);
 
             addProductForm.Show();
         }
@@ -338,6 +338,24 @@ namespace Store.ApplicationUI
         {
             pageHelper.SetNewPage(Gui.ReturnsGui.ReturnsReportsGui.ReturnsReportsUserControl.Instance(this));
 
+        }
+
+        private void button17_Click(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.ProductsGui.StoreGui.StoreInventoryGui.StoreInventoryUserControl.Instance(this));
+
+        }
+
+        private void button18_Click(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.ProductsGui.StoreGui.StoreTrensfertReportGui.StoreTransfertReportUserControl.Instance(this));
+
+        }
+
+        private void button19_Click(object sender, EventArgs e)
+        {
+
+            pageHelper.SetNewPage(Gui.ProductsGui.StoreGui.StoreDamagedProductReportGui.StoreDamagedProductUserControl.Instance(this));
         }
     }
 }

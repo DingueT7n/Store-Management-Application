@@ -22,6 +22,18 @@
                   "بيانات مكررة"
                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+        public static void ShowSameDirectionTransfert()
+        {
+            MessageBox.Show("لا يمكن التحويل الى نفس المخزن. تأكد من تغيير بعض بيانات ثم اعدة المحاولة ",
+                  "بيانات غير متوافقة"
+                  , MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        public static void ShowInvalidQuentityTotransfert()
+        {
+            MessageBox.Show("لا يمكن التحويل لأن الكمية المحولة اكبر من الموجودة. تأكد من تغيير بعض بيانات ثم اعدة المحاولة ",
+                  "بيانات غير متوافقة"
+                  , MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
 
         public static void ShowDuplicatedItemsAndInformTeCaiser()
         {

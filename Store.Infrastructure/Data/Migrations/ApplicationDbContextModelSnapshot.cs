@@ -918,9 +918,6 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<decimal>("PriceTax")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<int>("Pro_ID")
                         .HasColumnType("int");
 
@@ -936,9 +933,6 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<decimal>("SalePrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("SalePriceTax")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("StoreFrom")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -946,9 +940,6 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<string>("StoreTo")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<decimal>("TaxValue")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 

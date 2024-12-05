@@ -12,13 +12,13 @@
         public string Date { get; set; }
         public string Name { get; set; }
         public string Reason { get; set; }
-        public decimal TaxValue { get; set; }
-        public decimal PriceTax { get; set; }
-        public decimal SalePriceTax { get; set; }
+
+
 
 
         public virtual Product Product { get; set; }
     }
+
 
 
 }
