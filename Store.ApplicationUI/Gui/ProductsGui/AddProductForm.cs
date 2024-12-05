@@ -12,10 +12,10 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 {
     public partial class AddProductForm : Form
     {
-        private static MainForm _main;
+        private static MainForm? _main;
         private ApplicationDbContext _context;
         private ProductsRepository? productsRepository;
-        private static AddProductForm _addProductForm;
+        private static AddProductForm? _addProductForm;
         private CategorysRepository? categoryRepository;
         public AddProductForm(MainForm main)
         {
@@ -42,6 +42,21 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         public static AddProductForm Instance(MainForm main)
         {
+            if (_addProductForm == null || _addProductForm.IsDisposed)
+            {
+                _addProductForm = new AddProductForm(main);
+            }
+            else
+            {
+                // Bring the form to the front if it exists.
+                if (!_addProductForm.Visible)
+                {
+                    _addProductForm.Show();
+                }
+                _addProductForm.BringToFront();
+            }
+
+            return _addProductForm;
             _main = main;
             // If the instance is null, create a new one and assign it to the static field
 

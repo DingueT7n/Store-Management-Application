@@ -97,15 +97,10 @@ namespace Store.ApplicationUI.Gui.SupplierGui
 
         private void btnAddSupplier_Click(object sender, EventArgs e)
         {
-            if (addSupplierrForm == null || addSupplierrForm.IsDisposed)
-            {
-                addSupplierrForm = new AddSupplierForm(_main);
-                addSupplierrForm.Show();
-            }
-            else
-            {
-                addSupplierrForm.Focus();
-            }
+
+            addSupplierrForm = AddSupplierForm.Instance(_main);
+            addSupplierrForm.Show();
+
         }
 
         private void btnEditSupplier_Click(object sender, EventArgs e)
@@ -114,7 +109,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui
             {
                 if (addSupplierrForm == null || addSupplierrForm.IsDisposed)
                 {
-                    addSupplierrForm = new AddSupplierForm(_main);
+                    addSupplierrForm = AddSupplierForm.Instance(_main);
                     addSupplierrForm.SetDataToEdit(
                         DgvِSupplier.CurrentRow.Cells[0].Value.ToString(),
                         DgvِSupplier.CurrentRow.Cells[1].Value.ToString(),

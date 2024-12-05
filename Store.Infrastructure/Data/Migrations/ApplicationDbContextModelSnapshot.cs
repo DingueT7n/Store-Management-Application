@@ -659,6 +659,9 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<string>("National_ID")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("Salary")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");

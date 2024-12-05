@@ -103,15 +103,10 @@ namespace Store.ApplicationUI.Gui.CustomersGui
 
         private void btnAddCustomer_Click(object sender, EventArgs e)
         {
-            if (addCustomerForm == null || addCustomerForm.IsDisposed)
-            {
-                addCustomerForm = new AddCustomerForm(_main);
-                addCustomerForm.Show();
-            }
-            else
-            {
-                addCustomerForm.Focus();
-            }
+
+            addCustomerForm = AddCustomerForm.Instance(_main);
+            addCustomerForm.Show();
+
         }
 
         private void btnEditCustomer_Click(object sender, EventArgs e)
@@ -120,7 +115,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui
             {
                 if (addCustomerForm == null || addCustomerForm.IsDisposed)
                 {
-                    addCustomerForm = new AddCustomerForm(_main);
+                    addCustomerForm = AddCustomerForm.Instance(_main);
 
 
                     addCustomerForm.SetDataToEdit(
@@ -148,7 +143,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui
                 {
                     var customer = customersRepository.DeleteAsync(DgvِCustomer.CurrentRow.Cells[6].Value.ToString());
 
-                    _context.SaveChanges();
+
                 }
                 RefreshDgv();
             }

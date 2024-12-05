@@ -12,6 +12,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         private readonly MainForm _main;
         private ApplicationDbContext _context;
         private SuppliersRepository? _suppliersRepository;
+        private static AddSupplierForm? _addSupplierForm;
 
         public AddSupplierForm(MainForm main)
         {
@@ -25,7 +26,25 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             LoadData();
 
         }
+        public static AddSupplierForm Instance(MainForm main)
+        {
+            // If the instance is null or has been disposed, create a new one.
+            if (_addSupplierForm == null || _addSupplierForm.IsDisposed)
+            {
+                _addSupplierForm = new AddSupplierForm(main);
+            }
+            else
+            {
+                // Bring the form to the front if it exists.
+                if (!_addSupplierForm.Visible)
+                {
+                    _addSupplierForm.Show();
+                }
+                _addSupplierForm.BringToFront();
+            }
 
+            return _addSupplierForm;
+        }
         public async void LoadData()
         {
 

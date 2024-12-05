@@ -10,6 +10,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
         private ApplicationDbContext _context;
         private static MainForm _main;
 
+        private static CaisseDetailsForm? _caisseDetailsForm;
+
         public CaisseDetailsForm(MainForm main)
         {
             _context = new ApplicationDbContext();
@@ -18,7 +20,35 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
             this.Owner = main;
             LoadData();
         }
+        public static CaisseDetailsForm Instance(MainForm main)
+        {
+            if (_caisseDetailsForm == null || _caisseDetailsForm.IsDisposed)
+            {
+                _caisseDetailsForm = new CaisseDetailsForm(main);
+            }
+            else
+            {
+                // Bring the form to the front if it exists.
+                if (!_caisseDetailsForm.Visible)
+                {
+                    _caisseDetailsForm.Show();
+                }
+                _caisseDetailsForm.BringToFront();
+            }
 
+            return _caisseDetailsForm;
+            _main = main;
+            // If the instance is null, create a new one and assign it to the static field
+
+
+            _caisseDetailsForm = new CaisseDetailsForm(_main);
+
+
+
+            // Return the singleton instance
+
+            return _caisseDetailsForm;
+        }
         public void SetCategoryToDgv()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));

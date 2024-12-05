@@ -75,8 +75,13 @@
             flowLayoutPaneReturns = new FlowLayoutPanel();
             button15 = new Button();
             button16 = new Button();
+            btnEmployeerPanel = new Button();
+            flowLayoutPanelEmployees = new FlowLayoutPanel();
+            btnAllEmployees = new Button();
+            btnNewEmployee = new Button();
             ContainerPanel = new Panel();
             animationTimer = new System.Windows.Forms.Timer(components);
+            button20 = new Button();
             flowLayoutPanelNavBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ProductsflowLayoutPanel.SuspendLayout();
@@ -86,6 +91,7 @@
             SalesflowLayoutPanel.SuspendLayout();
             DeservedflowLayoutPanel.SuspendLayout();
             flowLayoutPaneReturns.SuspendLayout();
+            flowLayoutPanelEmployees.SuspendLayout();
             SuspendLayout();
             // 
             // flowLayoutPanelNavBar
@@ -111,6 +117,8 @@
             flowLayoutPanelNavBar.Controls.Add(DeservedflowLayoutPanel);
             flowLayoutPanelNavBar.Controls.Add(button14);
             flowLayoutPanelNavBar.Controls.Add(flowLayoutPaneReturns);
+            flowLayoutPanelNavBar.Controls.Add(btnEmployeerPanel);
+            flowLayoutPanelNavBar.Controls.Add(flowLayoutPanelEmployees);
             flowLayoutPanelNavBar.Dock = DockStyle.Left;
             flowLayoutPanelNavBar.Location = new Point(0, 0);
             flowLayoutPanelNavBar.Name = "flowLayoutPanelNavBar";
@@ -691,6 +699,58 @@
             button16.UseVisualStyleBackColor = true;
             button16.Click += button16_Click;
             // 
+            // btnEmployeerPanel
+            // 
+            btnEmployeerPanel.FlatAppearance.BorderSize = 4;
+            btnEmployeerPanel.Image = Properties.Resources.Open_Box;
+            btnEmployeerPanel.ImageAlign = ContentAlignment.MiddleLeft;
+            btnEmployeerPanel.Location = new Point(6, 1873);
+            btnEmployeerPanel.Margin = new Padding(4, 5, 4, 5);
+            btnEmployeerPanel.Name = "btnEmployeerPanel";
+            btnEmployeerPanel.Size = new Size(204, 37);
+            btnEmployeerPanel.TabIndex = 19;
+            btnEmployeerPanel.Text = "شؤون الموظفين";
+            btnEmployeerPanel.UseVisualStyleBackColor = true;
+            btnEmployeerPanel.Click += btnEmployeerPanel_Click;
+            // 
+            // flowLayoutPanelEmployees
+            // 
+            flowLayoutPanelEmployees.Controls.Add(btnAllEmployees);
+            flowLayoutPanelEmployees.Controls.Add(btnNewEmployee);
+            flowLayoutPanelEmployees.Controls.Add(button20);
+            flowLayoutPanelEmployees.Location = new Point(24, 1918);
+            flowLayoutPanelEmployees.MaximumSize = new Size(209, 143);
+            flowLayoutPanelEmployees.Name = "flowLayoutPanelEmployees";
+            flowLayoutPanelEmployees.Size = new Size(187, 143);
+            flowLayoutPanelEmployees.TabIndex = 20;
+            flowLayoutPanelEmployees.Visible = false;
+            // 
+            // btnAllEmployees
+            // 
+            btnAllEmployees.Image = Properties.Resources.Open_Box;
+            btnAllEmployees.ImageAlign = ContentAlignment.MiddleLeft;
+            btnAllEmployees.Location = new Point(0, 5);
+            btnAllEmployees.Margin = new Padding(4, 5, 4, 5);
+            btnAllEmployees.Name = "btnAllEmployees";
+            btnAllEmployees.Size = new Size(183, 37);
+            btnAllEmployees.TabIndex = 2;
+            btnAllEmployees.Text = "جميع الموطفين";
+            btnAllEmployees.UseVisualStyleBackColor = true;
+            btnAllEmployees.Click += btnAllEmployees_Click;
+            // 
+            // btnNewEmployee
+            // 
+            btnNewEmployee.Image = Properties.Resources.Open_Box;
+            btnNewEmployee.ImageAlign = ContentAlignment.MiddleLeft;
+            btnNewEmployee.Location = new Point(0, 52);
+            btnNewEmployee.Margin = new Padding(4, 5, 4, 5);
+            btnNewEmployee.Name = "btnNewEmployee";
+            btnNewEmployee.Size = new Size(183, 37);
+            btnNewEmployee.TabIndex = 3;
+            btnNewEmployee.Text = "موظف جديد";
+            btnNewEmployee.UseVisualStyleBackColor = true;
+            btnNewEmployee.Click += btnNewEmployee_Click;
+            // 
             // ContainerPanel
             // 
             ContainerPanel.BackColor = Color.White;
@@ -706,6 +766,19 @@
             animationTimer.Enabled = true;
             animationTimer.Interval = 15;
             animationTimer.Tick += animationTimer_Tick;
+            // 
+            // button20
+            // 
+            button20.Image = Properties.Resources.Open_Box;
+            button20.ImageAlign = ContentAlignment.MiddleLeft;
+            button20.Location = new Point(0, 99);
+            button20.Margin = new Padding(4, 5, 4, 5);
+            button20.Name = "button20";
+            button20.Size = new Size(183, 37);
+            button20.TabIndex = 4;
+            button20.Text = "المسحوبات من الموظف";
+            button20.TextAlign = ContentAlignment.MiddleRight;
+            button20.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -733,6 +806,7 @@
             SalesflowLayoutPanel.ResumeLayout(false);
             DeservedflowLayoutPanel.ResumeLayout(false);
             flowLayoutPaneReturns.ResumeLayout(false);
+            flowLayoutPanelEmployees.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -785,5 +859,10 @@
         private Button button17;
         private Button button18;
         private Button button19;
+        private Button btnEmployeerPanel;
+        private FlowLayoutPanel flowLayoutPanelEmployees;
+        private Button btnAllEmployees;
+        private Button btnNewEmployee;
+        private Button button20;
     }
 }

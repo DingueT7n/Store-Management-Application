@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.CaisseAndBankGui;
+using Store.ApplicationUI.Gui.EmployeesGui;
 using Store.ApplicationUI.Gui.ProductsGui;
 using Store.ApplicationUI.Gui.ProductsGui.Category;
 using Store.ApplicationUI.Gui.ProductsGui.StoreGui;
@@ -184,7 +185,7 @@ namespace Store.ApplicationUI
 
         private void button3_Click_1(object sender, EventArgs e)
         {
-            AddCustomerForm addProductForm = new AddCustomerForm(this);
+            AddCustomerForm addProductForm = AddCustomerForm.Instance(this);
 
             addProductForm.Show();
         }
@@ -292,7 +293,7 @@ namespace Store.ApplicationUI
 
         private void button6_Click(object sender, EventArgs e)
         {
-            CaisseDetailsForm caisseDetailsForm = new(this);
+            CaisseDetailsForm caisseDetailsForm = CaisseDetailsForm.Instance(this);
             caisseDetailsForm.Show();
         }
 
@@ -356,6 +357,27 @@ namespace Store.ApplicationUI
         {
 
             pageHelper.SetNewPage(Gui.ProductsGui.StoreGui.StoreDamagedProductReportGui.StoreDamagedProductUserControl.Instance(this));
+        }
+
+        private void btnEmployeerPanel_Click(object sender, EventArgs e)
+        {
+            CloseSubPanels();
+
+            ShowSubPanel(flowLayoutPanelEmployees);
+
+        }
+
+        private void btnAllEmployees_Click(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.EmployeesGui.EmployeeUserControl.Instance(this));
+
+        }
+
+        private void btnNewEmployee_Click(object sender, EventArgs e)
+        {
+            AddEmployeeForm addProductForm = AddEmployeeForm.Instance(this);
+
+            addProductForm.Show();
         }
     }
 }

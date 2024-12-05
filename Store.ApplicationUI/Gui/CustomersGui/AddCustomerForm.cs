@@ -11,6 +11,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
     {
         private readonly MainForm _main;
         private CustomersRepository? _customersRepository;
+        private static AddCustomerForm? _addCustomerForm;
 
         public AddCustomerForm(MainForm main)
         {
@@ -22,7 +23,25 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             LoadData();
 
         }
+        public static AddCustomerForm Instance(MainForm main)
+        {
+            // If the instance is null or has been disposed, create a new one.
+            if (_addCustomerForm == null || _addCustomerForm.IsDisposed)
+            {
+                _addCustomerForm = new AddCustomerForm(main);
+            }
+            else
+            {
+                // Bring the form to the front if it exists.
+                if (!_addCustomerForm.Visible)
+                {
+                    _addCustomerForm.Show();
+                }
+                _addCustomerForm.BringToFront();
+            }
 
+            return _addCustomerForm;
+        }
         public async void LoadData()
         {
 
@@ -55,72 +74,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             txtNotes.Text = "";
 
         }
-
-        private void txtBarCode_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void txtMinQty_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
-            {
-                e.Handled = true;
-            }
-        }
-
         private void txtTaxValue_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void txtBuyPrice_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void txtTotalQty_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void txtWholeSalePrice_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void txtSalePrice_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void txtDiscountAllowed_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void txtSaleAfterTax_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
             {
