@@ -299,6 +299,11 @@
             Controls.Add(OperationsflowLayoutPanel);
             Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(3, 4, 3, 4);
+            MaximizeBox = false;
+            MaximumSize = new Size(723, 323);
+            MdiChildrenMinimizedAnchorBottom = false;
+            MinimizeBox = false;
+            MinimumSize = new Size(723, 323);
             Name = "AddEmployeeForm";
             RightToLeft = RightToLeft.Yes;
             RightToLeftLayout = true;

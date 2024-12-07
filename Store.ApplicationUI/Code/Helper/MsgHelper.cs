@@ -22,6 +22,20 @@
                   "بيانات مكررة"
                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+        public static bool ShowSalaryMinusIsNegative(string EmployeeName, string Salary)
+        {
+            var result = MessageBox.Show($"مرتب السيد {EmployeeName} لهذا الشهر {Salary} اذا اردت الاكمل اضغظ على القبول",
+                   "تنبيه بيانات غير مسبوقة"
+                           , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public static void ShowSameDirectionTransfert()
         {
             MessageBox.Show("لا يمكن التحويل الى نفس المخزن. تأكد من تغيير بعض بيانات ثم اعدة المحاولة ",
@@ -31,6 +45,12 @@
         public static void ShowInvalidQuentityTotransfert()
         {
             MessageBox.Show("لا يمكن التحويل لأن الكمية المحولة اكبر من الموجودة. تأكد من تغيير بعض بيانات ثم اعدة المحاولة ",
+                  "بيانات غير متوافقة"
+                  , MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        public static void ShowInvalidMoneyTrasfert()
+        {
+            MessageBox.Show("لا يمكن التحويل لأن القيمة المحولة اكبر من الموجودة. تأكد من تغيير بعض بيانات ثم اعدة المحاولة ",
                   "بيانات غير متوافقة"
                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
         }

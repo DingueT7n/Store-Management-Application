@@ -79,9 +79,14 @@
             flowLayoutPanelEmployees = new FlowLayoutPanel();
             btnAllEmployees = new Button();
             btnNewEmployee = new Button();
+            button20 = new Button();
+            button21 = new Button();
+            button22 = new Button();
+            button23 = new Button();
+            button24 = new Button();
             ContainerPanel = new Panel();
             animationTimer = new System.Windows.Forms.Timer(components);
-            button20 = new Button();
+            button25 = new Button();
             flowLayoutPanelNavBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ProductsflowLayoutPanel.SuspendLayout();
@@ -718,10 +723,15 @@
             flowLayoutPanelEmployees.Controls.Add(btnAllEmployees);
             flowLayoutPanelEmployees.Controls.Add(btnNewEmployee);
             flowLayoutPanelEmployees.Controls.Add(button20);
+            flowLayoutPanelEmployees.Controls.Add(button21);
+            flowLayoutPanelEmployees.Controls.Add(button22);
+            flowLayoutPanelEmployees.Controls.Add(button23);
+            flowLayoutPanelEmployees.Controls.Add(button24);
+            flowLayoutPanelEmployees.Controls.Add(button25);
             flowLayoutPanelEmployees.Location = new Point(24, 1918);
-            flowLayoutPanelEmployees.MaximumSize = new Size(209, 143);
+            flowLayoutPanelEmployees.MaximumSize = new Size(187, 371);
             flowLayoutPanelEmployees.Name = "flowLayoutPanelEmployees";
-            flowLayoutPanelEmployees.Size = new Size(187, 143);
+            flowLayoutPanelEmployees.Size = new Size(187, 371);
             flowLayoutPanelEmployees.TabIndex = 20;
             flowLayoutPanelEmployees.Visible = false;
             // 
@@ -751,6 +761,74 @@
             btnNewEmployee.UseVisualStyleBackColor = true;
             btnNewEmployee.Click += btnNewEmployee_Click;
             // 
+            // button20
+            // 
+            button20.Image = Properties.Resources.Open_Box;
+            button20.ImageAlign = ContentAlignment.MiddleLeft;
+            button20.Location = new Point(0, 99);
+            button20.Margin = new Padding(4, 5, 4, 5);
+            button20.Name = "button20";
+            button20.Size = new Size(183, 37);
+            button20.TabIndex = 4;
+            button20.Text = "المسحوبات من الموظف";
+            button20.TextAlign = ContentAlignment.MiddleRight;
+            button20.UseVisualStyleBackColor = true;
+            button20.Click += button20_Click;
+            // 
+            // button21
+            // 
+            button21.Image = Properties.Resources.Open_Box;
+            button21.ImageAlign = ContentAlignment.MiddleLeft;
+            button21.Location = new Point(0, 146);
+            button21.Margin = new Padding(4, 5, 4, 5);
+            button21.Name = "button21";
+            button21.Size = new Size(183, 37);
+            button21.TabIndex = 5;
+            button21.Text = "سلفيات الاموال";
+            button21.UseVisualStyleBackColor = true;
+            button21.Click += button21_Click;
+            // 
+            // button22
+            // 
+            button22.Image = Properties.Resources.Open_Box;
+            button22.ImageAlign = ContentAlignment.MiddleLeft;
+            button22.Location = new Point(0, 193);
+            button22.Margin = new Padding(4, 5, 4, 5);
+            button22.Name = "button22";
+            button22.Size = new Size(183, 37);
+            button22.TabIndex = 6;
+            button22.Text = "صرف مرتبات الموظفين";
+            button22.TextAlign = ContentAlignment.MiddleRight;
+            button22.UseVisualStyleBackColor = true;
+            button22.Click += button22_Click;
+            // 
+            // button23
+            // 
+            button23.Image = Properties.Resources.Open_Box;
+            button23.ImageAlign = ContentAlignment.MiddleLeft;
+            button23.Location = new Point(0, 240);
+            button23.Margin = new Padding(4, 5, 4, 5);
+            button23.Name = "button23";
+            button23.Size = new Size(183, 37);
+            button23.TabIndex = 7;
+            button23.Text = "تقرير مسحوبات الموظفين";
+            button23.TextAlign = ContentAlignment.MiddleRight;
+            button23.UseVisualStyleBackColor = true;
+            button23.Click += button23_Click;
+            // 
+            // button24
+            // 
+            button24.Image = Properties.Resources.Open_Box;
+            button24.ImageAlign = ContentAlignment.MiddleLeft;
+            button24.Location = new Point(0, 287);
+            button24.Margin = new Padding(4, 5, 4, 5);
+            button24.Name = "button24";
+            button24.Size = new Size(183, 37);
+            button24.TabIndex = 8;
+            button24.Text = "تقرير السلفيات";
+            button24.UseVisualStyleBackColor = true;
+            button24.Click += button24_Click;
+            // 
             // ContainerPanel
             // 
             ContainerPanel.BackColor = Color.White;
@@ -767,18 +845,19 @@
             animationTimer.Interval = 15;
             animationTimer.Tick += animationTimer_Tick;
             // 
-            // button20
+            // button25
             // 
-            button20.Image = Properties.Resources.Open_Box;
-            button20.ImageAlign = ContentAlignment.MiddleLeft;
-            button20.Location = new Point(0, 99);
-            button20.Margin = new Padding(4, 5, 4, 5);
-            button20.Name = "button20";
-            button20.Size = new Size(183, 37);
-            button20.TabIndex = 4;
-            button20.Text = "المسحوبات من الموظف";
-            button20.TextAlign = ContentAlignment.MiddleRight;
-            button20.UseVisualStyleBackColor = true;
+            button25.Image = Properties.Resources.Open_Box;
+            button25.ImageAlign = ContentAlignment.MiddleLeft;
+            button25.Location = new Point(0, 334);
+            button25.Margin = new Padding(4, 5, 4, 5);
+            button25.Name = "button25";
+            button25.Size = new Size(183, 37);
+            button25.TabIndex = 9;
+            button25.Text = "تقرير تصريفات الرواتب";
+            button25.TextAlign = ContentAlignment.MiddleRight;
+            button25.UseVisualStyleBackColor = true;
+            button25.Click += button25_Click;
             // 
             // MainForm
             // 
@@ -864,5 +943,10 @@
         private Button btnAllEmployees;
         private Button btnNewEmployee;
         private Button button20;
+        private Button button21;
+        private Button button22;
+        private Button button23;
+        private Button button24;
+        private Button button25;
     }
 }

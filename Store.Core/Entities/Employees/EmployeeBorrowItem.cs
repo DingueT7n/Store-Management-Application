@@ -6,6 +6,7 @@ namespace Store.Core.Entities.Employees
     {
 
         public int Item_Id { get; set; }
+        public string ProductName { get; set; }
         public int Emp_Id { get; set; }
         public DateTime Date { get; set; }
         public string Time { get; set; }

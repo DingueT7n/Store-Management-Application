@@ -688,6 +688,9 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<int>("Item_Id")
                         .HasColumnType("int");
 
+                    b.Property<string>("ProductName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("Quentity")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
@@ -721,7 +724,7 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<DateTime>("DateReminder")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Emp_Id")
+                    b.Property<int?>("Emp_Id")
                         .HasColumnType("int");
 
                     b.Property<string>("Notes")
@@ -1885,9 +1888,7 @@ namespace Store.Infrastructure.Data.Migrations
                 {
                     b.HasOne("Store.Core.Entities.Employees.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("Emp_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Emp_Id");
 
                     b.Navigation("Employee");
                 });

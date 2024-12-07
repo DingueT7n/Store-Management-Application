@@ -2,6 +2,9 @@ using System.ComponentModel;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.CaisseAndBankGui;
 using Store.ApplicationUI.Gui.EmployeesGui;
+using Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowItemsGui;
+using Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowMoneyGui;
+using Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryGui;
 using Store.ApplicationUI.Gui.ProductsGui;
 using Store.ApplicationUI.Gui.ProductsGui.Category;
 using Store.ApplicationUI.Gui.ProductsGui.StoreGui;
@@ -162,12 +165,14 @@ namespace Store.ApplicationUI
             AddProductForm addProductForm = AddProductForm.Instance(this);
 
             addProductForm.Show();
+            CloseSubPanels();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             AddCategoryForm addCategoryForm = AddCategoryForm.Instance(this); ;
             addCategoryForm.ShowDialog();
+            CloseSubPanels();
 
         }
 
@@ -188,6 +193,7 @@ namespace Store.ApplicationUI
             AddCustomerForm addProductForm = AddCustomerForm.Instance(this);
 
             addProductForm.Show();
+            CloseSubPanels();
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -214,6 +220,7 @@ namespace Store.ApplicationUI
             AddSupplierForm addSupplierForm = new AddSupplierForm(this);
 
             addSupplierForm.Show();
+            CloseSubPanels();
         }
 
         private void btnAllSuppliers_Click(object sender, EventArgs e)
@@ -295,6 +302,7 @@ namespace Store.ApplicationUI
         {
             CaisseDetailsForm caisseDetailsForm = CaisseDetailsForm.Instance(this);
             caisseDetailsForm.Show();
+            CloseSubPanels();
         }
 
         private void button9_Click(object sender, EventArgs e)
@@ -378,6 +386,49 @@ namespace Store.ApplicationUI
             AddEmployeeForm addProductForm = AddEmployeeForm.Instance(this);
 
             addProductForm.Show();
+            CloseSubPanels();
+        }
+
+        private void button20_Click(object sender, EventArgs e)
+        {
+            EmployeeBorrowItemForm addProductForm = EmployeeBorrowItemForm.Instance(this);
+
+            addProductForm.Show();
+        }
+
+        private void button21_Click(object sender, EventArgs e)
+        {
+            EmployeeBorrowMoneyForm addProductForm = EmployeeBorrowMoneyForm.Instance(this);
+
+            addProductForm.Show();
+            CloseSubPanels();
+
+        }
+
+        private void button22_Click(object sender, EventArgs e)
+        {
+            EmployeeSalaryForm addProductForm = EmployeeSalaryForm.Instance(this);
+
+            addProductForm.Show();
+            CloseSubPanels();
+        }
+
+        private void button23_Click(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.EmployeesGui.EmployeeBorrowsItemReport.EmployeeBorrowItemReportUserControl.Instance(this));
+
+        }
+
+        private void button24_Click(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.EmployeesGui.EmployeeBorrowMoneyReport.EmployeeBorrowMoneyReportUserControl.Instance(this));
+
+        }
+
+        private void button25_Click(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.EmployeesGui.EmployeeSalaryReportGui.EmployeeSalaryReportUserControl.Instance(this));
+
         }
     }
 }
