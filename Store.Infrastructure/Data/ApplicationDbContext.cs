@@ -11,6 +11,7 @@ using Store.Core.Entities.Products;
 using Store.Core.Entities.Returns;
 using Store.Core.Entities.Sales;
 using Store.Core.Entities.Suppliers;
+using Store.Core.Entities.Users;
 using Store.Core.Entities.Vouchers;
 
 namespace Store.Infrastructure.Data
@@ -86,22 +87,16 @@ namespace Store.Infrastructure.Data
         public DbSet<CaisseTransfere> CaissesTransferes { get; set; }
         public DbSet<CaisseBankTransfere> CaissesBankTransferes { get; set; }
         public DbSet<sale8cm> sale8cms { get; set; }
-
-
-
-
-
-
-
-
-
-        //public DbSet<UserDeserved> UserDeserved { get; set; }
-        //public DbSet<UserEmp> UserEmp { get; set; }
-        //public DbSet<UserReport> UserReport { get; set; }
-        //public DbSet<UserReturn> UserReturn { get; set; }
-        //public DbSet<UserSale> UserSale { get; set; }
-        //public DbSet<UserSetting> UserSetting { get; set; }
-        //public DbSet<UserStockBank> UserStockBank { get; set; }
-        //public DbSet<UserSupplier> UserSupplier { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserSetting> UserSettings { get; set; }
+        public DbSet<UserCustomer> UserCustomers { get; set; }
+        public DbSet<UserProductAndStore> UserProductsAndStores { get; set; }
+        public DbSet<UserSupplier> UserSuppliers { get; set; }
+        public DbSet<UserBuy> UserBuys { get; set; }
+        public DbSet<UserSale> UserSales { get; set; }
+        public DbSet<UserCaisseAndBank> UserCaissesAndBanks { get; set; }
+        public DbSet<UserDeservedAndTax> UserDeservedAndTaxs { get; set; }
+        public DbSet<UserRefund> UserRefunds { get; set; }
+        public DbSet<UserEmployee> UserEmployees { get; set; }
     }
 }

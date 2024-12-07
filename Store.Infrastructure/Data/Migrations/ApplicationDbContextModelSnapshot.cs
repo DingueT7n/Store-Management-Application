@@ -1673,6 +1673,335 @@ namespace Store.Infrastructure.Data.Migrations
                     b.ToTable("SuppliersReports");
                 });
 
+            modelBuilder.Entity("Store.Core.Entities.Users.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Stock_Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("UserProfit")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Users.UserBuy", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("BuyReports")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("NewBuy")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("User_Id")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("User_Id");
+
+                    b.ToTable("UserBuys");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Users.UserCaisseAndBank", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("CaissesAndBanks")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DepositToBank")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DepositToCaisse")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("TransfertBetweenCaisse")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("TransfertBetweenCaisseAndBank")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("User_Id")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("WithdrawFromBank")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("WithdrawFromCaisse")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("User_Id");
+
+                    b.ToTable("UserCaissesAndBanks");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Users.UserCustomer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("AddCustomer")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AllCustomers")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CustomerAccount")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CustomerReport")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("User_Id")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("User_Id");
+
+                    b.ToTable("UserCustomers");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Users.UserDeservedAndTax", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Deserved")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("User_Id")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Vouchers")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("User_Id");
+
+                    b.ToTable("UserDeservedAndTaxs");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Users.UserEmployee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("AddEmployee")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AllEmployee")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("EmployeeBorrowItem")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("EmployeeBorrowItemsReport")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("EmployeeBorrowMoney")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("EmployeeBorrowMoneyReport")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("EmployeeSalaries")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("EmployeeSalariesReport")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("User_Id")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("User_Id");
+
+                    b.ToTable("UserEmployees");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Users.UserProductAndStore", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("AddProduct")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AllCategories")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AllProducts")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ProductOutStoreReport")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("StoreInventory")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("TransfertReport")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("User_Id")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("User_Id");
+
+                    b.ToTable("UserProductsAndStores");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Users.UserRefund", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("RefundProduct")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RefundReport")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("User_Id")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("User_Id");
+
+                    b.ToTable("UserRefunds");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Users.UserSale", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("NewSale")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("SaleProfits")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("SaleReports")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("User_Id")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("User_Id");
+
+                    b.ToTable("UserSales");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Users.UserSetting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("ApplicationSettings")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("UserPermession")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("User_Id")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("User_Id");
+
+                    b.ToTable("UserSettings");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Users.UserSupplier", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("AddSuppliers")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AllSuppliers")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("SuppliersAccount")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("SuppliersReport")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("User_Id")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("User_Id");
+
+                    b.ToTable("UserSuppliers");
+                });
+
             modelBuilder.Entity("Store.Core.Entities.Vouchers.ReceiptVoucher", b =>
                 {
                     b.Property<int>("Id")
@@ -2101,6 +2430,116 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Navigation("Buy");
 
                     b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Users.UserBuy", b =>
+                {
+                    b.HasOne("Store.Core.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("User_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Users.UserCaisseAndBank", b =>
+                {
+                    b.HasOne("Store.Core.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("User_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Users.UserCustomer", b =>
+                {
+                    b.HasOne("Store.Core.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("User_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Users.UserDeservedAndTax", b =>
+                {
+                    b.HasOne("Store.Core.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("User_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Users.UserEmployee", b =>
+                {
+                    b.HasOne("Store.Core.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("User_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Users.UserProductAndStore", b =>
+                {
+                    b.HasOne("Store.Core.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("User_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Users.UserRefund", b =>
+                {
+                    b.HasOne("Store.Core.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("User_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Users.UserSale", b =>
+                {
+                    b.HasOne("Store.Core.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("User_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Users.UserSetting", b =>
+                {
+                    b.HasOne("Store.Core.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("User_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Users.UserSupplier", b =>
+                {
+                    b.HasOne("Store.Core.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("User_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }
