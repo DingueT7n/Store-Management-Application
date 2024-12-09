@@ -145,18 +145,6 @@ namespace Store.ApplicationUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public byte ImageStore {
-            get {
-                return ((byte)(this["ImageStore"]));
-            }
-            set {
-                this["ImageStore"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("15")]
         public int NoOfDataInDgvs {
             get {
@@ -176,6 +164,186 @@ namespace Store.ApplicationUI.Properties {
             }
             set {
                 this["StoreIdDefault"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LogoPicture {
+            get {
+                return ((string)(this["LogoPicture"]));
+            }
+            set {
+                this["LogoPicture"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PrinterBarCode {
+            get {
+                return ((string)(this["PrinterBarCode"]));
+            }
+            set {
+                this["PrinterBarCode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Printer8cm {
+            get {
+                return ((string)(this["Printer8cm"]));
+            }
+            set {
+                this["Printer8cm"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PrinterA4 {
+            get {
+                return ((string)(this["PrinterA4"]));
+            }
+            set {
+                this["PrinterA4"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AddressStore {
+            get {
+                return ((string)(this["AddressStore"]));
+            }
+            set {
+                this["AddressStore"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("شكرا على زيارتكم الطيبة")]
+        public string SentenceUnderFacture {
+            get {
+                return ((string)(this["SentenceUnderFacture"]));
+            }
+            set {
+                this["SentenceUnderFacture"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FacturePhoneNumber {
+            get {
+                return ((string)(this["FacturePhoneNumber"]));
+            }
+            set {
+                this["FacturePhoneNumber"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool PrintSaleFactureType8cm {
+            get {
+                return ((bool)(this["PrintSaleFactureType8cm"]));
+            }
+            set {
+                this["PrintSaleFactureType8cm"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool PrintBuyFactureType8cm {
+            get {
+                return ((bool)(this["PrintBuyFactureType8cm"]));
+            }
+            set {
+                this["PrintBuyFactureType8cm"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool PrintSaleOnOrOff {
+            get {
+                return ((bool)(this["PrintSaleOnOrOff"]));
+            }
+            set {
+                this["PrintSaleOnOrOff"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool PrintBuyOnOrOff {
+            get {
+                return ((bool)(this["PrintBuyOnOrOff"]));
+            }
+            set {
+                this["PrintBuyOnOrOff"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int NbrCopyOfSaleFacture {
+            get {
+                return ((int)(this["NbrCopyOfSaleFacture"]));
+            }
+            set {
+                this["NbrCopyOfSaleFacture"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int NbrCopyOfBuyFacture {
+            get {
+                return ((int)(this["NbrCopyOfBuyFacture"]));
+            }
+            set {
+                this["NbrCopyOfBuyFacture"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool LogoYesNo {
+            get {
+                return ((bool)(this["LogoYesNo"]));
+            }
+            set {
+                this["LogoYesNo"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ALG-D")]
+        public string StoreNameFacture {
+            get {
+                return ((string)(this["StoreNameFacture"]));
+            }
+            set {
+                this["StoreNameFacture"] = value;
             }
         }
     }

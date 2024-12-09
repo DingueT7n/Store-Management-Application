@@ -5,6 +5,8 @@ using Store.ApplicationUI.Gui.EmployeesGui;
 using Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowItemsGui;
 using Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowMoneyGui;
 using Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryGui;
+using Store.ApplicationUI.Gui.GeneralSettingsGui;
+using Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui;
 using Store.ApplicationUI.Gui.ProductsGui;
 using Store.ApplicationUI.Gui.ProductsGui.Category;
 using Store.ApplicationUI.Gui.ProductsGui.StoreGui;
@@ -429,6 +431,28 @@ namespace Store.ApplicationUI
         {
             pageHelper.SetNewPage(Gui.EmployeesGui.EmployeeSalaryReportGui.EmployeeSalaryReportUserControl.Instance(this));
 
+        }
+
+        private void button27_Click(object sender, EventArgs e)
+        {
+            UserRolesForm userRolesForm = UserRolesForm.Instance(this);
+
+            userRolesForm.Show();
+            CloseSubPanels();
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            CloseSubPanels();
+            ShowSubPanel(flowLayoutPanelSettings);
+        }
+
+        private void btnApplicationSettings_Click(object sender, EventArgs e)
+        {
+            ApplicationSettingsForm ApplicationSettingsForm = ApplicationSettingsForm.Instance(this);
+
+            ApplicationSettingsForm.Show();
+            CloseSubPanels();
         }
     }
 }
