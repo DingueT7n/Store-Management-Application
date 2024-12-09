@@ -255,5 +255,10 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
                 btnSearch_Click(sender, e);
             }
         }
+
+        private void btnExportCustomer_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -67,6 +67,8 @@
             this.NbrArticales = new DevExpress.XtraReports.UI.CalculatedField();
             this.xrLine1 = new DevExpress.XtraReports.UI.XRLine();
             this.ReportFooter = new DevExpress.XtraReports.UI.ReportFooterBand();
+            this.xrLabel20 = new DevExpress.XtraReports.UI.XRLabel();
+            this.lblAddress = new DevExpress.XtraReports.UI.XRLabel();
             this.lblSentenceUnderFacture = new DevExpress.XtraReports.UI.XRLabel();
             this.lblCaisse = new DevExpress.XtraReports.UI.XRLabel();
             this.xrLabel19 = new DevExpress.XtraReports.UI.XRLabel();
@@ -84,8 +86,7 @@
             this.pageInfo1 = new DevExpress.XtraReports.UI.XRPageInfo();
             this.DetailReport = new DevExpress.XtraReports.UI.DetailReportBand();
             this.Detail1 = new DevExpress.XtraReports.UI.DetailBand();
-            this.xrLabel20 = new DevExpress.XtraReports.UI.XRLabel();
-            this.lblAddress = new DevExpress.XtraReports.UI.XRLabel();
+            this.PageHeader = new DevExpress.XtraReports.UI.PageHeaderBand();
             ((System.ComponentModel.ISupportInitialize)(this.xrTable1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xrTable2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
@@ -105,19 +106,9 @@
             // ReportHeader
             // 
             this.ReportHeader.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
-            this.xrLabel8,
-            this.xrLabel7,
-            this.lblPhoneNumber,
-            this.xrLabel6,
-            this.xrLabel5,
-            this.xrLabel4,
-            this.xrLabel3,
-            this.xrLabel2,
-            this.xrLabel1,
-            this.pbLogo,
-            this.lblStoreName});
+            this.pbLogo});
             this.ReportHeader.Dpi = 254F;
-            this.ReportHeader.HeightF = 519.2708F;
+            this.ReportHeader.HeightF = 300F;
             this.ReportHeader.Name = "ReportHeader";
             // 
             // xrLabel8
@@ -125,7 +116,7 @@
             this.xrLabel8.Dpi = 254F;
             this.xrLabel8.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[اسم العميل]")});
-            this.xrLabel8.LocationFloat = new DevExpress.Utils.PointFloat(25.00001F, 308.2091F);
+            this.xrLabel8.LocationFloat = new DevExpress.Utils.PointFloat(17.26203F, 156.7091F);
             this.xrLabel8.Multiline = true;
             this.xrLabel8.Name = "xrLabel8";
             this.xrLabel8.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
@@ -137,7 +128,7 @@
             // xrLabel7
             // 
             this.xrLabel7.Dpi = 254F;
-            this.xrLabel7.LocationFloat = new DevExpress.Utils.PointFloat(534.6877F, 308.2091F);
+            this.xrLabel7.LocationFloat = new DevExpress.Utils.PointFloat(526.9497F, 156.7091F);
             this.xrLabel7.Multiline = true;
             this.xrLabel7.Name = "xrLabel7";
             this.xrLabel7.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
@@ -150,7 +141,7 @@
             // lblPhoneNumber
             // 
             this.lblPhoneNumber.Dpi = 254F;
-            this.lblPhoneNumber.LocationFloat = new DevExpress.Utils.PointFloat(25.00001F, 239.2057F);
+            this.lblPhoneNumber.LocationFloat = new DevExpress.Utils.PointFloat(17.26203F, 87.70573F);
             this.lblPhoneNumber.Multiline = true;
             this.lblPhoneNumber.Name = "lblPhoneNumber";
             this.lblPhoneNumber.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
@@ -162,7 +153,7 @@
             // xrLabel6
             // 
             this.xrLabel6.Dpi = 254F;
-            this.xrLabel6.LocationFloat = new DevExpress.Utils.PointFloat(534.6876F, 239.2057F);
+            this.xrLabel6.LocationFloat = new DevExpress.Utils.PointFloat(526.9496F, 87.70573F);
             this.xrLabel6.Multiline = true;
             this.xrLabel6.Name = "xrLabel6";
             this.xrLabel6.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
@@ -177,7 +168,7 @@
             this.xrLabel5.Dpi = 254F;
             this.xrLabel5.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[Time]")});
-            this.xrLabel5.LocationFloat = new DevExpress.Utils.PointFloat(0F, 467.08F);
+            this.xrLabel5.LocationFloat = new DevExpress.Utils.PointFloat(0F, 315.58F);
             this.xrLabel5.Multiline = true;
             this.xrLabel5.Name = "xrLabel5";
             this.xrLabel5.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
@@ -191,7 +182,7 @@
             this.xrLabel4.Dpi = 254F;
             this.xrLabel4.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[Date]")});
-            this.xrLabel4.LocationFloat = new DevExpress.Utils.PointFloat(180.7707F, 467.08F);
+            this.xrLabel4.LocationFloat = new DevExpress.Utils.PointFloat(180.7707F, 315.5799F);
             this.xrLabel4.Multiline = true;
             this.xrLabel4.Name = "xrLabel4";
             this.xrLabel4.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
@@ -204,7 +195,7 @@
             // xrLabel3
             // 
             this.xrLabel3.Dpi = 254F;
-            this.xrLabel3.LocationFloat = new DevExpress.Utils.PointFloat(534.6877F, 456.4966F);
+            this.xrLabel3.LocationFloat = new DevExpress.Utils.PointFloat(526.9497F, 304.9966F);
             this.xrLabel3.Multiline = true;
             this.xrLabel3.Name = "xrLabel3";
             this.xrLabel3.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
@@ -219,7 +210,7 @@
             this.xrLabel2.Dpi = 254F;
             this.xrLabel2.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[رقم الفاتورة]")});
-            this.xrLabel2.LocationFloat = new DevExpress.Utils.PointFloat(25.00001F, 380.8256F);
+            this.xrLabel2.LocationFloat = new DevExpress.Utils.PointFloat(17.26203F, 229.3256F);
             this.xrLabel2.Multiline = true;
             this.xrLabel2.Name = "xrLabel2";
             this.xrLabel2.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
@@ -231,7 +222,7 @@
             // xrLabel1
             // 
             this.xrLabel1.Dpi = 254F;
-            this.xrLabel1.LocationFloat = new DevExpress.Utils.PointFloat(534.6875F, 380.8256F);
+            this.xrLabel1.LocationFloat = new DevExpress.Utils.PointFloat(526.9495F, 229.3256F);
             this.xrLabel1.Multiline = true;
             this.xrLabel1.Name = "xrLabel1";
             this.xrLabel1.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
@@ -245,15 +236,15 @@
             // 
             this.pbLogo.Dpi = 254F;
             this.pbLogo.ImageSource = new DevExpress.XtraPrinting.Drawing.ImageSource("img", resources.GetString("pbLogo.ImageSource"));
-            this.pbLogo.LocationFloat = new DevExpress.Utils.PointFloat(2.018611E-05F, 0F);
+            this.pbLogo.LocationFloat = new DevExpress.Utils.PointFloat(195.7917F, 0F);
             this.pbLogo.Name = "pbLogo";
-            this.pbLogo.SizeF = new System.Drawing.SizeF(744.9999F, 153.4583F);
+            this.pbLogo.SizeF = new System.Drawing.SizeF(300F, 300F);
             this.pbLogo.Sizing = DevExpress.XtraPrinting.ImageSizeMode.ZoomImage;
             // 
             // lblStoreName
             // 
             this.lblStoreName.Dpi = 254F;
-            this.lblStoreName.LocationFloat = new DevExpress.Utils.PointFloat(180.7707F, 153.4583F);
+            this.lblStoreName.LocationFloat = new DevExpress.Utils.PointFloat(173.0327F, 5.291667F);
             this.lblStoreName.Name = "lblStoreName";
             this.lblStoreName.RightToLeft = DevExpress.XtraReports.UI.RightToLeft.Yes;
             this.lblStoreName.SizeF = new System.Drawing.SizeF(346.6249F, 61.45358F);
@@ -524,6 +515,33 @@
             this.ReportFooter.HeightF = 567.2675F;
             this.ReportFooter.Name = "ReportFooter";
             // 
+            // xrLabel20
+            // 
+            this.xrLabel20.Dpi = 254F;
+            this.xrLabel20.LocationFloat = new DevExpress.Utils.PointFloat(544.116F, 327.3566F);
+            this.xrLabel20.Multiline = true;
+            this.xrLabel20.Name = "xrLabel20";
+            this.xrLabel20.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
+            this.xrLabel20.RightToLeft = DevExpress.XtraReports.UI.RightToLeft.Yes;
+            this.xrLabel20.SizeF = new System.Drawing.SizeF(193.1459F, 58.42001F);
+            this.xrLabel20.StylePriority.UseTextAlignment = false;
+            this.xrLabel20.Text = "عنوان المحل:";
+            this.xrLabel20.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+            this.xrLabel20.Visible = false;
+            // 
+            // lblAddress
+            // 
+            this.lblAddress.Dpi = 254F;
+            this.lblAddress.LocationFloat = new DevExpress.Utils.PointFloat(17.26195F, 327.3566F);
+            this.lblAddress.Multiline = true;
+            this.lblAddress.Name = "lblAddress";
+            this.lblAddress.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
+            this.lblAddress.RightToLeft = DevExpress.XtraReports.UI.RightToLeft.Yes;
+            this.lblAddress.SizeF = new System.Drawing.SizeF(526.8541F, 58.42001F);
+            this.lblAddress.StylePriority.UseTextAlignment = false;
+            this.lblAddress.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
+            this.lblAddress.Visible = false;
+            // 
             // lblSentenceUnderFacture
             // 
             this.lblSentenceUnderFacture.Dpi = 254F;
@@ -540,12 +558,12 @@
             // lblCaisse
             // 
             this.lblCaisse.Dpi = 254F;
-            this.lblCaisse.LocationFloat = new DevExpress.Utils.PointFloat(212.1646F, 268.9367F);
+            this.lblCaisse.LocationFloat = new DevExpress.Utils.PointFloat(17.26203F, 268.9367F);
             this.lblCaisse.Multiline = true;
             this.lblCaisse.Name = "lblCaisse";
             this.lblCaisse.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
             this.lblCaisse.RightToLeft = DevExpress.XtraReports.UI.RightToLeft.Yes;
-            this.lblCaisse.SizeF = new System.Drawing.SizeF(331.9515F, 58.41998F);
+            this.lblCaisse.SizeF = new System.Drawing.SizeF(526.854F, 58.41998F);
             this.lblCaisse.StylePriority.UseTextAlignment = false;
             this.lblCaisse.Text = "الصندوق الاول";
             this.lblCaisse.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
@@ -555,12 +573,12 @@
             this.xrLabel19.Dpi = 254F;
             this.xrLabel19.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[User_Name]")});
-            this.xrLabel19.LocationFloat = new DevExpress.Utils.PointFloat(212.1646F, 210.5166F);
+            this.xrLabel19.LocationFloat = new DevExpress.Utils.PointFloat(17.26203F, 210.5165F);
             this.xrLabel19.Multiline = true;
             this.xrLabel19.Name = "xrLabel19";
             this.xrLabel19.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
             this.xrLabel19.RightToLeft = DevExpress.XtraReports.UI.RightToLeft.Yes;
-            this.xrLabel19.SizeF = new System.Drawing.SizeF(331.9515F, 58.41998F);
+            this.xrLabel19.SizeF = new System.Drawing.SizeF(526.854F, 58.41998F);
             this.xrLabel19.StylePriority.UseTextAlignment = false;
             this.xrLabel19.Text = "xrLabel19";
             this.xrLabel19.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
@@ -616,12 +634,12 @@
             this.xrLabel10.Dpi = 254F;
             this.xrLabel10.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[NbrArticales]")});
-            this.xrLabel10.LocationFloat = new DevExpress.Utils.PointFloat(440.6598F, 5F);
+            this.xrLabel10.LocationFloat = new DevExpress.Utils.PointFloat(427.4306F, 5.000018F);
             this.xrLabel10.Multiline = true;
             this.xrLabel10.Name = "xrLabel10";
             this.xrLabel10.Padding = new DevExpress.XtraPrinting.PaddingInfo(3, 3, 0, 0, 254F);
             this.xrLabel10.RightToLeft = DevExpress.XtraReports.UI.RightToLeft.Yes;
-            this.xrLabel10.SizeF = new System.Drawing.SizeF(115.6877F, 58.42F);
+            this.xrLabel10.SizeF = new System.Drawing.SizeF(128.9168F, 58.41999F);
             this.xrLabel10.StylePriority.UsePadding = false;
             this.xrLabel10.StylePriority.UseTextAlignment = false;
             this.xrLabel10.Text = "xrLabel10";
@@ -737,32 +755,22 @@
             this.Detail1.HierarchyPrintOptions.Indent = 50.8F;
             this.Detail1.Name = "Detail1";
             // 
-            // xrLabel20
+            // PageHeader
             // 
-            this.xrLabel20.Dpi = 254F;
-            this.xrLabel20.LocationFloat = new DevExpress.Utils.PointFloat(544.116F, 327.3566F);
-            this.xrLabel20.Multiline = true;
-            this.xrLabel20.Name = "xrLabel20";
-            this.xrLabel20.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
-            this.xrLabel20.RightToLeft = DevExpress.XtraReports.UI.RightToLeft.Yes;
-            this.xrLabel20.SizeF = new System.Drawing.SizeF(193.1459F, 58.42001F);
-            this.xrLabel20.StylePriority.UseTextAlignment = false;
-            this.xrLabel20.Text = "عنوان المحل:";
-            this.xrLabel20.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
-            this.xrLabel20.Visible = false;
-            // 
-            // lblAddress
-            // 
-            this.lblAddress.Dpi = 254F;
-            this.lblAddress.LocationFloat = new DevExpress.Utils.PointFloat(212.1645F, 327.3566F);
-            this.lblAddress.Multiline = true;
-            this.lblAddress.Name = "lblAddress";
-            this.lblAddress.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
-            this.lblAddress.RightToLeft = DevExpress.XtraReports.UI.RightToLeft.Yes;
-            this.lblAddress.SizeF = new System.Drawing.SizeF(331.9515F, 58.41998F);
-            this.lblAddress.StylePriority.UseTextAlignment = false;
-            this.lblAddress.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
-            this.lblAddress.Visible = false;
+            this.PageHeader.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
+            this.xrLabel8,
+            this.xrLabel7,
+            this.lblPhoneNumber,
+            this.lblStoreName,
+            this.xrLabel5,
+            this.xrLabel4,
+            this.xrLabel3,
+            this.xrLabel2,
+            this.xrLabel1,
+            this.xrLabel6});
+            this.PageHeader.Dpi = 254F;
+            this.PageHeader.HeightF = 364.1042F;
+            this.PageHeader.Name = "PageHeader";
             // 
             // sale8cm
             // 
@@ -773,7 +781,8 @@
             this.GroupHeader1,
             this.Detail,
             this.ReportFooter,
-            this.DetailReport});
+            this.DetailReport,
+            this.PageHeader});
             this.CalculatedFields.AddRange(new DevExpress.XtraReports.UI.CalculatedField[] {
             this.NbrArticales});
             this.ComponentStorage.AddRange(new System.ComponentModel.IComponent[] {
@@ -858,5 +867,6 @@
         public DevExpress.XtraReports.UI.XRLabel lblPhoneNumber;
         private DevExpress.XtraReports.UI.XRLabel xrLabel20;
         public DevExpress.XtraReports.UI.XRLabel lblAddress;
+        private DevExpress.XtraReports.UI.PageHeaderBand PageHeader;
     }
 }

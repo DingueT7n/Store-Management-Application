@@ -31,6 +31,8 @@ namespace Store.ApplicationUI.Reports
                 xrLabel20.Visible = true;
             }
             pbLogo.Visible = Properties.Settings.Default.LogoYesNo;
+            ReportHeader.Visible = Properties.Settings.Default.LogoYesNo;
+
             if (Properties.Settings.Default.LogoYesNo)
             {
                 LoadImageFromBase64();
