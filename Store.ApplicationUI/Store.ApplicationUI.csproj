@@ -62,8 +62,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Reports\BuysReports\" />
-  </ItemGroup>
-
 </Project>

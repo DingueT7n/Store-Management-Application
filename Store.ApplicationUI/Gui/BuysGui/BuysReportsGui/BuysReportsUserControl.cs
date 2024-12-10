@@ -1,4 +1,5 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using System.Data;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Buys;
 using Store.Infrastructure.Data;
@@ -238,6 +239,26 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
             {
 
                 btnSearch_Click(sender, e);
+            }
+        }
+
+        private async void btnExportCustomer_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (DgvBuys.SelectedRows.Count > 0)
+                {
+                    DataTable buyDetailsTable = await FactureHelper.GetBuyDetailsDataTableAsync(Convert.ToInt32(DgvBuys.CurrentRow.Cells[0].Value.ToString()));
+                    Reports.BuysReports.buy8cm buy8cm = new();
+                    buy8cm.DataSource = buyDetailsTable;
+                    Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(buy8cm);
+                    xtraForm1.ShowDialog();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
     }

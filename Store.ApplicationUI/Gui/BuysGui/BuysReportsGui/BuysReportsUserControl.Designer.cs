@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BuysReportsUserControl));
-            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             OperationsflowLayoutPanel = new FlowLayoutPanel();
             gbPayChoiches = new GroupBox();
             dtpFrom = new DateTimePicker();
@@ -313,6 +313,7 @@
             btnExportCustomer.TabIndex = 6;
             btnExportCustomer.Text = "   تصدير/طباعة الفاتورة";
             btnExportCustomer.UseVisualStyleBackColor = true;
+            btnExportCustomer.Click += btnExportCustomer_Click;
             // 
             // btnRefresh
             // 
@@ -346,31 +347,31 @@
             DgvBuys.AllowUserToAddRows = false;
             DgvBuys.AllowUserToResizeColumns = false;
             DgvBuys.AllowUserToResizeRows = false;
-            dataGridViewCellStyle9.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvBuys.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle1.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvBuys.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             DgvBuys.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             DgvBuys.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             DgvBuys.BackgroundColor = Color.White;
             DgvBuys.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             DgvBuys.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle10.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle10.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle10.ForeColor = Color.White;
-            dataGridViewCellStyle10.SelectionBackColor = Color.DodgerBlue;
-            dataGridViewCellStyle10.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = DataGridViewTriState.True;
-            DgvBuys.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = Color.DodgerBlue;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            DgvBuys.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             DgvBuys.ColumnHeadersHeight = 40;
             DgvBuys.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle11.BackColor = SystemColors.Window;
-            dataGridViewCellStyle11.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle11.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle11.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle11.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = DataGridViewTriState.False;
-            DgvBuys.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = SystemColors.Window;
+            dataGridViewCellStyle3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            DgvBuys.DefaultCellStyle = dataGridViewCellStyle3;
             DgvBuys.Dock = DockStyle.Fill;
             DgvBuys.EnableHeadersVisualStyles = false;
             DgvBuys.GridColor = SystemColors.ControlDark;
@@ -382,8 +383,8 @@
             DgvBuys.RowHeadersVisible = false;
             DgvBuys.RowHeadersWidth = 21;
             DgvBuys.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle12.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvBuys.RowsDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle4.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvBuys.RowsDefaultCellStyle = dataGridViewCellStyle4;
             DgvBuys.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DgvBuys.Size = new Size(1034, 517);
             DgvBuys.TabIndex = 20;

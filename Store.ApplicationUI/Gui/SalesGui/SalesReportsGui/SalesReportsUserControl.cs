@@ -1,5 +1,7 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using System.Data;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.ApplicationUI.Reports.ReportPerviwGui;
 using Store.Core.Entities.Sales;
 using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
@@ -256,8 +258,24 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
             }
         }
 
-        private void btnExportCustomer_Click(object sender, EventArgs e)
+        private async void btnExportCustomer_Click(object sender, EventArgs e)
         {
+            try
+            {
+                if (DgvSales.SelectedRows.Count > 0)
+                {
+                    DataTable saleDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(Convert.ToInt32(DgvSales.CurrentRow.Cells[0].Value.ToString()));
+                    Reports.sale8cm sale8Cm = new();
+                    sale8Cm.DataSource = saleDetailsTable;
+                    XtraForm1 xtraForm1 = new(sale8Cm);
+                    xtraForm1.ShowDialog();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
 
         }
     }
