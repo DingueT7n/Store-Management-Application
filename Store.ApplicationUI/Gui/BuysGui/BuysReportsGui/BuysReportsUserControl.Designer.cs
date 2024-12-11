@@ -298,8 +298,9 @@
             button1.Name = "button1";
             button1.Size = new Size(244, 40);
             button1.TabIndex = 7;
-            button1.Text = "       تصدير/طباعة جميع فاتورات العميل";
+            button1.Text = "طباعة فاتورة التقارير";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // btnExportCustomer
             // 

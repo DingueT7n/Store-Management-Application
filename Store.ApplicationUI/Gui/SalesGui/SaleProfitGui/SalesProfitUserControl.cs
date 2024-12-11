@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Data;
+using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Sales;
@@ -392,7 +393,6 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
                 try
                 {
                     _context.Database.ExecuteSqlRaw($"DELETE FROM [SalesProfits]");
-
                     LoadData();
                 }
                 catch (Exception ex)
@@ -400,6 +400,28 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
                     // Handle or log the exception
                     MessageBox.Show($"لقد حدث خطأ : {ex.Message}", "خطأ برمجي", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+        }
+
+        private async void btnExportCustomer_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (DgvSalesProfit.SelectedRows.Count > 0)
+                {
+                    DataTable ProfitDetailsTable = await FactureHelper.GetProfitReportDataTableAsync(dtpFrom.Value, dtpTo.Value);
+                    Reports.SalesReports.salesProfit saleReportsInPeriod = new();
+                    saleReportsInPeriod.DataSource = ProfitDetailsTable;
+                    saleReportsInPeriod.lbldateFrom.Text = dtpFrom.Value.ToString("yyyy-MM-dd");
+                    saleReportsInPeriod.lblDateTo.Text = dtpTo.Value.ToString("yyyy-MM-dd");
+                    Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(saleReportsInPeriod);
+                    xtraForm1.ShowDialog();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
     }

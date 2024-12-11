@@ -75,5 +75,143 @@ namespace Store.ApplicationUI.Code.Helper
                 }
             }
         }
+        public static async Task<DataTable> GetSupplierAccountDataTableAsync(int sup_id)
+        {
+
+            using (var context = new ApplicationDbContext())
+            {
+                var orderIdParam = new SqlParameter("@Sup_iD", sup_id);
+                var connection = context.Database.GetDbConnection();
+
+                try
+                {
+                    await connection.OpenAsync();
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = "EXEC [dbo].[get_all_supplier_Accounts_reports] @Sup_iD";
+                        command.CommandType = CommandType.Text;
+                        command.Parameters.Add(orderIdParam);
+
+
+                        using (var reader = await command.ExecuteReaderAsync())
+                        {
+                            DataTable sellDetailsTable = new DataTable();
+                            sellDetailsTable.Load(reader);
+                            return sellDetailsTable;
+                        }
+                    }
+                }
+                finally
+                {
+                    await connection.CloseAsync();
+                }
+            }
+        }
+        public static async Task<DataTable> GetCustomerAccountDataTableAsync(int Cust_iD)
+        {
+
+            using (var context = new ApplicationDbContext())
+            {
+                var orderIdParam = new SqlParameter("@Cust_iD", Cust_iD);
+                var connection = context.Database.GetDbConnection();
+
+                try
+                {
+                    await connection.OpenAsync();
+
+
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = "EXEC [dbo].[get_all_Customer_Accounts_reports] @Cust_iD";
+                        command.CommandType = CommandType.Text;
+                        command.Parameters.Add(orderIdParam);
+
+
+                        using (var reader = await command.ExecuteReaderAsync())
+                        {
+                            DataTable sellDetailsTable = new DataTable();
+                            sellDetailsTable.Load(reader);
+                            return sellDetailsTable;
+                        }
+                    }
+                }
+                finally
+                {
+                    await connection.CloseAsync();
+                }
+            }
+        }
+        public static async Task<DataTable> GetBuyReportDataTableAsync(DateTime datefrom, DateTime dateto)
+        {
+
+            using (var context = new ApplicationDbContext())
+            {
+                var orderFromParam = new SqlParameter("@orderFrom", datefrom);
+                var orderToParam = new SqlParameter("@orderTo", dateto);
+                var connection = context.Database.GetDbConnection();
+
+                try
+                {
+                    await connection.OpenAsync();
+
+
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = "EXEC [dbo].get_all_buy_details_reports @orderFrom,@orderTo";
+                        command.CommandType = CommandType.Text;
+                        command.Parameters.Add(orderFromParam);
+                        command.Parameters.Add(orderToParam);
+
+
+                        using (var reader = await command.ExecuteReaderAsync())
+                        {
+                            DataTable sellDetailsTable = new DataTable();
+                            sellDetailsTable.Load(reader);
+                            return sellDetailsTable;
+                        }
+                    }
+                }
+                finally
+                {
+                    await connection.CloseAsync();
+                }
+            }
+        }
+        public static async Task<DataTable> GetProfitReportDataTableAsync(DateTime datefrom, DateTime dateto)
+        {
+
+            using (var context = new ApplicationDbContext())
+            {
+                var orderFromParam = new SqlParameter("@orderFrom", datefrom);
+                var orderToParam = new SqlParameter("@orderTo", dateto);
+                var connection = context.Database.GetDbConnection();
+
+                try
+                {
+                    await connection.OpenAsync();
+
+
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = "EXEC [dbo].get_all_profit_reports @orderFrom,@orderTo";
+                        command.CommandType = CommandType.Text;
+                        command.Parameters.Add(orderFromParam);
+                        command.Parameters.Add(orderToParam);
+
+
+                        using (var reader = await command.ExecuteReaderAsync())
+                        {
+                            DataTable sellDetailsTable = new DataTable();
+                            sellDetailsTable.Load(reader);
+                            return sellDetailsTable;
+                        }
+                    }
+                }
+                finally
+                {
+                    await connection.CloseAsync();
+                }
+            }
+        }
     }
 }

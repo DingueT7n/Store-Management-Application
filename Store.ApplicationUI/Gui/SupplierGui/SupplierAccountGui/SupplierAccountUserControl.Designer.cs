@@ -322,6 +322,7 @@
             btnExportCustomer.TabIndex = 6;
             btnExportCustomer.Text = "   تصدير/طباعة الفاتورة";
             btnExportCustomer.UseVisualStyleBackColor = true;
+            btnExportCustomer.Click += btnExportCustomer_Click;
             // 
             // btnRefresh
             // 

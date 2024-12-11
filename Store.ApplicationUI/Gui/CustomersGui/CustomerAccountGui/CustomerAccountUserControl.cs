@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Data;
+using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Caisses;
@@ -235,6 +236,28 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
         private void btnRefresh_Click_1(object sender, EventArgs e)
         {
             LoadData();
+        }
+
+        private async void btnExportCustomer_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (DgvِCustomer.SelectedRows.Count > 0)
+                {
+                    DataTable CustomerAccountAccountDetailsTable = await FactureHelper.GetCustomerAccountDataTableAsync(Convert.ToInt32(DgvِCustomer.CurrentRow.Cells[0].Value.ToString()));
+                    Reports.CustomersAccountReports.CustomersAccountReport custAccount = new();
+                    custAccount.DataSource = CustomerAccountAccountDetailsTable;
+                    var a = CustomerAccountAccountDetailsTable.Rows.Count.ToString();
+                    custAccount.lblTotalFactures.Text = a;
+                    Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(custAccount);
+                    xtraForm1.ShowDialog();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

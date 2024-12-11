@@ -261,5 +261,27 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
                 throw;
             }
         }
+
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (DgvBuys.SelectedRows.Count > 0)
+                {
+                    DataTable buyDetailsTable = await FactureHelper.GetBuyReportDataTableAsync(dtpFrom.Value, dtpTo.Value);
+                    Reports.BuysReports.buyReportsInPeriod buyReportsInPeriod = new();
+                    buyReportsInPeriod.DataSource = buyDetailsTable;
+                    buyReportsInPeriod.lbldateFrom.Text = dtpFrom.Value.ToString("yyyy-MM-dd");
+                    buyReportsInPeriod.lblDateTo.Text = dtpTo.Value.ToString("yyyy-MM-dd");
+                    Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(buyReportsInPeriod);
+                    xtraForm1.ShowDialog();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

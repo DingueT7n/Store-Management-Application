@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Data;
+using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Caisses;
@@ -223,6 +224,28 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                     }
                 }
                 SetDataToDgv();
+            }
+        }
+
+        private async void btnExportCustomer_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (DgvِCustomer.SelectedRows.Count > 0)
+                {
+                    DataTable suplierAccountDetailsTable = await FactureHelper.GetSupplierAccountDataTableAsync(Convert.ToInt32(DgvِCustomer.CurrentRow.Cells[0].Value.ToString()));
+                    Reports.SuppliersAccountsReports.SuppliersAccountsReports supAccount = new();
+                    supAccount.DataSource = suplierAccountDetailsTable;
+                    var a = suplierAccountDetailsTable.Rows.Count.ToString();
+                    supAccount.lblTotalFactures.Text = a;
+                    Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(supAccount);
+                    xtraForm1.ShowDialog();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
     }

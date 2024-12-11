@@ -213,6 +213,7 @@
             resources.ApplyResources(btnExportCustomer, "btnExportCustomer");
             btnExportCustomer.Name = "btnExportCustomer";
             btnExportCustomer.UseVisualStyleBackColor = true;
+            btnExportCustomer.Click += btnExportCustomer_Click;
             // 
             // btnRefresh
             // 
