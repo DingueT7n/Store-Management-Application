@@ -1,4 +1,5 @@
-﻿using Store.Core.Entities.Caisses;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.Core.Entities.Caisses;
 using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
 
@@ -12,24 +13,154 @@ namespace Store.Infrastructure.Repositories
     }
     public class CaisseDepositRepository : GenericRepository<CaisseDeposit>, ICaisseDepositRepository
     {
+        public List<CaisseDeposit> GetAllDepositToCaisse(string t1, string barcode, DateTime dtpFrom, DateTime dtpTo)
+        {
+            try
+            {
+                var allTransfers = _context.CaissesDeposits
+                    .Include(x => x.Caisse)
+                      .AsEnumerable();
+                if (barcode != string.Empty) allTransfers = allTransfers.Where(x => x.Caisse.CaisseName == barcode || x.Name.Contains(barcode));
+                if (t1 != string.Empty)
+                    allTransfers = allTransfers.Where(x => x.Caisse is not null && x.Caisse.CaisseName == t1);
+
+                allTransfers = allTransfers.Where(x => x.Date >= dtpFrom && x.Date <= dtpTo)
+                     ;
+
+                return allTransfers.ToList();
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("Error retrieving the buyFactures", ex);
+            }
+        }
         public CaisseDepositRepository(ApplicationDbContext context) : base(context)
         {
         }
     }
     public class CaisseBankTransfereRepository : GenericRepository<CaisseBankTransfere>, ICaisseBankTransfereRepository
     {
+
         public CaisseBankTransfereRepository(ApplicationDbContext context) : base(context)
         {
+        }
+
+        public List<CaisseBankTransfere> GetAll(DateTime value1, DateTime value2)
+        {
+            try
+            {
+                var allTransfers = _context.CaissesBankTransferes
+                      .AsEnumerable();
+
+
+                allTransfers = allTransfers.Where(x => x.Date >= value1 && x.Date <= value2);
+                return allTransfers.ToList();
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("Error retrieving the buyFactures", ex);
+            }
+        }
+
+        public List<CaisseBankTransfere> GetAllBankToCaisse(string t1, string barcode,
+            DateTime value1, DateTime value2, bool @checked)
+        {
+            try
+            {
+                var allTransfers = _context.CaissesBankTransferes
+                      .AsEnumerable();
+                if (barcode != string.Empty) allTransfers = allTransfers.Where(x => x.Name.Contains(barcode));
+                if (@checked && t1 != string.Empty)
+                    allTransfers = allTransfers.Where(x => x.To_.ToString() == t1);
+                allTransfers = allTransfers.Where(x => x.From_ == "بنك");
+
+                allTransfers = allTransfers.Where(x => x.Date >= value1 && x.Date <= value2);
+                return allTransfers.ToList();
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("Error retrieving the buyFactures", ex);
+            }
+        }
+
+        public List<CaisseBankTransfere> GetAllCaisseToBank(string t1, string barcode,
+            DateTime value1, DateTime value2, bool @checked)
+        {
+            try
+            {
+                var allTransfers = _context.CaissesBankTransferes
+                      .AsEnumerable();
+                if (barcode != string.Empty) allTransfers = allTransfers.Where(x => x.Name.Contains(barcode));
+                if (@checked && t1 != string.Empty)
+                    allTransfers = allTransfers.Where(x => x.From_.ToString() == t1);
+                allTransfers = allTransfers.Where(x => x.To_ == "بنك");
+
+                allTransfers = allTransfers.Where(x => x.Date >= value1 && x.Date <= value2);
+                return allTransfers.ToList();
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("Error retrieving the buyFactures", ex);
+            }
         }
     }
     public class CaisseTransfereRepository : GenericRepository<CaisseTransfere>, ICaisseTransfereRepository
     {
+        public List<CaisseTransfere> GetAllDepositToCaisse(string t1, string t2, string barcode, DateTime dtpFrom, DateTime dtpTo)
+        {
+            try
+            {
+                var allTransfers = _context.CaissesTransferes
+                    .Include(x => x.CaisseFrom)
+                    .Include(x => x.CaisseTo)
+                      .AsEnumerable();
+                if (barcode != string.Empty) allTransfers = allTransfers.Where(x => x.Name.Contains(barcode) || x.Reason.Contains(barcode));
+                if (t1 != string.Empty)
+                    allTransfers = allTransfers.Where(x => x.Caisse_From.ToString() == t1);
+                if (t2 != string.Empty)
+                    allTransfers = allTransfers.Where(x => x.Caisse_To.ToString() == t2);
+
+                allTransfers = allTransfers.Where(x => x.Date >= dtpFrom && x.Date <= dtpTo);
+                return allTransfers.ToList();
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("Error retrieving the buyFactures", ex);
+            }
+        }
         public CaisseTransfereRepository(ApplicationDbContext context) : base(context)
         {
         }
     }
     public class CaisseWithdrawRepository : GenericRepository<CaisseWithdraw>, ICaisseWithdrawRepository
     {
+        public List<CaisseWithdraw> GetAllDepositToCaisse(string t1, string barcode, DateTime dtpFrom, DateTime dtpTo)
+        {
+            try
+            {
+                var allTransfers = _context.CaissesWithdraws
+                    .Include(x => x.Caisse)
+                      .AsEnumerable();
+                if (barcode != string.Empty) allTransfers = allTransfers.Where(x => x.Caisse.CaisseName == barcode || x.Name.Contains(barcode));
+                if (t1 != string.Empty)
+                    allTransfers = allTransfers.Where(x => x.Caisse is not null && x.Caisse.CaisseName == t1);
+
+                allTransfers = allTransfers.Where(x => x.Date >= dtpFrom && x.Date <= dtpTo)
+                     ;
+
+                return allTransfers.ToList();
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("Error retrieving the buyFactures", ex);
+            }
+        }
         public CaisseWithdrawRepository(ApplicationDbContext context) : base(context)
         {
         }

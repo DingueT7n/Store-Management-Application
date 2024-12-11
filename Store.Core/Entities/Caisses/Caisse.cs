@@ -4,11 +4,12 @@
     {
         public string CaisseName { get; set; }
         public decimal MoneyinCaisse { get; set; }
-
-
-
-
+        public override string ToString()
+        {
+            return CaisseName;
+        }
     }
+
 
 
 }

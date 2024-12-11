@@ -302,9 +302,11 @@ namespace Store.ApplicationUI
 
         private void button6_Click(object sender, EventArgs e)
         {
-            CaisseDetailsForm caisseDetailsForm = CaisseDetailsForm.Instance(this);
-            caisseDetailsForm.Show();
             CloseSubPanels();
+
+            ShowSubPanel(flowLayoutPanelCaissesAndBank);
+
+
         }
 
         private void button9_Click(object sender, EventArgs e)
@@ -453,6 +455,47 @@ namespace Store.ApplicationUI
 
             ApplicationSettingsForm.Show();
             CloseSubPanels();
+        }
+
+        private void button1_Click_2(object sender, EventArgs e)
+        {
+            CaisseDetailsForm caisseDetailsForm = CaisseDetailsForm.Instance(this);
+            caisseDetailsForm.Show();
+            CloseSubPanels();
+        }
+
+        private void button2_Click_2(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.CaisseAndBankGui.DepositToCaisseReportGui.DepositToCaisseReportUserControl.Instance(this));
+
+        }
+        private void button3_Click_2(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.CaisseAndBankGui.DepositToBankReportGui.DepositToBankReportUserControl.Instance(this));
+
+        }
+
+        private void button4_Click_1(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.CaisseAndBankGui.WithdrawFromCaisseReportsGui.WithdrawFromCaisseReportsUserControl.Instance(this));
+        }
+
+        private void button6_Click_1(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.CaisseAndBankGui.TransfertBetweenCaisseReportGui.TransfertBetweenCaisseReportUserControl.Instance(this));
+
+        }
+
+        private void button5_Click_1(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.CaisseAndBankGui.WithdrawFromBankReportGui.WIthdrawFromBankReportUserControl.Instance(this));
+
+        }
+
+        private void button7_Click_1(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.CaisseAndBankGui.TransfertBetweenCaisseAndBankReportGui.TransfertBetweenCaisseAndBankReportUserControl.Instance(this));
+
         }
     }
 }
