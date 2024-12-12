@@ -43,6 +43,27 @@
         public virtual Product Product { get; set; }
     }
 
+
+
+    public class ProductMinQty
+    {
+        public string CodeBar { get; set; }
+        public string ProductName { get; set; }
+        public decimal Quentity { get; set; }
+        public DateTime DateExperation { get; set; }
+        public string CategoryName { get; set; }
+
+    }
+    public class ProductOutdated
+    {
+        public string CodeBar { get; set; }
+        public string ProductName { get; set; }
+        public string StoreName { get; set; }
+        public decimal Quentity { get; set; }
+        public DateTime DateExperation { get; set; }
+
+    }
+
     //Table BadProduct
 
 }

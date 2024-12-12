@@ -48,6 +48,56 @@ namespace Store.Infrastructure.Repositories
         //        return new List<Product>();
         //    }
         //}
+
+
+        public List<ProductOutdated> GetAllProductOutdated()
+        {
+            try
+            {
+                var products = _context.ProductsQuantities
+                    .Include(x => x.Product)
+                                .Where(x => x.DateExpiration <= DateTime.Now && x.Qty > 0)
+                    .Select(bd => new ProductOutdated
+                    {
+                        CodeBar = bd.Product.CodeBar,
+                        DateExperation = bd.DateExpiration,
+                        ProductName = bd.Product.ProductName, // Assuming `Name` is the property for the supplier's name
+                        StoreName = bd.StoreName,
+                        Quentity = bd.Qty
+                    })
+                    .ToList();
+                return products;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("Error retrieving the buyFactures", ex);
+            }
+        }
+        public List<ProductMinQty> GetAllProductMinQty()
+        {
+            try
+            {
+                var products = _context.Products
+                    .Include(x => x.Category)
+                                .Where(x => x.Quentity <= x.MinQty)
+                    .Select(bd => new ProductMinQty
+                    {
+                        CodeBar = bd.CodeBar,
+                        DateExperation = bd.DateExperation,
+                        ProductName = bd.ProductName, // Assuming `Name` is the property for the supplier's name
+                        CategoryName = bd.Category.CategoryName,
+                        Quentity = bd.Quentity
+                    })
+                    .ToList();
+                return products;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("Error retrieving the buyFactures", ex);
+            }
+        }
         public List<Product> SearchAll(string searchIteam)
         {
 

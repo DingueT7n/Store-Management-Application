@@ -1,4 +1,8 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.IO;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.SqlServer.Management.Smo;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.CaisseAndBankGui;
 using Store.ApplicationUI.Gui.EmployeesGui;
@@ -12,6 +16,8 @@ using Store.ApplicationUI.Gui.ProductsGui.Category;
 using Store.ApplicationUI.Gui.ProductsGui.StoreGui;
 using Store.ApplicationUI.Gui.SalesGui.PosGui;
 using Store.Infrastructure.Data;
+
+
 
 namespace Store.ApplicationUI
 {
@@ -27,7 +33,7 @@ namespace Store.ApplicationUI
             KeyPreview = true;
 
             pageHelper = new(this);
-            pageHelper.SetNewPage(Gui.HomeGui.HomeUserControl.Instance());
+            pageHelper.SetNewPage(Gui.HomeGui.HomeUserControl.Instance(this));
 
 
             Context = new ApplicationDbContext();
@@ -108,7 +114,7 @@ namespace Store.ApplicationUI
 
         private void btnHomeSummary_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.HomeGui.HomeUserControl.Instance());
+            pageHelper.SetNewPage(Gui.HomeGui.HomeUserControl.Instance(this));
         }
 
         private void BtnProducts_Click(object sender, EventArgs e)
@@ -495,6 +501,145 @@ namespace Store.ApplicationUI
         private void button7_Click_1(object sender, EventArgs e)
         {
             pageHelper.SetNewPage(Gui.CaisseAndBankGui.TransfertBetweenCaisseAndBankReportGui.TransfertBetweenCaisseAndBankReportUserControl.Instance(this));
+
+        }
+
+        private async void button8_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                // Define the backup file path
+                string backupFilePath = @"C:\DatabaseBackups\MyDatabaseBackup.bak";
+
+                // Create the backup directory if it doesn't exist
+                string backupDirectory = Path.GetDirectoryName(backupFilePath);
+                if (!Directory.Exists(backupDirectory))
+                {
+                    Directory.CreateDirectory(backupDirectory);
+                }
+
+                // SQL command to back up the database
+                string backupSql = $@"
+            BACKUP DATABASE [{Context.Database.GetDbConnection().Database}]
+            TO DISK = '{backupFilePath}'
+            WITH FORMAT, MEDIANAME = 'SQLServerBackups', NAME = 'Full Backup of MyDatabase';";
+
+                // Execute the SQL command
+                await Context.Database.ExecuteSqlRawAsync(backupSql);
+
+                MessageBox.Show($"تم النسخ الاحتياطي لقاعدة البيانات بنجاح.\nملف النسخة الاحتياطية: {backupFilePath}", "نجاح النسخ الاحتياطي", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"حدث خطأ أثناء النسخ الاحتياطي لقاعدة البيانات:\n{ex.Message}", "فشل النسخ الاحتياطي", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+        }
+        public void KillAllProcessesUsingDbContext(DbContext context)
+        {
+            try
+            {
+                // Get the database name and server connection
+                var databaseName = context.Database.GetDbConnection().Database;
+                var connectionString = context.Database.GetDbConnection().ConnectionString;
+
+                // Parse the connection string to extract the server name
+                var builder = new SqlConnectionStringBuilder(connectionString);
+                var serverName = builder.DataSource;
+
+                // Create a connection to the master database
+                using (var masterConnection = new SqlConnection($"Server={serverName};Database=master;{builder.ConnectionString}"))
+                {
+                    masterConnection.Open();
+
+                    // Kill all processes connected to the target database
+                    var killProcessesCommand = $@"
+                DECLARE @sql NVARCHAR(MAX)
+                SET @sql = ''
+                SELECT @sql += 'KILL ' + CONVERT(VARCHAR, session_id) + ';'
+                FROM sys.dm_exec_sessions
+                WHERE database_id = DB_ID('{databaseName}')
+                EXEC sp_executesql @sql";
+
+                    using (var command = new SqlCommand(killProcessesCommand, masterConnection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+
+                    Console.WriteLine($"All processes for database '{databaseName}' have been killed successfully.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+        private void button9_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog
+                {
+                    Filter = "Backup Files (*.bak)|*.bak",
+                    Title = "اختر ملف النسخة الاحتياطية"
+                };
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string backupFilePath = openFileDialog.FileName;
+
+                    var result = MessageBox.Show(
+                        "استعادة النسخة الاحتياطية ستقوم بالكتابة فوق قاعدة البيانات الحالية. هل تريد المتابعة؟",
+                        "تأكيد الاستعادة",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Warning);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        var databaseName = Context?.Database.GetDbConnection().Database;
+                        var connectionString = Context?.Database.GetDbConnection().ConnectionString;
+
+                        Server server = new Server(connectionString);
+                        //Database db = server.Databases[databaseName];
+                        if (databaseName != null)
+                        {
+                            server.KillAllProcesses(databaseName);
+                        }
+                        Restore restore = new Restore();
+                        restore.Database = databaseName;
+                        restore.Action = RestoreActionType.Database;
+                        restore.Devices.AddDevice(openFileDialog.FileName, DeviceType.File);
+                        restore.ReplaceDatabase = true;
+                        restore.NoRecovery = false;
+                        restore.SqlRestore(server);
+                        //// Use the SQL command for restoring the database
+                        //string restoreQuery = $"RESTORE DATABASE YourDatabaseName FROM DISK = '{backupFilePath}' WITH REPLACE;";
+
+                        //// Execute the SQL command using Microsoft.Data.SqlClient
+                        //using (var connection = new SqlConnection(Context?.Database.GetDbConnection().ConnectionString))
+                        //{
+                        //    connection.Open();
+                        //    using (var command = new SqlCommand(restoreQuery, connection))
+                        //    {
+                        //        command.ExecuteNonQuery();
+                        //    }
+                        //}
+
+                        MessageBox.Show("تم استعادة قاعدة البيانات بنجاح!", "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"حدث خطأ أثناء استعادة قاعدة البيانات: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        private void button10_Click_1(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.DeservedGui.VouchersReportGui.VouchersReportsUserControl.Instance(this));
 
         }
     }

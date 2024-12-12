@@ -1,5 +1,6 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Vouchers;
 using Store.Infrastructure.Data;
 
@@ -146,7 +147,8 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                     Reason = txtNotes.Text,
                     Time = DateTime.Now.ToString("HH:mm:ss"),
                 });
-
+                _context.Update(AddCaisse(Convert.ToDecimal(txtValue.Text)));
+                _context.Add(SetCaisseDeposit(Convert.ToDecimal(txtValue.Text)));
             }
             else
             {
@@ -159,6 +161,9 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                     Reason = txtNotes.Text,
                     Time = DateTime.Now.ToString("HH:mm:ss"),
                 });
+                _context.Update(MinusCaisse(Convert.ToDecimal(txtValue.Text)));
+                _context.Add(SetCaisseWithdraw(Convert.ToDecimal(txtValue.Text)));
+
             }
             _context.SaveChanges();
             if (!VouchersUserControl.CheckInstance())
@@ -166,7 +171,60 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                 VouchersUserControl.RefreshDgv();
             }
         }
+        Caisse AddCaisse(decimal value)
+        {
+            var caisse = _context.Caisses.FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
+            if (caisse != null)
+            {
+                caisse.MoneyinCaisse += value;
+            }
+            return caisse;
 
+        }
+        Caisse MinusCaisse(decimal value)
+        {
+            var caisse = _context.Caisses.FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
+            if (caisse != null)
+            {
+                caisse.MoneyinCaisse -= value;
+            }
+            return caisse;
+
+        }
+        CaisseDeposit SetCaisseDeposit(decimal value)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+
+            return new CaisseDeposit
+            {
+                Caisse_ID = Properties.Settings.Default.DefaultCaisseId,
+                Time = DateTime.Now.ToString("HH:mm:ss"),
+                Date = DateTime.Now,
+                Name = $"  {Properties.Settings.Default.UserName} بحساب ",
+                Money = value,
+                Reason = txtNotes.Text,
+                Type = "سند القبض"
+            };
+        }
+        CaisseWithdraw SetCaisseWithdraw(decimal value)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+
+
+            var caisseWithdraw = new CaisseWithdraw
+            {
+                Caisse_ID = Properties.Settings.Default.DefaultCaisseId,
+                Time = DateTime.Now.ToString("HH:mm:ss"),
+                Date = DateTime.Now,
+                Name = $"  {Properties.Settings.Default.UserName}",
+                Money = value,
+                Reason = txtNotes.Text,
+                Type = "سند الصرف"
+            };
+
+            return caisseWithdraw;
+
+        }
         private async void btnEditDeserved_Click(object sender, EventArgs e)
         {
 
@@ -180,6 +238,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                 receipt.Reason = txtNotes.Text;
 
                 _context.Update(receipt);
+
             }
             else
             {

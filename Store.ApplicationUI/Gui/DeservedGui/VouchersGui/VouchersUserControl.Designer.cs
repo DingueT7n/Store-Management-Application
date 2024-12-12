@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VouchersUserControl));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
             OperationsflowLayoutPanel = new FlowLayoutPanel();
             gbPayChoiches = new GroupBox();
             groupBox1 = new GroupBox();
@@ -54,11 +54,9 @@
             btnSearch = new Button();
             panel1 = new Panel();
             button2 = new Button();
-            button1 = new Button();
             btnAddDeserved = new Button();
             btnEditDeserved = new Button();
             btnExportProduct = new Button();
-            btnAddDeservedType = new Button();
             btnDeleteDeserved = new Button();
             btnRefresh = new Button();
             lblEmptyData = new Label();
@@ -294,11 +292,9 @@
             // panel1
             // 
             panel1.Controls.Add(button2);
-            panel1.Controls.Add(button1);
             panel1.Controls.Add(btnAddDeserved);
             panel1.Controls.Add(btnEditDeserved);
             panel1.Controls.Add(btnExportProduct);
-            panel1.Controls.Add(btnAddDeservedType);
             panel1.Controls.Add(btnDeleteDeserved);
             panel1.Location = new Point(3, 3);
             panel1.Name = "panel1";
@@ -310,28 +306,12 @@
             button2.Anchor = AnchorStyles.None;
             button2.Image = (Image)resources.GetObject("button2.Image");
             button2.ImageAlign = ContentAlignment.MiddleLeft;
-            button2.Location = new Point(3, 113);
+            button2.Location = new Point(27, 53);
             button2.Name = "button2";
-            button2.Size = new Size(158, 40);
+            button2.Size = new Size(144, 40);
             button2.TabIndex = 10;
-            button2.Text = "طباعة كل المصروفات";
-            button2.TextAlign = ContentAlignment.MiddleRight;
+            button2.Text = "    طباعة السند";
             button2.UseVisualStyleBackColor = true;
-            // 
-            // button1
-            // 
-            button1.Anchor = AnchorStyles.None;
-            button1.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            button1.Image = (Image)resources.GetObject("button1.Image");
-            button1.ImageAlign = ContentAlignment.MiddleLeft;
-            button1.Location = new Point(163, 113);
-            button1.Name = "button1";
-            button1.Size = new Size(146, 40);
-            button1.TabIndex = 9;
-            button1.Text = "حذف كل المعلومات";
-            button1.TextAlign = ContentAlignment.MiddleRight;
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
             // 
             // btnAddDeserved
             // 
@@ -352,7 +332,7 @@
             btnEditDeserved.Anchor = AnchorStyles.None;
             btnEditDeserved.Image = (Image)resources.GetObject("btnEditDeserved.Image");
             btnEditDeserved.ImageAlign = ContentAlignment.MiddleLeft;
-            btnEditDeserved.Location = new Point(111, 12);
+            btnEditDeserved.Location = new Point(123, 13);
             btnEditDeserved.Name = "btnEditDeserved";
             btnEditDeserved.Size = new Size(90, 40);
             btnEditDeserved.TabIndex = 4;
@@ -366,25 +346,12 @@
             btnExportProduct.Anchor = AnchorStyles.None;
             btnExportProduct.Image = (Image)resources.GetObject("btnExportProduct.Image");
             btnExportProduct.ImageAlign = ContentAlignment.MiddleLeft;
-            btnExportProduct.Location = new Point(3, 66);
+            btnExportProduct.Location = new Point(177, 55);
             btnExportProduct.Name = "btnExportProduct";
-            btnExportProduct.Size = new Size(158, 40);
+            btnExportProduct.Size = new Size(132, 40);
             btnExportProduct.TabIndex = 6;
-            btnExportProduct.Text = "تصدير اكسال";
+            btnExportProduct.Text = "    تصدير اكسال";
             btnExportProduct.UseVisualStyleBackColor = true;
-            // 
-            // btnAddDeservedType
-            // 
-            btnAddDeservedType.Anchor = AnchorStyles.None;
-            btnAddDeservedType.Image = (Image)resources.GetObject("btnAddDeservedType.Image");
-            btnAddDeservedType.ImageAlign = ContentAlignment.MiddleLeft;
-            btnAddDeservedType.Location = new Point(166, 67);
-            btnAddDeservedType.Name = "btnAddDeservedType";
-            btnAddDeservedType.Size = new Size(146, 40);
-            btnAddDeservedType.TabIndex = 8;
-            btnAddDeservedType.Text = "انواع المصروفات";
-            btnAddDeservedType.TextAlign = ContentAlignment.MiddleRight;
-            btnAddDeservedType.UseVisualStyleBackColor = true;
             // 
             // btnDeleteDeserved
             // 
@@ -392,7 +359,7 @@
             btnDeleteDeserved.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnDeleteDeserved.Image = (Image)resources.GetObject("btnDeleteDeserved.Image");
             btnDeleteDeserved.ImageAlign = ContentAlignment.MiddleLeft;
-            btnDeleteDeserved.Location = new Point(15, 12);
+            btnDeleteDeserved.Location = new Point(27, 12);
             btnDeleteDeserved.Name = "btnDeleteDeserved";
             btnDeleteDeserved.Size = new Size(90, 40);
             btnDeleteDeserved.TabIndex = 5;
@@ -431,31 +398,31 @@
             DgvProducts.AllowUserToAddRows = false;
             DgvProducts.AllowUserToResizeColumns = false;
             DgvProducts.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvProducts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvProducts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
             DgvProducts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             DgvProducts.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             DgvProducts.BackgroundColor = Color.White;
             DgvProducts.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             DgvProducts.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle2.ForeColor = Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = Color.DodgerBlue;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            DgvProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle6.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle6.ForeColor = Color.White;
+            dataGridViewCellStyle6.SelectionBackColor = Color.DodgerBlue;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            DgvProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             DgvProducts.ColumnHeadersHeight = 40;
             DgvProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Window;
-            dataGridViewCellStyle3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
-            DgvProducts.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.BackColor = SystemColors.Window;
+            dataGridViewCellStyle7.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle7.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.False;
+            DgvProducts.DefaultCellStyle = dataGridViewCellStyle7;
             DgvProducts.Dock = DockStyle.Fill;
             DgvProducts.EnableHeadersVisualStyles = false;
             DgvProducts.GridColor = SystemColors.ControlDark;
@@ -467,8 +434,8 @@
             DgvProducts.RowHeadersVisible = false;
             DgvProducts.RowHeadersWidth = 21;
             DgvProducts.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle4.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvProducts.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle8.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvProducts.RowsDefaultCellStyle = dataGridViewCellStyle8;
             DgvProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DgvProducts.Size = new Size(1034, 513);
             DgvProducts.TabIndex = 15;
@@ -521,11 +488,9 @@
         private Button btnSearch;
         private Panel panel1;
         private Button button2;
-        private Button button1;
         private Button btnAddDeserved;
         private Button btnEditDeserved;
         private Button btnExportProduct;
-        private Button btnAddDeservedType;
         private Button btnDeleteDeserved;
         private Button btnRefresh;
         private Label lblEmptyData;

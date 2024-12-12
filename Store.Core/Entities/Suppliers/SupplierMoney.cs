@@ -19,5 +19,13 @@ namespace Store.Core.Entities.Suppliers
 
         public virtual Supplier Supplier { get; set; }
     }
+    public class SupplierDebts
+    {
+        public int Order_ID { get; set; }
+        public string SupplierName { get; set; }
+        public decimal Price { get; set; }
+        public DateTime Order_Date { get; set; }
+        public DateTime Reminder_Date { get; set; }
+    }
 
 }
