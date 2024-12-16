@@ -165,7 +165,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.TransferBetweenStoresGui
                         transfer.StoreTo = cmbStoreTo.Text;
                         transfer.BuyPrice = productQty.Buy_Price;
                         transfer.SalePrice = productQty.Sale_PriceTax;
-                        transfer.Date = dateTimePicker1.Value.ToString("yyyy-MM-dd-HH:mm");
+                        transfer.Date = dateTimePicker1.Value.ToString("yyyy-MM-dd/HH:mm");
                         transfer.Name = txtMaker.Text + " Using (" + Properties.Settings.Default.UserName + ")";
                         transfer.Reason = txtReason.Text;
                         _context.ProductsTransfers.Add(transfer);
@@ -198,7 +198,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.TransferBetweenStoresGui
                         transfer.StoreTo = cmbStoreTo.Text;
                         transfer.BuyPrice = productQty.Buy_Price;
                         transfer.SalePrice = productQty.Sale_PriceTax;
-                        transfer.Date = dateTimePicker1.Value.ToString("yyyy-MM-dd-HH:mm");
+                        transfer.Date = dateTimePicker1.Value.ToString("yyyy-MM-dd/HH:mm");
                         transfer.Name = txtMaker.Text + " Using (" + Properties.Settings.Default.UserName + ")";
                         transfer.Reason = txtReason.Text;
                         _context.ProductsTransfers.Add(transfer);

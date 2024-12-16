@@ -1,4 +1,5 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using System.Data;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Vouchers;
 using Store.Infrastructure.Data;
@@ -217,6 +218,49 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        private async void btnExportCustomer_Click(object sender, EventArgs e)
+        {
+            if (rbRecieptVoucher.Checked)
+            {
+                try
+                {
+                    if (DgvSales.SelectedRows.Count > 0)
+                    {
+                        DataTable DetailsTable = await FactureHelper.GetVoucherRecieptDataTableAsync(Convert.ToInt32(DgvSales.CurrentRow.Cells[6].Value.ToString()));
+                        Reports.VouchersReports.RecieptVoucher RecieptVoucher = new();
+                        RecieptVoucher.DataSource = DetailsTable;
+                        Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(RecieptVoucher);
+                        xtraForm1.ShowDialog();
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+            else
+            {
+
+                try
+                {
+                    if (DgvSales.SelectedRows.Count > 0)
+                    {
+                        DataTable DetailsTable = await FactureHelper.GetVoucherSenderDataTableAsync(Convert.ToInt32(DgvSales.CurrentRow.Cells[6].Value.ToString()));
+                        Reports.VouchersReports.SendVoucher SendVoucher = new();
+                        SendVoucher.DataSource = DetailsTable;
+                        Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(SendVoucher);
+                        xtraForm1.ShowDialog();
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
             }
         }
     }

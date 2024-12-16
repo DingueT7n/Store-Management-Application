@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Globalization;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Buys;
@@ -271,9 +272,10 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
                     DataTable buyDetailsTable = await FactureHelper.GetBuyReportDataTableAsync(dtpFrom.Value, dtpTo.Value);
                     Reports.BuysReports.buyReportsInPeriod buyReportsInPeriod = new();
                     buyReportsInPeriod.DataSource = buyDetailsTable;
-                    buyReportsInPeriod.lbldateFrom.Text = dtpFrom.Value.ToString("yyyy-MM-dd");
-                    buyReportsInPeriod.lblDateTo.Text = dtpTo.Value.ToString("yyyy-MM-dd");
+                    buyReportsInPeriod.lbldateFrom.Text = dtpFrom.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    buyReportsInPeriod.lblDateTo.Text = dtpTo.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                     Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(buyReportsInPeriod);
+
                     xtraForm1.ShowDialog();
                 }
             }

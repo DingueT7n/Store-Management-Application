@@ -541,7 +541,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 Cust_Name = cmbCustomers.Text,
                 Date = DtpDateFacture.Value,
                 Price = _main.ConvertToFloat(PaidUp.ToString()),
-                Time = DateTime.Now.ToString("yyyy:MM:dd:HH:mm"),
+                Time = DateTime.Now.ToString("yyyy:MM:dd/HH:mm"),
             };
         }
         CustomerMoney SetCustMoney()
@@ -553,7 +553,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 Cust_Name = cmbCustomers.Text,
                 Order_Date = DtpDateFacture.Value,
                 Price = _main.ConvertToFloat(Remain.ToString()),
-                Time = DateTime.Now.ToString("yyyy:MM:dd:HH:mm"),
+                Time = DateTime.Now.ToString("yyyy:MM:dd/HH:mm"),
                 Reminder_Date = dtpReminderDate.Value
             };
         }
@@ -588,7 +588,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 Buy_Price = buyPrice,
                 Tax_Value = Properties.Settings.Default.TaxValue,
                 Discount = _main.ConvertToFloat(row.Cells[3].Value.ToString()),
-                Time = DateTime.Now.ToString("yyyy:MM:dd:HH:mm"),
+                Time = DateTime.Now.ToString("yyyy:MM:dd/HH:mm"),
                 Price_Tax = _main.ConvertToFloat(row.Cells[1].Value.ToString())
             };
 

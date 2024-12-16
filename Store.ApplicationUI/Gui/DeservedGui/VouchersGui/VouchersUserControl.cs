@@ -1,5 +1,7 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using System.Data;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.ApplicationUI.Reports.VouchersReports;
 using Store.Core.Entities.Vouchers;
 using Store.Infrastructure.Data;
 
@@ -144,7 +146,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                 }
                 else
                 {
-                    SendVoucher send = _context.SendVouchers.FirstOrDefault(x => x.Id.ToString() == DgvProducts.CurrentRow.Cells[7].Value.ToString());
+                    Core.Entities.Vouchers.SendVoucher send = _context.SendVouchers.FirstOrDefault(x => x.Id.ToString() == DgvProducts.CurrentRow.Cells[7].Value.ToString());
 
 
                     _context.Remove(send);
@@ -198,7 +200,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                     }
                     else
                     {
-                        SendVoucher send = _context.SendVouchers.FirstOrDefault(x => x.Id.ToString() == DgvProducts.CurrentRow.Cells[7].Value.ToString());
+                        Core.Entities.Vouchers.SendVoucher send = _context.SendVouchers.FirstOrDefault(x => x.Id.ToString() == DgvProducts.CurrentRow.Cells[7].Value.ToString());
 
 
                         _context.Remove(send);
@@ -206,6 +208,49 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                     await _context.SaveChangesAsync();
                     SetProductsToDgv();
 
+                }
+            }
+        }
+
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            if (rbReciptVoucher.Checked)
+            {
+                try
+                {
+                    if (DgvProducts.SelectedRows.Count > 0)
+                    {
+                        DataTable DetailsTable = await FactureHelper.GetVoucherRecieptDataTableAsync(Convert.ToInt32(DgvProducts.CurrentRow.Cells[6].Value.ToString()));
+                        Reports.VouchersReports.RecieptVoucher RecieptVoucher = new();
+                        RecieptVoucher.DataSource = DetailsTable;
+                        Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(RecieptVoucher);
+                        xtraForm1.ShowDialog();
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+            else
+            {
+
+                try
+                {
+                    if (DgvProducts.SelectedRows.Count > 0)
+                    {
+                        DataTable DetailsTable = await FactureHelper.GetVoucherSenderDataTableAsync(Convert.ToInt32(DgvProducts.CurrentRow.Cells[6].Value.ToString()));
+                        Reports.VouchersReports.SendVoucher SendVoucher = new();
+                        SendVoucher.DataSource = DetailsTable;
+                        Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(SendVoucher);
+                        xtraForm1.ShowDialog();
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
                 }
             }
         }

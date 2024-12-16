@@ -41,6 +41,70 @@ namespace Store.ApplicationUI.Code.Helper
                 }
             }
         }
+        public static async Task<DataTable> GetVoucherRecieptDataTableAsync(int orderId)
+        {
+
+            using (var context = new ApplicationDbContext())
+            {
+                var orderIdParam = new SqlParameter("@Vou_id", orderId);
+                var connection = context.Database.GetDbConnection();
+
+                try
+                {
+                    await connection.OpenAsync();
+
+
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = "EXEC [dbo].get_Voucher_Reciept_reports @Vou_id";
+                        command.CommandType = CommandType.Text;
+                        command.Parameters.Add(orderIdParam);
+                        using (var reader = await command.ExecuteReaderAsync())
+                        {
+                            DataTable sellDetailsTable = new DataTable();
+                            sellDetailsTable.Load(reader);
+                            return sellDetailsTable;
+                        }
+                    }
+                }
+                finally
+                {
+                    await connection.CloseAsync();
+                }
+            }
+        }
+        public static async Task<DataTable> GetVoucherSenderDataTableAsync(int orderId)
+        {
+
+            using (var context = new ApplicationDbContext())
+            {
+                var orderIdParam = new SqlParameter("@Vou_id", orderId);
+                var connection = context.Database.GetDbConnection();
+
+                try
+                {
+                    await connection.OpenAsync();
+
+
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = "EXEC [dbo].get_Voucher_send_reports @Vou_id";
+                        command.CommandType = CommandType.Text;
+                        command.Parameters.Add(orderIdParam);
+                        using (var reader = await command.ExecuteReaderAsync())
+                        {
+                            DataTable sellDetailsTable = new DataTable();
+                            sellDetailsTable.Load(reader);
+                            return sellDetailsTable;
+                        }
+                    }
+                }
+                finally
+                {
+                    await connection.CloseAsync();
+                }
+            }
+        }
         public static async Task<DataTable> GetBuyDetailsDataTableAsync(int orderId)
         {
 

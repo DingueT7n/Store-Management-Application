@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Globalization;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.PaymentGui;
@@ -244,7 +245,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 newRow.Cells[4].Value = txtSalePrice.Text;
                 newRow.Cells[5].Value = txtWholeSalePrice.Text;
                 newRow.Cells[6].Value = txtPriceWithTax.Text;
-                newRow.Cells[7].Value = dtpDateExpiration.Value.ToString("MM/dd/yyyy");
+                newRow.Cells[7].Value = dtpDateExpiration.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                 newRow.Cells[8].Value = _product.Id;
                 newRow.Cells[9].Value = _product.CodeBar;
                 DgvِProducts.CurrentCell = DgvِProducts[0, DgvِProducts.Rows.Count - 1];

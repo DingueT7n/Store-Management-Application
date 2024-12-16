@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
@@ -412,8 +413,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
                     DataTable ProfitDetailsTable = await FactureHelper.GetProfitReportDataTableAsync(dtpFrom.Value, dtpTo.Value);
                     Reports.SalesReports.salesProfit saleReportsInPeriod = new();
                     saleReportsInPeriod.DataSource = ProfitDetailsTable;
-                    saleReportsInPeriod.lbldateFrom.Text = dtpFrom.Value.ToString("yyyy-MM-dd");
-                    saleReportsInPeriod.lblDateTo.Text = dtpTo.Value.ToString("yyyy-MM-dd");
+                    saleReportsInPeriod.lbldateFrom.Text = dtpFrom.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    saleReportsInPeriod.lblDateTo.Text = dtpTo.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                     Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(saleReportsInPeriod);
                     xtraForm1.ShowDialog();
                 }
