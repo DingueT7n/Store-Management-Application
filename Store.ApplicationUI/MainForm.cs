@@ -75,6 +75,10 @@ namespace Store.ApplicationUI
 
             }
         }
+        void TiltOptions()
+        {
+
+        }
 
         public void ShowSubPanel(FlowLayoutPanel flowLayoutPanel)
         {
@@ -123,7 +127,10 @@ namespace Store.ApplicationUI
             CloseSubPanels();
             ShowSubPanel(ProductsflowLayoutPanel);
         }
-
+        public void SetBytilt(UserControl userControl)
+        {
+            pageHelper.SetNewPage(userControl);
+        }
         private void button1_Click(object sender, EventArgs e)
         {
             pageHelper.SetNewPage(Gui.ProductsGui.ProductsUserControl.Instance(this));

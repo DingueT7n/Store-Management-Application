@@ -1,6 +1,10 @@
 ﻿using DevExpress.Data.Linq.Helpers;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Gui.CaisseAndBankGui;
+using Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.ApplicationUI.Gui.ProductsGui;
+using Store.ApplicationUI.Gui.SalesGui.PosGui;
 using Store.Core.Entities.Suppliers;
 using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
@@ -182,6 +186,79 @@ namespace Store.ApplicationUI.Gui.HomeGui
         {
             lblhora.Text = DateTime.Now.ToString("hh:mm:ss ");
             lblFecha.Text = DateTime.Now.ToLongDateString();
+        }
+
+        private void tiltUsersManagment_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
+        {
+            _main.CloseSubPanels();
+            UserRolesForm userRolesForm = UserRolesForm.Instance(_main);
+
+            userRolesForm.Show();
+
+        }
+
+        private void tiltAddProduct_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
+        {
+            _main.CloseSubPanels();
+            AddProductForm addProductForm = AddProductForm.Instance(_main);
+
+            addProductForm.Show();
+        }
+
+        private void tiltSuppAccount_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
+        {
+            _main.CloseSubPanels();
+            _main.SetBytilt(Gui.CustomersGui.CustomerAccountGui.CustomerAccountUserControl.Instance(_main));
+
+        }
+
+        private void tiltCustomersAccount_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
+        {
+            _main.CloseSubPanels();
+            _main.SetBytilt(Gui.SupplierGui.SupplierAccountGui.SupplierAccountUserControl.Instance(_main));
+
+        }
+
+        private void tiltBuys_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
+        {
+            _main.CloseSubPanels();
+            _main.SetBytilt(Gui.BuysGui.BuysUserControl.Instance(_main));
+        }
+
+        private void tiltSales_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
+        {
+            _main.CloseSubPanels();
+            _main.SetBytilt(Gui.SalesGui.SalesUserControl.Instance(_main));
+        }
+
+        private void tiltCaisse_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
+        {
+            CaisseDetailsForm caisseDetailsForm = CaisseDetailsForm.Instance(_main);
+            caisseDetailsForm.Show();
+            _main.CloseSubPanels();
+        }
+
+        private void tiltStatistiocs_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
+        {
+            _main.CloseSubPanels();
+
+            _main.SetBytilt(Gui.HomeGui.StatisticsUserControl.Instance(_main));
+
+        }
+
+        private void tiltReturns_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
+        {
+            _main.CloseSubPanels();
+
+            _main.SetBytilt(Gui.ReturnsGui.ReturnUserControl.Instance(_main));
+        }
+
+        private void tiltPos_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
+        {
+            _main.CloseSubPanels();
+            PosForm posForm = new PosForm();
+            posForm.ShowDialog();
+            _main.Show();
         }
     }
 }
