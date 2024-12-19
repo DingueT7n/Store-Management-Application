@@ -573,7 +573,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 Discount = _main.ConvertToFloat(row.Cells[3].Value.ToString())
             };
         }
-        SaleProfit SetSaleProfit(int i, decimal buyPrice)
+        SaleProfit SetSaleProfit(int i, decimal buyPrice, decimal qty)
         {
 
             var row = DgvِProducts.Rows[i];
@@ -582,7 +582,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 Order_ID = Convert.ToInt32(txtFactureNumber.Text),
                 Cust_Name = cmbCustomers.Text,
                 Pro_ID = Convert.ToInt32(row.Cells[6].Value.ToString()),
-                Quentity = _main.ConvertToFloat(row.Cells[2].Value.ToString()),
+                Quentity = qty,
                 Price = _main.ConvertToFloat(row.Cells[1].Value.ToString()),
                 Total = _main.ConvertToFloat(row.Cells[5].Value.ToString()),
                 Buy_Price = buyPrice,
@@ -609,7 +609,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
             return product;
         }
-        decimal SetProductQuentity(decimal quentity, int i)
+        decimal SetProductQuentity(decimal quentity, int i, int sale_Id)
         {
             var proId = DgvِProducts.Rows[i].Cells[6].Value.ToString();
             decimal totalBuyPrice = 0;
@@ -627,6 +627,10 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
                     if (productQty.Qty >= quentity)
                     {
+                        var profit = SetSaleProfit(i, productQty.Buy_Price, quentity);
+                        profit.Order_ID = sale_Id;
+                        _context.SalesProfits.Add(profit);
+                        _context.SaveChanges();
                         productQty.Qty -= quentity;
                         quentity = 0;
                         _context.ProductsQuantities.Update(productQty);
@@ -635,6 +639,11 @@ namespace Store.ApplicationUI.Gui.SalesGui
                     }
                     else
                     {
+                        var profit = SetSaleProfit(i, productQty.Buy_Price, productQty.Qty);
+                        profit.Order_ID = sale_Id;
+                        _context.SalesProfits.Add(profit);
+                        _context.SaveChanges();
+
                         quentity -= productQty.Qty;
                         productQty.Qty = 0;
                         _context.ProductsQuantities.Update(productQty);
@@ -645,8 +654,18 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 }
                 else
                 {
-                    totalBuyPrice += _context.Products.FirstOrDefault(x => x.Id.ToString() == proId)?.BuyPrice ?? 0;
-                    return count > 0 ? totalBuyPrice / count : totalBuyPrice;
+                    var product = _context.Products.FirstOrDefault(x => x.Id.ToString() == proId);
+                    if (product != null)
+                    {
+                        totalBuyPrice = product.BuyPrice;
+                        var profit = SetSaleProfit(i, totalBuyPrice, quentity);
+                        profit.Order_ID = sale_Id;
+                        _context.SalesProfits.Add(profit);
+                        _context.SaveChanges();
+
+                        quentity = 0;
+                        return count > 0 ? totalBuyPrice / count : totalBuyPrice;
+                    }
                 }
             }
 
@@ -708,10 +727,8 @@ namespace Store.ApplicationUI.Gui.SalesGui
                         _context.SalesDetails.Add(saleDetail);
 
                         _context.Update(SetProduct(i));
-                        var buyPrice = SetProductQuentity(Convert.ToDecimal(DgvِProducts.Rows[i].Cells[2].Value.ToString()), i);
-                        var profit = SetSaleProfit(i, buyPrice);
-                        profit.Order_ID = sale.Id;
-                        _context.Add(profit);
+                        var buyPrice = SetProductQuentity(Convert.ToDecimal(DgvِProducts.Rows[i].Cells[2].Value.ToString()), i, sale.Id);
+
                     }
                     _context.SaveChanges();
 

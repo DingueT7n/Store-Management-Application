@@ -642,5 +642,11 @@ namespace Store.ApplicationUI
             pageHelper.SetNewPage(Gui.DeservedGui.VouchersReportGui.VouchersReportsUserControl.Instance(this));
 
         }
+
+        private void btnStatics_Click(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.HomeGui.StatisticsUserControl.Instance(this));
+
+        }
     }
 }
