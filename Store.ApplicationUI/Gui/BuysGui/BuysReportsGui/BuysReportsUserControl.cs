@@ -285,5 +285,25 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
                 throw;
             }
         }
+
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (DgvBuys.SelectedRows.Count > 0)
+                {
+                    DataTable buyDetailsTable = await FactureHelper.GetBuyDetailsDataTableAsync(Convert.ToInt32(DgvBuys.CurrentRow.Cells[0].Value.ToString()));
+                    Reports.BuysReports.buyA4 buyA4 = new();
+                    buyA4.DataSource = buyDetailsTable;
+                    Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(buyA4);
+                    xtraForm1.ShowDialog();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

@@ -14,6 +14,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.BarcodeGui
         {
             try
             {
+
                 if (!string.IsNullOrEmpty(txtBarCode.Text) &&
                     !string.IsNullOrEmpty(txtProductName.Text) &&
                     !string.IsNullOrEmpty(txtPrice.Text))

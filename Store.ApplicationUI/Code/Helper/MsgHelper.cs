@@ -54,6 +54,20 @@
                 return false;
             }
         }
+        public static bool ShowProductNameIsSame()
+        {
+            var result = MessageBox.Show($"اسم المنتج موجود بالفعل! , هل تريد الاضافة على كل حال؟",
+                   "تنبيه بيانات متشابهة"
+                           , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public static void ShowSameDirectionTransfert()
         {
             MessageBox.Show("لا يمكن التحويل الى نفس المخزن. تأكد من تغيير بعض بيانات ثم اعدة المحاولة ",
