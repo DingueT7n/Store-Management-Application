@@ -264,13 +264,21 @@
             // 
             // documentViewer1
             // 
+            documentViewer1.Appearance.BackColor = Color.White;
+            documentViewer1.Appearance.BorderColor = Color.White;
+            documentViewer1.Appearance.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            documentViewer1.Appearance.Options.UseBackColor = true;
+            documentViewer1.Appearance.Options.UseBorderColor = true;
+            documentViewer1.Appearance.Options.UseFont = true;
+            documentViewer1.BorderStyle = BorderStyle.FixedSingle;
             documentViewer1.Dock = DockStyle.Fill;
             documentViewer1.IsMetric = false;
             documentViewer1.Location = new Point(0, 150);
             documentViewer1.Name = "documentViewer1";
             documentViewer1.PageBorderColor = Color.White;
-            documentViewer1.Size = new Size(1298, 544);
+            documentViewer1.Size = new Size(1415, 544);
             documentViewer1.TabIndex = 0;
+            documentViewer1.TooltipFont = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             // 
             // documentViewerRibbonController1
             // 
@@ -291,7 +299,7 @@
             ribbonControl1.OptionsMenuMinWidth = 440;
             ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] { printPreviewRibbonPage });
             ribbonControl1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] { repositoryItemProgressBar1, repositoryItemZoomTrackBar1 });
-            ribbonControl1.Size = new Size(1298, 150);
+            ribbonControl1.Size = new Size(1415, 150);
             ribbonControl1.StatusBar = ribbonStatusBar1;
             ribbonControl1.TransparentEditorsMode = DevExpress.Utils.DefaultBoolean.True;
             // 
@@ -1382,7 +1390,7 @@
             ribbonStatusBar1.Margin = new Padding(4);
             ribbonStatusBar1.Name = "ribbonStatusBar1";
             ribbonStatusBar1.Ribbon = ribbonControl1;
-            ribbonStatusBar1.Size = new Size(1298, 27);
+            ribbonStatusBar1.Size = new Size(1415, 27);
             // 
             // XtraForm1
             // 
@@ -1391,7 +1399,7 @@
             Appearance.Options.UseFont = true;
             AutoScaleDimensions = new SizeF(8F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1298, 721);
+            ClientSize = new Size(1415, 721);
             Controls.Add(documentViewer1);
             Controls.Add(ribbonStatusBar1);
             Controls.Add(ribbonControl1);
@@ -1411,8 +1419,6 @@
         }
 
         #endregion
-
-        private DevExpress.XtraPrinting.Preview.DocumentViewer documentViewer1;
         private DevExpress.XtraPrinting.Preview.DocumentViewerRibbonController documentViewerRibbonController1;
         private DevExpress.XtraBars.Ribbon.RibbonControl ribbonControl1;
         private DevExpress.XtraPrinting.Preview.PrintPreviewBarItem printPreviewBarItem1;
@@ -1483,5 +1489,6 @@
         private DevExpress.XtraPrinting.Preview.PrintPreviewRibbonPageGroup printPreviewRibbonPageGroup7;
         private DevExpress.XtraPrinting.Preview.PrintPreviewRibbonPageGroup printPreviewRibbonPageGroup8;
         private DevExpress.XtraBars.Ribbon.RibbonStatusBar ribbonStatusBar1;
+        public DevExpress.XtraPrinting.Preview.DocumentViewer documentViewer1;
     }
 }

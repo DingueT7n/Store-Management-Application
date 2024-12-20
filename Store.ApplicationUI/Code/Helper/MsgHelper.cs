@@ -15,7 +15,11 @@
                   "حقول مطلوبة"
                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+        public static void ShowRequiredFields2()
+        {
+            MessageBox.Show("يرجى تعبئة جميع الحقول المطلوبة.", "خطأ في التحقق", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
+        }
         public static void ShowDuplicatedItems()
         {
             MessageBox.Show("تم اضافة هذه البيانات بالفعل. تأكد من تغيير بعض بيانات بعض الحقول ثم اعدة المحاولة ",
@@ -26,6 +30,20 @@
         {
             var result = MessageBox.Show($"مرتب السيد {EmployeeName} لهذا الشهر {Salary} اذا اردت الاكمل اضغظ على القبول",
                    "تنبيه بيانات غير مسبوقة"
+                           , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public static bool ShowBareCodeIsGoingToChange()
+        {
+            var result = MessageBox.Show($"الباركود سيتغير بغد الموافقة , هل توافق؟",
+                   "تنبيه بيانات ستستبدل"
                            , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {

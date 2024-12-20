@@ -58,7 +58,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
             return _addProductForm;
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
+
 
 
             _addProductForm = new AddProductForm(_main);
@@ -127,7 +127,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void txtBarCode_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
+            if (!char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
             }
@@ -135,7 +135,18 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void txtMinQty_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
+            string currentText = (sender as TextBox)?.Text ?? string.Empty;
+
+
+            char decimalSeparator = Properties.Settings.Default.DecimalSEP[0];
+
+
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != decimalSeparator && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+
+            else if (e.KeyChar == decimalSeparator && currentText.Contains(decimalSeparator))
             {
                 e.Handled = true;
             }
@@ -143,7 +154,18 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void txtTaxValue_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
+            string currentText = (sender as TextBox)?.Text ?? string.Empty;
+
+
+            char decimalSeparator = Properties.Settings.Default.DecimalSEP[0];
+
+
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != decimalSeparator && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+
+            else if (e.KeyChar == decimalSeparator && currentText.Contains(decimalSeparator))
             {
                 e.Handled = true;
             }
@@ -151,7 +173,18 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void txtBuyPrice_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
+            string currentText = (sender as TextBox)?.Text ?? string.Empty;
+
+
+            char decimalSeparator = Properties.Settings.Default.DecimalSEP[0];
+
+
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != decimalSeparator && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+
+            else if (e.KeyChar == decimalSeparator && currentText.Contains(decimalSeparator))
             {
                 e.Handled = true;
             }
@@ -159,7 +192,18 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void txtTotalQty_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
+            string currentText = (sender as TextBox)?.Text ?? string.Empty;
+
+
+            char decimalSeparator = Properties.Settings.Default.DecimalSEP[0];
+
+
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != decimalSeparator && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+
+            else if (e.KeyChar == decimalSeparator && currentText.Contains(decimalSeparator))
             {
                 e.Handled = true;
             }
@@ -167,7 +211,18 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void txtWholeSalePrice_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
+            string currentText = (sender as TextBox)?.Text ?? string.Empty;
+
+
+            char decimalSeparator = Properties.Settings.Default.DecimalSEP[0];
+
+
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != decimalSeparator && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+
+            else if (e.KeyChar == decimalSeparator && currentText.Contains(decimalSeparator))
             {
                 e.Handled = true;
             }
@@ -175,7 +230,18 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void txtSalePrice_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
+            string currentText = (sender as TextBox)?.Text ?? string.Empty;
+
+
+            char decimalSeparator = Properties.Settings.Default.DecimalSEP[0];
+
+
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != decimalSeparator && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+
+            else if (e.KeyChar == decimalSeparator && currentText.Contains(decimalSeparator))
             {
                 e.Handled = true;
             }
@@ -183,7 +249,18 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void txtDiscountAllowed_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
+            string currentText = (sender as TextBox)?.Text ?? string.Empty;
+
+
+            char decimalSeparator = Properties.Settings.Default.DecimalSEP[0];
+
+
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != decimalSeparator && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+
+            else if (e.KeyChar == decimalSeparator && currentText.Contains(decimalSeparator))
             {
                 e.Handled = true;
             }
@@ -191,7 +268,19 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void txtSaleAfterTax_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
+
+            string currentText = (sender as TextBox)?.Text ?? string.Empty;
+
+
+            char decimalSeparator = Properties.Settings.Default.DecimalSEP[0];
+
+
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != decimalSeparator && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+
+            else if (e.KeyChar == decimalSeparator && currentText.Contains(decimalSeparator))
             {
                 e.Handled = true;
             }
@@ -227,6 +316,37 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             btnEditProduct.Visible = true;
             lblProductId.Visible = true;
             label13.Visible = true;
+        }
+        public void SetSimilaireDataToAdd(string NameProduct, string BarCode, string categoryId, string MinQty
+           , bool IsTaxed, string TaxValue, string BuyPrice, string Quentity, string WholesalePrice
+           , string SalePrice, DateTime DateExpiration, string MaxDiscount, string SaleAfterTax, string productId, byte[] image
+           , string catName)
+        {
+            LoadData();
+            txtNameProduct.Text = NameProduct;
+
+            CMBCategory.SelectedValue = Convert.ToInt32(categoryId);
+            txtMinQty.Text = MinQty;
+            CbIsTaxed.Checked = IsTaxed;
+            txtTaxValue.Text = TaxValue;
+            txtBuyPrice.Text = BuyPrice;
+            txtTotalQty.Text = Quentity;
+            txtWholeSalePrice.Text = WholesalePrice;
+            txtSalePrice.Text = SalePrice;
+            txtDiscountAllowed.Text = MaxDiscount;
+            txtSaleAfterTax.Text = SaleAfterTax;
+            DtpExperation.Value = DateExpiration;
+            txtDiscountAllowed.Text = MaxDiscount;
+            txtSaleAfterTax.Text = SaleAfterTax;
+            lblProductId.Text = productId;
+            if (image is not null)
+            {
+                SetImage(image);
+            }
+            btnAddProduct.Visible = true;
+            lblProductId.Visible = false;
+            label13.Visible = false;
+            txtBarCode.Focus();
         }
         private void btnAddProduct_Click(object sender, EventArgs e)
         {
@@ -387,6 +507,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             }
             BarcodeGui.BarCodeForm barCodeForm = new BarcodeGui.BarCodeForm();
             barCodeForm.txtBarCode.Text = txtBarCode.Text;
+            barCodeForm.lblIdProduct.Text = lblProductId.Text;
             barCodeForm.txtPrice.Text = txtSaleAfterTax.Text;
             barCodeForm.txtProductName.Text = txtNameProduct.Text;
             barCodeForm.lblBarecode.Text = txtBarCode.Text;

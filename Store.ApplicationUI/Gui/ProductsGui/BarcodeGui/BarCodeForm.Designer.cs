@@ -40,12 +40,16 @@
             groupBox2 = new GroupBox();
             btnPrint = new Button();
             btnReviewPrint = new Button();
+            lblIdProduct = new Label();
+            label5 = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             SuspendLayout();
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label5);
+            groupBox1.Controls.Add(lblIdProduct);
             groupBox1.Controls.Add(txtPrice);
             groupBox1.Controls.Add(txtBarCode);
             groupBox1.Controls.Add(txtProductName);
@@ -55,28 +59,28 @@
             groupBox1.Dock = DockStyle.Top;
             groupBox1.Location = new Point(0, 0);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(382, 166);
+            groupBox1.Size = new Size(382, 185);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "بيانات باركود المنتج";
             // 
             // txtPrice
             // 
-            txtPrice.Location = new Point(43, 126);
+            txtPrice.Location = new Point(43, 148);
             txtPrice.Name = "txtPrice";
             txtPrice.Size = new Size(243, 27);
             txtPrice.TabIndex = 5;
             // 
             // txtBarCode
             // 
-            txtBarCode.Location = new Point(43, 87);
+            txtBarCode.Location = new Point(43, 109);
             txtBarCode.Name = "txtBarCode";
             txtBarCode.Size = new Size(243, 27);
             txtBarCode.TabIndex = 4;
             // 
             // txtProductName
             // 
-            txtProductName.Location = new Point(43, 43);
+            txtProductName.Location = new Point(43, 65);
             txtProductName.Name = "txtProductName";
             txtProductName.Size = new Size(243, 27);
             txtProductName.TabIndex = 3;
@@ -84,7 +88,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(298, 129);
+            label3.Location = new Point(298, 151);
             label3.Name = "label3";
             label3.Size = new Size(41, 19);
             label3.TabIndex = 2;
@@ -93,7 +97,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(298, 90);
+            label2.Location = new Point(298, 112);
             label2.Name = "label2";
             label2.Size = new Size(72, 19);
             label2.TabIndex = 1;
@@ -102,7 +106,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(298, 46);
+            label1.Location = new Point(298, 68);
             label1.Name = "label1";
             label1.Size = new Size(67, 19);
             label1.TabIndex = 0;
@@ -112,7 +116,7 @@
             // 
             lblBarecode.Dock = DockStyle.Top;
             lblBarecode.Font = new Font("Aatrix3of9Reg", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblBarecode.Location = new Point(0, 166);
+            lblBarecode.Location = new Point(0, 185);
             lblBarecode.Margin = new Padding(10);
             lblBarecode.Name = "lblBarecode";
             lblBarecode.Size = new Size(382, 79);
@@ -157,6 +161,24 @@
             btnReviewPrint.Text = "معاينة وطباعة";
             btnReviewPrint.TextAlign = ContentAlignment.MiddleRight;
             btnReviewPrint.UseVisualStyleBackColor = true;
+            btnReviewPrint.Click += btnReviewPrint_Click;
+            // 
+            // lblIdProduct
+            // 
+            lblIdProduct.AutoSize = true;
+            lblIdProduct.Location = new Point(201, 33);
+            lblIdProduct.Name = "lblIdProduct";
+            lblIdProduct.Size = new Size(0, 19);
+            lblIdProduct.TabIndex = 6;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(298, 33);
+            label5.Name = "label5";
+            label5.Size = new Size(78, 19);
+            label5.TabIndex = 7;
+            label5.Text = "معرف المنتج";
             // 
             // BarCodeForm
             // 
@@ -195,5 +217,7 @@
         public TextBox txtBarCode;
         public TextBox txtProductName;
         public Label lblBarecode;
+        private Label label5;
+        public Label lblIdProduct;
     }
 }

@@ -40,6 +40,8 @@
             btnDeleteProduct = new Button();
             btnAddCategory = new Button();
             btnAddStore = new Button();
+            btnAddSimilareProduct = new Button();
+            button1 = new Button();
             btnExportProduct = new Button();
             SearchPanel = new Panel();
             txtSearch = new TextBox();
@@ -61,6 +63,8 @@
             OperationsflowLayoutPanel.Controls.Add(btnDeleteProduct);
             OperationsflowLayoutPanel.Controls.Add(btnAddCategory);
             OperationsflowLayoutPanel.Controls.Add(btnAddStore);
+            OperationsflowLayoutPanel.Controls.Add(btnAddSimilareProduct);
+            OperationsflowLayoutPanel.Controls.Add(button1);
             OperationsflowLayoutPanel.Controls.Add(btnExportProduct);
             OperationsflowLayoutPanel.Controls.Add(SearchPanel);
             OperationsflowLayoutPanel.Dock = DockStyle.Top;
@@ -75,7 +79,7 @@
             btnAddProduct.Anchor = AnchorStyles.None;
             btnAddProduct.Image = (Image)resources.GetObject("btnAddProduct.Image");
             btnAddProduct.ImageAlign = ContentAlignment.MiddleLeft;
-            btnAddProduct.Location = new Point(931, 3);
+            btnAddProduct.Location = new Point(914, 3);
             btnAddProduct.Name = "btnAddProduct";
             btnAddProduct.Size = new Size(100, 40);
             btnAddProduct.TabIndex = 3;
@@ -88,7 +92,7 @@
             btnEditProduct.Anchor = AnchorStyles.None;
             btnEditProduct.Image = (Image)resources.GetObject("btnEditProduct.Image");
             btnEditProduct.ImageAlign = ContentAlignment.MiddleLeft;
-            btnEditProduct.Location = new Point(825, 3);
+            btnEditProduct.Location = new Point(808, 3);
             btnEditProduct.Name = "btnEditProduct";
             btnEditProduct.Size = new Size(100, 40);
             btnEditProduct.TabIndex = 4;
@@ -102,7 +106,7 @@
             btnDeleteProduct.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnDeleteProduct.Image = (Image)resources.GetObject("btnDeleteProduct.Image");
             btnDeleteProduct.ImageAlign = ContentAlignment.MiddleLeft;
-            btnDeleteProduct.Location = new Point(719, 3);
+            btnDeleteProduct.Location = new Point(702, 3);
             btnDeleteProduct.Name = "btnDeleteProduct";
             btnDeleteProduct.Size = new Size(100, 40);
             btnDeleteProduct.TabIndex = 5;
@@ -115,7 +119,7 @@
             btnAddCategory.Anchor = AnchorStyles.None;
             btnAddCategory.Image = (Image)resources.GetObject("btnAddCategory.Image");
             btnAddCategory.ImageAlign = ContentAlignment.MiddleLeft;
-            btnAddCategory.Location = new Point(592, 3);
+            btnAddCategory.Location = new Point(575, 3);
             btnAddCategory.Name = "btnAddCategory";
             btnAddCategory.Size = new Size(121, 40);
             btnAddCategory.TabIndex = 8;
@@ -128,7 +132,7 @@
             btnAddStore.Anchor = AnchorStyles.None;
             btnAddStore.Image = (Image)resources.GetObject("btnAddStore.Image");
             btnAddStore.ImageAlign = ContentAlignment.MiddleLeft;
-            btnAddStore.Location = new Point(467, 3);
+            btnAddStore.Location = new Point(450, 3);
             btnAddStore.Name = "btnAddStore";
             btnAddStore.Size = new Size(119, 40);
             btnAddStore.TabIndex = 9;
@@ -136,12 +140,39 @@
             btnAddStore.UseVisualStyleBackColor = true;
             btnAddStore.Click += btnAddStore_Click;
             // 
+            // btnAddSimilareProduct
+            // 
+            btnAddSimilareProduct.Anchor = AnchorStyles.None;
+            btnAddSimilareProduct.Image = (Image)resources.GetObject("btnAddSimilareProduct.Image");
+            btnAddSimilareProduct.ImageAlign = ContentAlignment.MiddleLeft;
+            btnAddSimilareProduct.Location = new Point(306, 3);
+            btnAddSimilareProduct.Name = "btnAddSimilareProduct";
+            btnAddSimilareProduct.Size = new Size(138, 40);
+            btnAddSimilareProduct.TabIndex = 10;
+            btnAddSimilareProduct.Text = "اضافة منتج مماثل";
+            btnAddSimilareProduct.TextAlign = ContentAlignment.MiddleRight;
+            btnAddSimilareProduct.UseVisualStyleBackColor = true;
+            btnAddSimilareProduct.Click += btnAddSimilareProduct_Click;
+            // 
+            // button1
+            // 
+            button1.Anchor = AnchorStyles.None;
+            button1.Image = (Image)resources.GetObject("button1.Image");
+            button1.ImageAlign = ContentAlignment.MiddleLeft;
+            button1.Location = new Point(163, 3);
+            button1.Name = "button1";
+            button1.Size = new Size(137, 40);
+            button1.TabIndex = 11;
+            button1.Text = "طباعة المنتجات";
+            button1.TextAlign = ContentAlignment.MiddleRight;
+            button1.UseVisualStyleBackColor = true;
+            // 
             // btnExportProduct
             // 
             btnExportProduct.Anchor = AnchorStyles.None;
             btnExportProduct.Image = (Image)resources.GetObject("btnExportProduct.Image");
             btnExportProduct.ImageAlign = ContentAlignment.MiddleLeft;
-            btnExportProduct.Location = new Point(361, 3);
+            btnExportProduct.Location = new Point(57, 3);
             btnExportProduct.Name = "btnExportProduct";
             btnExportProduct.Size = new Size(100, 40);
             btnExportProduct.TabIndex = 6;
@@ -152,9 +183,9 @@
             // 
             SearchPanel.Controls.Add(txtSearch);
             SearchPanel.Controls.Add(btnSearch);
-            SearchPanel.Location = new Point(15, 3);
+            SearchPanel.Location = new Point(762, 49);
             SearchPanel.Name = "SearchPanel";
-            SearchPanel.Size = new Size(340, 40);
+            SearchPanel.Size = new Size(252, 40);
             SearchPanel.TabIndex = 7;
             // 
             // txtSearch
@@ -165,7 +196,7 @@
             txtSearch.Multiline = true;
             txtSearch.Name = "txtSearch";
             txtSearch.PlaceholderText = "ابحث عن منتج";
-            txtSearch.Size = new Size(290, 40);
+            txtSearch.Size = new Size(202, 40);
             txtSearch.TabIndex = 9;
             txtSearch.TextAlign = HorizontalAlignment.Center;
             // 
@@ -292,5 +323,7 @@
         private ToolTip toolTip1;
         private Button btnAddCategory;
         private Button btnAddStore;
+        private Button btnAddSimilareProduct;
+        private Button button1;
     }
 }

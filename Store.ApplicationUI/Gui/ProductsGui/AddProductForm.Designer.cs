@@ -66,12 +66,9 @@
             btnAddProduct = new Button();
             btnEditProduct = new Button();
             btnPrintBarCode = new Button();
-            panelcancel = new Panel();
-            button1 = new Button();
             GbInfoProduct.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)PbImageProduct).BeginInit();
             OperationsflowLayoutPanel.SuspendLayout();
-            panelcancel.SuspendLayout();
             SuspendLayout();
             // 
             // GbInfoProduct
@@ -154,7 +151,7 @@
             txtBarCode.Location = new Point(368, 74);
             txtBarCode.Name = "txtBarCode";
             txtBarCode.Size = new Size(219, 27);
-            txtBarCode.TabIndex = 3;
+            txtBarCode.TabIndex = 2;
             txtBarCode.TextAlign = HorizontalAlignment.Center;
             txtBarCode.KeyPress += txtBarCode_KeyPress;
             // 
@@ -229,7 +226,7 @@
             DtpExperation.MaxDate = new DateTime(2101, 1, 1, 0, 0, 0, 0);
             DtpExperation.Name = "DtpExperation";
             DtpExperation.Size = new Size(119, 27);
-            DtpExperation.TabIndex = 25;
+            DtpExperation.TabIndex = 16;
             DtpExperation.Value = new DateTime(2024, 8, 23, 21, 42, 30, 0);
             // 
             // label12
@@ -271,7 +268,8 @@
             txtBuyPrice.Location = new Point(368, 240);
             txtBuyPrice.Name = "txtBuyPrice";
             txtBuyPrice.Size = new Size(217, 27);
-            txtBuyPrice.TabIndex = 21;
+            txtBuyPrice.TabIndex = 8;
+            txtBuyPrice.Text = "0.00";
             txtBuyPrice.TextAlign = HorizontalAlignment.Center;
             txtBuyPrice.KeyPress += txtBuyPrice_KeyPress;
             // 
@@ -291,7 +289,8 @@
             txtTotalQty.Location = new Point(2, 29);
             txtTotalQty.Name = "txtTotalQty";
             txtTotalQty.Size = new Size(180, 27);
-            txtTotalQty.TabIndex = 19;
+            txtTotalQty.TabIndex = 11;
+            txtTotalQty.Text = "0.00";
             txtTotalQty.TextAlign = HorizontalAlignment.Center;
             txtTotalQty.KeyPress += txtTotalQty_KeyPress;
             // 
@@ -310,7 +309,8 @@
             txtSaleAfterTax.Location = new Point(2, 199);
             txtSaleAfterTax.Name = "txtSaleAfterTax";
             txtSaleAfterTax.Size = new Size(183, 27);
-            txtSaleAfterTax.TabIndex = 17;
+            txtSaleAfterTax.TabIndex = 15;
+            txtSaleAfterTax.Text = "0.00";
             txtSaleAfterTax.TextAlign = HorizontalAlignment.Center;
             txtSaleAfterTax.KeyPress += txtSaleAfterTax_KeyPress;
             // 
@@ -329,7 +329,8 @@
             txtDiscountAllowed.Location = new Point(2, 155);
             txtDiscountAllowed.Name = "txtDiscountAllowed";
             txtDiscountAllowed.Size = new Size(183, 27);
-            txtDiscountAllowed.TabIndex = 15;
+            txtDiscountAllowed.TabIndex = 14;
+            txtDiscountAllowed.Text = "0.00";
             txtDiscountAllowed.TextAlign = HorizontalAlignment.Center;
             txtDiscountAllowed.KeyPress += txtDiscountAllowed_KeyPress;
             // 
@@ -349,6 +350,7 @@
             txtSalePrice.Name = "txtSalePrice";
             txtSalePrice.Size = new Size(183, 27);
             txtSalePrice.TabIndex = 13;
+            txtSalePrice.Text = "0.00";
             txtSalePrice.TextAlign = HorizontalAlignment.Center;
             txtSalePrice.KeyPress += txtSalePrice_KeyPress;
             // 
@@ -367,7 +369,8 @@
             txtWholeSalePrice.Location = new Point(2, 75);
             txtWholeSalePrice.Name = "txtWholeSalePrice";
             txtWholeSalePrice.Size = new Size(182, 27);
-            txtWholeSalePrice.TabIndex = 11;
+            txtWholeSalePrice.TabIndex = 12;
+            txtWholeSalePrice.Text = "0.00";
             txtWholeSalePrice.TextAlign = HorizontalAlignment.Center;
             txtWholeSalePrice.KeyPress += txtWholeSalePrice_KeyPress;
             // 
@@ -388,7 +391,7 @@
             btnAddCategory.Location = new Point(368, 114);
             btnAddCategory.Name = "btnAddCategory";
             btnAddCategory.Size = new Size(34, 35);
-            btnAddCategory.TabIndex = 8;
+            btnAddCategory.TabIndex = 4;
             btnAddCategory.UseVisualStyleBackColor = true;
             btnAddCategory.Click += btnAddCategory_Click;
             // 
@@ -398,7 +401,7 @@
             txtTaxValue.Location = new Point(368, 201);
             txtTaxValue.Name = "txtTaxValue";
             txtTaxValue.Size = new Size(71, 27);
-            txtTaxValue.TabIndex = 9;
+            txtTaxValue.TabIndex = 7;
             txtTaxValue.Text = "0";
             txtTaxValue.TextAlign = HorizontalAlignment.Center;
             txtTaxValue.KeyPress += txtTaxValue_KeyPress;
@@ -410,7 +413,7 @@
             CbIsTaxed.Location = new Point(466, 203);
             CbIsTaxed.Name = "CbIsTaxed";
             CbIsTaxed.Size = new Size(205, 23);
-            CbIsTaxed.TabIndex = 8;
+            CbIsTaxed.TabIndex = 6;
             CbIsTaxed.Text = "خاضع لضريبة القيمة المضافة %:\r\n";
             CbIsTaxed.UseVisualStyleBackColor = true;
             // 
@@ -421,7 +424,7 @@
             CMBCategory.Location = new Point(406, 117);
             CMBCategory.Name = "CMBCategory";
             CMBCategory.Size = new Size(179, 27);
-            CMBCategory.TabIndex = 7;
+            CMBCategory.TabIndex = 3;
             CMBCategory.Text = "اختر صنف";
             // 
             // label4
@@ -442,6 +445,7 @@
             txtMinQty.Name = "txtMinQty";
             txtMinQty.Size = new Size(143, 27);
             txtMinQty.TabIndex = 5;
+            txtMinQty.Text = "0.00";
             txtMinQty.TextAlign = HorizontalAlignment.Center;
             txtMinQty.KeyPress += txtMinQty_KeyPress;
             // 
@@ -462,7 +466,6 @@
             OperationsflowLayoutPanel.Controls.Add(btnAddProduct);
             OperationsflowLayoutPanel.Controls.Add(btnEditProduct);
             OperationsflowLayoutPanel.Controls.Add(btnPrintBarCode);
-            OperationsflowLayoutPanel.Controls.Add(panelcancel);
             OperationsflowLayoutPanel.Dock = DockStyle.Bottom;
             OperationsflowLayoutPanel.Location = new Point(0, 430);
             OperationsflowLayoutPanel.Margin = new Padding(5);
@@ -475,10 +478,10 @@
             btnAddProduct.Anchor = AnchorStyles.None;
             btnAddProduct.Image = (Image)resources.GetObject("btnAddProduct.Image");
             btnAddProduct.ImageAlign = ContentAlignment.MiddleLeft;
-            btnAddProduct.Location = new Point(587, 3);
+            btnAddProduct.Location = new Point(604, 3);
             btnAddProduct.Name = "btnAddProduct";
             btnAddProduct.Size = new Size(100, 40);
-            btnAddProduct.TabIndex = 3;
+            btnAddProduct.TabIndex = 17;
             btnAddProduct.Text = "   اضافة";
             btnAddProduct.UseVisualStyleBackColor = true;
             btnAddProduct.Click += btnAddProduct_Click;
@@ -488,10 +491,10 @@
             btnEditProduct.Anchor = AnchorStyles.None;
             btnEditProduct.Image = (Image)resources.GetObject("btnEditProduct.Image");
             btnEditProduct.ImageAlign = ContentAlignment.MiddleLeft;
-            btnEditProduct.Location = new Point(481, 3);
+            btnEditProduct.Location = new Point(498, 3);
             btnEditProduct.Name = "btnEditProduct";
             btnEditProduct.Size = new Size(100, 40);
-            btnEditProduct.TabIndex = 4;
+            btnEditProduct.TabIndex = 18;
             btnEditProduct.Text = "   تعديل";
             btnEditProduct.UseVisualStyleBackColor = true;
             btnEditProduct.Visible = false;
@@ -502,32 +505,13 @@
             btnPrintBarCode.Anchor = AnchorStyles.None;
             btnPrintBarCode.Image = (Image)resources.GetObject("btnPrintBarCode.Image");
             btnPrintBarCode.ImageAlign = ContentAlignment.MiddleLeft;
-            btnPrintBarCode.Location = new Point(359, 3);
+            btnPrintBarCode.Location = new Point(376, 3);
             btnPrintBarCode.Name = "btnPrintBarCode";
             btnPrintBarCode.Size = new Size(116, 40);
-            btnPrintBarCode.TabIndex = 6;
+            btnPrintBarCode.TabIndex = 19;
             btnPrintBarCode.Text = "      طباعة باركود";
             btnPrintBarCode.UseVisualStyleBackColor = true;
             btnPrintBarCode.Click += btnPrintBarCode_Click;
-            // 
-            // panelcancel
-            // 
-            panelcancel.Controls.Add(button1);
-            panelcancel.Location = new Point(244, 49);
-            panelcancel.Name = "panelcancel";
-            panelcancel.Size = new Size(443, 42);
-            panelcancel.TabIndex = 32;
-            // 
-            // button1
-            // 
-            button1.Image = (Image)resources.GetObject("button1.Image");
-            button1.ImageAlign = ContentAlignment.MiddleLeft;
-            button1.Location = new Point(7, -1);
-            button1.Name = "button1";
-            button1.Size = new Size(100, 40);
-            button1.TabIndex = 7;
-            button1.Text = "      الخروج";
-            button1.UseVisualStyleBackColor = true;
             // 
             // AddProductForm
             // 
@@ -552,7 +536,6 @@
             GbInfoProduct.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)PbImageProduct).EndInit();
             OperationsflowLayoutPanel.ResumeLayout(false);
-            panelcancel.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -565,7 +548,6 @@
         private Button btnAddProduct;
         private Button btnEditProduct;
         private Button btnPrintBarCode;
-        private Button button1;
         private Label lblProductId;
         private Label label13;
         private DateTimePicker DtpExperation;
@@ -596,6 +578,5 @@
         private Label label14;
         private Label label16;
         private Label label15;
-        private Panel panelcancel;
     }
 }

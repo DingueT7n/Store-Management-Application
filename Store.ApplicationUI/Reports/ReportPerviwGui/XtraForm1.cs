@@ -10,5 +10,10 @@ namespace Store.ApplicationUI.Reports.ReportPerviwGui
             documentViewer1.DocumentSource = report;
             report.CreateDocument();
         }
+        public XtraForm1()
+        {
+            InitializeComponent();
+
+        }
     }
 }

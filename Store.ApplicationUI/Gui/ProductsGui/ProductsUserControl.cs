@@ -229,5 +229,42 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 addStoreForm.Focus();
             }
         }
+
+        private void btnAddSimilareProduct_Click(object sender, EventArgs e)
+        {
+            if (DgvProducts.Rows.Count > 0)
+            {
+                if (addProductForm == null || addProductForm.IsDisposed)
+                {
+                    addProductForm = AddProductForm.Instance(_main);
+
+
+                    addProductForm.SetSimilaireDataToAdd(
+                        DgvProducts.CurrentRow.Cells[1].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[0].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[13].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[10].Value?.ToString(),
+                        Convert.ToBoolean(DgvProducts.CurrentRow.Cells[8].Value),
+                        DgvProducts.CurrentRow.Cells[6].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[3].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[2].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[5].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[4].Value.ToString(),
+                       Convert.ToDateTime(DgvProducts.CurrentRow.Cells[9].Value),
+                        DgvProducts.CurrentRow.Cells[11].Value?.ToString(),
+                        DgvProducts.CurrentRow.Cells[7].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[15].Value.ToString(),
+                        (byte[])DgvProducts.CurrentRow.Cells[12].Value,
+                          DgvProducts.CurrentRow.Cells[14].Value.ToString()
+                        );
+
+                    addProductForm.Show();
+                }
+                else
+                {
+                    addProductForm.Focus();
+                }
+            }
+        }
     }
 }
