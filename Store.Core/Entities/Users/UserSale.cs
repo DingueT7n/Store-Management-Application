@@ -2,6 +2,17 @@
 {
     public class UserSale : BaseEntity<int>
     {
+        public UserSale(bool b)
+        {
+            NewSale = b;
+            SaleReports = b;
+            SaleProfits = b;
+        }
+        public UserSale()
+        {
+
+        }
+
         public int User_Id { get; set; }
         public bool NewSale { get; set; }
         public bool SaleReports { get; set; }

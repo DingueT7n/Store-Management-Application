@@ -2,6 +2,21 @@
 {
     public class UserEmployee : BaseEntity<int>
     {
+        public UserEmployee(bool b)
+        {
+            AllEmployee = b;
+            AddEmployee = b;
+            EmployeeBorrowItem = b;
+            EmployeeBorrowMoney = b;
+            EmployeeSalaries = b;
+            EmployeeBorrowItemsReport = b;
+            EmployeeBorrowMoneyReport = b;
+            EmployeeSalariesReport = b;
+        }
+        public UserEmployee()
+        {
+
+        }
         public int User_Id { get; set; }
         public bool AllEmployee { get; set; }
         public bool AddEmployee { get; set; }

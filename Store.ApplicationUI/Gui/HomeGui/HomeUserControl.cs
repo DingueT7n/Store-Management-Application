@@ -1,4 +1,5 @@
 ﻿using DevExpress.Data.Linq.Helpers;
+using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.CaisseAndBankGui;
 using Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui;
@@ -22,6 +23,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
         public HomeUserControl()
         {
             InitializeComponent();
+
 
 
         }
@@ -82,6 +84,23 @@ namespace Store.ApplicationUI.Gui.HomeGui
             SummaryDataDeserved.Text = _context.Deserveds.Count().ToString();
             SummaryDataProducts.Text = _context.Products.Count().ToString();
             SummaryDataSuppliers.Text = _context.Suppliers.Count().ToString();
+
+            var user = _context.Users
+             .Include(u => u.UserBuy)
+            .Include(u => u.UserCaisseAndBank)
+            .Include(u => u.UserCustomer)
+            .Include(u => u.UserDeservedAndTax)
+            .Include(u => u.UserEmployee)
+            .Include(u => u.UserProductAndStore)
+            .Include(u => u.UserRefund)
+            .Include(u => u.UserSale)
+            .Include(u => u.UserSetting)
+            .Include(u => u.UserSupplier)
+            .FirstOrDefault(u => u.UserName == "hg" && u.Password == "g");
+
+
+            int a2 = 1;
+
         }
         private void SetColumns()
         {

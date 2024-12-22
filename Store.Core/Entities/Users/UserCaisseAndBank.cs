@@ -11,6 +11,20 @@
         public bool TransfertBetweenCaisse { get; set; }
         public bool TransfertBetweenCaisseAndBank { get; set; }
         public User User { get; set; }
+        public UserCaisseAndBank()
+        {
 
+        }
+
+        public UserCaisseAndBank(bool b)
+        {
+            CaissesAndBanks = b;
+            DepositToCaisse = b;
+            DepositToBank = b;
+            WithdrawFromCaisse = b;
+            WithdrawFromBank = b;
+            TransfertBetweenCaisse = b;
+            TransfertBetweenCaisseAndBank = b;
+        }
     }
 }

@@ -23,6 +23,55 @@ namespace Store.Infrastructure.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
+            modelBuilder.Entity<UserBuy>()
+      .HasOne(ub => ub.User)
+      .WithMany()
+      .HasForeignKey(ub => ub.User_Id); // Use actual column name in the database
+
+            modelBuilder.Entity<UserCaisseAndBank>()
+               .HasOne(ub => ub.User)
+               .WithMany()
+               .HasForeignKey(ub => ub.User_Id);
+            modelBuilder.Entity<UserCustomer>()
+               .HasOne(ub => ub.User)
+               .WithMany()
+               .HasForeignKey(ub => ub.User_Id);
+
+            modelBuilder.Entity<UserDeservedAndTax>()
+              .HasOne(ub => ub.User)
+              .WithMany()
+              .HasForeignKey(ub => ub.User_Id);
+
+            modelBuilder.Entity<UserEmployee>()
+              .HasOne(ub => ub.User)
+              .WithMany()
+              .HasForeignKey(ub => ub.User_Id);
+            modelBuilder.Entity<UserProductAndStore>()
+             .HasOne(ub => ub.User)
+             .WithMany()
+             .HasForeignKey(ub => ub.User_Id);
+
+            modelBuilder.Entity<UserRefund>()
+            .HasOne(ub => ub.User)
+            .WithMany()
+            .HasForeignKey(ub => ub.User_Id);
+
+            modelBuilder.Entity<UserSale>()
+             .HasOne(ub => ub.User)
+             .WithMany()
+             .HasForeignKey(ub => ub.User_Id);
+
+            modelBuilder.Entity<UserSetting>()
+            .HasOne(ub => ub.User)
+            .WithMany()
+            .HasForeignKey(ub => ub.User_Id);
+
+            modelBuilder.Entity<UserSupplier>()
+              .HasOne(ub => ub.User)
+              .WithMany()
+              .HasForeignKey(ub => ub.User_Id);
+
+
         }
         protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
         {

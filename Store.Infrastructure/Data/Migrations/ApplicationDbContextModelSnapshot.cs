@@ -1687,17 +1687,67 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<int>("Stock_Id")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UserBuyId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserCaisseAndBankId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserCustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserDeservedAndTaxId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserEmployeeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UserProductAndStoreId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("UserProfit")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("UserRefundId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserSaleId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserSettingId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserSupplierId")
+                        .HasColumnType("int");
+
                     b.Property<string>("type")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserBuyId");
+
+                    b.HasIndex("UserCaisseAndBankId");
+
+                    b.HasIndex("UserCustomerId");
+
+                    b.HasIndex("UserDeservedAndTaxId");
+
+                    b.HasIndex("UserEmployeeId");
+
+                    b.HasIndex("UserProductAndStoreId");
+
+                    b.HasIndex("UserRefundId");
+
+                    b.HasIndex("UserSaleId");
+
+                    b.HasIndex("UserSettingId");
+
+                    b.HasIndex("UserSupplierId");
 
                     b.ToTable("Users");
                 });
@@ -2430,6 +2480,69 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Navigation("Buy");
 
                     b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Users.User", b =>
+                {
+                    b.HasOne("Store.Core.Entities.Users.UserBuy", "UserBuy")
+                        .WithMany()
+                        .HasForeignKey("UserBuyId");
+
+                    b.HasOne("Store.Core.Entities.Users.UserCaisseAndBank", "UserCaisseAndBank")
+                        .WithMany()
+                        .HasForeignKey("UserCaisseAndBankId");
+
+                    b.HasOne("Store.Core.Entities.Users.UserCustomer", "UserCustomer")
+                        .WithMany()
+                        .HasForeignKey("UserCustomerId");
+
+                    b.HasOne("Store.Core.Entities.Users.UserDeservedAndTax", "UserDeservedAndTax")
+                        .WithMany()
+                        .HasForeignKey("UserDeservedAndTaxId");
+
+                    b.HasOne("Store.Core.Entities.Users.UserEmployee", "UserEmployee")
+                        .WithMany()
+                        .HasForeignKey("UserEmployeeId");
+
+                    b.HasOne("Store.Core.Entities.Users.UserProductAndStore", "UserProductAndStore")
+                        .WithMany()
+                        .HasForeignKey("UserProductAndStoreId");
+
+                    b.HasOne("Store.Core.Entities.Users.UserRefund", "UserRefund")
+                        .WithMany()
+                        .HasForeignKey("UserRefundId");
+
+                    b.HasOne("Store.Core.Entities.Users.UserSale", "UserSale")
+                        .WithMany()
+                        .HasForeignKey("UserSaleId");
+
+                    b.HasOne("Store.Core.Entities.Users.UserSetting", "UserSetting")
+                        .WithMany()
+                        .HasForeignKey("UserSettingId");
+
+                    b.HasOne("Store.Core.Entities.Users.UserSupplier", "UserSupplier")
+                        .WithMany()
+                        .HasForeignKey("UserSupplierId");
+
+                    b.Navigation("UserBuy");
+
+                    b.Navigation("UserCaisseAndBank");
+
+                    b.Navigation("UserCustomer");
+
+                    b.Navigation("UserDeservedAndTax");
+
+                    b.Navigation("UserEmployee");
+
+                    b.Navigation("UserProductAndStore");
+
+                    b.Navigation("UserRefund");
+
+                    b.Navigation("UserSale");
+
+                    b.Navigation("UserSetting");
+
+                    b.Navigation("UserSupplier");
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Users.UserBuy", b =>

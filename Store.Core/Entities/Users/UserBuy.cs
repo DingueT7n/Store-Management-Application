@@ -6,6 +6,15 @@
         public bool NewBuy { get; set; }
         public bool BuyReports { get; set; }
         public User User { get; set; }
+        public UserBuy(bool b)
+        {
+            NewBuy = b;
+            BuyReports = b;
+        }
+        public UserBuy()
+        {
+
+        }
 
     }
 }

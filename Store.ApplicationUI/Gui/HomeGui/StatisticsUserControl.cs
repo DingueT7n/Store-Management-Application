@@ -226,7 +226,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
             return data
                 .GroupBy(groupKey)
                 .Select(g => new { Date = g.Key, Total = g.Sum(sumSelector) })
-                .Where(x => dtpFrom.Value <= x.Date && dtpTo.Value >= x.Date)
+                //.Where(x => dtpFrom.Value <= x.Date && dtpTo.Value >= x.Date)
                 .AsEnumerable()
                 .Select(x => (x.Date, x.Total))
                 .ToList();
@@ -340,69 +340,74 @@ namespace Store.ApplicationUI.Gui.HomeGui
             chartControl7.Series.Clear();
 
             // Step 1: Calculate Net Profit
-            var netProfitData = _context.SalesProfits // Assuming SalesProfit contains profits
-               .Where(x => dtpFrom.Value <= x.Sale.Date && dtpTo.Value >= x.Sale.Date)
-                .GroupBy(sp => sp.Sale.Date.Date) // Group by Date
+            var netProfitData = _context.SalesProfits
+                .Where(x => dtpFrom.Value <= x.Sale.Date && dtpTo.Value >= x.Sale.Date)
+                .GroupBy(sp => sp.Sale.Date.Date)
                 .Select(g => new
                 {
                     Date = g.Key,
-                    TotalSalesProfit = g.Sum(sp => (sp.Price - sp.Buy_Price) * sp.Quentity) // Sum of Profit per Date
+                    TotalSalesProfit = g.Sum(sp => (sp.Price - sp.Buy_Price) * sp.Quentity)
                 })
                 .ToList();
-            var Profit = netProfitData.Sum(s => s.TotalSalesProfit);
 
-            txtProfit.Text = Profit.ToString();
+            var totalSalesProfit = netProfitData.Sum(s => s.TotalSalesProfit);
+            txtProfit.Text = totalSalesProfit.ToString();
 
-            var deservedData = _context.Deserveds // Assuming Deserved contains expenses/deductions
-               .Where(x => dtpFrom.Value <= x.Date && dtpTo.Value >= x.Date)
-
-                .GroupBy(d => d.Date.Date) // Group by Date
+            var deservedData = _context.Deserveds
+                .Where(x => dtpFrom.Value <= x.Date && dtpTo.Value >= x.Date)
+                .GroupBy(d => d.Date.Date)
                 .Select(g => new
                 {
                     Date = g.Key,
-                    TotalDeserved = g.Sum(d => d.Price) // Sum of Deserved per Date
+                    TotalDeserved = g.Sum(d => d.Price)
                 })
                 .ToList();
 
-            // Merge SalesProfit and Deserved data to calculate Net Profit
-            var netProfitByDate = netProfitData
+            // Combine SalesProfits and Deserveds data
+            var combinedData = netProfitData
+                .Concat(
+                    deservedData
+                        .Where(d => !netProfitData.Any(s => s.Date == d.Date))
+                        .Select(d => new
+                        {
+                            Date = d.Date,
+                            TotalSalesProfit = 0m // No sales profit for this date
+                        })
+                )
                 .GroupJoin(deservedData,
                     sales => sales.Date,
                     deserved => deserved.Date,
                     (sales, deserved) => new
                     {
                         Date = sales.Date,
-                        NetProfit = sales.TotalSalesProfit - deserved.Sum(d => d.TotalDeserved) // Calculate Net Profit
+                        NetProfit = sales.TotalSalesProfit - deserved.Sum(d => d.TotalDeserved)
                     })
-                .OrderBy(data => data.Date) // Sort by Date
+                .OrderBy(data => data.Date)
                 .ToList();
-            var netProfitByDatee = netProfitByDate.Sum(s => s.NetProfit);
 
-            txtNetProfits.Text = netProfitByDatee.ToString();
+            var totalNetProfit = combinedData.Sum(data => data.NetProfit);
+            txtNetProfits.Text = totalNetProfit.ToString();
+
             // Step 2: Create Series for Net Profit Visualization
             Series series = new Series("صافي الربح", ViewType.Line);
 
             // Add Data Points for Net Profit
-            foreach (var data in netProfitByDate)
+            foreach (var data in combinedData)
             {
                 series.Points.Add(new SeriesPoint(data.Date, data.NetProfit));
             }
 
-
             // Enable labels and set their text pattern
             series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
-            series.Label.TextPattern = "{V} دج"; // Display net profit values in دج
-                                                 // Customize Series Appearance
+            series.Label.TextPattern = "{V} دج";
 
-            LineSeriesView view = series.View as LineSeriesView;
-            if (view != null)
+            // Customize Series Appearance
+            if (series.View is LineSeriesView view)
             {
                 view.Color = Color.Orange; // Set line color to orange
-                view.LineMarkerOptions.Kind = MarkerKind.Circle; // Add markers for better visualization
+                view.LineMarkerOptions.Kind = MarkerKind.Circle; // Add markers
+
             }
-
-            // Set label text pattern to show currency
-
 
             // Add series to chart
             chartControl7.Series.Add(series);
@@ -419,19 +424,18 @@ namespace Store.ApplicationUI.Gui.HomeGui
             chartControl7.Titles.Add(chartTitle);
 
             // Step 4: Configure X and Y axis
-            XYDiagram diagram = chartControl7.Diagram as XYDiagram;
-            if (diagram != null)
+            if (chartControl7.Diagram is XYDiagram diagram)
             {
                 // Configure X-axis
                 diagram.AxisX.Title.Text = "التاريخ";
                 diagram.AxisX.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
-                diagram.AxisX.Label.Angle = -45; // Rotate labels for better readability
+                diagram.AxisX.Label.Angle = -45;
                 diagram.AxisX.DateTimeScaleOptions.MeasureUnit = DateTimeMeasureUnit.Day;
 
                 // Configure Y-axis
-                diagram.AxisY.Title.Text = "صافي الربح (دج)";
+                diagram.AxisY.Title.Text = "(صافي الربح (دج";
                 diagram.AxisY.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
-                diagram.AxisY.Label.TextPattern = "{V} دج"; // Format Y-axis labels with currency
+                diagram.AxisY.Label.TextPattern = "{V} دج";
             }
         }
 
@@ -443,14 +447,15 @@ namespace Store.ApplicationUI.Gui.HomeGui
             // Step 1: Calculate Net Profit
             var netProfitData = _context.SalesProfits // Assuming SalesProfit contains profits
                .Where(x => dtpFrom.Value <= x.Sale.Date && dtpTo.Value >= x.Sale.Date)
-
                 .GroupBy(sp => sp.Sale.Date.Date) // Group by Date
+
                 .Select(g => new
                 {
                     Date = g.Key,
                     TotalSalesProfit = g.Sum(sp => (sp.Price - sp.Buy_Price) * sp.Quentity) // Sum of Profit per Date
                 })
                 .ToList();
+
             // Step 2: Create Series for Net Profit Visualization
             Series series = new Series("الربح", ViewType.Line);
 

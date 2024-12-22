@@ -2,6 +2,15 @@
 {
     public class UserRefund : BaseEntity<int>
     {
+        public UserRefund(bool b)
+        {
+            RefundProduct = b;
+            RefundReport = b;
+        }
+        public UserRefund()
+        {
+
+        }
         public int User_Id { get; set; }
         public bool RefundProduct { get; set; }
         public bool RefundReport { get; set; }

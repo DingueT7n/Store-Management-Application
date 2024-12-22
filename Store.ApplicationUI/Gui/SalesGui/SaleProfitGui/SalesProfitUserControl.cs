@@ -425,5 +425,24 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
                 throw;
             }
         }
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (DgvSalesProfit.SelectedRows.Count > 0)
+                {
+                    DataTable ProfitDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(Convert.ToInt32(DgvSalesProfit.CurrentRow.Cells[0].Value.ToString()));
+                    Reports.SalesReports.salesA4 salesA4 = new();
+                    salesA4.DataSource = ProfitDetailsTable;
+                    Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(salesA4);
+                    xtraForm1.ShowDialog();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

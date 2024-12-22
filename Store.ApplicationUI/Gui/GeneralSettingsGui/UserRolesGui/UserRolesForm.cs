@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Users;
@@ -141,7 +142,19 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             Dgv.Columns[2].HeaderCell.Value = "نوع المستخدم";
             Dgv.Columns[3].HeaderCell.Value = "معرف الخزنة";
             Dgv.Columns[4].HeaderCell.Value = "نسبة الربح";
-            Dgv.Columns[5].HeaderCell.Value = "معرف المستخدم";
+
+            Dgv.Columns[5].Visible = false;
+            Dgv.Columns[6].Visible = false;
+            Dgv.Columns[7].Visible = false;
+            Dgv.Columns[8].Visible = false;
+            Dgv.Columns[9].Visible = false;
+            Dgv.Columns[10].Visible = false;
+            Dgv.Columns[11].Visible = false;
+            Dgv.Columns[12].Visible = false;
+            Dgv.Columns[13].Visible = false;
+            Dgv.Columns[14].Visible = false;
+
+            Dgv.Columns[15].HeaderCell.Value = "معرف المستخدم";
             Dgv.CellFormatting += (s, e) =>
             {
                 // Check if this is the column you want to mask
@@ -167,86 +180,85 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             if (txtUserName.Text.IsNullOrEmpty() || txtPassowrd.Text.IsNullOrEmpty())
             {
                 MsgHelper.ShowRequiredFields();
+                return;
             }
-            else
+
+            using (var transaction = _context.Database.BeginTransaction())
             {
-                User user = new();
-                user.UserName = txtUserName.Text;
-                user.Password = txtPassowrd.Text;
-                user.UserProfit = _main.ConvertToFloat(txtProfit.Text);
-                user.Stock_Id = Convert.ToInt32(cmbCaisse.SelectedValue);
-                user.type = cmbType.Text;
-                _context.Users.Add(user);
-                _context.SaveChanges();
-                UserBuy userBuy = new();
-                userBuy.User_Id = user.Id;
+                try
+                {
+                    // Create new User
+                    User user = new()
+                    {
+                        UserName = txtUserName.Text,
+                        Password = txtPassowrd.Text,
+                        UserProfit = _main.ConvertToFloat(txtProfit.Text),
+                        Stock_Id = Convert.ToInt32(cmbCaisse.SelectedValue),
+                        type = cmbType.Text
+                    };
+                    _context.Users.Add(user);
+                    _context.SaveChanges(); // Save to generate UserId
 
-                _context.Add(userBuy);
-                _context.SaveChanges();
-                UserCaisseAndBank UserCaisseAndBank = new();
-                UserCaisseAndBank.User_Id = user.Id;
+                    // Add related entities based on User type
+                    if (cmbType.Text == "مدير")
+                    {
+                        AddUserRelatedEntities(user, true);
+                    }
+                    else
+                    {
+                        AddUserRelatedEntities(user, false);
+                    }
 
-                _context.Add(UserCaisseAndBank);
-                _context.SaveChanges();
-                UserCustomer UserCustomer = new();
-                UserCustomer.User_Id = user.Id;
+                    // Commit transaction
+                    transaction.Commit();
 
-                _context.Add(UserCustomer);
-                _context.SaveChanges();
-
-                UserDeservedAndTax UserDeservedAndTax = new();
-                UserDeservedAndTax.User_Id = user.Id;
-
-                _context.Add(UserDeservedAndTax);
-                _context.SaveChanges();
-
-                UserEmployee UserEmployee = new();
-                UserEmployee.User_Id = user.Id;
-
-                _context.Add(UserEmployee);
-                _context.SaveChanges();
-
-                UserProductAndStore UserProductAndStore = new();
-                UserProductAndStore.User_Id = user.Id;
-
-                _context.Add(UserProductAndStore);
-                _context.SaveChanges();
-
-                UserRefund UserRefund = new();
-                UserRefund.User_Id = user.Id;
-
-                _context.Add(UserRefund);
-                _context.SaveChanges();
-
-                UserSale UserSale = new();
-                UserSale.User_Id = user.Id;
-
-                _context.Add(UserSale);
-                _context.SaveChanges();
-                UserSetting UserSetting = new();
-                UserSetting.User_Id = user.Id;
-
-                _context.Add(UserSetting);
-                _context.SaveChanges();
-                UserSupplier UserSupplier = new();
-                UserSupplier.User_Id = user.Id;
-
-                _context.Add(UserSupplier);
-                _context.SaveChanges();
+                    // Refresh DataGridView
+                    RefreshDgv();
+                }
+                catch (Exception ex)
+                {
+                    // Rollback transaction on error
+                    transaction.Rollback();
+                    MessageBox.Show(ex.Message);
+                }
             }
-            RefreshDgv();
         }
-
+        private void AddUserRelatedEntities(User user, bool isAdmin)
+        {
+            List<object> relatedEntities = new()
+            {
+                new UserBuy(isAdmin) { User_Id = user.Id },
+                new UserCaisseAndBank(isAdmin) { User_Id = user.Id },
+                new UserCustomer(isAdmin) { User_Id = user.Id },
+                new UserDeservedAndTax(isAdmin) { User_Id = user.Id },
+                new UserEmployee(isAdmin) { User_Id = user.Id },
+                new UserProductAndStore(isAdmin) { User_Id = user.Id },
+                new UserRefund(isAdmin) { User_Id = user.Id },
+                new UserSale(isAdmin) { User_Id = user.Id },
+                new UserSetting(isAdmin) { User_Id = user.Id },
+                new UserSupplier(isAdmin) { User_Id = user.Id }
+            };
+            user.UserBuy = (UserBuy)relatedEntities[0];
+            user.UserCaisseAndBank = (UserCaisseAndBank)relatedEntities[1];
+            user.UserCustomer = (UserCustomer)relatedEntities[2];
+            user.UserDeservedAndTax = (UserDeservedAndTax)relatedEntities[3];
+            user.UserEmployee = (UserEmployee)relatedEntities[4];
+            user.UserProductAndStore = (UserProductAndStore)relatedEntities[5];
+            user.UserRefund = (UserRefund)relatedEntities[6];
+            user.UserSale = (UserSale)relatedEntities[7];
+            user.UserSetting = (UserSetting)relatedEntities[8];
+            user.UserSupplier = (UserSupplier)relatedEntities[9];
+            _context.AddRange(relatedEntities);
+            _context.SaveChanges();
+        }
         private void btnEdit_Click(object sender, EventArgs e)
         {
             if (MsgHelper.ShowEditDialog())
             {
                 if (Dgv.SelectedRows.Count > 0)
                 {
-                    User user = _context?.Users.FirstOrDefault(x => x.Id ==
-                    Convert.ToInt32(Dgv.CurrentRow.Cells[5].Value.ToString())
-                    );
-                    if (user != null)
+                    User user = _context?.Users.FirstOrDefault(x => x.Id == Convert.ToInt32(Dgv.CurrentRow.Cells[15].Value.ToString())
+                    ); if (user != null)
                     {
                         user.UserName = txtUserName.Text;
                         user.Password = txtPassowrd.Text;
@@ -260,24 +272,44 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                 vider();
             }
         }
-
         private void btnDelete_Click(object sender, EventArgs e)
         {
             if (MsgHelper.ShowDeleteDialog())
             {
                 if (Dgv.SelectedRows.Count > 0)
                 {
-                    var user = _context.Users.FirstOrDefault(x => x.Id == Convert.ToInt32(Dgv.CurrentRow.Cells[5].Value.ToString()));
+                    var user = _context.Users
+               .Include(u => u.UserBuy)
+              .Include(u => u.UserCaisseAndBank)
+              .Include(u => u.UserCustomer)
+              .Include(u => u.UserDeservedAndTax)
+              .Include(u => u.UserEmployee)
+              .Include(u => u.UserProductAndStore)
+              .Include(u => u.UserRefund)
+              .Include(u => u.UserSale)
+              .Include(u => u.UserSetting)
+              .Include(u => u.UserSupplier).FirstOrDefault(x => x.Id == Convert.ToInt32(Dgv.CurrentRow.Cells[15].Value.ToString()));
                     if (user is not null)
                     {
+                        _context.Remove(user.UserBuy);
+                        _context.Remove(user.UserCaisseAndBank);
+                        _context.Remove(user.UserCustomer);
+                        _context.Remove(user.UserDeservedAndTax);
+                        _context.Remove(user.UserEmployee);
+                        _context.Remove(user.UserProductAndStore);
+                        _context.Remove(user.UserRefund);
+                        _context.Remove(user.UserSale);
+                        _context.Remove(user.UserSetting);
+                        _context.Remove(user.UserSupplier);
+                        _context.SaveChanges();
                         _context.Remove(user);
                         _context.SaveChanges();
                     }
-
                 }
+                RefreshDgv();
             }
-            RefreshDgv();
         }
+
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
@@ -305,7 +337,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                     cmbType.Text = Dgv.CurrentRow.Cells[2].Value.ToString();
                     cmbCaisse.SelectedValue = Convert.ToInt32(Dgv.CurrentRow.Cells[3].Value.ToString());
                     txtProfit.Text = Dgv.CurrentRow.Cells[4].Value.ToString();
-                    lblidCaisse.Text = Dgv.CurrentRow.Cells[5].Value.ToString();
+                    lblidCaisse.Text = Dgv.CurrentRow.Cells[15].Value.ToString();
                     btnEdit.Enabled = true;
                     //btnRefresh.Enabled = true;
                 }
@@ -561,10 +593,9 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                 var user = _context.UserSales.FirstOrDefault(x => x.User_Id.ToString() == cmbSales.SelectedValue.ToString());
                 if (user != null)
                 {
-                    cbNewBuy.Checked = user.NewSale;
-                    cbBuyReport.Checked = user.SaleReports;
+                    cbNewSale.Checked = user.NewSale;
+                    cbSalesReport.Checked = user.SaleReports;
                     cbSaleProfit.Checked = user.SaleProfits;
-
                 }
             }
             catch (Exception)

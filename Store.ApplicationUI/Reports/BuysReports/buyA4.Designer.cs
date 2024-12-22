@@ -37,8 +37,8 @@
             this.pageInfo1 = new DevExpress.XtraReports.UI.XRPageInfo();
             this.pageInfo2 = new DevExpress.XtraReports.UI.XRPageInfo();
             this.ReportHeader = new DevExpress.XtraReports.UI.ReportHeaderBand();
-            this.pbLogo = new DevExpress.XtraReports.UI.XRPictureBox();
             this.lblStoreName = new DevExpress.XtraReports.UI.XRLabel();
+            this.pbLogo = new DevExpress.XtraReports.UI.XRPictureBox();
             this.GroupHeader1 = new DevExpress.XtraReports.UI.GroupHeaderBand();
             this.xrTable1 = new DevExpress.XtraReports.UI.XRTable();
             this.xrTableRow1 = new DevExpress.XtraReports.UI.XRTableRow();
@@ -49,6 +49,7 @@
             this.xrTableCell3 = new DevExpress.XtraReports.UI.XRTableCell();
             this.Detail = new DevExpress.XtraReports.UI.DetailBand();
             this.GroupFooter1 = new DevExpress.XtraReports.UI.GroupFooterBand();
+            this.xrLine2 = new DevExpress.XtraReports.UI.XRLine();
             this.sqlDataSource1 = new DevExpress.DataAccess.Sql.SqlDataSource(this.components);
             this.Title = new DevExpress.XtraReports.UI.XRControlStyle();
             this.GroupCaption1 = new DevExpress.XtraReports.UI.XRControlStyle();
@@ -94,7 +95,6 @@
             this.lblAddress = new DevExpress.XtraReports.UI.XRLabel();
             this.lblSentenceUnderFacture = new DevExpress.XtraReports.UI.XRLabel();
             this.PageFooter = new DevExpress.XtraReports.UI.PageFooterBand();
-            this.xrLine2 = new DevExpress.XtraReports.UI.XRLine();
             ((System.ComponentModel.ISupportInitialize)(this.xrTable1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xrTable2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
@@ -123,7 +123,7 @@
             this.pageInfo1.SizeF = new System.Drawing.SizeF(796F, 58F);
             this.pageInfo1.StyleName = "PageInfo";
             this.pageInfo1.StylePriority.UseTextAlignment = false;
-            this.pageInfo1.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopCenter;
+            this.pageInfo1.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopRight;
             // 
             // pageInfo2
             // 
@@ -132,8 +132,9 @@
             this.pageInfo2.Name = "pageInfo2";
             this.pageInfo2.SizeF = new System.Drawing.SizeF(796F, 58F);
             this.pageInfo2.StyleName = "PageInfo";
-            this.pageInfo2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopRight;
-            this.pageInfo2.TextFormatString = "Page {0} of {1}";
+            this.pageInfo2.StylePriority.UseTextAlignment = false;
+            this.pageInfo2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopLeft;
+            this.pageInfo2.TextFormatString = "الصفحة {0} من {1}";
             // 
             // ReportHeader
             // 
@@ -143,15 +144,6 @@
             this.ReportHeader.Dpi = 254F;
             this.ReportHeader.HeightF = 300F;
             this.ReportHeader.Name = "ReportHeader";
-            // 
-            // pbLogo
-            // 
-            this.pbLogo.Dpi = 254F;
-            this.pbLogo.ImageSource = new DevExpress.XtraPrinting.Drawing.ImageSource("img", resources.GetString("pbLogo.ImageSource"));
-            this.pbLogo.LocationFloat = new DevExpress.Utils.PointFloat(1087.052F, 0F);
-            this.pbLogo.Name = "pbLogo";
-            this.pbLogo.SizeF = new System.Drawing.SizeF(500.4542F, 300F);
-            this.pbLogo.Sizing = DevExpress.XtraPrinting.ImageSizeMode.ZoomImage;
             // 
             // lblStoreName
             // 
@@ -168,6 +160,15 @@
             this.lblStoreName.StylePriority.UseTextAlignment = false;
             this.lblStoreName.Text = "محل ALG-D";
             this.lblStoreName.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+            // 
+            // pbLogo
+            // 
+            this.pbLogo.Dpi = 254F;
+            this.pbLogo.ImageSource = new DevExpress.XtraPrinting.Drawing.ImageSource("img", resources.GetString("pbLogo.ImageSource"));
+            this.pbLogo.LocationFloat = new DevExpress.Utils.PointFloat(1087.052F, 0F);
+            this.pbLogo.Name = "pbLogo";
+            this.pbLogo.SizeF = new System.Drawing.SizeF(500.4542F, 300F);
+            this.pbLogo.Sizing = DevExpress.XtraPrinting.ImageSizeMode.ZoomImage;
             // 
             // GroupHeader1
             // 
@@ -295,6 +296,13 @@
             this.GroupFooter1.HeightF = 5F;
             this.GroupFooter1.Name = "GroupFooter1";
             // 
+            // xrLine2
+            // 
+            this.xrLine2.Dpi = 254F;
+            this.xrLine2.LocationFloat = new DevExpress.Utils.PointFloat(0F, 0F);
+            this.xrLine2.Name = "xrLine2";
+            this.xrLine2.SizeF = new System.Drawing.SizeF(1592F, 5F);
+            // 
             // sqlDataSource1
             // 
             this.sqlDataSource1.ConnectionName = "localhost_StoreDbEFCore_Connection";
@@ -380,7 +388,7 @@
             this.xrLabel6});
             this.PageHeader.Dpi = 254F;
             this.PageHeader.Font = new DevExpress.Drawing.DXFont("Arial", 10F);
-            this.PageHeader.HeightF = 365.2527F;
+            this.PageHeader.HeightF = 363.6274F;
             this.PageHeader.Name = "PageHeader";
             this.PageHeader.StylePriority.UseFont = false;
             // 
@@ -952,13 +960,6 @@
             this.PageFooter.Dpi = 254F;
             this.PageFooter.HeightF = 254F;
             this.PageFooter.Name = "PageFooter";
-            // 
-            // xrLine2
-            // 
-            this.xrLine2.Dpi = 254F;
-            this.xrLine2.LocationFloat = new DevExpress.Utils.PointFloat(0F, 0F);
-            this.xrLine2.Name = "xrLine2";
-            this.xrLine2.SizeF = new System.Drawing.SizeF(1592F, 5F);
             // 
             // buyA4
             // 
