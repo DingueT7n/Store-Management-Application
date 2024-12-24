@@ -58,7 +58,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
             cmbpagination.Items.Clear();
             for (int i = 0; i <= PageValue; i++)
             {
-                cmbpagination.Items.Add(i);
+                cmbpagination.Items.Add(i + 1);
 
             }
             if (cmbpagination.Items.Count > 0)
@@ -176,7 +176,6 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
                 }
                 DgvِCustomer.DataSource = a.Result;
 
-                PaginationHide();
                 lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
                 int totalRecords = a.count;
                 int pageValue = (int)Math.Ceiling((double)totalRecords / take);
@@ -184,7 +183,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
 
                 for (int i = 0; i < pageValue; i++)
                 {
-                    cmbpagination.Items.Add(i);
+                    cmbpagination.Items.Add(i + 1);
                 }
                 if (selectedi < cmbpagination.Items.Count && cmbpagination.Items.Count > 0)
                 {
@@ -195,6 +194,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
                     .Select(x => x.Customer.Id) // Replace CustomerId with the actual unique identifier property
                     .Distinct()
                     .Count();
+                PaginationHide();
                 if (DgvِCustomer.Rows.Count > 0)
                 {
                     if (DgvِCustomer.SelectedRows.Count > 0)
@@ -252,8 +252,8 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
         }
         void PaginationHide()
         {
-            btnNext.Enabled = cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1 && !dgvHelper.IsEmpty(DgvِCustomer);
-            btnPrev.Enabled = cmbpagination.SelectedIndex > 0 && !dgvHelper.IsEmpty(DgvِCustomer);
+            btnNext.Enabled = cmbpagination.SelectedIndex <= cmbpagination.Items.Count - 1 && !dgvHelper.IsEmpty(DgvِCustomer);
+            btnPrev.Enabled = cmbpagination.SelectedIndex >= 0 && !dgvHelper.IsEmpty(DgvِCustomer);
             cmbpagination.Enabled = !dgvHelper.IsEmpty(DgvِCustomer);
         }
         private void btnPrev_Click(object sender, EventArgs e)

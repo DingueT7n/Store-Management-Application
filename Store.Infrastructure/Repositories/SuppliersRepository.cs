@@ -16,6 +16,7 @@ namespace Store.Infrastructure.Repositories
 
             try
             {
+                _context = new ApplicationDbContext();
                 return _context.Suppliers.Where(x => x.Id.ToString() == searchIteam ||
                 x.SupplierName.ToString().Contains(searchIteam) ||
                 x.Address.Contains(searchIteam) ||
@@ -45,6 +46,7 @@ namespace Store.Infrastructure.Repositories
         {
             try
             {
+                _context = new ApplicationDbContext();
                 return _context.SuppliersMoneys.Where(x =>
                 x.SupplierName.ToString().Contains(searchIteam) ||
                 x.Id.ToString() == (searchIteam)
@@ -63,6 +65,7 @@ namespace Store.Infrastructure.Repositories
 
             try
             {
+                _context = new ApplicationDbContext();
                 var supplierMoney = _context.SuppliersMoneys.FirstOrDefault(x =>
                   x.Sup_ID.ToString() == sup_id && x.Order_ID.ToString() == order_Id &&
                   x.Price.ToString() == (price)
@@ -89,6 +92,7 @@ namespace Store.Infrastructure.Repositories
         }
         public bool TransactionOfSupplierDebt(string order_Id, string sup_Id, string price, string sup_Name, DateTime date)
         {
+            _context = new ApplicationDbContext();
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
@@ -122,6 +126,7 @@ namespace Store.Infrastructure.Repositories
         {
             try
             {
+                _context = new ApplicationDbContext();
                 var suppliersMoneys = _context.SuppliersMoneys.FirstOrDefault(x =>
                   x.Sup_ID.ToString() == sup_Id && x.Order_ID.ToString() == order_Id
                   );
@@ -142,6 +147,7 @@ namespace Store.Infrastructure.Repositories
             {
                 try
                 {
+                    _context = new ApplicationDbContext();
                     double diffrence = Convert.ToDouble(PayedValue);
                     if (Convert.ToDouble(price) - diffrence <= 0)
                     {
@@ -187,6 +193,7 @@ namespace Store.Infrastructure.Repositories
 
             try
             {
+                _context = new ApplicationDbContext();
                 var query = _context.SuppliersReports.AsQueryable();
                 // Filter by searchItem and date range
                 var totalCount = query.Count();
@@ -215,6 +222,7 @@ namespace Store.Infrastructure.Repositories
 
             try
             {
+                _context = new ApplicationDbContext();
                 var query = _context.SuppliersReports
                     .Where(x =>
                         (EF.Functions.Like(x.SupplierName, $"%{searchItem}%") ||
@@ -245,6 +253,7 @@ namespace Store.Infrastructure.Repositories
 
             try
             {
+                _context = new ApplicationDbContext();
                 var query = _context.SuppliersReports.Include(x => x.Buy).Include(x => x.Supplier)
                     .Where(x => fromDate <= x.Date && x.Date <= toDate)
                     .OrderByDescending(x => x.Date);
@@ -265,6 +274,7 @@ namespace Store.Infrastructure.Repositories
 
             try
             {
+                _context = new ApplicationDbContext();
                 var query = _context.SuppliersReports
                     .Where(x =>
                         EF.Functions.Like(x.SupplierName, $"%{searchItem}%") ||

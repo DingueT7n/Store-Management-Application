@@ -16,6 +16,7 @@ namespace Store.Infrastructure.Repositories
 
             try
             {
+                _context = new ApplicationDbContext();
                 return _context.Customers.Where(x => x.Id.ToString() == searchIteam ||
                 x.CustomerName.ToString().Contains(searchIteam) ||
                 x.Address.Contains(searchIteam) ||
@@ -42,6 +43,7 @@ namespace Store.Infrastructure.Repositories
 
             try
             {
+                _context = new ApplicationDbContext();
                 return _context.CustomersMoneys.Where(x =>
                 x.Cust_Name.ToString().Contains(searchIteam) ||
                 x.Id.ToString() == (searchIteam)
@@ -60,6 +62,7 @@ namespace Store.Infrastructure.Repositories
 
             try
             {
+                _context = new ApplicationDbContext();
                 var customerMoney = _context.CustomersMoneys.FirstOrDefault(x =>
                   x.Cust_ID.ToString() == cust_Id && x.Order_ID.ToString() == order_Id &&
                   x.Price.ToString() == (price)
@@ -86,6 +89,7 @@ namespace Store.Infrastructure.Repositories
         }
         public bool TransactionOfCustomerDebt(string order_Id, string cust_Id, string price, string Cust_Name, DateTime date)
         {
+            _context = new ApplicationDbContext();
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
@@ -118,7 +122,9 @@ namespace Store.Infrastructure.Repositories
         public bool UpdateFacture(string order_Id, string cust_Id, string price, string PayedValue)
         {
             try
+
             {
+                _context = new ApplicationDbContext();
                 var customerMoney = _context.CustomersMoneys.FirstOrDefault(x =>
                   x.Cust_ID.ToString() == cust_Id && x.Order_ID.ToString() == order_Id
                   );
@@ -134,6 +140,7 @@ namespace Store.Infrastructure.Repositories
         }
         public bool TransactionOfEditingCustomerDebt(string order_Id, string cust_Id, string price, string Cust_Name, string PayedValue, DateTime date)
         {
+            _context = new ApplicationDbContext();
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
@@ -184,14 +191,15 @@ namespace Store.Infrastructure.Repositories
 
             try
             {
+                _context = new ApplicationDbContext();
                 var query = _context.CustomersReports.AsQueryable();
 
-                var totalCount = query.Count();
                 var result = query.Include(x => x.Sale).Include(x => x.Customer)
                     .OrderByDescending(x => x.Date).AsNoTracking()
                     .Skip(skip)
                     .Take(take)
                     .ToList();
+                var totalCount = query.Include(x => x.Sale).Include(x => x.Customer).Count();
 
 
 
@@ -212,6 +220,7 @@ namespace Store.Infrastructure.Repositories
         {
             try
             {
+                _context = new ApplicationDbContext();
                 var query = _context.CustomersReports
                     .Where(x =>
                         (EF.Functions.Like(x.Cust_Name, $"%{searchItem}%") ||
@@ -241,6 +250,7 @@ namespace Store.Infrastructure.Repositories
         {
             try
             {
+                _context = new ApplicationDbContext();
                 var query = _context.CustomersReports.AsNoTracking().Include(x => x.Sale).Include(x => x.Customer)
                     .Where(x => fromDate <= x.Date && x.Date <= toDate)// Date range filter
                     .OrderByDescending(x => x.Date); // Order by descending date
@@ -260,6 +270,7 @@ namespace Store.Infrastructure.Repositories
         {
             try
             {
+                _context = new ApplicationDbContext();
                 var query = _context.CustomersReports
                     .Where(x =>
                         EF.Functions.Like(x.Cust_Name, $"%{searchItem}%") ||

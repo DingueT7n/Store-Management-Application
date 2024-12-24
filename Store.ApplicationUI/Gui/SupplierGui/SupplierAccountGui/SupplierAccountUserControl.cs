@@ -45,6 +45,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
 
         public async void SetDataToDgv()
         {
+
             //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             var SuppliersMoneyList = _context.SuppliersMoneys.
                 Include(x => x.Supplier).Include(x => x.Buy)
@@ -174,6 +175,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
         {
             if (DgvِCustomer.SelectedRows.Count > 0 && !dgvHelper.IsEmpty(DgvِCustomer))
             {
+                _context = new ApplicationDbContext();
                 if (rbPayFacture.Checked)
                 {
                     suppliersRepository.TransactionOfSupplierDebt(

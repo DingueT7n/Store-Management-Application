@@ -1,4 +1,6 @@
-﻿namespace Store.ApplicationUI.Code.Helper
+﻿using Store.Infrastructure.Data;
+
+namespace Store.ApplicationUI.Code.Helper
 {
     public static class MsgHelper
     {
@@ -79,6 +81,86 @@
             MessageBox.Show("لا يمكن التحويل لأن الكمية المحولة اكبر من الموجودة. تأكد من تغيير بعض بيانات ثم اعدة المحاولة ",
                   "بيانات غير متوافقة"
                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        public static bool ShowBareCodeDuplicated(ApplicationDbContext _context, string barCode)
+        {
+
+            try
+            {
+                var p = _context.Products.Where(x =>
+                x.CodeBar == (barCode)
+                )
+                    .FirstOrDefault();
+                if (p is not null)
+                {
+                    return false;
+                }
+                else
+                {
+                    MessageBox.Show("لا يمكن حفظ العملية لأن الباركود موجود بالفعل في قاعدة البيانات ",
+               "بيانات متكررة"
+               , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return true;
+                }
+
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
+        public static bool ShowBareCodeDuplicatedWithoutMessages(ApplicationDbContext _context, string barCode)
+        {
+
+            try
+            {
+                var p = _context.Products.Where(x =>
+                x.CodeBar == (barCode)
+                )
+                    .FirstOrDefault();
+                if (p is not null)
+                {
+                    return false;
+                }
+                else
+                {
+
+                    return true;
+                }
+
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
+        public static bool ShowProductNameDuplicated(ApplicationDbContext _context, string productName)
+        {
+
+            try
+            {
+                var p = _context.Products.Where(x =>
+                x.ProductName == (productName)
+                )
+                    .FirstOrDefault();
+                if (p is not null)
+                {
+                    return false;
+                }
+                else
+                {
+
+                    return true;
+                }
+
+            }
+            catch
+            {
+                return false;
+            }
+
         }
         public static void ShowInvalidMoneyTrasfert()
         {

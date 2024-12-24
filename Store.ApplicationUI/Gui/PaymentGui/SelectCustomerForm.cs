@@ -1,6 +1,7 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.SalesGui.PosGui;
+using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.PaymentGui
 {
@@ -10,9 +11,12 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         private static MainForm _main;
         private static PosForm _PosForm;
         private static SelectCustomerForm _selectCustomerForm;
+        private ApplicationDbContext _context;
+
         public SelectCustomerForm(MainForm main)
         {
             InitializeComponent();
+            _context = new ApplicationDbContext();
 
             this.Owner = _main;
         }
@@ -59,10 +63,10 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         public async void LoadData()
         {
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => MainForm.Context.Database.CanConnect()))
+            if (await Task.Run(() => _context.Database.CanConnect()))
             {
 
-                DgvProducts.DataSource = MainForm.Context.Customers.ToList();
+                DgvProducts.DataSource = _context.Customers.ToList();
                 SetColumns();
 
 

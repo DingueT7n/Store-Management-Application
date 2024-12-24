@@ -30,6 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BarCodeForm));
             groupBox1 = new GroupBox();
+            label5 = new Label();
+            lblIdProduct = new Label();
             txtPrice = new TextBox();
             txtBarCode = new TextBox();
             txtProductName = new TextBox();
@@ -40,8 +42,6 @@
             groupBox2 = new GroupBox();
             btnPrint = new Button();
             btnReviewPrint = new Button();
-            lblIdProduct = new Label();
-            label5 = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             SuspendLayout();
@@ -64,10 +64,28 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "بيانات باركود المنتج";
             // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(298, 33);
+            label5.Name = "label5";
+            label5.Size = new Size(78, 19);
+            label5.TabIndex = 7;
+            label5.Text = "معرف المنتج";
+            // 
+            // lblIdProduct
+            // 
+            lblIdProduct.AutoSize = true;
+            lblIdProduct.Location = new Point(201, 33);
+            lblIdProduct.Name = "lblIdProduct";
+            lblIdProduct.Size = new Size(0, 19);
+            lblIdProduct.TabIndex = 6;
+            // 
             // txtPrice
             // 
             txtPrice.Location = new Point(43, 148);
             txtPrice.Name = "txtPrice";
+            txtPrice.ReadOnly = true;
             txtPrice.Size = new Size(243, 27);
             txtPrice.TabIndex = 5;
             // 
@@ -75,6 +93,7 @@
             // 
             txtBarCode.Location = new Point(43, 109);
             txtBarCode.Name = "txtBarCode";
+            txtBarCode.ReadOnly = true;
             txtBarCode.Size = new Size(243, 27);
             txtBarCode.TabIndex = 4;
             // 
@@ -82,6 +101,7 @@
             // 
             txtProductName.Location = new Point(43, 65);
             txtProductName.Name = "txtProductName";
+            txtProductName.ReadOnly = true;
             txtProductName.Size = new Size(243, 27);
             txtProductName.TabIndex = 3;
             // 
@@ -162,23 +182,6 @@
             btnReviewPrint.TextAlign = ContentAlignment.MiddleRight;
             btnReviewPrint.UseVisualStyleBackColor = true;
             btnReviewPrint.Click += btnReviewPrint_Click;
-            // 
-            // lblIdProduct
-            // 
-            lblIdProduct.AutoSize = true;
-            lblIdProduct.Location = new Point(201, 33);
-            lblIdProduct.Name = "lblIdProduct";
-            lblIdProduct.Size = new Size(0, 19);
-            lblIdProduct.TabIndex = 6;
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(298, 33);
-            label5.Name = "label5";
-            label5.Size = new Size(78, 19);
-            label5.TabIndex = 7;
-            label5.Text = "معرف المنتج";
             // 
             // BarCodeForm
             // 

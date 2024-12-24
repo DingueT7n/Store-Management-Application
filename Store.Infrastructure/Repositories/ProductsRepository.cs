@@ -103,7 +103,7 @@ namespace Store.Infrastructure.Repositories
 
             try
             {
-                return _context.Products.Where(x => x.Id.ToString() == searchIteam ||
+                return _context.Products.Include(x => x.Category).Where(x => x.Id.ToString() == searchIteam ||
                 x.Quentity.ToString() == searchIteam ||
                 x.ProductName.Contains(searchIteam) ||
                 x.IsTaxed.ToString() == (searchIteam) ||

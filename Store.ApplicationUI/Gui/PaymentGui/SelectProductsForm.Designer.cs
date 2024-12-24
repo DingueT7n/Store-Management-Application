@@ -172,6 +172,7 @@
             btnSearch.Size = new Size(50, 40);
             btnSearch.TabIndex = 7;
             btnSearch.UseVisualStyleBackColor = true;
+            btnSearch.Click += btnSearch_Click;
             // 
             // flowLayoutPanel
             // 

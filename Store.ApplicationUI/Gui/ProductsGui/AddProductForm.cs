@@ -57,17 +57,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             }
 
             return _addProductForm;
-            _main = main;
 
-
-
-            _addProductForm = new AddProductForm(_main);
-
-
-
-            // Return the singleton instance
-
-            return _addProductForm;
         }
         private void ConfigDate()
         {
@@ -423,6 +413,10 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                             }
                         }
                     }
+                    else
+                    {
+                        MsgHelper.ShowBareCodeDuplicated(_context, txtBarCode.Text);
+                    }
                 }
                 else
                     MsgHelper.ShowRequiredFields();
@@ -508,6 +502,10 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                         }
                     }
                 }
+                else
+                {
+                    MsgHelper.ShowBareCodeDuplicated(_context, txtBarCode.Text);
+                }
 
             }
             catch (Exception)
@@ -591,15 +589,15 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                     _context.Database.ExecuteSqlRaw(sql);
                 }
             }
-            BarcodeGui.BarCodeForm barCodeForm = new BarcodeGui.BarCodeForm();
+            BarcodeGui.BarCodeForm barCodeForm = BarcodeGui.BarCodeForm.Instance(_main);
             barCodeForm.txtBarCode.Text = txtBarCode.Text;
             barCodeForm.lblIdProduct.Text = lblProductId.Text;
             barCodeForm.txtPrice.Text = txtSaleAfterTax.Text;
             barCodeForm.txtProductName.Text = txtNameProduct.Text;
             barCodeForm.lblBarecode.Text = txtBarCode.Text;
-            this.Hide();
-            barCodeForm.ShowDialog();
-            this.Show();
+
+            barCodeForm.Show();
+
         }
 
         private void CbIsTaxed_CheckedChanged(object sender, EventArgs e)
@@ -627,6 +625,49 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         private void cbFavorite_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void txtBarCode_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!MsgHelper.ShowBareCodeDuplicatedWithoutMessages(_context, txtBarCode.Text))
+                {
+                    txtBarCode.ForeColor = Color.Red;
+                }
+                else
+                {
+                    txtBarCode.ForeColor = Color.Black;
+
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private void txtNameProduct_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!MsgHelper.ShowProductNameDuplicated(_context, txtNameProduct.Text))
+                {
+                    txtNameProduct.ForeColor = Color.Red;
+
+                }
+                else
+                {
+                    txtNameProduct.ForeColor = Color.Black;
+
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

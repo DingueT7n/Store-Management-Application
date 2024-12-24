@@ -127,6 +127,7 @@
             // 
             resources.ApplyResources(txtNameProduct, "txtNameProduct");
             txtNameProduct.Name = "txtNameProduct";
+            txtNameProduct.TextChanged += txtNameProduct_TextChanged;
             txtNameProduct.KeyDown += txtNameProduct_KeyDown;
             // 
             // label2
@@ -138,6 +139,7 @@
             // 
             resources.ApplyResources(txtBarCode, "txtBarCode");
             txtBarCode.Name = "txtBarCode";
+            txtBarCode.TextChanged += txtBarCode_TextChanged;
             txtBarCode.KeyDown += txtNameProduct_KeyDown;
             txtBarCode.KeyPress += txtBarCode_KeyPress;
             // 

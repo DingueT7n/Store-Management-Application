@@ -13,26 +13,48 @@ namespace Store.Infrastructure.Repositories
     }
     public class CaisseDepositRepository : GenericRepository<CaisseDeposit>, ICaisseDepositRepository
     {
-        public List<CaisseDeposit> GetAllDepositToCaisse(string t1, string barcode, DateTime dtpFrom, DateTime dtpTo)
+        public (List<CaisseDeposit> Deposits, int TotalCount) GetAllDepositToCaisse(
+             string t1,
+             string barcode,
+             DateTime dtpFrom,
+             DateTime dtpTo,
+             int take,
+             int skip)
         {
             try
             {
-                var allTransfers = _context.CaissesDeposits
+                // Query base
+                var query = _context.CaissesDeposits
                     .Include(x => x.Caisse)
-                      .AsEnumerable();
-                if (barcode != string.Empty) allTransfers = allTransfers.Where(x => x.Caisse.CaisseName == barcode || x.Name.Contains(barcode));
-                if (t1 != string.Empty)
-                    allTransfers = allTransfers.Where(x => x.Caisse is not null && x.Caisse.CaisseName == t1);
+                    .OrderBy(x => x.Date)
+                    .AsQueryable();
 
-                allTransfers = allTransfers.Where(x => x.Date >= dtpFrom && x.Date <= dtpTo)
-                     ;
+                // Filter by barcode if provided
+                if (!string.IsNullOrEmpty(barcode))
+                    query = query.Where(x => x.Caisse.CaisseName == barcode || x.Name.Contains(barcode));
 
-                return allTransfers.ToList();
+                // Filter by Caisse name if provided
+                if (!string.IsNullOrEmpty(t1))
+                    query = query.Where(x => x.Caisse != null && x.Caisse.CaisseName == t1);
+
+                // Filter by date range
+                query = query.Where(x => x.Date >= dtpFrom && x.Date <= dtpTo);
+
+                // Calculate total count before applying pagination
+                int totalCount = query.Count();
+
+                // Apply pagination (skip and take)
+                var deposits = query
+                    .OrderBy(x => x.Date) // Ensure consistent ordering
+                    .Skip(skip)
+                    .Take(take)
+                    .ToList();
+
+                return (deposits, totalCount);
             }
             catch (Exception ex)
             {
-
-                throw new Exception("Error retrieving the buyFactures", ex);
+                throw new Exception("Error retrieving the deposits", ex);
             }
         }
         public CaisseDepositRepository(ApplicationDbContext context) : base(context)

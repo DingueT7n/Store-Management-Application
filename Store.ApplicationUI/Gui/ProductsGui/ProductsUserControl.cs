@@ -63,11 +63,31 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         }
 
-        public async void SetProductsToDgv()
+        public async void SetProductsToDgv(int skip)
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             DgvProducts.DataSource = _context.Products.
-                Include(x => x.Category).AsNoTracking().ToList();
+                Include(x => x.Category).Skip(skip).Take(Properties.Settings.Default.NoOfDataInDgvs).AsNoTracking().ToList();
+            // Set data source
+
+
+            // Calculate total pages
+            double value = _context.Products.Count() / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
+            int pageCount = Convert.ToInt32(Math.Ceiling(value));
+
+            // Update pagination combo box
+            cmbpagination.Items.Clear();
+            for (int i = 0; i < pageCount; i++)
+            {
+                cmbpagination.Items.Add(i);
+            }
+
+            if (cmbpagination.Items.Count > 0)
+            {
+                cmbpagination.SelectedIndex = skip / Properties.Settings.Default.NoOfDataInDgvs;
+            }
+
+            PaginationHide();
         }
 
         public static void RefreshDgv()
@@ -88,7 +108,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
                 // if its an admin or Normal user 
 
-                SetProductsToDgv();
+                SetProductsToDgv(0);
                 SetColumns();
                 //_data.Clear();
             }
@@ -264,6 +284,42 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 {
                     addProductForm.Focus();
                 }
+            }
+        }
+        void PaginationHide()
+        {
+            btnNext.Enabled = cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1 && !dgvHelper.IsEmpty(DgvProducts);
+            btnPrev.Enabled = cmbpagination.SelectedIndex > 0 && !dgvHelper.IsEmpty(DgvProducts);
+            cmbpagination.Enabled = !dgvHelper.IsEmpty(DgvProducts);
+        }
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+            if (cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1)
+            {
+                cmbpagination.SelectedIndex++;
+                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+                SetProductsToDgv(skip);
+
+            }
+        }
+
+        private void btnPrev_Click(object sender, EventArgs e)
+        {
+            if (cmbpagination.SelectedIndex > 0)
+            {
+                cmbpagination.SelectedIndex--;
+                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+
+                SetProductsToDgv(skip);
+            }
+        }
+
+        private void cmbpagination_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            if (cmbpagination.SelectedIndex != -1)
+            {
+                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+                SetProductsToDgv(skip);
             }
         }
     }

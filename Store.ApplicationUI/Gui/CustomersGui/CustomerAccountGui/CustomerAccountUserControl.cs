@@ -174,6 +174,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
         {
             if (DgvِCustomer.SelectedRows.Count > 0 && !dgvHelper.IsEmpty(DgvِCustomer))
             {
+                _context = new ApplicationDbContext();
                 if (rbPayFacture.Checked)
                 {
                     var v1 = DgvِCustomer.CurrentRow.Cells[1].Value?.ToString();

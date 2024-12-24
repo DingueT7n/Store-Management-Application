@@ -4,6 +4,7 @@ using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.SalesGui;
 using Store.ApplicationUI.Gui.SalesGui.PosGui;
 using Store.Core.Entities.Products;
+using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.PaymentGui
 {
@@ -12,10 +13,12 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         private static MainForm _main;
         private static PosForm _PosForm;
         private static SelectProductsForm _selectProductsForm;
+        private ApplicationDbContext _context;
 
         public SelectProductsForm(MainForm main)
         {
             InitializeComponent();
+            _context = new ApplicationDbContext();
             this.Owner = _main;
         }
         public SelectProductsForm(PosForm main)
@@ -45,7 +48,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         {
             try
             {
-                byte[] Picture = (byte[])retrivedData;
+                byte[] Picture = retrivedData;
                 MemoryStream ms = new MemoryStream(Picture);
                 return Image.FromStream(ms);
             }
@@ -70,7 +73,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
 
             if (!SalesUserControl.CheckInstance())
             {
-                if (SalesUserControl.setProductFromSelector(MainForm.Context.Products.FirstOrDefault(x => x.Id == productId)))
+                if (SalesUserControl.setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == productId)))
                 {
 
                 }
@@ -81,7 +84,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
                 var posUserControl = PosForm.GetPosUserControl();
                 if (posUserControl != null)
                 {
-                    posUserControl.setProductFromSelector(MainForm.Context.Products.FirstOrDefault(x => x.Id == productId));
+                    posUserControl.setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == productId));
                 }
 
 
@@ -117,12 +120,12 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         public async void LoadData()
         {
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => MainForm.Context.Database.CanConnect()))
+            if (await Task.Run(() => _context.Database.CanConnect()))
             {
 
-                DgvProducts.DataSource = MainForm.Context.ProductQuickAccess.ToList();
+                DgvProducts.DataSource = _context.ProductQuickAccess.ToList();
                 SetColumns();
-                List<ProductQuickAccess> productQuicks = MainForm.Context.ProductQuickAccess.ToList();
+                List<ProductQuickAccess> productQuicks = _context.ProductQuickAccess.ToList();
                 foreach (var productImage in productQuicks)
                 {
                     Panel qucikPan = new Panel
@@ -206,18 +209,23 @@ namespace Store.ApplicationUI.Gui.PaymentGui
                 int Id = Convert.ToInt32(DgvProducts.CurrentRow.Cells[0].Value.ToString());
                 if (!SalesUserControl.CheckInstance())
                 {
-                    if (SalesUserControl.setProductFromSelector(MainForm.Context.Products.FirstOrDefault(x => x.Id == Id))) { }
+                    if (SalesUserControl.setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == Id))) { }
                 }
 
                 {
 
                     if (PosForm.GetPosUserControl() is not null)
                     {
-                        PosForm.GetPosUserControl().setProductFromSelector(MainForm.Context.Products.FirstOrDefault(x => x.Id == Id));
+                        PosForm.GetPosUserControl().setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == Id));
                     }
 
                 }
             }
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
