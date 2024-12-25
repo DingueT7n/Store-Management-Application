@@ -460,33 +460,37 @@ namespace Store.ApplicationUI.Gui.SalesGui
         }
         private void ResetForm()
         {
-            // Clear all textboxes
-            foreach (Control ctrl in this.Controls)
+            if (Process)
             {
-                if (ctrl is TextBox)
+                Process = false;
+                // Clear all textboxes
+                foreach (Control ctrl in this.Controls)
                 {
-                    ((TextBox)ctrl).Clear();
+                    if (ctrl is TextBox)
+                    {
+                        ((TextBox)ctrl).Clear();
+                    }
+                    else if (ctrl is ComboBox)
+                    {
+                        ((ComboBox)ctrl).SelectedIndex = -1; // Deselect ComboBox
+                    }
+                    else if (ctrl is CheckBox)
+                    {
+                        ((CheckBox)ctrl).Checked = false; // Uncheck CheckBox
+                    }
+                    // Add more control types if needed
                 }
-                else if (ctrl is ComboBox)
-                {
-                    ((ComboBox)ctrl).SelectedIndex = -1; // Deselect ComboBox
-                }
-                else if (ctrl is CheckBox)
-                {
-                    ((CheckBox)ctrl).Checked = false; // Uncheck CheckBox
-                }
-                // Add more control types if needed
+
+                // Reset any DataGridView
+                DgvِProducts.Rows.Clear();
+                CalculateStatistics();
+
+                // Reinitialize form data (e.g., reload initial data)
+                LoadData(); // This is a method where you load initial data
+
+                // Optionally reset focus to the first control
+                // Set focus to the first control
             }
-
-            // Reset any DataGridView
-            DgvِProducts.Rows.Clear();
-            CalculateStatistics();
-
-            // Reinitialize form data (e.g., reload initial data)
-            LoadData(); // This is a method where you load initial data
-
-            // Optionally reset focus to the first control
-            // Set focus to the first control
         }
 
         private void btnDeleteSelected_Click(object sender, EventArgs e)
@@ -784,6 +788,8 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
             _context.SaveChanges();
         }
+        public static bool Process = false;
+
         private void btnPay_Click(object sender, EventArgs e)
         {
             if (!(DgvِProducts.Rows.Count > 0))
@@ -796,13 +802,15 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
                     addPaymentForm.LoadData(TotalFacture.ToString(), "0", TotalFacture.ToString());
                     addPaymentForm.ShowDialog();
-                    ProcessTransaction(PaidUp, rBPayPartial.Checked || rBPayDebt.Checked || Remain > 0);
+                    if (Process)
+                        ProcessTransaction(PaidUp, rBPayPartial.Checked || rBPayDebt.Checked || Remain > 0);
                 }
                 else if (rBPayCash.Checked)
                 {
                     addPaymentForm.LoadData(TotalFacture.ToString(), TotalFacture.ToString(), "0");
                     addPaymentForm.ShowDialog();
-                    ProcessTransaction(PaidUp, false || Remain > 0);
+                    if (Process)
+                        ProcessTransaction(PaidUp, false || Remain > 0);
                 }
 
             }
@@ -872,27 +880,28 @@ namespace Store.ApplicationUI.Gui.SalesGui
             try
             {
                 if (dgvHelper.IsEmpty(DgvِProducts)) { MsgHelper.ShowEmptyDataGridView(); }
-                _product = salesRepository.GetProductBarCode(DgvِProducts.CurrentRow.Cells[7].Value.ToString());
-                txtProductName.Text = this.DgvِProducts.CurrentRow.Cells[0].Value.ToString();
-                txtSaleDiscount.Text = this.DgvِProducts.CurrentRow.Cells[3].Value.ToString();
-                txtQty.Text = (_main.ConvertToFloat(DgvِProducts.CurrentRow.Cells[2].Value.ToString()) + q).ToString();
-                txtTotalSaleProduct.Text = this.DgvِProducts.CurrentRow.Cells[5].Value.ToString();
-                txtSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[1].Value.ToString();
-                txtWholeSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[4].Value.ToString();
+                if (!dgvHelper.IsEmpty(DgvِProducts))
+                {
+                    _product = salesRepository.GetProductBarCode(DgvِProducts.CurrentRow.Cells[7].Value.ToString());
+                    txtProductName.Text = this.DgvِProducts.CurrentRow.Cells[0].Value.ToString();
+                    txtSaleDiscount.Text = this.DgvِProducts.CurrentRow.Cells[3].Value.ToString();
+                    txtQty.Text = (_main.ConvertToFloat(DgvِProducts.CurrentRow.Cells[2].Value.ToString()) + q).ToString();
+                    txtTotalSaleProduct.Text = this.DgvِProducts.CurrentRow.Cells[5].Value.ToString();
+                    txtSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[1].Value.ToString();
+                    txtWholeSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[4].Value.ToString();
 
-                DgvِProducts.Rows.RemoveAt(DgvِProducts.CurrentRow.Index);
-                txtQty.Focus();
-                CalculateAmount();
-                CalculateStatistics();
+                    txtQty.Focus();
+                    CalculateAmount();
+                    CalculateStatistics();
+                    labelError1.Visible = _product.Quentity <= _main.ConvertToFloat(txtQty.Text);
+                    ProductsQuantitie productQty = _context.ProductsQuantities.
+                              Where(x => x.Pro_ID == _product.Id && x.Qty >= _main.ConvertToFloat(txtQty.Text)
+                              && x.Store_ID.ToString() == cmbStores.SelectedValue).FirstOrDefault();
 
-                labelError1.Visible = _product.Quentity <= _main.ConvertToFloat(txtQty.Text);
+                    lblError2.Visible = productQty is null;
 
-                ProductsQuantitie productQty = _context.ProductsQuantities.
-                          Where(x => x.Pro_ID == _product.Id && x.Qty >= _main.ConvertToFloat(txtQty.Text) && x.Store_ID.ToString() == cmbStores.SelectedValue).FirstOrDefault();
-
-                lblError2.Visible = productQty is null;
-
-
+                    DgvِProducts.Rows.RemoveAt(DgvِProducts.CurrentRow.Index);
+                }
 
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
@@ -904,10 +913,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
             EditFromTable(0);
         }
 
-        private void DgvِProducts_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            EditFromTable(0);
-        }
+
         void EditUsingPlusMinus(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Oemplus)
@@ -939,6 +945,12 @@ namespace Store.ApplicationUI.Gui.SalesGui
         {
             SelectProductsForm selectProductsForm = SelectProductsForm.Instance(_main);
             selectProductsForm.ShowDialog();
+        }
+
+        private void DgvِProducts_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            EditFromTable(0);
+
         }
     }
 }

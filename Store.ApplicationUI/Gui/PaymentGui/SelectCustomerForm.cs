@@ -23,6 +23,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         public SelectCustomerForm(PosForm main)
         {
             InitializeComponent();
+            _context = new ApplicationDbContext();
 
             this.Owner = _PosForm;
         }

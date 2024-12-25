@@ -8,7 +8,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui
 {
     public partial class SuppliersUserControl : UserControl
     {
-        private static SupplierGui.SuppliersUserControl? _suppliersUserControl;
+        private static SuppliersUserControl? _suppliersUserControl;
         private static MainForm? _main;
         private static ApplicationDbContext _context;
         public static SuppliersRepository? suppliersRepository;
@@ -20,7 +20,6 @@ namespace Store.ApplicationUI.Gui.SupplierGui
         public static bool CheckInstance()
         {
             return (_suppliersUserControl == null);
-
         }
 
         public static SuppliersUserControl Instance(MainForm main)
@@ -44,7 +43,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui
         public async void SetProductsToDgv()
         {
             //DgvِSupplier.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            DgvِSupplier.DataSource = MainForm.Context.Suppliers
+            DgvِSupplier.DataSource = _context.Suppliers.OrderBy(x => x.SupplierName)
                 .ToList();
         }
 

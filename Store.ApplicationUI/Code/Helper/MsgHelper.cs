@@ -17,6 +17,12 @@ namespace Store.ApplicationUI.Code.Helper
                   "حقول مطلوبة"
                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+        public static void ShowMaxDebtAllowedExceeded()
+        {
+            MessageBox.Show("لا يمكن السماح باجراء هاته العملية , لقد تعدى الدين المحدد",
+                  "عدم السماح بهاته العملية"
+                  , MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
         public static void ShowRequiredFields2()
         {
             MessageBox.Show("يرجى تعبئة جميع الحقول المطلوبة.", "خطأ في التحقق", MessageBoxButtons.OK, MessageBoxIcon.Warning);

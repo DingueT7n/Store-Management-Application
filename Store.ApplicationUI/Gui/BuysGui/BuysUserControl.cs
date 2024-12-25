@@ -427,30 +427,36 @@ namespace Store.ApplicationUI.Gui.BuysGui
         }
         private void ResetForm()
         {
-            // Clear all textboxes
-            foreach (Control ctrl in this.Controls)
+
+            if (Process)
             {
-                if (ctrl is TextBox)
+                Process = false;
+
+                // Clear all textboxes
+                foreach (Control ctrl in this.Controls)
                 {
-                    ((TextBox)ctrl).Clear();
+                    if (ctrl is TextBox)
+                    {
+                        ((TextBox)ctrl).Clear();
+                    }
+                    else if (ctrl is ComboBox)
+                    {
+                        ((ComboBox)ctrl).SelectedIndex = -1; // Deselect ComboBox
+                    }
+                    else if (ctrl is CheckBox)
+                    {
+                        ((CheckBox)ctrl).Checked = false; // Uncheck CheckBox
+                    }
+                    // Add more control types if needed
                 }
-                else if (ctrl is ComboBox)
-                {
-                    ((ComboBox)ctrl).SelectedIndex = -1; // Deselect ComboBox
-                }
-                else if (ctrl is CheckBox)
-                {
-                    ((CheckBox)ctrl).Checked = false; // Uncheck CheckBox
-                }
-                // Add more control types if needed
+
+                // Reset any DataGridView
+                DgvِProducts.Rows.Clear();
+                CalculateStatistics();
+
+                // Reinitialize form data (e.g., reload initial data)
+                LoadData(); // This is a method where you load initial data
             }
-
-            // Reset any DataGridView
-            DgvِProducts.Rows.Clear();
-            CalculateStatistics();
-
-            // Reinitialize form data (e.g., reload initial data)
-            LoadData(); // This is a method where you load initial data
 
             // Optionally reset focus to the first control
             // Set focus to the first control
@@ -668,8 +674,10 @@ namespace Store.ApplicationUI.Gui.BuysGui
             }
             await _context.SaveChangesAsync();
         }
+        public static bool Process = false;
         private async void btnPay_Click(object sender, EventArgs e)
         {
+
             if (!(DgvِProducts.Rows.Count > 0))
                 return;
             if (ValidatePay())
@@ -690,11 +698,11 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 }
 
                 // Proceed if payment is valid
-                if (PaidUp >= TotalFacture)
+                if (PaidUp >= TotalFacture && Process)
                 {
                     await ProcessPaymentAsync(false);
                 }
-                else if (PaidUp < TotalFacture)
+                else if (PaidUp < TotalFacture && Process)
                 {
                     await ProcessPaymentAsync(true);
                 }
@@ -990,28 +998,30 @@ namespace Store.ApplicationUI.Gui.BuysGui
         {
             try
             {
-                txtProductName.Text = this.DgvِProducts.CurrentRow.Cells[0].Value.ToString();
-                txtBuyPrice.Text = this.DgvِProducts.CurrentRow.Cells[1].Value.ToString();
-                txtQty.Text = this.DgvِProducts.CurrentRow.Cells[2].Value.ToString();
-                txtTotalBuyProduct.Text = this.DgvِProducts.CurrentRow.Cells[3].Value.ToString();
-                txtSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[4].Value.ToString();
-                txtWholeSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[5].Value.ToString();
-                txtPriceWithTax.Text = this.DgvِProducts.CurrentRow.Cells[6].Value.ToString();
-                dtpDateExpiration.Value = Convert.ToDateTime(this.DgvِProducts.CurrentRow.Cells[7].Value.ToString());
-                DgvِProducts.Rows.RemoveAt(DgvِProducts.CurrentRow.Index);
-                txtQty.Focus();
-                CalculateAmount();
-                CalculateStatistics();
+                if (!dgvHelper.IsEmpty(DgvِProducts))
+                {
+                    txtProductName.Text = this.DgvِProducts.CurrentRow.Cells[0].Value.ToString();
+                    txtBuyPrice.Text = this.DgvِProducts.CurrentRow.Cells[1].Value.ToString();
+                    txtQty.Text = this.DgvِProducts.CurrentRow.Cells[2].Value.ToString();
+                    txtTotalBuyProduct.Text = this.DgvِProducts.CurrentRow.Cells[3].Value.ToString();
+                    txtSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[4].Value.ToString();
+                    txtWholeSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[5].Value.ToString();
+                    txtPriceWithTax.Text = this.DgvِProducts.CurrentRow.Cells[6].Value.ToString();
+                    dtpDateExpiration.Value = Convert.ToDateTime(this.DgvِProducts.CurrentRow.Cells[7].Value.ToString());
+                    DgvِProducts.Rows.RemoveAt(DgvِProducts.CurrentRow.Index);
+
+                    txtQty.Focus();
+                    CalculateAmount();
 
 
 
+                }
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
-        }
-        private void DgvِProducts_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            EditFromTable();
         }
 
         private void txtWholeSalePrice_KeyUp(object sender, KeyEventArgs e)
@@ -1023,6 +1033,18 @@ namespace Store.ApplicationUI.Gui.BuysGui
         private void btnEditSelected_Click(object sender, EventArgs e)
         {
             EditFromTable();
+        }
+
+        private void DgvِProducts_RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            EditFromTable();
+
+        }
+
+        private void DgvِProducts_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            EditFromTable();
+
         }
     }
 }

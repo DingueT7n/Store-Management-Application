@@ -23,12 +23,15 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         }
         public SelectProductsForm(PosForm main)
         {
+            _context = new ApplicationDbContext();
+
             InitializeComponent();
             this.Owner = _PosForm;
         }
         public static SelectProductsForm Instance(MainForm main)
         {
             _main = main;
+            _selectProductsForm._context = new ApplicationDbContext();
 
             _selectProductsForm = new SelectProductsForm(_main);
 
@@ -38,6 +41,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         public static SelectProductsForm Instance(PosForm main)
         {
             _PosForm = main;
+            _selectProductsForm._context = new ApplicationDbContext();
 
             _selectProductsForm = new SelectProductsForm(_PosForm);
 

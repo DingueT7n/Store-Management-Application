@@ -1,4 +1,5 @@
 ﻿using Store.ApplicationUI.Gui.BuysGui;
+using Store.ApplicationUI.Gui.SalesGui;
 using Store.ApplicationUI.Gui.SalesGui.PosGui;
 
 namespace Store.ApplicationUI.Gui.PaymentGui
@@ -35,18 +36,28 @@ namespace Store.ApplicationUI.Gui.PaymentGui
 
         private void button1_Click(object sender, EventArgs e)
         {
+
             this.Close();
         }
         private void btnSearchImage_Click(object sender, EventArgs e)
         {
             if (this._form == 1)
+            {
 
                 SalesGui.SalesUserControl.InitializeData(txtpaidUp.Text, txtRemain.Text);
+                SalesUserControl.Process = true;
+            }
             else if (_form == 0)
+            {
                 BuysUserControl.InitializeData(txtpaidUp.Text, txtRemain.Text);
+                BuysUserControl.Process = true;
+            }
             else if (PosForm.GetPosUserControl() is not null)
             {
                 PosForm.GetPosUserControl().InitializeData(txtpaidUp.Text, txtRemain.Text);
+
+
+
             }
             this.Close();
 

@@ -85,7 +85,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
         private void LoadChartData()
         {
             var selectedCaisseId = cmbCaisse.SelectedValue as int?;
-            var selectedCustomerId = cmbCustomers.SelectedValue as int?;
+            var selectedCustomerId = cmbCustomers.Text == "اختر العميل" ? "" : cmbCustomers.Text;
             var selectedUserId = cmbUser.Text == "اختر البائع" ? "" : cmbUser.Text;
             // Step 1: Retrieve Data for Sales and Buys
 
@@ -95,7 +95,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
               s => s.TotalOrder,
               // Apply filters dynamically
               //s => selectedCaisseId == null || s. == selectedCaisseId,
-              s => selectedCustomerId == null || s.CustomerId == selectedCustomerId,
+              s => selectedCustomerId == null || s.Customer.CustomerName.Contains(selectedCustomerId),
               s => selectedUserId == null || s.User_Name.Contains(selectedUserId)
           );
 
@@ -338,9 +338,12 @@ namespace Store.ApplicationUI.Gui.HomeGui
         {
             // Clear any existing series in the chart
             chartControl7.Series.Clear();
-
+            var selectedCustomerId = cmbCustomers.Text == "اختر العميل" ? "" : cmbCustomers.Text;
+            var selectedUserId = cmbUser.Text == "اختر البائع" ? "" : cmbUser.Text;
             // Step 1: Calculate Net Profit
-            var netProfitData = _context.SalesProfits
+            var netProfitData = _context.SalesProfits.Where(s => selectedCustomerId == null || s.Cust_Name.Contains(selectedCustomerId))
+                .Where(
+              s => selectedUserId == null || s.Sale.User_Name.Contains(selectedUserId))
                 .Where(x => dtpFrom.Value <= x.Sale.Date && dtpTo.Value >= x.Sale.Date)
                 .GroupBy(sp => sp.Sale.Date.Date)
                 .Select(g => new
@@ -354,6 +357,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
             txtProfit.Text = totalSalesProfit.ToString();
 
             var deservedData = _context.Deserveds
+                .Where(s => s.UserName.Contains(selectedUserId))
                 .Where(x => dtpFrom.Value <= x.Date && dtpTo.Value >= x.Date)
                 .GroupBy(d => d.Date.Date)
                 .Select(g => new
@@ -443,9 +447,12 @@ namespace Store.ApplicationUI.Gui.HomeGui
         {
             // Clear any existing series in the chart
             chartControl8.Series.Clear();
-
+            var selectedCustomerId = cmbCustomers.Text == "اختر العميل" ? "" : cmbCustomers.Text;
+            var selectedUserId = cmbUser.Text == "اختر البائع" ? "" : cmbUser.Text;
             // Step 1: Calculate Net Profit
-            var netProfitData = _context.SalesProfits // Assuming SalesProfit contains profits
+            var netProfitData = _context.SalesProfits.Where(s => selectedCustomerId == null || s.Cust_Name.Contains(selectedCustomerId))
+                .Where(
+              s => selectedUserId == null || s.Sale.User_Name.Contains(selectedUserId))
                .Where(x => dtpFrom.Value <= x.Sale.Date && dtpTo.Value >= x.Sale.Date)
                 .GroupBy(sp => sp.Sale.Date.Date) // Group by Date
 

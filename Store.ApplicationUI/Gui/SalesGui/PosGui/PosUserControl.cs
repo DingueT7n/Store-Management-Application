@@ -500,30 +500,34 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         }
         private void ResetForm()
         {
-            // Clear all textboxes
-            foreach (Control ctrl in this.Controls)
+            if (Process)
             {
-                if (ctrl is TextBox)
+                Process = false;
+
+                // Clear all textboxes
+                foreach (Control ctrl in this.Controls)
                 {
-                    ((TextBox)ctrl).Clear();
+                    if (ctrl is TextBox)
+                    {
+                        ((TextBox)ctrl).Clear();
+                    }
+                    else if (ctrl is ComboBox)
+                    {
+                        ((ComboBox)ctrl).SelectedIndex = -1; // Deselect ComboBox
+                    }
+                    else if (ctrl is CheckBox)
+                    {
+                        ((CheckBox)ctrl).Checked = false; // Uncheck CheckBox
+                    }
+                    // Add more control types if needed
                 }
-                else if (ctrl is ComboBox)
-                {
-                    ((ComboBox)ctrl).SelectedIndex = -1; // Deselect ComboBox
-                }
-                else if (ctrl is CheckBox)
-                {
-                    ((CheckBox)ctrl).Checked = false; // Uncheck CheckBox
-                }
-                // Add more control types if needed
+
+                // Reset any DataGridView
+                DgvِProducts.Rows.Clear();
+                OnLoad();
+
+
             }
-
-            // Reset any DataGridView
-            DgvِProducts.Rows.Clear();
-            OnLoad();
-
-
-
 
             // Optionally reset focus to the first control
             // Set focus to the first control
@@ -848,6 +852,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             };
 
         }
+        public static bool Process = false;
+
         private async void btnPay_Click(object sender, EventArgs e)
         {
             await PayNowAsync();
@@ -856,6 +862,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         }
         public void InitializeData(string paidUp, string remain)
         {
+            Process = true;
             PaidUp = ConvertToFloat(paidUp);
             Remain = ConvertToFloat(remain);
         }
@@ -878,59 +885,73 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 }
                 else
                 {
+                    Process = true;
                     PaidUp = ConvertToFloat(TotalFacture.ToString());
                     Remain = 0;
                 }
-                _context = new ApplicationDbContext();
-                using (var transaction = await _context.Database.BeginTransactionAsync())
+                if (Process)
                 {
-                    try
+                    _context = new ApplicationDbContext();
+                    using (var transaction = await _context.Database.BeginTransactionAsync())
                     {
-                        var sale = SetSale();
-                        await _context.AddAsync(sale);
-                        await _context.SaveChangesAsync();
-                        saleID = sale.Id;
-
-                        for (int i = 0; i < DgvِProducts.Rows.Count; i++)
+                        try
                         {
-                            var saleDetail = SetSaleDetail(i);
-                            saleDetail.Order_ID = sale.Id;
-                            await _context.SalesDetails.AddAsync(saleDetail);
+                            if (IdCustomer.Text != Properties.Settings.Default.IdCustomerSale)
+                            {
+                                var customer = _context.Customers.FirstOrDefault(x => x.Id.ToString() == IdCustomer.Text);
+                                if (customer.MaxDebtAllowed < customer.TotalDebts + Remain)
+                                {
+                                    MsgHelper.ShowMaxDebtAllowedExceeded();
+                                    return;
+                                }
+                            }
+                            var sale = SetSale();
+                            await _context.AddAsync(sale);
+                            await _context.SaveChangesAsync();
+                            saleID = sale.Id;
 
-                            _context.Update(SetProduct(i));
-                            var buyPrice = SetProductQuentity(Convert.ToDecimal(DgvِProducts.Rows[i].Cells[2].Value.ToString()), i, sale.Id);
-                            //var profit = SetSaleProfit(i, buyPrice);
-                            //profit.Order_ID = sale.Id;
-                            //await _context.AddAsync(profit);
-                        }
-                        HandleCaisseAndDeposits(PaidUp, TotalFacture);
+                            for (int i = 0; i < DgvِProducts.Rows.Count; i++)
+                            {
+                                var saleDetail = SetSaleDetail(i);
+                                saleDetail.Order_ID = sale.Id;
+                                await _context.SalesDetails.AddAsync(saleDetail);
 
-                        if (PaidUp > 0)
-                        {
-                            var custReport = SetCustReport();
-                            custReport.Order_ID = sale.Id;
-                            await _context.AddAsync(custReport);
+                                _context.Update(SetProduct(i));
+                                var buyPrice = SetProductQuentity(Convert.ToDecimal(DgvِProducts.Rows[i].Cells[2].Value.ToString()), i, sale.Id);
+                                //var profit = SetSaleProfit(i, buyPrice);
+                                //profit.Order_ID = sale.Id;
+                                //await _context.AddAsync(profit);
+                            }
+                            HandleCaisseAndDeposits(PaidUp, TotalFacture);
+
+                            if (PaidUp > 0)
+                            {
+                                var custReport = SetCustReport();
+                                custReport.Order_ID = sale.Id;
+                                await _context.AddAsync(custReport);
+                            }
+                            if (Remain > 0)
+                            {
+                                var custMoney = SetCustMoney();
+                                custMoney.Order_ID = sale.Id;
+                                await _context.AddAsync(custMoney);
+                                _context.Update(SetCustomer());
+                            }
+                            await _context.SaveChangesAsync();
+                            await transaction.CommitAsync();
+                            ResetForm();
+                            DataTable saleDetailsTable = await GetSellDetailsDataTableAsync(saleID);
+                            Reports.sale8cm sale8Cm = new();
+                            sale8Cm.DataSource = saleDetailsTable;
+                            XtraForm1 xtraForm1 = new(sale8Cm);
+                            xtraForm1.ShowDialog();
+
                         }
-                        if (Remain > 0)
+                        catch (Exception ex)
                         {
-                            var custMoney = SetCustMoney();
-                            custMoney.Order_ID = sale.Id;
-                            await _context.AddAsync(custMoney);
-                            _context.Update(SetCustomer());
+                            await transaction.RollbackAsync();
+                            MessageBox.Show(ex.Message);
                         }
-                        await _context.SaveChangesAsync();
-                        await transaction.CommitAsync();
-                        ResetForm();
-                        DataTable saleDetailsTable = await GetSellDetailsDataTableAsync(saleID);
-                        Reports.sale8cm sale8Cm = new();
-                        sale8Cm.DataSource = saleDetailsTable;
-                        XtraForm1 xtraForm1 = new(sale8Cm);
-                        xtraForm1.ShowDialog();
-                    }
-                    catch (Exception ex)
-                    {
-                        await transaction.RollbackAsync();
-                        MessageBox.Show(ex.Message);
                     }
                 }
             }
