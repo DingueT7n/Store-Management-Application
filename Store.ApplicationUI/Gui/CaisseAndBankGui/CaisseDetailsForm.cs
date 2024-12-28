@@ -52,6 +52,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
         public void SetCategoryToDgv()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
+            _context = new ApplicationDbContext();
             DgvCaisser.DataSource = _context.Caisses
                 .ToList();
             lblidCaisse.Text = (_context.Caisses.Count() + 1).ToString();

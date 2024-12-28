@@ -52,7 +52,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
             cmbpagination.Items.Clear();
             for (int i = 0; i <= PageValue; i++)
             {
-                cmbpagination.Items.Add(i);
+                cmbpagination.Items.Add(i + 1);
 
             }
             if (cmbpagination.Items.Count > 0)

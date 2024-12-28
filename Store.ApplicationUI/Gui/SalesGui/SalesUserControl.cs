@@ -34,7 +34,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 _salesUserControl = new SalesUserControl();
             }
             // Return the singleton instance
-            //_salesUserControl.LoadData();
+            _salesUserControl.LoadData();
 
             _salesUserControl.ResetForm();
             return _salesUserControl;
@@ -803,14 +803,36 @@ namespace Store.ApplicationUI.Gui.SalesGui
                     addPaymentForm.LoadData(TotalFacture.ToString(), "0", TotalFacture.ToString());
                     addPaymentForm.ShowDialog();
                     if (Process)
+                    {
+                        if (cmbCustomers.SelectedValue.ToString() != Properties.Settings.Default.IdCustomerSale)
+                        {
+                            var customer = _context.Customers.FirstOrDefault(x => x.Id.ToString() == cmbCustomers.SelectedValue.ToString());
+                            if (customer.MaxDebtAllowed < customer.TotalDebts + Remain)
+                            {
+                                MsgHelper.ShowMaxDebtAllowedExceeded();
+                                return;
+                            }
+                        }
                         ProcessTransaction(PaidUp, rBPayPartial.Checked || rBPayDebt.Checked || Remain > 0);
+                    }
                 }
                 else if (rBPayCash.Checked)
                 {
                     addPaymentForm.LoadData(TotalFacture.ToString(), TotalFacture.ToString(), "0");
                     addPaymentForm.ShowDialog();
                     if (Process)
+                    {
+                        if (cmbCustomers.SelectedValue.ToString() != Properties.Settings.Default.IdCustomerSale)
+                        {
+                            var customer = _context.Customers.FirstOrDefault(x => x.Id.ToString() == cmbCustomers.SelectedValue.ToString());
+                            if (customer.MaxDebtAllowed < customer.TotalDebts + Remain)
+                            {
+                                MsgHelper.ShowMaxDebtAllowedExceeded();
+                                return;
+                            }
+                        }
                         ProcessTransaction(PaidUp, false || Remain > 0);
+                    }
                 }
 
             }

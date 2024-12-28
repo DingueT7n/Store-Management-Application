@@ -56,7 +56,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
             int PageValue = Convert.ToInt32(Math.Round(value, MidpointRounding.AwayFromZero));
 
             cmbpagination.Items.Clear();
-            for (int i = 0; i <= PageValue; i++)
+            for (int i = 0; i < PageValue; i++)
             {
                 cmbpagination.Items.Add(i + 1);
 
@@ -346,6 +346,21 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
                     MessageBox.Show($"لقد حدث خطأ {ex.Message}", "خطأ برمجي", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void btnExportCustomer_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

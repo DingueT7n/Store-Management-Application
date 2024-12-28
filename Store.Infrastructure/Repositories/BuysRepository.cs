@@ -25,7 +25,7 @@ namespace Store.Infrastructure.Repositories
                     .Where(bd =>
                         bd.Supplier.SupplierName.ToLower().Contains(searchItem.ToLower()) ||
                         bd.Order_ID.ToString() == searchItem) // Client-side case-insensitive search
-                    .OrderByDescending(bd => bd.Buy.Date);
+                    .OrderByDescending(bd => bd.Buy.Id);
 
                 var buyDetailDtos = buyDetailsQuery
 
@@ -72,7 +72,7 @@ namespace Store.Infrastructure.Repositories
                     .Include(x => x.Product)
                     .Include(x => x.Supplier)
                     .Where(bd => fromDate <= bd.Buy.Date && bd.Buy.Date <= toDate) // Date range filter
-                    .OrderByDescending(bd => bd.Buy.Date)
+                    .OrderByDescending(bd => bd.Buy.Id)
                       .Skip(skip)
                     .Take(take)
                     .Select(bd => new BuyDetailDto
@@ -113,7 +113,7 @@ namespace Store.Infrastructure.Repositories
                     .Include(bd => bd.Supplier)
                     .Where(bd => bd.Supplier.SupplierName.ToLower().Contains(searchLower) ||
                                  bd.Order_ID.ToString() == searchItem)
-                    .OrderByDescending(bd => bd.Buy.Date)
+                    .OrderByDescending(bd => bd.Buy.Id)
                     .Skip(skip)
                     .Take(take)
                     .Select(bd => new BuyDetailDto
@@ -194,7 +194,7 @@ namespace Store.Infrastructure.Repositories
                     .Include(x => x.Buy)
                     .Include(x => x.Product)
                     .Include(x => x.Supplier).
-                    OrderByDescending(x => x.Buy.Date)
+                    OrderByDescending(x => x.Buy.Id)
                      .Skip(skip)
                     .Take(take)
                     .Select(bd => new BuyDetailDto

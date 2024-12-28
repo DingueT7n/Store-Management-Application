@@ -48,7 +48,7 @@ namespace Store.Infrastructure.Repositories
                 x.Cust_Name.ToString().Contains(searchIteam) ||
                 x.Id.ToString() == (searchIteam)
                 )
-                    .OrderBy(x => x.Order_Date).ToList();
+                    .OrderByDescending(x => x.Id).ToList();
 
             }
             catch
@@ -62,7 +62,7 @@ namespace Store.Infrastructure.Repositories
 
             try
             {
-                _context = new ApplicationDbContext();
+
                 var customerMoney = _context.CustomersMoneys.FirstOrDefault(x =>
                   x.Cust_ID.ToString() == cust_Id && x.Order_ID.ToString() == order_Id &&
                   x.Price.ToString() == (price)
@@ -98,8 +98,10 @@ namespace Store.Infrastructure.Repositories
                     if (customer is not null)
                     {
                         customer.TotalDebts = customer.TotalDebts - ConvertToFloat(price);
+                        _context.Update(customer);
+                        _context.SaveChanges();
+
                     }
-                    _context.Update(customer);
                     DeleteFacture(order_Id, cust_Id, price);
                     CustomerReport customerReport = new CustomerReport();
                     customerReport.Cust_ID = Convert.ToInt32(cust_Id);
@@ -110,7 +112,7 @@ namespace Store.Infrastructure.Repositories
                     customerReport.Time = DateTime.Now.ToString("HH:mm");
                     _context.Add(customerReport);
                     _context.SaveChanges();
-                    transaction.CommitAsync();
+                    transaction.Commit();
                     return true;
                 }
                 catch
@@ -124,7 +126,7 @@ namespace Store.Infrastructure.Repositories
             try
 
             {
-                _context = new ApplicationDbContext();
+
                 var customerMoney = _context.CustomersMoneys.FirstOrDefault(x =>
                   x.Cust_ID.ToString() == cust_Id && x.Order_ID.ToString() == order_Id
                   );
@@ -195,17 +197,16 @@ namespace Store.Infrastructure.Repositories
                 var query = _context.CustomersReports.AsQueryable();
 
                 var result = query.Include(x => x.Sale).Include(x => x.Customer)
-                    .OrderByDescending(x => x.Date).AsNoTracking()
-                    .Skip(skip)
-                    .Take(take)
-                    .ToList();
-                var totalCount = query.Include(x => x.Sale).Include(x => x.Customer).Count();
+                    .OrderByDescending(x => x.Id).AsNoTracking()
+                    ;
+                var totalCount = result.Count();
 
 
 
                 return new CustomerReportDto
                 {
-                    Result = result,
+                    Result = result.Skip(skip)
+                    .Take(take).ToList(),
                     count = totalCount
                 };
             }
@@ -228,7 +229,7 @@ namespace Store.Infrastructure.Repositories
                         fromDate <= x.Date && x.Date <= toDate);  // Filter by searchItem and date range
 
                 var result = query.Include(x => x.Sale).Include(x => x.Customer)
-                    .OrderByDescending(x => x.Date).AsNoTracking()
+                    .OrderByDescending(x => x.Id).AsNoTracking()
                     .Skip(skip)
                     .Take(take)
                     .ToList();
@@ -253,7 +254,7 @@ namespace Store.Infrastructure.Repositories
                 _context = new ApplicationDbContext();
                 var query = _context.CustomersReports.AsNoTracking().Include(x => x.Sale).Include(x => x.Customer)
                     .Where(x => fromDate <= x.Date && x.Date <= toDate)// Date range filter
-                    .OrderByDescending(x => x.Date); // Order by descending date
+                    .OrderByDescending(x => x.Id); // Order by descending date
 
                 return new CustomerReportDto
                 {
@@ -277,7 +278,7 @@ namespace Store.Infrastructure.Repositories
                         x.Order_ID.ToString() == searchItem);  // Filter by customer name or order ID
 
                 var result = query.Include(x => x.Sale).Include(x => x.Customer)
-                    .OrderByDescending(x => x.Date).AsNoTracking()  // Order by date in descending order
+                    .OrderByDescending(x => x.Id).AsNoTracking()  // Order by date in descending order
                     .Skip(skip)
                     .Take(take)
                     .ToList();

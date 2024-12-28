@@ -31,7 +31,7 @@ namespace Store.Core.Entities.Sales
         public decimal Discount { get; set; }
         public decimal Total { get; set; }
 
-        public decimal profit { get; set; }
+        public decimal profit { get; set; } = 00.00m;
         public decimal TotalFacture { get; set; }
         public decimal PaidUp { get; set; }
         public decimal Remain { get; set; }

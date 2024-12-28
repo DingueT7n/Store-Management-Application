@@ -50,11 +50,13 @@ namespace Store.Infrastructure.Repositories
             try
             {
                 var lastBuy = _context.SalesDetails
-                    .Skip(skip)
-                    .Take(take)
+                    .OrderByDescending(x => x.Sale.Id)
                     .Include(x => x.Sale)
                     .Include(x => x.Product)
-                    .Include(x => x.Customer).Select(bd => new SaleDetailDto
+                    .Include(x => x.Customer)
+                    .Skip(skip)
+                    .Take(take)
+                    .Select(bd => new SaleDetailDto
                     {
                         Order_ID = bd.Order_ID,
                         Date = bd.Sale.Date,
@@ -74,7 +76,9 @@ namespace Store.Infrastructure.Repositories
                 return new ResultSaleDetailDto
                 {
                     result = lastBuy,
-                    count = _context.SalesDetails.Count()
+                    count = _context.SalesDetails.Include(x => x.Sale)
+                    .Include(x => x.Product)
+                    .Include(x => x.Customer).Count()
                 };
             }
             catch (Exception ex)
@@ -93,6 +97,7 @@ namespace Store.Infrastructure.Repositories
 
                 // Query with server-side filtering for both the date range and the search item
                 var query = _context.SalesDetails
+
                     .Include(bd => bd.Sale)
                     .Include(bd => bd.Product)
                     .Include(bd => bd.Customer)
@@ -103,7 +108,7 @@ namespace Store.Infrastructure.Repositories
 
                 // Get the result list with pagination
                 var saleDetails = query
-                    .OrderByDescending(bd => bd.Sale.Date)
+                    .OrderByDescending(bd => bd.Sale.Id)
                     .Skip(skip)
                     .Take(take)
                     .Select(bd => new SaleDetailDto
@@ -152,7 +157,7 @@ namespace Store.Infrastructure.Repositories
                     .Include(x => x.Product)
                     .Include(x => x.Customer)
                     .Where(bd => fromDate <= bd.Sale.Date && bd.Sale.Date <= toDate) // Date range filter
-                    .OrderByDescending(bd => bd.Sale.Date)
+                    .OrderByDescending(bd => bd.Sale.Id)
                     .Skip(skip)
                     .Take(take);
 
@@ -216,7 +221,7 @@ namespace Store.Infrastructure.Repositories
 
                 // Get the result list with pagination
                 var saleDetails = query
-                    .OrderByDescending(bd => bd.Sale.Date)
+                    .OrderByDescending(bd => bd.Sale.Id)
                     .Skip(skip)
                     .Take(take)
                     .Select(bd => new SaleDetailDto
@@ -271,15 +276,15 @@ namespace Store.Infrastructure.Repositories
                 return new SaleProfitDtoReturned
                 {
                     Result = _context.SalesProfits
-                    .Skip(skip)
-                    .Take(take)
                     .Include(bd => bd.Sale)
                     .Include(bd => bd.Product)
                     .AsEnumerable()
                     //.Where(bd =>
                     //    bd.Customer.CustomerName.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
                     //    bd.Order_ID.ToString() == searchItem)
-                    .OrderByDescending(bd => bd.Sale.Date)
+                    .OrderByDescending(bd => bd.Sale.Id)
+                    .Skip(skip)
+                    .Take(take)
                     .Select(bd => new SaleProfitDto
                     {
                         Order_ID = bd.Order_ID,
@@ -301,7 +306,8 @@ namespace Store.Infrastructure.Repositories
                         Sallesman = bd.Sale.User_Name,
                     })
                     .ToList(),
-                    Count = _context.SalesProfits.Count()
+                    Count = _context.SalesProfits.Include(bd => bd.Sale)
+                    .Include(bd => bd.Product).Count()
                 };
             }
             catch (Exception ex)
@@ -327,7 +333,7 @@ namespace Store.Infrastructure.Repositories
                         bd.Product.ProductName.ToLower().Contains(searchItem.ToLower()) ||
 
                         bd.Order_ID.ToString() == searchItem)
-                    .OrderByDescending(bd => bd.Sale.Date);
+                    .OrderByDescending(bd => bd.Sale.Id);
 
                 var result = query
                       .Skip(skip)
@@ -374,13 +380,13 @@ namespace Store.Infrastructure.Repositories
                 return new SaleProfitDtoReturned
                 {
                     Result = _context.SalesProfits
-                     .Skip(skip)
-                        .Take(take)
                     .Include(x => x.Sale)
                     .Include(x => x.Product)
 
                     .Where(bd => fromDate <= bd.Sale.Date && bd.Sale.Date <= toDate) // Date range filter
-                    .OrderByDescending(bd => bd.Sale.Date)
+                    .OrderByDescending(bd => bd.Sale.Id)
+                    .Skip(skip)
+                    .Take(take)
                     .Select(bd => new SaleProfitDto
                     {
                         Order_ID = bd.Order_ID,
@@ -402,7 +408,8 @@ namespace Store.Infrastructure.Repositories
                         Sallesman = bd.Sale.User_Name,
                     })
                     .ToList(),
-                    Count = _context.SalesProfits
+                    Count = _context.SalesProfits.Include(x => x.Sale)
+                    .Include(x => x.Product)
 
                     .Where(bd => fromDate <= bd.Sale.Date && bd.Sale.Date <= toDate).Count()
                 };
@@ -422,14 +429,14 @@ namespace Store.Infrastructure.Repositories
                     Result = _context.SalesProfits
                     .Include(bd => bd.Sale)
                     .Include(bd => bd.Product)
-                      .Skip(skip)
-                     .Take(take)
                     .AsEnumerable()  // Forces client-side evaluation for case-insensitive search
                     .Where(bd =>
                          bd.Sale.Customer.CustomerName.ToLower().Contains(searchItem.ToLower()) ||
                         bd.Product.ProductName.ToLower().Contains(searchItem.ToLower()) ||  // Client-side case-insensitive search
                         bd.Order_ID.ToString() == searchItem)
-                    .OrderByDescending(bd => bd.Sale.Date)
+                    .OrderByDescending(bd => bd.Sale.Id)
+                    .Skip(skip)
+                    .Take(take)
                     .Select(bd => new SaleProfitDto
                     {
                         Order_ID = bd.Order_ID,

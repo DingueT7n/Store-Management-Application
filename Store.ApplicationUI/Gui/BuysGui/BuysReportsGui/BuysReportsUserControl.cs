@@ -53,7 +53,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
             cmbpagination.Items.Clear();
             for (int i = 0; i <= PageValue; i++)
             {
-                cmbpagination.Items.Add(i);
+                cmbpagination.Items.Add(i + 1);
 
             }
             if (cmbpagination.Items.Count > 0)
@@ -182,7 +182,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
 
             for (int i = 0; i < pageValue; i++)
             {
-                cmbpagination.Items.Add(i);
+                cmbpagination.Items.Add(i + 1);
             }
             if (selectedi < cmbpagination.Items.Count && cmbpagination.Items.Count > 0)
             {

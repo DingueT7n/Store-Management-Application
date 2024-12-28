@@ -51,7 +51,7 @@ namespace Store.Infrastructure.Repositories
                 x.SupplierName.ToString().Contains(searchIteam) ||
                 x.Id.ToString() == (searchIteam)
                 )
-                    .OrderBy(x => x.Order_Date).ToList();
+                    .OrderBy(x => x.Id).ToList();
 
             }
             catch
@@ -198,7 +198,7 @@ namespace Store.Infrastructure.Repositories
                 // Filter by searchItem and date range
                 var totalCount = query.Count();
                 var result = query.Include(x => x.Buy).Include(x => x.Supplier)
-                    .OrderByDescending(x => x.Date)
+                    .OrderByDescending(x => x.Id)
                     .Skip(skip)
                     .Take(take)
                     .ToList();
@@ -230,7 +230,7 @@ namespace Store.Infrastructure.Repositories
                         fromDate <= x.Date && x.Date <= toDate);  // Filter by searchItem and date range
 
                 var result = query.Include(x => x.Buy).Include(x => x.Supplier)
-                    .OrderByDescending(x => x.Date)
+                    .OrderByDescending(x => x.Id)
                     .Skip(skip)
                     .Take(take)
                     .ToList();
@@ -256,7 +256,7 @@ namespace Store.Infrastructure.Repositories
                 _context = new ApplicationDbContext();
                 var query = _context.SuppliersReports.Include(x => x.Buy).Include(x => x.Supplier)
                     .Where(x => fromDate <= x.Date && x.Date <= toDate)
-                    .OrderByDescending(x => x.Date);
+                    .OrderByDescending(x => x.Id);
 
                 return new SupplierReportDto
                 {
@@ -281,7 +281,7 @@ namespace Store.Infrastructure.Repositories
                         x.Order_ID.ToString() == searchItem);
 
                 var result = query.Include(x => x.Buy).Include(x => x.Supplier)
-                    .OrderByDescending(x => x.Date)
+                    .OrderByDescending(x => x.Id)
                     .Skip(skip)
                     .Take(take)
                     .ToList();

@@ -190,6 +190,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                         );
                     _context.Update(SetCaisse(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString())));
                     _context.Add(SetCaisseDeposit(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString())));
+                    _context.SaveChanges();
 
                 }
                 else if (rbPayPartialFacture.Checked)
@@ -208,6 +209,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                        );
                     _context.Update(SetCaisse(_main.ConvertToFloat(txtPayAmout.Text)));
                     _context.Add(SetCaisseDeposit(_main.ConvertToFloat(txtPayAmout.Text)));
+                    _context.SaveChanges();
 
                 }
                 else
@@ -224,6 +226,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                         );
                         _context.Update(SetCaisse(_main.ConvertToFloat(row.Cells[3].Value?.ToString())));
                         _context.Add(SetCaisseDeposit(_main.ConvertToFloat(row.Cells[3].Value?.ToString())));
+                        _context.SaveChanges();
 
                     }
 
