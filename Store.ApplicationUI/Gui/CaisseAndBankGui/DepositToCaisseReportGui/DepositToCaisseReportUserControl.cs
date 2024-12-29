@@ -24,9 +24,9 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui
         {
             _main = main;
             // If the instance is null, create a new one and assign it to the static field
+            _contex = new ApplicationDbContext();
             if (CheckInstance())
             {
-                _contex = new ApplicationDbContext();
                 repository = new CaisseDepositRepository(_contex);
 
                 _UserControl = new DepositToCaisseReportUserControl();

@@ -1,5 +1,6 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.Core.Entities.Caisses;
+using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseGui
 {
@@ -8,6 +9,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseGui
         static WithdrawFromCaisseUserControl _WithdrawFromCaisseUserControl;
         private static CaisseDetailsForm _caisse;
         private static MainForm _main;
+        private static ApplicationDbContext _contex;
 
         public WithdrawFromCaisseUserControl()
         {
@@ -17,6 +19,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseGui
         {
             _caisse = caisse;
             _main = main;
+            _contex = new ApplicationDbContext();
+
             // If the instance is null, create a new one and assign it to the static field
             if (_WithdrawFromCaisseUserControl == null || _WithdrawFromCaisseUserControl.IsDisposed)
             {
@@ -39,9 +43,9 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseGui
             lblValue.Text = "0";
             dateTimePicker.Value = DateTime.Now;
 
-            if (await Task.Run(() => MainForm.Context.Database.CanConnect()))
+            if (await Task.Run(() => _contex.Database.CanConnect()))
             {
-                cmbCaisse.DataSource = MainForm.Context.Caisses.ToList();
+                cmbCaisse.DataSource = _contex.Caisses.ToList();
                 cmbCaisse.DisplayMember = "CaisseName";
                 cmbCaisse.ValueMember = "Id";
                 cmbCaisse.Text = "اختر صندوق";
@@ -78,7 +82,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseGui
             try
             {
                 validate();
-                var value = MainForm.Context.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisse.SelectedValue.ToString()).MoneyinCaisse;
+                var value = _contex.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisse.SelectedValue.ToString()).MoneyinCaisse;
                 lblValue.Text = value.ToString();
             }
             catch (Exception)
@@ -90,11 +94,11 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseGui
 
         private async void btnDepositToCaisse_Click(object sender, EventArgs e)
         {
-            using (var transaction = await MainForm.Context.Database.BeginTransactionAsync())
+            using (var transaction = await _contex.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    var caisse = MainForm.Context.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisse.SelectedValue);
+                    var caisse = _contex.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisse.SelectedValue);
 
                     if (caisse is not null)
                     {
@@ -113,11 +117,11 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseGui
                                 Type = "سحب عادي (مال فائض )"
                             };
 
-                            MainForm.Context.Caisses.Update(caisse);
-                            await MainForm.Context.CaissesWithdraws.AddAsync(caisseDeposit);
+                            _contex.Caisses.Update(caisse);
+                            await _contex.CaissesWithdraws.AddAsync(caisseDeposit);
 
                             // Save all changes to the database
-                            await MainForm.Context.SaveChangesAsync();
+                            await _contex.SaveChangesAsync();
 
                             // Commit the transaction
                             await transaction.CommitAsync();

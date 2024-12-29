@@ -28,9 +28,9 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
         {
             _main = main;
             // If the instance is null, create a new one and assign it to the static field
+            _context = new ApplicationDbContext();
             if (CheckInstance())
             {
-                _context = new ApplicationDbContext();
                 SaleProfitRepository = new(_context);
 
                 _salesProfitUserControl = new SalesProfitUserControl();

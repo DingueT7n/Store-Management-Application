@@ -103,6 +103,8 @@ namespace Store.Infrastructure.Repositories
                         supplier.TotalDebts = supplier.TotalDebts - ConvertToFloat(price);
                     }
                     _context.Update(supplier);
+                    _context.SaveChanges();
+
                     DeleteFacture(order_Id, sup_Id, price);
                     SupplierReport supplierReport = new SupplierReport();
                     supplierReport.Sup_ID = Convert.ToInt32(sup_Id);
@@ -163,6 +165,8 @@ namespace Store.Infrastructure.Repositories
                         supplier.TotalDebts = supplier.TotalDebts - ConvertToFloat(PayedValue.ToString());
                     }
                     _context.Update(supplier);
+                    _context.SaveChanges();
+
                     SupplierReport supplierReport = new SupplierReport();
                     supplierReport.Sup_ID = Convert.ToInt32(sup_Id);
                     supplierReport.SupplierName = sup_Name;

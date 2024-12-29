@@ -1,5 +1,6 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.Core.Entities.Banks;
+using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBank
 {
@@ -8,6 +9,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBank
         static WithdrawFromBankUserControl _WithdrawFromBankUserControl;
         private static CaisseDetailsForm _caisse;
         private static MainForm _main;
+        private static ApplicationDbContext _contex;
+
         public WithdrawFromBankUserControl()
         {
             InitializeComponent();
@@ -16,6 +19,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBank
         {
             _caisse = caisse;
             _main = main;
+            _contex = new ApplicationDbContext();
+
             // If the instance is null, create a new one and assign it to the static field
             if (_WithdrawFromBankUserControl == null || _WithdrawFromBankUserControl.IsDisposed)
             {
@@ -32,9 +37,9 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBank
             lblValue.Text = "0";
             dateTimePicker.Value = DateTime.Now;
 
-            if (await Task.Run(() => MainForm.Context.Database.CanConnect()))
+            if (await Task.Run(() => _contex.Database.CanConnect()))
             {
-                lblValue.Text = MainForm.Context.Banks.FirstOrDefault().Money.ToString();
+                lblValue.Text = _contex.Banks.FirstOrDefault().Money.ToString();
 
             }
             else
@@ -66,11 +71,11 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBank
 
         private async void btnWithdraw_Click(object sender, EventArgs e)
         {
-            using (var transaction = await MainForm.Context.Database.BeginTransactionAsync())
+            using (var transaction = await _contex.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    var bank = MainForm.Context.Banks.FirstOrDefault();
+                    var bank = _contex.Banks.FirstOrDefault();
 
                     if (bank is not null)
                     {
@@ -89,11 +94,11 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBank
                                 Type = "سحب عادي (مال فائض )"
                             };
 
-                            MainForm.Context.Banks.Update(bank);
-                            await MainForm.Context.BankWithdraws.AddAsync(bankDeposit);
+                            _contex.Banks.Update(bank);
+                            await _contex.BankWithdraws.AddAsync(bankDeposit);
 
                             // Save all changes to the database
-                            await MainForm.Context.SaveChangesAsync();
+                            await _contex.SaveChangesAsync();
 
                             // Commit the transaction
                             await transaction.CommitAsync();

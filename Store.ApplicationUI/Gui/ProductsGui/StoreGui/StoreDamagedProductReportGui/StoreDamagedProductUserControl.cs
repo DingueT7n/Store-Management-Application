@@ -24,9 +24,9 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDamagedProductReport
         {
             _main = main;
             // If the instance is null, create a new one and assign it to the static field
+            _contex = new ApplicationDbContext();
             if (CheckInstance())
             {
-                _contex = new ApplicationDbContext();
                 productOutStoreRepository = new ProductOutStoreRepository(_contex);
 
                 _storeDamagedProductUserControl = new StoreDamagedProductUserControl();

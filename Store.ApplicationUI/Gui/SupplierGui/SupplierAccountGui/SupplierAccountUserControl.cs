@@ -27,9 +27,9 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
         {
             _main = main;
             // If the instance is null, create a new one and assign it to the static field
+            _context = new ApplicationDbContext();
             if (CheckInstance())
             {
-                _context = new ApplicationDbContext();
 
                 suppliersRepository = new SupplierMoneyRepository(_context);
 
@@ -150,7 +150,6 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                 caisse.MoneyinCaisse -= value;
             }
             return caisse;
-
         }
         CaisseWithdraw SetCaisseWithdraw(decimal value, string suppname)
         {
@@ -186,9 +185,14 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                         DateTime.Now
                         );
                     _context.Update(SetCaisse(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString())));
-                    _context.Add(SetCaisseWithdraw(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString()),
-                        DgvِCustomer.CurrentRow.Cells[2].Value.ToString()
-                        ));
+                    _context.SaveChanges();
+                    if (_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString()) > 0)
+                    {
+                        _context.Add(SetCaisseWithdraw(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString()),
+                            DgvِCustomer.CurrentRow.Cells[2].Value.ToString()
+                            ));
+                        _context.SaveChanges();
+                    }
 
                 }
                 else if (rbPayPartialFacture.Checked)
@@ -202,8 +206,13 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                        DateTime.Now
                        );
                     _context.Update(SetCaisse(_main.ConvertToFloat(txtPayAmout.Text)));
-                    _context.Add(SetCaisseWithdraw(_main.ConvertToFloat(txtPayAmout.Text),
+                    _context.SaveChanges();
+                    if (_main.ConvertToFloat(txtPayAmout.Text) > 0)
+                    {
+                        _context.Add(SetCaisseWithdraw(_main.ConvertToFloat(txtPayAmout.Text),
                          DgvِCustomer.CurrentRow.Cells[2].Value.ToString()));
+                        _context.SaveChanges();
+                    }
 
                 }
                 else
@@ -219,9 +228,14 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                             DateTime.Now
                         );
                         _context.Update(SetCaisse(_main.ConvertToFloat(row.Cells[3].Value?.ToString())));
-                        _context.Add(SetCaisseWithdraw(
+                        _context.SaveChanges();
+                        if (_main.ConvertToFloat(row.Cells[3].Value?.ToString()) > 0)
+                        {
+                            _context.Add(SetCaisseWithdraw(
                             _main.ConvertToFloat(row.Cells[3].Value?.ToString())
-                            , DgvِCustomer.CurrentRow.Cells[2].Value.ToString()));
+                            , row.Cells[2].Value.ToString()));
+                            _context.SaveChanges();
+                        }
 
                     }
                 }

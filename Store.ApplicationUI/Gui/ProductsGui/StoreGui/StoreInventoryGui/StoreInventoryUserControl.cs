@@ -27,10 +27,10 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
         public static StoreInventoryUserControl Instance(MainForm main)
         {
             _main = main;
+            _contex = new ApplicationDbContext();
             // If the instance is null, create a new one and assign it to the static field
             if (CheckInstance())
             {
-                _contex = new ApplicationDbContext();
                 productQtyRepository = new ProductsQuantitieRepository(_contex);
 
                 _storeInventoryUserControl = new StoreInventoryUserControl();

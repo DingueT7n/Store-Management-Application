@@ -20,9 +20,9 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankGui
             _caisse = caisse;
             _main = main;
             // If the instance is null, create a new one and assign it to the static field
+            _context = new ApplicationDbContext();
             if (_depositTobankUserControl == null || _depositTobankUserControl.IsDisposed)
             {
-                _context = new ApplicationDbContext();
                 _depositTobankUserControl = new DepositTobankUserControl();
             }
             _depositTobankUserControl.LoadData();

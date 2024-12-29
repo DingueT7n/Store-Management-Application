@@ -1,4 +1,7 @@
-﻿namespace Store.ApplicationUI.Gui.SalesGui.PosGui
+﻿using System.Diagnostics;
+using Store.ApplicationUI.Gui.PaymentGui;
+
+namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 {
     public partial class PosForm : Form
     {
@@ -140,7 +143,7 @@
         public static PosUserControl GetPosUserControl()
         {
             if (posForm == null) return null;
-            TabPage selectedTab = posForm.tabControl.SelectedTab as TabPage;
+            TabPage selectedTab = posForm.tabControl.SelectedTab;
             if (selectedTab != null)
             {
                 foreach (Control control in selectedTab.Controls)
@@ -171,7 +174,199 @@
             }
         }
 
+        private void btnEditProduct_Click(object sender, EventArgs e)
+        {
+            LockUnlockForm lockUnlockForm = new LockUnlockForm();
+            lockUnlockForm.ShowDialog();
 
+
+        }
+
+        private void btnCleanCart_Click(object sender, EventArgs e)
+        {
+            var control = GetPosUserControl();
+            if (control != null)
+            {
+                control.CleanForm();
+            }
+        }
+
+        private void btnTurnOffPrinter_Click(object sender, EventArgs e)
+        {
+            if (btnTurnOffPrinter.Text == "اطفاء الطابعة")
+            {
+                btnTurnOffPrinter.Text = "اشعال الطابعة";
+                Properties.Settings.Default.PrintSaleOnOrOff = false;
+                Properties.Settings.Default.Save();
+            }
+            else
+            {
+                btnTurnOffPrinter.Text = "اطفاء الطابعة";
+                Properties.Settings.Default.PrintSaleOnOrOff = true;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        private void btnPrintLastFacture_Click(object sender, EventArgs e)
+        {
+            var control = GetPosUserControl();
+            if (control != null)
+            {
+                control.PrintLastFacture(false);
+            }
+        }
+
+        private void btnLastFactureA4_Click(object sender, EventArgs e)
+        {
+            var control = GetPosUserControl();
+            if (control != null)
+            {
+                control.PrintLastFacture(true);
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Start the calculator process
+                Process.Start("calc.exe");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error launching calculator: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Create a new process for the on-screen keyboard
+                Process process = new Process
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "osk.exe",
+                        UseShellExecute = true,
+                        Verb = "runas" // Request administrative privileges
+                    }
+                };
+
+                process.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error launching keyboard: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnCalc_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Start the calculator process
+                Process.Start("calc.exe");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error launching calculator: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnAddComptoire_Click_1(object sender, EventArgs e)
+        {
+            InitializeTabs();
+        }
+
+        private void btnDeleteComptoire_Click(object sender, EventArgs e)
+        {
+            if (tabControl.SelectedTab != null && tabControl.TabCount > 1)
+            {
+                TabPage selectedTab = tabControl.SelectedTab;
+                int index = tabControl.SelectedIndex;
+                tabControl.TabPages.Remove(selectedTab);
+                tabControl.SelectedIndex = index == 0 ? 0 : --index;
+            }
+        }
+
+        private void btnLockComptoire_Click(object sender, EventArgs e)
+        {
+            LockUnlockForm lockUnlockForm = new LockUnlockForm();
+            lockUnlockForm.ShowDialog();
+        }
+
+        private void btnTurnOffPrinter_Click_1(object sender, EventArgs e)
+        {
+            if (btnTurnOffPrinter.Text == "اطفاء الطابعة")
+            {
+                btnTurnOffPrinter.Text = "اشعال الطابعة";
+                Properties.Settings.Default.PrintSaleOnOrOff = false;
+                Properties.Settings.Default.Save();
+            }
+            else
+            {
+                btnTurnOffPrinter.Text = "اطفاء الطابعة";
+                Properties.Settings.Default.PrintSaleOnOrOff = true;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        private void btnCleanComptoire_Click(object sender, EventArgs e)
+        {
+            var control = GetPosUserControl();
+            if (control != null)
+            {
+                control.CleanForm();
+            }
+        }
+
+        private void btnPrintLastFacture_Click_1(object sender, EventArgs e)
+        {
+            var control = GetPosUserControl();
+            if (control != null)
+            {
+                control.PrintLastFacture(false);
+            }
+        }
+
+        private void btnLastFactureA4_Click_1(object sender, EventArgs e)
+        {
+            var control = GetPosUserControl();
+            if (control != null)
+            {
+                control.PrintLastFacture(true);
+            }
+        }
+
+        private void btnkeyboard_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Create a new process for the on-screen keyboard
+                Process process = new Process
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "osk.exe",
+                        UseShellExecute = true,
+                        Verb = "runas" // Request administrative privileges
+                    }
+                };
+
+                process.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error launching keyboard: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnCaisse_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
 }

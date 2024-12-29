@@ -32,9 +32,9 @@ namespace Store.ApplicationUI.Gui.BuysGui
         {
             _main = main;
             // If the instance is null, create a new one and assign it to the static field
+            _context = new ApplicationDbContext();
             if (_buysUserControl == null)
             {
-                _context = new ApplicationDbContext();
 
                 buysRepository = new BuysRepository(_context);
                 _buysUserControl = new BuysUserControl();

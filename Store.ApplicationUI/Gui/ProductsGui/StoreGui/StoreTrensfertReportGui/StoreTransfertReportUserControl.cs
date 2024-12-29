@@ -23,9 +23,9 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreTrensfertReportGui
         {
             _main = main;
             // If the instance is null, create a new one and assign it to the static field
+            _contex = new ApplicationDbContext();
             if (CheckInstance())
             {
-                _contex = new ApplicationDbContext();
                 productTransferRepository = new ProductTransferRepository(_contex);
 
                 _storeTransfertReportUserControl = new StoreTransfertReportUserControl();

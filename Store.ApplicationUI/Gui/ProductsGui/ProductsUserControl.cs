@@ -26,9 +26,9 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         {
             _main = main;
             // If the instance is null, create a new one and assign it to the static field
+            _context = new ApplicationDbContext();
             if (_productsUserControl == null)
             {
-                _context = new ApplicationDbContext();
 
                 productsRepository = new ProductsRepository(_context);
                 categoryRepository = new CategorysRepository(_context);

@@ -23,9 +23,9 @@ namespace Store.ApplicationUI.Gui.DeservedGui
         {
             _main = main;
             // If the instance is null, create a new one and assign it to the static field
+            _context = new ApplicationDbContext();
             if (_deservedUserControl == null)
             {
-                _context = new ApplicationDbContext();
 
                 deservedsRepository = new Infrastructure.Repositories.DeservedsRepository(_context);
                 //categoryRepository = new CategorysRepository(_context);

@@ -1,6 +1,7 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.Core.Entities.Banks;
 using Store.Core.Entities.Caisses;
+using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenBankAndCaisseGui
 {
@@ -8,6 +9,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenBankAndCaisse
     {
         static TransfertBetweenBankAndCaisseUserControl _TransfertBetweenBankAndCaisseUserControl;
         private static CaisseDetailsForm _caisse;
+        private static ApplicationDbContext _contex;
         private static MainForm _main;
         public TransfertBetweenBankAndCaisseUserControl()
         {
@@ -17,6 +19,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenBankAndCaisse
         {
             _caisse = caisse;
             _main = main;
+            _contex = new ApplicationDbContext();
+
             // If the instance is null, create a new one and assign it to the static field
             if (_TransfertBetweenBankAndCaisseUserControl == null || _TransfertBetweenBankAndCaisseUserControl.IsDisposed)
             {
@@ -40,14 +44,14 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenBankAndCaisse
             lblValue.Text = "0";
             dateTimePicker.Value = DateTime.Now;
 
-            if (await Task.Run(() => MainForm.Context.Database.CanConnect()))
+            if (await Task.Run(() => _contex.Database.CanConnect()))
             {
-                cmbCaisseFrom.DataSource = MainForm.Context.Caisses.ToList();
+                cmbCaisseFrom.DataSource = _contex.Caisses.ToList();
 
                 cmbCaisseFrom.DisplayMember = "CaisseName";
                 cmbCaisseFrom.ValueMember = "Id";
                 cmbCaisseFrom.Text = "اختر صندوق";
-                lblValue.Text = MainForm.Context.Banks.FirstOrDefault().Money.ToString();
+                lblValue.Text = _contex.Banks.FirstOrDefault().Money.ToString();
 
             }
             else
@@ -82,7 +86,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenBankAndCaisse
             try
             {
                 validate();
-                var value = MainForm.Context.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisseFrom.SelectedValue.ToString()).MoneyinCaisse;
+                var value = _contex.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisseFrom.SelectedValue.ToString()).MoneyinCaisse;
                 lblValueCiasse.Text = value.ToString();
             }
             catch (Exception)
@@ -100,12 +104,12 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenBankAndCaisse
                 if (Convert.ToDouble(txtValue.Text) > Convert.ToDouble(lblValueCiasse.Text)) { MessageBox.Show($"الصنودق المرسل لديه قيمى اصغر من المحولة"); return; }
 
 
-                using (var transaction = await MainForm.Context.Database.BeginTransactionAsync())
+                using (var transaction = await _contex.Database.BeginTransactionAsync())
                 {
                     try
                     {
-                        var caisseFrom = MainForm.Context.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisseFrom.SelectedValue);
-                        var bank = MainForm.Context.Banks.FirstOrDefault();
+                        var caisseFrom = _contex.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisseFrom.SelectedValue);
+                        var bank = _contex.Banks.FirstOrDefault();
 
                         if (caisseFrom is not null)
                         {
@@ -143,12 +147,12 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenBankAndCaisse
                                     Reason = textBox1.Text,
                                     Type = $"ايداع محول من {cmbCaisseFrom.Text} (مال اضافي )"
                                 };
-                                MainForm.Context.Caisses.Update(caisseFrom);
-                                MainForm.Context.Banks.Update(bank);
-                                await MainForm.Context.CaissesBankTransferes.AddAsync(caisseBankTransfere);
-                                await MainForm.Context.CaissesWithdraws.AddAsync(caisseWithdraw);
-                                await MainForm.Context.BankDeposits.AddAsync(BankDeposit);
-                                await MainForm.Context.SaveChangesAsync();
+                                _contex.Caisses.Update(caisseFrom);
+                                _contex.Banks.Update(bank);
+                                await _contex.CaissesBankTransferes.AddAsync(caisseBankTransfere);
+                                await _contex.CaissesWithdraws.AddAsync(caisseWithdraw);
+                                await _contex.BankDeposits.AddAsync(BankDeposit);
+                                await _contex.SaveChangesAsync();
 
                                 // Commit the transaction
                                 await transaction.CommitAsync();
@@ -173,12 +177,12 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenBankAndCaisse
                 if (Convert.ToDouble(txtValue.Text) > Convert.ToDouble(lblValue.Text)) { MessageBox.Show($"البنك لديه قيمى اصغر من المحولة"); return; }
 
 
-                using (var transaction = await MainForm.Context.Database.BeginTransactionAsync())
+                using (var transaction = await _contex.Database.BeginTransactionAsync())
                 {
                     try
                     {
-                        var caisseFrom = MainForm.Context.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisseFrom.SelectedValue);
-                        var bank = MainForm.Context.Banks.FirstOrDefault();
+                        var caisseFrom = _contex.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisseFrom.SelectedValue);
+                        var bank = _contex.Banks.FirstOrDefault();
 
                         if (caisseFrom is not null)
                         {
@@ -216,12 +220,12 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenBankAndCaisse
                                     Reason = textBox1.Text,
                                     Type = $"سحب محول الى {cmbCaisseFrom.Text} (مال مودع )"
                                 };
-                                MainForm.Context.Caisses.Update(caisseFrom);
-                                MainForm.Context.Banks.Update(bank);
-                                await MainForm.Context.CaissesBankTransferes.AddAsync(caisseBankTransfere);
-                                await MainForm.Context.CaissesDeposits.AddAsync(caisseDeposit);
-                                await MainForm.Context.BankWithdraws.AddAsync(bankWithdraw);
-                                await MainForm.Context.SaveChangesAsync();
+                                _contex.Caisses.Update(caisseFrom);
+                                _contex.Banks.Update(bank);
+                                await _contex.CaissesBankTransferes.AddAsync(caisseBankTransfere);
+                                await _contex.CaissesDeposits.AddAsync(caisseDeposit);
+                                await _contex.BankWithdraws.AddAsync(bankWithdraw);
+                                await _contex.SaveChangesAsync();
 
                                 // Commit the transaction
                                 await transaction.CommitAsync();

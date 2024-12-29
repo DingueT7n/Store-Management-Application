@@ -26,9 +26,9 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
         {
             _main = main;
             // If the instance is null, create a new one and assign it to the static field
+            _context = new ApplicationDbContext();
             if (CheckInstance())
             {
-                _context = new ApplicationDbContext();
 
                 buysRepository = new BuysRepository(_context);
 
@@ -51,7 +51,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
             double value = data.Count / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
             int PageValue = Convert.ToInt32(Math.Round(value, MidpointRounding.AwayFromZero));
             cmbpagination.Items.Clear();
-            for (int i = 0; i <= PageValue; i++)
+            for (int i = 0; i < PageValue; i++)
             {
                 cmbpagination.Items.Add(i + 1);
 

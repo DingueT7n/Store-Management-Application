@@ -141,9 +141,9 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
         {
             _main = main;
             // If the instance is null, create a new one and assign it to the static field
+            _context = new ApplicationDbContext();
             if (_ReturnUserControl == null)
             {
-                _context = new ApplicationDbContext();
 
                 buysRepository = new BuysRepository(_context);
                 ReturnsRepository = new ReturnsRepository(_context);

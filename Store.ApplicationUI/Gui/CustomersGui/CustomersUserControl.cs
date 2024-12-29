@@ -29,9 +29,9 @@ namespace Store.ApplicationUI.Gui.CustomersGui
         {
             _main = main;
             // If the instance is null, create a new one and assign it to the static field
+            _context = new ApplicationDbContext();
             if (CheckInstance())
             {
-                _context = new ApplicationDbContext();
                 customersRepository = new CustomersRepository(_context);
 
                 _customersUserControl = new CustomersUserControl();

@@ -26,9 +26,9 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
         {
             _main = main;
             // If the instance is null, create a new one and assign it to the static field
+            _contex = new ApplicationDbContext();
             if (CheckInstance())
             {
-                _contex = new ApplicationDbContext();
                 salesRepository = new SalesRepository(_contex);
 
                 _salesReportsUserControl = new SalesReportsUserControl();
@@ -276,6 +276,16 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
 
                 throw;
             }
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
 
         }
     }

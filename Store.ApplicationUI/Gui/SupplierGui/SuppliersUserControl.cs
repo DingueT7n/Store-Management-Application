@@ -26,11 +26,11 @@ namespace Store.ApplicationUI.Gui.SupplierGui
         {
             _main = main;
             // If the instance is null, create a new one and assign it to the static field
+            _context = new ApplicationDbContext();
             if (CheckInstance())
             {
-                _context = new ApplicationDbContext();
-
                 suppliersRepository = new SuppliersRepository(_context);
+
 
                 _suppliersUserControl = new SuppliersUserControl();
 

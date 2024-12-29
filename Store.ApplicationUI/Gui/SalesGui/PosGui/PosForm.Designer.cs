@@ -29,144 +29,215 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PosForm));
-            OperationsflowLayoutPanel = new FlowLayoutPanel();
-            btnAddComptoire = new Button();
-            btnDeleteProduct = new Button();
-            btnEditProduct = new Button();
-            btnAddCategory = new Button();
-            btnAddStore = new Button();
-            btnExportProduct = new Button();
             ContainerPanel = new Panel();
             tabControl = new TabControl();
-            OperationsflowLayoutPanel.SuspendLayout();
+            panel1 = new Panel();
+            btnAddComptoire = new Button();
+            btnCaisse = new Button();
+            btnkeyboard = new Button();
+            btnCalc = new Button();
+            btnLastFactureA4 = new Button();
+            btnPrintLastFacture = new Button();
+            btnTurnOffPrinter = new Button();
+            btnCleanComptoire = new Button();
+            btnLockComptoire = new Button();
+            btnDeleteComptoire = new Button();
             ContainerPanel.SuspendLayout();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
-            // OperationsflowLayoutPanel
+            // ContainerPanel
             // 
-            OperationsflowLayoutPanel.AutoScroll = true;
-            OperationsflowLayoutPanel.Controls.Add(btnAddComptoire);
-            OperationsflowLayoutPanel.Controls.Add(btnDeleteProduct);
-            OperationsflowLayoutPanel.Controls.Add(btnEditProduct);
-            OperationsflowLayoutPanel.Controls.Add(btnAddCategory);
-            OperationsflowLayoutPanel.Controls.Add(btnAddStore);
-            OperationsflowLayoutPanel.Controls.Add(btnExportProduct);
-            OperationsflowLayoutPanel.Dock = DockStyle.Top;
-            OperationsflowLayoutPanel.Location = new Point(0, 0);
-            OperationsflowLayoutPanel.Margin = new Padding(5);
-            OperationsflowLayoutPanel.Name = "OperationsflowLayoutPanel";
-            OperationsflowLayoutPanel.Size = new Size(1350, 58);
-            OperationsflowLayoutPanel.TabIndex = 9;
+            ContainerPanel.Controls.Add(tabControl);
+            ContainerPanel.Controls.Add(panel1);
+            ContainerPanel.Dock = DockStyle.Fill;
+            ContainerPanel.Location = new Point(0, 0);
+            ContainerPanel.Name = "ContainerPanel";
+            ContainerPanel.Size = new Size(1350, 749);
+            ContainerPanel.TabIndex = 10;
+            // 
+            // tabControl
+            // 
+            tabControl.Dock = DockStyle.Fill;
+            tabControl.Location = new Point(0, 55);
+            tabControl.Margin = new Padding(1);
+            tabControl.Name = "tabControl";
+            tabControl.Padding = new Point(25, 5);
+            tabControl.RightToLeftLayout = true;
+            tabControl.SelectedIndex = 0;
+            tabControl.Size = new Size(1350, 694);
+            tabControl.TabIndex = 0;
+            tabControl.KeyDown += tabControl_KeyDown;
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(btnAddComptoire);
+            panel1.Controls.Add(btnCaisse);
+            panel1.Controls.Add(btnkeyboard);
+            panel1.Controls.Add(btnCalc);
+            panel1.Controls.Add(btnLastFactureA4);
+            panel1.Controls.Add(btnPrintLastFacture);
+            panel1.Controls.Add(btnTurnOffPrinter);
+            panel1.Controls.Add(btnCleanComptoire);
+            panel1.Controls.Add(btnLockComptoire);
+            panel1.Controls.Add(btnDeleteComptoire);
+            panel1.Dock = DockStyle.Top;
+            panel1.Location = new Point(0, 0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(1350, 55);
+            panel1.TabIndex = 15;
             // 
             // btnAddComptoire
             // 
-            btnAddComptoire.Anchor = AnchorStyles.None;
+            btnAddComptoire.Anchor = AnchorStyles.Right;
             btnAddComptoire.Image = (Image)resources.GetObject("btnAddComptoire.Image");
             btnAddComptoire.ImageAlign = ContentAlignment.TopCenter;
-            btnAddComptoire.Location = new Point(1072, 3);
-            btnAddComptoire.Margin = new Padding(160, 3, 3, 3);
+            btnAddComptoire.Location = new Point(1204, 1);
+            btnAddComptoire.Margin = new Padding(5);
             btnAddComptoire.Name = "btnAddComptoire";
             btnAddComptoire.Size = new Size(118, 52);
             btnAddComptoire.TabIndex = 3;
             btnAddComptoire.Text = "اضافة سلة جديدة";
             btnAddComptoire.TextAlign = ContentAlignment.BottomCenter;
             btnAddComptoire.UseVisualStyleBackColor = true;
-            btnAddComptoire.Click += btnAddComptoire_Click;
+            btnAddComptoire.Click += btnAddComptoire_Click_1;
             // 
-            // btnDeleteProduct
+            // btnCaisse
             // 
-            btnDeleteProduct.Anchor = AnchorStyles.None;
-            btnDeleteProduct.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnDeleteProduct.Image = (Image)resources.GetObject("btnDeleteProduct.Image");
-            btnDeleteProduct.ImageAlign = ContentAlignment.TopCenter;
-            btnDeleteProduct.Location = new Point(884, 3);
-            btnDeleteProduct.Margin = new Padding(60, 3, 3, 3);
-            btnDeleteProduct.Name = "btnDeleteProduct";
-            btnDeleteProduct.Size = new Size(125, 52);
-            btnDeleteProduct.TabIndex = 5;
-            btnDeleteProduct.Text = "حذف السلة الحالية";
-            btnDeleteProduct.TextAlign = ContentAlignment.BottomCenter;
-            btnDeleteProduct.UseVisualStyleBackColor = true;
-            btnDeleteProduct.Click += btnDeleteProduct_Click;
+            btnCaisse.Anchor = AnchorStyles.Left;
+            btnCaisse.Image = (Image)resources.GetObject("btnCaisse.Image");
+            btnCaisse.ImageAlign = ContentAlignment.TopCenter;
+            btnCaisse.Location = new Point(8, 1);
+            btnCaisse.Margin = new Padding(5);
+            btnCaisse.Name = "btnCaisse";
+            btnCaisse.Size = new Size(129, 52);
+            btnCaisse.TabIndex = 13;
+            btnCaisse.Text = "الحسبة في الصندوق";
+            btnCaisse.TextAlign = ContentAlignment.BottomCenter;
+            btnCaisse.UseVisualStyleBackColor = true;
+            btnCaisse.Click += btnCaisse_Click;
             // 
-            // btnEditProduct
+            // btnkeyboard
             // 
-            btnEditProduct.Anchor = AnchorStyles.None;
-            btnEditProduct.Image = (Image)resources.GetObject("btnEditProduct.Image");
-            btnEditProduct.ImageAlign = ContentAlignment.TopCenter;
-            btnEditProduct.Location = new Point(721, 3);
-            btnEditProduct.Margin = new Padding(60, 3, 3, 3);
-            btnEditProduct.Name = "btnEditProduct";
-            btnEditProduct.Size = new Size(100, 52);
-            btnEditProduct.TabIndex = 4;
-            btnEditProduct.Text = "قفل الشاشة";
-            btnEditProduct.TextAlign = ContentAlignment.BottomCenter;
-            btnEditProduct.UseVisualStyleBackColor = true;
+            btnkeyboard.Anchor = AnchorStyles.Left;
+            btnkeyboard.Image = (Image)resources.GetObject("btnkeyboard.Image");
+            btnkeyboard.ImageAlign = ContentAlignment.TopCenter;
+            btnkeyboard.Location = new Point(147, 1);
+            btnkeyboard.Margin = new Padding(5);
+            btnkeyboard.Name = "btnkeyboard";
+            btnkeyboard.Size = new Size(129, 52);
+            btnkeyboard.TabIndex = 12;
+            btnkeyboard.Text = "اظهار لوحة المفاتيح";
+            btnkeyboard.TextAlign = ContentAlignment.BottomCenter;
+            btnkeyboard.UseVisualStyleBackColor = true;
+            btnkeyboard.Click += btnkeyboard_Click;
             // 
-            // btnAddCategory
+            // btnCalc
             // 
-            btnAddCategory.Anchor = AnchorStyles.None;
-            btnAddCategory.Image = (Image)resources.GetObject("btnAddCategory.Image");
-            btnAddCategory.ImageAlign = ContentAlignment.TopCenter;
-            btnAddCategory.Location = new Point(525, 3);
-            btnAddCategory.Margin = new Padding(60, 3, 3, 3);
-            btnAddCategory.Name = "btnAddCategory";
-            btnAddCategory.Size = new Size(133, 52);
-            btnAddCategory.TabIndex = 8;
-            btnAddCategory.Text = "مسح معلومات السلة";
-            btnAddCategory.TextAlign = ContentAlignment.BottomCenter;
-            btnAddCategory.UseVisualStyleBackColor = true;
+            btnCalc.Anchor = AnchorStyles.Left;
+            btnCalc.Image = (Image)resources.GetObject("btnCalc.Image");
+            btnCalc.ImageAlign = ContentAlignment.TopCenter;
+            btnCalc.Location = new Point(286, 1);
+            btnCalc.Margin = new Padding(5);
+            btnCalc.Name = "btnCalc";
+            btnCalc.Size = new Size(106, 52);
+            btnCalc.TabIndex = 11;
+            btnCalc.Text = "اظهار الة حاسبة";
+            btnCalc.TextAlign = ContentAlignment.BottomCenter;
+            btnCalc.UseVisualStyleBackColor = true;
+            btnCalc.Click += btnCalc_Click;
             // 
-            // btnAddStore
+            // btnLastFactureA4
             // 
-            btnAddStore.Anchor = AnchorStyles.None;
-            btnAddStore.BackColor = Color.White;
-            btnAddStore.Image = (Image)resources.GetObject("btnAddStore.Image");
-            btnAddStore.ImageAlign = ContentAlignment.TopCenter;
-            btnAddStore.Location = new Point(343, 3);
-            btnAddStore.Margin = new Padding(60, 3, 3, 3);
-            btnAddStore.Name = "btnAddStore";
-            btnAddStore.Size = new Size(119, 52);
-            btnAddStore.TabIndex = 9;
-            btnAddStore.Text = "اطفاء الطابعة";
-            btnAddStore.TextAlign = ContentAlignment.BottomCenter;
-            btnAddStore.UseVisualStyleBackColor = false;
+            btnLastFactureA4.Anchor = AnchorStyles.None;
+            btnLastFactureA4.Image = (Image)resources.GetObject("btnLastFactureA4.Image");
+            btnLastFactureA4.ImageAlign = ContentAlignment.TopCenter;
+            btnLastFactureA4.Location = new Point(402, 1);
+            btnLastFactureA4.Margin = new Padding(5);
+            btnLastFactureA4.Name = "btnLastFactureA4";
+            btnLastFactureA4.Size = new Size(146, 52);
+            btnLastFactureA4.TabIndex = 10;
+            btnLastFactureA4.Text = "طباعة اخر فاتورة (A4)";
+            btnLastFactureA4.TextAlign = ContentAlignment.BottomCenter;
+            btnLastFactureA4.UseVisualStyleBackColor = true;
+            btnLastFactureA4.Click += btnLastFactureA4_Click_1;
             // 
-            // btnExportProduct
+            // btnPrintLastFacture
             // 
-            btnExportProduct.Anchor = AnchorStyles.None;
-            btnExportProduct.Image = (Image)resources.GetObject("btnExportProduct.Image");
-            btnExportProduct.ImageAlign = ContentAlignment.TopCenter;
-            btnExportProduct.Location = new Point(180, 3);
-            btnExportProduct.Margin = new Padding(60, 3, 3, 3);
-            btnExportProduct.Name = "btnExportProduct";
-            btnExportProduct.Size = new Size(100, 52);
-            btnExportProduct.TabIndex = 6;
-            btnExportProduct.Text = "تنظيف الشاشة";
-            btnExportProduct.TextAlign = ContentAlignment.BottomCenter;
-            btnExportProduct.UseVisualStyleBackColor = true;
+            btnPrintLastFacture.Anchor = AnchorStyles.None;
+            btnPrintLastFacture.Image = (Image)resources.GetObject("btnPrintLastFacture.Image");
+            btnPrintLastFacture.ImageAlign = ContentAlignment.TopCenter;
+            btnPrintLastFacture.Location = new Point(558, 1);
+            btnPrintLastFacture.Margin = new Padding(5);
+            btnPrintLastFacture.Name = "btnPrintLastFacture";
+            btnPrintLastFacture.Size = new Size(153, 52);
+            btnPrintLastFacture.TabIndex = 6;
+            btnPrintLastFacture.Text = "طباعة اخر فاتورة (8cm)";
+            btnPrintLastFacture.TextAlign = ContentAlignment.BottomCenter;
+            btnPrintLastFacture.UseVisualStyleBackColor = true;
+            btnPrintLastFacture.Click += btnPrintLastFacture_Click_1;
             // 
-            // ContainerPanel
+            // btnTurnOffPrinter
             // 
-            ContainerPanel.Controls.Add(tabControl);
-            ContainerPanel.Dock = DockStyle.Fill;
-            ContainerPanel.Location = new Point(0, 58);
-            ContainerPanel.Name = "ContainerPanel";
-            ContainerPanel.Size = new Size(1350, 691);
-            ContainerPanel.TabIndex = 10;
+            btnTurnOffPrinter.Anchor = AnchorStyles.None;
+            btnTurnOffPrinter.BackColor = Color.White;
+            btnTurnOffPrinter.Image = (Image)resources.GetObject("btnTurnOffPrinter.Image");
+            btnTurnOffPrinter.ImageAlign = ContentAlignment.TopCenter;
+            btnTurnOffPrinter.Location = new Point(721, 1);
+            btnTurnOffPrinter.Margin = new Padding(5);
+            btnTurnOffPrinter.Name = "btnTurnOffPrinter";
+            btnTurnOffPrinter.Size = new Size(100, 52);
+            btnTurnOffPrinter.TabIndex = 9;
+            btnTurnOffPrinter.Text = "اطفاء الطابعة";
+            btnTurnOffPrinter.TextAlign = ContentAlignment.BottomCenter;
+            btnTurnOffPrinter.UseVisualStyleBackColor = false;
+            btnTurnOffPrinter.Click += btnTurnOffPrinter_Click_1;
             // 
-            // tabControl
+            // btnCleanComptoire
             // 
-            tabControl.Dock = DockStyle.Fill;
-            tabControl.Location = new Point(0, 0);
-            tabControl.Margin = new Padding(1);
-            tabControl.Name = "tabControl";
-            tabControl.Padding = new Point(25, 5);
-            tabControl.RightToLeftLayout = true;
-            tabControl.SelectedIndex = 0;
-            tabControl.Size = new Size(1350, 691);
-            tabControl.TabIndex = 0;
-            tabControl.KeyDown += tabControl_KeyDown;
+            btnCleanComptoire.Anchor = AnchorStyles.Right;
+            btnCleanComptoire.Image = (Image)resources.GetObject("btnCleanComptoire.Image");
+            btnCleanComptoire.ImageAlign = ContentAlignment.TopCenter;
+            btnCleanComptoire.Location = new Point(831, 1);
+            btnCleanComptoire.Margin = new Padding(5);
+            btnCleanComptoire.Name = "btnCleanComptoire";
+            btnCleanComptoire.Size = new Size(133, 52);
+            btnCleanComptoire.TabIndex = 8;
+            btnCleanComptoire.Text = "مسح معلومات السلة";
+            btnCleanComptoire.TextAlign = ContentAlignment.BottomCenter;
+            btnCleanComptoire.UseVisualStyleBackColor = true;
+            btnCleanComptoire.Click += btnCleanComptoire_Click;
+            // 
+            // btnLockComptoire
+            // 
+            btnLockComptoire.Anchor = AnchorStyles.Right;
+            btnLockComptoire.Image = (Image)resources.GetObject("btnLockComptoire.Image");
+            btnLockComptoire.ImageAlign = ContentAlignment.TopCenter;
+            btnLockComptoire.Location = new Point(974, 1);
+            btnLockComptoire.Margin = new Padding(5);
+            btnLockComptoire.Name = "btnLockComptoire";
+            btnLockComptoire.Size = new Size(83, 52);
+            btnLockComptoire.TabIndex = 4;
+            btnLockComptoire.Text = "قفل الشاشة";
+            btnLockComptoire.TextAlign = ContentAlignment.BottomCenter;
+            btnLockComptoire.UseVisualStyleBackColor = true;
+            btnLockComptoire.Click += btnLockComptoire_Click;
+            // 
+            // btnDeleteComptoire
+            // 
+            btnDeleteComptoire.Anchor = AnchorStyles.Right;
+            btnDeleteComptoire.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnDeleteComptoire.Image = (Image)resources.GetObject("btnDeleteComptoire.Image");
+            btnDeleteComptoire.ImageAlign = ContentAlignment.TopCenter;
+            btnDeleteComptoire.Location = new Point(1067, 1);
+            btnDeleteComptoire.Margin = new Padding(5);
+            btnDeleteComptoire.Name = "btnDeleteComptoire";
+            btnDeleteComptoire.Size = new Size(125, 52);
+            btnDeleteComptoire.TabIndex = 5;
+            btnDeleteComptoire.Text = "حذف السلة الحالية";
+            btnDeleteComptoire.TextAlign = ContentAlignment.BottomCenter;
+            btnDeleteComptoire.UseVisualStyleBackColor = true;
+            btnDeleteComptoire.Click += btnDeleteComptoire_Click;
             // 
             // PosForm
             // 
@@ -175,7 +246,6 @@
             BackColor = Color.White;
             ClientSize = new Size(1350, 749);
             Controls.Add(ContainerPanel);
-            Controls.Add(OperationsflowLayoutPanel);
             Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             KeyPreview = true;
             Margin = new Padding(3, 4, 3, 4);
@@ -189,21 +259,24 @@
             WindowState = FormWindowState.Maximized;
             Load += PosForm_Load;
             KeyDown += PosForm_KeyDown;
-            OperationsflowLayoutPanel.ResumeLayout(false);
             ContainerPanel.ResumeLayout(false);
+            panel1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
-
-        private FlowLayoutPanel OperationsflowLayoutPanel;
-        private Button btnAddComptoire;
-        private Button btnEditProduct;
-        private Button btnDeleteProduct;
-        private Button btnAddCategory;
-        private Button btnAddStore;
-        private Button btnExportProduct;
         private Panel ContainerPanel;
         private TabControl tabControl;
+        private Panel panel1;
+        private Button btnAddComptoire;
+        private Button btnCaisse;
+        private Button btnkeyboard;
+        private Button btnCalc;
+        private Button btnLastFactureA4;
+        private Button btnPrintLastFacture;
+        private Button btnTurnOffPrinter;
+        private Button btnCleanComptoire;
+        private Button btnLockComptoire;
+        private Button btnDeleteComptoire;
     }
 }

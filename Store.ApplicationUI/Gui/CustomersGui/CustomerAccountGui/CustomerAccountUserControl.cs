@@ -27,9 +27,9 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
         {
             _main = main;
             // If the instance is null, create a new one and assign it to the static field
+            _context = new ApplicationDbContext();
             if (CheckInstance())
             {
-                _context = new ApplicationDbContext();
 
                 customersRepository = new CustomerMoneyRepository(_context);
 
@@ -189,8 +189,13 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                         DateTime.Now
                         );
                     _context.Update(SetCaisse(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString())));
-                    _context.Add(SetCaisseDeposit(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString())));
                     _context.SaveChanges();
+
+                    if (_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString()) > 0)
+                    {
+                        _context.Add(SetCaisseDeposit(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString())));
+                        _context.SaveChanges();
+                    }
 
                 }
                 else if (rbPayPartialFacture.Checked)
@@ -208,9 +213,13 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                        DateTime.Now
                        );
                     _context.Update(SetCaisse(_main.ConvertToFloat(txtPayAmout.Text)));
-                    _context.Add(SetCaisseDeposit(_main.ConvertToFloat(txtPayAmout.Text)));
                     _context.SaveChanges();
 
+                    if (_main.ConvertToFloat(txtPayAmout.Text) > 0)
+                    {
+                        _context.Add(SetCaisseDeposit(_main.ConvertToFloat(txtPayAmout.Text)));
+                        _context.SaveChanges();
+                    }
                 }
                 else
                 {
@@ -225,8 +234,13 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                             DateTime.Now
                         );
                         _context.Update(SetCaisse(_main.ConvertToFloat(row.Cells[3].Value?.ToString())));
-                        _context.Add(SetCaisseDeposit(_main.ConvertToFloat(row.Cells[3].Value?.ToString())));
                         _context.SaveChanges();
+
+                        if (_main.ConvertToFloat(row.Cells[3].Value?.ToString()) > 0)
+                        {
+                            _context.Add(SetCaisseDeposit(_main.ConvertToFloat(row.Cells[3].Value?.ToString())));
+                            _context.SaveChanges();
+                        }
 
                     }
 

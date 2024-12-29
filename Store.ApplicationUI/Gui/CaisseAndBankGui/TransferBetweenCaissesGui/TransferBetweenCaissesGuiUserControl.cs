@@ -21,9 +21,9 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransferBetweenCaissesGui
             _caisse = caisse;
             _main = main;
             // If the instance is null, create a new one and assign it to the static field
+            _context = new ApplicationDbContext();
             if (_TransferBetweenCaissesGuiUserControl == null || _TransferBetweenCaissesGuiUserControl.IsDisposed)
             {
-                _context = new ApplicationDbContext();
 
                 _TransferBetweenCaissesGuiUserControl = new TransferBetweenCaissesGuiUserControl();
             }

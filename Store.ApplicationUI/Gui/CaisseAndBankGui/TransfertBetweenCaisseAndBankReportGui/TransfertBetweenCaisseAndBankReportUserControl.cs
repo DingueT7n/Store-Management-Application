@@ -24,9 +24,9 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenCaisseAndBank
         {
             _main = main;
             // If the instance is null, create a new one and assign it to the static field
+            _contex = new ApplicationDbContext();
             if (CheckInstance())
             {
-                _contex = new ApplicationDbContext();
                 repository = new CaisseBankTransfereRepository(_contex);
 
                 _UserControl = new TransfertBetweenCaisseAndBankReportUserControl();

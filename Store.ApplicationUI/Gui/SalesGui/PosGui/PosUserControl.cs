@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.PaymentGui;
+using Store.ApplicationUI.Reports.ReportPerviwGui;
 using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Customers;
 using Store.Core.Entities.Products;
@@ -347,7 +348,6 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             txtTotalSaleProduct.Text = string.Empty;
             txtSalePrice.Text = string.Empty;
         }
-
         void CalculateAmount()
         {
             try
@@ -358,12 +358,11 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                     decimal Discount = Convert.ToDecimal(txtSaleDiscount.Text);
                     decimal Amount = Convert.ToDecimal(txtSalePrice.Text);
                     decimal TotalAmount = Amount - (Amount * (Discount / 100));
-                    txtTotalSaleProduct.Text = (ConvertToFloat(TotalAmount.ToString()) * Convert.ToInt32(txtQty.Text)).ToString();
+                    txtTotalSaleProduct.Text = (ConvertToFloat(TotalAmount.ToString()) * Convert.ToDecimal(txtQty.Text)).ToString();
 
                 }
                 if (txtSalePrice.Text != string.Empty && _product is not null)
                 {
-
                 }
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
@@ -529,7 +528,40 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
 
         }
-        private void ResetForm()
+        public void CleanForm()
+        {
+
+            Process = false;
+
+            // Clear all textboxes
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is TextBox)
+                {
+                    ((TextBox)ctrl).Clear();
+                }
+                else if (ctrl is ComboBox)
+                {
+                    ((ComboBox)ctrl).SelectedIndex = -1; // Deselect ComboBox
+                }
+                else if (ctrl is CheckBox)
+                {
+                    ((CheckBox)ctrl).Checked = false; // Uncheck CheckBox
+                }
+                // Add more control types if needed
+            }
+
+            // Reset any DataGridView
+            DgvِProducts.Rows.Clear();
+            OnLoad();
+
+
+
+
+            // Optionally reset focus to the first control
+            // Set focus to the first control
+        }
+        public void ResetForm()
         {
             if (Process)
             {
@@ -562,6 +594,43 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
             // Optionally reset focus to the first control
             // Set focus to the first control
+        }
+        public async void PrintLastFacture(bool A4)
+        {
+            int LastFactureId = _context.Sales.OrderByDescending(s => s.Id).FirstOrDefault().Id;
+            if (!A4)
+            {
+                try
+                {
+                    DataTable saleDetailsTable = await GetSellDetailsDataTableAsync(LastFactureId);
+                    Reports.sale8cm sale8Cm = new();
+                    sale8Cm.DataSource = saleDetailsTable;
+                    XtraForm1 xtraForm11 = new(sale8Cm);
+                    xtraForm11.ShowDialog();
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            else
+            {
+                try
+                {
+
+                    DataTable ProfitDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(LastFactureId);
+                    Reports.SalesReports.salesA4 salesA4 = new();
+                    salesA4.DataSource = ProfitDetailsTable;
+                    Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(salesA4);
+                    xtraForm1.ShowDialog();
+
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
         }
         void EditFromTable(int q)
         {
@@ -978,11 +1047,17 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                             ResetForm();
                             if (facture)
                             {
-                                //DataTable saleDetailsTable = await GetSellDetailsDataTableAsync(saleID);
-                                //Reports.sale8cm sale8Cm = new();
-                                //sale8Cm.DataSource = saleDetailsTable;
-                                //XtraForm1 xtraForm1 = new(sale8Cm);
-                                //xtraForm1.ShowDialog();
+                                //if (Properties.Settings.Default.PrintSaleOnOrOff)
+                                //{
+                                DataTable saleDetailsTable = await GetSellDetailsDataTableAsync(saleID);
+                                Reports.sale8cm sale8Cm = new();
+                                sale8Cm.DataSource = saleDetailsTable;
+                                XtraForm1 xtraForm11 = new(sale8Cm);
+                                xtraForm11.ShowDialog();
+                                //}
+                                //else
+                                //{
+                                //}
                             }
 
 
@@ -1061,7 +1136,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             else
             {
                 btnPrices.Text = "سعر 1";
-                btnPrices.BackColor = Color.Lime;
+                btnPrices.BackColor = Color.SeaGreen;
 
             }
         }

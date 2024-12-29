@@ -157,6 +157,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
+
             btnAddCaisse.Enabled = true;
             vider();
             btnEditCaisse.Enabled = false;

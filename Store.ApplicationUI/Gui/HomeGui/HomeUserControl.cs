@@ -97,9 +97,9 @@ namespace Store.ApplicationUI.Gui.HomeGui
             .Include(u => u.UserSetting)
             .Include(u => u.UserSupplier)
             .FirstOrDefault(u => u.UserName == "hg" && u.Password == "g");
+            Code.Models.LocalUser.User = user;
 
 
-            int a2 = 1;
 
         }
         private void SetColumns()

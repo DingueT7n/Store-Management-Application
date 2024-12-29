@@ -22,9 +22,9 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
         {
             _main = main;
             // If the instance is null, create a new one and assign it to the static field
+            _context = new ApplicationDbContext();
             if (_addStoreForm == null)
             {
-                _context = new ApplicationDbContext();
 
                 _addStoreForm = new AddStoreForm(_main);
             }

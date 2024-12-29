@@ -27,9 +27,9 @@ namespace Store.ApplicationUI.Gui.SalesGui
         {
             _main = main;
             // If the instance is null, create a new one and assign it to the static field
+            _context = new ApplicationDbContext();
             if (_salesUserControl == null)
             {
-                _context = new ApplicationDbContext();
                 salesRepository = new SalesRepository(_context);
                 _salesUserControl = new SalesUserControl();
             }
@@ -760,15 +760,23 @@ namespace Store.ApplicationUI.Gui.SalesGui
             {
                 _context.Update(SetCaisse(paymentAmount));
                 _context.SaveChanges();
-                _context.Add(SetCaisseDeposit(paymentAmount));
-                _context.SaveChanges();
+                if (paymentAmount > 0)
+                {
+                    _context.Add(SetCaisseDeposit(paymentAmount));
+                    _context.SaveChanges();
+                }
             }
             else
             {
                 _context.Update(SetCaisse(TotalFacture));
                 _context.SaveChanges();
-                _context.Add(SetCaisseDeposit(TotalFacture));
-                _context.SaveChanges();
+                if (TotalFacture > 0)
+                {
+
+                    _context.Add(SetCaisseDeposit(TotalFacture));
+                    _context.SaveChanges();
+                }
+
             }
 
             if (PaidUp > 0)
