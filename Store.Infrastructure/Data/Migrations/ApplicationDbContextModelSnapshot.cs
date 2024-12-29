@@ -962,6 +962,10 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CodeBar")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ColisageBareCode")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateExperation")
@@ -978,6 +982,10 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<decimal>("NbrProductInColis")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<byte[]>("ProductImage")
                         .HasColumnType("varbinary(max)");
 
@@ -990,6 +998,10 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("SalePrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("SalePriceSeconde")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
@@ -1051,6 +1063,33 @@ namespace Store.Infrastructure.Data.Migrations
                     b.HasIndex("Pro_Id");
 
                     b.ToTable("ProductDiscounts");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Products.ProductFamily", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CodeBar")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Pro_Id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Pro_Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductFamilies");
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Products.ProductOutStore", b =>
@@ -2316,6 +2355,21 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Store.Core.Entities.Products.ProductFamily", b =>
+                {
+                    b.HasOne("Store.Core.Entities.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("Pro_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Store.Core.Entities.Products.Product", null)
+                        .WithMany("ProductFamilies")
+                        .HasForeignKey("ProductId");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Store.Core.Entities.Products.ProductOutStore", b =>
                 {
                     b.HasOne("Store.Core.Entities.Products.Product", "Product")
@@ -2653,6 +2707,11 @@ namespace Store.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Products.Product", b =>
+                {
+                    b.Navigation("ProductFamilies");
                 });
 #pragma warning restore 612, 618
         }

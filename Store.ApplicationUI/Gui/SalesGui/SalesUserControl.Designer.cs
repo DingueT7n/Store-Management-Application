@@ -554,7 +554,7 @@
             txtSalePrice.TabIndex = 23;
             txtSalePrice.TextAlign = HorizontalAlignment.Center;
             txtSalePrice.KeyDown += txtSalePrice_KeyDown;
-            txtSalePrice.KeyPress += txtSalePrice_KeyPress;
+            txtSalePrice.KeyPress += txtQty_KeyPress;
             txtSalePrice.KeyUp += txtSalePrice_KeyUp;
             // 
             // lblBuyPrice
@@ -582,7 +582,7 @@
             txtSaleDiscount.TabIndex = 20;
             txtSaleDiscount.TextAlign = HorizontalAlignment.Center;
             txtSaleDiscount.KeyDown += txtBuyPrice_KeyDown;
-            txtSaleDiscount.KeyPress += txtBuyPrice_KeyPress;
+            txtSaleDiscount.KeyPress += txtQty_KeyPress;
             txtSaleDiscount.KeyUp += txtBuyPrice_KeyUp;
             // 
             // lblWholesaleprice
@@ -621,7 +621,7 @@
             txtWholeSalePrice.Size = new Size(152, 32);
             txtWholeSalePrice.TabIndex = 24;
             txtWholeSalePrice.TextAlign = HorizontalAlignment.Center;
-            txtWholeSalePrice.KeyPress += txtWholeSalePrice_KeyPress;
+            txtWholeSalePrice.KeyPress += txtQty_KeyPress;
             // 
             // txtTotalSaleProduct
             // 
@@ -635,7 +635,7 @@
             txtTotalSaleProduct.Size = new Size(149, 32);
             txtTotalSaleProduct.TabIndex = 22;
             txtTotalSaleProduct.TextAlign = HorizontalAlignment.Center;
-            txtTotalSaleProduct.KeyPress += txtTotalBuyProduct_KeyPress;
+            txtTotalSaleProduct.KeyPress += txtQty_KeyPress;
             // 
             // flowLayoutPanelstatistics
             // 

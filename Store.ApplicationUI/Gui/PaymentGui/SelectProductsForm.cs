@@ -31,9 +31,9 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         public static SelectProductsForm Instance(MainForm main)
         {
             _main = main;
+            _selectProductsForm = new SelectProductsForm(_main);
             _selectProductsForm._context = new ApplicationDbContext();
 
-            _selectProductsForm = new SelectProductsForm(_main);
 
             _selectProductsForm.LoadData();
             return _selectProductsForm;
@@ -41,9 +41,9 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         public static SelectProductsForm Instance(PosForm main)
         {
             _PosForm = main;
+            _selectProductsForm = new SelectProductsForm(_PosForm);
             _selectProductsForm._context = new ApplicationDbContext();
 
-            _selectProductsForm = new SelectProductsForm(_PosForm);
 
             _selectProductsForm.LoadData();
             return _selectProductsForm;
@@ -106,37 +106,37 @@ namespace Store.ApplicationUI.Gui.PaymentGui
             AddProductToDgvIfNotExist(pictureBox);
 
         }
-        private void SetColumns()
-        {
+        //private void SetColumns()
+        //{
 
-            DgvProducts.Columns[0].HeaderCell.Value = "معرف المنتوج";
-            DgvProducts.Columns[1].HeaderCell.Value = "باركود";
-            DgvProducts.Columns[2].HeaderCell.Value = "اسم المنتج";
-            DgvProducts.Columns[3].HeaderCell.Value = "صورة المنتج";
-            DgvProducts.Columns[4].HeaderCell.Value = "المنتج";
+        //    DgvProducts.Columns[0].HeaderCell.Value = "معرف المنتوج";
+        //    DgvProducts.Columns[1].HeaderCell.Value = "باركود";
+        //    DgvProducts.Columns[2].HeaderCell.Value = "اسم المنتج";
+        //    DgvProducts.Columns[3].HeaderCell.Value = "صورة المنتج";
+        //    DgvProducts.Columns[4].HeaderCell.Value = "المنتج";
 
-            DgvProducts.Columns[5].HeaderCell.Value = "معرف السرعة";
-            DgvProducts.Columns[3].Visible = false;
-            DgvProducts.Columns[4].Visible = false;
+        //    DgvProducts.Columns[5].HeaderCell.Value = "معرف السرعة";
+        //    DgvProducts.Columns[3].Visible = false;
+        //    DgvProducts.Columns[4].Visible = false;
 
 
-        }
+        //}
         public async void LoadData()
         {
             LoadingForm.Instance(_main).Show();
             if (await Task.Run(() => _context.Database.CanConnect()))
             {
 
-                DgvProducts.DataSource = _context.ProductQuickAccess.ToList();
-                SetColumns();
+                //DgvProducts.DataSource = _context.ProductQuickAccess.ToList();
+                //SetColumns();
                 List<ProductQuickAccess> productQuicks = _context.ProductQuickAccess.ToList();
                 foreach (var productImage in productQuicks)
                 {
                     Panel qucikPan = new Panel
                     {
                         BackColor = Color.White,
-                        Width = 220,
-                        Height = 167,
+                        Width = 110,
+                        Height = 105,
                     };
                     Label labelName = new Label
                     {
@@ -158,7 +158,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
                     {
                         FlowDirection = FlowDirection.RightToLeft,
                         Dock = DockStyle.Bottom,
-                        Size = new Size(219, 60)
+                        Size = new Size(110, 50)
 
 
                     };
@@ -172,8 +172,8 @@ namespace Store.ApplicationUI.Gui.PaymentGui
                     {
                         Image = SetImage(productImage.ProductImage),
                         SizeMode = PictureBoxSizeMode.StretchImage,
-                        Width = 220,
-                        Height = 105,
+                        Width = 75,
+                        Height = 45,
                         Tag = productImage.Pro_Id,
                         Dock = DockStyle.Top,
 
@@ -196,7 +196,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
             }
             //Hideloading
             LoadingForm.Instance(_main).Hide();
-            lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
+            //lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
             // Show EmptyDAta
 
         }
@@ -206,26 +206,26 @@ namespace Store.ApplicationUI.Gui.PaymentGui
 
         }
 
-        private void DgvProducts_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (!dgvHelper.IsEmpty(DgvProducts))
-            {
-                int Id = Convert.ToInt32(DgvProducts.CurrentRow.Cells[0].Value.ToString());
-                if (!SalesUserControl.CheckInstance())
-                {
-                    if (SalesUserControl.setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == Id))) { }
-                }
+        //private void DgvProducts_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        //{
+        //    if (!dgvHelper.IsEmpty(DgvProducts))
+        //    {
+        //        int Id = Convert.ToInt32(DgvProducts.CurrentRow.Cells[0].Value.ToString());
+        //        if (!SalesUserControl.CheckInstance())
+        //        {
+        //            if (SalesUserControl.setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == Id))) { }
+        //        }
 
-                {
+        //        {
 
-                    if (PosForm.GetPosUserControl() is not null)
-                    {
-                        PosForm.GetPosUserControl().setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == Id));
-                    }
+        //            if (PosForm.GetPosUserControl() is not null)
+        //            {
+        //                PosForm.GetPosUserControl().setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == Id));
+        //            }
 
-                }
-            }
-        }
+        //        }
+        //    }
+        //}
 
         private void btnSearch_Click(object sender, EventArgs e)
         {

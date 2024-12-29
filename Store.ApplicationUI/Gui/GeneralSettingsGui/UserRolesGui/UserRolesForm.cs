@@ -796,5 +796,24 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                 throw;
             }
         }
+
+        private void txtProfit_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            string currentText = (sender as TextBox)?.Text ?? string.Empty;
+
+
+            char decimalSeparator = Properties.Settings.Default.DecimalSEP[0];
+
+
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != decimalSeparator && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+
+            else if (e.KeyChar == decimalSeparator && currentText.Contains(decimalSeparator))
+            {
+                e.Handled = true;
+            }
+        }
     }
 }

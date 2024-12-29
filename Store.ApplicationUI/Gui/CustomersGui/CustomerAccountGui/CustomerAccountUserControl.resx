@@ -207,6 +207,9 @@
   <data name="&gt;&gt;rbPayAllFactures.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="txtPayAmout.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="txtPayAmout.Location" type="System.Drawing.Point, System.Drawing">
     <value>106, 65</value>
   </data>

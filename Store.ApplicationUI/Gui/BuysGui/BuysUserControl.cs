@@ -139,7 +139,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
         {
             txtProductName.Text = product.ProductName;
             txtBuyPrice.Text = product.BuyPrice.ToString();
-            txtQty.Text = "1";
+            txtQty.Text = product.ColisageBareCode == txtSearchBarCode.Text ? product.NbrProductInColis.ToString() : "1";
             txtTotalBuyProduct.Text = product.BuyPrice.ToString();
             txtSalePrice.Text = product.SalePrice.ToString();
             txtWholeSalePrice.Text = product.WholesalePrice.ToString();
@@ -163,24 +163,40 @@ namespace Store.ApplicationUI.Gui.BuysGui
             txtPriceWithTax.Text = string.Empty;
         }
 
+
         void CalculateAmount()
         {
             try
             {
-                if (txtBuyPrice.Text != string.Empty && txtQty.Text != string.Empty)
-
-                    txtTotalBuyProduct.Text = (_main.ConvertToFloat(txtBuyPrice.Text) * Convert.ToInt32(txtQty.Text)).ToString();
-
-                if (txtSalePrice.Text != string.Empty && _product is not null)
+                // Ensure buy price and quantity are not empty before calculation
+                if (!string.IsNullOrWhiteSpace(txtBuyPrice.Text) && !string.IsNullOrWhiteSpace(txtQty.Text))
                 {
-                    if (_product.IsTaxed)
-                        txtPriceWithTax.Text = (((_main.ConvertToFloat(txtSalePrice.Text) / 100) * _product.TaxValue) + _main.ConvertToFloat
-                            (txtSalePrice.Text)).ToString();
-                    else txtPriceWithTax.Text = txtSalePrice.Text;
+                    decimal buyPrice = decimal.Parse(txtBuyPrice.Text, CultureInfo.InvariantCulture);
+                    decimal quantity = Convert.ToDecimal(txtQty.Text);
 
+                    txtTotalBuyProduct.Text = (buyPrice * quantity).ToString("F2", CultureInfo.InvariantCulture); // Format to 2 decimal places
+                }
+
+                // Ensure sale price and product object are valid
+                if (!string.IsNullOrWhiteSpace(txtSalePrice.Text) && _product is not null)
+                {
+                    decimal salePrice = decimal.Parse(txtSalePrice.Text, CultureInfo.InvariantCulture);
+
+                    if (_product.IsTaxed)
+                    {
+                        decimal taxAmount = (salePrice * _product.TaxValue) / 100;
+                        txtPriceWithTax.Text = (salePrice + taxAmount).ToString("F2", CultureInfo.InvariantCulture); // Format to 2 decimal places
+                    }
+                    else
+                    {
+                        txtPriceWithTax.Text = salePrice.ToString("F2", CultureInfo.InvariantCulture); // Format to 2 decimal places
+                    }
                 }
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Calculation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private Product _product;
         public async void SetProductsToTable()
@@ -190,6 +206,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
             if (_product is not null)
             {
                 InitializeTextBoxesAndLables(_product);
+
 
                 txtQty.Focus();
                 txtQty.SelectAll();
@@ -219,6 +236,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
         {
             if (e.KeyCode == Keys.Enter)
             {
+                _product = null;
                 SetProductsToTable();
             }
         }
@@ -283,11 +301,6 @@ namespace Store.ApplicationUI.Gui.BuysGui
                     CalculateStatistics();
                 }
                 catch (Exception ex) { MessageBox.Show(ex.Message); }
-
-
-
-
-
             }
             else { MsgHelper.ShowEmptyResult(); }
             CalculateStatistics();
@@ -303,7 +316,18 @@ namespace Store.ApplicationUI.Gui.BuysGui
 
         private void txtQty_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
+            string currentText = (sender as TextBox)?.Text ?? string.Empty;
+
+
+            char decimalSeparator = Properties.Settings.Default.DecimalSEP[0];
+
+
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != decimalSeparator && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+
+            else if (e.KeyChar == decimalSeparator && currentText.Contains(decimalSeparator))
             {
                 e.Handled = true;
             }

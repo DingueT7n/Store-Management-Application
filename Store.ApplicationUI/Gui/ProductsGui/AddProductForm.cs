@@ -280,7 +280,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         public void SetDataToEdit(string NameProduct, string BarCode, string categoryId, string MinQty
             , bool IsTaxed, string TaxValue, string BuyPrice, string Quentity, string WholesalePrice
             , string SalePrice, DateTime DateExpiration, string MaxDiscount, string SaleAfterTax, string productId, byte[] image
-            , string catName)
+            , string catName, string SalePrice2, string NbrProductInColis, string ColisageBareCode)
         {
             LoadData();
             txtNameProduct.Text = NameProduct;
@@ -303,6 +303,10 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             {
                 SetImage(image);
             }
+            txtSalePrice2.Text = SalePrice2;
+            txtColisageBareCode.Text = ColisageBareCode;
+            txtNbrIncolis.Text = NbrProductInColis;
+            Fill_familyBareCode(productId);
             btnAddProduct.Visible = false;
             btnEditProduct.Visible = true;
             lblProductId.Visible = true;
@@ -314,7 +318,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         public void SetSimilaireDataToAdd(string NameProduct, string BarCode, string categoryId, string MinQty
            , bool IsTaxed, string TaxValue, string BuyPrice, string Quentity, string WholesalePrice
            , string SalePrice, DateTime DateExpiration, string MaxDiscount, string SaleAfterTax, string productId, byte[] image
-           , string catName)
+           , string catName, string SalePrice2, string NbrProductInColis, string ColisageBareCode)
         {
             LoadData();
             txtNameProduct.Text = NameProduct;
@@ -341,8 +345,28 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             lblProductId.Visible = false;
             label13.Visible = false;
             txtBarCode.Focus();
+
+            txtSalePrice2.Text = SalePrice2;
+            txtColisageBareCode.Text = "";
+            txtNbrIncolis.Text = NbrProductInColis;
+
             cbFavorite.Checked = _context.ProductQuickAccess.FirstOrDefault(x => x.Pro_Id.ToString() == productId) == null ? false : true;
 
+        }
+        void Fill_familyBareCode(string id)
+        {
+            var listFamily = _context.ProductFamilies
+                       .Where(x => x.Pro_Id.ToString() == id)
+                       .Select(x => x.CodeBar)
+                       .ToList();
+
+            var textBoxes = new[] { textBox1, textBox2, textBox3, textBox4, textBox5, textBox6, textBox7, textBox8, textBox9, textBox10 };
+            checkBox1.Checked = listFamily.Count > 0;
+            for (int i = 0; i < listFamily.Count && i < textBoxes.Length; i++)
+            {
+                textBoxes[i].Text = listFamily[i].ToString();
+                textBoxes[i].Enabled = !string.IsNullOrEmpty(listFamily[i].ToString());
+            }
         }
         private void btnAddProduct_Click(object sender, EventArgs e)
         {
@@ -367,7 +391,76 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                         var ResultProductName = _context.Products.FirstOrDefault(x => x.ProductName == txtNameProduct.Text);
 
 
-                        if (ResultProductName is not null)
+                        if (ResultProductName is null)
+                        {
+
+                            Product product = new Product();
+                            product.ProductName = txtNameProduct.Text;
+                            product.CodeBar = txtBarCode.Text;
+                            product.CategoryId = Convert.ToInt32(CMBCategory.SelectedValue);
+                            product.MinQty = ConvertToFloat(txtMinQty.Text);
+                            product.IsTaxed = CbIsTaxed.Checked;
+                            product.TaxValue = CbIsTaxed.Checked ? ConvertToFloat(txtTaxValue.Text) : 0;
+                            product.BuyPrice = ConvertToFloat(txtBuyPrice.Text);
+                            product.Quentity = ConvertToFloat(txtTotalQty.Text);
+                            product.WholesalePrice = ConvertToFloat(txtWholeSalePrice.Text);
+                            product.SalePrice = ConvertToFloat(txtSalePrice.Text);
+                            product.MaxDiscount = ConvertToFloat(txtDiscountAllowed.Text);
+                            product.SalePriceTax = ConvertToFloat(txtSaleAfterTax.Text);
+                            product.SalePriceSeconde = ConvertToFloat(txtSalePrice2.Text);
+                            product.ColisageBareCode = txtColisageBareCode.Text;
+                            product.NbrProductInColis = ConvertToFloat(txtNbrIncolis.Text);
+                            product.DateExperation = DtpExperation.Value;
+                            product.ProductImage = RetriveImage();
+                            var result = _context.Add(product);
+                            _context.SaveChanges();
+                            if (checkBox1.Checked)
+                            {
+                                var textBoxes = new[]
+                                {
+                                    textBox1, textBox2, textBox3, textBox4, textBox5,
+                                    textBox6, textBox7, textBox8, textBox9, textBox10
+                                };
+
+                                foreach (var textBox in textBoxes)
+                                {
+                                    if (!string.IsNullOrEmpty(textBox.Text))
+                                    {
+                                        var family = new ProductFamily
+                                        {
+                                            Pro_Id = product.Id,
+                                            CodeBar = textBox.Text
+                                        };
+                                        _context.ProductFamilies.Add(family);
+                                    }
+                                }
+
+                                // Save all changes at once
+                                _context.SaveChanges();
+                            }
+
+
+                            if (!ProductsUserControl.CheckInstance())
+                            {
+                                ProductsUserControl.RefreshDgv();
+                            }
+                            _context.SaveChanges();
+                            if (cbFavorite.Checked)
+                            {
+                                ProductQuickAccess qucik = new ProductQuickAccess
+                                {
+                                    Pro_Id = product.Id,
+                                    CodeBar = txtBarCode.Text,
+                                    ProductImage = RetriveImage(),
+                                    ProductName = txtNameProduct.Text,
+                                };
+                                vider();
+                                _context.Add(qucik);
+                                _context.SaveChanges();
+                            }
+
+                        }
+                        else
                         {
                             if (MsgHelper.ShowProductNameIsSame())
                             {
@@ -384,13 +477,43 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                                 product.SalePrice = ConvertToFloat(txtSalePrice.Text);
                                 product.MaxDiscount = ConvertToFloat(txtDiscountAllowed.Text);
                                 product.SalePriceTax = ConvertToFloat(txtSaleAfterTax.Text);
+                                product.SalePriceSeconde = ConvertToFloat(txtSalePrice2.Text);
+                                product.ColisageBareCode = txtColisageBareCode.Text;
+                                product.NbrProductInColis = ConvertToFloat(txtNbrIncolis.Text);
                                 product.DateExperation = DtpExperation.Value;
                                 product.ProductImage = RetriveImage();
+                                var result = _context.Add(product);
+                                _context.SaveChanges();
                                 //if (CMBCategory.SelectedValue != null && int.TryParse(CMBCategory.SelectedValue.ToString(), out int categoryId))
                                 //{
                                 //    product.CategoryId = categoryId;
                                 //}
-                                var result = _context.Add(product);
+
+
+                                if (checkBox1.Checked)
+                                {
+                                    var textBoxes = new[]
+                                    {
+                                    textBox1, textBox2, textBox3, textBox4, textBox5,
+                                    textBox6, textBox7, textBox8, textBox9, textBox10
+                                };
+
+                                    foreach (var textBox in textBoxes)
+                                    {
+                                        if (!string.IsNullOrEmpty(textBox.Text))
+                                        {
+                                            var family = new ProductFamily
+                                            {
+                                                Pro_Id = product.Id,
+                                                CodeBar = textBox.Text
+                                            };
+                                            _context.ProductFamilies.Add(family);
+                                        }
+                                    }
+
+                                    // Save all changes at once
+                                    _context.SaveChanges();
+                                }
 
                                 if (!ProductsUserControl.CheckInstance())
                                 {
@@ -442,14 +565,94 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         {
             try
             {
-                var ResultBareCode = _context.Products.FirstOrDefault(x => x.CodeBar == txtBarCode.Text);
+                var ResultBareCode = _context.Products.FirstOrDefault(x => x.CodeBar == txtBarCode.Text &&
+                x.Id.ToString() != lblProductId.Text);
 
                 if (ResultBareCode is null)
                 {
-                    var ResultProductName = _context.Products.FirstOrDefault(x => x.ProductName == txtNameProduct.Text);
+                    var ResultProductName = _context.Products.FirstOrDefault(x => x.ProductName == txtNameProduct.Text
+                    && x.Id.ToString() != lblProductId.Text);
 
+                    if (ResultProductName is null)
+                    {
 
-                    if (ResultProductName is not null)
+                        Product product = productsRepository.Find(lblProductId.Text);
+                        product.ProductName = txtNameProduct.Text;
+                        product.CodeBar = txtBarCode.Text;
+                        product.CategoryId = Convert.ToInt32(CMBCategory.SelectedValue);
+                        product.MinQty = ConvertToFloat(txtMinQty.Text);
+                        product.IsTaxed = CbIsTaxed.Checked;
+                        product.TaxValue = CbIsTaxed.Checked ? ConvertToFloat(txtTaxValue.Text) : 0;
+                        product.BuyPrice = ConvertToFloat(txtBuyPrice.Text);
+                        product.Quentity = ConvertToFloat(txtTotalQty.Text);
+                        product.WholesalePrice = ConvertToFloat(txtWholeSalePrice.Text);
+                        product.SalePrice = ConvertToFloat(txtSalePrice.Text);
+                        product.MaxDiscount = ConvertToFloat(txtDiscountAllowed.Text);
+                        product.SalePriceTax = ConvertToFloat(txtSaleAfterTax.Text);
+                        product.SalePriceSeconde = ConvertToFloat(txtSalePrice2.Text);
+                        product.ColisageBareCode = txtColisageBareCode.Text;
+                        product.NbrProductInColis = ConvertToFloat(txtNbrIncolis.Text);
+                        product.DateExperation = DtpExperation.Value;
+                        product.ProductImage = RetriveImage();
+
+                        var result = productsRepository.UpdateAsync(lblProductId.Text, product);
+                        var families = _context.ProductFamilies.Where(x => x.Pro_Id == product.Id).ToList();
+                        _context.RemoveRange(families);
+                        _context.SaveChanges();
+                        if (checkBox1.Checked)
+                        {
+                            var textBoxes = new[]
+                            {
+                                    textBox1, textBox2, textBox3, textBox4, textBox5,
+                                    textBox6, textBox7, textBox8, textBox9, textBox10
+                                };
+
+                            foreach (var textBox in textBoxes)
+                            {
+                                if (!string.IsNullOrEmpty(textBox.Text))
+                                {
+                                    var family = new ProductFamily
+                                    {
+                                        Pro_Id = product.Id,
+                                        CodeBar = textBox.Text
+                                    };
+                                    _context.ProductFamilies.Add(family);
+                                }
+                            }
+
+                            // Save all changes at once
+                            _context.SaveChanges();
+                        }
+                        if (!ProductsUserControl.CheckInstance())
+                        {
+                            ProductsUserControl.RefreshDgv();
+                        }
+                        if (cbFavorite.Checked)
+                        {
+                            ProductQuickAccess qucik = new ProductQuickAccess
+                            {
+                                Pro_Id = product.Id,
+                                CodeBar = txtBarCode.Text,
+                                ProductImage = RetriveImage(),
+                                ProductName = txtNameProduct.Text,
+                            };
+                            vider();
+                            _context.Add(qucik);
+                            _context.SaveChanges();
+                            product = null;
+                        }
+                        else
+                        {
+                            var ProQuick = _context.ProductQuickAccess.FirstOrDefault(x => x.Pro_Id.ToString() == lblProductId.Text);
+                            if (ProQuick != null)
+                            {
+                                _context.Remove(ProQuick);
+                                _context.SaveChanges();
+
+                            }
+                        }
+                    }
+                    else
                     {
                         if (MsgHelper.ShowProductNameIsSame())
                         {
@@ -466,15 +669,44 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                             product.SalePrice = ConvertToFloat(txtSalePrice.Text);
                             product.MaxDiscount = ConvertToFloat(txtDiscountAllowed.Text);
                             product.SalePriceTax = ConvertToFloat(txtSaleAfterTax.Text);
+                            product.SalePriceSeconde = ConvertToFloat(txtSalePrice2.Text);
+                            product.ColisageBareCode = txtColisageBareCode.Text;
+                            product.NbrProductInColis = ConvertToFloat(txtNbrIncolis.Text);
                             product.DateExperation = DtpExperation.Value;
                             product.ProductImage = RetriveImage();
                             var result = productsRepository.UpdateAsync(lblProductId.Text, product);
+                            var families = _context.ProductFamilies.Where(x => x.Pro_Id == product.Id).ToList();
+                            _context.RemoveRange(families);
+                            _context.SaveChanges();
+                            if (checkBox1.Checked)
+                            {
+                                var textBoxes = new[]
+                                {
+                                    textBox1, textBox2, textBox3, textBox4, textBox5,
+                                    textBox6, textBox7, textBox8, textBox9, textBox10
+                                };
 
+                                foreach (var textBox in textBoxes)
+                                {
+                                    if (!string.IsNullOrEmpty(textBox.Text))
+                                    {
+                                        var family = new ProductFamily
+                                        {
+                                            Pro_Id = product.Id,
+                                            CodeBar = textBox.Text
+                                        };
+                                        _context.ProductFamilies.Add(family);
+                                    }
+                                }
+
+                                // Save all changes at once
+                                _context.SaveChanges();
+                            }
                             if (!ProductsUserControl.CheckInstance())
                             {
                                 ProductsUserControl.RefreshDgv();
                             }
-                            product = null;
+
                             if (cbFavorite.Checked)
                             {
                                 ProductQuickAccess qucik = new ProductQuickAccess
@@ -487,7 +719,9 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                                 vider();
                                 _context.Add(qucik);
                                 _context.SaveChanges();
+                                product = null;
                             }
+
                             else
                             {
                                 var ProQuick = _context.ProductQuickAccess.FirstOrDefault(x => x.Pro_Id.ToString() == lblProductId.Text);
@@ -667,6 +901,21 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             {
 
                 throw;
+            }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (flowLayoutPanel1.Enabled)
+            {
+                flowLayoutPanel1.Enabled = false;
+            }
+            else
+            {
+
+                flowLayoutPanel1.Enabled = true;
+
+
             }
         }
     }

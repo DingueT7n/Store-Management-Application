@@ -154,20 +154,37 @@ namespace Store.Infrastructure.Repositories
         }
         public Product GetProductBarCode(string barCode)
         {
-
             try
             {
-                return _context.Products.Where(x =>
-                x.CodeBar == (barCode)
-                )
-                    .FirstOrDefault();
 
+                var product = _context.Products.FirstOrDefault(x => x.CodeBar == barCode);
+
+
+                if (product == null)
+                {
+                    product = _context.Products.FirstOrDefault(x => x.ColisageBareCode == barCode);
+                }
+
+
+                if (product == null)
+                {
+                    product = _context.ProductFamilies
+                        .Where(x => x.CodeBar == barCode)
+                        .Select(x => x.Product)
+                        .FirstOrDefault();
+                }
+
+
+
+                return product;
             }
-            catch
+            catch (Exception)
             {
+
                 return new Product();
             }
         }
+
         public string GetFactureNumber()
         {
 

@@ -9,6 +9,8 @@ namespace Store.Infrastructure.Data.Config
         public void Configure(EntityTypeBuilder<Product> builder)
         {
             builder.Property(x => x.Id).IsRequired();
+            builder.Property(x => x.CodeBar).HasMaxLength(50);
+
             builder.Property(x => x.ProductName).HasMaxLength(50);
             builder.HasKey(x => x.Id);
             builder.HasOne(x => x.Category).WithMany().HasForeignKey(x => x.CategoryId);
@@ -21,9 +23,16 @@ namespace Store.Infrastructure.Data.Config
             builder.Property(p => p.SalePriceTax).HasColumnType("decimal(18,2)");
             builder.Property(p => p.MinQty).HasColumnType("decimal(18,2)");
             builder.Property(p => p.MaxDiscount).HasColumnType("decimal(18,2)");
-
-
-
+        }
+    }
+    public class ProductFamilyConfiguration : IEntityTypeConfiguration<ProductFamily>
+    {
+        public void Configure(EntityTypeBuilder<ProductFamily> builder)
+        {
+            builder.Property(x => x.Id).IsRequired();
+            builder.Property(x => x.CodeBar).HasMaxLength(50);
+            builder.HasKey(x => x.Id);
+            builder.HasOne(x => x.Product).WithMany().HasForeignKey(x => x.Pro_Id);
         }
     }
     public class ProductOutStoreConfiguration : IEntityTypeConfiguration<ProductOutStore>

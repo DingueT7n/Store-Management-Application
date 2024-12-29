@@ -29,7 +29,15 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddProductForm));
+            OperationsflowLayoutPanel = new FlowLayoutPanel();
+            btnAddProduct = new Button();
+            btnEditProduct = new Button();
+            btnPrintBarCode = new Button();
+            tabcontrolProductInfo = new TabControl();
+            tabPage1 = new TabPage();
             GbInfoProduct = new GroupBox();
+            txtSalePrice2 = new TextBox();
+            label17 = new Label();
             cbFavorite = new CheckBox();
             label1 = new Label();
             txtNameProduct = new TextBox();
@@ -40,10 +48,6 @@
             label14 = new Label();
             lblProductId = new Label();
             label13 = new Label();
-            DtpExperation = new DateTimePicker();
-            label12 = new Label();
-            label11 = new Label();
-            PbImageProduct = new PictureBox();
             txtBuyPrice = new TextBox();
             label10 = new Label();
             txtTotalQty = new TextBox();
@@ -63,17 +67,84 @@
             label4 = new Label();
             txtMinQty = new TextBox();
             label3 = new Label();
-            OperationsflowLayoutPanel = new FlowLayoutPanel();
-            btnAddProduct = new Button();
-            btnEditProduct = new Button();
-            btnPrintBarCode = new Button();
-            GbInfoProduct.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)PbImageProduct).BeginInit();
+            tabPage2 = new TabPage();
+            checkBox1 = new CheckBox();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            textBox1 = new TextBox();
+            textBox2 = new TextBox();
+            textBox3 = new TextBox();
+            textBox4 = new TextBox();
+            textBox5 = new TextBox();
+            textBox6 = new TextBox();
+            textBox7 = new TextBox();
+            textBox8 = new TextBox();
+            textBox9 = new TextBox();
+            textBox10 = new TextBox();
+            txtColisageBareCode = new TextBox();
+            label18 = new Label();
+            txtNbrIncolis = new TextBox();
+            label19 = new Label();
+            DtpExperation = new DateTimePicker();
+            label12 = new Label();
+            label11 = new Label();
+            PbImageProduct = new PictureBox();
             OperationsflowLayoutPanel.SuspendLayout();
+            tabcontrolProductInfo.SuspendLayout();
+            tabPage1.SuspendLayout();
+            GbInfoProduct.SuspendLayout();
+            tabPage2.SuspendLayout();
+            flowLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)PbImageProduct).BeginInit();
             SuspendLayout();
+            // 
+            // OperationsflowLayoutPanel
+            // 
+            resources.ApplyResources(OperationsflowLayoutPanel, "OperationsflowLayoutPanel");
+            OperationsflowLayoutPanel.Controls.Add(btnAddProduct);
+            OperationsflowLayoutPanel.Controls.Add(btnEditProduct);
+            OperationsflowLayoutPanel.Controls.Add(btnPrintBarCode);
+            OperationsflowLayoutPanel.Name = "OperationsflowLayoutPanel";
+            // 
+            // btnAddProduct
+            // 
+            resources.ApplyResources(btnAddProduct, "btnAddProduct");
+            btnAddProduct.Name = "btnAddProduct";
+            btnAddProduct.UseVisualStyleBackColor = true;
+            btnAddProduct.Click += btnAddProduct_Click;
+            // 
+            // btnEditProduct
+            // 
+            resources.ApplyResources(btnEditProduct, "btnEditProduct");
+            btnEditProduct.Name = "btnEditProduct";
+            btnEditProduct.UseVisualStyleBackColor = true;
+            btnEditProduct.Click += btnEditProduct_Click;
+            // 
+            // btnPrintBarCode
+            // 
+            resources.ApplyResources(btnPrintBarCode, "btnPrintBarCode");
+            btnPrintBarCode.Name = "btnPrintBarCode";
+            btnPrintBarCode.UseVisualStyleBackColor = true;
+            btnPrintBarCode.Click += btnPrintBarCode_Click;
+            // 
+            // tabcontrolProductInfo
+            // 
+            tabcontrolProductInfo.Controls.Add(tabPage1);
+            tabcontrolProductInfo.Controls.Add(tabPage2);
+            resources.ApplyResources(tabcontrolProductInfo, "tabcontrolProductInfo");
+            tabcontrolProductInfo.Name = "tabcontrolProductInfo";
+            tabcontrolProductInfo.SelectedIndex = 0;
+            // 
+            // tabPage1
+            // 
+            tabPage1.BackColor = Color.White;
+            tabPage1.Controls.Add(GbInfoProduct);
+            resources.ApplyResources(tabPage1, "tabPage1");
+            tabPage1.Name = "tabPage1";
             // 
             // GbInfoProduct
             // 
+            GbInfoProduct.Controls.Add(txtSalePrice2);
+            GbInfoProduct.Controls.Add(label17);
             GbInfoProduct.Controls.Add(cbFavorite);
             GbInfoProduct.Controls.Add(label1);
             GbInfoProduct.Controls.Add(txtNameProduct);
@@ -84,10 +155,6 @@
             GbInfoProduct.Controls.Add(label14);
             GbInfoProduct.Controls.Add(lblProductId);
             GbInfoProduct.Controls.Add(label13);
-            GbInfoProduct.Controls.Add(DtpExperation);
-            GbInfoProduct.Controls.Add(label12);
-            GbInfoProduct.Controls.Add(label11);
-            GbInfoProduct.Controls.Add(PbImageProduct);
             GbInfoProduct.Controls.Add(txtBuyPrice);
             GbInfoProduct.Controls.Add(label10);
             GbInfoProduct.Controls.Add(txtTotalQty);
@@ -110,6 +177,18 @@
             resources.ApplyResources(GbInfoProduct, "GbInfoProduct");
             GbInfoProduct.Name = "GbInfoProduct";
             GbInfoProduct.TabStop = false;
+            // 
+            // txtSalePrice2
+            // 
+            resources.ApplyResources(txtSalePrice2, "txtSalePrice2");
+            txtSalePrice2.Name = "txtSalePrice2";
+            txtSalePrice2.KeyDown += txtNameProduct_KeyDown;
+            txtSalePrice2.KeyPress += txtSalePrice_KeyPress;
+            // 
+            // label17
+            // 
+            resources.ApplyResources(label17, "label17");
+            label17.Name = "label17";
             // 
             // cbFavorite
             // 
@@ -173,31 +252,6 @@
             // 
             resources.ApplyResources(label13, "label13");
             label13.Name = "label13";
-            // 
-            // DtpExperation
-            // 
-            resources.ApplyResources(DtpExperation, "DtpExperation");
-            DtpExperation.Format = DateTimePickerFormat.Short;
-            DtpExperation.MaxDate = new DateTime(2101, 1, 1, 0, 0, 0, 0);
-            DtpExperation.Name = "DtpExperation";
-            DtpExperation.Value = new DateTime(2024, 8, 23, 21, 42, 30, 0);
-            // 
-            // label12
-            // 
-            resources.ApplyResources(label12, "label12");
-            label12.Name = "label12";
-            // 
-            // label11
-            // 
-            resources.ApplyResources(label11, "label11");
-            label11.Name = "label11";
-            // 
-            // PbImageProduct
-            // 
-            resources.ApplyResources(PbImageProduct, "PbImageProduct");
-            PbImageProduct.Name = "PbImageProduct";
-            PbImageProduct.TabStop = false;
-            PbImageProduct.Click += PbImageProduct_Click;
             // 
             // txtBuyPrice
             // 
@@ -316,68 +370,208 @@
             resources.ApplyResources(label3, "label3");
             label3.Name = "label3";
             // 
-            // OperationsflowLayoutPanel
+            // tabPage2
             // 
-            resources.ApplyResources(OperationsflowLayoutPanel, "OperationsflowLayoutPanel");
-            OperationsflowLayoutPanel.Controls.Add(btnAddProduct);
-            OperationsflowLayoutPanel.Controls.Add(btnEditProduct);
-            OperationsflowLayoutPanel.Controls.Add(btnPrintBarCode);
-            OperationsflowLayoutPanel.Name = "OperationsflowLayoutPanel";
+            tabPage2.BackColor = Color.White;
+            tabPage2.Controls.Add(checkBox1);
+            tabPage2.Controls.Add(flowLayoutPanel1);
+            tabPage2.Controls.Add(txtColisageBareCode);
+            tabPage2.Controls.Add(label18);
+            tabPage2.Controls.Add(txtNbrIncolis);
+            tabPage2.Controls.Add(label19);
+            tabPage2.Controls.Add(DtpExperation);
+            tabPage2.Controls.Add(label12);
+            tabPage2.Controls.Add(label11);
+            tabPage2.Controls.Add(PbImageProduct);
+            resources.ApplyResources(tabPage2, "tabPage2");
+            tabPage2.Name = "tabPage2";
             // 
-            // btnAddProduct
+            // checkBox1
             // 
-            resources.ApplyResources(btnAddProduct, "btnAddProduct");
-            btnAddProduct.Name = "btnAddProduct";
-            btnAddProduct.UseVisualStyleBackColor = true;
-            btnAddProduct.Click += btnAddProduct_Click;
+            resources.ApplyResources(checkBox1, "checkBox1");
+            checkBox1.Name = "checkBox1";
+            checkBox1.UseVisualStyleBackColor = true;
+            checkBox1.CheckedChanged += checkBox1_CheckedChanged;
+            checkBox1.KeyDown += txtNameProduct_KeyDown;
             // 
-            // btnEditProduct
+            // flowLayoutPanel1
             // 
-            resources.ApplyResources(btnEditProduct, "btnEditProduct");
-            btnEditProduct.Name = "btnEditProduct";
-            btnEditProduct.UseVisualStyleBackColor = true;
-            btnEditProduct.Click += btnEditProduct_Click;
+            flowLayoutPanel1.Controls.Add(textBox1);
+            flowLayoutPanel1.Controls.Add(textBox2);
+            flowLayoutPanel1.Controls.Add(textBox3);
+            flowLayoutPanel1.Controls.Add(textBox4);
+            flowLayoutPanel1.Controls.Add(textBox5);
+            flowLayoutPanel1.Controls.Add(textBox6);
+            flowLayoutPanel1.Controls.Add(textBox7);
+            flowLayoutPanel1.Controls.Add(textBox8);
+            flowLayoutPanel1.Controls.Add(textBox9);
+            flowLayoutPanel1.Controls.Add(textBox10);
+            resources.ApplyResources(flowLayoutPanel1, "flowLayoutPanel1");
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
             // 
-            // btnPrintBarCode
+            // textBox1
             // 
-            resources.ApplyResources(btnPrintBarCode, "btnPrintBarCode");
-            btnPrintBarCode.Name = "btnPrintBarCode";
-            btnPrintBarCode.UseVisualStyleBackColor = true;
-            btnPrintBarCode.Click += btnPrintBarCode_Click;
+            resources.ApplyResources(textBox1, "textBox1");
+            textBox1.Name = "textBox1";
+            textBox1.KeyDown += txtNameProduct_KeyDown;
+            textBox1.KeyPress += txtBarCode_KeyPress;
+            // 
+            // textBox2
+            // 
+            resources.ApplyResources(textBox2, "textBox2");
+            textBox2.Name = "textBox2";
+            textBox2.KeyDown += txtNameProduct_KeyDown;
+            textBox2.KeyPress += txtBarCode_KeyPress;
+            // 
+            // textBox3
+            // 
+            resources.ApplyResources(textBox3, "textBox3");
+            textBox3.Name = "textBox3";
+            textBox3.KeyDown += txtNameProduct_KeyDown;
+            textBox3.KeyPress += txtBarCode_KeyPress;
+            // 
+            // textBox4
+            // 
+            resources.ApplyResources(textBox4, "textBox4");
+            textBox4.Name = "textBox4";
+            textBox4.KeyDown += txtNameProduct_KeyDown;
+            textBox4.KeyPress += txtBarCode_KeyPress;
+            // 
+            // textBox5
+            // 
+            resources.ApplyResources(textBox5, "textBox5");
+            textBox5.Name = "textBox5";
+            textBox5.KeyDown += txtNameProduct_KeyDown;
+            textBox5.KeyPress += txtBarCode_KeyPress;
+            // 
+            // textBox6
+            // 
+            resources.ApplyResources(textBox6, "textBox6");
+            textBox6.Name = "textBox6";
+            textBox6.KeyDown += txtNameProduct_KeyDown;
+            textBox6.KeyPress += txtBarCode_KeyPress;
+            // 
+            // textBox7
+            // 
+            resources.ApplyResources(textBox7, "textBox7");
+            textBox7.Name = "textBox7";
+            textBox7.KeyDown += txtNameProduct_KeyDown;
+            textBox7.KeyPress += txtBarCode_KeyPress;
+            // 
+            // textBox8
+            // 
+            resources.ApplyResources(textBox8, "textBox8");
+            textBox8.Name = "textBox8";
+            textBox8.KeyDown += txtNameProduct_KeyDown;
+            textBox8.KeyPress += txtBarCode_KeyPress;
+            // 
+            // textBox9
+            // 
+            resources.ApplyResources(textBox9, "textBox9");
+            textBox9.Name = "textBox9";
+            textBox9.KeyDown += txtNameProduct_KeyDown;
+            textBox9.KeyPress += txtBarCode_KeyPress;
+            // 
+            // textBox10
+            // 
+            resources.ApplyResources(textBox10, "textBox10");
+            textBox10.Name = "textBox10";
+            textBox10.KeyDown += txtNameProduct_KeyDown;
+            textBox10.KeyPress += txtBarCode_KeyPress;
+            // 
+            // txtColisageBareCode
+            // 
+            resources.ApplyResources(txtColisageBareCode, "txtColisageBareCode");
+            txtColisageBareCode.Name = "txtColisageBareCode";
+            txtColisageBareCode.KeyDown += txtNameProduct_KeyDown;
+            txtColisageBareCode.KeyPress += txtBarCode_KeyPress;
+            // 
+            // label18
+            // 
+            resources.ApplyResources(label18, "label18");
+            label18.Name = "label18";
+            // 
+            // txtNbrIncolis
+            // 
+            resources.ApplyResources(txtNbrIncolis, "txtNbrIncolis");
+            txtNbrIncolis.Name = "txtNbrIncolis";
+            txtNbrIncolis.KeyDown += txtNameProduct_KeyDown;
+            txtNbrIncolis.KeyPress += txtMinQty_KeyPress;
+            // 
+            // label19
+            // 
+            resources.ApplyResources(label19, "label19");
+            label19.Name = "label19";
+            // 
+            // DtpExperation
+            // 
+            resources.ApplyResources(DtpExperation, "DtpExperation");
+            DtpExperation.Format = DateTimePickerFormat.Short;
+            DtpExperation.MaxDate = new DateTime(2101, 1, 1, 0, 0, 0, 0);
+            DtpExperation.Name = "DtpExperation";
+            DtpExperation.Value = new DateTime(2024, 8, 23, 21, 42, 30, 0);
+            DtpExperation.KeyDown += txtNameProduct_KeyDown;
+            // 
+            // label12
+            // 
+            resources.ApplyResources(label12, "label12");
+            label12.Name = "label12";
+            // 
+            // label11
+            // 
+            resources.ApplyResources(label11, "label11");
+            label11.Name = "label11";
+            // 
+            // PbImageProduct
+            // 
+            resources.ApplyResources(PbImageProduct, "PbImageProduct");
+            PbImageProduct.BorderStyle = BorderStyle.FixedSingle;
+            PbImageProduct.Name = "PbImageProduct";
+            PbImageProduct.TabStop = false;
             // 
             // AddProductForm
             // 
             resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
+            Controls.Add(tabcontrolProductInfo);
             Controls.Add(OperationsflowLayoutPanel);
-            Controls.Add(GbInfoProduct);
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "AddProductForm";
             ShowIcon = false;
+            OperationsflowLayoutPanel.ResumeLayout(false);
+            tabcontrolProductInfo.ResumeLayout(false);
+            tabPage1.ResumeLayout(false);
             GbInfoProduct.ResumeLayout(false);
             GbInfoProduct.PerformLayout();
+            tabPage2.ResumeLayout(false);
+            tabPage2.PerformLayout();
+            flowLayoutPanel1.ResumeLayout(false);
+            flowLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)PbImageProduct).EndInit();
-            OperationsflowLayoutPanel.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
-
-        private GroupBox GbInfoProduct;
-        private Label label1;
-        private TextBox txtNameProduct;
         private FlowLayoutPanel OperationsflowLayoutPanel;
         private Button btnAddProduct;
         private Button btnEditProduct;
         private Button btnPrintBarCode;
+        private TabControl tabcontrolProductInfo;
+        private TabPage tabPage2;
+        private TabPage tabPage1;
+        private GroupBox GbInfoProduct;
+        private CheckBox cbFavorite;
+        private Label label1;
+        private TextBox txtNameProduct;
+        private Label label2;
+        private TextBox txtBarCode;
+        private Label label16;
+        private Label label15;
+        private Label label14;
         private Label lblProductId;
         private Label label13;
-        private DateTimePicker DtpExperation;
-        private Label label12;
-        private Label label11;
-        private PictureBox PbImageProduct;
         private TextBox txtBuyPrice;
         private Label label10;
         private TextBox txtTotalQty;
@@ -397,11 +591,27 @@
         private Label label4;
         private TextBox txtMinQty;
         private Label label3;
-        private TextBox txtBarCode;
-        private Label label2;
-        private Label label14;
-        private Label label16;
-        private Label label15;
-        private CheckBox cbFavorite;
+        private TextBox txtSalePrice2;
+        private Label label17;
+        private Label label11;
+        private PictureBox PbImageProduct;
+        private DateTimePicker DtpExperation;
+        private Label label12;
+        private TextBox txtColisageBareCode;
+        private Label label18;
+        private TextBox txtNbrIncolis;
+        private Label label19;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private CheckBox checkBox1;
+        private TextBox textBox1;
+        private TextBox textBox2;
+        private TextBox textBox3;
+        private TextBox textBox4;
+        private TextBox textBox5;
+        private TextBox textBox6;
+        private TextBox textBox7;
+        private TextBox textBox8;
+        private TextBox textBox9;
+        private TextBox textBox10;
     }
 }

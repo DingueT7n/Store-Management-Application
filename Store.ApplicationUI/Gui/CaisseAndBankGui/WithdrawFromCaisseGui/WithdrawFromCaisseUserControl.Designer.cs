@@ -174,6 +174,7 @@
             txtValue.Name = "txtValue";
             txtValue.Size = new Size(200, 27);
             txtValue.TabIndex = 4;
+            txtValue.Text = "0";
             txtValue.KeyPress += txtValue_KeyPress;
             // 
             // flowLayoutPanel1

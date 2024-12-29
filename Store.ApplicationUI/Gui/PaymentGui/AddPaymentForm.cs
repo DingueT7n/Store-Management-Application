@@ -41,25 +41,28 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         }
         private void btnSearchImage_Click(object sender, EventArgs e)
         {
-            if (this._form == 1)
+            if (Convert.ToDecimal(txtRemain.Text) + Convert.ToDecimal(txtpaidUp.Text) >= Convert.ToDecimal(txtFacturePrice.Text))
             {
+                if (this._form == 1)
+                {
 
-                SalesGui.SalesUserControl.InitializeData(txtpaidUp.Text, txtRemain.Text);
-                SalesUserControl.Process = true;
+                    SalesGui.SalesUserControl.InitializeData(txtpaidUp.Text, txtRemain.Text);
+                    SalesUserControl.Process = true;
+                }
+                else if (_form == 0)
+                {
+                    BuysUserControl.InitializeData(txtpaidUp.Text, txtRemain.Text);
+                    BuysUserControl.Process = true;
+                }
+                else if (PosForm.GetPosUserControl() is not null)
+                {
+                    PosForm.GetPosUserControl().InitializeData(txtpaidUp.Text, txtRemain.Text);
+
+
+
+                }
+                this.Close();
             }
-            else if (_form == 0)
-            {
-                BuysUserControl.InitializeData(txtpaidUp.Text, txtRemain.Text);
-                BuysUserControl.Process = true;
-            }
-            else if (PosForm.GetPosUserControl() is not null)
-            {
-                PosForm.GetPosUserControl().InitializeData(txtpaidUp.Text, txtRemain.Text);
-
-
-
-            }
-            this.Close();
 
         }
         private void txtpaidUp_TextChanged(object sender, EventArgs e)
@@ -76,10 +79,26 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         }
         private void txtpaidUp_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
+            string currentText = (sender as TextBox)?.Text ?? string.Empty;
+
+
+            char decimalSeparator = Properties.Settings.Default.DecimalSEP[0];
+
+
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != decimalSeparator && e.KeyChar != (char)8)
             {
                 e.Handled = true;
             }
+
+            else if (e.KeyChar == decimalSeparator && currentText.Contains(decimalSeparator))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtFacturePrice_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
         }
     }
 }

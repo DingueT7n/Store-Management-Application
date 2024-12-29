@@ -101,6 +101,7 @@ namespace Store.Infrastructure.Data
         public DbSet<EmployeeBorrowMoney> EmployeesBorrowMonies { get; set; }
         public DbSet<EmployeeSalary> EmployeesSalaries { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductFamily> ProductFamilies { get; set; }
         public DbSet<ProductDiscount> ProductDiscounts { get; set; }
         public DbSet<ProductQuickAccess> ProductQuickAccess { get; set; }
         public DbSet<ReceiptVoucher> ReceiptVouchers { get; set; }

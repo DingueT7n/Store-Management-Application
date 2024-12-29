@@ -376,6 +376,7 @@
             txtProfit.TabIndex = 37;
             txtProfit.Text = "0";
             txtProfit.TextAlign = HorizontalAlignment.Center;
+            txtProfit.KeyPress += txtProfit_KeyPress;
             // 
             // label6
             // 

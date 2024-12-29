@@ -30,56 +30,25 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PosUserControl));
-            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle13 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle14 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle15 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle16 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle17 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle18 = new DataGridViewCellStyle();
-            flowLayoutPanel1 = new FlowLayoutPanel();
-            DateNHourflowLayoutPanel = new FlowLayoutPanel();
-            flowLayoutPanelDates = new FlowLayoutPanel();
-            label1 = new Label();
-            lblFactureNumber = new Label();
-            label4 = new Label();
-            lblDatetime = new Label();
-            label6 = new Label();
-            lblHour = new Label();
-            CustomerflowLayoutPanel = new FlowLayoutPanel();
-            flowLayoutPanelCusotnmer = new FlowLayoutPanel();
-            label3 = new Label();
-            lblCustomerName = new Label();
-            IdCustomer = new Label();
-            panel5 = new Panel();
-            flowLayoutPanel4 = new FlowLayoutPanel();
-            lblqtyshow = new Label();
-            lblQuentityValue = new Label();
-            labelproductintable = new Label();
-            lblProductIntable = new Label();
-            flowLayoutPanel3 = new FlowLayoutPanel();
-            lblUserShow = new Label();
-            lblUserName = new Label();
-            lblSupportTech = new Label();
-            lblSupportNumber = new Label();
-            flowLayoutPanelComptoirePrice = new FlowLayoutPanel();
-            lblValuePrice = new Label();
-            lblCurrancy = new Label();
-            pictureBox1 = new PictureBox();
-            labelprice = new Label();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
             btnChoseCustomer = new Button();
             gbOperations = new GroupBox();
+            button1 = new Button();
             btnPay = new Button();
             btnDeleteSelected = new Button();
-            gbOperation = new GroupBox();
-            rbRefund = new RadioButton();
-            rbSale = new RadioButton();
             btnEditSelected = new Button();
             btnDown = new Button();
             btnUp = new Button();
             gpSearchAvailable = new GroupBox();
+            btnPrices = new Button();
             label5 = new Label();
             lblBarCode = new Label();
             txtSearchBarCode = new TextBox();
@@ -103,18 +72,38 @@
             QuickPanel = new Panel();
             lblEmptyQuick = new Label();
             DgvQuickProducts = new DataGridView();
-            flowLayoutPanel1.SuspendLayout();
-            DateNHourflowLayoutPanel.SuspendLayout();
-            flowLayoutPanelDates.SuspendLayout();
-            CustomerflowLayoutPanel.SuspendLayout();
-            flowLayoutPanelCusotnmer.SuspendLayout();
-            panel5.SuspendLayout();
-            flowLayoutPanel4.SuspendLayout();
-            flowLayoutPanel3.SuspendLayout();
-            flowLayoutPanelComptoirePrice.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            panel1 = new Panel();
+            panel5 = new Panel();
+            flowLayoutPanelCusotnmer = new FlowLayoutPanel();
+            label3 = new Label();
+            lblCustomerName = new Label();
+            gbOperation = new GroupBox();
+            rbRefund = new RadioButton();
+            rbSale = new RadioButton();
+            IdCustomer = new Label();
+            flowLayoutPanel4 = new FlowLayoutPanel();
+            lblqtyshow = new Label();
+            lblQuentityValue = new Label();
+            labelproductintable = new Label();
+            lblProductIntable = new Label();
+            flowLayoutPanelDates = new FlowLayoutPanel();
+            label1 = new Label();
+            lblFactureNumber = new Label();
+            label4 = new Label();
+            lblDatetime = new Label();
+            label6 = new Label();
+            lblHour = new Label();
+            flowLayoutPanel3 = new FlowLayoutPanel();
+            lblUserShow = new Label();
+            lblUserName = new Label();
+            lblSupportTech = new Label();
+            lblSupportNumber = new Label();
+            flowLayoutPanelComptoirePrice = new FlowLayoutPanel();
+            lblValuePrice = new Label();
+            lblCurrancy = new Label();
+            pictureBox1 = new PictureBox();
+            labelprice = new Label();
             gbOperations.SuspendLayout();
-            gbOperation.SuspendLayout();
             gpSearchAvailable.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
             ModifiertableLayoutPanel.SuspendLayout();
@@ -122,394 +111,29 @@
             ((System.ComponentModel.ISupportInitialize)DgvِProducts).BeginInit();
             QuickPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DgvQuickProducts).BeginInit();
+            panel1.SuspendLayout();
+            panel5.SuspendLayout();
+            flowLayoutPanelCusotnmer.SuspendLayout();
+            gbOperation.SuspendLayout();
+            flowLayoutPanel4.SuspendLayout();
+            flowLayoutPanelDates.SuspendLayout();
+            flowLayoutPanel3.SuspendLayout();
+            flowLayoutPanelComptoirePrice.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
-            // 
-            // flowLayoutPanel1
-            // 
-            flowLayoutPanel1.BackColor = Color.FromArgb(137, 207, 240);
-            flowLayoutPanel1.Controls.Add(DateNHourflowLayoutPanel);
-            flowLayoutPanel1.Controls.Add(CustomerflowLayoutPanel);
-            flowLayoutPanel1.Controls.Add(panel5);
-            flowLayoutPanel1.Dock = DockStyle.Top;
-            flowLayoutPanel1.Location = new Point(0, 0);
-            flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(1266, 131);
-            flowLayoutPanel1.TabIndex = 0;
-            // 
-            // DateNHourflowLayoutPanel
-            // 
-            DateNHourflowLayoutPanel.Controls.Add(flowLayoutPanelDates);
-            DateNHourflowLayoutPanel.FlowDirection = FlowDirection.TopDown;
-            DateNHourflowLayoutPanel.Location = new Point(1118, 3);
-            DateNHourflowLayoutPanel.Name = "DateNHourflowLayoutPanel";
-            DateNHourflowLayoutPanel.Size = new Size(145, 126);
-            DateNHourflowLayoutPanel.TabIndex = 1;
-            // 
-            // flowLayoutPanelDates
-            // 
-            flowLayoutPanelDates.BackColor = Color.FromArgb(137, 207, 240);
-            flowLayoutPanelDates.Controls.Add(label1);
-            flowLayoutPanelDates.Controls.Add(lblFactureNumber);
-            flowLayoutPanelDates.Controls.Add(label4);
-            flowLayoutPanelDates.Controls.Add(lblDatetime);
-            flowLayoutPanelDates.Controls.Add(label6);
-            flowLayoutPanelDates.Controls.Add(lblHour);
-            flowLayoutPanelDates.FlowDirection = FlowDirection.TopDown;
-            flowLayoutPanelDates.Location = new Point(4, 3);
-            flowLayoutPanelDates.Name = "flowLayoutPanelDates";
-            flowLayoutPanelDates.Size = new Size(138, 129);
-            flowLayoutPanelDates.TabIndex = 33;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.BackColor = Color.Transparent;
-            label1.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.ForeColor = SystemColors.ControlText;
-            label1.Location = new Point(62, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(73, 19);
-            label1.TabIndex = 0;
-            label1.Text = "رقم الفاتورة";
-            // 
-            // lblFactureNumber
-            // 
-            lblFactureNumber.AutoSize = true;
-            lblFactureNumber.BackColor = Color.Transparent;
-            lblFactureNumber.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblFactureNumber.ForeColor = Color.DarkGreen;
-            lblFactureNumber.Location = new Point(35, 19);
-            lblFactureNumber.Name = "lblFactureNumber";
-            lblFactureNumber.Size = new Size(100, 23);
-            lblFactureNumber.TabIndex = 1;
-            lblFactureNumber.Text = "000000001";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.BackColor = Color.Transparent;
-            label4.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label4.ForeColor = SystemColors.ControlText;
-            label4.Location = new Point(65, 42);
-            label4.Name = "label4";
-            label4.Size = new Size(70, 19);
-            label4.TabIndex = 0;
-            label4.Text = "تاريخ اليوم";
-            // 
-            // lblDatetime
-            // 
-            lblDatetime.AutoSize = true;
-            lblDatetime.BackColor = Color.Transparent;
-            lblDatetime.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblDatetime.ForeColor = Color.DarkGreen;
-            lblDatetime.Location = new Point(49, 61);
-            lblDatetime.Name = "lblDatetime";
-            lblDatetime.Size = new Size(86, 23);
-            lblDatetime.TabIndex = 1;
-            lblDatetime.Text = "9/3/2024";
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.BackColor = Color.Transparent;
-            label6.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label6.ForeColor = SystemColors.ControlText;
-            label6.Location = new Point(88, 84);
-            label6.Name = "label6";
-            label6.Size = new Size(47, 19);
-            label6.TabIndex = 0;
-            label6.Text = "الساعة";
-            // 
-            // lblHour
-            // 
-            lblHour.AutoSize = true;
-            lblHour.BackColor = Color.Transparent;
-            lblHour.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblHour.ForeColor = Color.DarkGreen;
-            lblHour.Location = new Point(80, 103);
-            lblHour.Name = "lblHour";
-            lblHour.Size = new Size(55, 23);
-            lblHour.TabIndex = 1;
-            lblHour.Text = "00:00";
-            // 
-            // CustomerflowLayoutPanel
-            // 
-            CustomerflowLayoutPanel.BackColor = Color.FromArgb(137, 207, 240);
-            CustomerflowLayoutPanel.Controls.Add(flowLayoutPanelCusotnmer);
-            CustomerflowLayoutPanel.FlowDirection = FlowDirection.TopDown;
-            CustomerflowLayoutPanel.Location = new Point(908, 3);
-            CustomerflowLayoutPanel.Name = "CustomerflowLayoutPanel";
-            CustomerflowLayoutPanel.Size = new Size(204, 126);
-            CustomerflowLayoutPanel.TabIndex = 2;
-            // 
-            // flowLayoutPanelCusotnmer
-            // 
-            flowLayoutPanelCusotnmer.BackColor = Color.FromArgb(137, 207, 240);
-            flowLayoutPanelCusotnmer.Controls.Add(label3);
-            flowLayoutPanelCusotnmer.Controls.Add(lblCustomerName);
-            flowLayoutPanelCusotnmer.Controls.Add(IdCustomer);
-            flowLayoutPanelCusotnmer.FlowDirection = FlowDirection.TopDown;
-            flowLayoutPanelCusotnmer.Location = new Point(0, 3);
-            flowLayoutPanelCusotnmer.Name = "flowLayoutPanelCusotnmer";
-            flowLayoutPanelCusotnmer.Size = new Size(201, 116);
-            flowLayoutPanelCusotnmer.TabIndex = 34;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.BackColor = Color.Transparent;
-            label3.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.ForeColor = SystemColors.ControlText;
-            label3.Location = new Point(66, 10);
-            label3.Margin = new Padding(50, 10, 7, 20);
-            label3.Name = "label3";
-            label3.Size = new Size(85, 23);
-            label3.TabIndex = 0;
-            label3.Text = "اسم العميل";
-            // 
-            // lblCustomerName
-            // 
-            lblCustomerName.AutoSize = true;
-            lblCustomerName.BackColor = Color.Transparent;
-            lblCustomerName.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblCustomerName.ForeColor = Color.DarkGreen;
-            lblCustomerName.Location = new Point(104, 56);
-            lblCustomerName.Margin = new Padding(3);
-            lblCustomerName.Name = "lblCustomerName";
-            lblCustomerName.Size = new Size(94, 23);
-            lblCustomerName.TabIndex = 1;
-            lblCustomerName.Text = "مشتري عادي";
-            lblCustomerName.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // IdCustomer
-            // 
-            IdCustomer.AutoSize = true;
-            IdCustomer.BackColor = Color.Transparent;
-            IdCustomer.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            IdCustomer.ForeColor = Color.DarkGreen;
-            IdCustomer.Location = new Point(178, 85);
-            IdCustomer.Margin = new Padding(3);
-            IdCustomer.Name = "IdCustomer";
-            IdCustomer.Size = new Size(20, 23);
-            IdCustomer.TabIndex = 2;
-            IdCustomer.Text = "4";
-            IdCustomer.TextAlign = ContentAlignment.MiddleRight;
-            IdCustomer.Visible = false;
-            // 
-            // panel5
-            // 
-            panel5.BackColor = Color.FromArgb(137, 207, 240);
-            panel5.Controls.Add(flowLayoutPanel4);
-            panel5.Controls.Add(flowLayoutPanel3);
-            panel5.Controls.Add(flowLayoutPanelComptoirePrice);
-            panel5.Controls.Add(labelprice);
-            panel5.Location = new Point(1, 1);
-            panel5.Margin = new Padding(1);
-            panel5.Name = "panel5";
-            panel5.Size = new Size(903, 128);
-            panel5.TabIndex = 4;
-            // 
-            // flowLayoutPanel4
-            // 
-            flowLayoutPanel4.BackColor = Color.FromArgb(137, 207, 240);
-            flowLayoutPanel4.Controls.Add(lblqtyshow);
-            flowLayoutPanel4.Controls.Add(lblQuentityValue);
-            flowLayoutPanel4.Controls.Add(labelproductintable);
-            flowLayoutPanel4.Controls.Add(lblProductIntable);
-            flowLayoutPanel4.FlowDirection = FlowDirection.TopDown;
-            flowLayoutPanel4.Location = new Point(129, 6);
-            flowLayoutPanel4.Name = "flowLayoutPanel4";
-            flowLayoutPanel4.Size = new Size(162, 125);
-            flowLayoutPanel4.TabIndex = 35;
-            // 
-            // lblqtyshow
-            // 
-            lblqtyshow.AutoSize = true;
-            lblqtyshow.BackColor = Color.Transparent;
-            lblqtyshow.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblqtyshow.ForeColor = SystemColors.ControlText;
-            lblqtyshow.Location = new Point(48, 0);
-            lblqtyshow.Name = "lblqtyshow";
-            lblqtyshow.Size = new Size(111, 19);
-            lblqtyshow.TabIndex = 3;
-            lblqtyshow.Text = "الكميات في الجدول";
-            // 
-            // lblQuentityValue
-            // 
-            lblQuentityValue.AutoSize = true;
-            lblQuentityValue.BackColor = Color.Transparent;
-            lblQuentityValue.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblQuentityValue.ForeColor = Color.DarkGreen;
-            lblQuentityValue.Location = new Point(139, 19);
-            lblQuentityValue.Name = "lblQuentityValue";
-            lblQuentityValue.Size = new Size(20, 23);
-            lblQuentityValue.TabIndex = 4;
-            lblQuentityValue.Text = "0";
-            lblQuentityValue.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // labelproductintable
-            // 
-            labelproductintable.AutoSize = true;
-            labelproductintable.BackColor = Color.Transparent;
-            labelproductintable.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelproductintable.ForeColor = SystemColors.ControlText;
-            labelproductintable.Location = new Point(11, 42);
-            labelproductintable.Name = "labelproductintable";
-            labelproductintable.Size = new Size(148, 19);
-            labelproductintable.TabIndex = 3;
-            labelproductintable.Text = "عدد المنتجات في الجدول";
-            // 
-            // lblProductIntable
-            // 
-            lblProductIntable.AutoSize = true;
-            lblProductIntable.BackColor = Color.Transparent;
-            lblProductIntable.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblProductIntable.ForeColor = Color.DarkGreen;
-            lblProductIntable.Location = new Point(139, 61);
-            lblProductIntable.Name = "lblProductIntable";
-            lblProductIntable.Size = new Size(20, 23);
-            lblProductIntable.TabIndex = 4;
-            lblProductIntable.Text = "0";
-            lblProductIntable.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // flowLayoutPanel3
-            // 
-            flowLayoutPanel3.BackColor = Color.FromArgb(137, 207, 240);
-            flowLayoutPanel3.Controls.Add(lblUserShow);
-            flowLayoutPanel3.Controls.Add(lblUserName);
-            flowLayoutPanel3.Controls.Add(lblSupportTech);
-            flowLayoutPanel3.Controls.Add(lblSupportNumber);
-            flowLayoutPanel3.FlowDirection = FlowDirection.TopDown;
-            flowLayoutPanel3.Location = new Point(3, 6);
-            flowLayoutPanel3.Name = "flowLayoutPanel3";
-            flowLayoutPanel3.Size = new Size(120, 124);
-            flowLayoutPanel3.TabIndex = 34;
-            // 
-            // lblUserShow
-            // 
-            lblUserShow.AutoSize = true;
-            lblUserShow.BackColor = Color.Transparent;
-            lblUserShow.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblUserShow.ForeColor = SystemColors.ControlText;
-            lblUserShow.Location = new Point(25, 0);
-            lblUserShow.Name = "lblUserShow";
-            lblUserShow.Size = new Size(92, 19);
-            lblUserShow.TabIndex = 0;
-            lblUserShow.Text = "اسم المستخدم";
-            // 
-            // lblUserName
-            // 
-            lblUserName.AutoSize = true;
-            lblUserName.BackColor = Color.Transparent;
-            lblUserName.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblUserName.ForeColor = Color.DarkGreen;
-            lblUserName.Location = new Point(55, 19);
-            lblUserName.Name = "lblUserName";
-            lblUserName.Size = new Size(62, 23);
-            lblUserName.TabIndex = 1;
-            lblUserName.Text = "Admin";
-            // 
-            // lblSupportTech
-            // 
-            lblSupportTech.AutoSize = true;
-            lblSupportTech.BackColor = Color.Transparent;
-            lblSupportTech.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblSupportTech.ForeColor = SystemColors.ControlText;
-            lblSupportTech.Location = new Point(41, 42);
-            lblSupportTech.Name = "lblSupportTech";
-            lblSupportTech.Size = new Size(76, 19);
-            lblSupportTech.TabIndex = 0;
-            lblSupportTech.Text = "الدعم التقني";
-            // 
-            // lblSupportNumber
-            // 
-            lblSupportNumber.AutoSize = true;
-            lblSupportNumber.BackColor = Color.Transparent;
-            lblSupportNumber.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblSupportNumber.ForeColor = Color.DarkGreen;
-            lblSupportNumber.Location = new Point(7, 61);
-            lblSupportNumber.Name = "lblSupportNumber";
-            lblSupportNumber.Size = new Size(110, 23);
-            lblSupportNumber.TabIndex = 1;
-            lblSupportNumber.Text = "0697357307";
-            // 
-            // flowLayoutPanelComptoirePrice
-            // 
-            flowLayoutPanelComptoirePrice.BackColor = Color.FromArgb(137, 207, 240);
-            flowLayoutPanelComptoirePrice.Controls.Add(lblValuePrice);
-            flowLayoutPanelComptoirePrice.Controls.Add(lblCurrancy);
-            flowLayoutPanelComptoirePrice.Controls.Add(pictureBox1);
-            flowLayoutPanelComptoirePrice.Location = new Point(297, 32);
-            flowLayoutPanelComptoirePrice.Name = "flowLayoutPanelComptoirePrice";
-            flowLayoutPanelComptoirePrice.Size = new Size(557, 80);
-            flowLayoutPanelComptoirePrice.TabIndex = 33;
-            // 
-            // lblValuePrice
-            // 
-            lblValuePrice.AutoSize = true;
-            lblValuePrice.BackColor = Color.FromArgb(137, 207, 240);
-            lblValuePrice.Font = new Font("Calibri", 36F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
-            lblValuePrice.ForeColor = Color.DarkGreen;
-            lblValuePrice.Location = new Point(216, 4);
-            lblValuePrice.Margin = new Padding(4);
-            lblValuePrice.Name = "lblValuePrice";
-            lblValuePrice.Size = new Size(337, 59);
-            lblValuePrice.TabIndex = 2;
-            lblValuePrice.Text = "5090,9043,4534";
-            lblValuePrice.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // lblCurrancy
-            // 
-            lblCurrancy.AutoSize = true;
-            lblCurrancy.BackColor = Color.Transparent;
-            lblCurrancy.Font = new Font("Calibri", 36F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
-            lblCurrancy.ForeColor = Color.DarkGreen;
-            lblCurrancy.Location = new Point(136, 4);
-            lblCurrancy.Margin = new Padding(4);
-            lblCurrancy.Name = "lblCurrancy";
-            lblCurrancy.Size = new Size(72, 59);
-            lblCurrancy.TabIndex = 2;
-            lblCurrancy.Text = "دج";
-            lblCurrancy.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // pictureBox1
-            // 
-            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(6, 3);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(123, 73);
-            pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
-            pictureBox1.TabIndex = 3;
-            pictureBox1.TabStop = false;
-            // 
-            // labelprice
-            // 
-            labelprice.AutoSize = true;
-            labelprice.BackColor = Color.Transparent;
-            labelprice.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelprice.ForeColor = SystemColors.ControlText;
-            labelprice.Location = new Point(774, 3);
-            labelprice.Name = "labelprice";
-            labelprice.Size = new Size(101, 23);
-            labelprice.TabIndex = 5;
-            labelprice.Text = "الحسبة الكلية";
-            labelprice.TextAlign = ContentAlignment.MiddleRight;
             // 
             // btnChoseCustomer
             // 
             btnChoseCustomer.Anchor = AnchorStyles.None;
             btnChoseCustomer.BackColor = Color.White;
-            btnChoseCustomer.FlatAppearance.BorderColor = Color.PaleGreen;
-            btnChoseCustomer.FlatAppearance.BorderSize = 0;
-            btnChoseCustomer.FlatAppearance.MouseDownBackColor = Color.PaleGreen;
-            btnChoseCustomer.FlatAppearance.MouseOverBackColor = Color.PaleGreen;
+            btnChoseCustomer.FlatStyle = FlatStyle.Flat;
             btnChoseCustomer.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnChoseCustomer.ForeColor = SystemColors.ControlText;
             btnChoseCustomer.Image = (Image)resources.GetObject("btnChoseCustomer.Image");
             btnChoseCustomer.ImageAlign = ContentAlignment.TopCenter;
-            btnChoseCustomer.Location = new Point(13, 23);
+            btnChoseCustomer.Location = new Point(118, 24);
             btnChoseCustomer.Name = "btnChoseCustomer";
-            btnChoseCustomer.Size = new Size(95, 72);
+            btnChoseCustomer.Size = new Size(77, 76);
             btnChoseCustomer.TabIndex = 4;
             btnChoseCustomer.Text = "العملاء (Crtl+F5)";
             btnChoseCustomer.TextAlign = ContentAlignment.BottomCenter;
@@ -519,21 +143,39 @@
             // gbOperations
             // 
             gbOperations.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            gbOperations.Controls.Add(button1);
             gbOperations.Controls.Add(btnPay);
             gbOperations.Controls.Add(btnDeleteSelected);
-            gbOperations.Controls.Add(gbOperation);
             gbOperations.Controls.Add(btnChoseCustomer);
             gbOperations.Controls.Add(btnEditSelected);
             gbOperations.Controls.Add(btnDown);
             gbOperations.Controls.Add(btnUp);
             flowLayoutPanel2.SetFlowBreak(gbOperations, true);
             gbOperations.Font = new Font("Calibri", 12F, FontStyle.Bold);
-            gbOperations.Location = new Point(18, 3);
+            gbOperations.Location = new Point(31, 3);
             gbOperations.Name = "gbOperations";
-            gbOperations.Size = new Size(678, 101);
+            gbOperations.Size = new Size(523, 109);
             gbOperations.TabIndex = 24;
             gbOperations.TabStop = false;
             gbOperations.Text = "العمليات المتاحة على الجدول";
+            // 
+            // button1
+            // 
+            button1.Anchor = AnchorStyles.None;
+            button1.FlatAppearance.MouseOverBackColor = Color.PaleGreen;
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button1.Image = (Image)resources.GetObject("button1.Image");
+            button1.ImageAlign = ContentAlignment.TopCenter;
+            button1.ImeMode = ImeMode.NoControl;
+            button1.Location = new Point(6, 25);
+            button1.Name = "button1";
+            button1.Size = new Size(97, 75);
+            button1.TabIndex = 32;
+            button1.Text = "ادفع بالفاتورة (F11)";
+            button1.TextAlign = ContentAlignment.BottomCenter;
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // btnPay
             // 
@@ -544,9 +186,9 @@
             btnPay.Image = (Image)resources.GetObject("btnPay.Image");
             btnPay.ImageAlign = ContentAlignment.TopCenter;
             btnPay.ImeMode = ImeMode.NoControl;
-            btnPay.Location = new Point(576, 22);
+            btnPay.Location = new Point(414, 23);
             btnPay.Name = "btnPay";
-            btnPay.Size = new Size(95, 72);
+            btnPay.Size = new Size(97, 75);
             btnPay.TabIndex = 31;
             btnPay.Text = "ادفع (F12)";
             btnPay.TextAlign = ContentAlignment.BottomCenter;
@@ -562,7 +204,7 @@
             btnDeleteSelected.Image = (Image)resources.GetObject("btnDeleteSelected.Image");
             btnDeleteSelected.ImageAlign = ContentAlignment.TopCenter;
             btnDeleteSelected.ImeMode = ImeMode.NoControl;
-            btnDeleteSelected.Location = new Point(432, 21);
+            btnDeleteSelected.Location = new Point(335, 24);
             btnDeleteSelected.Name = "btnDeleteSelected";
             btnDeleteSelected.Size = new Size(73, 76);
             btnDeleteSelected.TabIndex = 30;
@@ -570,41 +212,6 @@
             btnDeleteSelected.TextAlign = ContentAlignment.BottomCenter;
             btnDeleteSelected.UseVisualStyleBackColor = true;
             btnDeleteSelected.Click += btnDeleteSelected_Click;
-            // 
-            // gbOperation
-            // 
-            gbOperation.Controls.Add(rbRefund);
-            gbOperation.Controls.Add(rbSale);
-            gbOperation.Location = new Point(116, 19);
-            gbOperation.Name = "gbOperation";
-            gbOperation.Size = new Size(164, 76);
-            gbOperation.TabIndex = 32;
-            gbOperation.TabStop = false;
-            gbOperation.Text = "نوع العميلة";
-            // 
-            // rbRefund
-            // 
-            rbRefund.AutoSize = true;
-            rbRefund.Location = new Point(35, 49);
-            rbRefund.Name = "rbRefund";
-            rbRefund.Size = new Size(107, 23);
-            rbRefund.TabIndex = 1;
-            rbRefund.Text = "ارجاع منتجات";
-            rbRefund.UseVisualStyleBackColor = true;
-            rbRefund.CheckedChanged += rbRefund_CheckedChanged;
-            // 
-            // rbSale
-            // 
-            rbSale.AutoSize = true;
-            rbSale.Checked = true;
-            rbSale.Location = new Point(49, 20);
-            rbSale.Name = "rbSale";
-            rbSale.Size = new Size(93, 23);
-            rbSale.TabIndex = 0;
-            rbSale.TabStop = true;
-            rbSale.Text = "بيع منتجات";
-            rbSale.UseVisualStyleBackColor = true;
-            rbSale.CheckedChanged += rbSale_CheckedChanged;
             // 
             // btnEditSelected
             // 
@@ -615,7 +222,7 @@
             btnEditSelected.Image = (Image)resources.GetObject("btnEditSelected.Image");
             btnEditSelected.ImageAlign = ContentAlignment.TopCenter;
             btnEditSelected.ImeMode = ImeMode.NoControl;
-            btnEditSelected.Location = new Point(298, 21);
+            btnEditSelected.Location = new Point(201, 24);
             btnEditSelected.Name = "btnEditSelected";
             btnEditSelected.Size = new Size(73, 76);
             btnEditSelected.TabIndex = 28;
@@ -629,7 +236,7 @@
             btnDown.Anchor = AnchorStyles.None;
             btnDown.Image = (Image)resources.GetObject("btnDown.Image");
             btnDown.ImeMode = ImeMode.NoControl;
-            btnDown.Location = new Point(377, 59);
+            btnDown.Location = new Point(280, 62);
             btnDown.Name = "btnDown";
             btnDown.Size = new Size(50, 34);
             btnDown.TabIndex = 26;
@@ -641,7 +248,7 @@
             btnUp.Anchor = AnchorStyles.None;
             btnUp.Image = (Image)resources.GetObject("btnUp.Image");
             btnUp.ImeMode = ImeMode.NoControl;
-            btnUp.Location = new Point(377, 22);
+            btnUp.Location = new Point(280, 25);
             btnUp.Name = "btnUp";
             btnUp.Size = new Size(50, 34);
             btnUp.TabIndex = 23;
@@ -651,24 +258,41 @@
             // gpSearchAvailable
             // 
             gpSearchAvailable.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            gpSearchAvailable.Controls.Add(btnPrices);
             gpSearchAvailable.Controls.Add(label5);
             gpSearchAvailable.Controls.Add(lblBarCode);
             gpSearchAvailable.Controls.Add(txtSearchBarCode);
             gpSearchAvailable.Controls.Add(btnSearchImage);
             gpSearchAvailable.Font = new Font("Calibri", 12F, FontStyle.Bold);
-            gpSearchAvailable.Location = new Point(699, 1);
+            gpSearchAvailable.Location = new Point(557, 2);
             gpSearchAvailable.Margin = new Padding(0);
             gpSearchAvailable.Name = "gpSearchAvailable";
-            gpSearchAvailable.Size = new Size(343, 104);
+            gpSearchAvailable.Size = new Size(485, 111);
             gpSearchAvailable.TabIndex = 18;
             gpSearchAvailable.TabStop = false;
             gpSearchAvailable.Text = "عمليات البحث المتاحة";
+            // 
+            // btnPrices
+            // 
+            btnPrices.Anchor = AnchorStyles.None;
+            btnPrices.BackColor = Color.Lime;
+            btnPrices.FlatStyle = FlatStyle.Flat;
+            btnPrices.Font = new Font("Calibri", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnPrices.ImageAlign = ContentAlignment.TopCenter;
+            btnPrices.ImeMode = ImeMode.NoControl;
+            btnPrices.Location = new Point(14, 30);
+            btnPrices.Name = "btnPrices";
+            btnPrices.Size = new Size(97, 60);
+            btnPrices.TabIndex = 32;
+            btnPrices.Text = "سعر 1";
+            btnPrices.UseVisualStyleBackColor = false;
+            btnPrices.Click += btnPrices_Click;
             // 
             // label5
             // 
             label5.AutoSize = true;
             label5.ImeMode = ImeMode.NoControl;
-            label5.Location = new Point(244, 76);
+            label5.Location = new Point(386, 76);
             label5.Name = "label5";
             label5.Size = new Size(93, 19);
             label5.TabIndex = 28;
@@ -678,7 +302,7 @@
             // 
             lblBarCode.AutoSize = true;
             lblBarCode.ImeMode = ImeMode.NoControl;
-            lblBarCode.Location = new Point(291, 30);
+            lblBarCode.Location = new Point(433, 30);
             lblBarCode.Name = "lblBarCode";
             lblBarCode.Size = new Size(46, 19);
             lblBarCode.TabIndex = 19;
@@ -687,7 +311,7 @@
             // txtSearchBarCode
             // 
             txtSearchBarCode.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtSearchBarCode.Location = new Point(4, 21);
+            txtSearchBarCode.Location = new Point(146, 21);
             txtSearchBarCode.Multiline = true;
             txtSearchBarCode.Name = "txtSearchBarCode";
             txtSearchBarCode.PlaceholderText = "ادخل الباركود";
@@ -703,7 +327,7 @@
             btnSearchImage.Image = (Image)resources.GetObject("btnSearchImage.Image");
             btnSearchImage.ImageAlign = ContentAlignment.MiddleLeft;
             btnSearchImage.ImeMode = ImeMode.NoControl;
-            btnSearchImage.Location = new Point(4, 62);
+            btnSearchImage.Location = new Point(146, 62);
             btnSearchImage.Name = "btnSearchImage";
             btnSearchImage.Size = new Size(234, 40);
             btnSearchImage.TabIndex = 2;
@@ -717,10 +341,10 @@
             flowLayoutPanel2.Controls.Add(gpSearchAvailable);
             flowLayoutPanel2.Controls.Add(gbOperations);
             flowLayoutPanel2.Controls.Add(ModifiertableLayoutPanel);
-            flowLayoutPanel2.Location = new Point(12, 7);
+            flowLayoutPanel2.Location = new Point(12, 3);
             flowLayoutPanel2.Margin = new Padding(0);
             flowLayoutPanel2.Name = "flowLayoutPanel2";
-            flowLayoutPanel2.Size = new Size(1042, 105);
+            flowLayoutPanel2.Size = new Size(1042, 112);
             flowLayoutPanel2.TabIndex = 25;
             // 
             // ModifiertableLayoutPanel
@@ -744,7 +368,7 @@
             ModifiertableLayoutPanel.Controls.Add(lblTotalSale, 4, 0);
             ModifiertableLayoutPanel.Controls.Add(txtTotalSaleProduct, 4, 1);
             ModifiertableLayoutPanel.Dock = DockStyle.Top;
-            ModifiertableLayoutPanel.Location = new Point(3, 110);
+            ModifiertableLayoutPanel.Location = new Point(3, 118);
             ModifiertableLayoutPanel.Margin = new Padding(5, 3, 5, 3);
             ModifiertableLayoutPanel.Name = "ModifiertableLayoutPanel";
             ModifiertableLayoutPanel.RowCount = 2;
@@ -830,6 +454,7 @@
             txtSalePrice.Size = new Size(160, 32);
             txtSalePrice.TabIndex = 23;
             txtSalePrice.TextAlign = HorizontalAlignment.Center;
+            txtSalePrice.KeyPress += txtQty_KeyPress;
             // 
             // lblBuyPrice
             // 
@@ -855,6 +480,7 @@
             txtSaleDiscount.Size = new Size(131, 32);
             txtSaleDiscount.TabIndex = 20;
             txtSaleDiscount.TextAlign = HorizontalAlignment.Center;
+            txtSaleDiscount.KeyPress += txtQty_KeyPress;
             // 
             // lblTotalSale
             // 
@@ -887,7 +513,7 @@
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel.Controls.Add(flowLayoutPanel2, 0, 0);
             tableLayoutPanel.Dock = DockStyle.Top;
-            tableLayoutPanel.Location = new Point(0, 131);
+            tableLayoutPanel.Location = new Point(0, 138);
             tableLayoutPanel.Name = "tableLayoutPanel";
             tableLayoutPanel.RowCount = 1;
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 59.1623039F));
@@ -902,7 +528,7 @@
             lblEmptyData.Font = new Font("Calibri", 12F, FontStyle.Bold);
             lblEmptyData.ForeColor = Color.Crimson;
             lblEmptyData.ImeMode = ImeMode.NoControl;
-            lblEmptyData.Location = new Point(561, 460);
+            lblEmptyData.Location = new Point(499, 423);
             lblEmptyData.Name = "lblEmptyData";
             lblEmptyData.Size = new Size(133, 19);
             lblEmptyData.TabIndex = 28;
@@ -915,54 +541,54 @@
             DgvِProducts.AllowUserToAddRows = false;
             DgvِProducts.AllowUserToResizeColumns = false;
             DgvِProducts.AllowUserToResizeRows = false;
-            dataGridViewCellStyle10.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvِProducts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle1.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvِProducts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             DgvِProducts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             DgvِProducts.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             DgvِProducts.BackgroundColor = Color.White;
             DgvِProducts.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             DgvِProducts.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle11.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle11.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle11.ForeColor = Color.White;
-            dataGridViewCellStyle11.SelectionBackColor = Color.FromArgb(137, 207, 240);
-            dataGridViewCellStyle11.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = DataGridViewTriState.True;
-            DgvِProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(137, 207, 240);
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            DgvِProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             DgvِProducts.ColumnHeadersHeight = 40;
             DgvِProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle12.BackColor = SystemColors.Window;
-            dataGridViewCellStyle12.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle12.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle12.SelectionBackColor = Color.FromArgb(137, 207, 240);
-            dataGridViewCellStyle12.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle12.WrapMode = DataGridViewTriState.False;
-            DgvِProducts.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = SystemColors.Window;
+            dataGridViewCellStyle3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(137, 207, 240);
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            DgvِProducts.DefaultCellStyle = dataGridViewCellStyle3;
             DgvِProducts.Dock = DockStyle.Fill;
             DgvِProducts.EnableHeadersVisualStyles = false;
             DgvِProducts.GridColor = SystemColors.ControlDark;
-            DgvِProducts.Location = new Point(0, 250);
+            DgvِProducts.Location = new Point(0, 257);
             DgvِProducts.MultiSelect = false;
             DgvِProducts.Name = "DgvِProducts";
             DgvِProducts.ReadOnly = true;
             DgvِProducts.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle13.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle13.BackColor = SystemColors.Control;
-            dataGridViewCellStyle13.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle13.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle13.SelectionBackColor = Color.FromArgb(137, 207, 240);
-            dataGridViewCellStyle13.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle13.WrapMode = DataGridViewTriState.True;
-            DgvِProducts.RowHeadersDefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Control;
+            dataGridViewCellStyle4.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = Color.FromArgb(137, 207, 240);
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            DgvِProducts.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             DgvِProducts.RowHeadersVisible = false;
             DgvِProducts.RowHeadersWidth = 21;
             DgvِProducts.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle14.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvِProducts.RowsDefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle5.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvِProducts.RowsDefaultCellStyle = dataGridViewCellStyle5;
             DgvِProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DgvِProducts.Size = new Size(1066, 367);
+            DgvِProducts.Size = new Size(1066, 360);
             DgvِProducts.TabIndex = 29;
             DgvِProducts.RowsAdded += DgvِProducts_RowsAdded;
             DgvِProducts.RowsRemoved += DgvِProducts_RowsRemoved;
@@ -977,9 +603,9 @@
             QuickPanel.Controls.Add(lblEmptyQuick);
             QuickPanel.Controls.Add(DgvQuickProducts);
             QuickPanel.Dock = DockStyle.Right;
-            QuickPanel.Location = new Point(1066, 131);
+            QuickPanel.Location = new Point(1066, 138);
             QuickPanel.Name = "QuickPanel";
-            QuickPanel.Size = new Size(200, 486);
+            QuickPanel.Size = new Size(200, 479);
             QuickPanel.TabIndex = 36;
             // 
             // lblEmptyQuick
@@ -990,7 +616,7 @@
             lblEmptyQuick.Font = new Font("Calibri", 12F, FontStyle.Bold);
             lblEmptyQuick.ForeColor = Color.Crimson;
             lblEmptyQuick.ImeMode = ImeMode.NoControl;
-            lblEmptyQuick.Location = new Point(43, 234);
+            lblEmptyQuick.Location = new Point(43, 161);
             lblEmptyQuick.Name = "lblEmptyQuick";
             lblEmptyQuick.Size = new Size(133, 19);
             lblEmptyQuick.TabIndex = 29;
@@ -1003,31 +629,30 @@
             DgvQuickProducts.AllowUserToAddRows = false;
             DgvQuickProducts.AllowUserToResizeColumns = false;
             DgvQuickProducts.AllowUserToResizeRows = false;
-            dataGridViewCellStyle15.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvQuickProducts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle6.Font = new Font("Sakkal Majalla", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            DgvQuickProducts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
             DgvQuickProducts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             DgvQuickProducts.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             DgvQuickProducts.BackgroundColor = Color.White;
-            DgvQuickProducts.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             DgvQuickProducts.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle16.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle16.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle16.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle16.ForeColor = Color.White;
-            dataGridViewCellStyle16.SelectionBackColor = Color.DodgerBlue;
-            dataGridViewCellStyle16.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle16.WrapMode = DataGridViewTriState.True;
-            DgvQuickProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle16;
-            DgvQuickProducts.ColumnHeadersHeight = 40;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle7.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle7.ForeColor = Color.White;
+            dataGridViewCellStyle7.SelectionBackColor = Color.DodgerBlue;
+            dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
+            DgvQuickProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            DgvQuickProducts.ColumnHeadersHeight = 20;
             DgvQuickProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle17.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle17.BackColor = SystemColors.Window;
-            dataGridViewCellStyle17.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle17.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle17.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle17.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle17.WrapMode = DataGridViewTriState.False;
-            DgvQuickProducts.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle8.BackColor = SystemColors.Window;
+            dataGridViewCellStyle8.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle8.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = DataGridViewTriState.False;
+            DgvQuickProducts.DefaultCellStyle = dataGridViewCellStyle8;
             DgvQuickProducts.Dock = DockStyle.Fill;
             DgvQuickProducts.EnableHeadersVisualStyles = false;
             DgvQuickProducts.GridColor = SystemColors.ControlDark;
@@ -1037,13 +662,409 @@
             DgvQuickProducts.ReadOnly = true;
             DgvQuickProducts.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
             DgvQuickProducts.RowHeadersVisible = false;
-            DgvQuickProducts.RowHeadersWidth = 21;
+            DgvQuickProducts.RowHeadersWidth = 15;
             DgvQuickProducts.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle18.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvQuickProducts.RowsDefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle9.Font = new Font("Sakkal Majalla", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            DgvQuickProducts.RowsDefaultCellStyle = dataGridViewCellStyle9;
+            DgvQuickProducts.RowTemplate.Height = 15;
+            DgvQuickProducts.ScrollBars = ScrollBars.Vertical;
             DgvQuickProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DgvQuickProducts.Size = new Size(200, 486);
+            DgvQuickProducts.Size = new Size(200, 479);
             DgvQuickProducts.TabIndex = 30;
+            // 
+            // panel1
+            // 
+            panel1.BackColor = Color.FromArgb(137, 207, 240);
+            panel1.Controls.Add(panel5);
+            panel1.Dock = DockStyle.Top;
+            panel1.Location = new Point(0, 0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(1266, 138);
+            panel1.TabIndex = 37;
+            // 
+            // panel5
+            // 
+            panel5.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            panel5.BackColor = Color.FromArgb(137, 207, 240);
+            panel5.Controls.Add(flowLayoutPanelCusotnmer);
+            panel5.Controls.Add(flowLayoutPanel4);
+            panel5.Controls.Add(flowLayoutPanelDates);
+            panel5.Controls.Add(flowLayoutPanel3);
+            panel5.Controls.Add(flowLayoutPanelComptoirePrice);
+            panel5.Controls.Add(labelprice);
+            panel5.Location = new Point(0, 1);
+            panel5.Margin = new Padding(1);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(1265, 136);
+            panel5.TabIndex = 4;
+            // 
+            // flowLayoutPanelCusotnmer
+            // 
+            flowLayoutPanelCusotnmer.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            flowLayoutPanelCusotnmer.BackColor = Color.FromArgb(137, 207, 240);
+            flowLayoutPanelCusotnmer.Controls.Add(label3);
+            flowLayoutPanelCusotnmer.Controls.Add(lblCustomerName);
+            flowLayoutPanelCusotnmer.Controls.Add(gbOperation);
+            flowLayoutPanelCusotnmer.Controls.Add(IdCustomer);
+            flowLayoutPanelCusotnmer.Location = new Point(908, 3);
+            flowLayoutPanelCusotnmer.Name = "flowLayoutPanelCusotnmer";
+            flowLayoutPanelCusotnmer.Size = new Size(214, 125);
+            flowLayoutPanelCusotnmer.TabIndex = 34;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.BackColor = Color.Transparent;
+            label3.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label3.ForeColor = SystemColors.ControlText;
+            label3.Location = new Point(109, 5);
+            label3.Margin = new Padding(5);
+            label3.Name = "label3";
+            label3.Padding = new Padding(3);
+            label3.Size = new Size(100, 29);
+            label3.TabIndex = 0;
+            label3.Text = "اسم العميل :";
+            // 
+            // lblCustomerName
+            // 
+            lblCustomerName.AutoSize = true;
+            lblCustomerName.BackColor = Color.Transparent;
+            lblCustomerName.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblCustomerName.ForeColor = Color.Lime;
+            lblCustomerName.Location = new Point(5, 5);
+            lblCustomerName.Margin = new Padding(5);
+            lblCustomerName.Name = "lblCustomerName";
+            lblCustomerName.Size = new Size(94, 23);
+            lblCustomerName.TabIndex = 1;
+            lblCustomerName.Text = "مشتري عادي";
+            lblCustomerName.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // gbOperation
+            // 
+            gbOperation.Controls.Add(rbRefund);
+            gbOperation.Controls.Add(rbSale);
+            gbOperation.Location = new Point(32, 42);
+            gbOperation.Name = "gbOperation";
+            gbOperation.Size = new Size(179, 76);
+            gbOperation.TabIndex = 32;
+            gbOperation.TabStop = false;
+            gbOperation.Text = "نوع العميلة";
+            // 
+            // rbRefund
+            // 
+            rbRefund.AutoSize = true;
+            rbRefund.Location = new Point(57, 47);
+            rbRefund.Name = "rbRefund";
+            rbRefund.Size = new Size(103, 23);
+            rbRefund.TabIndex = 1;
+            rbRefund.Text = "ارجاع منتجات";
+            rbRefund.UseVisualStyleBackColor = true;
+            rbRefund.CheckedChanged += rbRefund_CheckedChanged_1;
+            // 
+            // rbSale
+            // 
+            rbSale.AutoSize = true;
+            rbSale.Checked = true;
+            rbSale.Location = new Point(69, 21);
+            rbSale.Name = "rbSale";
+            rbSale.Size = new Size(91, 23);
+            rbSale.TabIndex = 0;
+            rbSale.TabStop = true;
+            rbSale.Text = "بيع منتجات";
+            rbSale.UseVisualStyleBackColor = true;
+            rbSale.CheckedChanged += rbSale_CheckedChanged_1;
+            // 
+            // IdCustomer
+            // 
+            IdCustomer.AutoSize = true;
+            IdCustomer.BackColor = Color.Transparent;
+            IdCustomer.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            IdCustomer.ForeColor = Color.Lime;
+            IdCustomer.Location = new Point(6, 42);
+            IdCustomer.Margin = new Padding(3);
+            IdCustomer.Name = "IdCustomer";
+            IdCustomer.Size = new Size(20, 23);
+            IdCustomer.TabIndex = 2;
+            IdCustomer.Text = "4";
+            IdCustomer.TextAlign = ContentAlignment.MiddleRight;
+            IdCustomer.Visible = false;
+            // 
+            // flowLayoutPanel4
+            // 
+            flowLayoutPanel4.BackColor = Color.FromArgb(137, 207, 240);
+            flowLayoutPanel4.Controls.Add(lblqtyshow);
+            flowLayoutPanel4.Controls.Add(lblQuentityValue);
+            flowLayoutPanel4.Controls.Add(labelproductintable);
+            flowLayoutPanel4.Controls.Add(lblProductIntable);
+            flowLayoutPanel4.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel4.Location = new Point(129, 6);
+            flowLayoutPanel4.Name = "flowLayoutPanel4";
+            flowLayoutPanel4.Size = new Size(162, 106);
+            flowLayoutPanel4.TabIndex = 35;
+            // 
+            // lblqtyshow
+            // 
+            lblqtyshow.AutoSize = true;
+            lblqtyshow.BackColor = Color.Transparent;
+            lblqtyshow.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblqtyshow.ForeColor = SystemColors.ControlText;
+            lblqtyshow.Location = new Point(48, 0);
+            lblqtyshow.Name = "lblqtyshow";
+            lblqtyshow.Size = new Size(111, 19);
+            lblqtyshow.TabIndex = 3;
+            lblqtyshow.Text = "الكميات في الجدول";
+            // 
+            // lblQuentityValue
+            // 
+            lblQuentityValue.AutoSize = true;
+            lblQuentityValue.BackColor = Color.Transparent;
+            lblQuentityValue.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblQuentityValue.ForeColor = Color.Lime;
+            lblQuentityValue.Location = new Point(139, 19);
+            lblQuentityValue.Name = "lblQuentityValue";
+            lblQuentityValue.Size = new Size(20, 23);
+            lblQuentityValue.TabIndex = 4;
+            lblQuentityValue.Text = "0";
+            lblQuentityValue.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // labelproductintable
+            // 
+            labelproductintable.AutoSize = true;
+            labelproductintable.BackColor = Color.Transparent;
+            labelproductintable.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            labelproductintable.ForeColor = SystemColors.ControlText;
+            labelproductintable.Location = new Point(11, 42);
+            labelproductintable.Name = "labelproductintable";
+            labelproductintable.Size = new Size(148, 19);
+            labelproductintable.TabIndex = 3;
+            labelproductintable.Text = "عدد المنتجات في الجدول";
+            // 
+            // lblProductIntable
+            // 
+            lblProductIntable.AutoSize = true;
+            lblProductIntable.BackColor = Color.Transparent;
+            lblProductIntable.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblProductIntable.ForeColor = Color.Lime;
+            lblProductIntable.Location = new Point(139, 61);
+            lblProductIntable.Name = "lblProductIntable";
+            lblProductIntable.Size = new Size(20, 23);
+            lblProductIntable.TabIndex = 4;
+            lblProductIntable.Text = "0";
+            lblProductIntable.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // flowLayoutPanelDates
+            // 
+            flowLayoutPanelDates.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            flowLayoutPanelDates.BackColor = Color.FromArgb(137, 207, 240);
+            flowLayoutPanelDates.Controls.Add(label1);
+            flowLayoutPanelDates.Controls.Add(lblFactureNumber);
+            flowLayoutPanelDates.Controls.Add(label4);
+            flowLayoutPanelDates.Controls.Add(lblDatetime);
+            flowLayoutPanelDates.Controls.Add(label6);
+            flowLayoutPanelDates.Controls.Add(lblHour);
+            flowLayoutPanelDates.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanelDates.Location = new Point(1125, 2);
+            flowLayoutPanelDates.Name = "flowLayoutPanelDates";
+            flowLayoutPanelDates.Size = new Size(137, 129);
+            flowLayoutPanelDates.TabIndex = 33;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.BackColor = Color.Transparent;
+            label1.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.ForeColor = SystemColors.ControlText;
+            label1.Location = new Point(61, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(73, 19);
+            label1.TabIndex = 0;
+            label1.Text = "رقم الفاتورة";
+            // 
+            // lblFactureNumber
+            // 
+            lblFactureNumber.AutoSize = true;
+            lblFactureNumber.BackColor = Color.Transparent;
+            lblFactureNumber.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblFactureNumber.ForeColor = Color.Lime;
+            lblFactureNumber.Location = new Point(34, 19);
+            lblFactureNumber.Name = "lblFactureNumber";
+            lblFactureNumber.Size = new Size(100, 23);
+            lblFactureNumber.TabIndex = 1;
+            lblFactureNumber.Text = "000000001";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.BackColor = Color.Transparent;
+            label4.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label4.ForeColor = SystemColors.ControlText;
+            label4.Location = new Point(52, 42);
+            label4.Name = "label4";
+            label4.Size = new Size(82, 19);
+            label4.TabIndex = 0;
+            label4.Text = "تاريخ اليوم   ";
+            // 
+            // lblDatetime
+            // 
+            lblDatetime.AutoSize = true;
+            lblDatetime.BackColor = Color.Transparent;
+            lblDatetime.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblDatetime.ForeColor = Color.Lime;
+            lblDatetime.Location = new Point(48, 61);
+            lblDatetime.Name = "lblDatetime";
+            lblDatetime.Size = new Size(86, 23);
+            lblDatetime.TabIndex = 1;
+            lblDatetime.Text = "9/3/2024";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.BackColor = Color.Transparent;
+            label6.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label6.ForeColor = SystemColors.ControlText;
+            label6.Location = new Point(79, 84);
+            label6.Name = "label6";
+            label6.Size = new Size(55, 19);
+            label6.TabIndex = 0;
+            label6.Text = "الساعة  ";
+            // 
+            // lblHour
+            // 
+            lblHour.AutoSize = true;
+            lblHour.BackColor = Color.Transparent;
+            lblHour.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblHour.ForeColor = Color.Lime;
+            lblHour.Location = new Point(79, 103);
+            lblHour.Name = "lblHour";
+            lblHour.Size = new Size(55, 23);
+            lblHour.TabIndex = 1;
+            lblHour.Text = "00:00";
+            // 
+            // flowLayoutPanel3
+            // 
+            flowLayoutPanel3.BackColor = Color.FromArgb(137, 207, 240);
+            flowLayoutPanel3.Controls.Add(lblUserShow);
+            flowLayoutPanel3.Controls.Add(lblUserName);
+            flowLayoutPanel3.Controls.Add(lblSupportTech);
+            flowLayoutPanel3.Controls.Add(lblSupportNumber);
+            flowLayoutPanel3.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel3.Location = new Point(3, 6);
+            flowLayoutPanel3.Name = "flowLayoutPanel3";
+            flowLayoutPanel3.Size = new Size(120, 106);
+            flowLayoutPanel3.TabIndex = 34;
+            // 
+            // lblUserShow
+            // 
+            lblUserShow.AutoSize = true;
+            lblUserShow.BackColor = Color.Transparent;
+            lblUserShow.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblUserShow.ForeColor = SystemColors.ControlText;
+            lblUserShow.Location = new Point(25, 0);
+            lblUserShow.Name = "lblUserShow";
+            lblUserShow.Size = new Size(92, 19);
+            lblUserShow.TabIndex = 0;
+            lblUserShow.Text = "اسم المستخدم";
+            // 
+            // lblUserName
+            // 
+            lblUserName.AutoSize = true;
+            lblUserName.BackColor = Color.Transparent;
+            lblUserName.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblUserName.ForeColor = Color.Lime;
+            lblUserName.Location = new Point(55, 19);
+            lblUserName.Name = "lblUserName";
+            lblUserName.Size = new Size(62, 23);
+            lblUserName.TabIndex = 1;
+            lblUserName.Text = "Admin";
+            // 
+            // lblSupportTech
+            // 
+            lblSupportTech.AutoSize = true;
+            lblSupportTech.BackColor = Color.Transparent;
+            lblSupportTech.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblSupportTech.ForeColor = SystemColors.ControlText;
+            lblSupportTech.Location = new Point(41, 42);
+            lblSupportTech.Name = "lblSupportTech";
+            lblSupportTech.Size = new Size(76, 19);
+            lblSupportTech.TabIndex = 0;
+            lblSupportTech.Text = "الدعم التقني";
+            // 
+            // lblSupportNumber
+            // 
+            lblSupportNumber.AutoSize = true;
+            lblSupportNumber.BackColor = Color.Transparent;
+            lblSupportNumber.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblSupportNumber.ForeColor = Color.Lime;
+            lblSupportNumber.Location = new Point(7, 61);
+            lblSupportNumber.Name = "lblSupportNumber";
+            lblSupportNumber.Size = new Size(110, 23);
+            lblSupportNumber.TabIndex = 1;
+            lblSupportNumber.Text = "0697357307";
+            // 
+            // flowLayoutPanelComptoirePrice
+            // 
+            flowLayoutPanelComptoirePrice.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            flowLayoutPanelComptoirePrice.BackColor = Color.FromArgb(137, 207, 240);
+            flowLayoutPanelComptoirePrice.BorderStyle = BorderStyle.FixedSingle;
+            flowLayoutPanelComptoirePrice.Controls.Add(lblValuePrice);
+            flowLayoutPanelComptoirePrice.Controls.Add(lblCurrancy);
+            flowLayoutPanelComptoirePrice.Controls.Add(pictureBox1);
+            flowLayoutPanelComptoirePrice.Location = new Point(318, 48);
+            flowLayoutPanelComptoirePrice.Name = "flowLayoutPanelComptoirePrice";
+            flowLayoutPanelComptoirePrice.Size = new Size(557, 80);
+            flowLayoutPanelComptoirePrice.TabIndex = 33;
+            // 
+            // lblValuePrice
+            // 
+            lblValuePrice.AutoSize = true;
+            lblValuePrice.BackColor = Color.FromArgb(137, 207, 240);
+            lblValuePrice.Font = new Font("Calibri", 36F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
+            lblValuePrice.ForeColor = Color.Lime;
+            lblValuePrice.Location = new Point(214, 4);
+            lblValuePrice.Margin = new Padding(4);
+            lblValuePrice.Name = "lblValuePrice";
+            lblValuePrice.Size = new Size(337, 59);
+            lblValuePrice.TabIndex = 2;
+            lblValuePrice.Text = "5090,9043,4534";
+            lblValuePrice.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblCurrancy
+            // 
+            lblCurrancy.AutoSize = true;
+            lblCurrancy.BackColor = Color.Transparent;
+            lblCurrancy.Font = new Font("Calibri", 36F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
+            lblCurrancy.ForeColor = Color.Lime;
+            lblCurrancy.Location = new Point(134, 4);
+            lblCurrancy.Margin = new Padding(4);
+            lblCurrancy.Name = "lblCurrancy";
+            lblCurrancy.Size = new Size(72, 59);
+            lblCurrancy.TabIndex = 2;
+            lblCurrancy.Text = "دج";
+            lblCurrancy.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(4, 3);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(123, 73);
+            pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
+            pictureBox1.TabIndex = 3;
+            pictureBox1.TabStop = false;
+            // 
+            // labelprice
+            // 
+            labelprice.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            labelprice.AutoSize = true;
+            labelprice.BackColor = Color.Transparent;
+            labelprice.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            labelprice.ForeColor = SystemColors.ControlText;
+            labelprice.Location = new Point(774, 3);
+            labelprice.Name = "labelprice";
+            labelprice.Size = new Size(101, 23);
+            labelprice.TabIndex = 5;
+            labelprice.Text = "الحسبة الكلية";
+            labelprice.TextAlign = ContentAlignment.MiddleRight;
             // 
             // PosUserControl
             // 
@@ -1054,7 +1075,7 @@
             Controls.Add(DgvِProducts);
             Controls.Add(tableLayoutPanel);
             Controls.Add(QuickPanel);
-            Controls.Add(flowLayoutPanel1);
+            Controls.Add(panel1);
             Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(3, 4, 3, 4);
             Name = "PosUserControl";
@@ -1062,25 +1083,7 @@
             Size = new Size(1266, 617);
             Load += PosUserControl_Load;
             KeyDown += PosUserControl_KeyDown;
-            flowLayoutPanel1.ResumeLayout(false);
-            DateNHourflowLayoutPanel.ResumeLayout(false);
-            flowLayoutPanelDates.ResumeLayout(false);
-            flowLayoutPanelDates.PerformLayout();
-            CustomerflowLayoutPanel.ResumeLayout(false);
-            flowLayoutPanelCusotnmer.ResumeLayout(false);
-            flowLayoutPanelCusotnmer.PerformLayout();
-            panel5.ResumeLayout(false);
-            panel5.PerformLayout();
-            flowLayoutPanel4.ResumeLayout(false);
-            flowLayoutPanel4.PerformLayout();
-            flowLayoutPanel3.ResumeLayout(false);
-            flowLayoutPanel3.PerformLayout();
-            flowLayoutPanelComptoirePrice.ResumeLayout(false);
-            flowLayoutPanelComptoirePrice.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             gbOperations.ResumeLayout(false);
-            gbOperation.ResumeLayout(false);
-            gbOperation.PerformLayout();
             gpSearchAvailable.ResumeLayout(false);
             gpSearchAvailable.PerformLayout();
             flowLayoutPanel2.ResumeLayout(false);
@@ -1091,30 +1094,28 @@
             QuickPanel.ResumeLayout(false);
             QuickPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)DgvQuickProducts).EndInit();
+            panel1.ResumeLayout(false);
+            panel5.ResumeLayout(false);
+            panel5.PerformLayout();
+            flowLayoutPanelCusotnmer.ResumeLayout(false);
+            flowLayoutPanelCusotnmer.PerformLayout();
+            gbOperation.ResumeLayout(false);
+            gbOperation.PerformLayout();
+            flowLayoutPanel4.ResumeLayout(false);
+            flowLayoutPanel4.PerformLayout();
+            flowLayoutPanelDates.ResumeLayout(false);
+            flowLayoutPanelDates.PerformLayout();
+            flowLayoutPanel3.ResumeLayout(false);
+            flowLayoutPanel3.PerformLayout();
+            flowLayoutPanelComptoirePrice.ResumeLayout(false);
+            flowLayoutPanelComptoirePrice.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-
-        private FlowLayoutPanel flowLayoutPanel1;
-        private FlowLayoutPanel DateNHourflowLayoutPanel;
-        private Label lblFactureNumber;
-        private Label label1;
-        private Label lblDatetime;
-        private Label label4;
-        private Label lblHour;
-        private Label label6;
-        private FlowLayoutPanel CustomerflowLayoutPanel;
-        private Label label3;
-        private Label lblCustomerName;
         private Button btnChoseCustomer;
-        private Label lblCurrancy;
-        private Panel panel5;
-        private Label lblValuePrice;
-        private Label lblQuentityValue;
-        private Label lblqtyshow;
-        private Label labelprice;
         private GroupBox gbOperations;
         private Button btnDeleteSelected;
         private Button btnEditSelected;
@@ -1130,10 +1131,6 @@
         private Label lblEmptyData;
         private DataGridView DgvِProducts;
         private Button btnPay;
-        private Label lblUserName;
-        private Label lblUserShow;
-        private Label lblSupportNumber;
-        private Label lblSupportTech;
         private TableLayoutPanel ModifiertableLayoutPanel;
         private Label lblProductName;
         private Label lblQuentity;
@@ -1145,21 +1142,42 @@
         private TextBox txtSaleDiscount;
         private Label lblTotalSale;
         private TextBox txtTotalSaleProduct;
-        private GroupBox gbOperation;
-        private RadioButton rbRefund;
-        private RadioButton rbSale;
         private System.Windows.Forms.Timer timer;
-        private FlowLayoutPanel flowLayoutPanelDates;
-        private FlowLayoutPanel flowLayoutPanelComptoirePrice;
-        private FlowLayoutPanel flowLayoutPanelCusotnmer;
-        private FlowLayoutPanel flowLayoutPanel3;
-        private PictureBox pictureBox1;
-        private FlowLayoutPanel flowLayoutPanel4;
-        private Label labelproductintable;
-        private Label lblProductIntable;
         private Panel QuickPanel;
         private Label lblEmptyQuick;
         private DataGridView DgvQuickProducts;
+        private Button button1;
+        private Panel panel1;
+        private FlowLayoutPanel flowLayoutPanelCusotnmer;
+        private Label label3;
+        private Label lblCustomerName;
+        private GroupBox gbOperation;
+        private RadioButton rbRefund;
+        private RadioButton rbSale;
         private Label IdCustomer;
+        private FlowLayoutPanel flowLayoutPanelDates;
+        private Label label1;
+        private Label lblFactureNumber;
+        private Label label4;
+        private Label lblDatetime;
+        private Label label6;
+        private Label lblHour;
+        private Panel panel5;
+        private FlowLayoutPanel flowLayoutPanel4;
+        private Label lblqtyshow;
+        private Label lblQuentityValue;
+        private Label labelproductintable;
+        private Label lblProductIntable;
+        private FlowLayoutPanel flowLayoutPanel3;
+        private Label lblUserShow;
+        private Label lblUserName;
+        private Label lblSupportTech;
+        private Label lblSupportNumber;
+        private FlowLayoutPanel flowLayoutPanelComptoirePrice;
+        private Label lblValuePrice;
+        private Label lblCurrancy;
+        private PictureBox pictureBox1;
+        private Label labelprice;
+        private Button btnPrices;
     }
 }

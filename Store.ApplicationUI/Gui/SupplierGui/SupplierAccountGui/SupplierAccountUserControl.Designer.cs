@@ -132,10 +132,12 @@
             // 
             // txtPayAmout
             // 
+            txtPayAmout.Enabled = false;
             txtPayAmout.Location = new Point(106, 65);
             txtPayAmout.Name = "txtPayAmout";
             txtPayAmout.Size = new Size(181, 27);
             txtPayAmout.TabIndex = 7;
+            txtPayAmout.KeyPress += txtPayAmout_KeyPress;
             // 
             // rbPayPartialFacture
             // 
@@ -147,6 +149,7 @@
             rbPayPartialFacture.TabIndex = 6;
             rbPayPartialFacture.Text = "دفع جزء من الفاتورة:";
             rbPayPartialFacture.UseVisualStyleBackColor = true;
+            rbPayPartialFacture.CheckedChanged += rbPayPartialFacture_CheckedChanged;
             // 
             // rbPayFacture
             // 

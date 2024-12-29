@@ -748,6 +748,7 @@
             txtPriceWithTax.Size = new Size(131, 32);
             txtPriceWithTax.TabIndex = 25;
             txtPriceWithTax.TextAlign = HorizontalAlignment.Center;
+            txtPriceWithTax.KeyPress += txtQty_KeyPress;
             // 
             // txtWholeSalePrice
             // 
@@ -761,7 +762,7 @@
             txtWholeSalePrice.TabIndex = 24;
             txtWholeSalePrice.TextAlign = HorizontalAlignment.Center;
             txtWholeSalePrice.TextChanged += txtWholeSalePrice_TextChanged;
-            txtWholeSalePrice.KeyPress += txtWholeSalePrice_KeyPress;
+            txtWholeSalePrice.KeyPress += txtQty_KeyPress;
             txtWholeSalePrice.KeyUp += txtWholeSalePrice_KeyUp;
             // 
             // txtTotalBuyProduct
@@ -776,6 +777,7 @@
             txtTotalBuyProduct.Size = new Size(100, 32);
             txtTotalBuyProduct.TabIndex = 22;
             txtTotalBuyProduct.TextAlign = HorizontalAlignment.Center;
+            txtTotalBuyProduct.KeyPress += txtQty_KeyPress;
             // 
             // txtQty
             // 
@@ -804,7 +806,7 @@
             txtBuyPrice.TabIndex = 20;
             txtBuyPrice.TextAlign = HorizontalAlignment.Center;
             txtBuyPrice.KeyDown += txtBuyPrice_KeyDown;
-            txtBuyPrice.KeyPress += txtBuyPrice_KeyPress;
+            txtBuyPrice.KeyPress += txtQty_KeyPress;
             txtBuyPrice.KeyUp += txtBuyPrice_KeyUp;
             // 
             // txtProductName
@@ -929,7 +931,7 @@
             txtSalePrice.TextAlign = HorizontalAlignment.Center;
             txtSalePrice.TextChanged += txtSalePrice_TextChanged;
             txtSalePrice.KeyDown += txtSalePrice_KeyDown;
-            txtSalePrice.KeyPress += txtSalePrice_KeyPress;
+            txtSalePrice.KeyPress += txtQty_KeyPress;
             txtSalePrice.KeyUp += txtSalePrice_KeyUp;
             // 
             // BuysUserControl

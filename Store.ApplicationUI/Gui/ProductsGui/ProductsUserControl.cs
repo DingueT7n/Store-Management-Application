@@ -133,18 +133,21 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             DgvProducts.Columns[2].HeaderCell.Value = "الكمية";
             DgvProducts.Columns[3].HeaderCell.Value = "سعر الشراء";
             DgvProducts.Columns[4].HeaderCell.Value = "سعر البيع";
-            DgvProducts.Columns[5].HeaderCell.Value = "سعر الجملة";
-            DgvProducts.Columns[6].HeaderCell.Value = "قيمة الضريبة";
-            DgvProducts.Columns[7].HeaderCell.Value = "سعر البيع باحتساب الضريبة";
-            DgvProducts.Columns[8].HeaderCell.Value = "خاضع للضريبة؟";
-            DgvProducts.Columns[9].HeaderCell.Value = "تاريخ انتهاء الصلاحية";
-            DgvProducts.Columns[10].HeaderCell.Value = "كمية التنبيه";
-            DgvProducts.Columns[11].HeaderCell.Value = "اقصى تخفيض";
-            DgvProducts.Columns[12].HeaderCell.Value = "صورة المنتج";
-
-            DgvProducts.Columns[13].HeaderCell.Value = "معرف الصنف";
-            DgvProducts.Columns[14].HeaderCell.Value = "اسم الصنف";
-            DgvProducts.Columns[15].HeaderCell.Value = "معرف المنتج";
+            DgvProducts.Columns[5].HeaderCell.Value = "سعر البيع 2";
+            DgvProducts.Columns[6].HeaderCell.Value = "سعر الجملة";
+            DgvProducts.Columns[7].HeaderCell.Value = "قيمة الضريبة";
+            DgvProducts.Columns[8].HeaderCell.Value = "سعر البيع باحتساب الضريبة";
+            DgvProducts.Columns[9].HeaderCell.Value = "خاضع للضريبة؟";
+            DgvProducts.Columns[10].HeaderCell.Value = "تاريخ انتهاء الصلاحية";
+            DgvProducts.Columns[11].HeaderCell.Value = "كمية التنبيه";
+            DgvProducts.Columns[12].HeaderCell.Value = "اقصى تخفيض";
+            DgvProducts.Columns[13].HeaderCell.Value = "كمية الوحدات في الكرتونة";
+            DgvProducts.Columns[14].HeaderCell.Value = "باركود الكرتونة";
+            DgvProducts.Columns[15].HeaderCell.Value = "صورة المنتج";
+            DgvProducts.Columns[16].HeaderCell.Value = "معرف الصنف";
+            DgvProducts.Columns[17].HeaderCell.Value = "اسم الصنف";
+            DgvProducts.Columns[18].HeaderCell.Value = "معرف المنتج";
+            DgvProducts.Columns[19].HeaderCell.Value = "معرف المنتج";
 
 
 
@@ -152,11 +155,15 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
             // Visible of Columns
             //DgvProducts.Columns[0].Visible = false;
-            DgvProducts.Columns[6].Visible = false;
+            DgvProducts.Columns[7].Visible = false;
+            DgvProducts.Columns[10].Visible = false;
             DgvProducts.Columns[9].Visible = false;
-            DgvProducts.Columns[8].Visible = false;
-            DgvProducts.Columns[11].Visible = false;
             DgvProducts.Columns[12].Visible = false;
+            DgvProducts.Columns[13].Visible = false;
+            DgvProducts.Columns[14].Visible = false;
+            DgvProducts.Columns[16].Visible = false;
+            DgvProducts.Columns[18].Visible = false;
+            DgvProducts.Columns[19].Visible = false;
             DgvProducts.Columns[15].Visible = false;
             DgvProducts.Columns[13].Visible = false;
             //DgvProducts.Columns[13].Visible = false;
@@ -182,21 +189,24 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
                     addProductForm.SetDataToEdit(
                         DgvProducts.CurrentRow.Cells[1].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[0].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[13].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[10].Value?.ToString(),
-                        Convert.ToBoolean(DgvProducts.CurrentRow.Cells[8].Value),
-                        DgvProducts.CurrentRow.Cells[6].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[0]?.Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[16].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[11].Value.ToString(),
+                        Convert.ToBoolean(DgvProducts.CurrentRow.Cells[9].Value),
+                        DgvProducts.CurrentRow.Cells[7].Value.ToString(),
                         DgvProducts.CurrentRow.Cells[3].Value.ToString(),
                         DgvProducts.CurrentRow.Cells[2].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[5].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[6].Value.ToString(),
                         DgvProducts.CurrentRow.Cells[4].Value.ToString(),
-                       Convert.ToDateTime(DgvProducts.CurrentRow.Cells[9].Value),
-                        DgvProducts.CurrentRow.Cells[11].Value?.ToString(),
-                        DgvProducts.CurrentRow.Cells[7].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[15].Value.ToString(),
-                        (byte[])DgvProducts.CurrentRow.Cells[12].Value,
-                          DgvProducts.CurrentRow.Cells[14].Value.ToString()
+                       Convert.ToDateTime(DgvProducts.CurrentRow.Cells[10].Value),
+                        DgvProducts.CurrentRow.Cells[12].Value?.ToString(),
+                        DgvProducts.CurrentRow.Cells[8].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[19].Value.ToString(),
+                        (byte[])DgvProducts.CurrentRow.Cells[15].Value,
+                          DgvProducts.CurrentRow.Cells[16].Value.ToString()
+                          , DgvProducts.CurrentRow.Cells[5].Value.ToString()
+                          , DgvProducts.CurrentRow.Cells[13].Value.ToString()
+                          , DgvProducts.CurrentRow.Cells[14].Value.ToString()
                         );
 
                     addProductForm.Show();
@@ -260,22 +270,25 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
 
                     addProductForm.SetSimilaireDataToAdd(
-                        DgvProducts.CurrentRow.Cells[1].Value.ToString(),
+                          DgvProducts.CurrentRow.Cells[1].Value.ToString(),
                         DgvProducts.CurrentRow.Cells[0].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[13].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[10].Value?.ToString(),
-                        Convert.ToBoolean(DgvProducts.CurrentRow.Cells[8].Value),
-                        DgvProducts.CurrentRow.Cells[6].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[16].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[11].Value.ToString(),
+                        Convert.ToBoolean(DgvProducts.CurrentRow.Cells[9].Value),
+                        DgvProducts.CurrentRow.Cells[7].Value.ToString(),
                         DgvProducts.CurrentRow.Cells[3].Value.ToString(),
                         DgvProducts.CurrentRow.Cells[2].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[5].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[6].Value.ToString(),
                         DgvProducts.CurrentRow.Cells[4].Value.ToString(),
-                       Convert.ToDateTime(DgvProducts.CurrentRow.Cells[9].Value),
-                        DgvProducts.CurrentRow.Cells[11].Value?.ToString(),
-                        DgvProducts.CurrentRow.Cells[7].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[15].Value.ToString(),
-                        (byte[])DgvProducts.CurrentRow.Cells[12].Value,
-                          DgvProducts.CurrentRow.Cells[14].Value.ToString()
+                       Convert.ToDateTime(DgvProducts.CurrentRow.Cells[10].Value),
+                        DgvProducts.CurrentRow.Cells[12].Value?.ToString(),
+                        DgvProducts.CurrentRow.Cells[8].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[19].Value.ToString(),
+                        (byte[])DgvProducts.CurrentRow.Cells[15].Value,
+                          DgvProducts.CurrentRow.Cells[16].Value.ToString()
+                          , DgvProducts.CurrentRow.Cells[5].Value.ToString()
+                          , DgvProducts.CurrentRow.Cells[13].Value.ToString()
+                          , DgvProducts.CurrentRow.Cells[14].Value.ToString()
                         );
 
                     addProductForm.Show();

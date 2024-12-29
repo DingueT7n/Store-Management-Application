@@ -263,5 +263,29 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                 throw;
             }
         }
+
+        private void txtPayAmout_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            string currentText = (sender as TextBox)?.Text ?? string.Empty;
+
+
+            char decimalSeparator = Properties.Settings.Default.DecimalSEP[0];
+
+
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != decimalSeparator && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+
+            else if (e.KeyChar == decimalSeparator && currentText.Contains(decimalSeparator))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void rbPayPartialFacture_CheckedChanged(object sender, EventArgs e)
+        {
+            txtPayAmout.Enabled = rbPayPartialFacture.Checked;
+        }
     }
 }

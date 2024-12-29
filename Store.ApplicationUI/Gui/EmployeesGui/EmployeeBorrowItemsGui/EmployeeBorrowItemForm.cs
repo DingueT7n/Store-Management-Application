@@ -108,7 +108,18 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowItemsGui
 
         private void txtBareCode_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
+            string currentText = (sender as TextBox)?.Text ?? string.Empty;
+
+
+            char decimalSeparator = Properties.Settings.Default.DecimalSEP[0];
+
+
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != decimalSeparator && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+
+            else if (e.KeyChar == decimalSeparator && currentText.Contains(decimalSeparator))
             {
                 e.Handled = true;
             }

@@ -85,9 +85,11 @@
             txtFacturePrice.Multiline = true;
             txtFacturePrice.Name = "txtFacturePrice";
             txtFacturePrice.PlaceholderText = "مبلغ الفاتورة";
+            txtFacturePrice.ReadOnly = true;
             txtFacturePrice.Size = new Size(186, 36);
             txtFacturePrice.TabIndex = 19;
             txtFacturePrice.TextAlign = HorizontalAlignment.Center;
+            txtFacturePrice.KeyPress += txtpaidUp_KeyPress;
             // 
             // txtpaidUp
             // 
@@ -111,9 +113,11 @@
             txtRemain.Multiline = true;
             txtRemain.Name = "txtRemain";
             txtRemain.PlaceholderText = "باقي العملية";
+            txtRemain.ReadOnly = true;
             txtRemain.Size = new Size(186, 36);
             txtRemain.TabIndex = 21;
             txtRemain.TextAlign = HorizontalAlignment.Center;
+            txtRemain.KeyPress += txtpaidUp_KeyPress;
             // 
             // PaymentstableLayoutPanel
             // 

@@ -160,9 +160,9 @@
             label3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label3.Location = new Point(327, 253);
             label3.Name = "label3";
-            label3.Size = new Size(76, 19);
+            label3.Size = new Size(62, 19);
             label3.TabIndex = 44;
-            label3.Text = "رقم الباركود:";
+            label3.Text = "الملاحظة:";
             // 
             // txtNotes
             // 

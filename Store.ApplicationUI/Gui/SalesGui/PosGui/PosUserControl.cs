@@ -3,7 +3,6 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.PaymentGui;
-using Store.ApplicationUI.Reports.ReportPerviwGui;
 using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Customers;
 using Store.Core.Entities.Products;
@@ -190,7 +189,18 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
         private void txtQty_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
+            string currentText = (sender as TextBox)?.Text ?? string.Empty;
+
+
+            char decimalSeparator = Properties.Settings.Default.DecimalSEP[0];
+
+
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != decimalSeparator && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+
+            else if (e.KeyChar == decimalSeparator && currentText.Contains(decimalSeparator))
             {
                 e.Handled = true;
             }
@@ -218,7 +228,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             _PosUserControl = this;
             SetColumns();
             if (await Task.Run(() => _context.Database.CanConnect()))
-                DgvQuickProducts.DataSource = _context.ProductQuickAccess.ToList();
+                DgvQuickProducts.DataSource = _context.ProductQuickAccess.Select(x => new { x.CodeBar, x.ProductName }).ToList();
             SetQuickColumns();
             lblFactureNumber.Text = salesRepository.GetFactureNumber();
             lblUserName.Text = Properties.Settings.Default.UserName;
@@ -291,8 +301,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 ).FirstOrDefault();
             txtProductName.Text = product.ProductName;
 
-            ProductsQuantitie productQty = _context.ProductsQuantities.
-                      Where(x => x.Pro_ID == product.Id && x.Qty > 0 && x.Store_ID == Properties.Settings.Default.FastSaleStore).FirstOrDefault();
+            //ProductsQuantitie productQty = _context.ProductsQuantities.
+            //          Where(x => x.Pro_ID == product.Id && x.Qty > 0 && x.Store_ID == Properties.Settings.Default.FastSaleStore).FirstOrDefault();
 
 
             if (productDiscount is not null)
@@ -307,12 +317,27 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             }
             else
             {
-                txtQty.Text = "1";
+                txtQty.Text = product.ColisageBareCode == txtSearchBarCode.Text ? product.NbrProductInColis.ToString() : "1";
+            }
+            if (btnPrices.Text == "سعر 1")
+            {
+                txtTotalSaleProduct.Text = product.SalePriceTax.ToString();
+                txtSalePrice.Text = product.SalePriceTax.ToString();
+            }
+            else if (btnPrices.Text == "سعر 2")
+            {
+                txtTotalSaleProduct.Text = product.SalePriceSeconde.ToString();
+                txtSalePrice.Text = product.SalePriceSeconde.ToString();
+
+            }
+            else
+            {
+                txtTotalSaleProduct.Text = product.WholesalePrice.ToString();
+                txtSalePrice.Text = product.WholesalePrice.ToString();
+
             }
 
 
-            txtTotalSaleProduct.Text = product.SalePriceTax.ToString();
-            txtSalePrice.Text = product.SalePriceTax.ToString();
         }
         public void ClearBoxes()
         {
@@ -470,7 +495,13 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         {
             if (e.KeyCode == Keys.F12)
             {
-                await PayNowAsync();
+                if (!dgvHelper.IsEmpty(DgvِProducts))
+                    await PayNowAsync(false);
+            }
+            else if (e.KeyCode == Keys.F11)
+            {
+                if (!dgvHelper.IsEmpty(DgvِProducts))
+                    await PayNowAsync(true);
             }
         }
         public void GetTheEventAndSender(object sender, KeyEventArgs e)
@@ -484,17 +515,17 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         private void SetQuickColumns()
         {
 
-            DgvQuickProducts.Columns[0].HeaderCell.Value = "معرف المنتوج";
-            DgvQuickProducts.Columns[1].HeaderCell.Value = "باركود";
-            DgvQuickProducts.Columns[2].HeaderCell.Value = "اسم المنتج";
-            DgvQuickProducts.Columns[3].HeaderCell.Value = "صورة المنتج";
-            DgvQuickProducts.Columns[4].HeaderCell.Value = "المنتج";
-            DgvQuickProducts.Columns[5].HeaderCell.Value = "معرف السرعة";
-
-            DgvQuickProducts.Columns[3].Visible = false;
-            DgvQuickProducts.Columns[4].Visible = false;
-            DgvQuickProducts.Columns[5].Visible = false;
-            DgvQuickProducts.Columns[0].Visible = false;
+            //DgvQuickProducts.Columns[0].HeaderCell.Value = "معرف المنتوج";
+            DgvQuickProducts.Columns[0].HeaderCell.Value = "باركود";
+            DgvQuickProducts.Columns[1].HeaderCell.Value = "اسم المنتج";
+            //DgvQuickProducts.Columns[3].HeaderCell.Value = "صورة المنتج";
+            //DgvQuickProducts.Columns[4].HeaderCell.Value = "المنتج";
+            //DgvQuickProducts.Columns[5].HeaderCell.Value = "معرف السرعة";
+            DgvQuickProducts.Columns[0].Width = 50;
+            //DgvQuickProducts.Columns[3].Visible = false;
+            //DgvQuickProducts.Columns[4].Visible = false;
+            //DgvQuickProducts.Columns[5].Visible = false;
+            //DgvQuickProducts.Columns[0].Visible = false;
 
 
         }
@@ -632,11 +663,13 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         private void DgvِProducts_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
             CalculateStatistics();
+
         }
 
         private void DgvِProducts_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
         {
             CalculateStatistics();
+
         }
         void UpArrow()
         {
@@ -762,7 +795,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             while (quentity > 0)
             {
                 var productQty = _context.ProductsQuantities
-                                 .FirstOrDefault(x => x.Qty > 0 && x.Pro_ID.ToString() == proId);
+                                 .FirstOrDefault(x => x.Qty > 0 && x.Pro_ID.ToString() == proId && x.Store_ID ==
+                                 Properties.Settings.Default.FastSaleStore);
 
                 if (productQty != null)
                 {
@@ -856,7 +890,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
         private async void btnPay_Click(object sender, EventArgs e)
         {
-            await PayNowAsync();
+            if (!dgvHelper.IsEmpty(DgvِProducts))
+                await PayNowAsync(false);
 
 
         }
@@ -870,10 +905,11 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         {
             var amountToDeposit = Math.Min(paidAmount, totalAmount);
             _context.Update(SetCaisse(amountToDeposit));
-            await _context.AddAsync(SetCaisseDeposit(amountToDeposit));
+            if (amountToDeposit > 0)
+                await _context.AddAsync(SetCaisseDeposit(amountToDeposit));
         }
         private int saleID;
-        async Task PayNowAsync()
+        async Task PayNowAsync(bool facture)
         {
             if (DgvِProducts.Rows.Count > 0 && rbSale.Checked)
             {
@@ -940,11 +976,17 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                             await _context.SaveChangesAsync();
                             await transaction.CommitAsync();
                             ResetForm();
-                            DataTable saleDetailsTable = await GetSellDetailsDataTableAsync(saleID);
-                            Reports.sale8cm sale8Cm = new();
-                            sale8Cm.DataSource = saleDetailsTable;
-                            XtraForm1 xtraForm1 = new(sale8Cm);
-                            xtraForm1.ShowDialog();
+                            if (facture)
+                            {
+                                //DataTable saleDetailsTable = await GetSellDetailsDataTableAsync(saleID);
+                                //Reports.sale8cm sale8Cm = new();
+                                //sale8Cm.DataSource = saleDetailsTable;
+                                //XtraForm1 xtraForm1 = new(sale8Cm);
+                                //xtraForm1.ShowDialog();
+                            }
+
+
+
 
                         }
                         catch (Exception ex)
@@ -994,6 +1036,54 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         {
             SelectCustomerForm SelectCustomerForm = SelectCustomerForm.Instance(_posForm);
             SelectCustomerForm.Show();
+        }
+
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            if (!dgvHelper.IsEmpty(DgvِProducts))
+                await PayNowAsync(true);
+
+        }
+
+        private void btnPrices_Click(object sender, EventArgs e)
+        {
+            if (btnPrices.Text == "سعر 1")
+            {
+                btnPrices.BackColor = Color.Yellow;
+                btnPrices.Text = "سعر 2";
+            }
+            else if (btnPrices.Text == "سعر 2")
+            {
+                btnPrices.Text = "سعر 3";
+                btnPrices.BackColor = Color.PaleVioletRed;
+
+            }
+            else
+            {
+                btnPrices.Text = "سعر 1";
+                btnPrices.BackColor = Color.Lime;
+
+            }
+        }
+
+        private void rbSale_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (rbRefund.Checked)
+            {
+                ChangeLabelColeurs(Color.Red);
+            }
+            else
+                ChangeLabelColeurs(Color.PaleGreen);
+        }
+
+        private void rbRefund_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (rbRefund.Checked)
+            {
+                ChangeLabelColeurs(Color.Red);
+            }
+            else
+                ChangeLabelColeurs(Color.PaleGreen);
         }
     }
 }

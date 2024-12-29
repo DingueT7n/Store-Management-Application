@@ -156,15 +156,8 @@ namespace Store.ApplicationUI.Gui.SalesGui
             if (productDiscount is not null)
                 txtSaleDiscount.Text = productDiscount.DiscountValue.ToString();
             else txtSaleDiscount.Text = 0.ToString();
-            if (txtQty.Text != string.Empty)
-            {
 
-            }
-            else
-            {
-                txtQty.Text = "1";
-            }
-
+            txtQty.Text = product.ColisageBareCode == txtSearchBarCode.Text ? product.NbrProductInColis.ToString() : "1";
 
             txtTotalSaleProduct.Text = product.SalePriceTax.ToString();
             txtSalePrice.Text = product.SalePriceTax.ToString();
@@ -334,7 +327,18 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
         private void txtQty_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
+            string currentText = (sender as TextBox)?.Text ?? string.Empty;
+
+
+            char decimalSeparator = Properties.Settings.Default.DecimalSEP[0];
+
+
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != decimalSeparator && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+
+            else if (e.KeyChar == decimalSeparator && currentText.Contains(decimalSeparator))
             {
                 e.Handled = true;
             }

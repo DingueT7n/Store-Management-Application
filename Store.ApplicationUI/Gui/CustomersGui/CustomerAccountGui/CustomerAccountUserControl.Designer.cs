@@ -110,12 +110,14 @@
             // 
             resources.ApplyResources(txtPayAmout, "txtPayAmout");
             txtPayAmout.Name = "txtPayAmout";
+            txtPayAmout.KeyPress += txtPayAmout_KeyPress;
             // 
             // rbPayPartialFacture
             // 
             resources.ApplyResources(rbPayPartialFacture, "rbPayPartialFacture");
             rbPayPartialFacture.Name = "rbPayPartialFacture";
             rbPayPartialFacture.UseVisualStyleBackColor = true;
+            rbPayPartialFacture.CheckedChanged += rbPayPartialFacture_CheckedChanged;
             // 
             // rbPayFacture
             // 
