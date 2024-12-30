@@ -7,6 +7,7 @@ using Store.ApplicationUI.Reports.ReportPerviwGui;
 using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Customers;
 using Store.Core.Entities.Products;
+using Store.Core.Entities.Returns;
 using Store.Core.Entities.Sales;
 using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
@@ -980,6 +981,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         private int saleID;
         async Task PayNowAsync(bool facture)
         {
+            _context = new ApplicationDbContext();
             if (DgvِProducts.Rows.Count > 0 && rbSale.Checked)
             {
                 if (IdCustomer.Text != Properties.Settings.Default.IdCustomerSale)
@@ -996,7 +998,6 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 }
                 if (Process)
                 {
-                    _context = new ApplicationDbContext();
                     using (var transaction = await _context.Database.BeginTransactionAsync())
                     {
                         try
@@ -1049,11 +1050,33 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                             {
                                 //if (Properties.Settings.Default.PrintSaleOnOrOff)
                                 //{
+
                                 DataTable saleDetailsTable = await GetSellDetailsDataTableAsync(saleID);
-                                Reports.sale8cm sale8Cm = new();
-                                sale8Cm.DataSource = saleDetailsTable;
-                                XtraForm1 xtraForm11 = new(sale8Cm);
-                                xtraForm11.ShowDialog();
+                                string printername = Properties.Settings.Default.Printer8cm;
+
+                                if (Properties.Settings.Default.PrintSaleFactureType8cm)
+                                {
+                                    Reports.sale8cm sale8Cm = new();
+                                    sale8Cm.DataSource = saleDetailsTable;
+
+                                    // Force print to the specified printer
+                                    var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(sale8Cm);
+                                    printTool.PrinterSettings.PrinterName = printername;
+                                    printTool.Print(printername);
+                                }
+                                else
+                                {
+                                    Reports.SalesReports.salesA4 salesA4 = new();
+                                    salesA4.DataSource = saleDetailsTable;
+                                    printername = Properties.Settings.Default.PrinterA4;
+
+                                    // Force print to the specified printer
+                                    var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(salesA4);
+                                    printTool.PrinterSettings.PrinterName = printername;
+                                    printTool.Print(printername);
+                                }
+                                //XtraForm1 xtraForm11 = new(sale8Cm);
+                                //xtraForm11.ShowDialog();
                                 //}
                                 //else
                                 //{
@@ -1072,6 +1095,123 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                     }
                 }
             }
+            else if (DgvِProducts.Rows.Count > 0 && rbRefund.Checked)
+            {
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var refund = SetRefundSale();
+                        _context.Add(refund);
+                        _context.SaveChanges();
+
+                        for (int i = 0; i < DgvِProducts.Rows.Count; i++)
+                        {
+                            var refundSaleDetail = SetRefundSaleDetail(i);
+                            refundSaleDetail.Order_ID = refund.Id;
+                            _context.ReturnsDetails.Add(refundSaleDetail);
+
+                            // Update product and add quantity
+                            _context.Update(SetProductRefund(i, DgvِProducts.Rows[i].Cells[5].Value.ToString()));
+                            SetProductQuentityRefund(i, _context);
+                        }
+                        if (PaidUp >= TotalFacture)
+                        {
+
+                            SetCaisseSaleRefund(TotalFacture, _context);
+                            _context.CaissesWithdraws.Add(SetCaisseWithdraw(TotalFacture, _context));
+                            _context.SaveChanges();
+                        }
+
+                        transaction.Commit();
+                        ResetForm();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+            }
+        }
+        Caisse SetCaisseSaleRefund(decimal value, ApplicationDbContext context)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+
+            Caisse caisse = context.Caisses.Where(x => x.Id == Properties.Settings.Default.FastSaleStore).FirstOrDefault();
+            if (caisse is not null)
+            {
+                caisse.MoneyinCaisse -= value;
+            }
+            context.Caisses.Update(caisse);
+            context.SaveChanges();
+            return caisse;
+
+        }
+        CaisseWithdraw SetCaisseWithdraw(decimal value, ApplicationDbContext context)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+
+
+            var caisseWithdraw = new CaisseWithdraw
+            {
+                Caisse_ID = Properties.Settings.Default.FastSaleStore,
+                Time = DateTime.Now.ToString("yyyy:MM:dd:HH:mm"),
+                Date = DateTime.Now,
+                Name = $" ({Properties.Settings.Default.UserName})  العميل ({lblCustomerName.Text}) بحساب ",
+                Money = value,
+                Reason = $"ارجاع المنتوجات للمخزن ({context.Stores.FirstOrDefault(x => x.Id == Properties.Settings.Default.FastSaleStore).StoreName}) واعادة الاموال للعميل",
+                Type = "سحب عن طريق ارجاع المنتوجات للمخزن وارجاع الاموال لصاحبها"
+            };
+
+            return caisseWithdraw;
+
+        }
+        ProductsQuantitie SetProductQuentityRefund(int i, ApplicationDbContext context)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+            ProductsQuantitie productQty = new();
+
+            var lis = context.ProductsQuantities.Where(x => x.Id == Convert.ToInt32(DgvِProducts.Rows[i].Cells[5].Value.ToString())).ToList();
+            productQty = lis.Last();
+
+            decimal removeQty = ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+            if (productQty is not null)
+            {
+                productQty.Qty += removeQty;
+                context.Update(productQty);
+                context.SaveChanges();
+            }
+            else
+            {
+                ProductsQuantitie productsQuantitie = new();
+                productsQuantitie.Store_ID = Properties.Settings.Default.FastSaleStore;
+                productsQuantitie.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[5].Value.ToString());
+                productsQuantitie.StoreName = context.Stores.FirstOrDefault(x => x.Id == Properties.Settings.Default.FastSaleStore).StoreName;
+                productsQuantitie.Qty = removeQty;
+                productsQuantitie.Buy_Price = context.Products.FirstOrDefault(x => x.Id == Convert.ToInt32(DgvِProducts.Rows[i].Cells[5].Value.ToString())).BuyPrice;
+                productsQuantitie.Sale_PriceTax = ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
+                productsQuantitie.DateExpiration = context.Products.FirstOrDefault(x => x.Id == Convert.ToInt32(DgvِProducts.Rows[i].Cells[5].Value.ToString())).DateExperation;
+                context.Add(productQty);
+                context.SaveChanges();
+
+                return productQty;
+
+            }
+            return productQty;
+        }
+        Product SetProductRefund(int i, string idprod)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+
+            Product product = _context.Products.Where(x => x.Id.ToString() == idprod).FirstOrDefault();
+            var qty = ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+            if (product is not null)
+            {
+                product.Quentity = product.Quentity + qty;
+            }
+            return product;
         }
         private async Task<DataTable> GetSellDetailsDataTableAsync(int orderId)
         {
@@ -1106,6 +1246,37 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                     await connection.CloseAsync();
                 }
             }
+        }
+        Return SetRefundSale()
+        {
+
+            Return buy = new Return();
+
+            buy.TotalOrder = TotalFacture;
+            //buy.SupplierId = Convert.ToInt32(cmbSuppliers.SelectedValue);
+            buy.OrderDate = DateTime.Now;
+            buy.PaidUP = TotalFacture;
+            buy.Remain = 0.00m;
+            buy.Time = DateTime.Now.ToString("yyyy:MM:dd:HH:mm");
+            buy.User_Name = "Alaa";
+            buy.OrderType = "Refund Sale";
+
+            return buy;
+        }
+        ReturnDetail SetRefundSaleDetail(int i)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+            ReturnDetail buyDetail = new ReturnDetail();
+
+            buyDetail.Cust_Name = IdCustomer.Text;
+            buyDetail.Date = DateTime.Now.ToString("yyyy-MM-dd");
+            buyDetail.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[5].Value.ToString());
+            buyDetail.Qty = ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+            buyDetail.Price = ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
+            buyDetail.Total = ConvertToFloat(DgvِProducts.Rows[i].Cells[4].Value.ToString());
+            buyDetail.TaxValue = Properties.Settings.Default.TaxValue;
+            buyDetail.PriceWithTax = TotalFacture;
+            return buyDetail;
         }
         private void btnChoseCustomer_Click(object sender, EventArgs e)
         {
@@ -1156,9 +1327,15 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             if (rbRefund.Checked)
             {
                 ChangeLabelColeurs(Color.Red);
+                btnPrices.Text = "سعر 3";
+                btnPrices.BackColor = Color.PaleVioletRed;
             }
             else
+            {
                 ChangeLabelColeurs(Color.PaleGreen);
+                btnPrices.Text = "سعر 1";
+                btnPrices.BackColor = Color.SeaGreen;
+            }
         }
     }
 }

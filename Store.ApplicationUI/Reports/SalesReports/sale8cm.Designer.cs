@@ -35,6 +35,7 @@
             this.TopMargin = new DevExpress.XtraReports.UI.TopMarginBand();
             this.BottomMargin = new DevExpress.XtraReports.UI.BottomMarginBand();
             this.ReportHeader = new DevExpress.XtraReports.UI.ReportHeaderBand();
+            this.pbLogo = new DevExpress.XtraReports.UI.XRPictureBox();
             this.xrLabel8 = new DevExpress.XtraReports.UI.XRLabel();
             this.xrLabel7 = new DevExpress.XtraReports.UI.XRLabel();
             this.lblPhoneNumber = new DevExpress.XtraReports.UI.XRLabel();
@@ -44,7 +45,6 @@
             this.xrLabel3 = new DevExpress.XtraReports.UI.XRLabel();
             this.xrLabel2 = new DevExpress.XtraReports.UI.XRLabel();
             this.xrLabel1 = new DevExpress.XtraReports.UI.XRLabel();
-            this.pbLogo = new DevExpress.XtraReports.UI.XRPictureBox();
             this.lblStoreName = new DevExpress.XtraReports.UI.XRLabel();
             this.GroupHeader1 = new DevExpress.XtraReports.UI.GroupHeaderBand();
             this.xrTable1 = new DevExpress.XtraReports.UI.XRTable();
@@ -111,6 +111,15 @@
             this.ReportHeader.HeightF = 300F;
             this.ReportHeader.Name = "ReportHeader";
             // 
+            // pbLogo
+            // 
+            this.pbLogo.Dpi = 254F;
+            this.pbLogo.ImageSource = new DevExpress.XtraPrinting.Drawing.ImageSource("img", resources.GetString("pbLogo.ImageSource"));
+            this.pbLogo.LocationFloat = new DevExpress.Utils.PointFloat(195.7917F, 0F);
+            this.pbLogo.Name = "pbLogo";
+            this.pbLogo.SizeF = new System.Drawing.SizeF(300F, 300F);
+            this.pbLogo.Sizing = DevExpress.XtraPrinting.ImageSizeMode.ZoomImage;
+            // 
             // xrLabel8
             // 
             this.xrLabel8.Dpi = 254F;
@@ -128,7 +137,7 @@
             // xrLabel7
             // 
             this.xrLabel7.Dpi = 254F;
-            this.xrLabel7.LocationFloat = new DevExpress.Utils.PointFloat(526.9497F, 156.7091F);
+            this.xrLabel7.LocationFloat = new DevExpress.Utils.PointFloat(526.9498F, 156.7091F);
             this.xrLabel7.Multiline = true;
             this.xrLabel7.Name = "xrLabel7";
             this.xrLabel7.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
@@ -136,7 +145,7 @@
             this.xrLabel7.SizeF = new System.Drawing.SizeF(210.3124F, 58.41998F);
             this.xrLabel7.StylePriority.UseTextAlignment = false;
             this.xrLabel7.Text = "اسم المشتري :";
-            this.xrLabel7.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+            this.xrLabel7.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
             // lblPhoneNumber
             // 
@@ -161,7 +170,7 @@
             this.xrLabel6.SizeF = new System.Drawing.SizeF(210.3124F, 58.42001F);
             this.xrLabel6.StylePriority.UseTextAlignment = false;
             this.xrLabel6.Text = "رقم الهاتف :";
-            this.xrLabel6.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+            this.xrLabel6.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
             // xrLabel5
             // 
@@ -195,7 +204,7 @@
             // xrLabel3
             // 
             this.xrLabel3.Dpi = 254F;
-            this.xrLabel3.LocationFloat = new DevExpress.Utils.PointFloat(526.9497F, 304.9966F);
+            this.xrLabel3.LocationFloat = new DevExpress.Utils.PointFloat(526.9498F, 304.9966F);
             this.xrLabel3.Multiline = true;
             this.xrLabel3.Name = "xrLabel3";
             this.xrLabel3.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
@@ -203,7 +212,7 @@
             this.xrLabel3.SizeF = new System.Drawing.SizeF(210.3123F, 58.41998F);
             this.xrLabel3.StylePriority.UseTextAlignment = false;
             this.xrLabel3.Text = "تاريخ الفاتورة :";
-            this.xrLabel3.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+            this.xrLabel3.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
             // xrLabel2
             // 
@@ -222,7 +231,7 @@
             // xrLabel1
             // 
             this.xrLabel1.Dpi = 254F;
-            this.xrLabel1.LocationFloat = new DevExpress.Utils.PointFloat(526.9495F, 229.3256F);
+            this.xrLabel1.LocationFloat = new DevExpress.Utils.PointFloat(526.9496F, 229.3256F);
             this.xrLabel1.Multiline = true;
             this.xrLabel1.Name = "xrLabel1";
             this.xrLabel1.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
@@ -230,16 +239,7 @@
             this.xrLabel1.SizeF = new System.Drawing.SizeF(210.3124F, 58.41998F);
             this.xrLabel1.StylePriority.UseTextAlignment = false;
             this.xrLabel1.Text = "رقم الفاتورة :";
-            this.xrLabel1.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
-            // 
-            // pbLogo
-            // 
-            this.pbLogo.Dpi = 254F;
-            this.pbLogo.ImageSource = new DevExpress.XtraPrinting.Drawing.ImageSource("img", resources.GetString("pbLogo.ImageSource"));
-            this.pbLogo.LocationFloat = new DevExpress.Utils.PointFloat(195.7917F, 0F);
-            this.pbLogo.Name = "pbLogo";
-            this.pbLogo.SizeF = new System.Drawing.SizeF(300F, 300F);
-            this.pbLogo.Sizing = DevExpress.XtraPrinting.ImageSizeMode.ZoomImage;
+            this.xrLabel1.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
             // lblStoreName
             // 
@@ -512,7 +512,7 @@
             this.xrLabel16,
             this.pageInfo1});
             this.ReportFooter.Dpi = 254F;
-            this.ReportFooter.HeightF = 567.2675F;
+            this.ReportFooter.HeightF = 544.7192F;
             this.ReportFooter.Name = "ReportFooter";
             // 
             // xrLabel20
@@ -526,7 +526,7 @@
             this.xrLabel20.SizeF = new System.Drawing.SizeF(193.1459F, 58.42001F);
             this.xrLabel20.StylePriority.UseTextAlignment = false;
             this.xrLabel20.Text = "عنوان المحل:";
-            this.xrLabel20.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+            this.xrLabel20.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             this.xrLabel20.Visible = false;
             // 
             // lblAddress
@@ -594,7 +594,7 @@
             this.xrLabel18.SizeF = new System.Drawing.SizeF(193.1459F, 58.42001F);
             this.xrLabel18.StylePriority.UseTextAlignment = false;
             this.xrLabel18.Text = "الصندوق :";
-            this.xrLabel18.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+            this.xrLabel18.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
             // xrLabel17
             // 
@@ -607,7 +607,7 @@
             this.xrLabel17.SizeF = new System.Drawing.SizeF(193.1459F, 58.42001F);
             this.xrLabel17.StylePriority.UseTextAlignment = false;
             this.xrLabel17.Text = "البائع :";
-            this.xrLabel17.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+            this.xrLabel17.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
             // xrLine2
             // 
@@ -627,7 +627,7 @@
             this.xrLabel9.SizeF = new System.Drawing.SizeF(188.6525F, 58.42002F);
             this.xrLabel9.StylePriority.UseTextAlignment = false;
             this.xrLabel9.Text = "عدد المنتجات :";
-            this.xrLabel9.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+            this.xrLabel9.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
             // xrLabel10
             // 
@@ -791,8 +791,8 @@
             this.DataSource = this.sqlDataSource1;
             this.Dpi = 254F;
             this.Font = new DevExpress.Drawing.DXFont("Arial", 9.75F);
-            this.Margins = new DevExpress.Drawing.DXMargins(31F, 24F, 1.791678F, 0F);
-            this.PageHeight = 3000;
+            this.Margins = new DevExpress.Drawing.DXMargins(30F, 23F, 1.791678F, 0F);
+            this.PageHeight = 30000;
             this.PageWidth = 800;
             this.PaperKind = DevExpress.Drawing.Printing.DXPaperKind.Custom;
             this.ReportUnit = DevExpress.XtraReports.UI.ReportUnit.TenthsOfAMillimeter;

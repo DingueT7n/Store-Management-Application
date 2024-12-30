@@ -25,7 +25,7 @@ namespace Store.Core.Entities.Products
         public decimal MinQty { get; set; } = 0;
         public decimal MaxDiscount { get; set; } = 0;
         public decimal NbrProductInColis { get; set; } = 0;
-        public string ColisageBareCode { get; set; } = string.Empty;
+        public string ColisageBareCode { get; set; } = "";
 
         public byte[] ProductImage { get; set; }
 

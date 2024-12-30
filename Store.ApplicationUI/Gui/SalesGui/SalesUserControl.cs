@@ -1,6 +1,9 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using System.Data;
+using Microsoft.IdentityModel.Tokens;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.PaymentGui;
+using Store.ApplicationUI.Reports.ReportPerviwGui;
 using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Customers;
 using Store.Core.Entities.Products;
@@ -140,28 +143,48 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
         public void InitializeTextBoxesAndLables(Product product)
         {
+            try
+            {
+                var storeId = Convert.ToInt32(cmbStores.SelectedValue);
+                var now = DateTime.Now;
 
-            ProductDiscount productDiscount = _context.ProductDiscounts.
-                Where(x => x.Id.ToString() == product.Id.ToString() && x.Quentity > 0 && x.Store_Id == Convert.ToInt32(cmbStores.SelectedValue)
-                && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
-                ).FirstOrDefault();
-            txtProductName.Text = product.ProductName;
-            labelError1.Visible = product.Quentity <= 0;
+                ProductDiscount productDiscount = _context.ProductDiscounts
+                    .FirstOrDefault(x => x.Id == product.Id && x.Quentity > 0 && x.Store_Id == storeId
+                        && x.DateStart <= now && x.DateEnd > now);
 
-            ProductsQuantitie productQty = _context.ProductsQuantities.
-                      Where(x => x.Pro_ID == product.Id && x.Qty > 0 && x.Store_ID.ToString() == cmbStores.SelectedValue).FirstOrDefault();
+                txtProductName.Text = product.ProductName;
+                labelError1.Visible = product.Quentity <= 0;
 
-            lblError2.Visible = productQty is null;
+                ProductsQuantitie productQty = _context.ProductsQuantities
+                    .FirstOrDefault(x => x.Pro_ID == product.Id && x.Qty > 0 && x.Store_ID == storeId);
 
-            if (productDiscount is not null)
-                txtSaleDiscount.Text = productDiscount.DiscountValue.ToString();
-            else txtSaleDiscount.Text = 0.ToString();
+                lblError2.Visible = productQty is null;
 
-            txtQty.Text = product.ColisageBareCode == txtSearchBarCode.Text ? product.NbrProductInColis.ToString() : "1";
+                txtSaleDiscount.Text = productDiscount?.DiscountValue.ToString() ?? "0";
 
-            txtTotalSaleProduct.Text = product.SalePriceTax.ToString();
-            txtSalePrice.Text = product.SalePriceTax.ToString();
-            txtWholeSalePrice.Text = product.WholesalePrice.ToString();
+                if (!string.IsNullOrEmpty(product.ColisageBareCode) && string.IsNullOrEmpty(txtQty.Text))
+                {
+                    txtQty.Text = product.ColisageBareCode == txtSearchBarCode.Text ?
+                        product.NbrProductInColis.ToString() : "1";
+                }
+                else if (string.IsNullOrEmpty(txtQty.Text))
+                {
+                    txtQty.Text = "1";
+                }
+                else
+                {
+                    txtQty.Text = "1";
+
+                }
+
+                txtTotalSaleProduct.Text = product.SalePriceTax.ToString();
+                txtSalePrice.Text = product.SalePriceTax.ToString();
+                txtWholeSalePrice.Text = product.WholesalePrice.ToString();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
 
 
         }
@@ -172,64 +195,56 @@ namespace Store.ApplicationUI.Gui.SalesGui
         }
         public void ClearBoxes()
         {
-            txtProductName.Text = string.Empty;
-            txtSaleDiscount.Text = string.Empty;
-            txtQty.Text = string.Empty;
-            txtTotalSaleProduct.Text = string.Empty;
-            txtSalePrice.Text = string.Empty;
-            txtWholeSalePrice.Text = string.Empty;
+            txtProductName.Clear();
+            txtSaleDiscount.Clear();
+            txtQty.Clear();
+            txtTotalSaleProduct.Clear();
+            txtSalePrice.Clear();
+            txtWholeSalePrice.Clear();
 
         }
 
         void CalculateAmount()
         {
+
             try
             {
-                if (txtSalePrice.Text != string.Empty && txtQty.Text != string.Empty && txtWholeSalePrice.Text
-                    != string.Empty && txtSaleDiscount.Text != string.Empty)
-                {
-                    if (cbWholsale.Checked)
-                    {
-                        decimal Discount = Convert.ToDecimal(txtSaleDiscount.Text);
-                        decimal Amount = Convert.ToDecimal(txtWholeSalePrice.Text);
-                        decimal TotalAmount = Amount - (Amount * (Discount / 100));
+                if (string.IsNullOrEmpty(txtSalePrice.Text) || string.IsNullOrEmpty(txtQty.Text) ||
+                    string.IsNullOrEmpty(txtWholeSalePrice.Text) || string.IsNullOrEmpty(txtSaleDiscount.Text))
+                    return;
 
-                        txtTotalSaleProduct.Text = (_main.ConvertToFloat(TotalAmount.ToString()) * Convert.ToInt32(txtQty.Text)).ToString();
-                    }
-                    else
-                    {
-                        decimal Discount = Convert.ToDecimal(txtSaleDiscount.Text);
-                        decimal Amount = Convert.ToDecimal(txtSalePrice.Text);
-                        decimal TotalAmount = Amount - (Amount * (Discount / 100));
-                        txtTotalSaleProduct.Text = (_main.ConvertToFloat(TotalAmount.ToString()) * Convert.ToInt32(txtQty.Text)).ToString();
-                    }
-                }
+                decimal discount = Convert.ToDecimal(txtSaleDiscount.Text);
+                decimal amount = cbWholsale.Checked ? Convert.ToDecimal(txtWholeSalePrice.Text) : Convert.ToDecimal(txtSalePrice.Text);
+                decimal totalAmount = amount - (amount * (discount / 100));
 
+                txtTotalSaleProduct.Text = (_main.ConvertToFloat(totalAmount.ToString()) * Convert.ToDecimal(txtQty.Text)).ToString();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         private Product _product;
         private ProductDiscount _productDiscount;
         private ProductsQuantitie _productQuantitie;
         public async void SetProductsToTable()
         {
-            //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             _product = salesRepository.GetProductBarCode(txtSearchBarCode.Text);
-            if (_product is not null)
+
+            if (_product != null)
             {
                 InitializeTextBoxesAndLables(_product);
-
                 txtQty.Focus();
                 txtQty.SelectAll();
                 CalculateAmount();
-                CalculateStatistics();
             }
             else
             {
                 MsgHelper.ShowEmptyResult();
                 txtSearchBarCode.Focus();
-
+                txtQty.Clear();
             }
+
             txtSearchBarCode.Clear();
 
         }
@@ -278,12 +293,16 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
                 ClearBoxes();
                 txtSearchBarCode.Focus();
+                txtQty.Clear();
+
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
 
         }
         void AddNewRow()
         {
+
+
             if (labelError1.Visible)
                 if (!MsgHelper.ShowErrorValidating()) return;
             if (txtProductName.Text != string.Empty && txtProductName.Text != "" && txtSalePrice.Text != string.Empty
@@ -314,19 +333,29 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 MsgHelper.ShowEmptyResult();
             }
             CalculateStatistics();
+            txtQty.Clear();
+
         }
 
         private void txtQty_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                AddNewRow();
+                if (txtQty.Text.IsNullOrEmpty())
+                {
+
+                    return;
+                }
+                else
+                    AddNewRow();
             }
             EditUsingPlusMinus(sender, e);
         }
 
         private void txtQty_KeyPress(object sender, KeyPressEventArgs e)
         {
+            if (txtQty.Text.IsNullOrEmpty()) { return; }
+
             string currentText = (sender as TextBox)?.Text ?? string.Empty;
 
 
@@ -348,6 +377,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
         {
             try
             {
+                if (txtQty.Text.IsNullOrEmpty()) { return; }
                 if (cmbStores.Text == "اختر مخزن") { MessageBox.Show("يرجى اختيار مخزن , راجع البيانات من فضلك", "بيانات غير كاملة"); cmbStores.Focus(); return; }
                 InitializeTextBoxesAndLables(_product);
                 CalculateAmount();
@@ -436,7 +466,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
             {
                 ErrorDetection();
                 lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِProducts);
-                if (DgvِProducts.Rows.Count >= 0)
+                if (DgvِProducts.Rows.Count > 0)
                 {
                     lblTotalPriceinFacture.Text = "المبلغ الاجمالي في الفاتورة :" +
                                          (from DataGridViewRow row in DgvِProducts.Rows
@@ -536,7 +566,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 Date = DtpDateFacture.Value,
                 PaidUP = _main.ConvertToFloat(PaidUp.ToString()),
                 Remain = _main.ConvertToFloat(Remain.ToString()),
-                Time = DateTime.Now.ToString("yyyy:MM:dd:HH:mm"),
+                Time = DateTime.Now.ToString("HH:mm"),
                 User_Name = Properties.Settings.Default.UserName,
             };
         }
@@ -717,7 +747,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
         }
 
-        private void ProcessTransaction(decimal paymentAmount, bool isDebt)
+        private async void ProcessTransaction(decimal paymentAmount, bool isDebt)
         {
             _context = new ApplicationDbContext();
             using (var transaction = _context.Database.BeginTransaction())
@@ -742,8 +772,47 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
                     // Handle Caisse and Customer updates
                     HandleFinancialUpdates(paymentAmount, isDebt, sale.Id);
-
                     transaction.Commit();
+                    DataTable saleDetailsTable = await Code.Helper.FactureHelper.GetSellDetailsDataTableAsync(sale.Id);
+                    string printername = Properties.Settings.Default.Printer8cm;
+
+                    if (Properties.Settings.Default.PrintSaleFactureType8cm)
+                    {
+                        Reports.sale8cm sale8Cm = new();
+                        sale8Cm.DataSource = saleDetailsTable;
+
+                        if (rbPrinterDirectly.Checked)
+                        {
+                            var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(sale8Cm);
+                            printTool.PrinterSettings.PrinterName = printername;
+                            printTool.Print(printername);
+                        }
+                        else if (rbAnalysis.Checked)
+                        {
+                            XtraForm1 xtraForm1 = new XtraForm1(sale8Cm);
+                            xtraForm1.ShowDialog();
+                        }
+                    }
+                    else
+                    {
+                        Reports.SalesReports.salesA4 salesA4 = new();
+                        salesA4.DataSource = saleDetailsTable;
+                        printername = Properties.Settings.Default.PrinterA4;
+
+                        if (rbPrinterDirectly.Checked)
+                        {
+                            var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(salesA4);
+                            printTool.PrinterSettings.PrinterName = printername;
+                            printTool.Print(printername);
+                        }
+                        else if (rbAnalysis.Checked)
+                        {
+                            XtraForm1 xtraForm1 = new XtraForm1(salesA4);
+                            xtraForm1.ShowDialog();
+                        }
+
+                    }
+
                     ResetForm();
                 }
                 catch (Exception ex)
@@ -984,6 +1053,11 @@ namespace Store.ApplicationUI.Gui.SalesGui
         private void DgvِProducts_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             EditFromTable(0);
+
+        }
+
+        private void lblQuentity_Click(object sender, EventArgs e)
+        {
 
         }
     }

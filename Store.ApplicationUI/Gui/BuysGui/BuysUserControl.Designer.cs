@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BuysUserControl));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
             OperationsflowLayoutPanel = new FlowLayoutPanel();
             gbPayChoiches = new GroupBox();
             label1 = new Label();
@@ -54,12 +54,8 @@
             panelButtons = new Panel();
             gbOperations = new GroupBox();
             btnDeleteSelected = new Button();
-            lblDelete = new Label();
             btnEditSelected = new Button();
-            lblEdit = new Label();
             btnDown = new Button();
-            lblDown = new Label();
-            lblUp = new Label();
             btnUp = new Button();
             btnPay = new Button();
             flowLayoutPanelstatistics = new FlowLayoutPanel();
@@ -96,6 +92,8 @@
             lblSalePrice = new Label();
             lblBuyPrice = new Label();
             txtSalePrice = new TextBox();
+            rbAnalysis = new RadioButton();
+            rbPrinterDirectly = new RadioButton();
             OperationsflowLayoutPanel.SuspendLayout();
             gbPayChoiches.SuspendLayout();
             panelstatisticsandOperations.SuspendLayout();
@@ -325,13 +323,11 @@
             // gbOperations
             // 
             gbOperations.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            gbOperations.Controls.Add(rbAnalysis);
+            gbOperations.Controls.Add(rbPrinterDirectly);
             gbOperations.Controls.Add(btnDeleteSelected);
-            gbOperations.Controls.Add(lblDelete);
             gbOperations.Controls.Add(btnEditSelected);
-            gbOperations.Controls.Add(lblEdit);
             gbOperations.Controls.Add(btnDown);
-            gbOperations.Controls.Add(lblDown);
-            gbOperations.Controls.Add(lblUp);
             gbOperations.Controls.Add(btnUp);
             gbOperations.Location = new Point(3, 3);
             gbOperations.Name = "gbOperations";
@@ -345,7 +341,7 @@
             btnDeleteSelected.Anchor = AnchorStyles.None;
             btnDeleteSelected.Image = (Image)resources.GetObject("btnDeleteSelected.Image");
             btnDeleteSelected.ImeMode = ImeMode.NoControl;
-            btnDeleteSelected.Location = new Point(125, 83);
+            btnDeleteSelected.Location = new Point(146, 52);
             btnDeleteSelected.Name = "btnDeleteSelected";
             btnDeleteSelected.Size = new Size(37, 34);
             btnDeleteSelected.TabIndex = 30;
@@ -353,22 +349,12 @@
             btnDeleteSelected.UseVisualStyleBackColor = true;
             btnDeleteSelected.Click += btnDeleteSelected_Click;
             // 
-            // lblDelete
-            // 
-            lblDelete.AutoSize = true;
-            lblDelete.ImeMode = ImeMode.NoControl;
-            lblDelete.Location = new Point(164, 97);
-            lblDelete.Name = "lblDelete";
-            lblDelete.Size = new Size(108, 19);
-            lblDelete.TabIndex = 29;
-            lblDelete.Text = "حذف من الجدول:";
-            // 
             // btnEditSelected
             // 
             btnEditSelected.Anchor = AnchorStyles.None;
             btnEditSelected.Image = (Image)resources.GetObject("btnEditSelected.Image");
             btnEditSelected.ImeMode = ImeMode.NoControl;
-            btnEditSelected.Location = new Point(125, 24);
+            btnEditSelected.Location = new Point(232, 52);
             btnEditSelected.Name = "btnEditSelected";
             btnEditSelected.Size = new Size(37, 34);
             btnEditSelected.TabIndex = 28;
@@ -376,22 +362,12 @@
             btnEditSelected.UseVisualStyleBackColor = true;
             btnEditSelected.Click += btnEditSelected_Click;
             // 
-            // lblEdit
-            // 
-            lblEdit.AutoSize = true;
-            lblEdit.ImeMode = ImeMode.NoControl;
-            lblEdit.Location = new Point(184, 38);
-            lblEdit.Name = "lblEdit";
-            lblEdit.Size = new Size(88, 19);
-            lblEdit.TabIndex = 27;
-            lblEdit.Text = "تعديل المحدد:";
-            // 
             // btnDown
             // 
             btnDown.Anchor = AnchorStyles.None;
             btnDown.Image = (Image)resources.GetObject("btnDown.Image");
             btnDown.ImeMode = ImeMode.NoControl;
-            btnDown.Location = new Point(10, 24);
+            btnDown.Location = new Point(189, 22);
             btnDown.Name = "btnDown";
             btnDown.Size = new Size(37, 34);
             btnDown.TabIndex = 26;
@@ -399,32 +375,12 @@
             btnDown.UseVisualStyleBackColor = true;
             btnDown.Click += btnDown_Click;
             // 
-            // lblDown
-            // 
-            lblDown.AutoSize = true;
-            lblDown.ImeMode = ImeMode.NoControl;
-            lblDown.Location = new Point(50, 38);
-            lblDown.Name = "lblDown";
-            lblDown.Size = new Size(69, 19);
-            lblDown.TabIndex = 25;
-            lblDown.Text = "الى الاسفل:";
-            // 
-            // lblUp
-            // 
-            lblUp.AutoSize = true;
-            lblUp.ImeMode = ImeMode.NoControl;
-            lblUp.Location = new Point(57, 97);
-            lblUp.Name = "lblUp";
-            lblUp.Size = new Size(62, 19);
-            lblUp.TabIndex = 24;
-            lblUp.Text = "الى الفوق:";
-            // 
             // btnUp
             // 
             btnUp.Anchor = AnchorStyles.None;
             btnUp.Image = (Image)resources.GetObject("btnUp.Image");
             btnUp.ImeMode = ImeMode.NoControl;
-            btnUp.Location = new Point(10, 83);
+            btnUp.Location = new Point(189, 83);
             btnUp.Name = "btnUp";
             btnUp.Size = new Size(37, 34);
             btnUp.TabIndex = 23;
@@ -640,31 +596,31 @@
             DgvِProducts.AllowUserToAddRows = false;
             DgvِProducts.AllowUserToResizeColumns = false;
             DgvِProducts.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvِProducts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvِProducts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
             DgvِProducts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             DgvِProducts.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             DgvِProducts.BackgroundColor = Color.White;
             DgvِProducts.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             DgvِProducts.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle2.ForeColor = Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = Color.DodgerBlue;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            DgvِProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle6.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle6.ForeColor = Color.White;
+            dataGridViewCellStyle6.SelectionBackColor = Color.DodgerBlue;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            DgvِProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             DgvِProducts.ColumnHeadersHeight = 40;
             DgvِProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Window;
-            dataGridViewCellStyle3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
-            DgvِProducts.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.BackColor = SystemColors.Window;
+            dataGridViewCellStyle7.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle7.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.False;
+            DgvِProducts.DefaultCellStyle = dataGridViewCellStyle7;
             DgvِProducts.Dock = DockStyle.Fill;
             DgvِProducts.EnableHeadersVisualStyles = false;
             DgvِProducts.GridColor = SystemColors.ControlDark;
@@ -676,8 +632,8 @@
             DgvِProducts.RowHeadersVisible = false;
             DgvِProducts.RowHeadersWidth = 21;
             DgvِProducts.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle4.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvِProducts.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle8.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvِProducts.RowsDefaultCellStyle = dataGridViewCellStyle8;
             DgvِProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DgvِProducts.Size = new Size(1034, 322);
             DgvِProducts.TabIndex = 20;
@@ -934,6 +890,28 @@
             txtSalePrice.KeyPress += txtQty_KeyPress;
             txtSalePrice.KeyUp += txtSalePrice_KeyUp;
             // 
+            // rbAnalysis
+            // 
+            rbAnalysis.AutoSize = true;
+            rbAnalysis.Location = new Point(4, 73);
+            rbAnalysis.Name = "rbAnalysis";
+            rbAnalysis.Size = new Size(114, 23);
+            rbAnalysis.TabIndex = 34;
+            rbAnalysis.Text = "معاينة ثم طباعة";
+            rbAnalysis.UseVisualStyleBackColor = true;
+            // 
+            // rbPrinterDirectly
+            // 
+            rbPrinterDirectly.AutoSize = true;
+            rbPrinterDirectly.Checked = true;
+            rbPrinterDirectly.Location = new Point(19, 33);
+            rbPrinterDirectly.Name = "rbPrinterDirectly";
+            rbPrinterDirectly.Size = new Size(99, 23);
+            rbPrinterDirectly.TabIndex = 33;
+            rbPrinterDirectly.TabStop = true;
+            rbPrinterDirectly.Text = "طباعة مباشرة";
+            rbPrinterDirectly.UseVisualStyleBackColor = true;
+            // 
             // BuysUserControl
             // 
             AutoScaleDimensions = new SizeF(8F, 19F);
@@ -1014,12 +992,8 @@
         private Button btnSearchImage;
         private GroupBox gbOperations;
         private Button btnDeleteSelected;
-        private Label lblDelete;
         private Button btnEditSelected;
-        private Label lblEdit;
         private Button btnDown;
-        private Label lblDown;
-        private Label lblUp;
         private Button btnUp;
         private DateTimePicker dtpReminderDate;
         private Label lblReminderDate;
@@ -1044,5 +1018,7 @@
         private Label labelError1;
         private DateTimePicker dtpDateExpiration;
         private Label lblDateExpiration;
+        private RadioButton rbAnalysis;
+        private RadioButton rbPrinterDirectly;
     }
 }

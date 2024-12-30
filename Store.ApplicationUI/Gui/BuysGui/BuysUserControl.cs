@@ -3,6 +3,7 @@ using System.Globalization;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.PaymentGui;
+using Store.ApplicationUI.Reports.ReportPerviwGui;
 using Store.Core.Entities.Buys;
 using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Products;
@@ -661,6 +662,46 @@ namespace Store.ApplicationUI.Gui.BuysGui
                     await HandleCaisseAndSupplierAsync(buy);
 
                     await transaction.CommitAsync();
+                    DataTable BuyDetailsTable = await Code.Helper.FactureHelper.GetBuyDetailsDataTableAsync(buy.Id);
+                    string printername = Properties.Settings.Default.Printer8cm;
+
+                    if (Properties.Settings.Default.PrintSaleFactureType8cm)
+                    {
+                        Reports.BuysReports.buy8cm buy8cm = new();
+                        buy8cm.DataSource = BuyDetailsTable;
+
+                        if (rbPrinterDirectly.Checked)
+                        {
+                            var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(buy8cm);
+                            printTool.PrinterSettings.PrinterName = printername;
+                            printTool.Print(printername);
+                        }
+                        else if (rbAnalysis.Checked)
+                        {
+                            XtraForm1 xtraForm1 = new XtraForm1(buy8cm);
+                            xtraForm1.ShowDialog();
+                        }
+                    }
+                    else
+                    {
+                        Reports.BuysReports.buyA4 buyA4 = new();
+                        buyA4.DataSource = BuyDetailsTable;
+                        printername = Properties.Settings.Default.PrinterA4;
+
+                        if (rbPrinterDirectly.Checked)
+                        {
+                            var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(buyA4);
+                            printTool.PrinterSettings.PrinterName = printername;
+                            printTool.Print(printername);
+                        }
+                        else if (rbAnalysis.Checked)
+                        {
+                            XtraForm1 xtraForm1 = new XtraForm1(buyA4);
+                            xtraForm1.ShowDialog();
+                        }
+
+                    }
+
                     ResetForm();
                 }
                 catch (Exception ex)

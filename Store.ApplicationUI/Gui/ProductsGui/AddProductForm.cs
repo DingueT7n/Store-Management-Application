@@ -529,7 +529,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                                         ProductImage = RetriveImage(),
                                         ProductName = txtNameProduct.Text,
                                     };
-                                    vider();
+                                    //vider();
                                     _context.Add(qucik);
                                     _context.SaveChanges();
                                 }

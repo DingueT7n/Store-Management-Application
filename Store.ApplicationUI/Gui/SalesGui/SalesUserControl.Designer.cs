@@ -54,13 +54,11 @@
             btnSearchImage = new Button();
             panelButtons = new Panel();
             gbOperations = new GroupBox();
+            rbAnalysis = new RadioButton();
+            rbPrinterDirectly = new RadioButton();
             btnDeleteSelected = new Button();
-            lblDelete = new Label();
             btnEditSelected = new Button();
-            lblEdit = new Label();
             btnDown = new Button();
-            lblDown = new Label();
-            lblUp = new Label();
             btnUp = new Button();
             tableLayoutPanel = new TableLayoutPanel();
             txtQty = new TextBox();
@@ -335,13 +333,11 @@
             // gbOperations
             // 
             gbOperations.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            gbOperations.Controls.Add(rbAnalysis);
+            gbOperations.Controls.Add(rbPrinterDirectly);
             gbOperations.Controls.Add(btnDeleteSelected);
-            gbOperations.Controls.Add(lblDelete);
             gbOperations.Controls.Add(btnEditSelected);
-            gbOperations.Controls.Add(lblEdit);
             gbOperations.Controls.Add(btnDown);
-            gbOperations.Controls.Add(lblDown);
-            gbOperations.Controls.Add(lblUp);
             gbOperations.Controls.Add(btnUp);
             gbOperations.Location = new Point(3, 3);
             gbOperations.Name = "gbOperations";
@@ -350,12 +346,34 @@
             gbOperations.TabStop = false;
             gbOperations.Text = "العمليات المتاحة على الجدول";
             // 
+            // rbAnalysis
+            // 
+            rbAnalysis.AutoSize = true;
+            rbAnalysis.Location = new Point(5, 77);
+            rbAnalysis.Name = "rbAnalysis";
+            rbAnalysis.Size = new Size(114, 23);
+            rbAnalysis.TabIndex = 32;
+            rbAnalysis.Text = "معاينة ثم طباعة";
+            rbAnalysis.UseVisualStyleBackColor = true;
+            // 
+            // rbPrinterDirectly
+            // 
+            rbPrinterDirectly.AutoSize = true;
+            rbPrinterDirectly.Checked = true;
+            rbPrinterDirectly.Location = new Point(17, 37);
+            rbPrinterDirectly.Name = "rbPrinterDirectly";
+            rbPrinterDirectly.Size = new Size(99, 23);
+            rbPrinterDirectly.TabIndex = 31;
+            rbPrinterDirectly.TabStop = true;
+            rbPrinterDirectly.Text = "طباعة مباشرة";
+            rbPrinterDirectly.UseVisualStyleBackColor = true;
+            // 
             // btnDeleteSelected
             // 
             btnDeleteSelected.Anchor = AnchorStyles.None;
             btnDeleteSelected.Image = (Image)resources.GetObject("btnDeleteSelected.Image");
             btnDeleteSelected.ImeMode = ImeMode.NoControl;
-            btnDeleteSelected.Location = new Point(125, 83);
+            btnDeleteSelected.Location = new Point(138, 52);
             btnDeleteSelected.Name = "btnDeleteSelected";
             btnDeleteSelected.Size = new Size(37, 34);
             btnDeleteSelected.TabIndex = 30;
@@ -363,22 +381,12 @@
             btnDeleteSelected.UseVisualStyleBackColor = true;
             btnDeleteSelected.Click += btnDeleteSelected_Click;
             // 
-            // lblDelete
-            // 
-            lblDelete.AutoSize = true;
-            lblDelete.ImeMode = ImeMode.NoControl;
-            lblDelete.Location = new Point(164, 97);
-            lblDelete.Name = "lblDelete";
-            lblDelete.Size = new Size(108, 19);
-            lblDelete.TabIndex = 29;
-            lblDelete.Text = "حذف من الجدول:";
-            // 
             // btnEditSelected
             // 
             btnEditSelected.Anchor = AnchorStyles.None;
             btnEditSelected.Image = (Image)resources.GetObject("btnEditSelected.Image");
             btnEditSelected.ImeMode = ImeMode.NoControl;
-            btnEditSelected.Location = new Point(125, 24);
+            btnEditSelected.Location = new Point(226, 50);
             btnEditSelected.Name = "btnEditSelected";
             btnEditSelected.Size = new Size(37, 34);
             btnEditSelected.TabIndex = 28;
@@ -386,22 +394,12 @@
             btnEditSelected.UseVisualStyleBackColor = true;
             btnEditSelected.Click += btnEditSelected_Click;
             // 
-            // lblEdit
-            // 
-            lblEdit.AutoSize = true;
-            lblEdit.ImeMode = ImeMode.NoControl;
-            lblEdit.Location = new Point(184, 38);
-            lblEdit.Name = "lblEdit";
-            lblEdit.Size = new Size(88, 19);
-            lblEdit.TabIndex = 27;
-            lblEdit.Text = "تعديل المحدد:";
-            // 
             // btnDown
             // 
             btnDown.Anchor = AnchorStyles.None;
             btnDown.Image = (Image)resources.GetObject("btnDown.Image");
             btnDown.ImeMode = ImeMode.NoControl;
-            btnDown.Location = new Point(10, 24);
+            btnDown.Location = new Point(181, 26);
             btnDown.Name = "btnDown";
             btnDown.Size = new Size(37, 34);
             btnDown.TabIndex = 26;
@@ -409,32 +407,12 @@
             btnDown.UseVisualStyleBackColor = true;
             btnDown.Click += btnDown_Click;
             // 
-            // lblDown
-            // 
-            lblDown.AutoSize = true;
-            lblDown.ImeMode = ImeMode.NoControl;
-            lblDown.Location = new Point(50, 38);
-            lblDown.Name = "lblDown";
-            lblDown.Size = new Size(69, 19);
-            lblDown.TabIndex = 25;
-            lblDown.Text = "الى الاسفل:";
-            // 
-            // lblUp
-            // 
-            lblUp.AutoSize = true;
-            lblUp.ImeMode = ImeMode.NoControl;
-            lblUp.Location = new Point(57, 97);
-            lblUp.Name = "lblUp";
-            lblUp.Size = new Size(62, 19);
-            lblUp.TabIndex = 24;
-            lblUp.Text = "الى الفوق:";
-            // 
             // btnUp
             // 
             btnUp.Anchor = AnchorStyles.None;
             btnUp.Image = (Image)resources.GetObject("btnUp.Image");
             btnUp.ImeMode = ImeMode.NoControl;
-            btnUp.Location = new Point(10, 83);
+            btnUp.Location = new Point(181, 66);
             btnUp.Name = "btnUp";
             btnUp.Size = new Size(37, 34);
             btnUp.TabIndex = 23;
@@ -971,12 +949,8 @@
         private Panel panelButtons;
         private GroupBox gbOperations;
         private Button btnDeleteSelected;
-        private Label lblDelete;
         private Button btnEditSelected;
-        private Label lblEdit;
         private Button btnDown;
-        private Label lblDown;
-        private Label lblUp;
         private Button btnUp;
         private TableLayoutPanel tableLayoutPanel;
         private TextBox txtWholeSalePrice;
@@ -1011,5 +985,7 @@
         private DataGridView DgvِProducts;
         private CheckBox cbWholsale;
         private Label lblError2;
+        private RadioButton rbPrinterDirectly;
+        private RadioButton rbAnalysis;
     }
 }
