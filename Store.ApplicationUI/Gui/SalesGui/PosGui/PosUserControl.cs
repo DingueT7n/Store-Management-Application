@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.PaymentGui;
 using Store.ApplicationUI.Reports.ReportPerviwGui;
@@ -254,6 +255,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             {
                 SetProductsToTable();
                 AddNewRow();
+                txtSearchBarCode.Clear();
                 return;
             }
 
@@ -280,7 +282,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 txtSearchBarCode.Focus();
 
             }
-            txtSearchBarCode.Clear();
+            //txtSearchBarCode.Clear();
 
         }
         public decimal ConvertToFloat(string value)
@@ -303,23 +305,28 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 ).FirstOrDefault();
             txtProductName.Text = product.ProductName;
 
-            //ProductsQuantitie productQty = _context.ProductsQuantities.
-            //          Where(x => x.Pro_ID == product.Id && x.Qty > 0 && x.Store_ID == Properties.Settings.Default.FastSaleStore).FirstOrDefault();
 
 
-            if (productDiscount is not null)
-                txtSaleDiscount.Text = productDiscount.DiscountValue.ToString();
-            else txtSaleDiscount.Text = "0";
-            if (txtQty.Text != string.Empty)
+            if (productDiscount != null && btnPrices.Text == "سعر 1")
             {
-                if (product.Quentity < ConvertToFloat(txtQty.Text))
-                {
-                    txtQty.Text = product.Quentity.ToString();
-                }
+
+                txtSaleDiscount.Text = Code.Helper.FactureHelper.CalculateDiscountPercentage(product.SalePriceTax, productDiscount.DiscountValue).ToString();
+
             }
             else
             {
-                txtQty.Text = product.ColisageBareCode == txtSearchBarCode.Text ? product.NbrProductInColis.ToString() : "1";
+                txtSaleDiscount.Text = "0";
+            }
+
+            if (txtQty.Text != string.Empty)
+            {
+                txtQty.Text = !product.ColisageBareCode.IsNullOrEmpty() && product.ColisageBareCode == txtSearchBarCode.Text ?
+                    (ConvertToFloat(txtQty.Text) + product.NbrProductInColis).ToString() : "1";
+
+            }
+            else
+            {
+                txtQty.Text = !product.ColisageBareCode.IsNullOrEmpty() && product.ColisageBareCode == txtSearchBarCode.Text ? product.NbrProductInColis.ToString() : "1";
             }
             if (btnPrices.Text == "سعر 1")
             {
@@ -330,12 +337,16 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             {
                 txtTotalSaleProduct.Text = product.SalePriceSeconde.ToString();
                 txtSalePrice.Text = product.SalePriceSeconde.ToString();
+                txtSaleDiscount.Text = "0";
+
 
             }
             else
             {
                 txtTotalSaleProduct.Text = product.WholesalePrice.ToString();
                 txtSalePrice.Text = product.WholesalePrice.ToString();
+                txtSaleDiscount.Text = "0";
+
 
             }
 
@@ -356,14 +367,33 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 if (txtSalePrice.Text != string.Empty && txtQty.Text != string.Empty
                      && txtSaleDiscount.Text != string.Empty)
                 {
+                    ProductDiscount productDiscount = _context.ProductDiscounts.
+              Where(x => x.Id.ToString() == _product.Id.ToString() && x.Quentity >= ConvertToFloat(txtQty.Text)
+
+              && x.Store_Id == Properties.Settings.Default.FastSaleStore
+              && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
+              ).FirstOrDefault();
+                    if (productDiscount != null && btnPrices.Text == "سعر 1" && productDiscount.Quentity >= ConvertToFloat(txtQty.Text))
+                    {
+
+                        txtSaleDiscount.Text = Code.Helper.FactureHelper.CalculateDiscountPercentage(_product.SalePriceTax, productDiscount.DiscountValue).ToString();
+
+                    }
+                    else
+                    {
+                        txtSaleDiscount.Text = "0";
+                    }
+
                     decimal Discount = Convert.ToDecimal(txtSaleDiscount.Text);
                     decimal Amount = Convert.ToDecimal(txtSalePrice.Text);
                     decimal TotalAmount = Amount - (Amount * (Discount / 100));
+                    TotalAmount = Math.Round(TotalAmount, 2);
                     txtTotalSaleProduct.Text = (ConvertToFloat(TotalAmount.ToString()) * Convert.ToDecimal(txtQty.Text)).ToString();
 
                 }
-                if (txtSalePrice.Text != string.Empty && _product is not null)
+                if (txtQty.Text == string.Empty)
                 {
+                    txtQty.Text = "1";
                 }
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
@@ -387,6 +417,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 newRow.Cells[6].Value = _product.CodeBar;
                 DgvِProducts.CurrentCell = DgvِProducts[0, DgvِProducts.Rows.Count - 1];
                 ClearBoxes();
+                txtSearchBarCode.Clear();
                 txtSearchBarCode.Focus();
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
@@ -404,15 +435,37 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                     {
                         if (DgvِProducts.Rows[i].Cells[5].Value.ToString() == _product.Id.ToString())
                         {
+                            ProductDiscount productDiscount = _context.ProductDiscounts.
+              Where(x => x.Id == _product.Id && x.Quentity >= (ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()) + 1)
+
+              && x.Store_Id == Properties.Settings.Default.FastSaleStore
+              && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
+              ).FirstOrDefault();
+
+
+                            if (productDiscount != null && btnPrices.Text == "سعر 1")
+                            {
+                                DgvِProducts.Rows[i].Cells[3].Value = FactureHelper.CalculateDiscountPercentage(_product.SalePriceTax, productDiscount.DiscountValue).ToString();
+                            }
+                            else
+                            {
+                                DgvِProducts.Rows[i].Cells[3].Value = 0;
+                            }
                             //MsgHelper.ShowDuplicatedItemsAndInformTeCaiser();  Toaster
-                            DgvِProducts.Rows[i].Cells[2].Value = (ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()) + 1).ToString();
+                            DgvِProducts.Rows[i].Cells[2].Value = !_product.ColisageBareCode.IsNullOrEmpty() && _product.ColisageBareCode.ToString() == txtSearchBarCode.Text ?
+                              (ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()) + _product.NbrProductInColis).ToString() : (ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()) + 1).ToString();
                             DgvِProducts.Rows[i].Cells[4].Value = (ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()) *
                                 ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString())).ToString();
 
                             txtSearchBarCode.Focus();
                             ClearBoxes();
                             CalculateStatistics();
+                            txtSearchBarCode.Clear();
+
                             return;
+                            EditFromTable(1);
+                            //CalculateAmount();
+                            ////AddNewRow();
                         }
                     }
                     new_row();
@@ -645,12 +698,28 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 }
                 _product = salesRepository.GetProductBarCode(DgvِProducts.CurrentRow.Cells[6].Value.ToString());
                 txtProductName.Text = this.DgvِProducts.CurrentRow.Cells[0].Value.ToString();
-                txtSaleDiscount.Text = this.DgvِProducts.CurrentRow.Cells[3].Value.ToString();
                 if (ConvertToFloat(DgvِProducts.CurrentRow.Cells[2].Value.ToString()) + q > 1)
                     txtQty.Text = (ConvertToFloat(DgvِProducts.CurrentRow.Cells[2].Value.ToString()) + q).ToString();
                 else txtQty.Text = "1";
                 txtTotalSaleProduct.Text = this.DgvِProducts.CurrentRow.Cells[4].Value.ToString();
                 txtSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[1].Value.ToString();
+
+                ProductDiscount productDiscount = _context.ProductDiscounts.
+               Where(x => x.Id == _product.Id && x.Quentity > 0
+
+               && x.Store_Id == Properties.Settings.Default.FastSaleStore
+               && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
+               ).FirstOrDefault();
+
+
+                if (productDiscount != null && btnPrices.Text == "سعر 1" && ConvertToFloat(txtQty.Text) <= productDiscount.Quentity)
+                {
+                    txtSaleDiscount.Text = Code.Helper.FactureHelper.CalculateDiscountPercentage(_product.SalePriceTax, productDiscount.DiscountValue).ToString();
+                }
+                else
+                {
+                    txtSaleDiscount.Text = "0";
+                }
 
 
                 DgvِProducts.Rows.RemoveAt(DgvِProducts.CurrentRow.Index);
@@ -658,9 +727,9 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 CalculateAmount();
                 CalculateStatistics();
 
-                ProductsQuantitie productQty = _context.ProductsQuantities.
-                          Where(x => x.Pro_ID == _product.Id && x.Qty >= ConvertToFloat(txtQty.Text)
-                          && x.Store_ID == Properties.Settings.Default.FastSaleStore).FirstOrDefault();
+                //ProductsQuantitie productQty = _context.ProductsQuantities.
+                //          Where(x => x.Pro_ID == _product.Id && x.Qty >= ConvertToFloat(txtQty.Text)
+                //          && x.Store_ID == Properties.Settings.Default.FastSaleStore).FirstOrDefault();
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
 
@@ -853,6 +922,21 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 product.Quentity = Math.Max(0, product.Quentity - ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()));
             }
 
+            ProductDiscount productDiscount = _context.ProductDiscounts.
+                Where(x => x.Id.ToString() == product.Id.ToString() && x.Quentity > 0
+
+                && x.Store_Id == Properties.Settings.Default.FastSaleStore
+                && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
+                ).FirstOrDefault();
+            if (productDiscount != null)
+            {
+
+                productDiscount.Quentity -= ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+                if (productDiscount.Quentity < 0)
+                { productDiscount.Quentity = 0; }
+                _context.Update(productDiscount);
+                _context.SaveChanges();
+            }
             return product;
         }
 
@@ -1023,6 +1107,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                                 await _context.SalesDetails.AddAsync(saleDetail);
 
                                 _context.Update(SetProduct(i));
+
+
                                 var buyPrice = SetProductQuentity(Convert.ToDecimal(DgvِProducts.Rows[i].Cells[2].Value.ToString()), i, sale.Id);
                                 //var profit = SetSaleProfit(i, buyPrice);
                                 //profit.Order_ID = sale.Id;

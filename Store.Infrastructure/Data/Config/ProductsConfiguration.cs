@@ -88,6 +88,7 @@ namespace Store.Infrastructure.Data.Config
 
             builder.HasKey(x => x.Id);
             builder.HasOne(x => x.Product).WithMany().HasForeignKey(x => x.Pro_Id);
+            builder.HasOne(x => x.Store).WithMany().HasForeignKey(x => x.Store_Id);
             builder.Property(p => p.DiscountValue).HasColumnType("decimal(18,2)");
             builder.Property(p => p.Quentity).HasColumnType("decimal(18,2)");
         }

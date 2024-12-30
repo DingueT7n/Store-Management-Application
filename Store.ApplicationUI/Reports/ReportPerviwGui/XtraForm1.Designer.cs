@@ -276,7 +276,7 @@
             documentViewer1.Location = new Point(0, 150);
             documentViewer1.Name = "documentViewer1";
             documentViewer1.PageBorderColor = Color.White;
-            documentViewer1.Size = new Size(1415, 544);
+            documentViewer1.Size = new Size(1169, 484);
             documentViewer1.TabIndex = 0;
             documentViewer1.TooltipFont = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             // 
@@ -299,7 +299,7 @@
             ribbonControl1.OptionsMenuMinWidth = 440;
             ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] { printPreviewRibbonPage });
             ribbonControl1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] { repositoryItemProgressBar1, repositoryItemZoomTrackBar1 });
-            ribbonControl1.Size = new Size(1415, 150);
+            ribbonControl1.Size = new Size(1169, 150);
             ribbonControl1.StatusBar = ribbonStatusBar1;
             ribbonControl1.TransparentEditorsMode = DevExpress.Utils.DefaultBoolean.True;
             // 
@@ -611,16 +611,16 @@
             // 
             // printPreviewBarItem18
             // 
-            printPreviewBarItem18.Caption = "First Page";
-            printPreviewBarItem18.Command = DevExpress.XtraPrinting.PrintingSystemCommand.ShowFirstPage;
+            printPreviewBarItem18.Caption = "Last  Page ";
+            printPreviewBarItem18.Command = DevExpress.XtraPrinting.PrintingSystemCommand.ShowLastPage;
             printPreviewBarItem18.ContextSpecifier = documentViewerRibbonController1;
             printPreviewBarItem18.Enabled = false;
             printPreviewBarItem18.Id = 18;
             printPreviewBarItem18.Name = "printPreviewBarItem18";
             superToolTip18.FixedTooltipWidth = true;
-            toolTipTitleItem18.Text = "First Page (Home)";
+            toolTipTitleItem18.Text = "Last Page (End)";
             toolTipItem18.LeftIndent = 6;
-            toolTipItem18.Text = "Navigate to the first page of the document.";
+            toolTipItem18.Text = "Navigate to the last page of the document.";
             superToolTip18.Items.Add(toolTipTitleItem18);
             superToolTip18.Items.Add(toolTipItem18);
             superToolTip18.MaxWidth = 210;
@@ -628,16 +628,16 @@
             // 
             // printPreviewBarItem19
             // 
-            printPreviewBarItem19.Caption = "Previous Page";
-            printPreviewBarItem19.Command = DevExpress.XtraPrinting.PrintingSystemCommand.ShowPrevPage;
+            printPreviewBarItem19.Caption = "Next  Page ";
+            printPreviewBarItem19.Command = DevExpress.XtraPrinting.PrintingSystemCommand.ShowNextPage;
             printPreviewBarItem19.ContextSpecifier = documentViewerRibbonController1;
             printPreviewBarItem19.Enabled = false;
             printPreviewBarItem19.Id = 19;
             printPreviewBarItem19.Name = "printPreviewBarItem19";
             superToolTip19.FixedTooltipWidth = true;
-            toolTipTitleItem19.Text = "Previous Page (Left Arrow)";
+            toolTipTitleItem19.Text = "Next Page (Right Arrow)";
             toolTipItem19.LeftIndent = 6;
-            toolTipItem19.Text = "Navigate to the previous page of the document.";
+            toolTipItem19.Text = "Navigate to the next page of the document.";
             superToolTip19.Items.Add(toolTipTitleItem19);
             superToolTip19.Items.Add(toolTipItem19);
             superToolTip19.MaxWidth = 210;
@@ -645,16 +645,16 @@
             // 
             // printPreviewBarItem20
             // 
-            printPreviewBarItem20.Caption = "Next  Page ";
-            printPreviewBarItem20.Command = DevExpress.XtraPrinting.PrintingSystemCommand.ShowNextPage;
+            printPreviewBarItem20.Caption = "Previous Page";
+            printPreviewBarItem20.Command = DevExpress.XtraPrinting.PrintingSystemCommand.ShowPrevPage;
             printPreviewBarItem20.ContextSpecifier = documentViewerRibbonController1;
             printPreviewBarItem20.Enabled = false;
             printPreviewBarItem20.Id = 20;
             printPreviewBarItem20.Name = "printPreviewBarItem20";
             superToolTip20.FixedTooltipWidth = true;
-            toolTipTitleItem20.Text = "Next Page (Right Arrow)";
+            toolTipTitleItem20.Text = "Previous Page (Left Arrow)";
             toolTipItem20.LeftIndent = 6;
-            toolTipItem20.Text = "Navigate to the next page of the document.";
+            toolTipItem20.Text = "Navigate to the previous page of the document.";
             superToolTip20.Items.Add(toolTipTitleItem20);
             superToolTip20.Items.Add(toolTipItem20);
             superToolTip20.MaxWidth = 210;
@@ -662,16 +662,16 @@
             // 
             // printPreviewBarItem21
             // 
-            printPreviewBarItem21.Caption = "Last  Page ";
-            printPreviewBarItem21.Command = DevExpress.XtraPrinting.PrintingSystemCommand.ShowLastPage;
+            printPreviewBarItem21.Caption = "First Page";
+            printPreviewBarItem21.Command = DevExpress.XtraPrinting.PrintingSystemCommand.ShowFirstPage;
             printPreviewBarItem21.ContextSpecifier = documentViewerRibbonController1;
             printPreviewBarItem21.Enabled = false;
             printPreviewBarItem21.Id = 21;
             printPreviewBarItem21.Name = "printPreviewBarItem21";
             superToolTip21.FixedTooltipWidth = true;
-            toolTipTitleItem21.Text = "Last Page (End)";
+            toolTipTitleItem21.Text = "First Page (Home)";
             toolTipItem21.LeftIndent = 6;
-            toolTipItem21.Text = "Navigate to the last page of the document.";
+            toolTipItem21.Text = "Navigate to the first page of the document.";
             superToolTip21.Items.Add(toolTipTitleItem21);
             superToolTip21.Items.Add(toolTipItem21);
             superToolTip21.MaxWidth = 210;
@@ -1386,11 +1386,11 @@
             ribbonStatusBar1.ItemLinks.Add(printPreviewBarItem52);
             ribbonStatusBar1.ItemLinks.Add(printPreviewStaticItem2);
             ribbonStatusBar1.ItemLinks.Add(zoomTrackBarEditItem1);
-            ribbonStatusBar1.Location = new Point(0, 694);
+            ribbonStatusBar1.Location = new Point(0, 634);
             ribbonStatusBar1.Margin = new Padding(4);
             ribbonStatusBar1.Name = "ribbonStatusBar1";
             ribbonStatusBar1.Ribbon = ribbonControl1;
-            ribbonStatusBar1.Size = new Size(1415, 27);
+            ribbonStatusBar1.Size = new Size(1169, 27);
             // 
             // XtraForm1
             // 
@@ -1399,7 +1399,7 @@
             Appearance.Options.UseFont = true;
             AutoScaleDimensions = new SizeF(8F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1415, 721);
+            ClientSize = new Size(1169, 661);
             Controls.Add(documentViewer1);
             Controls.Add(ribbonStatusBar1);
             Controls.Add(ribbonControl1);

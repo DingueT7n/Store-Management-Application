@@ -86,6 +86,7 @@
             txtQtyInFrom.Name = "txtQtyInFrom";
             txtQtyInFrom.Size = new Size(66, 27);
             txtQtyInFrom.TabIndex = 14;
+            txtQtyInFrom.Text = "0";
             // 
             // label10
             // 
@@ -102,6 +103,7 @@
             txtQtyTransfert.Name = "txtQtyTransfert";
             txtQtyTransfert.Size = new Size(62, 27);
             txtQtyTransfert.TabIndex = 12;
+            txtQtyTransfert.Text = "0";
             txtQtyTransfert.KeyPress += textBox4_KeyPress;
             // 
             // label5
@@ -138,6 +140,7 @@
             txtTotalQty.Name = "txtTotalQty";
             txtTotalQty.Size = new Size(66, 27);
             txtTotalQty.TabIndex = 5;
+            txtTotalQty.Text = "0";
             txtTotalQty.KeyPress += textBox3_KeyPress;
             // 
             // label3

@@ -629,16 +629,19 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                         }
                         if (cbFavorite.Checked)
                         {
-                            ProductQuickAccess qucik = new ProductQuickAccess
+                            if (_context.ProductQuickAccess.FirstOrDefault(x => x.Id.ToString() == lblProductId.Text) is not null)
                             {
-                                Pro_Id = product.Id,
-                                CodeBar = txtBarCode.Text,
-                                ProductImage = RetriveImage(),
-                                ProductName = txtNameProduct.Text,
-                            };
-                            vider();
-                            _context.Add(qucik);
-                            _context.SaveChanges();
+                                ProductQuickAccess qucik = new ProductQuickAccess
+                                {
+                                    Pro_Id = product.Id,
+                                    CodeBar = txtBarCode.Text,
+                                    ProductImage = RetriveImage(),
+                                    ProductName = txtNameProduct.Text,
+                                };
+                                vider();
+                                _context.Add(qucik);
+                                _context.SaveChanges();
+                            }
                             product = null;
                         }
                         else
@@ -709,16 +712,19 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
                             if (cbFavorite.Checked)
                             {
-                                ProductQuickAccess qucik = new ProductQuickAccess
+                                if (_context.ProductQuickAccess.FirstOrDefault(x => x.Id.ToString() == lblProductId.Text) is not null)
                                 {
-                                    Pro_Id = product.Id,
-                                    CodeBar = txtBarCode.Text,
-                                    ProductImage = RetriveImage(),
-                                    ProductName = txtNameProduct.Text,
-                                };
-                                vider();
-                                _context.Add(qucik);
-                                _context.SaveChanges();
+                                    ProductQuickAccess qucik = new ProductQuickAccess
+                                    {
+                                        Pro_Id = product.Id,
+                                        CodeBar = txtBarCode.Text,
+                                        ProductImage = RetriveImage(),
+                                        ProductName = txtNameProduct.Text,
+                                    };
+                                    vider();
+                                    _context.Add(qucik);
+                                    _context.SaveChanges();
+                                }
                                 product = null;
                             }
 
@@ -845,15 +851,15 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void txtNameProduct_KeyDown(object sender, KeyEventArgs e)
         {
-            if ((e.KeyCode == Keys.Enter))
+
+            if (e.KeyCode == Keys.Enter)
             {
-                if (e.KeyCode == Keys.Enter)
-                {
-                    e.Handled = true;
-                    //e.SuppressKeyPress = true; // Suppress the "ding" sound
-                    SelectNextControl((Control)sender, true, true, true, true);
-                }
+
+                e.Handled = true;
+                //e.SuppressKeyPress = true; // Suppress the "ding" sound
+                SelectNextControl((Control)sender, true, true, true, true);
             }
+
         }
 
         private void cbFavorite_CheckedChanged(object sender, EventArgs e)
@@ -917,6 +923,20 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
 
             }
+        }
+
+        private void txtSalePrice_KeyUp(object sender, KeyEventArgs e)
+        {
+            txtSalePrice2.Text = txtSalePrice.Text;
+            txtSaleAfterTax.Text = CalculatePriceWithTax(ConvertToFloat(txtSalePrice.Text), ConvertToFloat(txtTaxValue.Text)).ToString();
+        }
+        public static decimal CalculatePriceWithTax(decimal price, decimal taxRate)
+        {
+            if (price < 0 || taxRate < 0)
+                return 0;
+
+            decimal priceWithTax = price + (price * (taxRate / 100));
+            return Math.Round(priceWithTax, 2); // Rounds to 2 decimal places
         }
     }
 }

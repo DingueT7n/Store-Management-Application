@@ -1062,6 +1062,8 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Pro_Id");
 
+                    b.HasIndex("Store_Id");
+
                     b.ToTable("ProductDiscounts");
                 });
 
@@ -2352,7 +2354,15 @@ namespace Store.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Store.Core.Entities.Stores.Store", "Store")
+                        .WithMany()
+                        .HasForeignKey("Store_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Product");
+
+                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Products.ProductFamily", b =>

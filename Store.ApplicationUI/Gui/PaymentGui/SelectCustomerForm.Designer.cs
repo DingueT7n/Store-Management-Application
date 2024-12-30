@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectCustomerForm));
             panelTitle = new Panel();
             lblTitleForm = new Label();
@@ -56,7 +56,7 @@
             panelTitle.Dock = DockStyle.Top;
             panelTitle.Location = new Point(0, 0);
             panelTitle.Name = "panelTitle";
-            panelTitle.Size = new Size(864, 54);
+            panelTitle.Size = new Size(773, 54);
             panelTitle.TabIndex = 2;
             // 
             // lblTitleForm
@@ -85,7 +85,7 @@
             tableLayoutPanel.RowCount = 1;
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel.Size = new Size(864, 388);
+            tableLayoutPanel.Size = new Size(773, 581);
             tableLayoutPanel.TabIndex = 3;
             // 
             // panelDgv
@@ -96,7 +96,7 @@
             panelDgv.Dock = DockStyle.Fill;
             panelDgv.Location = new Point(3, 3);
             panelDgv.Name = "panelDgv";
-            panelDgv.Size = new Size(850, 382);
+            panelDgv.Size = new Size(759, 575);
             panelDgv.TabIndex = 1;
             // 
             // lblEmptyData
@@ -106,7 +106,7 @@
             lblEmptyData.BackColor = Color.Transparent;
             lblEmptyData.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 7);
             lblEmptyData.ForeColor = Color.Crimson;
-            lblEmptyData.Location = new Point(359, 182);
+            lblEmptyData.Location = new Point(313, 278);
             lblEmptyData.Name = "lblEmptyData";
             lblEmptyData.Size = new Size(133, 19);
             lblEmptyData.TabIndex = 12;
@@ -119,31 +119,31 @@
             DgvProducts.AllowUserToAddRows = false;
             DgvProducts.AllowUserToResizeColumns = false;
             DgvProducts.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvProducts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvProducts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
             DgvProducts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             DgvProducts.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             DgvProducts.BackgroundColor = Color.White;
             DgvProducts.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             DgvProducts.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle2.ForeColor = Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = Color.DodgerBlue;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            DgvProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle6.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle6.ForeColor = Color.White;
+            dataGridViewCellStyle6.SelectionBackColor = Color.DodgerBlue;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            DgvProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             DgvProducts.ColumnHeadersHeight = 40;
             DgvProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Window;
-            dataGridViewCellStyle3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
-            DgvProducts.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.BackColor = SystemColors.Window;
+            dataGridViewCellStyle7.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle7.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.False;
+            DgvProducts.DefaultCellStyle = dataGridViewCellStyle7;
             DgvProducts.Dock = DockStyle.Fill;
             DgvProducts.EnableHeadersVisualStyles = false;
             DgvProducts.GridColor = SystemColors.ControlDark;
@@ -155,10 +155,10 @@
             DgvProducts.RowHeadersVisible = false;
             DgvProducts.RowHeadersWidth = 21;
             DgvProducts.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle4.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvProducts.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle8.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvProducts.RowsDefaultCellStyle = dataGridViewCellStyle8;
             DgvProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DgvProducts.Size = new Size(850, 331);
+            DgvProducts.Size = new Size(759, 524);
             DgvProducts.TabIndex = 10;
             DgvProducts.CellContentDoubleClick += DgvProducts_CellContentDoubleClick;
             // 
@@ -170,7 +170,7 @@
             SearchPanel.Dock = DockStyle.Top;
             SearchPanel.Location = new Point(0, 0);
             SearchPanel.Name = "SearchPanel";
-            SearchPanel.Size = new Size(850, 51);
+            SearchPanel.Size = new Size(759, 51);
             SearchPanel.TabIndex = 11;
             // 
             // txtSearch
@@ -181,7 +181,7 @@
             txtSearch.Multiline = true;
             txtSearch.Name = "txtSearch";
             txtSearch.PlaceholderText = "ابحث عن عميل";
-            txtSearch.Size = new Size(633, 51);
+            txtSearch.Size = new Size(542, 51);
             txtSearch.TabIndex = 9;
             txtSearch.TextAlign = HorizontalAlignment.Center;
             // 
@@ -214,14 +214,16 @@
             AutoScaleDimensions = new SizeF(8F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(864, 442);
+            ClientSize = new Size(773, 635);
             Controls.Add(tableLayoutPanel);
             Controls.Add(panelTitle);
             Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             KeyPreview = true;
             Margin = new Padding(3, 4, 3, 4);
             MaximizeBox = false;
+            MaximumSize = new Size(789, 674);
             MinimizeBox = false;
+            MinimumSize = new Size(789, 674);
             Name = "SelectCustomerForm";
             RightToLeft = RightToLeft.Yes;
             RightToLeftLayout = true;

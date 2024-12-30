@@ -39,7 +39,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
             // Return the singleton instance
             _salesUserControl.LoadData();
 
-            _salesUserControl.ResetForm();
+            _salesUserControl.ResetFormBegin();
             return _salesUserControl;
         }
 
@@ -80,6 +80,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
             LoadingForm.Instance(_main).Show();
             if (await Task.Run(() => salesRepository.IsConnected()))
             {
+                ResetFormBegin();
                 //Start Load Data
                 txtFactureNumber.Text = salesRepository.GetFactureNumber();
                 // if its an admin or Normal user 
@@ -148,10 +149,8 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 var storeId = Convert.ToInt32(cmbStores.SelectedValue);
                 var now = DateTime.Now;
 
-                ProductDiscount productDiscount = _context.ProductDiscounts
-                    .FirstOrDefault(x => x.Id == product.Id && x.Quentity > 0 && x.Store_Id == storeId
-                        && x.DateStart <= now && x.DateEnd > now);
-
+                if (txtQty.Text.Contains("\r\n"))
+                    txtQty.Text = "1";
                 txtProductName.Text = product.ProductName;
                 labelError1.Visible = product.Quentity <= 0;
 
@@ -160,7 +159,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
                 lblError2.Visible = productQty is null;
 
-                txtSaleDiscount.Text = productDiscount?.DiscountValue.ToString() ?? "0";
+
 
                 if (!string.IsNullOrEmpty(product.ColisageBareCode) && string.IsNullOrEmpty(txtQty.Text))
                 {
@@ -171,12 +170,19 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 {
                     txtQty.Text = "1";
                 }
+                decimal qty = !txtQty.Text.IsNullOrEmpty() ? Convert.ToDecimal(txtQty.Text) : 0;
+                ProductDiscount productDiscount = _context.ProductDiscounts
+                                 .FirstOrDefault(x => x.Id == product.Id && x.Quentity >= qty && x.Store_Id == storeId
+                                     && x.DateStart <= now && x.DateEnd > now);
+                if (productDiscount != null)
+                {
+
+                    txtSaleDiscount.Text = Code.Helper.FactureHelper.CalculateDiscountPercentage(product.SalePriceTax, productDiscount.DiscountValue).ToString();
+                }
                 else
                 {
-                    txtQty.Text = "1";
-
+                    txtSaleDiscount.Text = "0";
                 }
-
                 txtTotalSaleProduct.Text = product.SalePriceTax.ToString();
                 txtSalePrice.Text = product.SalePriceTax.ToString();
                 txtWholeSalePrice.Text = product.WholesalePrice.ToString();
@@ -188,6 +194,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
 
         }
+
         public static void InitializeData(string paidUp, string remain)
         {
             PaidUp = _main.ConvertToFloat(paidUp);
@@ -214,8 +221,8 @@ namespace Store.ApplicationUI.Gui.SalesGui
                     return;
 
                 decimal discount = Convert.ToDecimal(txtSaleDiscount.Text);
-                decimal amount = cbWholsale.Checked ? Convert.ToDecimal(txtWholeSalePrice.Text) : Convert.ToDecimal(txtSalePrice.Text);
-                decimal totalAmount = amount - (amount * (discount / 100));
+                decimal amount = cbWholsale.Checked && discount == 0 ? Convert.ToDecimal(txtWholeSalePrice.Text) : Convert.ToDecimal(txtSalePrice.Text);
+                decimal totalAmount = Math.Round(amount - (amount * (discount / 100)), 2);
 
                 txtTotalSaleProduct.Text = (_main.ConvertToFloat(totalAmount.ToString()) * Convert.ToDecimal(txtQty.Text)).ToString();
             }
@@ -526,7 +533,39 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 // Set focus to the first control
             }
         }
+        private void ResetFormBegin()
+        {
 
+            Process = false;
+            // Clear all textboxes
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is TextBox)
+                {
+                    ((TextBox)ctrl).Clear();
+                }
+                else if (ctrl is ComboBox)
+                {
+                    ((ComboBox)ctrl).SelectedIndex = -1; // Deselect ComboBox
+                }
+                else if (ctrl is CheckBox)
+                {
+                    ((CheckBox)ctrl).Checked = false; // Uncheck CheckBox
+                }
+                // Add more control types if needed
+            }
+
+            // Reset any DataGridView
+            DgvِProducts.Rows.Clear();
+            CalculateStatistics();
+
+            // Reinitialize form data (e.g., reload initial data)
+            //LoadData(); // This is a method where you load initial data
+
+            // Optionally reset focus to the first control
+            // Set focus to the first control
+
+        }
         private void btnDeleteSelected_Click(object sender, EventArgs e)
         {
             try
@@ -643,6 +682,21 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 product.Quentity -= _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
                 if (product.Quentity < 0)
                     product.Quentity = 0;
+            }
+            ProductDiscount productDiscount = _context.ProductDiscounts.
+             Where(x => x.Id.ToString() == product.Id.ToString() && x.Quentity > 0
+
+             && x.Store_Id == Properties.Settings.Default.FastSaleStore
+             && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
+             ).FirstOrDefault();
+            if (productDiscount != null)
+            {
+
+                productDiscount.Quentity -= _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+                if (productDiscount.Quentity < 0)
+                { productDiscount.Quentity = 0; }
+                _context.Update(productDiscount);
+                _context.SaveChanges();
             }
 
             return product;
@@ -992,6 +1046,22 @@ namespace Store.ApplicationUI.Gui.SalesGui
                     txtTotalSaleProduct.Text = this.DgvِProducts.CurrentRow.Cells[5].Value.ToString();
                     txtSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[1].Value.ToString();
                     txtWholeSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[4].Value.ToString();
+
+                    ProductDiscount productDiscount = _context.ProductDiscounts.
+                   Where(x => x.Id == _product.Id && x.Quentity > 0
+
+                   && x.Store_Id == Properties.Settings.Default.FastSaleStore
+                   && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
+                   ).FirstOrDefault();
+
+                    if (productDiscount != null && !cbWholsale.Checked && _main.ConvertToFloat(txtQty.Text) <= productDiscount.Quentity)
+                    {
+                        txtSaleDiscount.Text = Code.Helper.FactureHelper.CalculateDiscountPercentage(_product.SalePriceTax, productDiscount.DiscountValue).ToString();
+                    }
+                    else
+                    {
+                        txtSaleDiscount.Text = "0";
+                    }
 
                     txtQty.Focus();
                     CalculateAmount();

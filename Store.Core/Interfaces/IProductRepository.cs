@@ -21,5 +21,8 @@ namespace Store.Core.Interfaces
     public interface IProductTransferRepository : IGenericRepository<ProductTransfer>
     {
     }
+    public interface IProductDiscountRepository : IGenericRepository<ProductDiscount>
+    {
+    }
 
 }

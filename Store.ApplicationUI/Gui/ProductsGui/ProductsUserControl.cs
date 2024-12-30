@@ -229,6 +229,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+
             DgvProducts.DataSource = productsRepository.SearchAll(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
             txtSearch.Text = string.Empty;

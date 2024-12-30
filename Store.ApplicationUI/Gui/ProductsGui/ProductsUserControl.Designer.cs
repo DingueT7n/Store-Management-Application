@@ -171,6 +171,7 @@
             button1.Text = "طباعة المنتجات";
             button1.TextAlign = ContentAlignment.MiddleRight;
             button1.UseVisualStyleBackColor = true;
+            button1.Visible = false;
             // 
             // btnExportProduct
             // 
@@ -183,6 +184,7 @@
             btnExportProduct.TabIndex = 6;
             btnExportProduct.Text = "   تصدير";
             btnExportProduct.UseVisualStyleBackColor = true;
+            btnExportProduct.Visible = false;
             // 
             // SearchPanel
             // 

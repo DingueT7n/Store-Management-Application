@@ -12,6 +12,7 @@
         public string? TimeEnd { get; set; }
 
         public virtual Product Product { get; set; }
+        public virtual Stores.Store Store { get; set; }
     }
 
     //Table BadProduct

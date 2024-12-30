@@ -7,6 +7,16 @@ namespace Store.ApplicationUI.Code.Helper
 {
     public static class FactureHelper
     {
+        public static decimal CalculateDiscountPercentage(decimal originalPrice, decimal discountedPrice)
+        {
+            if (originalPrice <= 0 || discountedPrice < 0)
+                return 0;
+
+            decimal discount = originalPrice - discountedPrice;
+            decimal percentage = (discount / originalPrice) * 100;
+
+            return Math.Round(percentage, 2); // Rounds to 2 decimal places
+        }
         public static async Task<DataTable> GetSellDetailsDataTableAsync(int orderId)
         {
 

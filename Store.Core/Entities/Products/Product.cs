@@ -34,6 +34,10 @@ namespace Store.Core.Entities.Products
         public int CategoryId { get; set; } // Group
         public virtual Category Category { get; set; }
         public virtual ICollection<ProductFamily> ProductFamilies { get; set; } = new HashSet<ProductFamily>();
+        public override string ToString()
+        {
+            return ProductName;
+        }
 
     }
 

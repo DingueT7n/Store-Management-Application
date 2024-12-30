@@ -307,6 +307,7 @@
             txtSalePrice.Name = "txtSalePrice";
             txtSalePrice.KeyDown += txtNameProduct_KeyDown;
             txtSalePrice.KeyPress += txtSalePrice_KeyPress;
+            txtSalePrice.KeyUp += txtSalePrice_KeyUp;
             // 
             // label5
             // 

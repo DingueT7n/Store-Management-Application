@@ -15,14 +15,32 @@ namespace Store.Infrastructure.Repositories
 
             try
             {
-                return _context.Products.Where(x =>
-                x.CodeBar == (barCode)
-                )
-                    .FirstOrDefault();
+                _context = new ApplicationDbContext();
 
+                var product = _context.Products.FirstOrDefault(x => x.CodeBar == barCode);
+
+
+                if (product == null)
+                {
+                    product = _context.Products.FirstOrDefault(x => x.ColisageBareCode == barCode);
+                }
+
+
+                if (product == null)
+                {
+                    product = _context.ProductFamilies
+                        .Where(x => x.CodeBar == barCode)
+                        .Select(x => x.Product)
+                        .FirstOrDefault();
+                }
+
+
+
+                return product;
             }
-            catch
+            catch (Exception)
             {
+
                 return new Product();
             }
         }
@@ -54,6 +72,8 @@ namespace Store.Infrastructure.Repositories
         {
             try
             {
+                _context = new ApplicationDbContext();
+
                 var products = _context.ProductsQuantities
                     .Include(x => x.Product)
                                 .Where(x => x.DateExpiration <= DateTime.Now && x.Qty > 0)
@@ -78,6 +98,8 @@ namespace Store.Infrastructure.Repositories
         {
             try
             {
+                _context = new ApplicationDbContext();
+
                 var products = _context.Products
                     .Include(x => x.Category)
                                 .Where(x => x.Quentity <= x.MinQty)
@@ -103,6 +125,7 @@ namespace Store.Infrastructure.Repositories
 
             try
             {
+                _context = new ApplicationDbContext();
                 return _context.Products.Include(x => x.Category).Where(x => x.Id.ToString() == searchIteam ||
                 x.Quentity.ToString() == searchIteam ||
                 x.ProductName.Contains(searchIteam) ||
@@ -124,6 +147,8 @@ namespace Store.Infrastructure.Repositories
         {
             try
             {
+                _context = new ApplicationDbContext();
+
                 return _context.Products.Where(x => x.Id.ToString() == userId).Where(x => x.Id.ToString() == searchIteam ||
                 x.Quentity.ToString() == searchIteam ||
                 x.ProductName.Contains(searchIteam) ||
@@ -145,6 +170,8 @@ namespace Store.Infrastructure.Repositories
         {
             try
             {
+                _context = new ApplicationDbContext();
+
                 var allTransfers = _context.ProductsOutStore
                       .Include(x => x.Product)
                       .AsEnumerable();
@@ -174,6 +201,8 @@ namespace Store.Infrastructure.Repositories
         {
             try
             {
+                _context = new ApplicationDbContext();
+
                 var lastRefund = _context.ProductsQuantities
                     .Include(x => x.Product)
                                 .Where(x => (barcode != string.Empty ? barcode == x.Product.CodeBar : true))
@@ -207,6 +236,8 @@ namespace Store.Infrastructure.Repositories
         {
             try
             {
+                _context = new ApplicationDbContext();
+
                 var lastRefund = _context.ProductsQuantities
                     .Include(x => x.Product)
                     .Where(x => x.Store_ID == storeId)
@@ -247,6 +278,8 @@ namespace Store.Infrastructure.Repositories
 
             try
             {
+                _context = new ApplicationDbContext();
+
                 var allTransfers = _context.ProductsTransfers
                       .Include(x => x.Product)
                       .AsEnumerable();
@@ -271,6 +304,45 @@ namespace Store.Infrastructure.Repositories
 
         }
         public ProductTransferRepository(ApplicationDbContext context) : base(context)
+        {
+        }
+    }
+    public class ProductDiscountRepository : GenericRepository<ProductDiscount>, IProductDiscountRepository
+    {
+        public List<ProductDiscount> GetAllData(DateTime dateStart, DateTime dateEnd, string barcode, string store)
+        {
+
+            try
+            {
+                _context = new ApplicationDbContext();
+
+                var allTransfers = _context.ProductDiscounts
+                      .Include(x => x.Product)
+                      .Include(x => x.Store)
+                      .AsEnumerable();
+                if (barcode != string.Empty) allTransfers = allTransfers.Where(x => x.Product.CodeBar == barcode);
+                allTransfers = allTransfers.Where(x => x.DateStart >= dateStart && x.DateEnd >= dateEnd);
+
+                if (store != string.Empty)
+                    allTransfers = allTransfers.Where(x => x.Store.StoreName == store);
+                //if (t2 != string.Empty)
+                //    allTransfers = allTransfers.Where(x => x.StoreTo == t2);
+
+
+
+                //allTransfers = allTransfers.Where(x => DateTime.TryParse(x.Date, out var date) && date >= dtpFrom && date <= dtpTo)
+                //     ;
+
+                return allTransfers.ToList();
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("Error retrieving the buyFactures", ex);
+            }
+
+        }
+        public ProductDiscountRepository(ApplicationDbContext context) : base(context)
         {
         }
     }

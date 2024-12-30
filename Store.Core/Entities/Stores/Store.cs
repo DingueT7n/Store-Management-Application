@@ -4,5 +4,9 @@
     {
 
         public string StoreName { get; set; }
+        public override string ToString()
+        {
+            return StoreName;
+        }
     }
 }
