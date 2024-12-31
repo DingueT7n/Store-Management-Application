@@ -61,6 +61,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 addProductForm.Focus();
             }
 
+
         }
 
         public async void SetProductsToDgv(int skip)
@@ -223,6 +224,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             if (MsgHelper.ShowDeleteDialog())
             {
                 productsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[15].Value.ToString());
+                Code.Helper.ToasterHelper.ShowDeletedToast();
+
             }
             RefreshDgv();
         }

@@ -131,5 +131,32 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenCaisseReportG
         {
             RefreshDgv();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (MsgHelper.ShowDeleteDialog())
+                {
+                    for (int i = 0; i <= DgvSales.Rows.Count - 1; i++)
+                    {
+                        var deleteedRefund = _contex.CaissesTransferes.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i].Cells[9].Value.ToString())).FirstOrDefault();
+                        if (deleteedRefund != null)
+                        {
+                            _contex.Remove(deleteedRefund);
+                            _contex.SaveChanges();
+                        }
+                    }
+
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
+                    DgvSales.DataSource = null;
+                    RefreshDgv();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

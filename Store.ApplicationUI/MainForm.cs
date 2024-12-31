@@ -42,64 +42,66 @@ namespace Store.ApplicationUI
 
             isPanelNull = true;
             //btnStatistics.Enabled = LocalUser.User.user
-            btnAllProducts.Enabled = LocalUser.User.UserProductAndStore.AllProducts;
-            //btnAllStores.Enabled = LocalUser.User.UserProductAndStore.Allstores;
-            btnAddProduct.Enabled = LocalUser.User.UserProductAndStore.AddProduct;
-            btnAllCategories.Enabled = LocalUser.User.UserProductAndStore.AllCategories;
-            btnStoreInventory.Enabled = LocalUser.User.UserProductAndStore.StoreInventory;
-            btnProductTransfertReport.Enabled = LocalUser.User.UserProductAndStore.TransfertReport;
-            btnProductOutStoreReport.Enabled = LocalUser.User.UserProductAndStore.ProductOutStoreReport;
+            if (LocalUser.User is not null)
+            {
+                btnAllProducts.Enabled = LocalUser.User.UserProductAndStore.AllProducts;
+                //btnAllStores.Enabled = LocalUser.User.UserProductAndStore.Allstores;
+                btnAddProduct.Enabled = LocalUser.User.UserProductAndStore.AddProduct;
+                btnAllCategories.Enabled = LocalUser.User.UserProductAndStore.AllCategories;
+                btnStoreInventory.Enabled = LocalUser.User.UserProductAndStore.StoreInventory;
+                btnProductTransfertReport.Enabled = LocalUser.User.UserProductAndStore.TransfertReport;
+                btnProductOutStoreReport.Enabled = LocalUser.User.UserProductAndStore.ProductOutStoreReport;
 
 
-            btnAllCustomers.Enabled = LocalUser.User.UserCustomer.AllCustomers;
-            btnAddCustomer.Enabled = LocalUser.User.UserCustomer.AddCustomer;
-            btnCustomerAccount.Enabled = LocalUser.User.UserCustomer.CustomerAccount;
-            btnCustomerReport.Enabled = LocalUser.User.UserCustomer.CustomerReport;
+                btnAllCustomers.Enabled = LocalUser.User.UserCustomer.AllCustomers;
+                btnAddCustomer.Enabled = LocalUser.User.UserCustomer.AddCustomer;
+                btnCustomerAccount.Enabled = LocalUser.User.UserCustomer.CustomerAccount;
+                btnCustomerReport.Enabled = LocalUser.User.UserCustomer.CustomerReport;
 
 
-            btnAllSuppliers.Enabled = LocalUser.User.UserSupplier.AllSuppliers;
-            btnAddSupplier.Enabled = LocalUser.User.UserSupplier.AddSuppliers;
-            btnSupplierAccount.Enabled = LocalUser.User.UserSupplier.SuppliersAccount;
-            btnSupplierReports.Enabled = LocalUser.User.UserSupplier.SuppliersReport;
+                btnAllSuppliers.Enabled = LocalUser.User.UserSupplier.AllSuppliers;
+                btnAddSupplier.Enabled = LocalUser.User.UserSupplier.AddSuppliers;
+                btnSupplierAccount.Enabled = LocalUser.User.UserSupplier.SuppliersAccount;
+                btnSupplierReports.Enabled = LocalUser.User.UserSupplier.SuppliersReport;
 
 
-            btnNewBuy.Enabled = LocalUser.User.UserBuy.NewBuy;
-            btnBuysReports.Enabled = LocalUser.User.UserBuy.BuyReports;
+                btnNewBuy.Enabled = LocalUser.User.UserBuy.NewBuy;
+                btnBuysReports.Enabled = LocalUser.User.UserBuy.BuyReports;
 
 
-            btnNewSale.Enabled = LocalUser.User.UserSale.NewSale;
-            btnSalesReport.Enabled = LocalUser.User.UserSale.SaleReports;
-            btnProfitReport.Enabled = LocalUser.User.UserSale.SaleProfits;
+                btnNewSale.Enabled = LocalUser.User.UserSale.NewSale;
+                btnSalesReport.Enabled = LocalUser.User.UserSale.SaleReports;
+                btnProfitReport.Enabled = LocalUser.User.UserSale.SaleProfits;
 
-            btnCaisseAndBank.Enabled = LocalUser.User.UserCaisseAndBank.CaissesAndBanks;
-            btnDepositToCaisseReport.Enabled = LocalUser.User.UserCaisseAndBank.DepositToCaisse;
-            btnDepositToBankReport.Enabled = LocalUser.User.UserCaisseAndBank.DepositToBank;
-            btnWithdrawToCaisseReport.Enabled = LocalUser.User.UserCaisseAndBank.WithdrawFromCaisse;
-            btnWithdrawBankReport.Enabled = LocalUser.User.UserCaisseAndBank.WithdrawFromBank;
-            btnTransfertCaisse.Enabled = LocalUser.User.UserCaisseAndBank.TransfertBetweenCaisse;
-            btnTreansfertBankCaisse.Enabled = LocalUser.User.UserCaisseAndBank.TransfertBetweenCaisseAndBank;
+                btnCaisseAndBank.Enabled = LocalUser.User.UserCaisseAndBank.CaissesAndBanks;
+                btnDepositToCaisseReport.Enabled = LocalUser.User.UserCaisseAndBank.DepositToCaisse;
+                btnDepositToBankReport.Enabled = LocalUser.User.UserCaisseAndBank.DepositToBank;
+                btnWithdrawToCaisseReport.Enabled = LocalUser.User.UserCaisseAndBank.WithdrawFromCaisse;
+                btnWithdrawBankReport.Enabled = LocalUser.User.UserCaisseAndBank.WithdrawFromBank;
+                btnTransfertCaisse.Enabled = LocalUser.User.UserCaisseAndBank.TransfertBetweenCaisse;
+                btnTreansfertBankCaisse.Enabled = LocalUser.User.UserCaisseAndBank.TransfertBetweenCaisseAndBank;
 
-            btnAllDeserved.Enabled = LocalUser.User.UserDeservedAndTax.Deserved;
-            btnVouchers.Enabled = LocalUser.User.UserDeservedAndTax.Vouchers;
-            btnVouchersReport.Enabled = LocalUser.User.UserDeservedAndTax.Vouchers;
+                btnAllDeserved.Enabled = LocalUser.User.UserDeservedAndTax.Deserved;
+                btnVouchers.Enabled = LocalUser.User.UserDeservedAndTax.Vouchers;
+                btnVouchersReport.Enabled = LocalUser.User.UserDeservedAndTax.Vouchers;
 
 
-            btnAddRefund.Enabled = LocalUser.User.UserRefund.RefundProduct;
-            btnRefundReport.Enabled = LocalUser.User.UserRefund.RefundReport;
-            btnAllEmployees.Enabled = LocalUser.User.UserEmployee.AllEmployee;
-            btnNewEmployee.Enabled = LocalUser.User.UserEmployee.AddEmployee;
-            btnEmployeeBorrowItems.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowItem;
-            btnBorrowMonies.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowMoney;
-            btnSalaries.Enabled = LocalUser.User.UserEmployee.EmployeeSalaries;
-            btnBorrowItemsReport.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowItemsReport;
-            btnBorrowMoniesReport.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowMoneyReport;
-            btnSalariesReport.Enabled = LocalUser.User.UserEmployee.EmployeeSalariesReport;
+                btnAddRefund.Enabled = LocalUser.User.UserRefund.RefundProduct;
+                btnRefundReport.Enabled = LocalUser.User.UserRefund.RefundReport;
+                btnAllEmployees.Enabled = LocalUser.User.UserEmployee.AllEmployee;
+                btnNewEmployee.Enabled = LocalUser.User.UserEmployee.AddEmployee;
+                btnEmployeeBorrowItems.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowItem;
+                btnBorrowMonies.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowMoney;
+                btnSalaries.Enabled = LocalUser.User.UserEmployee.EmployeeSalaries;
+                btnBorrowItemsReport.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowItemsReport;
+                btnBorrowMoniesReport.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowMoneyReport;
+                btnSalariesReport.Enabled = LocalUser.User.UserEmployee.EmployeeSalariesReport;
 
-            btnApplicationSettings.Enabled = LocalUser.User.UserSetting.ApplicationSettings;
-            btnUsersRoles.Enabled = LocalUser.User.UserSetting.UserPermession;
-            //btnBackUp.Enabled = LocalUser.User.UserSetting.BackUp;
-            //btnRestore.Enabled = LocalUser.User.UserSetting.Restore;
-
+                btnApplicationSettings.Enabled = LocalUser.User.UserSetting.ApplicationSettings;
+                btnUsersRoles.Enabled = LocalUser.User.UserSetting.UserPermession;
+                //btnBackUp.Enabled = LocalUser.User.UserSetting.BackUp;
+                //btnRestore.Enabled = LocalUser.User.UserSetting.Restore;
+            }
 
         }
         private void SetScreenState(bool isMax)

@@ -156,6 +156,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui
                             _contex.SaveChanges();
                         }
                     }
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
 
                     DgvSales.DataSource = null;
                     RefreshDgvAsync(0);

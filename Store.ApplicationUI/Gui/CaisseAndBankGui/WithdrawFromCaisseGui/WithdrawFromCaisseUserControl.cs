@@ -125,6 +125,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseGui
 
                             // Commit the transaction
                             await transaction.CommitAsync();
+                            Code.Helper.ToasterHelper.ShowWithdraw();
+
                         }
                     }
 

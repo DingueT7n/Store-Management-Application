@@ -213,6 +213,8 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowMoneyGui
 
 
                         transaction.Commit();
+                        Code.Helper.ToasterHelper.ShowBorrowMoney();
+
                         ResetForm();
                     }
                     catch (Exception)

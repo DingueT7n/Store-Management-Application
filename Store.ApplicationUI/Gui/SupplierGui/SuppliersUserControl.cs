@@ -130,6 +130,8 @@ namespace Store.ApplicationUI.Gui.SupplierGui
             if (MsgHelper.ShowDeleteDialog())
             {
                 suppliersRepository.DeleteAsync(DgvِSupplier.CurrentRow.Cells[6].Value.ToString());
+                Code.Helper.ToasterHelper.ShowDeletedToast();
+
             }
             RefreshDgv();
         }

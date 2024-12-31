@@ -211,6 +211,8 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui
                         }
 
                     }
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
+
                     DgvSales.DataSource = null;
                     RefreshDgv();
                 }

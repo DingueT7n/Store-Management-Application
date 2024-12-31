@@ -1,5 +1,4 @@
-﻿using System.Data;
-using Store.ApplicationUI.Code.Helper;
+﻿using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Reports.ReportPerviwGui;
 using Store.Infrastructure.Data;
 
@@ -72,7 +71,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.BarcodeGui
                         barCode.lblPrice.Text = txtPrice.Text;
 
                         // Ensure DataSource is set properly, even if it's empty
-                        barCode.DataSource = new DataTable();
+                        //barCode.DataSource = new DataTable();
 
                         // Use the report in a form viewer
                         XtraForm1 xtraForm1 = new();

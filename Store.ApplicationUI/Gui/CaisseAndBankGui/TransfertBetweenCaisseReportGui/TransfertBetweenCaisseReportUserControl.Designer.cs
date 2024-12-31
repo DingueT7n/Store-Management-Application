@@ -259,6 +259,7 @@
             button2.TabIndex = 8;
             button2.Text = "حذف جميع بيانات الجدول";
             button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // btnExportCustomer
             // 
@@ -272,6 +273,7 @@
             btnExportCustomer.TabIndex = 6;
             btnExportCustomer.Text = "   تصدير/طباعة الفاتورة";
             btnExportCustomer.UseVisualStyleBackColor = true;
+            btnExportCustomer.Visible = false;
             // 
             // lblEmptyData
             // 

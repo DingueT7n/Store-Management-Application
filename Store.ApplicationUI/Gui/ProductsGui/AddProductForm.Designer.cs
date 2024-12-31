@@ -36,6 +36,13 @@
             tabcontrolProductInfo = new TabControl();
             tabPage1 = new TabPage();
             GbInfoProduct = new GroupBox();
+            label26 = new Label();
+            label25 = new Label();
+            label24 = new Label();
+            label23 = new Label();
+            label22 = new Label();
+            label21 = new Label();
+            label20 = new Label();
             txtSalePrice2 = new TextBox();
             label17 = new Label();
             cbFavorite = new CheckBox();
@@ -143,6 +150,13 @@
             // 
             // GbInfoProduct
             // 
+            GbInfoProduct.Controls.Add(label26);
+            GbInfoProduct.Controls.Add(label25);
+            GbInfoProduct.Controls.Add(label24);
+            GbInfoProduct.Controls.Add(label23);
+            GbInfoProduct.Controls.Add(label22);
+            GbInfoProduct.Controls.Add(label21);
+            GbInfoProduct.Controls.Add(label20);
             GbInfoProduct.Controls.Add(txtSalePrice2);
             GbInfoProduct.Controls.Add(label17);
             GbInfoProduct.Controls.Add(cbFavorite);
@@ -177,6 +191,55 @@
             resources.ApplyResources(GbInfoProduct, "GbInfoProduct");
             GbInfoProduct.Name = "GbInfoProduct";
             GbInfoProduct.TabStop = false;
+            // 
+            // label26
+            // 
+            resources.ApplyResources(label26, "label26");
+            label26.BackColor = Color.Transparent;
+            label26.ForeColor = Color.Crimson;
+            label26.Name = "label26";
+            // 
+            // label25
+            // 
+            resources.ApplyResources(label25, "label25");
+            label25.BackColor = Color.Transparent;
+            label25.ForeColor = Color.Crimson;
+            label25.Name = "label25";
+            // 
+            // label24
+            // 
+            resources.ApplyResources(label24, "label24");
+            label24.BackColor = Color.Transparent;
+            label24.ForeColor = Color.Crimson;
+            label24.Name = "label24";
+            // 
+            // label23
+            // 
+            resources.ApplyResources(label23, "label23");
+            label23.BackColor = Color.Transparent;
+            label23.ForeColor = Color.Crimson;
+            label23.Name = "label23";
+            // 
+            // label22
+            // 
+            resources.ApplyResources(label22, "label22");
+            label22.BackColor = Color.Transparent;
+            label22.ForeColor = Color.Crimson;
+            label22.Name = "label22";
+            // 
+            // label21
+            // 
+            resources.ApplyResources(label21, "label21");
+            label21.BackColor = Color.Transparent;
+            label21.ForeColor = Color.Crimson;
+            label21.Name = "label21";
+            // 
+            // label20
+            // 
+            resources.ApplyResources(label20, "label20");
+            label20.BackColor = Color.Transparent;
+            label20.ForeColor = Color.Crimson;
+            label20.Name = "label20";
             // 
             // txtSalePrice2
             // 
@@ -414,6 +477,7 @@
             // 
             resources.ApplyResources(textBox1, "textBox1");
             textBox1.Name = "textBox1";
+            textBox1.TextChanged += txtBarCode_TextChanged;
             textBox1.KeyDown += txtNameProduct_KeyDown;
             textBox1.KeyPress += txtBarCode_KeyPress;
             // 
@@ -421,6 +485,7 @@
             // 
             resources.ApplyResources(textBox2, "textBox2");
             textBox2.Name = "textBox2";
+            textBox2.TextChanged += txtBarCode_TextChanged;
             textBox2.KeyDown += txtNameProduct_KeyDown;
             textBox2.KeyPress += txtBarCode_KeyPress;
             // 
@@ -428,6 +493,7 @@
             // 
             resources.ApplyResources(textBox3, "textBox3");
             textBox3.Name = "textBox3";
+            textBox3.TextChanged += txtBarCode_TextChanged;
             textBox3.KeyDown += txtNameProduct_KeyDown;
             textBox3.KeyPress += txtBarCode_KeyPress;
             // 
@@ -435,6 +501,7 @@
             // 
             resources.ApplyResources(textBox4, "textBox4");
             textBox4.Name = "textBox4";
+            textBox4.TextChanged += txtBarCode_TextChanged;
             textBox4.KeyDown += txtNameProduct_KeyDown;
             textBox4.KeyPress += txtBarCode_KeyPress;
             // 
@@ -442,6 +509,7 @@
             // 
             resources.ApplyResources(textBox5, "textBox5");
             textBox5.Name = "textBox5";
+            textBox5.TextChanged += txtBarCode_TextChanged;
             textBox5.KeyDown += txtNameProduct_KeyDown;
             textBox5.KeyPress += txtBarCode_KeyPress;
             // 
@@ -449,6 +517,7 @@
             // 
             resources.ApplyResources(textBox6, "textBox6");
             textBox6.Name = "textBox6";
+            textBox6.TextChanged += txtBarCode_TextChanged;
             textBox6.KeyDown += txtNameProduct_KeyDown;
             textBox6.KeyPress += txtBarCode_KeyPress;
             // 
@@ -456,6 +525,7 @@
             // 
             resources.ApplyResources(textBox7, "textBox7");
             textBox7.Name = "textBox7";
+            textBox7.TextChanged += txtBarCode_TextChanged;
             textBox7.KeyDown += txtNameProduct_KeyDown;
             textBox7.KeyPress += txtBarCode_KeyPress;
             // 
@@ -463,6 +533,7 @@
             // 
             resources.ApplyResources(textBox8, "textBox8");
             textBox8.Name = "textBox8";
+            textBox8.TextChanged += txtBarCode_TextChanged;
             textBox8.KeyDown += txtNameProduct_KeyDown;
             textBox8.KeyPress += txtBarCode_KeyPress;
             // 
@@ -470,6 +541,7 @@
             // 
             resources.ApplyResources(textBox9, "textBox9");
             textBox9.Name = "textBox9";
+            textBox9.TextChanged += txtBarCode_TextChanged;
             textBox9.KeyDown += txtNameProduct_KeyDown;
             textBox9.KeyPress += txtBarCode_KeyPress;
             // 
@@ -477,6 +549,7 @@
             // 
             resources.ApplyResources(textBox10, "textBox10");
             textBox10.Name = "textBox10";
+            textBox10.TextChanged += txtBarCode_TextChanged;
             textBox10.KeyDown += txtNameProduct_KeyDown;
             textBox10.KeyPress += txtBarCode_KeyPress;
             // 
@@ -614,5 +687,12 @@
         private TextBox textBox8;
         private TextBox textBox9;
         private TextBox textBox10;
+        private Label label20;
+        private Label label21;
+        private Label label22;
+        private Label label23;
+        private Label label25;
+        private Label label24;
+        private Label label26;
     }
 }

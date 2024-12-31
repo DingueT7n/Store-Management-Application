@@ -268,6 +268,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.TransferBetweenStoresGui
                         _context.ProductsQuantities.Where(x => x.Qty <= 0).ExecuteDelete();
                         _context.SaveChanges();
                         transaction.Commit();
+                        Code.Helper.ToasterHelper.ShowTransfertProduct();
+
                         ResetForm();
                     }
                     catch (Exception)

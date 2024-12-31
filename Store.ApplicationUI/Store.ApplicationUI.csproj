@@ -6,7 +6,14 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Store-Application</Title>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\People.png" />
+    <None Remove="Resources\successaudio.wav" />
+  </ItemGroup>
 
   <ItemGroup>
     <COMReference Include="FAXCOMEXLib">
@@ -18,6 +25,12 @@
       <Isolated>false</Isolated>
       <EmbedInteropTypes>true</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\People.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

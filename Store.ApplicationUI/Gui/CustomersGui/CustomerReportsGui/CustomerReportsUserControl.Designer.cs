@@ -364,6 +364,7 @@
             button2.TabIndex = 8;
             button2.Text = "      تصدير/طباعة جميع الفاتورات";
             button2.UseVisualStyleBackColor = true;
+            button2.Visible = false;
             button2.Click += button2_Click;
             // 
             // button1
@@ -378,6 +379,7 @@
             button1.TabIndex = 7;
             button1.Text = "       تصدير/طباعة جميع فاتورات العميل";
             button1.UseVisualStyleBackColor = true;
+            button1.Visible = false;
             button1.Click += button1_Click;
             // 
             // btnExportCustomer
@@ -392,6 +394,7 @@
             btnExportCustomer.TabIndex = 6;
             btnExportCustomer.Text = "   تصدير/طباعة الفاتورة";
             btnExportCustomer.UseVisualStyleBackColor = true;
+            btnExportCustomer.Visible = false;
             btnExportCustomer.Click += btnExportCustomer_Click;
             // 
             // btnRefresh

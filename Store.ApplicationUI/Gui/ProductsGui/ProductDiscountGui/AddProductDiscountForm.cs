@@ -157,6 +157,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
                     productDiscount.DiscountValue = Convert.ToDecimal(txtDiscountValue.Text);
                     _context.Add(productDiscount);
                     _context.SaveChanges();
+                    Code.Helper.ToasterHelper.ShowProductDiscountAdded();
+
                     ResetForm();
                     if (!ProductDiscountUserControl.CheckInstance())
                         ProductDiscountUserControl.RefreshInstance();

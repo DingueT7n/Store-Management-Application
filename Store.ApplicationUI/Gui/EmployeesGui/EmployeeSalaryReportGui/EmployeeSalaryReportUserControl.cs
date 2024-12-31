@@ -131,6 +131,8 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryReportGui
                             _contex.SaveChanges();
                         }
                     }
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
+
                     DgvSales.DataSource = null;
                     RefreshDgv();
                 }

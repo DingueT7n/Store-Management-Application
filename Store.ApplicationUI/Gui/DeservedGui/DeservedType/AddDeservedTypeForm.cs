@@ -93,6 +93,8 @@ namespace Store.ApplicationUI.Gui.DeservedGui
                 deservedtype.Description = txtNameِCategory.Text;
                 await _context.DeservedsTypes.AddAsync(deservedtype);
                 await _context.SaveChangesAsync();
+                Code.Helper.ToasterHelper.ShowAddToast();
+
 
             }
             RefreshDgv();
@@ -105,28 +107,53 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
         private async void btnEditTypes_Click(object sender, EventArgs e)
         {
-            if (MsgHelper.ShowEditDialog())
+            try
             {
-                DeservedType DeservedType = _context.DeservedsTypes.FirstOrDefault(x => x.Id ==
-                Convert.ToInt32(DgvTypes.CurrentRow.Cells[1].Value.ToString())
-                );
 
-                DeservedType.Description = txtNameِCategory.Text;
-                _context.Update(DeservedType);
-                await _context.SaveChangesAsync();
-                vider();
 
+                if (MsgHelper.ShowEditDialog())
+                {
+                    DeservedType DeservedType = _context.DeservedsTypes.FirstOrDefault(x => x.Id ==
+                    Convert.ToInt32(DgvTypes.CurrentRow.Cells[1].Value.ToString())
+                    );
+                    if (DeservedType != null)
+                    {
+                        DeservedType.Description = txtNameِCategory.Text;
+                        _context.Update(DeservedType);
+                        await _context.SaveChangesAsync();
+                        Code.Helper.ToasterHelper.ShowEditToast();
+
+                        vider();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
 
         private async void btnDeleteTypes_Click(object sender, EventArgs e)
         {
-            if (MsgHelper.ShowDeleteDialog())
+            try
             {
-                var type = _context.DeservedsTypes.FirstOrDefault
-                    (x => x.Id == Convert.ToInt32(DgvTypes.CurrentRow.Cells[1].Value.ToString()));
-                _context.DeservedsTypes.Remove(type);
-                await _context.SaveChangesAsync();
+
+
+                if (MsgHelper.ShowDeleteDialog())
+                {
+                    var type = _context.DeservedsTypes.FirstOrDefault
+                        (x => x.Id == Convert.ToInt32(DgvTypes.CurrentRow.Cells[1].Value.ToString()));
+                    _context.DeservedsTypes.Remove(type);
+                    await _context.SaveChangesAsync();
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
+
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
             RefreshDgv();
         }

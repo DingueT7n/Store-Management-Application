@@ -221,6 +221,8 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryGui
 
 
                     transaction.Commit();
+                    Code.Helper.ToasterHelper.ShowSalarie();
+
                     ResetForm();
                 }
                 catch (Exception)

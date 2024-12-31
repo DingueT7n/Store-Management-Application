@@ -141,17 +141,20 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                 {
                     ReceiptVoucher receipt = _context.ReceiptVouchers.FirstOrDefault(x => x.Id.ToString() == DgvProducts.CurrentRow.Cells[6].Value.ToString());
 
+                    if (receipt != null)
+                        _context.Remove(receipt);
 
-                    _context.Remove(receipt);
                 }
                 else
                 {
                     Core.Entities.Vouchers.SendVoucher send = _context.SendVouchers.FirstOrDefault(x => x.Id.ToString() == DgvProducts.CurrentRow.Cells[7].Value.ToString());
 
-
-                    _context.Remove(send);
+                    if (send != null)
+                        _context.Remove(send);
                 }
                 await _context.SaveChangesAsync();
+                Code.Helper.ToasterHelper.ShowDeletedToast();
+
                 SetProductsToDgv();
 
             }

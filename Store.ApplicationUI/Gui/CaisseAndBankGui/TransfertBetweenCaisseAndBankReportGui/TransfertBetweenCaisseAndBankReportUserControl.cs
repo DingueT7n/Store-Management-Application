@@ -176,6 +176,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenCaisseAndBank
                             _contex.SaveChanges();
                         }
                     }
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
+
                     DgvSales.DataSource = null;
                     RefreshDgv();
                 }

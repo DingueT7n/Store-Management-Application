@@ -701,6 +701,8 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
 
                             }
                             transaction.CommitAsync();
+                            Code.Helper.ToasterHelper.ShowAddedRefund();
+
                         }
                         catch (Exception ex)
                         {

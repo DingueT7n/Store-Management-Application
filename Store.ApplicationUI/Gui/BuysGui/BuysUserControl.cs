@@ -662,6 +662,8 @@ namespace Store.ApplicationUI.Gui.BuysGui
                     await HandleCaisseAndSupplierAsync(buy);
 
                     await transaction.CommitAsync();
+                    Code.Helper.ToasterHelper.ShowNewBuyAdd();
+
                     DataTable BuyDetailsTable = await Code.Helper.FactureHelper.GetBuyDetailsDataTableAsync(buy.Id);
                     string printername = Properties.Settings.Default.Printer8cm;
 

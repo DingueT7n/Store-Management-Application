@@ -275,6 +275,7 @@
             button2.Text = "طباعة كل المصروفات";
             button2.TextAlign = ContentAlignment.MiddleRight;
             button2.UseVisualStyleBackColor = true;
+            button2.Visible = false;
             // 
             // button1
             // 
@@ -330,6 +331,7 @@
             btnExportProduct.TabIndex = 6;
             btnExportProduct.Text = "تصدير اكسال";
             btnExportProduct.UseVisualStyleBackColor = true;
+            btnExportProduct.Visible = false;
             // 
             // btnAddDeservedType
             // 

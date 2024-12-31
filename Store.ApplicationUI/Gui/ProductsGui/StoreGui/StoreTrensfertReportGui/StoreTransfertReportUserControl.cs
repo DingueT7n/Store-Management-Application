@@ -170,6 +170,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreTrensfertReportGui
                             _contex.SaveChanges();
                         }
                     }
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
+
                 }
                 DgvSales.DataSource = null;
                 RefreshDgv();

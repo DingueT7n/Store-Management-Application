@@ -180,6 +180,8 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowItemsGui
                     _context.Add(employeeSalaryMinus);
                     _context.SaveChanges();
                     transaction.Commit();
+                    Code.Helper.ToasterHelper.ShowBorrowItem();
+
                     ResetForm();
                 }
                 catch (Exception)

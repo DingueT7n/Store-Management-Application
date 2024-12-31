@@ -1,4 +1,5 @@
-﻿using Store.Infrastructure.Data;
+﻿using Microsoft.IdentityModel.Tokens;
+using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Code.Helper
 {
@@ -88,24 +89,31 @@ namespace Store.ApplicationUI.Code.Helper
                   "بيانات غير متوافقة"
                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+        public static void BareCodeMesssageDuplicated()
+        {
+            MessageBox.Show("لا يمكن حفظ العملية لأن الباركود او اسم المنتج موجود بالفعل في قاعدة البيانات ",
+               "بيانات متكررة"
+               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
         public static bool ShowBareCodeDuplicated(ApplicationDbContext _context, string barCode)
         {
 
             try
             {
-                var p = _context.Products.Where(x =>
-                x.CodeBar == (barCode)
-                )
-                    .FirstOrDefault();
-                if (p is not null)
+                var product = _context.Products.Count(x => x.CodeBar == barCode);
+                product += _context.Products.Count(x => x.ColisageBareCode == barCode);
+                product += _context.ProductFamilies
+                    .Where(x => x.CodeBar == barCode)
+                    .Select(x => x.Product)
+                    .Count();
+                if (product >= 1)
                 {
                     return false;
                 }
                 else
                 {
-                    MessageBox.Show("لا يمكن حفظ العملية لأن الباركود موجود بالفعل في قاعدة البيانات ",
-               "بيانات متكررة"
-               , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    BareCodeMesssageDuplicated();
                     return true;
                 }
 
@@ -121,11 +129,14 @@ namespace Store.ApplicationUI.Code.Helper
 
             try
             {
-                var p = _context.Products.Where(x =>
-                x.CodeBar == (barCode)
-                )
-                    .FirstOrDefault();
-                if (p is not null)
+
+                var product = _context.Products.Count(x => x.CodeBar == barCode);
+                product += _context.Products.Count(x => x.ColisageBareCode == barCode);
+                product += _context.ProductFamilies
+                    .Where(x => x.CodeBar == barCode)
+                    .Select(x => x.Product)
+                    .Count();
+                if (product >= 1)
                 {
                     return false;
                 }
@@ -142,16 +153,21 @@ namespace Store.ApplicationUI.Code.Helper
             }
 
         }
-        public static bool ShowProductNameDuplicated(ApplicationDbContext _context, string productName)
+        public static bool ShowProductNameDuplicated(ApplicationDbContext _context, string productName, string id)
         {
 
             try
             {
+                int count = 0;
                 var p = _context.Products.Where(x =>
                 x.ProductName == (productName)
-                )
-                    .FirstOrDefault();
-                if (p is not null)
+                ).AsQueryable();
+                if (!id.IsNullOrEmpty())
+                    count = p.Where(x => x.Id.ToString() != id).Count();
+                else
+                    count = p.Count();
+
+                if (count >= 1)
                 {
                     return false;
                 }

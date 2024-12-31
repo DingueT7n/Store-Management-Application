@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StoreInventoryUserControl));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
             OperationsflowLayoutPanel = new FlowLayoutPanel();
             gbPayChoiches = new GroupBox();
             flowLayoutPanelreturnsoption = new FlowLayoutPanel();
@@ -46,11 +46,11 @@
             lblTitleForm = new Label();
             flowLayoutPanel1 = new FlowLayoutPanel();
             panelButtons = new Panel();
+            button1 = new Button();
             button2 = new Button();
             btnExportCustomer = new Button();
             lblEmptyData = new Label();
             DgvSales = new DataGridView();
-            button1 = new Button();
             OperationsflowLayoutPanel.SuspendLayout();
             gbPayChoiches.SuspendLayout();
             flowLayoutPanelreturnsoption.SuspendLayout();
@@ -211,6 +211,21 @@
             panelButtons.Size = new Size(259, 158);
             panelButtons.TabIndex = 9;
             // 
+            // button1
+            // 
+            button1.Anchor = AnchorStyles.None;
+            button1.Image = (Image)resources.GetObject("button1.Image");
+            button1.ImageAlign = ContentAlignment.MiddleLeft;
+            button1.ImeMode = ImeMode.NoControl;
+            button1.Location = new Point(3, 50);
+            button1.Name = "button1";
+            button1.Size = new Size(249, 40);
+            button1.TabIndex = 9;
+            button1.Text = "اخراج المنتجات التالفة من مخزن";
+            button1.TextAlign = ContentAlignment.MiddleRight;
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // button2
             // 
             button2.Anchor = AnchorStyles.None;
@@ -221,8 +236,7 @@
             button2.Name = "button2";
             button2.Size = new Size(249, 40);
             button2.TabIndex = 8;
-            button2.Text = "جرد جميع المنتجات في المخزن المحدد";
-            button2.TextAlign = ContentAlignment.MiddleRight;
+            button2.Text = "تحويل المنتجات بين المخازن";
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
@@ -238,6 +252,7 @@
             btnExportCustomer.TabIndex = 6;
             btnExportCustomer.Text = "   تصدير/طباعة الفاتورة";
             btnExportCustomer.UseVisualStyleBackColor = true;
+            btnExportCustomer.Visible = false;
             // 
             // lblEmptyData
             // 
@@ -260,31 +275,31 @@
             DgvSales.AllowUserToAddRows = false;
             DgvSales.AllowUserToResizeColumns = false;
             DgvSales.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvSales.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle9.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvSales.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle9;
             DgvSales.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             DgvSales.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             DgvSales.BackgroundColor = Color.White;
             DgvSales.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             DgvSales.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle2.ForeColor = Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = Color.DodgerBlue;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            DgvSales.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle10.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle10.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle10.ForeColor = Color.White;
+            dataGridViewCellStyle10.SelectionBackColor = Color.DodgerBlue;
+            dataGridViewCellStyle10.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = DataGridViewTriState.True;
+            DgvSales.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
             DgvSales.ColumnHeadersHeight = 40;
             DgvSales.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Window;
-            dataGridViewCellStyle3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
-            DgvSales.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle11.BackColor = SystemColors.Window;
+            dataGridViewCellStyle11.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle11.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle11.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = DataGridViewTriState.False;
+            DgvSales.DefaultCellStyle = dataGridViewCellStyle11;
             DgvSales.Dock = DockStyle.Fill;
             DgvSales.EnableHeadersVisualStyles = false;
             DgvSales.GridColor = SystemColors.ControlDark;
@@ -296,26 +311,11 @@
             DgvSales.RowHeadersVisible = false;
             DgvSales.RowHeadersWidth = 21;
             DgvSales.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle4.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvSales.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle12.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvSales.RowsDefaultCellStyle = dataGridViewCellStyle12;
             DgvSales.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DgvSales.Size = new Size(1034, 517);
             DgvSales.TabIndex = 27;
-            // 
-            // button1
-            // 
-            button1.Anchor = AnchorStyles.None;
-            button1.Image = (Image)resources.GetObject("button1.Image");
-            button1.ImageAlign = ContentAlignment.MiddleLeft;
-            button1.ImeMode = ImeMode.NoControl;
-            button1.Location = new Point(3, 50);
-            button1.Name = "button1";
-            button1.Size = new Size(249, 40);
-            button1.TabIndex = 9;
-            button1.Text = "اخراج المنتجات التالفة من مخزن";
-            button1.TextAlign = ContentAlignment.MiddleRight;
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
             // 
             // StoreInventoryUserControl
             // 

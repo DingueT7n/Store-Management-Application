@@ -28,6 +28,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
             }
 
         }
+
         private void StartSplash()
         {
             try
@@ -44,6 +45,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
         private void button2_Click(object sender, EventArgs e)
         {
             Close();
+            Application.Exit();
         }
 
         private void txtUsername_KeyPress(object sender, KeyPressEventArgs e)
@@ -70,6 +72,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
 
         private async void button1_Click(object sender, EventArgs e)
         {
+
             if (string.IsNullOrWhiteSpace(txtUsername.Text) || string.IsNullOrWhiteSpace(txtPassowrd.Text))
             {
                 MessageBox.Show("Please enter both username and password.");

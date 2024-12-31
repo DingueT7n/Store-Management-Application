@@ -352,6 +352,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
                     _context.SalesProfits.Remove(saleProfit);
                     await _context.SaveChangesAsync();
                 }
+                Code.Helper.ToasterHelper.ShowDeletedToast();
+
                 LoadData();
 
             }
@@ -378,6 +380,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
                         MessageBox.Show("لا توجد بيانات في الفترة المحددة", "معلومة", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     LoadData();
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
+
                 }
                 catch (Exception ex)
                 {
@@ -395,6 +399,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
                 {
                     _context.Database.ExecuteSqlRaw($"DELETE FROM [SalesProfits]");
                     LoadData();
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
+
                 }
                 catch (Exception ex)
                 {

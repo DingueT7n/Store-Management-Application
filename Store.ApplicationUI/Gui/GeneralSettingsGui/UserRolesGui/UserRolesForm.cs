@@ -211,6 +211,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
 
                     // Commit transaction
                     transaction.Commit();
+                    Code.Helper.ToasterHelper.ShowAddToast();
 
                     // Refresh DataGridView
                     RefreshDgv();
@@ -267,6 +268,8 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                         user.type = cmbType.Text;
                         _context.Update(user);
                         _context.SaveChanges();
+                        Code.Helper.ToasterHelper.ShowEditToast();
+
                     }
                 }
                 vider();
@@ -304,6 +307,9 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                         _context.SaveChanges();
                         _context.Remove(user);
                         _context.SaveChanges();
+
+                        Code.Helper.ToasterHelper.ShowDeletedToast();
+
                     }
                 }
                 RefreshDgv();

@@ -1131,6 +1131,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                             }
                             await _context.SaveChangesAsync();
                             await transaction.CommitAsync();
+                            Code.Helper.ToasterHelper.ShowNewSaleAdd();
+
                             ResetForm();
                             if (facture)
                             {

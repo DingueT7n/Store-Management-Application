@@ -91,6 +91,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
                 store.StoreName = txtNameِCategory.Text;
                 _context.Stores.Add(store);
                 _context.SaveChanges();
+                Code.Helper.ToasterHelper.ShowAddToast();
+
             }
             RefreshDgv();
         }
@@ -106,6 +108,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
                 store.StoreName = txtNameِCategory.Text;
                 _context.Update(store);
                 _context.SaveChanges();
+                Code.Helper.ToasterHelper.ShowEditToast();
+
                 vider();
             }
         }
@@ -121,6 +125,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
             {
                 _context.Remove(Convert.ToInt32(DgvStore.CurrentRow.Cells[1].Value.ToString()));
                 _context.SaveChanges();
+                Code.Helper.ToasterHelper.ShowDeletedToast();
+
             }
             RefreshDgv();
         }

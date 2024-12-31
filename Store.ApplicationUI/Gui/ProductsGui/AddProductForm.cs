@@ -312,6 +312,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             lblProductId.Visible = true;
             label13.Visible = true;
             txtNameProduct.Focus();
+            txtNameProduct_TextChanged(null, null);
+            txtBarCode.ForeColor = Color.Red;
 
             cbFavorite.Checked = _context.ProductQuickAccess.FirstOrDefault(x => x.Pro_Id.ToString() == productId) == null ? false : true;
         }
@@ -368,11 +370,21 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 textBoxes[i].Enabled = !string.IsNullOrEmpty(listFamily[i].ToString());
             }
         }
+        bool ValidateUniqueProductBareCode()
+        {
+            var textBoxes = new[] { txtBarCode, textBox1, textBox2, textBox3, textBox4, textBox5, textBox6, textBox7, textBox8, textBox9, textBox10 };
+            for (int i = 0; i < textBoxes.Length; i++)
+            {
+                if (textBoxes[i].ForeColor == Color.Red) return false;
+
+            }
+            return true;
+        }
         private void btnAddProduct_Click(object sender, EventArgs e)
         {
             try
             {
-
+                if (!ValidateUniqueProductBareCode()) { MsgHelper.BareCodeMesssageDuplicated(); return; }
                 if (CMBCategory.Text != "اختر صنف"
                     && !string.IsNullOrEmpty(txtBuyPrice.Text)
                     && !string.IsNullOrEmpty(txtNameProduct.Text)
@@ -384,16 +396,85 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                     && !string.IsNullOrEmpty(txtBarCode.Text)
                     )
                 {
-                    var ResultBareCode = _context.Products.FirstOrDefault(x => x.CodeBar == txtBarCode.Text);
 
-                    if (ResultBareCode is null)
+                    var ResultProductName = _context.Products.FirstOrDefault(x => x.ProductName == txtNameProduct.Text);
+
+
+                    if (ResultProductName is null)
                     {
-                        var ResultProductName = _context.Products.FirstOrDefault(x => x.ProductName == txtNameProduct.Text);
 
-
-                        if (ResultProductName is null)
+                        Product product = new Product();
+                        product.ProductName = txtNameProduct.Text;
+                        product.CodeBar = txtBarCode.Text;
+                        product.CategoryId = Convert.ToInt32(CMBCategory.SelectedValue);
+                        product.MinQty = ConvertToFloat(txtMinQty.Text);
+                        product.IsTaxed = CbIsTaxed.Checked;
+                        product.TaxValue = CbIsTaxed.Checked ? ConvertToFloat(txtTaxValue.Text) : 0;
+                        product.BuyPrice = ConvertToFloat(txtBuyPrice.Text);
+                        product.Quentity = ConvertToFloat(txtTotalQty.Text);
+                        product.WholesalePrice = ConvertToFloat(txtWholeSalePrice.Text);
+                        product.SalePrice = ConvertToFloat(txtSalePrice.Text);
+                        product.MaxDiscount = ConvertToFloat(txtDiscountAllowed.Text);
+                        product.SalePriceTax = ConvertToFloat(txtSaleAfterTax.Text);
+                        product.SalePriceSeconde = ConvertToFloat(txtSalePrice2.Text);
+                        product.ColisageBareCode = txtColisageBareCode.Text;
+                        product.NbrProductInColis = ConvertToFloat(txtNbrIncolis.Text);
+                        product.DateExperation = DtpExperation.Value;
+                        product.ProductImage = RetriveImage();
+                        var result = _context.Add(product);
+                        _context.SaveChanges();
+                        if (checkBox1.Checked)
                         {
+                            var textBoxes = new[]
+                            {
+                                    textBox1, textBox2, textBox3, textBox4, textBox5,
+                                    textBox6, textBox7, textBox8, textBox9, textBox10
+                                };
 
+                            foreach (var textBox in textBoxes)
+                            {
+                                if (!string.IsNullOrEmpty(textBox.Text))
+                                {
+                                    var family = new ProductFamily
+                                    {
+                                        Pro_Id = product.Id,
+                                        CodeBar = textBox.Text
+                                    };
+                                    _context.ProductFamilies.Add(family);
+                                }
+                            }
+
+                            // Save all changes at once
+                            _context.SaveChanges();
+
+                        }
+
+
+                        if (!ProductsUserControl.CheckInstance())
+                        {
+                            ProductsUserControl.RefreshDgv();
+                        }
+                        _context.SaveChanges();
+                        if (cbFavorite.Checked)
+                        {
+                            ProductQuickAccess qucik = new ProductQuickAccess
+                            {
+                                Pro_Id = product.Id,
+                                CodeBar = txtBarCode.Text,
+                                ProductImage = RetriveImage(),
+                                ProductName = txtNameProduct.Text,
+                            };
+                            vider();
+                            _context.Add(qucik);
+                            _context.SaveChanges();
+                        }
+                        Code.Helper.ToasterHelper.ShowAddToast();
+
+                    }
+                    else
+                    {
+                        if (MsgHelper.ShowProductNameIsSame())
+                        {
                             Product product = new Product();
                             product.ProductName = txtNameProduct.Text;
                             product.CodeBar = txtBarCode.Text;
@@ -414,6 +495,12 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                             product.ProductImage = RetriveImage();
                             var result = _context.Add(product);
                             _context.SaveChanges();
+                            //if (CMBCategory.SelectedValue != null && int.TryParse(CMBCategory.SelectedValue.ToString(), out int categoryId))
+                            //{
+                            //    product.CategoryId = categoryId;
+                            //}
+
+
                             if (checkBox1.Checked)
                             {
                                 var textBoxes = new[]
@@ -439,7 +526,6 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                                 _context.SaveChanges();
                             }
 
-
                             if (!ProductsUserControl.CheckInstance())
                             {
                                 ProductsUserControl.RefreshDgv();
@@ -454,92 +540,16 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                                     ProductImage = RetriveImage(),
                                     ProductName = txtNameProduct.Text,
                                 };
-                                vider();
+                                //vider();
                                 _context.Add(qucik);
                                 _context.SaveChanges();
                             }
+                            Code.Helper.ToasterHelper.ShowAddToast();
 
                         }
-                        else
-                        {
-                            if (MsgHelper.ShowProductNameIsSame())
-                            {
-                                Product product = new Product();
-                                product.ProductName = txtNameProduct.Text;
-                                product.CodeBar = txtBarCode.Text;
-                                product.CategoryId = Convert.ToInt32(CMBCategory.SelectedValue);
-                                product.MinQty = ConvertToFloat(txtMinQty.Text);
-                                product.IsTaxed = CbIsTaxed.Checked;
-                                product.TaxValue = CbIsTaxed.Checked ? ConvertToFloat(txtTaxValue.Text) : 0;
-                                product.BuyPrice = ConvertToFloat(txtBuyPrice.Text);
-                                product.Quentity = ConvertToFloat(txtTotalQty.Text);
-                                product.WholesalePrice = ConvertToFloat(txtWholeSalePrice.Text);
-                                product.SalePrice = ConvertToFloat(txtSalePrice.Text);
-                                product.MaxDiscount = ConvertToFloat(txtDiscountAllowed.Text);
-                                product.SalePriceTax = ConvertToFloat(txtSaleAfterTax.Text);
-                                product.SalePriceSeconde = ConvertToFloat(txtSalePrice2.Text);
-                                product.ColisageBareCode = txtColisageBareCode.Text;
-                                product.NbrProductInColis = ConvertToFloat(txtNbrIncolis.Text);
-                                product.DateExperation = DtpExperation.Value;
-                                product.ProductImage = RetriveImage();
-                                var result = _context.Add(product);
-                                _context.SaveChanges();
-                                //if (CMBCategory.SelectedValue != null && int.TryParse(CMBCategory.SelectedValue.ToString(), out int categoryId))
-                                //{
-                                //    product.CategoryId = categoryId;
-                                //}
 
-
-                                if (checkBox1.Checked)
-                                {
-                                    var textBoxes = new[]
-                                    {
-                                    textBox1, textBox2, textBox3, textBox4, textBox5,
-                                    textBox6, textBox7, textBox8, textBox9, textBox10
-                                };
-
-                                    foreach (var textBox in textBoxes)
-                                    {
-                                        if (!string.IsNullOrEmpty(textBox.Text))
-                                        {
-                                            var family = new ProductFamily
-                                            {
-                                                Pro_Id = product.Id,
-                                                CodeBar = textBox.Text
-                                            };
-                                            _context.ProductFamilies.Add(family);
-                                        }
-                                    }
-
-                                    // Save all changes at once
-                                    _context.SaveChanges();
-                                }
-
-                                if (!ProductsUserControl.CheckInstance())
-                                {
-                                    ProductsUserControl.RefreshDgv();
-                                }
-                                _context.SaveChanges();
-                                if (cbFavorite.Checked)
-                                {
-                                    ProductQuickAccess qucik = new ProductQuickAccess
-                                    {
-                                        Pro_Id = product.Id,
-                                        CodeBar = txtBarCode.Text,
-                                        ProductImage = RetriveImage(),
-                                        ProductName = txtNameProduct.Text,
-                                    };
-                                    //vider();
-                                    _context.Add(qucik);
-                                    _context.SaveChanges();
-                                }
-                            }
-                        }
                     }
-                    else
-                    {
-                        MsgHelper.ShowBareCodeDuplicated(_context, txtBarCode.Text);
-                    }
+
                 }
                 else
                     MsgHelper.ShowRequiredFields();
@@ -565,18 +575,18 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         {
             try
             {
-                var ResultBareCode = _context.Products.FirstOrDefault(x => x.CodeBar == txtBarCode.Text &&
-                x.Id.ToString() != lblProductId.Text);
+                if (!ValidateUniqueProductBareCode()) { MsgHelper.BareCodeMesssageDuplicated(); return; }
 
-                if (ResultBareCode is null)
+
+                var ResultProductName = _context.Products.FirstOrDefault(x => x.ProductName == txtNameProduct.Text
+                && x.Id.ToString() != lblProductId.Text);
+
+                if (ResultProductName is null)
                 {
-                    var ResultProductName = _context.Products.FirstOrDefault(x => x.ProductName == txtNameProduct.Text
-                    && x.Id.ToString() != lblProductId.Text);
 
-                    if (ResultProductName is null)
+                    Product product = productsRepository.Find(lblProductId.Text);
+                    if (product is not null)
                     {
-
-                        Product product = productsRepository.Find(lblProductId.Text);
                         product.ProductName = txtNameProduct.Text;
                         product.CodeBar = txtBarCode.Text;
                         product.CategoryId = Convert.ToInt32(CMBCategory.SelectedValue);
@@ -629,7 +639,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                         }
                         if (cbFavorite.Checked)
                         {
-                            if (_context.ProductQuickAccess.FirstOrDefault(x => x.Id.ToString() == lblProductId.Text) is not null)
+                            if (_context.ProductQuickAccess.FirstOrDefault(x => x.Id == product.Id) is not null)
                             {
                                 ProductQuickAccess qucik = new ProductQuickAccess
                                 {
@@ -638,7 +648,93 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                                     ProductImage = RetriveImage(),
                                     ProductName = txtNameProduct.Text,
                                 };
-                                vider();
+                                //vider();
+                                _context.Add(qucik);
+                                _context.SaveChanges();
+                            }
+                        }
+                        product = null;
+                    }
+                    else
+                    {
+                        var ProQuick = _context.ProductQuickAccess.FirstOrDefault(x => x.Pro_Id.ToString() == lblProductId.Text);
+                        if (ProQuick != null)
+                        {
+                            _context.Remove(ProQuick);
+                            _context.SaveChanges();
+
+                        }
+                    }
+                    Code.Helper.ToasterHelper.ShowEditToast();
+
+                }
+                else
+                {
+                    if (MsgHelper.ShowProductNameIsSame())
+                    {
+                        Product product = productsRepository.Find(lblProductId.Text);
+                        product.ProductName = txtNameProduct.Text;
+                        product.CodeBar = txtBarCode.Text;
+                        product.CategoryId = Convert.ToInt32(CMBCategory.SelectedValue);
+                        product.MinQty = ConvertToFloat(txtMinQty.Text);
+                        product.IsTaxed = CbIsTaxed.Checked;
+                        product.TaxValue = CbIsTaxed.Checked ? ConvertToFloat(txtTaxValue.Text) : 0;
+                        product.BuyPrice = ConvertToFloat(txtBuyPrice.Text);
+                        product.Quentity = ConvertToFloat(txtTotalQty.Text);
+                        product.WholesalePrice = ConvertToFloat(txtWholeSalePrice.Text);
+                        product.SalePrice = ConvertToFloat(txtSalePrice.Text);
+                        product.MaxDiscount = ConvertToFloat(txtDiscountAllowed.Text);
+                        product.SalePriceTax = ConvertToFloat(txtSaleAfterTax.Text);
+                        product.SalePriceSeconde = ConvertToFloat(txtSalePrice2.Text);
+                        product.ColisageBareCode = txtColisageBareCode.Text;
+                        product.NbrProductInColis = ConvertToFloat(txtNbrIncolis.Text);
+                        product.DateExperation = DtpExperation.Value;
+                        product.ProductImage = RetriveImage();
+                        var result = productsRepository.UpdateAsync(lblProductId.Text, product);
+                        var families = _context.ProductFamilies.Where(x => x.Pro_Id == product.Id).ToList();
+                        _context.RemoveRange(families);
+                        _context.SaveChanges();
+                        if (checkBox1.Checked)
+                        {
+                            var textBoxes = new[]
+                            {
+                                    textBox1, textBox2, textBox3, textBox4, textBox5,
+                                    textBox6, textBox7, textBox8, textBox9, textBox10
+                                };
+
+                            foreach (var textBox in textBoxes)
+                            {
+                                if (!string.IsNullOrEmpty(textBox.Text))
+                                {
+                                    var family = new ProductFamily
+                                    {
+                                        Pro_Id = product.Id,
+                                        CodeBar = textBox.Text
+                                    };
+                                    _context.ProductFamilies.Add(family);
+                                }
+                            }
+
+                            // Save all changes at once
+                            _context.SaveChanges();
+                        }
+                        if (!ProductsUserControl.CheckInstance())
+                        {
+                            ProductsUserControl.RefreshDgv();
+                        }
+
+                        if (cbFavorite.Checked)
+                        {
+                            if (_context.ProductQuickAccess.FirstOrDefault(x => x.Id == product.Id) is not null)
+                            {
+                                ProductQuickAccess qucik = new ProductQuickAccess
+                                {
+                                    Pro_Id = product.Id,
+                                    CodeBar = txtBarCode.Text,
+                                    ProductImage = RetriveImage(),
+                                    ProductName = txtNameProduct.Text,
+                                };
+                                //vider();
                                 _context.Add(qucik);
                                 _context.SaveChanges();
                             }
@@ -654,98 +750,11 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
                             }
                         }
-                    }
-                    else
-                    {
-                        if (MsgHelper.ShowProductNameIsSame())
-                        {
-                            Product product = productsRepository.Find(lblProductId.Text);
-                            product.ProductName = txtNameProduct.Text;
-                            product.CodeBar = txtBarCode.Text;
-                            product.CategoryId = Convert.ToInt32(CMBCategory.SelectedValue);
-                            product.MinQty = ConvertToFloat(txtMinQty.Text);
-                            product.IsTaxed = CbIsTaxed.Checked;
-                            product.TaxValue = CbIsTaxed.Checked ? ConvertToFloat(txtTaxValue.Text) : 0;
-                            product.BuyPrice = ConvertToFloat(txtBuyPrice.Text);
-                            product.Quentity = ConvertToFloat(txtTotalQty.Text);
-                            product.WholesalePrice = ConvertToFloat(txtWholeSalePrice.Text);
-                            product.SalePrice = ConvertToFloat(txtSalePrice.Text);
-                            product.MaxDiscount = ConvertToFloat(txtDiscountAllowed.Text);
-                            product.SalePriceTax = ConvertToFloat(txtSaleAfterTax.Text);
-                            product.SalePriceSeconde = ConvertToFloat(txtSalePrice2.Text);
-                            product.ColisageBareCode = txtColisageBareCode.Text;
-                            product.NbrProductInColis = ConvertToFloat(txtNbrIncolis.Text);
-                            product.DateExperation = DtpExperation.Value;
-                            product.ProductImage = RetriveImage();
-                            var result = productsRepository.UpdateAsync(lblProductId.Text, product);
-                            var families = _context.ProductFamilies.Where(x => x.Pro_Id == product.Id).ToList();
-                            _context.RemoveRange(families);
-                            _context.SaveChanges();
-                            if (checkBox1.Checked)
-                            {
-                                var textBoxes = new[]
-                                {
-                                    textBox1, textBox2, textBox3, textBox4, textBox5,
-                                    textBox6, textBox7, textBox8, textBox9, textBox10
-                                };
+                        Code.Helper.ToasterHelper.ShowEditToast();
 
-                                foreach (var textBox in textBoxes)
-                                {
-                                    if (!string.IsNullOrEmpty(textBox.Text))
-                                    {
-                                        var family = new ProductFamily
-                                        {
-                                            Pro_Id = product.Id,
-                                            CodeBar = textBox.Text
-                                        };
-                                        _context.ProductFamilies.Add(family);
-                                    }
-                                }
-
-                                // Save all changes at once
-                                _context.SaveChanges();
-                            }
-                            if (!ProductsUserControl.CheckInstance())
-                            {
-                                ProductsUserControl.RefreshDgv();
-                            }
-
-                            if (cbFavorite.Checked)
-                            {
-                                if (_context.ProductQuickAccess.FirstOrDefault(x => x.Id.ToString() == lblProductId.Text) is not null)
-                                {
-                                    ProductQuickAccess qucik = new ProductQuickAccess
-                                    {
-                                        Pro_Id = product.Id,
-                                        CodeBar = txtBarCode.Text,
-                                        ProductImage = RetriveImage(),
-                                        ProductName = txtNameProduct.Text,
-                                    };
-                                    vider();
-                                    _context.Add(qucik);
-                                    _context.SaveChanges();
-                                }
-                                product = null;
-                            }
-
-                            else
-                            {
-                                var ProQuick = _context.ProductQuickAccess.FirstOrDefault(x => x.Pro_Id.ToString() == lblProductId.Text);
-                                if (ProQuick != null)
-                                {
-                                    _context.Remove(ProQuick);
-                                    _context.SaveChanges();
-
-                                }
-                            }
-
-                        }
                     }
                 }
-                else
-                {
-                    MsgHelper.ShowBareCodeDuplicated(_context, txtBarCode.Text);
-                }
+
 
             }
             catch (Exception)
@@ -871,14 +880,16 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         {
             try
             {
-                if (!MsgHelper.ShowBareCodeDuplicatedWithoutMessages(_context, txtBarCode.Text))
+                if (sender is TextBox textBox)
                 {
-                    txtBarCode.ForeColor = Color.Red;
-                }
-                else
-                {
-                    txtBarCode.ForeColor = Color.Black;
-
+                    if (!MsgHelper.ShowBareCodeDuplicatedWithoutMessages(_context, textBox.Text))
+                    {
+                        textBox.ForeColor = Color.Red;
+                    }
+                    else
+                    {
+                        textBox.ForeColor = Color.Black;
+                    }
                 }
             }
             catch (Exception)
@@ -892,7 +903,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         {
             try
             {
-                if (!MsgHelper.ShowProductNameDuplicated(_context, txtNameProduct.Text))
+                if (!MsgHelper.ShowProductNameDuplicated(_context, txtNameProduct.Text, lblProductId.Text))
                 {
                     txtNameProduct.ForeColor = Color.Red;
 

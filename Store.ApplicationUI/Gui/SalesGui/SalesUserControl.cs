@@ -827,6 +827,8 @@ namespace Store.ApplicationUI.Gui.SalesGui
                     // Handle Caisse and Customer updates
                     HandleFinancialUpdates(paymentAmount, isDebt, sale.Id);
                     transaction.Commit();
+                    Code.Helper.ToasterHelper.ShowNewSaleAdd();
+
                     DataTable saleDetailsTable = await Code.Helper.FactureHelper.GetSellDetailsDataTableAsync(sale.Id);
                     string printername = Properties.Settings.Default.Printer8cm;
 

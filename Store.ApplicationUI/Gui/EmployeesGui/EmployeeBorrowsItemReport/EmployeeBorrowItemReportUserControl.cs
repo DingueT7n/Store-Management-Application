@@ -128,6 +128,8 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowsItemReport
                             _contex.SaveChanges();
                         }
                     }
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
+
                     DgvSales.DataSource = null;
                     RefreshDgv();
                 }

@@ -147,6 +147,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
                 if (MsgHelper.ShowDeleteDialog())
                 {
                     var customer = employeesRepository.DeleteAsync(DgvِCustomer.CurrentRow.Cells[7].Value.ToString());
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
 
 
                 }

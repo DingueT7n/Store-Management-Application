@@ -93,6 +93,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
                 category.CategoryName = txtNameِCategory.Text;
                 _context.Categories.Add(category);
                 _context.SaveChanges();
+                Code.Helper.ToasterHelper.ShowAddToast();
+
 
             }
             RefreshDgv();
@@ -114,17 +116,30 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
 
         private void btnEditCategory_Click(object sender, EventArgs e)
         {
-            if (MsgHelper.ShowEditDialog())
+            try
             {
-                Store.Core.Entities.Products.Category category = _context.Categories.FirstOrDefault(x => x.Id ==
-                Convert.ToInt32(DgvCategory.CurrentRow.Cells[1].Value.ToString())
-                );
 
-                category.CategoryName = txtNameِCategory.Text;
-                _context.Update(category);
-                _context.SaveChanges();
-                vider();
 
+                if (MsgHelper.ShowEditDialog())
+                {
+                    Store.Core.Entities.Products.Category category = _context.Categories.FirstOrDefault(x => x.Id ==
+                    Convert.ToInt32(DgvCategory.CurrentRow.Cells[1].Value.ToString())
+                    );
+                    if (category != null)
+                    {
+                        category.CategoryName = txtNameِCategory.Text;
+                        _context.Update(category);
+                        _context.SaveChanges();
+                        Code.Helper.ToasterHelper.ShowEditToast();
+                        vider();
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
 
@@ -136,6 +151,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
                     (x => x.Id == Convert.ToInt32(DgvCategory.CurrentRow.Cells[1].Value.ToString()));
                 _context.Categories.Remove(cate);
                 await _context.SaveChangesAsync();
+                Code.Helper.ToasterHelper.ShowDeletedToast();
+
             }
             RefreshDgv();
         }

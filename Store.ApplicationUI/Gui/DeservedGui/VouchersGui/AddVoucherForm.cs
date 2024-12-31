@@ -147,39 +147,51 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
 
         private void btnAddDeserved_Click(object sender, EventArgs e)
         {
-            if (rbReciptVoucher.Checked)
+            try
             {
-                _context.ReceiptVouchers.Add(new Core.Entities.Vouchers.ReceiptVoucher
+
+
+                if (rbReciptVoucher.Checked)
                 {
-                    From = txtPerson.Text,
-                    ReciverName = txtUserName.Text,
-                    Price = Convert.ToDecimal(txtValue.Text),
-                    Date = Dtp.Value,
-                    Reason = txtNotes.Text,
-                    Time = DateTime.Now.ToString("HH:mm:ss"),
-                });
-                _context.Update(AddCaisse(Convert.ToDecimal(txtValue.Text)));
-                _context.Add(SetCaisseDeposit(Convert.ToDecimal(txtValue.Text)));
-            }
-            else
-            {
-                _context.SendVouchers.Add(new Core.Entities.Vouchers.SendVoucher
+                    _context.ReceiptVouchers.Add(new Core.Entities.Vouchers.ReceiptVoucher
+                    {
+                        From = txtPerson.Text,
+                        ReciverName = txtUserName.Text,
+                        Price = Convert.ToDecimal(txtValue.Text),
+                        Date = Dtp.Value,
+                        Reason = txtNotes.Text,
+                        Time = DateTime.Now.ToString("HH:mm:ss"),
+                    });
+                    _context.Update(AddCaisse(Convert.ToDecimal(txtValue.Text)));
+                    _context.Add(SetCaisseDeposit(Convert.ToDecimal(txtValue.Text)));
+                }
+                else
                 {
-                    To = txtPerson.Text,
-                    SenderName = txtUserName.Text,
-                    Price = Convert.ToDecimal(txtValue.Text),
-                    Date = Dtp.Value,
-                    Reason = txtNotes.Text,
-                    Time = DateTime.Now.ToString("HH:mm:ss"),
-                });
-                _context.Update(MinusCaisse(Convert.ToDecimal(txtValue.Text)));
-                _context.Add(SetCaisseWithdraw(Convert.ToDecimal(txtValue.Text)));
+                    _context.SendVouchers.Add(new Core.Entities.Vouchers.SendVoucher
+                    {
+                        To = txtPerson.Text,
+                        SenderName = txtUserName.Text,
+                        Price = Convert.ToDecimal(txtValue.Text),
+                        Date = Dtp.Value,
+                        Reason = txtNotes.Text,
+                        Time = DateTime.Now.ToString("HH:mm:ss"),
+                    });
+                    _context.Update(MinusCaisse(Convert.ToDecimal(txtValue.Text)));
+                    _context.Add(SetCaisseWithdraw(Convert.ToDecimal(txtValue.Text)));
+
+                }
+                _context.SaveChanges();
+                if (!VouchersUserControl.CheckInstance())
+                {
+                    VouchersUserControl.RefreshDgv();
+                }
+                Code.Helper.ToasterHelper.ShowAddToast();
 
             }
-            _context.SaveChanges();
-            if (!VouchersUserControl.CheckInstance())
+            catch (Exception)
             {
-                VouchersUserControl.RefreshDgv();
+
+                throw;
             }
         }
         Caisse AddCaisse(decimal value)
@@ -238,36 +250,49 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
         }
         private async void btnEditDeserved_Click(object sender, EventArgs e)
         {
-
-            if (rbReciptVoucher.Checked)
+            try
             {
-                ReceiptVoucher receipt = _context.ReceiptVouchers.FirstOrDefault(x => x.Id.ToString() == lblNumberD.Text);
-                receipt.From = txtPerson.Text;
-                receipt.ReciverName = txtUserName.Text;
-                receipt.Price = Convert.ToDecimal(txtValue.Text);
-                receipt.Date = Dtp.Value;
-                receipt.Reason = txtNotes.Text;
 
-                _context.Update(receipt);
 
+                if (rbReciptVoucher.Checked)
+                {
+                    ReceiptVoucher receipt = _context.ReceiptVouchers.FirstOrDefault(x => x.Id.ToString() == lblNumberD.Text);
+                    if (receipt != null)
+                    {
+                        receipt.From = txtPerson.Text;
+                        receipt.ReciverName = txtUserName.Text;
+                        receipt.Price = Convert.ToDecimal(txtValue.Text);
+                        receipt.Date = Dtp.Value;
+                        receipt.Reason = txtNotes.Text;
+
+                        _context.Update(receipt);
+                    }
+
+                }
+                else
+                {
+                    SendVoucher receipt = _context.SendVouchers.FirstOrDefault(x => x.Id.ToString() == lblNumberD.Text);
+                    if (receipt != null)
+                    {
+                        receipt.To = txtPerson.Text;
+                        receipt.SenderName = txtUserName.Text;
+                        receipt.Price = Convert.ToDecimal(txtValue.Text);
+                        receipt.Date = Dtp.Value;
+                        receipt.Reason = txtNotes.Text;
+                        _context.Update(receipt);
+                    }
+                }
+                await _context.SaveChangesAsync();
+                if (!VouchersUserControl.CheckInstance())
+                {
+                    VouchersUserControl.RefreshDgv();
+                }
             }
-            else
+            catch (Exception)
             {
-                SendVoucher receipt = _context.SendVouchers.FirstOrDefault(x => x.Id.ToString() == lblNumberD.Text);
-                receipt.To = txtPerson.Text;
-                receipt.SenderName = txtUserName.Text;
-                receipt.Price = Convert.ToDecimal(txtValue.Text);
-                receipt.Date = Dtp.Value;
-                receipt.Reason = txtNotes.Text;
 
-                _context.Update(receipt);
+                throw;
             }
-            await _context.SaveChangesAsync();
-            if (!VouchersUserControl.CheckInstance())
-            {
-                VouchersUserControl.RefreshDgv();
-            }
-
             DataChanges();
         }
     }

@@ -190,6 +190,8 @@ namespace Store.ApplicationUI.Gui.ReturnsGui.ReturnsReportsGui
                             _contex.SaveChanges();
                         }
                     }
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
+
                 }
                 DgvSales.DataSource = null;
             }

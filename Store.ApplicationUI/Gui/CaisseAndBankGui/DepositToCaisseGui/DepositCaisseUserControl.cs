@@ -122,6 +122,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseGui
 
                             // Commit the transaction
                             await transaction.CommitAsync();
+                            Code.Helper.ToasterHelper.ShowDeposit();
+
                         }
                     }
 

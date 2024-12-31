@@ -165,22 +165,33 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         }
         private void btnAddProduct_Click(object sender, EventArgs e)
         {
-
-            Supplier customer = new Supplier();
-            customer.SupplierName = txtNameSupplier.Text;
-            customer.Address = txtAddress.Text;
-            customer.PhoneNumber = txtPhoneNumber.Text;
-            customer.Notes = txtNotes.Text;
-            customer.MaxDebtAllowed = ConvertToFloat(txtMaxDebtAllowed.Text);
-
-
-            var result = _suppliersRepository.AddAsync(customer);
-            vider();
-            if (!SuppliersUserControl.CheckInstance())
+            try
             {
-                SuppliersUserControl.RefreshDgv();
-            }
 
+
+                Supplier customer = new Supplier();
+                customer.SupplierName = txtNameSupplier.Text;
+                customer.Address = txtAddress.Text;
+                customer.PhoneNumber = txtPhoneNumber.Text;
+                customer.Notes = txtNotes.Text;
+                customer.MaxDebtAllowed = ConvertToFloat(txtMaxDebtAllowed.Text);
+
+
+                var result = _suppliersRepository.AddAsync(customer);
+                vider();
+                if (!SuppliersUserControl.CheckInstance())
+                {
+                    SuppliersUserControl.RefreshDgv();
+
+                }
+                Code.Helper.ToasterHelper.ShowAddToast();
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         decimal ConvertToFloat(string value)
@@ -195,20 +206,34 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void btnEditProduct_Click(object sender, EventArgs e)
         {
-
-            Supplier customer = _suppliersRepository.Find(lblِSupplierId.Text);
-            customer.SupplierName = txtNameSupplier.Text;
-            customer.Address = txtAddress.Text;
-            customer.PhoneNumber = txtPhoneNumber.Text;
-            customer.Notes = txtNotes.Text;
-            customer.MaxDebtAllowed = ConvertToFloat(txtMaxDebtAllowed.Text);
-            var result = _suppliersRepository.UpdateAsync(lblِSupplierId.Text, customer);
-
-            if (!SuppliersUserControl.CheckInstance())
+            try
             {
-                SuppliersUserControl.RefreshDgv();
+
+
+                Supplier customer = _suppliersRepository.Find(lblِSupplierId.Text);
+                if (customer is not null)
+                {
+                    customer.SupplierName = txtNameSupplier.Text;
+                    customer.Address = txtAddress.Text;
+                    customer.PhoneNumber = txtPhoneNumber.Text;
+                    customer.Notes = txtNotes.Text;
+                    customer.MaxDebtAllowed = ConvertToFloat(txtMaxDebtAllowed.Text);
+                    var result = _suppliersRepository.UpdateAsync(lblِSupplierId.Text, customer);
+
+                    if (!SuppliersUserControl.CheckInstance())
+                    {
+                        SuppliersUserControl.RefreshDgv();
+                    }
+                    customer = null;
+                    Code.Helper.ToasterHelper.ShowEditToast();
+
+                }
             }
-            customer = null;
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
         private void button1_Click(object sender, EventArgs e)
         {

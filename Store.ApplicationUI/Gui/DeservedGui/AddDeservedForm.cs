@@ -130,42 +130,69 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
         private void btnAddDeserved_Click(object sender, EventArgs e)
         {
-            if (CMBType.Text != "اختر نوع")
+            try
             {
-                _context.Deserveds.Add(new Deserved
+
+
+                if (CMBType.Text != "اختر نوع")
                 {
-                    TypeId = (int)CMBType.SelectedValue,
-                    UserName = txtUserName.Text,
-                    Price = Convert.ToDecimal(txtValueDeserved.Text),
-                    Date = DtpExperation.Value,
-                    Notes = txtNotes.Text,
-                    Time = DateTime.Now.ToString("HH:mm:ss"),
-                });
-                _context.SaveChanges();
-                if (!DeservedUserControl.CheckInstance())
-                {
-                    DeservedUserControl.RefreshDgv();
+                    _context.Deserveds.Add(new Deserved
+                    {
+                        TypeId = (int)CMBType.SelectedValue,
+                        UserName = txtUserName.Text,
+                        Price = Convert.ToDecimal(txtValueDeserved.Text),
+                        Date = DtpExperation.Value,
+                        Notes = txtNotes.Text,
+                        Time = DateTime.Now.ToString("HH:mm:ss"),
+                    });
+                    _context.SaveChanges();
+                    Code.Helper.ToasterHelper.ShowAddToast();
+
+                    if (!DeservedUserControl.CheckInstance())
+                    {
+                        DeservedUserControl.RefreshDgv();
+                    }
                 }
+                else
+                    MsgHelper.ShowRequiredFields();
             }
-            else
-                MsgHelper.ShowRequiredFields();
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         private async void btnEditDeserved_Click(object sender, EventArgs e)
         {
-            Deserved deserved = _context.Deserveds.FirstOrDefault(x => x.Id.ToString() == lblDeservedID.Text);
-            deserved.TypeId = Convert.ToInt32(CMBType.SelectedValue);
-            deserved.UserName = txtUserName.Text;
-            deserved.Price = Convert.ToDecimal(txtValueDeserved.Text);
-            deserved.Date = DtpExperation.Value;
-            deserved.Notes = txtNotes.Text;
-            _context.Update(deserved);
-            await _context.SaveChangesAsync();
-            if (!DeservedUserControl.CheckInstance())
+            try
             {
-                DeservedUserControl.RefreshDgv();
+
+
+                Deserved deserved = _context.Deserveds.FirstOrDefault(x => x.Id.ToString() == lblDeservedID.Text);
+                if (deserved != null)
+                {
+                    deserved.TypeId = Convert.ToInt32(CMBType.SelectedValue);
+                    deserved.UserName = txtUserName.Text;
+                    deserved.Price = Convert.ToDecimal(txtValueDeserved.Text);
+                    deserved.Date = DtpExperation.Value;
+                    deserved.Notes = txtNotes.Text;
+                    _context.Update(deserved);
+                    await _context.SaveChangesAsync();
+                    Code.Helper.ToasterHelper.ShowEditToast();
+
+                    if (!DeservedUserControl.CheckInstance())
+                    {
+                        DeservedUserControl.RefreshDgv();
+                    }
+                    deserved = null;
+                }
             }
-            deserved = null;
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         private void btnAddTypes_Click(object sender, EventArgs e)

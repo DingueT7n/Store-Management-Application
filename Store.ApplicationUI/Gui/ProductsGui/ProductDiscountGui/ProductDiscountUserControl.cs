@@ -211,6 +211,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
                     {
                         _contex.Remove(deleteedRefund);
                         _contex.SaveChanges();
+                        Code.Helper.ToasterHelper.ShowDeletedToast();
+
                     }
 
                     DgvSales.DataSource = null;

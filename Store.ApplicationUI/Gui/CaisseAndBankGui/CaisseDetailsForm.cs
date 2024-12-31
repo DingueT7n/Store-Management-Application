@@ -113,33 +113,66 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
                 caisse.MoneyinCaisse = 0;
                 _context.Caisses.Add(caisse);
                 _context.SaveChanges();
+                Code.Helper.ToasterHelper.ShowAddToast();
+
             }
             RefreshDgv();
         }
 
         private void btnEditCaisse_Click(object sender, EventArgs e)
         {
-            if (MsgHelper.ShowEditDialog())
+            try
             {
-                Store.Core.Entities.Caisses.Caisse caisse = _context.Caisses.FirstOrDefault(x => x.Id ==
-                Convert.ToInt32(DgvCaisser.CurrentRow.Cells[2].Value.ToString())
-                );
 
-                caisse.CaisseName = txtNameِCategory.Text;
-                _context.Update(caisse);
-                _context.SaveChangesAsync();
-                vider();
+
+                if (MsgHelper.ShowEditDialog())
+                {
+                    Store.Core.Entities.Caisses.Caisse caisse = _context.Caisses.FirstOrDefault(x => x.Id ==
+                    Convert.ToInt32(DgvCaisser.CurrentRow.Cells[2].Value.ToString())
+                    );
+                    if (caisse != null)
+                    {
+                        caisse.CaisseName = txtNameِCategory.Text;
+                        _context.Update(caisse);
+                        _context.SaveChangesAsync();
+                        Code.Helper.ToasterHelper.ShowEditToast();
+
+                        vider();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
 
         private void btnDeleteCaisse_Click(object sender, EventArgs e)
         {
-            if (MsgHelper.ShowDeleteDialog())
+            try
             {
-                _context.Remove(Convert.ToInt32(DgvCaisser.CurrentRow.Cells[2].Value.ToString()));
-                _context.SaveChangesAsync();
+
+
+                if (MsgHelper.ShowDeleteDialog())
+                {
+                    Store.Core.Entities.Caisses.Caisse caisse = _context.Caisses.FirstOrDefault(x => x.Id ==
+                    Convert.ToInt32(DgvCaisser.CurrentRow.Cells[2].Value.ToString())
+                    );
+                    if (caisse != null)
+                    {
+                        _context.Remove(caisse);
+                        _context.SaveChanges();
+                        Code.Helper.ToasterHelper.ShowDeletedToast();
+                    }
+                }
+                RefreshDgv();
             }
-            RefreshDgv();
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         private void btnSearch_Click(object sender, EventArgs e)

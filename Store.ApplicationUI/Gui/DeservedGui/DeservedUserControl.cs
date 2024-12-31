@@ -153,6 +153,8 @@ namespace Store.ApplicationUI.Gui.DeservedGui
             if (MsgHelper.ShowDeleteDialog())
             {
                 deservedsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[7].Value.ToString());
+                Code.Helper.ToasterHelper.ShowDeletedToast();
+
             }
             RefreshDgv();
         }
@@ -186,6 +188,8 @@ namespace Store.ApplicationUI.Gui.DeservedGui
                 {
 
                     deservedsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[i].Value.ToString());
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
+
                 }
             }
             RefreshDgv();

@@ -175,6 +175,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransferBetweenCaissesGui
 
                             // Commit the transaction
                             await transaction.CommitAsync();
+                            Code.Helper.ToasterHelper.ShowTransfert();
+
                         }
                     }
 

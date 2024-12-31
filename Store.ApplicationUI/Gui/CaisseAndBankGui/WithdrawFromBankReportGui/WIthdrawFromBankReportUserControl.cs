@@ -144,6 +144,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBankReportGui
                             _contex.SaveChanges();
                         }
                     }
+
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
                     DgvSales.DataSource = null;
                     RefreshDgv();
                 }

@@ -294,6 +294,8 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
                 for (int i = 0; i < DgvِCustomer.Rows.Count; i++)
                 {
                     customerReportRepository.DeleteAsync(DgvِCustomer.Rows[i].Cells[8].Value.ToString());
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
+
                 }
                 LoadData();
 
@@ -314,6 +316,8 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
                     {
                         _context.CustomersReports.RemoveRange(query);
                         await _context.SaveChangesAsync();
+                        Code.Helper.ToasterHelper.ShowDeletedToast();
+
                     }
                     else
                     {
@@ -337,6 +341,8 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
                 try
                 {
                     _context.Database.ExecuteSqlRaw($"DELETE FROM [CustomersReports]");
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
+
 
                     LoadData();
                 }

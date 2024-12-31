@@ -123,39 +123,65 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            Employee Employee = new Employee();
-            Employee.EmployeeName = txtNameEmployee.Text;
-            Employee.Address = txtAddress.Text;
-            Employee.PhoneNumber = txtPhoneNumber.Text;
-            Employee.Email = txtEmail.Text;
-            Employee.Salary = _main.ConvertToFloat(txtSalary.Text);
-            Employee.National_ID = txtNbrCartId.Text;
-            Employee.DateJoined = dtpJoined.Value;
-            var result = _employeesRepository.AddAsync(Employee);
-            vider();
-            if (!EmployeeUserControl.CheckInstance())
+            try
             {
-                EmployeeUserControl.RefreshDgv();
+
+
+                Employee Employee = new Employee();
+                Employee.EmployeeName = txtNameEmployee.Text;
+                Employee.Address = txtAddress.Text;
+                Employee.PhoneNumber = txtPhoneNumber.Text;
+                Employee.Email = txtEmail.Text;
+                Employee.Salary = _main.ConvertToFloat(txtSalary.Text);
+                Employee.National_ID = txtNbrCartId.Text;
+                Employee.DateJoined = dtpJoined.Value;
+                var result = _employeesRepository.AddAsync(Employee);
+                Code.Helper.ToasterHelper.ShowAddToast();
+
+                vider();
+                if (!EmployeeUserControl.CheckInstance())
+                {
+                    EmployeeUserControl.RefreshDgv();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            Employee Employee = _employeesRepository.Find(lblِCustomerId.Text);
-            Employee.EmployeeName = txtNameEmployee.Text;
-            Employee.Address = txtAddress.Text;
-            Employee.PhoneNumber = txtPhoneNumber.Text;
-            Employee.Email = txtEmail.Text;
-            Employee.Salary = _main.ConvertToFloat(txtSalary.Text);
-            Employee.National_ID = txtNbrCartId.Text;
-            Employee.DateJoined = dtpJoined.Value;
-            var result = _employeesRepository.UpdateAsync(lblِCustomerId.Text, Employee);
-
-            if (!EmployeeUserControl.CheckInstance())
+            try
             {
-                EmployeeUserControl.RefreshDgv();
+
+
+                Employee Employee = _employeesRepository.Find(lblِCustomerId.Text);
+                if (Employee is not null)
+                {
+                    Employee.EmployeeName = txtNameEmployee.Text;
+                    Employee.Address = txtAddress.Text;
+                    Employee.PhoneNumber = txtPhoneNumber.Text;
+                    Employee.Email = txtEmail.Text;
+                    Employee.Salary = _main.ConvertToFloat(txtSalary.Text);
+                    Employee.National_ID = txtNbrCartId.Text;
+                    Employee.DateJoined = dtpJoined.Value;
+                    var result = _employeesRepository.UpdateAsync(lblِCustomerId.Text, Employee);
+                    Code.Helper.ToasterHelper.ShowEditToast();
+
+                    if (!EmployeeUserControl.CheckInstance())
+                    {
+                        EmployeeUserControl.RefreshDgv();
+                    }
+                    Employee = null;
+                }
             }
-            Employee = null;
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

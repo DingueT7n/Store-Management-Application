@@ -143,6 +143,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui
                 {
                     var customer = customersRepository.DeleteAsync(DgvِCustomer.CurrentRow.Cells[6].Value.ToString());
 
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
 
                 }
                 RefreshDgv();

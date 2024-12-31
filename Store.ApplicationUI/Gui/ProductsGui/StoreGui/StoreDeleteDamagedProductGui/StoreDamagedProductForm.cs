@@ -223,6 +223,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDeleteDamagedProduct
                         _context.Update(_product);
                         _context.SaveChanges();
                         transaction.Commit();
+                        Code.Helper.ToasterHelper.ShowOutStockProduct();
+
                         ResetForm();
                     }
                     catch (Exception)

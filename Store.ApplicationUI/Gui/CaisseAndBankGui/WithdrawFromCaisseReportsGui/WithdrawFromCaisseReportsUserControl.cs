@@ -153,6 +153,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseReportsGui
                             _contex.SaveChanges();
                         }
                     }
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
                     DgvSales.DataSource = null;
                     RefreshDgv();
                 }
