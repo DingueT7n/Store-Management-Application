@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.PaymentGui;
-using Store.ApplicationUI.Reports.ReportPerviwGui;
 using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Customers;
 using Store.Core.Entities.Products;
@@ -659,8 +658,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                     DataTable saleDetailsTable = await GetSellDetailsDataTableAsync(LastFactureId);
                     Reports.sale8cm sale8Cm = new();
                     sale8Cm.DataSource = saleDetailsTable;
-                    XtraForm1 xtraForm11 = new(sale8Cm);
-                    xtraForm11.ShowDialog();
+                    var xtraForm11 = Reports.ReportPerviwGui.PerviweForm.Instance(sale8Cm);
+                    xtraForm11.Show();
                 }
                 catch (Exception)
                 {
@@ -675,8 +674,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                     DataTable ProfitDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(LastFactureId);
                     Reports.SalesReports.salesA4 salesA4 = new();
                     salesA4.DataSource = ProfitDetailsTable;
-                    Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(salesA4);
-                    xtraForm1.ShowDialog();
+                    Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(salesA4);
+                    xtraForm1.Show();
 
                 }
                 catch (Exception)
@@ -1141,27 +1140,29 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
                                 DataTable saleDetailsTable = await GetSellDetailsDataTableAsync(saleID);
                                 string printername = Properties.Settings.Default.Printer8cm;
-
-                                if (Properties.Settings.Default.PrintSaleFactureType8cm)
+                                for (int i = 0; i < Properties.Settings.Default.NbrCopyOfSaleFacture; i++)
                                 {
-                                    Reports.sale8cm sale8Cm = new();
-                                    sale8Cm.DataSource = saleDetailsTable;
+                                    if (Properties.Settings.Default.PrintSaleFactureType8cm)
+                                    {
+                                        Reports.sale8cm sale8Cm = new();
+                                        sale8Cm.DataSource = saleDetailsTable;
 
-                                    // Force print to the specified printer
-                                    var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(sale8Cm);
-                                    printTool.PrinterSettings.PrinterName = printername;
-                                    printTool.Print(printername);
-                                }
-                                else
-                                {
-                                    Reports.SalesReports.salesA4 salesA4 = new();
-                                    salesA4.DataSource = saleDetailsTable;
-                                    printername = Properties.Settings.Default.PrinterA4;
+                                        // Force print to the specified printer
+                                        var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(sale8Cm);
+                                        printTool.PrinterSettings.PrinterName = printername;
+                                        printTool.Print(printername);
+                                    }
+                                    else
+                                    {
+                                        Reports.SalesReports.salesA4 salesA4 = new();
+                                        salesA4.DataSource = saleDetailsTable;
+                                        printername = Properties.Settings.Default.PrinterA4;
 
-                                    // Force print to the specified printer
-                                    var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(salesA4);
-                                    printTool.PrinterSettings.PrinterName = printername;
-                                    printTool.Print(printername);
+                                        // Force print to the specified printer
+                                        var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(salesA4);
+                                        printTool.PrinterSettings.PrinterName = printername;
+                                        printTool.Print(printername);
+                                    }
                                 }
                                 //XtraForm1 xtraForm11 = new(sale8Cm);
                                 //xtraForm11.ShowDialog();

@@ -32,7 +32,6 @@
             OperationsflowLayoutPanel = new FlowLayoutPanel();
             btnAddDeserved = new Button();
             btnEditDeserved = new Button();
-            button1 = new Button();
             groupBox1 = new GroupBox();
             lblDeservedID = new Label();
             label13 = new Label();
@@ -59,7 +58,6 @@
             OperationsflowLayoutPanel.AutoScroll = true;
             OperationsflowLayoutPanel.Controls.Add(btnAddDeserved);
             OperationsflowLayoutPanel.Controls.Add(btnEditDeserved);
-            OperationsflowLayoutPanel.Controls.Add(button1);
             OperationsflowLayoutPanel.Dock = DockStyle.Bottom;
             OperationsflowLayoutPanel.Location = new Point(0, 436);
             OperationsflowLayoutPanel.Margin = new Padding(5);
@@ -93,18 +91,6 @@
             btnEditDeserved.UseVisualStyleBackColor = true;
             btnEditDeserved.Visible = false;
             btnEditDeserved.Click += btnEditDeserved_Click;
-            // 
-            // button1
-            // 
-            button1.Image = (Image)resources.GetObject("button1.Image");
-            button1.ImageAlign = ContentAlignment.MiddleLeft;
-            button1.Location = new Point(95, 3);
-            button1.Name = "button1";
-            button1.Size = new Size(100, 40);
-            button1.TabIndex = 7;
-            button1.Text = "      الخروج";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
             // 
             // groupBox1
             // 
@@ -338,7 +324,6 @@
         private FlowLayoutPanel OperationsflowLayoutPanel;
         private Button btnAddDeserved;
         private Button btnEditDeserved;
-        private Button button1;
         private GroupBox groupBox1;
         private Label lblUserNAme;
         private TextBox txtUserName;

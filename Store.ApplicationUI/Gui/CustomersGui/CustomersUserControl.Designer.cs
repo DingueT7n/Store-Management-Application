@@ -117,6 +117,7 @@
             btnExportCustomer.TabIndex = 6;
             btnExportCustomer.Text = "   تصدير";
             btnExportCustomer.UseVisualStyleBackColor = true;
+            btnExportCustomer.Visible = false;
             // 
             // SearchPanel
             // 

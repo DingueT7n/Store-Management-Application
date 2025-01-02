@@ -122,8 +122,10 @@
             textBox1.Location = new Point(43, 300);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
+            textBox1.PlaceholderText = "ادخل اي ملاحظة";
             textBox1.Size = new Size(287, 51);
             textBox1.TabIndex = 10;
+            textBox1.TextAlign = HorizontalAlignment.Center;
             // 
             // label6
             // 

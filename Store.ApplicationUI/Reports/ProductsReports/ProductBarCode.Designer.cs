@@ -36,10 +36,7 @@
             this.lblProductLineBar = new DevExpress.XtraReports.UI.XRLabel();
             this.lblCodeBar = new DevExpress.XtraReports.UI.XRLabel();
             this.ReportHeader = new DevExpress.XtraReports.UI.ReportHeaderBand();
-            this.xrLine5 = new DevExpress.XtraReports.UI.XRLine();
-            this.xrLine8 = new DevExpress.XtraReports.UI.XRLine();
-            this.xrLine6 = new DevExpress.XtraReports.UI.XRLine();
-            this.xrLine7 = new DevExpress.XtraReports.UI.XRLine();
+            this.xrLabel1 = new DevExpress.XtraReports.UI.XRLabel();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             // 
             // TopMargin
@@ -73,11 +70,11 @@
             // 
             this.lblPrice.Dpi = 254F;
             this.lblPrice.Font = new DevExpress.Drawing.DXFont("Calibri", 8F);
-            this.lblPrice.LocationFloat = new DevExpress.Utils.PointFloat(4.999969F, 202.624F);
+            this.lblPrice.LocationFloat = new DevExpress.Utils.PointFloat(0F, 207.6241F);
             this.lblPrice.Multiline = true;
             this.lblPrice.Name = "lblPrice";
             this.lblPrice.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
-            this.lblPrice.SizeF = new System.Drawing.SizeF(370F, 41.96625F);
+            this.lblPrice.SizeF = new System.Drawing.SizeF(380F, 41.96625F);
             this.lblPrice.StylePriority.UseFont = false;
             this.lblPrice.Text = "سعر المنتج 8940030539803";
             // 
@@ -85,11 +82,11 @@
             // 
             this.lblProductName.Dpi = 254F;
             this.lblProductName.Font = new DevExpress.Drawing.DXFont("Calibri", 8F);
-            this.lblProductName.LocationFloat = new DevExpress.Utils.PointFloat(4.999969F, 5F);
+            this.lblProductName.LocationFloat = new DevExpress.Utils.PointFloat(0F, 31.46872F);
             this.lblProductName.Multiline = true;
             this.lblProductName.Name = "lblProductName";
             this.lblProductName.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
-            this.lblProductName.SizeF = new System.Drawing.SizeF(370F, 61.8256F);
+            this.lblProductName.SizeF = new System.Drawing.SizeF(380F, 61.8256F);
             this.lblProductName.StylePriority.UseFont = false;
             this.lblProductName.Text = "lblProductName";
             // 
@@ -97,11 +94,11 @@
             // 
             this.lblProductLineBar.Dpi = 254F;
             this.lblProductLineBar.Font = new DevExpress.Drawing.DXFont("Aatrix3of9Reg", 9F);
-            this.lblProductLineBar.LocationFloat = new DevExpress.Utils.PointFloat(4.999969F, 66.82555F);
+            this.lblProductLineBar.LocationFloat = new DevExpress.Utils.PointFloat(0F, 93.29425F);
             this.lblProductLineBar.Multiline = true;
             this.lblProductLineBar.Name = "lblProductLineBar";
             this.lblProductLineBar.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
-            this.lblProductLineBar.SizeF = new System.Drawing.SizeF(370F, 57.48073F);
+            this.lblProductLineBar.SizeF = new System.Drawing.SizeF(380F, 57.48073F);
             this.lblProductLineBar.StylePriority.UseFont = false;
             this.lblProductLineBar.StylePriority.UseTextAlignment = false;
             this.lblProductLineBar.Text = "lblProductName";
@@ -111,11 +108,11 @@
             // 
             this.lblCodeBar.Dpi = 254F;
             this.lblCodeBar.Font = new DevExpress.Drawing.DXFont("Calibri", 9F);
-            this.lblCodeBar.LocationFloat = new DevExpress.Utils.PointFloat(4.999969F, 124.3063F);
+            this.lblCodeBar.LocationFloat = new DevExpress.Utils.PointFloat(0F, 150.775F);
             this.lblCodeBar.Multiline = true;
             this.lblCodeBar.Name = "lblCodeBar";
             this.lblCodeBar.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
-            this.lblCodeBar.SizeF = new System.Drawing.SizeF(370F, 56.84904F);
+            this.lblCodeBar.SizeF = new System.Drawing.SizeF(380F, 56.84904F);
             this.lblCodeBar.StylePriority.UseFont = false;
             this.lblCodeBar.StylePriority.UseTextAlignment = false;
             this.lblCodeBar.Text = "6745754745745745";
@@ -124,47 +121,26 @@
             // ReportHeader
             // 
             this.ReportHeader.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
-            this.xrLine7,
-            this.xrLine6,
+            this.xrLabel1,
             this.lblCodeBar,
-            this.xrLine5,
             this.lblProductLineBar,
             this.lblPrice,
-            this.xrLine8,
             this.lblProductName});
             this.ReportHeader.Dpi = 254F;
             this.ReportHeader.HeightF = 249.5903F;
             this.ReportHeader.Name = "ReportHeader";
             // 
-            // xrLine5
+            // xrLabel1
             // 
-            this.xrLine5.Dpi = 254F;
-            this.xrLine5.LineDirection = DevExpress.XtraReports.UI.LineDirection.Vertical;
-            this.xrLine5.LocationFloat = new DevExpress.Utils.PointFloat(375F, 0F);
-            this.xrLine5.Name = "xrLine5";
-            this.xrLine5.SizeF = new System.Drawing.SizeF(5F, 247F);
-            // 
-            // xrLine8
-            // 
-            this.xrLine8.Dpi = 254F;
-            this.xrLine8.LocationFloat = new DevExpress.Utils.PointFloat(0F, 0F);
-            this.xrLine8.Name = "xrLine8";
-            this.xrLine8.SizeF = new System.Drawing.SizeF(380F, 5F);
-            // 
-            // xrLine6
-            // 
-            this.xrLine6.Dpi = 254F;
-            this.xrLine6.LineDirection = DevExpress.XtraReports.UI.LineDirection.Vertical;
-            this.xrLine6.LocationFloat = new DevExpress.Utils.PointFloat(0F, 0F);
-            this.xrLine6.Name = "xrLine6";
-            this.xrLine6.SizeF = new System.Drawing.SizeF(5F, 247F);
-            // 
-            // xrLine7
-            // 
-            this.xrLine7.Dpi = 254F;
-            this.xrLine7.LocationFloat = new DevExpress.Utils.PointFloat(0F, 244.5903F);
-            this.xrLine7.Name = "xrLine7";
-            this.xrLine7.SizeF = new System.Drawing.SizeF(380F, 5F);
+            this.xrLabel1.Dpi = 254F;
+            this.xrLabel1.Font = new DevExpress.Drawing.DXFont("Calibri", 8F);
+            this.xrLabel1.LocationFloat = new DevExpress.Utils.PointFloat(0F, 0F);
+            this.xrLabel1.Multiline = true;
+            this.xrLabel1.Name = "xrLabel1";
+            this.xrLabel1.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
+            this.xrLabel1.SizeF = new System.Drawing.SizeF(380F, 31.46872F);
+            this.xrLabel1.StylePriority.UseFont = false;
+            this.xrLabel1.Text = "ALG-D";
             // 
             // ProductBarCode
             // 
@@ -199,9 +175,6 @@
         public DevExpress.XtraReports.UI.XRLabel lblProductLineBar;
         public DevExpress.XtraReports.UI.XRLabel lblCodeBar;
         private DevExpress.XtraReports.UI.ReportHeaderBand ReportHeader;
-        private DevExpress.XtraReports.UI.XRLine xrLine7;
-        private DevExpress.XtraReports.UI.XRLine xrLine6;
-        private DevExpress.XtraReports.UI.XRLine xrLine5;
-        private DevExpress.XtraReports.UI.XRLine xrLine8;
+        public DevExpress.XtraReports.UI.XRLabel xrLabel1;
     }
 }

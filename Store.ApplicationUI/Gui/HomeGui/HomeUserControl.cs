@@ -193,103 +193,112 @@ namespace Store.ApplicationUI.Gui.HomeGui
 
         private void tiltUsersManagment_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
+            if (LocalUser.User is not null)
+                if (LocalUser.User.UserSetting.UserPermession)
+                {
+                    _main.CloseSubPanels();
+                    UserRolesForm userRolesForm = UserRolesForm.Instance(_main);
 
-            if (LocalUser.User.UserSetting.UserPermession)
-            {
-                _main.CloseSubPanels();
-                UserRolesForm userRolesForm = UserRolesForm.Instance(_main);
-
-                userRolesForm.Show();
-            }
+                    userRolesForm.Show();
+                }
 
         }
 
         private void tiltAddProduct_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
-            if (LocalUser.User.UserProductAndStore.AddProduct)
-            {
-                _main.CloseSubPanels();
-                AddProductForm addProductForm = AddProductForm.Instance(_main);
+            if (LocalUser.User is not null)
+                if (LocalUser.User.UserProductAndStore.AddProduct)
+                {
+                    _main.CloseSubPanels();
+                    AddProductForm addProductForm = AddProductForm.Instance(_main);
 
-                addProductForm.Show();
-            }
+                    addProductForm.Show();
+                }
         }
 
         private void tiltSuppAccount_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
-            if (LocalUser.User.UserCustomer.CustomerAccount)
-            {
-                _main.CloseSubPanels();
-                _main.SetBytilt(Gui.CustomersGui.CustomerAccountGui.CustomerAccountUserControl.Instance(_main));
-            }
+            if (LocalUser.User is not null)
+                if (LocalUser.User.UserCustomer.CustomerAccount)
+                {
+                    _main.CloseSubPanels();
+                    _main.SetBytilt(Gui.CustomersGui.CustomerAccountGui.CustomerAccountUserControl.Instance(_main));
+                }
         }
 
         private void tiltCustomersAccount_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
-            if (LocalUser.User.UserSupplier.SuppliersAccount)
-            {
-                _main.CloseSubPanels();
-                _main.SetBytilt(Gui.SupplierGui.SupplierAccountGui.SupplierAccountUserControl.Instance(_main));
-            }
+            if (LocalUser.User is not null)
+                if (LocalUser.User.UserSupplier.SuppliersAccount)
+                {
+                    _main.CloseSubPanels();
+                    _main.SetBytilt(Gui.SupplierGui.SupplierAccountGui.SupplierAccountUserControl.Instance(_main));
+                }
         }
 
         private void tiltBuys_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
-            if (LocalUser.User.UserBuy.NewBuy)
-            {
-                _main.CloseSubPanels();
-                _main.SetBytilt(Gui.BuysGui.BuysUserControl.Instance(_main));
-            }
+            if (LocalUser.User is not null)
+                if (LocalUser.User.UserBuy.NewBuy)
+                {
+                    _main.CloseSubPanels();
+                    _main.SetBytilt(Gui.BuysGui.BuysUserControl.Instance(_main));
+                }
         }
 
         private void tiltSales_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
-            if (LocalUser.User.UserSale.NewSale)
-            {
-                _main.CloseSubPanels();
-                _main.SetBytilt(Gui.SalesGui.SalesUserControl.Instance(_main));
-            }
+            if (LocalUser.User is not null)
+                if (LocalUser.User.UserSale.NewSale)
+                {
+                    _main.CloseSubPanels();
+                    _main.SetBytilt(Gui.SalesGui.SalesUserControl.Instance(_main));
+                }
         }
 
         private void tiltCaisse_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
-            if (LocalUser.User.UserCaisseAndBank.CaissesAndBanks)
-            {
-                CaisseDetailsForm caisseDetailsForm = CaisseDetailsForm.Instance(_main);
-                caisseDetailsForm.Show();
-                _main.CloseSubPanels();
-            }
+            if (LocalUser.User is not null)
+                if (LocalUser.User.UserCaisseAndBank.CaissesAndBanks)
+                {
+                    CaisseDetailsForm caisseDetailsForm = CaisseDetailsForm.Instance(_main);
+                    caisseDetailsForm.Show();
+                    _main.CloseSubPanels();
+                }
         }
 
         private void tiltStatistiocs_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
-            //if (LocalUser.User.sa.CaissesAndBanks)
-            //{
-            _main.CloseSubPanels();
+            if (LocalUser.User is not null)
+                if (LocalUser.User.UserSetting.Statistics)
+                {
+                    _main.CloseSubPanels();
 
-            _main.SetBytilt(Gui.HomeGui.StatisticsUserControl.Instance(_main));
-            //}
+                    _main.SetBytilt(Gui.HomeGui.StatisticsUserControl.Instance(_main));
+                }
         }
 
         private void tiltReturns_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
-            if (LocalUser.User.UserRefund.RefundProduct)
-            {
-                _main.CloseSubPanels();
+            if (LocalUser.User is not null)
+                if (LocalUser.User.UserRefund.RefundProduct)
+                {
+                    _main.CloseSubPanels();
 
-                _main.SetBytilt(Gui.ReturnsGui.ReturnUserControl.Instance(_main));
-            }
+                    _main.SetBytilt(Gui.ReturnsGui.ReturnUserControl.Instance(_main));
+                }
         }
 
         private void tiltPos_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
-            //if (LocalUser.User.UserCaisseAndBank.CaissesAndBanks)
-            //{
-            _main.CloseSubPanels();
-            PosForm posForm = new PosForm();
-            posForm.ShowDialog();
-            _main.Show();
-            //}
+            if (LocalUser.User is not null)
+                if (LocalUser.User.UserCaisseAndBank.CaissesAndBanks)
+                {
+                    _main.CloseSubPanels();
+                    PosForm posForm = new PosForm();
+                    posForm.ShowDialog();
+                    _main.Show();
+                }
         }
     }
 }

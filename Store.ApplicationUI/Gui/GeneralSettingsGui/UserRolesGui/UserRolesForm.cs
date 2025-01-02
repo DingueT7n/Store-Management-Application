@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Users;
 using Store.Infrastructure.Data;
 
@@ -313,6 +314,38 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                     }
                 }
                 RefreshDgv();
+                if (_context.Users.Count() < 1)
+                {
+                    int caisse = Convert.ToInt32(cmbCaisse.SelectedValue);
+                    if (_context.Caisses.Count() < 1)
+                    {
+                        Caisse Caisse = new()
+                        {
+                            CaisseName = "الصندوق الأول",
+
+                        };
+                        _context.Add(Caisse);
+                        _context.SaveChanges();
+                        caisse = Caisse.Id;
+                    }
+                    // Create new User
+                    User user = new()
+                    {
+                        UserName = "ALG-D",
+                        Password = "2025",
+                        UserProfit = _main.ConvertToFloat(txtProfit.Text),
+                        Stock_Id = caisse,
+                        type = "مدير"
+                    };
+                    _context.Users.Add(user);
+                    _context.SaveChanges(); // Save to generate UserId
+
+                    // Add related entities based on User type
+
+                    AddUserRelatedEntities(user, true);
+
+
+                }
             }
         }
 
@@ -368,6 +401,11 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                 {
                     cbApplicationSettings.Checked = user.ApplicationSettings;
                     cbPermessions.Checked = user.UserPermession;
+                    cbComptoire.Checked = user.Pos;
+                    cbStatistics.Checked = user.Statistics;
+                    cbProductDiscount.Checked = user.ProductDiscounts;
+                    cbBackup.Checked = user.BackUp;
+                    cbRestore.Checked = user.Restore;
                 }
             }
             catch (Exception)
@@ -386,6 +424,11 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                 {
                     user.ApplicationSettings = cbApplicationSettings.Checked;
                     user.UserPermession = cbPermessions.Checked;
+                    user.Pos = cbComptoire.Checked;
+                    user.Statistics = cbStatistics.Checked;
+                    user.ProductDiscounts = cbProductDiscount.Checked;
+                    user.BackUp = cbBackup.Checked;
+                    user.Restore = cbRestore.Checked;
                     _context.Update(user);
                     _context.SaveChanges();
                 }
@@ -416,6 +459,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                     cbStoreInventory.Checked = user.StoreInventory;
                     cbProductOutStore.Checked = user.ProductOutStoreReport;
                     cbTransfertReport.Checked = user.TransfertReport;
+                    cbAllStores.Checked = user.allStores;
                 }
             }
             catch (Exception)
@@ -443,6 +487,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                     user.StoreInventory = cbStoreInventory.Checked;
                     user.ProductOutStoreReport = cbProductOutStore.Checked;
                     user.TransfertReport = cbTransfertReport.Checked;
+                    user.allStores = cbAllStores.Checked;
                     _context.Update(user);
                     _context.SaveChanges();
                 }

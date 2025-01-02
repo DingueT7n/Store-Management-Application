@@ -143,6 +143,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 if (MsgHelper.ShowDeleteDialog())
                 {
                     foreach (DataGridViewRow row in DgvSales.Rows)
@@ -175,6 +176,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui
         }
         private void btnNext_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1)
             {
                 cmbpagination.SelectedIndex++;
@@ -186,6 +188,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui
 
         private void btnPrev_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex > 0)
             {
                 cmbpagination.SelectedIndex--;
@@ -197,6 +200,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui
 
         private void cmbpagination_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex != -1)
             {
                 int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;

@@ -1,9 +1,32 @@
-﻿using Store.ApplicationUI.Gui.ToasterGui;
+﻿using System.IO;
+using System.Windows.Media;
+using Store.ApplicationUI.Gui.ToasterGui;
 
 namespace Store.ApplicationUI.Code.Helper
 {
     public static class ToasterHelper
     {
+        private static MediaPlayer _player = new(); // Field to keep MediaPlayer alive
+        static string soundFilePath = Path.Combine(Application.StartupPath, "ClickMouse.wav");
+
+        public static void PlayNotificationSound()
+        {
+            try
+            {
+                if (!File.Exists(soundFilePath))
+                {
+                    //MessageBox.Show($"Sound file not found: {soundFilePath}");
+                    return;
+                }
+                _player.Open(new Uri(soundFilePath));
+                _player.MediaEnded += (s, e) => _player.Close(); // Cleanup after playback
+                _player.Play();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error playing sound: {ex.Message}");
+            }
+        }
         public static void ShowAddToast()
         {
             ToastForm.Instance("اضافة البيانات", "تم اضافة البيانات بنجاح", null).Show();
@@ -76,7 +99,7 @@ namespace Store.ApplicationUI.Code.Helper
         }
         public static void ShowConnectionIsNotEstablished()
         {
-            ToastForm.Instance("اتصال بالسيريفر", "لم يتم الاتصال بالسيرفر ", Color.Red).Show();
+            ToastForm.Instance("اتصال بالسيريفر", "لم يتم الاتصال بالسيرفر ", System.Drawing.Color.Red).Show();
         }
     }
 }

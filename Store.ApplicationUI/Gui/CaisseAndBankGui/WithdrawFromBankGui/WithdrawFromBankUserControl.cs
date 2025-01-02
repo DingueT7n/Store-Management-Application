@@ -1,4 +1,5 @@
 ﻿using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.Models;
 using Store.Core.Entities.Banks;
 using Store.Infrastructure.Data;
 
@@ -46,6 +47,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBank
             {
                 MsgHelper.ShowServerError();
             }
+            txtDepositorName.Text = LocalUser.User.UserName;
 
 
         }
@@ -71,6 +73,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBank
 
         private async void btnWithdraw_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             using (var transaction = await _contex.Database.BeginTransactionAsync())
             {
                 try

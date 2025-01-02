@@ -1,4 +1,5 @@
 ﻿using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.Models;
 using Store.Core.Entities.Caisses;
 using Store.Infrastructure.Data;
 
@@ -54,6 +55,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseGui
             {
                 MsgHelper.ShowServerError();
             }
+            txtDepositorName.Text = LocalUser.User.UserName;
 
 
         }
@@ -94,6 +96,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseGui
 
         private async void btnDepositToCaisse_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try

@@ -254,8 +254,8 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                     supAccount.DataSource = suplierAccountDetailsTable;
                     var a = suplierAccountDetailsTable.Rows.Count.ToString();
                     supAccount.lblTotalFactures.Text = a;
-                    Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(supAccount);
-                    xtraForm1.ShowDialog();
+                    Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(supAccount);
+                    xtraForm1.Show();
                 }
             }
             catch (Exception)

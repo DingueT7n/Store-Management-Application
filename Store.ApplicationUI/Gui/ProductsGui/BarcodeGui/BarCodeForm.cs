@@ -1,5 +1,4 @@
 ﻿using Store.ApplicationUI.Code.Helper;
-using Store.ApplicationUI.Reports.ReportPerviwGui;
 using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.ProductsGui.BarcodeGui
@@ -74,10 +73,11 @@ namespace Store.ApplicationUI.Gui.ProductsGui.BarcodeGui
                         //barCode.DataSource = new DataTable();
 
                         // Use the report in a form viewer
-                        XtraForm1 xtraForm1 = new();
-                        barCode.CreateDocument();
-                        xtraForm1.documentViewer1.DocumentSource = barCode;
-                        xtraForm1.ShowDialog();
+                        var xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(barCode);
+                        xtraForm1.Show();
+                        //barCode.CreateDocument();
+                        //xtraForm1.documentViewer1.DocumentSource = barCode;
+                        //xtraForm1.Show();
 
 
                     }

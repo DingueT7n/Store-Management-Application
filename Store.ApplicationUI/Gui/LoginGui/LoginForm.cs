@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.LoginGui
@@ -49,6 +50,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
 
         private void button2_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             Close();
             Application.Exit();
         }
@@ -77,6 +79,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
 
         private async void button1_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             Code.Helper.ConStringHelper.SetConString();
             this._context = new ApplicationDbContext();
 
@@ -128,11 +131,24 @@ namespace Store.ApplicationUI.Gui.LoginGui
 
         private void lblCon_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             ConnectionSettingsForm connectionSettingsForm = new ConnectionSettingsForm();
             this.Hide();
             connectionSettingsForm.ShowDialog();
             this.Show();
 
+        }
+
+        private void LoginForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F12)
+            {
+                ToasterHelper.PlayNotificationSound();
+                ConnectionSettingsForm connectionSettingsForm = new ConnectionSettingsForm();
+                this.Hide();
+                connectionSettingsForm.ShowDialog();
+                this.Show();
+            }
         }
     }
 }

@@ -74,7 +74,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 cmbStores.Text = "اختر مخزن";
 
                 DtpDateFacture.Value = DateTime.Now;
-                dtpReminderDate.Value = DateTime.Now.AddDays(30);
+                dtpReminderDate.Value = DateTime.Now.AddDays(Properties.Settings.Default.DaysAddDebt);
 
 
                 //_data.Clear();
@@ -674,14 +674,18 @@ namespace Store.ApplicationUI.Gui.BuysGui
 
                         if (rbPrinterDirectly.Checked)
                         {
-                            var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(buy8cm);
-                            printTool.PrinterSettings.PrinterName = printername;
-                            printTool.Print(printername);
+                            for (int i = 0; i < Properties.Settings.Default.NbrCopyOfBuyFacture; i++)
+                            {
+                                var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(buy8cm);
+                                printTool.PrinterSettings.PrinterName = printername;
+                                printTool.Print(printername);
+                            }
+
                         }
                         else if (rbAnalysis.Checked)
                         {
-                            XtraForm1 xtraForm1 = new XtraForm1(buy8cm);
-                            xtraForm1.ShowDialog();
+                            var perv = Reports.ReportPerviwGui.PerviweForm.Instance(buy8cm);
+                            perv.Show();
                         }
                     }
                     else
@@ -692,14 +696,17 @@ namespace Store.ApplicationUI.Gui.BuysGui
 
                         if (rbPrinterDirectly.Checked)
                         {
-                            var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(buyA4);
-                            printTool.PrinterSettings.PrinterName = printername;
-                            printTool.Print(printername);
+                            for (int i = 0; i < Properties.Settings.Default.NbrCopyOfBuyFacture; i++)
+                            {
+                                var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(buyA4);
+                                printTool.PrinterSettings.PrinterName = printername;
+                                printTool.Print(printername);
+                            }
                         }
                         else if (rbAnalysis.Checked)
                         {
-                            XtraForm1 xtraForm1 = new XtraForm1(buyA4);
-                            xtraForm1.ShowDialog();
+                            PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(buyA4);
+                            xtraForm1.Show();
                         }
 
                     }
@@ -744,6 +751,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
         public static bool Process = false;
         private async void btnPay_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
 
             if (!(DgvِProducts.Rows.Count > 0))
                 return;

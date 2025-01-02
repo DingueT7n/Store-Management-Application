@@ -1,4 +1,5 @@
 ﻿using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.Models;
 using Store.Core.Entities.Banks;
 using Store.Core.Entities.Caisses;
 using Store.Infrastructure.Data;
@@ -59,6 +60,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenBankAndCaisse
                 MsgHelper.ShowServerError();
             }
 
+            txtDepositorName.Text = LocalUser.User.UserName;
 
         }
 
@@ -98,6 +100,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenBankAndCaisse
 
         private async void btnDepositToCaisse_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             validate();
             if (rbCaisseToBank.Checked)
             {

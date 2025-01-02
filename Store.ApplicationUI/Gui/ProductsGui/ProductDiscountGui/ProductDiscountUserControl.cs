@@ -113,7 +113,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
                 MsgHelper.ShowServerError();
             }
             //Hideloading
-
+            dtpTo.Value = DateTime.Now;
             LoadingForm.Instance(_main).Hide();
             // Show EmptyDAta
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);

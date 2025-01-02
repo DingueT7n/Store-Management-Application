@@ -98,12 +98,14 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
         private void btnAddDeserved_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             AddDeservedForm addDeservedForm = new(_main);
             addDeservedForm.ShowDialog();
         }
 
         private void btnEditDeserved_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (DgvProducts.Rows.Count > 0)
             {
                 if (addDeservedForm == null || addDeservedForm.IsDisposed)
@@ -131,6 +133,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
         private void btnAddDeservedType_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (addDeservedTypeyForm == null || addDeservedTypeyForm.IsDisposed)
             {
                 addDeservedTypeyForm = new(_main);
@@ -145,11 +148,13 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             LoadData();
         }
 
         private void btnDeleteDeserved_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
                 deservedsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[7].Value.ToString());
@@ -182,6 +187,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
         }
         private void button1_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
                 for (int i = 0; i < DgvProducts.Rows.Count; i++)

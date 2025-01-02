@@ -182,6 +182,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui
 
         private void button2_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             try
             {
                 if (MsgHelper.ShowDeleteDialog())
@@ -234,8 +235,8 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui
                         DataTable DetailsTable = await FactureHelper.GetVoucherRecieptDataTableAsync(Convert.ToInt32(DgvSales.CurrentRow.Cells[6].Value.ToString()));
                         Reports.VouchersReports.RecieptVoucher RecieptVoucher = new();
                         RecieptVoucher.DataSource = DetailsTable;
-                        Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(RecieptVoucher);
-                        xtraForm1.ShowDialog();
+                        Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(RecieptVoucher);
+                        xtraForm1.Show();
                     }
                 }
                 catch (Exception)
@@ -254,8 +255,8 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui
                         DataTable DetailsTable = await FactureHelper.GetVoucherSenderDataTableAsync(Convert.ToInt32(DgvSales.CurrentRow.Cells[6].Value.ToString()));
                         Reports.VouchersReports.SendVoucher SendVoucher = new();
                         SendVoucher.DataSource = DetailsTable;
-                        Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(SendVoucher);
-                        xtraForm1.ShowDialog();
+                        Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(SendVoucher);
+                        xtraForm1.Show();
                     }
                 }
                 catch (Exception)

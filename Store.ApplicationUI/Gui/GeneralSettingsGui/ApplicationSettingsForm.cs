@@ -142,6 +142,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
 
         private void button1_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             Properties.Settings.Default.PrinterBarCode = cmbBarcode.Text;
             Properties.Settings.Default.Save();
 
@@ -193,6 +194,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
 
         private void button2_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (cblogoStore.Checked)
                 SaveImageAsBase64();
             Properties.Settings.Default.SentenceUnderFacture = txtSentenceUnderFacture.Text;
@@ -221,6 +223,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
 
         private void button4_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             pbLogo.BackgroundImage = null;
             pbLogo.Image = null;
         }
@@ -251,6 +254,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
 
         private void button3_Click_1(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             Properties.Settings.Default.FastSaleStore = Convert.ToInt32(cmbFastStores.SelectedValue);
 
             Properties.Settings.Default.DefaultCaisseId = Convert.ToInt32(cmbFastCaisse.SelectedValue);
@@ -279,6 +283,25 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
 
 
 
+        }
+
+        private void txtDaysDelaysDebt_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            string currentText = (sender as TextBox)?.Text ?? string.Empty;
+
+
+            char decimalSeparator = Properties.Settings.Default.DecimalSEP[0];
+
+
+            if (!char.IsDigit(e.KeyChar) /*&& e.KeyChar != decimalSeparator && e.KeyChar != (char)8*/)
+            {
+                e.Handled = true;
+            }
+
+            //else if (e.KeyChar == decimalSeparator && currentText.Contains(decimalSeparator))
+            //{
+            //    e.Handled = true;
+            //}
         }
     }
 }

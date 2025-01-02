@@ -133,6 +133,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
             try
             {
 
+                ToasterHelper.PlayNotificationSound();
 
                 if (CMBType.Text != "اختر نوع")
                 {
@@ -168,6 +169,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
             try
             {
 
+                ToasterHelper.PlayNotificationSound();
 
                 Deserved deserved = _context.Deserveds.FirstOrDefault(x => x.Id.ToString() == lblDeservedID.Text);
                 if (deserved != null)
@@ -197,6 +199,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
         private void btnAddTypes_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             AddDeservedTypeForm addDeservedType = AddDeservedTypeForm.Instance(_main);
             this.Hide();
             addDeservedType.ShowDialog();

@@ -46,7 +46,7 @@ namespace Store.ApplicationUI
             if (LocalUser.User is not null)
             {
                 btnAllProducts.Enabled = LocalUser.User.UserProductAndStore.AllProducts;
-                //btnAllStores.Enabled = LocalUser.User.UserProductAndStore.Allstores;
+                btnAllStores.Enabled = LocalUser.User.UserProductAndStore.allStores;
                 btnAddProduct.Enabled = LocalUser.User.UserProductAndStore.AddProduct;
                 btnAllCategories.Enabled = LocalUser.User.UserProductAndStore.AllCategories;
                 btnStoreInventory.Enabled = LocalUser.User.UserProductAndStore.StoreInventory;
@@ -100,8 +100,11 @@ namespace Store.ApplicationUI
 
                 btnApplicationSettings.Enabled = LocalUser.User.UserSetting.ApplicationSettings;
                 btnUsersRoles.Enabled = LocalUser.User.UserSetting.UserPermession;
-                //btnBackUp.Enabled = LocalUser.User.UserSetting.BackUp;
-                //btnRestore.Enabled = LocalUser.User.UserSetting.Restore;
+                btnProductDiscount.Enabled = LocalUser.User.UserSetting.ProductDiscounts;
+                btnComptoire.Enabled = LocalUser.User.UserSetting.Pos;
+                btnStatistics.Enabled = LocalUser.User.UserSetting.Statistics;
+                btnBackUp.Enabled = LocalUser.User.UserSetting.BackUp;
+                btnRestore.Enabled = LocalUser.User.UserSetting.Restore;
             }
 
         }
@@ -127,6 +130,7 @@ namespace Store.ApplicationUI
         }
         public void CloseSubPanels()
         {
+            ToasterHelper.PlayNotificationSound();
             if (isPanelAnimating)
                 return;
 
@@ -175,6 +179,7 @@ namespace Store.ApplicationUI
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
 
             Properties.Settings.Default.IsMaxScreen = this.WindowState == FormWindowState.Maximized;
             Properties.Settings.Default.Save();
@@ -183,6 +188,7 @@ namespace Store.ApplicationUI
 
         private void btnHomeSummary_Click(object sender, EventArgs e)
         {
+
             pageHelper.SetNewPage(Gui.HomeGui.HomeUserControl.Instance(this));
         }
 
@@ -297,7 +303,7 @@ namespace Store.ApplicationUI
 
         private void btnAddSupplier_Click(object sender, EventArgs e)
         {
-            AddSupplierForm addSupplierForm = new AddSupplierForm(this);
+            AddSupplierForm addSupplierForm = AddSupplierForm.Instance(this);
 
             addSupplierForm.Show();
             CloseSubPanels();
@@ -367,6 +373,8 @@ namespace Store.ApplicationUI
         private void btnComptoire_Click(object sender, EventArgs e)
         {
             this.Hide();
+            ToasterHelper.PlayNotificationSound();
+
             PosForm posForm = new PosForm();
             posForm.ShowDialog();
             this.Show();

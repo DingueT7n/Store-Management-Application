@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserRolesForm));
             tabControlGeneralSettings = new TabControl();
             tabPageUsersManagment = new TabPage();
@@ -65,6 +65,9 @@
             tabPageGeneralSettings = new TabPage();
             button1 = new Button();
             groupBox1 = new GroupBox();
+            cbProductDiscount = new CheckBox();
+            cbStatistics = new CheckBox();
+            cbComptoire = new CheckBox();
             cbRestore = new CheckBox();
             cbBackup = new CheckBox();
             cbApplicationSettings = new CheckBox();
@@ -221,7 +224,7 @@
             tabControlGeneralSettings.Name = "tabControlGeneralSettings";
             tabControlGeneralSettings.RightToLeftLayout = true;
             tabControlGeneralSettings.SelectedIndex = 0;
-            tabControlGeneralSettings.Size = new Size(1113, 543);
+            tabControlGeneralSettings.Size = new Size(1118, 543);
             tabControlGeneralSettings.TabIndex = 0;
             // 
             // tabPageUsersManagment
@@ -234,7 +237,7 @@
             tabPageUsersManagment.Location = new Point(4, 28);
             tabPageUsersManagment.Name = "tabPageUsersManagment";
             tabPageUsersManagment.Padding = new Padding(3);
-            tabPageUsersManagment.Size = new Size(1105, 511);
+            tabPageUsersManagment.Size = new Size(1110, 511);
             tabPageUsersManagment.TabIndex = 0;
             tabPageUsersManagment.Text = "واجهة المستخدمين";
             // 
@@ -258,31 +261,31 @@
             Dgv.AllowUserToAddRows = false;
             Dgv.AllowUserToResizeColumns = false;
             Dgv.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            Dgv.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            Dgv.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
             Dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             Dgv.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             Dgv.BackgroundColor = Color.White;
             Dgv.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             Dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle2.ForeColor = Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = Color.DodgerBlue;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            Dgv.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle6.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle6.ForeColor = Color.White;
+            dataGridViewCellStyle6.SelectionBackColor = Color.DodgerBlue;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            Dgv.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             Dgv.ColumnHeadersHeight = 40;
             Dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Window;
-            dataGridViewCellStyle3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
-            Dgv.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.BackColor = SystemColors.Window;
+            dataGridViewCellStyle7.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle7.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.False;
+            Dgv.DefaultCellStyle = dataGridViewCellStyle7;
             Dgv.Dock = DockStyle.Fill;
             Dgv.EnableHeadersVisualStyles = false;
             Dgv.GridColor = SystemColors.ControlDark;
@@ -294,10 +297,10 @@
             Dgv.RowHeadersVisible = false;
             Dgv.RowHeadersWidth = 21;
             Dgv.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle4.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            Dgv.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle8.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            Dgv.RowsDefaultCellStyle = dataGridViewCellStyle8;
             Dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            Dgv.Size = new Size(1099, 293);
+            Dgv.Size = new Size(1104, 293);
             Dgv.TabIndex = 19;
             Dgv.CellMouseClick += Dgv_CellMouseClick;
             // 
@@ -323,7 +326,7 @@
             GbInfoCategory.Dock = DockStyle.Top;
             GbInfoCategory.Location = new Point(3, 62);
             GbInfoCategory.Name = "GbInfoCategory";
-            GbInfoCategory.Size = new Size(1099, 153);
+            GbInfoCategory.Size = new Size(1104, 153);
             GbInfoCategory.TabIndex = 17;
             GbInfoCategory.TabStop = false;
             GbInfoCategory.Text = "بيانات المستخدم";
@@ -335,7 +338,7 @@
             label30.BackColor = Color.Transparent;
             label30.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label30.ForeColor = Color.Crimson;
-            label30.Location = new Point(462, 119);
+            label30.Location = new Point(465, 119);
             label30.Name = "label30";
             label30.Size = new Size(17, 19);
             label30.TabIndex = 40;
@@ -349,7 +352,7 @@
             label29.BackColor = Color.Transparent;
             label29.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label29.ForeColor = Color.Crimson;
-            label29.Location = new Point(462, 73);
+            label29.Location = new Point(465, 73);
             label29.Name = "label29";
             label29.Size = new Size(17, 19);
             label29.TabIndex = 39;
@@ -369,7 +372,7 @@
             // txtProfit
             // 
             txtProfit.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            txtProfit.Location = new Point(170, 116);
+            txtProfit.Location = new Point(175, 116);
             txtProfit.Name = "txtProfit";
             txtProfit.PlaceholderText = "ادخل نسبة الربح";
             txtProfit.Size = new Size(288, 27);
@@ -429,7 +432,7 @@
             // txtPassowrd
             // 
             txtPassowrd.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            txtPassowrd.Location = new Point(170, 71);
+            txtPassowrd.Location = new Point(175, 71);
             txtPassowrd.Name = "txtPassowrd";
             txtPassowrd.PasswordChar = '*';
             txtPassowrd.PlaceholderText = "ادخل كلمة السر";
@@ -455,7 +458,7 @@
             label2.BackColor = Color.Transparent;
             label2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label2.ForeColor = Color.Crimson;
-            label2.Location = new Point(462, 27);
+            label2.Location = new Point(465, 27);
             label2.Name = "label2";
             label2.Size = new Size(17, 19);
             label2.TabIndex = 28;
@@ -477,7 +480,7 @@
             label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label1.AutoSize = true;
             label1.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.Location = new Point(1796, 30);
+            label1.Location = new Point(1801, 30);
             label1.Name = "label1";
             label1.Size = new Size(76, 19);
             label1.TabIndex = 0;
@@ -506,7 +509,7 @@
             // txtUserName
             // 
             txtUserName.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            txtUserName.Location = new Point(170, 30);
+            txtUserName.Location = new Point(175, 30);
             txtUserName.Name = "txtUserName";
             txtUserName.PlaceholderText = "ادخل اسم المستخدم";
             txtUserName.Size = new Size(288, 27);
@@ -524,7 +527,7 @@
             OperationsflowLayoutPanel.Location = new Point(3, 3);
             OperationsflowLayoutPanel.Margin = new Padding(5);
             OperationsflowLayoutPanel.Name = "OperationsflowLayoutPanel";
-            OperationsflowLayoutPanel.Size = new Size(1099, 59);
+            OperationsflowLayoutPanel.Size = new Size(1104, 59);
             OperationsflowLayoutPanel.TabIndex = 16;
             // 
             // btnAdd
@@ -532,7 +535,7 @@
             btnAdd.Anchor = AnchorStyles.None;
             btnAdd.Image = (Image)resources.GetObject("btnAdd.Image");
             btnAdd.ImageAlign = ContentAlignment.MiddleLeft;
-            btnAdd.Location = new Point(1001, 4);
+            btnAdd.Location = new Point(1006, 4);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(95, 47);
             btnAdd.TabIndex = 3;
@@ -546,7 +549,7 @@
             btnEdit.Enabled = false;
             btnEdit.Image = (Image)resources.GetObject("btnEdit.Image");
             btnEdit.ImageAlign = ContentAlignment.MiddleLeft;
-            btnEdit.Location = new Point(900, 4);
+            btnEdit.Location = new Point(905, 4);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(95, 47);
             btnEdit.TabIndex = 4;
@@ -560,7 +563,7 @@
             btnDelete.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnDelete.Image = (Image)resources.GetObject("btnDelete.Image");
             btnDelete.ImageAlign = ContentAlignment.MiddleLeft;
-            btnDelete.Location = new Point(799, 4);
+            btnDelete.Location = new Point(804, 4);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(95, 47);
             btnDelete.TabIndex = 8;
@@ -572,7 +575,7 @@
             // 
             panelSearch.Controls.Add(txtSearch);
             panelSearch.Controls.Add(btnSearch);
-            panelSearch.Location = new Point(459, 3);
+            panelSearch.Location = new Point(464, 3);
             panelSearch.Name = "panelSearch";
             panelSearch.Size = new Size(334, 50);
             panelSearch.TabIndex = 11;
@@ -608,7 +611,7 @@
             tabPageGeneralSettings.Location = new Point(4, 28);
             tabPageGeneralSettings.Name = "tabPageGeneralSettings";
             tabPageGeneralSettings.Padding = new Padding(3);
-            tabPageGeneralSettings.Size = new Size(1105, 511);
+            tabPageGeneralSettings.Size = new Size(1110, 511);
             tabPageGeneralSettings.TabIndex = 1;
             tabPageGeneralSettings.Text = "اعدادات عامة";
             tabPageGeneralSettings.Click += tabPageGeneralSettings_Click;
@@ -618,7 +621,7 @@
             button1.Anchor = AnchorStyles.None;
             button1.Image = (Image)resources.GetObject("button1.Image");
             button1.ImageAlign = ContentAlignment.MiddleLeft;
-            button1.Location = new Point(419, 291);
+            button1.Location = new Point(420, 361);
             button1.Name = "button1";
             button1.Size = new Size(294, 45);
             button1.TabIndex = 19;
@@ -628,6 +631,9 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(cbProductDiscount);
+            groupBox1.Controls.Add(cbStatistics);
+            groupBox1.Controls.Add(cbComptoire);
             groupBox1.Controls.Add(cbRestore);
             groupBox1.Controls.Add(cbBackup);
             groupBox1.Controls.Add(cbApplicationSettings);
@@ -639,15 +645,45 @@
             groupBox1.Dock = DockStyle.Top;
             groupBox1.Location = new Point(3, 3);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1099, 272);
+            groupBox1.Size = new Size(1104, 352);
             groupBox1.TabIndex = 18;
             groupBox1.TabStop = false;
             groupBox1.Text = "اسناد صلاحيات للمستخدمين";
             // 
+            // cbProductDiscount
+            // 
+            cbProductDiscount.AutoSize = true;
+            cbProductDiscount.Location = new Point(661, 76);
+            cbProductDiscount.Name = "cbProductDiscount";
+            cbProductDiscount.Size = new Size(127, 23);
+            cbProductDiscount.TabIndex = 43;
+            cbProductDiscount.Text = "تخفيض للمنتجات";
+            cbProductDiscount.UseVisualStyleBackColor = true;
+            // 
+            // cbStatistics
+            // 
+            cbStatistics.AutoSize = true;
+            cbStatistics.Location = new Point(999, 120);
+            cbStatistics.Name = "cbStatistics";
+            cbStatistics.Size = new Size(91, 23);
+            cbStatistics.TabIndex = 42;
+            cbStatistics.Text = "الاحصائيات";
+            cbStatistics.UseVisualStyleBackColor = true;
+            // 
+            // cbComptoire
+            // 
+            cbComptoire.AutoSize = true;
+            cbComptoire.Location = new Point(961, 76);
+            cbComptoire.Name = "cbComptoire";
+            cbComptoire.Size = new Size(129, 23);
+            cbComptoire.TabIndex = 41;
+            cbComptoire.Text = "شاشة البيع السريع";
+            cbComptoire.UseVisualStyleBackColor = true;
+            // 
             // cbRestore
             // 
             cbRestore.AutoSize = true;
-            cbRestore.Location = new Point(885, 233);
+            cbRestore.Location = new Point(885, 304);
             cbRestore.Name = "cbRestore";
             cbRestore.Size = new Size(205, 23);
             cbRestore.TabIndex = 40;
@@ -657,7 +693,7 @@
             // cbBackup
             // 
             cbBackup.AutoSize = true;
-            cbBackup.Location = new Point(906, 186);
+            cbBackup.Location = new Point(906, 257);
             cbBackup.Name = "cbBackup";
             cbBackup.Size = new Size(184, 23);
             cbBackup.TabIndex = 39;
@@ -667,7 +703,7 @@
             // cbApplicationSettings
             // 
             cbApplicationSettings.AutoSize = true;
-            cbApplicationSettings.Location = new Point(929, 141);
+            cbApplicationSettings.Location = new Point(929, 212);
             cbApplicationSettings.Name = "cbApplicationSettings";
             cbApplicationSettings.Size = new Size(161, 23);
             cbApplicationSettings.TabIndex = 38;
@@ -677,7 +713,7 @@
             // cbPermessions
             // 
             cbPermessions.AutoSize = true;
-            cbPermessions.Location = new Point(825, 92);
+            cbPermessions.Location = new Point(825, 163);
             cbPermessions.Name = "cbPermessions";
             cbPermessions.Size = new Size(265, 23);
             cbPermessions.TabIndex = 37;
@@ -710,7 +746,7 @@
             label13.BackColor = Color.Transparent;
             label13.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label13.ForeColor = Color.Crimson;
-            label13.Location = new Point(1239, 138);
+            label13.Location = new Point(1242, 178);
             label13.Name = "label13";
             label13.Size = new Size(17, 19);
             label13.TabIndex = 28;
@@ -722,7 +758,7 @@
             label14.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label14.AutoSize = true;
             label14.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label14.Location = new Point(2264, 30);
+            label14.Location = new Point(2269, 30);
             label14.Name = "label14";
             label14.Size = new Size(76, 19);
             label14.TabIndex = 0;
@@ -736,7 +772,7 @@
             tabPageProductsStores.Location = new Point(4, 28);
             tabPageProductsStores.Name = "tabPageProductsStores";
             tabPageProductsStores.Padding = new Padding(3);
-            tabPageProductsStores.Size = new Size(1105, 511);
+            tabPageProductsStores.Size = new Size(1110, 511);
             tabPageProductsStores.TabIndex = 2;
             tabPageProductsStores.Text = "المنتجات والمخازن";
             tabPageProductsStores.Click += tabPageProductsStores_Click;
@@ -770,7 +806,7 @@
             groupBox2.Dock = DockStyle.Top;
             groupBox2.Location = new Point(3, 3);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(1099, 303);
+            groupBox2.Size = new Size(1104, 303);
             groupBox2.TabIndex = 20;
             groupBox2.TabStop = false;
             groupBox2.Text = "اسناد صلاحيات للمستخدمين";
@@ -872,7 +908,7 @@
             label10.BackColor = Color.Transparent;
             label10.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label10.ForeColor = Color.Crimson;
-            label10.Location = new Point(1473, 239);
+            label10.Location = new Point(1476, 239);
             label10.Name = "label10";
             label10.Size = new Size(17, 19);
             label10.TabIndex = 28;
@@ -884,7 +920,7 @@
             label11.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label11.AutoSize = true;
             label11.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label11.Location = new Point(2732, 30);
+            label11.Location = new Point(2737, 30);
             label11.Name = "label11";
             label11.Size = new Size(76, 19);
             label11.TabIndex = 0;
@@ -898,7 +934,7 @@
             tabPageCustomers.Location = new Point(4, 28);
             tabPageCustomers.Name = "tabPageCustomers";
             tabPageCustomers.Padding = new Padding(3);
-            tabPageCustomers.Size = new Size(1105, 511);
+            tabPageCustomers.Size = new Size(1110, 511);
             tabPageCustomers.TabIndex = 3;
             tabPageCustomers.Text = "العملاء وحساباتهم";
             tabPageCustomers.Click += tabPageCustomers_Click;
@@ -929,7 +965,7 @@
             groupBox3.Dock = DockStyle.Top;
             groupBox3.Location = new Point(3, 3);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(1099, 272);
+            groupBox3.Size = new Size(1104, 272);
             groupBox3.TabIndex = 20;
             groupBox3.TabStop = false;
             groupBox3.Text = "اسناد صلاحيات للمستخدمين";
@@ -1000,7 +1036,7 @@
             label15.BackColor = Color.Transparent;
             label15.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label15.ForeColor = Color.Crimson;
-            label15.Location = new Point(1473, 224);
+            label15.Location = new Point(1476, 224);
             label15.Name = "label15";
             label15.Size = new Size(17, 19);
             label15.TabIndex = 28;
@@ -1012,7 +1048,7 @@
             label16.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label16.AutoSize = true;
             label16.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label16.Location = new Point(2732, 30);
+            label16.Location = new Point(2737, 30);
             label16.Name = "label16";
             label16.Size = new Size(76, 19);
             label16.TabIndex = 0;
@@ -1026,7 +1062,7 @@
             tabPageSuppliers.Location = new Point(4, 28);
             tabPageSuppliers.Name = "tabPageSuppliers";
             tabPageSuppliers.Padding = new Padding(3);
-            tabPageSuppliers.Size = new Size(1105, 511);
+            tabPageSuppliers.Size = new Size(1110, 511);
             tabPageSuppliers.TabIndex = 4;
             tabPageSuppliers.Text = "الموردين وحساباتهم";
             tabPageSuppliers.Click += tabPageSuppliers_Click;
@@ -1057,7 +1093,7 @@
             groupBox4.Dock = DockStyle.Top;
             groupBox4.Location = new Point(3, 3);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(1099, 272);
+            groupBox4.Size = new Size(1104, 272);
             groupBox4.TabIndex = 22;
             groupBox4.TabStop = false;
             groupBox4.Text = "اسناد صلاحيات للمستخدمين";
@@ -1128,7 +1164,7 @@
             label18.BackColor = Color.Transparent;
             label18.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label18.ForeColor = Color.Crimson;
-            label18.Location = new Point(1707, 310);
+            label18.Location = new Point(1710, 310);
             label18.Name = "label18";
             label18.Size = new Size(17, 19);
             label18.TabIndex = 28;
@@ -1140,7 +1176,7 @@
             label19.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label19.AutoSize = true;
             label19.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label19.Location = new Point(3200, 30);
+            label19.Location = new Point(3205, 30);
             label19.Name = "label19";
             label19.Size = new Size(76, 19);
             label19.TabIndex = 0;
@@ -1154,7 +1190,7 @@
             tabPageBuys.Location = new Point(4, 28);
             tabPageBuys.Name = "tabPageBuys";
             tabPageBuys.Padding = new Padding(3);
-            tabPageBuys.Size = new Size(1105, 511);
+            tabPageBuys.Size = new Size(1110, 511);
             tabPageBuys.TabIndex = 5;
             tabPageBuys.Text = "المشتريات";
             // 
@@ -1182,7 +1218,7 @@
             groupBox5.Dock = DockStyle.Top;
             groupBox5.Location = new Point(3, 3);
             groupBox5.Name = "groupBox5";
-            groupBox5.Size = new Size(1099, 272);
+            groupBox5.Size = new Size(1104, 272);
             groupBox5.TabIndex = 24;
             groupBox5.TabStop = false;
             groupBox5.Text = "اسناد صلاحيات للمستخدمين";
@@ -1233,7 +1269,7 @@
             label21.BackColor = Color.Transparent;
             label21.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label21.ForeColor = Color.Crimson;
-            label21.Location = new Point(2064, 396);
+            label21.Location = new Point(2067, 396);
             label21.Name = "label21";
             label21.Size = new Size(17, 19);
             label21.TabIndex = 28;
@@ -1245,7 +1281,7 @@
             label22.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label22.AutoSize = true;
             label22.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label22.Location = new Point(3915, 30);
+            label22.Location = new Point(3920, 30);
             label22.Name = "label22";
             label22.Size = new Size(76, 19);
             label22.TabIndex = 0;
@@ -1259,7 +1295,7 @@
             tabPageSales.Location = new Point(4, 28);
             tabPageSales.Name = "tabPageSales";
             tabPageSales.Padding = new Padding(3);
-            tabPageSales.Size = new Size(1105, 511);
+            tabPageSales.Size = new Size(1110, 511);
             tabPageSales.TabIndex = 6;
             tabPageSales.Text = "المبيعات والارباح";
             // 
@@ -1288,7 +1324,7 @@
             groupBox6.Dock = DockStyle.Top;
             groupBox6.Location = new Point(3, 3);
             groupBox6.Name = "groupBox6";
-            groupBox6.Size = new Size(1099, 272);
+            groupBox6.Size = new Size(1104, 272);
             groupBox6.TabIndex = 26;
             groupBox6.TabStop = false;
             groupBox6.Text = "اسناد صلاحيات للمستخدمين";
@@ -1349,7 +1385,7 @@
             label24.BackColor = Color.Transparent;
             label24.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label24.ForeColor = Color.Crimson;
-            label24.Location = new Point(2421, 482);
+            label24.Location = new Point(2424, 482);
             label24.Name = "label24";
             label24.Size = new Size(17, 19);
             label24.TabIndex = 28;
@@ -1361,7 +1397,7 @@
             label25.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label25.AutoSize = true;
             label25.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label25.Location = new Point(4630, 30);
+            label25.Location = new Point(4635, 30);
             label25.Name = "label25";
             label25.Size = new Size(76, 19);
             label25.TabIndex = 0;
@@ -1375,7 +1411,7 @@
             tabPageCaisseAndBank.Location = new Point(4, 28);
             tabPageCaisseAndBank.Name = "tabPageCaisseAndBank";
             tabPageCaisseAndBank.Padding = new Padding(3);
-            tabPageCaisseAndBank.Size = new Size(1105, 511);
+            tabPageCaisseAndBank.Size = new Size(1110, 511);
             tabPageCaisseAndBank.TabIndex = 7;
             tabPageCaisseAndBank.Text = "الصناديق والبنك";
             // 
@@ -1408,7 +1444,7 @@
             groupBox7.Dock = DockStyle.Top;
             groupBox7.Location = new Point(3, 3);
             groupBox7.Name = "groupBox7";
-            groupBox7.Size = new Size(1099, 303);
+            groupBox7.Size = new Size(1104, 303);
             groupBox7.TabIndex = 22;
             groupBox7.TabStop = false;
             groupBox7.Text = "اسناد صلاحيات للمستخدمين";
@@ -1509,7 +1545,7 @@
             label27.BackColor = Color.Transparent;
             label27.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label27.ForeColor = Color.Crimson;
-            label27.Location = new Point(1830, 340);
+            label27.Location = new Point(1833, 340);
             label27.Name = "label27";
             label27.Size = new Size(17, 19);
             label27.TabIndex = 28;
@@ -1521,7 +1557,7 @@
             label28.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label28.AutoSize = true;
             label28.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label28.Location = new Point(3447, 30);
+            label28.Location = new Point(3452, 30);
             label28.Name = "label28";
             label28.Size = new Size(76, 19);
             label28.TabIndex = 0;
@@ -1535,16 +1571,16 @@
             tabPageDeservedTax.Location = new Point(4, 28);
             tabPageDeservedTax.Name = "tabPageDeservedTax";
             tabPageDeservedTax.Padding = new Padding(3);
-            tabPageDeservedTax.Size = new Size(1105, 511);
+            tabPageDeservedTax.Size = new Size(1110, 511);
             tabPageDeservedTax.TabIndex = 8;
-            tabPageDeservedTax.Text = "المصروفات والضرائب";
+            tabPageDeservedTax.Text = "المصروفات والسندات";
             // 
             // button8
             // 
             button8.Anchor = AnchorStyles.None;
             button8.Image = (Image)resources.GetObject("button8.Image");
             button8.ImageAlign = ContentAlignment.MiddleLeft;
-            button8.Location = new Point(414, 379);
+            button8.Location = new Point(417, 379);
             button8.Name = "button8";
             button8.Size = new Size(294, 45);
             button8.TabIndex = 27;
@@ -1563,7 +1599,7 @@
             groupBox8.Dock = DockStyle.Top;
             groupBox8.Location = new Point(3, 3);
             groupBox8.Name = "groupBox8";
-            groupBox8.Size = new Size(1099, 272);
+            groupBox8.Size = new Size(1104, 272);
             groupBox8.TabIndex = 26;
             groupBox8.TabStop = false;
             groupBox8.Text = "اسناد صلاحيات للمستخدمين";
@@ -1614,7 +1650,7 @@
             label32.BackColor = Color.Transparent;
             label32.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label32.ForeColor = Color.Crimson;
-            label32.Location = new Point(2512, 482);
+            label32.Location = new Point(2515, 482);
             label32.Name = "label32";
             label32.Size = new Size(17, 19);
             label32.TabIndex = 28;
@@ -1626,7 +1662,7 @@
             label33.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label33.AutoSize = true;
             label33.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label33.Location = new Point(4811, 30);
+            label33.Location = new Point(4816, 30);
             label33.Name = "label33";
             label33.Size = new Size(76, 19);
             label33.TabIndex = 0;
@@ -1640,7 +1676,7 @@
             tabPageRefund.Location = new Point(4, 28);
             tabPageRefund.Name = "tabPageRefund";
             tabPageRefund.Padding = new Padding(3);
-            tabPageRefund.Size = new Size(1105, 511);
+            tabPageRefund.Size = new Size(1110, 511);
             tabPageRefund.TabIndex = 9;
             tabPageRefund.Text = "المرتجعات";
             // 
@@ -1649,7 +1685,7 @@
             button9.Anchor = AnchorStyles.None;
             button9.Image = (Image)resources.GetObject("button9.Image");
             button9.ImageAlign = ContentAlignment.MiddleLeft;
-            button9.Location = new Point(416, 281);
+            button9.Location = new Point(419, 281);
             button9.Name = "button9";
             button9.Size = new Size(294, 45);
             button9.TabIndex = 29;
@@ -1668,7 +1704,7 @@
             groupBox9.Dock = DockStyle.Top;
             groupBox9.Location = new Point(3, 3);
             groupBox9.Name = "groupBox9";
-            groupBox9.Size = new Size(1099, 272);
+            groupBox9.Size = new Size(1104, 272);
             groupBox9.TabIndex = 28;
             groupBox9.TabStop = false;
             groupBox9.Text = "اسناد صلاحيات للمستخدمين";
@@ -1719,7 +1755,7 @@
             label35.BackColor = Color.Transparent;
             label35.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label35.ForeColor = Color.Crimson;
-            label35.Location = new Point(2960, 568);
+            label35.Location = new Point(2963, 568);
             label35.Name = "label35";
             label35.Size = new Size(17, 19);
             label35.TabIndex = 28;
@@ -1731,7 +1767,7 @@
             label36.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label36.AutoSize = true;
             label36.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label36.Location = new Point(5707, 30);
+            label36.Location = new Point(5712, 30);
             label36.Name = "label36";
             label36.Size = new Size(76, 19);
             label36.TabIndex = 0;
@@ -1745,7 +1781,7 @@
             tabPageEmployees.Location = new Point(4, 28);
             tabPageEmployees.Name = "tabPageEmployees";
             tabPageEmployees.Padding = new Padding(3);
-            tabPageEmployees.Size = new Size(1105, 511);
+            tabPageEmployees.Size = new Size(1110, 511);
             tabPageEmployees.TabIndex = 10;
             tabPageEmployees.Text = "شؤون الموظفين";
             // 
@@ -1754,7 +1790,7 @@
             button10.Anchor = AnchorStyles.None;
             button10.Image = (Image)resources.GetObject("button10.Image");
             button10.ImageAlign = ContentAlignment.MiddleLeft;
-            button10.Location = new Point(417, 312);
+            button10.Location = new Point(420, 312);
             button10.Name = "button10";
             button10.Size = new Size(294, 45);
             button10.TabIndex = 25;
@@ -1779,7 +1815,7 @@
             groupBox10.Dock = DockStyle.Top;
             groupBox10.Location = new Point(3, 3);
             groupBox10.Name = "groupBox10";
-            groupBox10.Size = new Size(1099, 303);
+            groupBox10.Size = new Size(1104, 303);
             groupBox10.TabIndex = 24;
             groupBox10.TabStop = false;
             groupBox10.Text = "اسناد صلاحيات للمستخدمين";
@@ -1890,7 +1926,7 @@
             label38.BackColor = Color.Transparent;
             label38.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label38.ForeColor = Color.Crimson;
-            label38.Location = new Point(2279, 441);
+            label38.Location = new Point(2282, 441);
             label38.Name = "label38";
             label38.Size = new Size(17, 19);
             label38.TabIndex = 28;
@@ -1902,7 +1938,7 @@
             label39.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label39.AutoSize = true;
             label39.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label39.Location = new Point(4346, 30);
+            label39.Location = new Point(4351, 30);
             label39.Name = "label39";
             label39.Size = new Size(76, 19);
             label39.TabIndex = 0;
@@ -1913,7 +1949,7 @@
             AutoScaleDimensions = new SizeF(8F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(1113, 543);
+            ClientSize = new Size(1118, 543);
             Controls.Add(tabControlGeneralSettings);
             Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(3, 4, 3, 4);
@@ -2112,5 +2148,8 @@
         private Label label38;
         private Label label39;
         private CheckBox cbEmployeeSalaryReports;
+        private CheckBox cbStatistics;
+        private CheckBox cbComptoire;
+        private CheckBox cbProductDiscount;
     }
 }

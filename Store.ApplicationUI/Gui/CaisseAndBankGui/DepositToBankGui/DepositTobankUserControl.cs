@@ -71,6 +71,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankGui
 
         private async void btnDepositToCaisse_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try

@@ -39,6 +39,8 @@
             label2 = new Label();
             label1 = new Label();
             tabPageFacturesSettings = new TabPage();
+            txtStoreName = new TextBox();
+            label14 = new Label();
             btnDeletePicture = new Button();
             btnChoosePicture = new Button();
             pbLogo = new PictureBox();
@@ -76,8 +78,6 @@
             label9 = new Label();
             label8 = new Label();
             cmbCustomers = new ComboBox();
-            txtStoreName = new TextBox();
-            label14 = new Label();
             tabControl.SuspendLayout();
             tabPagePrintersSettings.SuspendLayout();
             tabPageFacturesSettings.SuspendLayout();
@@ -206,6 +206,25 @@
             tabPageFacturesSettings.TabIndex = 1;
             tabPageFacturesSettings.Text = "اعدادات الفاتورة";
             // 
+            // txtStoreName
+            // 
+            txtStoreName.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            txtStoreName.Location = new Point(415, 232);
+            txtStoreName.Name = "txtStoreName";
+            txtStoreName.PlaceholderText = "ادخل اسم المحل";
+            txtStoreName.Size = new Size(232, 27);
+            txtStoreName.TabIndex = 26;
+            txtStoreName.TextAlign = HorizontalAlignment.Center;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(664, 235);
+            label14.Name = "label14";
+            label14.Size = new Size(71, 19);
+            label14.TabIndex = 25;
+            label14.Text = "اسم المحل:";
+            // 
             // btnDeletePicture
             // 
             btnDeletePicture.Anchor = AnchorStyles.None;
@@ -240,6 +259,7 @@
             // 
             pbLogo.BorderStyle = BorderStyle.FixedSingle;
             pbLogo.Enabled = false;
+            pbLogo.Image = (Image)resources.GetObject("pbLogo.Image");
             pbLogo.Location = new Point(403, 37);
             pbLogo.Name = "pbLogo";
             pbLogo.Size = new Size(232, 117);
@@ -407,6 +427,7 @@
             txtBuyCopy.Size = new Size(189, 27);
             txtBuyCopy.TabIndex = 15;
             txtBuyCopy.TextAlign = HorizontalAlignment.Center;
+            txtBuyCopy.KeyPress += txtDaysDelaysDebt_KeyPress;
             // 
             // label12
             // 
@@ -426,6 +447,7 @@
             txtSaleCopy.Size = new Size(189, 27);
             txtSaleCopy.TabIndex = 13;
             txtSaleCopy.TextAlign = HorizontalAlignment.Center;
+            txtSaleCopy.KeyPress += txtDaysDelaysDebt_KeyPress;
             // 
             // label13
             // 
@@ -445,6 +467,7 @@
             txtDataInDgv.Size = new Size(189, 27);
             txtDataInDgv.TabIndex = 11;
             txtDataInDgv.TextAlign = HorizontalAlignment.Center;
+            txtDataInDgv.KeyPress += txtDaysDelaysDebt_KeyPress;
             // 
             // label11
             // 
@@ -464,6 +487,7 @@
             txtDaysDelaysDebt.Size = new Size(189, 27);
             txtDaysDelaysDebt.TabIndex = 9;
             txtDaysDelaysDebt.TextAlign = HorizontalAlignment.Center;
+            txtDaysDelaysDebt.KeyPress += txtDaysDelaysDebt_KeyPress;
             // 
             // label10
             // 
@@ -614,25 +638,6 @@
             cmbCustomers.Name = "cmbCustomers";
             cmbCustomers.Size = new Size(151, 27);
             cmbCustomers.TabIndex = 6;
-            // 
-            // txtStoreName
-            // 
-            txtStoreName.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            txtStoreName.Location = new Point(415, 232);
-            txtStoreName.Name = "txtStoreName";
-            txtStoreName.PlaceholderText = "ادخل اسم المحل";
-            txtStoreName.Size = new Size(232, 27);
-            txtStoreName.TabIndex = 26;
-            txtStoreName.TextAlign = HorizontalAlignment.Center;
-            // 
-            // label14
-            // 
-            label14.AutoSize = true;
-            label14.Location = new Point(664, 235);
-            label14.Name = "label14";
-            label14.Size = new Size(71, 19);
-            label14.TabIndex = 25;
-            label14.Text = "اسم المحل:";
             // 
             // ApplicationSettingsForm
             // 

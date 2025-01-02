@@ -131,6 +131,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBankReportGui
 
         private void button2_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
+
             try
             {
                 if (MsgHelper.ShowDeleteDialog())

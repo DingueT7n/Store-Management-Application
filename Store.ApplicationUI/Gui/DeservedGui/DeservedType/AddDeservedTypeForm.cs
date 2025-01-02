@@ -83,6 +83,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
         private async void btnAddTypes_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (txtNameِCategory.Text.IsNullOrEmpty())
             {
                 MsgHelper.ShowRequiredFields();
@@ -109,6 +110,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
 
 
                 if (MsgHelper.ShowEditDialog())
@@ -140,6 +142,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
             {
 
 
+                ToasterHelper.PlayNotificationSound();
                 if (MsgHelper.ShowDeleteDialog())
                 {
                     var type = _context.DeservedsTypes.FirstOrDefault

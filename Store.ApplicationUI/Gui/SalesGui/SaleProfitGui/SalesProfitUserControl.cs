@@ -421,8 +421,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
                     saleReportsInPeriod.DataSource = ProfitDetailsTable;
                     saleReportsInPeriod.lbldateFrom.Text = dtpFrom.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                     saleReportsInPeriod.lblDateTo.Text = dtpTo.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-                    Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(saleReportsInPeriod);
-                    xtraForm1.ShowDialog();
+                    Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(saleReportsInPeriod);
+                    xtraForm1.Show();
                 }
             }
             catch (Exception)
@@ -440,8 +440,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
                     DataTable ProfitDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(Convert.ToInt32(DgvSalesProfit.CurrentRow.Cells[0].Value.ToString()));
                     Reports.SalesReports.salesA4 salesA4 = new();
                     salesA4.DataSource = ProfitDetailsTable;
-                    Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(salesA4);
-                    xtraForm1.ShowDialog();
+                    Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(salesA4);
+                    xtraForm1.Show();
                 }
             }
             catch (Exception)

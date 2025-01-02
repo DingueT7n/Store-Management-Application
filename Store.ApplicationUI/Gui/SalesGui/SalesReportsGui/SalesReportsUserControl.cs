@@ -1,7 +1,6 @@
 ﻿using System.Data;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
-using Store.ApplicationUI.Reports.ReportPerviwGui;
 using Store.Core.Entities.Sales;
 using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
@@ -267,8 +266,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
                     DataTable saleDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(Convert.ToInt32(DgvSales.CurrentRow.Cells[0].Value.ToString()));
                     Reports.sale8cm sale8Cm = new();
                     sale8Cm.DataSource = saleDetailsTable;
-                    XtraForm1 xtraForm1 = new(sale8Cm);
-                    xtraForm1.ShowDialog();
+                    var xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(sale8Cm);
+                    xtraForm1.Show();
                 }
             }
             catch (Exception)

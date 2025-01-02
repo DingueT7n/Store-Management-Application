@@ -149,6 +149,8 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
+
             int take = Properties.Settings.Default.NoOfDataInDgvs;
             int selectedi = cmbpagination.SelectedIndex;
 
@@ -199,6 +201,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
         }
         private void btnNext_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
 
             if (cmbpagination.SelectedIndex == -1)
             {
@@ -214,6 +217,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
 
         private void btnPrev_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex == -1)
             {
                 cmbpagination.SelectedIndex = 0;
@@ -228,6 +232,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
 
         private void cmbpagination_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex == -1)
             {
                 cmbpagination.SelectedIndex = 0;
@@ -247,13 +252,14 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 if (DgvBuys.SelectedRows.Count > 0)
                 {
                     DataTable buyDetailsTable = await FactureHelper.GetBuyDetailsDataTableAsync(Convert.ToInt32(DgvBuys.CurrentRow.Cells[0].Value.ToString()));
                     Reports.BuysReports.buy8cm buy8cm = new();
                     buy8cm.DataSource = buyDetailsTable;
-                    Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(buy8cm);
-                    xtraForm1.ShowDialog();
+                    Reports.ReportPerviwGui.PerviweForm perv = Reports.ReportPerviwGui.PerviweForm.Instance(buy8cm);
+                    perv.Show();
                 }
             }
             catch (Exception)
@@ -267,6 +273,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 if (DgvBuys.SelectedRows.Count > 0)
                 {
                     DataTable buyDetailsTable = await FactureHelper.GetBuyReportDataTableAsync(dtpFrom.Value, dtpTo.Value);
@@ -274,9 +281,9 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
                     buyReportsInPeriod.DataSource = buyDetailsTable;
                     buyReportsInPeriod.lbldateFrom.Text = dtpFrom.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                     buyReportsInPeriod.lblDateTo.Text = dtpTo.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-                    Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(buyReportsInPeriod);
+                    Reports.ReportPerviwGui.PerviweForm perv = Reports.ReportPerviwGui.PerviweForm.Instance(buyReportsInPeriod);
 
-                    xtraForm1.ShowDialog();
+                    perv.Show();
                 }
             }
             catch (Exception)
@@ -290,13 +297,14 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 if (DgvBuys.SelectedRows.Count > 0)
                 {
                     DataTable buyDetailsTable = await FactureHelper.GetBuyDetailsDataTableAsync(Convert.ToInt32(DgvBuys.CurrentRow.Cells[0].Value.ToString()));
                     Reports.BuysReports.buyA4 buyA4 = new();
                     buyA4.DataSource = buyDetailsTable;
-                    Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(buyA4);
-                    xtraForm1.ShowDialog();
+                    Reports.ReportPerviwGui.PerviweForm perv = Reports.ReportPerviwGui.PerviweForm.Instance(buyA4);
+                    perv.Show();
                 }
             }
             catch (Exception)
@@ -304,6 +312,12 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
 
                 throw;
             }
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            LoadData();
         }
     }
 }

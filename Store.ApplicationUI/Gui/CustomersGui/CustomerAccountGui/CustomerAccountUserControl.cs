@@ -172,6 +172,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
 
         private void btnPay_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (DgvِCustomer.SelectedRows.Count > 0 && !dgvHelper.IsEmpty(DgvِCustomer))
             {
                 _context = new ApplicationDbContext();
@@ -264,6 +265,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 if (DgvِCustomer.SelectedRows.Count > 0)
                 {
                     DataTable CustomerAccountAccountDetailsTable = await FactureHelper.GetCustomerAccountDataTableAsync(Convert.ToInt32(DgvِCustomer.CurrentRow.Cells[0].Value.ToString()));
@@ -271,8 +273,8 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                     custAccount.DataSource = CustomerAccountAccountDetailsTable;
                     var a = CustomerAccountAccountDetailsTable.Rows.Count.ToString();
                     custAccount.lblTotalFactures.Text = a;
-                    Reports.ReportPerviwGui.XtraForm1 xtraForm1 = new(custAccount);
-                    xtraForm1.ShowDialog();
+                    Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(custAccount);
+                    xtraForm1.Show();
                 }
             }
             catch (Exception)

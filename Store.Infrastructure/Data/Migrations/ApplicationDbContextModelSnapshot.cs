@@ -1981,6 +1981,9 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<int>("User_Id")
                         .HasColumnType("int");
 
+                    b.Property<bool>("allStores")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("User_Id");
@@ -2048,6 +2051,21 @@ namespace Store.Infrastructure.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("ApplicationSettings")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("BackUp")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Pos")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ProductDiscounts")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Restore")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Statistics")
                         .HasColumnType("bit");
 
                     b.Property<bool>("UserPermession")

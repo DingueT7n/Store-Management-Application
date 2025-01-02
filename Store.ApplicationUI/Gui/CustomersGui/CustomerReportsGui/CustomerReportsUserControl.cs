@@ -239,6 +239,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
         private void btnNext_Click(object sender, EventArgs e)
         {
 
+            ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex == -1)
             {
                 cmbpagination.SelectedIndex = 0;  // Set to first page if no page is selected
@@ -258,6 +259,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
         }
         private void btnPrev_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex == -1)
             {
                 cmbpagination.SelectedIndex = 0;
@@ -272,6 +274,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
 
         private void cmbpagination_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex == -1)
             {
                 cmbpagination.SelectedIndex = 0;
@@ -289,6 +292,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
 
         private void btnDeleteCurrentPage_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
                 for (int i = 0; i < DgvِCustomer.Rows.Count; i++)
@@ -304,6 +308,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
 
         private async void btnDeleteReportsInPeriod_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
                 try
@@ -336,6 +341,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
 
         private void btnDeleteAllReports_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
                 try

@@ -14,6 +14,7 @@ namespace Store.ApplicationUI.Code.Helper
         //SetNewPage
         public void SetNewPage(UserControl pageUserControl)
         {
+            ToasterHelper.PlayNotificationSound();
             //get the Current Page
             var oldPage = _main.ContainerPanel.Controls.OfType<UserControl>().FirstOrDefault();
 
@@ -52,6 +53,7 @@ namespace Store.ApplicationUI.Code.Helper
         }
         public static void SetOperation(UserControl pageUserControl, CaisseDetailsForm detailsForm)
         {
+            ToasterHelper.PlayNotificationSound();
             var oldPage = detailsForm.panelUserControls.Controls.OfType<UserControl>().FirstOrDefault();
 
             // Remove and dispose of the old page

@@ -98,11 +98,13 @@ namespace Store.ApplicationUI.Gui.CustomersGui
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             LoadData();
         }
 
         private void btnAddCustomer_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
 
             addCustomerForm = AddCustomerForm.Instance(_main);
             addCustomerForm.Show();
@@ -111,6 +113,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui
 
         private void btnEditCustomer_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (DgvِCustomer.Rows.Count > 0)
             {
                 if (addCustomerForm == null || addCustomerForm.IsDisposed)
@@ -139,6 +142,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 if (MsgHelper.ShowDeleteDialog())
                 {
                     var customer = customersRepository.DeleteAsync(DgvِCustomer.CurrentRow.Cells[6].Value.ToString());

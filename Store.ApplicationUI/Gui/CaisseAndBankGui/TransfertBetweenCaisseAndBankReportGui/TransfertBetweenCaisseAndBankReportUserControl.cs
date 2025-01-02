@@ -165,6 +165,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenCaisseAndBank
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 if (MsgHelper.ShowDeleteDialog())
                 {
                     for (int i = 0; i <= DgvSales.Rows.Count - 1; i++)

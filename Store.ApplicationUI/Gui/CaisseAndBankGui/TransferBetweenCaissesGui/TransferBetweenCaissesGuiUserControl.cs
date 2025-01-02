@@ -1,4 +1,5 @@
 ﻿using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.Models;
 using Store.Core.Entities.Caisses;
 using Store.Infrastructure.Data;
 
@@ -63,7 +64,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransferBetweenCaissesGui
             {
                 MsgHelper.ShowServerError();
             }
-
+            txtDepositorName.Text = LocalUser.User.UserName;
 
         }
 
@@ -118,6 +119,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransferBetweenCaissesGui
 
         private async void btnDepositToCaisse_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             validate();
             if (Convert.ToInt32(cmbCaisseFrom.SelectedValue) == Convert.ToInt32(cmbCaisseTo.SelectedValue)) { MessageBox.Show("لا يمكنك التحويل إلى نفس الصندوق"); return; }
             if (Convert.ToDouble(txtValue.Text) > Convert.ToDouble(lblValue.Text)) { MessageBox.Show($"الصنودق المرسل لديه قيمى اصغر من المحولة"); return; }

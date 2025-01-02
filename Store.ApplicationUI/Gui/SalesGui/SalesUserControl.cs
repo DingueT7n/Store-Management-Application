@@ -3,7 +3,6 @@ using Microsoft.IdentityModel.Tokens;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.PaymentGui;
-using Store.ApplicationUI.Reports.ReportPerviwGui;
 using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Customers;
 using Store.Core.Entities.Products;
@@ -97,7 +96,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 cmbStores.Text = "اختر مخزن";
 
                 DtpDateFacture.Value = DateTime.Now;
-                dtpReminderDate.Value = DateTime.Now.AddDays(30);
+                dtpReminderDate.Value = DateTime.Now.AddDays(Properties.Settings.Default.DaysAddDebt);
 
 
                 //_data.Clear();
@@ -839,14 +838,17 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
                         if (rbPrinterDirectly.Checked)
                         {
-                            var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(sale8Cm);
-                            printTool.PrinterSettings.PrinterName = printername;
-                            printTool.Print(printername);
+                            for (int i = 0; i < Properties.Settings.Default.NbrCopyOfSaleFacture; i++)
+                            {
+                                var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(sale8Cm);
+                                printTool.PrinterSettings.PrinterName = printername;
+                                printTool.Print(printername);
+                            }
                         }
                         else if (rbAnalysis.Checked)
                         {
-                            XtraForm1 xtraForm1 = new XtraForm1(sale8Cm);
-                            xtraForm1.ShowDialog();
+                            var xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(sale8Cm);
+                            xtraForm1.Show();
                         }
                     }
                     else
@@ -857,14 +859,18 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
                         if (rbPrinterDirectly.Checked)
                         {
-                            var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(salesA4);
-                            printTool.PrinterSettings.PrinterName = printername;
-                            printTool.Print(printername);
+                            for (int i = 0; i < Properties.Settings.Default.NbrCopyOfSaleFacture; i++)
+                            {
+                                var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(salesA4);
+                                printTool.PrinterSettings.PrinterName = printername;
+                                printTool.Print(printername);
+                            }
+
                         }
                         else if (rbAnalysis.Checked)
                         {
-                            XtraForm1 xtraForm1 = new XtraForm1(salesA4);
-                            xtraForm1.ShowDialog();
+                            var xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(salesA4);
+                            xtraForm1.Show();
                         }
 
                     }

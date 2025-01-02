@@ -327,6 +327,7 @@
             btnRefresh.Size = new Size(50, 40);
             btnRefresh.TabIndex = 21;
             btnRefresh.UseVisualStyleBackColor = true;
+            btnRefresh.Click += btnRefresh_Click;
             // 
             // lblEmptyData
             // 

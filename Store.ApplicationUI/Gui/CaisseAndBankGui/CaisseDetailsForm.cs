@@ -101,6 +101,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
 
         private void btnAddCaisse_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (txtNameِCategory.Text.IsNullOrEmpty())
             {
                 MsgHelper.ShowRequiredFields();
@@ -124,6 +125,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
             try
             {
 
+                ToasterHelper.PlayNotificationSound();
 
                 if (MsgHelper.ShowEditDialog())
                 {
@@ -152,6 +154,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
 
 
                 if (MsgHelper.ShowDeleteDialog())
@@ -190,6 +193,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
 
             btnAddCaisse.Enabled = true;
             vider();
