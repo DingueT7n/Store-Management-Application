@@ -9,7 +9,9 @@ namespace Store.ApplicationUI.Gui.LoginGui
         public static LoginForm _oginForm;
         Thread Thread;
         public LoginForm()
+
         {
+            Code.Helper.ConStringHelper.SetConString();
             this._context = new ApplicationDbContext();
             InitializeComponent();
             _oginForm = this;
@@ -17,7 +19,10 @@ namespace Store.ApplicationUI.Gui.LoginGui
             {
                 Thread = new Thread(new ThreadStart(StartSplash));
                 Thread.Start();
-                _context.Database.CanConnect();
+                if (!_context.Database.CanConnect())
+                {
+                    lblCon.Visible = true;
+                }
                 Thread.Sleep(5000);
 
             }
@@ -72,10 +77,13 @@ namespace Store.ApplicationUI.Gui.LoginGui
 
         private async void button1_Click(object sender, EventArgs e)
         {
+            Code.Helper.ConStringHelper.SetConString();
+            this._context = new ApplicationDbContext();
+
 
             if (string.IsNullOrWhiteSpace(txtUsername.Text) || string.IsNullOrWhiteSpace(txtPassowrd.Text))
             {
-                MessageBox.Show("Please enter both username and password.");
+                MessageBox.Show("من فضلك ادخل اسم المستخدم وكلمة السر");
                 return;
             }
             if (await _context.Database.CanConnectAsync())
@@ -103,7 +111,6 @@ namespace Store.ApplicationUI.Gui.LoginGui
                     MainForm mainForm = new MainForm();
                     Properties.Settings.Default.UserName = txtUsername.Text;
                     Properties.Settings.Default.Save();
-
                     mainForm.Show();
 
                 }
@@ -117,6 +124,15 @@ namespace Store.ApplicationUI.Gui.LoginGui
                 button1_Click(sender, e);
                 e.Handled = true;
             }
+        }
+
+        private void lblCon_Click(object sender, EventArgs e)
+        {
+            ConnectionSettingsForm connectionSettingsForm = new ConnectionSettingsForm();
+            this.Hide();
+            connectionSettingsForm.ShowDialog();
+            this.Show();
+
         }
     }
 }

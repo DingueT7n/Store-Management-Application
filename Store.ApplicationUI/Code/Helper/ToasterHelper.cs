@@ -6,68 +6,77 @@ namespace Store.ApplicationUI.Code.Helper
     {
         public static void ShowAddToast()
         {
-            ToastForm.Instance("اضافة البيانات", "تم اضافة البيانات بنجاح").Show();
+            ToastForm.Instance("اضافة البيانات", "تم اضافة البيانات بنجاح", null).Show();
         }
         public static void ShowEditToast()
         {
-            ToastForm.Instance("تعديل البيانات", "تم تعديل البيانات بنجاح").Show();
+            ToastForm.Instance("تعديل البيانات", "تم تعديل البيانات بنجاح", null).Show();
         }
         public static void ShowDeletedToast()
         {
-            ToastForm.Instance("حذف البيانات", "تم حذف البيانات بنجاح").Show();
+            ToastForm.Instance("حذف البيانات", "تم حذف البيانات بنجاح", null).Show();
         }
         public static void ShowTransfertProduct()
         {
-            ToastForm.Instance("تحويل المنتجات", "تم تحويل المنتجات بنجاح").Show();
+            ToastForm.Instance("تحويل المنتجات", "تم تحويل المنتجات بنجاح", null).Show();
         }
         public static void ShowOutStockProduct()
         {
-            ToastForm.Instance(" تحويل المنتجات الفاسدة", "تم تحويل المنتجات الفاسدة بنجاح").Show();
+            ToastForm.Instance(" تحويل المنتجات الفاسدة", "تم تحويل المنتجات الفاسدة بنجاح", null).Show();
         }
         public static void ShowProductDiscountAdded()
         {
-            ToastForm.Instance("اضافة التخفيض", "تم اضافة التخفيض على المنتجات بنجاح").Show();
+            ToastForm.Instance("اضافة التخفيض", "تم اضافة التخفيض على المنتجات بنجاح", null).Show();
         }
         public static void ShowNewBuyAdd()
         {
-            ToastForm.Instance("اضافة شراء", "تم اضافة الشراء بنجاح").Show();
+            ToastForm.Instance("اضافة شراء", "تم اضافة الشراء بنجاح", null).Show();
         }
         public static void ShowNewSaleAdd()
         {
-            ToastForm.Instance("اضافة مبيعات", "تم اضافة المبيعة بنجاح").Show();
+            ToastForm.Instance("اضافة مبيعات", "تم اضافة المبيعة بنجاح", null).Show();
         }
         public static void ShowWithdraw()
         {
-            ToastForm.Instance("سحب اموال", "تم سحب المال بنجاح").Show();
+            ToastForm.Instance("سحب اموال", "تم سحب المال بنجاح", null).Show();
         }
         public static void ShowDeposit()
         {
-            ToastForm.Instance("ايداع اموال", "تم ايداع المال بنجاح").Show();
+            ToastForm.Instance("ايداع اموال", "تم ايداع المال بنجاح", null).Show();
         }
 
         public static void ShowTransfert()
         {
-            ToastForm.Instance("تحويل اموال", "تم تحويل المال بنجاح").Show();
+            ToastForm.Instance("تحويل اموال", "تم تحويل المال بنجاح", null).Show();
         }
         public static void ShowDebtAdded()
         {
-            ToastForm.Instance("دفع الدين", "تم دفع الدين بنجاح").Show();
+            ToastForm.Instance("دفع الدين", "تم دفع الدين بنجاح", null).Show();
         }
         public static void ShowSalarie()
         {
-            ToastForm.Instance("دفع الرواتب", "تم دفع الراتب بنجاح").Show();
+            ToastForm.Instance("دفع الرواتب", "تم دفع الراتب بنجاح", null).Show();
         }
         public static void ShowBorrowMoney()
         {
-            ToastForm.Instance("اضافة الدين", "تم اضافة الدين بنجاح").Show();
+            ToastForm.Instance("اضافة الدين", "تم اضافة الدين بنجاح", null).Show();
         }
         public static void ShowBorrowItem()
         {
-            ToastForm.Instance("اضافة بيانات", "تم سحب المنتج بنجاح").Show();
+            ToastForm.Instance("اضافة بيانات", "تم سحب المنتج بنجاح", null).Show();
         }
         public static void ShowAddedRefund()
         {
-            ToastForm.Instance("اضافة المرتجعات", "تم اضافة المرتجعات بنجاح").Show();
+            ToastForm.Instance("اضافة المرتجعات", "تم اضافة المرتجعات بنجاح", null).Show();
+        }
+
+        public static void ShowConnectionIsEstablished()
+        {
+            ToastForm.Instance("اتصال بالسيريفر", "تم الاتصال بالسيرفر بنجاح", null).Show();
+        }
+        public static void ShowConnectionIsNotEstablished()
+        {
+            ToastForm.Instance("اتصال بالسيريفر", "لم يتم الاتصال بالسيرفر ", Color.Red).Show();
         }
     }
 }

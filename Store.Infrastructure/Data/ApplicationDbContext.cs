@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Store.Core.Entities.AllDeserved;
 using Store.Core.Entities.Banks;
@@ -81,8 +82,8 @@ namespace Store.Infrastructure.Data
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string conString = @"Server=.\SQLEXPRESS; Database=StoreDbEFCore;Encrypt=false; Integrated Security = true;";
-            optionsBuilder.UseSqlServer(conString).EnableSensitiveDataLogging() // Enables detailed logging
+            //string conString = @"Server=.\SQLEXPRESS; Database=StoreDbEFCore;Encrypt=false; Integrated Security = true;";
+            optionsBuilder.UseSqlServer(ConString.ConStringValue).EnableSensitiveDataLogging() // Enables detailed logging
                   .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information); ;
             base.OnConfiguring(optionsBuilder);
             //     string conString = "Server=localhost;Database=StoreDbEFCore;User=root;Password=admin;";
@@ -91,7 +92,22 @@ namespace Store.Infrastructure.Data
             //    .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
         }
 
-
+        public static async Task<bool> IsValidConnectionStringAsync(string connectionString)
+        {
+            try
+            {
+                // Try to open the connection
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    await connection.OpenAsync();
+                }
+                return true; // Connection successful
+            }
+            catch (Exception)
+            {
+                return false; // Connection failed
+            }
+        }
         public DbSet<Bank> Banks { get; set; }
         public DbSet<BankDeposit> BankDeposits { get; set; }
         public DbSet<BankWithdraw> BankWithdraws { get; set; }

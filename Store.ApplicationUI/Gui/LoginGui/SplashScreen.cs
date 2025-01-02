@@ -6,7 +6,9 @@
         {
             InitializeComponent();
             this.labelCopyright.Text = "Copyright ALG-D © 1998-" + DateTime.Now.Year.ToString();
+            this.labelCopyright.Text = $"{DateTime.Now.Year.ToString()}-2024 ALG-D © جميع الحقوق محفوظة";
             this.BackColor = Color.White;
+            Code.Helper.ConStringHelper.SetConString();
         }
 
         #region Overrides

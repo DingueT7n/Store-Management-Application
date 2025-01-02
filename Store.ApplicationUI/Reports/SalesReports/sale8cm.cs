@@ -13,7 +13,7 @@ namespace Store.ApplicationUI.Reports
             _context = new ApplicationDbContext();
 
             InitialElements();
-
+            //this.AfterPrint += ReceiptReport_AfterPrint;
 
         }
         void InitialElements()
@@ -32,6 +32,7 @@ namespace Store.ApplicationUI.Reports
             }
             pbLogo.Visible = Properties.Settings.Default.LogoYesNo;
             ReportHeader.Visible = Properties.Settings.Default.LogoYesNo;
+
 
             if (Properties.Settings.Default.LogoYesNo)
             {
@@ -58,6 +59,32 @@ namespace Store.ApplicationUI.Reports
         private void sale8cm_BeforePrint(object sender, System.ComponentModel.CancelEventArgs e)
         {
 
+
+        }
+
+
+
+        private void sale8cm_AfterPrint(object sender, EventArgs e)
+        {
+            //// Calculate the total height dynamically based on content
+            //int calculatedHeight = 0;
+
+            //// Add heights of all visible bands
+            //calculatedHeight += Convert.ToInt32(this.Detail.HeightF);
+            //calculatedHeight += Convert.ToInt32(this.TopMargin.HeightF);
+            //calculatedHeight += Convert.ToInt32(this.BottomMargin.HeightF);
+
+            //// Optional: Include other bands like Report Footer, etc.
+            //if (this.ReportFooter.Visible)
+            //{
+            //    calculatedHeight += Convert.ToInt32(this.ReportFooter.HeightF);
+            //}
+
+            //// Ensure the calculated height is within the maximum allowed height
+            //if (calculatedHeight > 0 && calculatedHeight < this.PageHeight)
+            //{
+            //    this.PageHeight = calculatedHeight;
+            //}
         }
     }
 }

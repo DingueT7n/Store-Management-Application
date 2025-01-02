@@ -153,6 +153,35 @@ namespace Store.ApplicationUI.Code.Helper
             }
 
         }
+        public static bool ShowBareCodeDuplicatedWithoutMessagesForEdit(ApplicationDbContext _context, string barCode, string id)
+        {
+
+            try
+            {
+
+                var product = _context.Products.Count(x => x.CodeBar == barCode && x.Id.ToString() != id);
+                product += _context.Products.Count(x => x.ColisageBareCode == barCode && x.Id.ToString() != id);
+                product += _context.ProductFamilies
+                    .Where(x => x.CodeBar == barCode && x.Pro_Id.ToString() != id)
+                    .Select(x => x.Product)
+                    .Count();
+                if (product >= 1)
+                {
+                    return false;
+                }
+                else
+                {
+
+                    return true;
+                }
+
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
         public static bool ShowProductNameDuplicated(ApplicationDbContext _context, string productName, string id)
         {
 

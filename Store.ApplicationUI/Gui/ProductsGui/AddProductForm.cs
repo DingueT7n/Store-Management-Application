@@ -39,7 +39,6 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             _addProductForm.LoadData();
             _addProductForm.CMBCategory.SelectedValue = s;
         }
-
         public static AddProductForm Instance(MainForm main)
         {
             if (_addProductForm == null || _addProductForm.IsDisposed)
@@ -48,7 +47,6 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             }
             else
             {
-                // Bring the form to the front if it exists.
                 if (!_addProductForm.Visible)
                 {
                     _addProductForm.Show();
@@ -65,7 +63,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
             DtpExperation.CustomFormat = DtpExperation.CustomFormat = "yyyy-MM-dd";
         }
-        public void LoadData()
+        public async void LoadData()
         {
 
 
@@ -313,9 +311,27 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             label13.Visible = true;
             txtNameProduct.Focus();
             txtNameProduct_TextChanged(null, null);
-            txtBarCode.ForeColor = Color.Red;
+            //txtBarCode.ForeColor = Color.Red;
 
             cbFavorite.Checked = _context.ProductQuickAccess.FirstOrDefault(x => x.Pro_Id.ToString() == productId) == null ? false : true;
+
+            var textBoxes = new[] { txtBarCode, textBox1, textBox2, textBox3, textBox4, textBox5, textBox6, textBox7, textBox8, textBox9, textBox10 };
+            for (int i = 0; i < textBoxes.Length; i++)
+            {
+                if (!MsgHelper.ShowBareCodeDuplicatedWithoutMessagesForEdit(_context, textBoxes[i].Text, lblProductId.Text))
+                {
+                    textBoxes[i].ForeColor = Color.Red;
+                }
+                else
+                {
+                    textBoxes[i].ForeColor = Color.Black;
+                }
+
+
+            }
+
+
+
         }
         public void SetSimilaireDataToAdd(string NameProduct, string BarCode, string categoryId, string MinQty
            , bool IsTaxed, string TaxValue, string BuyPrice, string Quentity, string WholesalePrice
@@ -375,7 +391,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             var textBoxes = new[] { txtBarCode, textBox1, textBox2, textBox3, textBox4, textBox5, textBox6, textBox7, textBox8, textBox9, textBox10 };
             for (int i = 0; i < textBoxes.Length; i++)
             {
-                if (textBoxes[i].ForeColor == Color.Red) return false;
+                if (textBoxes[i].Text != string.Empty)
+                    if (textBoxes[i].ForeColor == Color.Red) return false;
 
             }
             return true;
@@ -639,7 +656,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                         }
                         if (cbFavorite.Checked)
                         {
-                            if (_context.ProductQuickAccess.FirstOrDefault(x => x.Id == product.Id) is not null)
+                            if (_context.ProductQuickAccess.FirstOrDefault(x => x.Pro_Id == product.Id) is null)
                             {
                                 ProductQuickAccess qucik = new ProductQuickAccess
                                 {
@@ -653,18 +670,19 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                                 _context.SaveChanges();
                             }
                         }
+                        else
+                        {
+                            var ProQuick = _context.ProductQuickAccess.FirstOrDefault(x => x.Pro_Id.ToString() == lblProductId.Text);
+                            if (ProQuick != null)
+                            {
+                                _context.Remove(ProQuick);
+                                _context.SaveChanges();
+
+                            }
+                        }
                         product = null;
                     }
-                    else
-                    {
-                        var ProQuick = _context.ProductQuickAccess.FirstOrDefault(x => x.Pro_Id.ToString() == lblProductId.Text);
-                        if (ProQuick != null)
-                        {
-                            _context.Remove(ProQuick);
-                            _context.SaveChanges();
 
-                        }
-                    }
                     Code.Helper.ToasterHelper.ShowEditToast();
 
                 }
@@ -725,7 +743,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
                         if (cbFavorite.Checked)
                         {
-                            if (_context.ProductQuickAccess.FirstOrDefault(x => x.Id == product.Id) is not null)
+                            if (_context.ProductQuickAccess.FirstOrDefault(x => x.Pro_Id == product.Id) is null)
                             {
                                 ProductQuickAccess qucik = new ProductQuickAccess
                                 {
@@ -889,6 +907,17 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                     else
                     {
                         textBox.ForeColor = Color.Black;
+                    }
+                }
+                if (btnEditProduct.Visible && sender is TextBox textBoX)
+                {
+                    if (!MsgHelper.ShowBareCodeDuplicatedWithoutMessagesForEdit(_context, textBoX.Text, lblProductId.Text))
+                    {
+                        textBoX.ForeColor = Color.Red;
+                    }
+                    else
+                    {
+                        textBoX.ForeColor = Color.Black;
                     }
                 }
             }

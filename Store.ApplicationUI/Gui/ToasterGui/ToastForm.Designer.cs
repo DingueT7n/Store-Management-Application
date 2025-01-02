@@ -50,6 +50,7 @@
             // 
             // lblTitle
             // 
+            lblTitle.BackColor = Color.GreenYellow;
             lblTitle.Dock = DockStyle.Top;
             lblTitle.Font = new Font("Calibri", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTitle.Location = new Point(0, 0);
@@ -61,6 +62,7 @@
             // 
             // lblDescription
             // 
+            lblDescription.BackColor = Color.GreenYellow;
             lblDescription.Dock = DockStyle.Top;
             lblDescription.Font = new Font("Calibri", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblDescription.Location = new Point(0, 32);

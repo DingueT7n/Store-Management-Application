@@ -41,6 +41,7 @@
             tileGroup2 = new DevExpress.XtraEditors.TileGroup();
             tileItem1 = new DevExpress.XtraEditors.TileItem();
             panel1 = new Panel();
+            lblCon = new Label();
             button2 = new Button();
             button1 = new Button();
             groupBox1 = new GroupBox();
@@ -80,6 +81,7 @@
             tileControl1.MaxId = 1;
             tileControl1.Name = "tileControl1";
             tileControl1.Padding = new Padding(5);
+            tileControl1.ScrollButtonFadeAnimationTime = 400;
             tileControl1.Size = new Size(367, 387);
             tileControl1.TabIndex = 0;
             // 
@@ -106,7 +108,7 @@
             tileItem1.ContentAnimation = DevExpress.XtraEditors.TileItemContentAnimationType.Fade;
             tileItemElement1.Text = "";
             tileItem1.Elements.Add(tileItemElement1);
-            tileItem1.FrameAnimationInterval = 2500;
+            tileItem1.FrameAnimationInterval = 2000;
             tileItemFrame1.Appearance.BackColor = Color.LightCyan;
             tileItemFrame1.Appearance.BorderColor = Color.Black;
             tileItemFrame1.Appearance.ForeColor = Color.White;
@@ -140,6 +142,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(lblCon);
             panel1.Controls.Add(button2);
             panel1.Controls.Add(button1);
             panel1.Controls.Add(groupBox1);
@@ -151,13 +154,27 @@
             panel1.Size = new Size(394, 387);
             panel1.TabIndex = 1;
             // 
+            // lblCon
+            // 
+            lblCon.AutoSize = true;
+            lblCon.Cursor = Cursors.Hand;
+            lblCon.Font = new Font("Calibri", 12F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
+            lblCon.ForeColor = Color.Blue;
+            lblCon.Location = new Point(249, 362);
+            lblCon.Name = "lblCon";
+            lblCon.Size = new Size(136, 19);
+            lblCon.TabIndex = 5;
+            lblCon.Text = "تعديل اعدادات الاتصال";
+            lblCon.Visible = false;
+            lblCon.Click += lblCon_Click;
+            // 
             // button2
             // 
             button2.FlatStyle = FlatStyle.Flat;
             button2.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             button2.Image = (Image)resources.GetObject("button2.Image");
             button2.ImageAlign = ContentAlignment.MiddleLeft;
-            button2.Location = new Point(28, 320);
+            button2.Location = new Point(26, 291);
             button2.Name = "button2";
             button2.Size = new Size(150, 42);
             button2.TabIndex = 4;
@@ -167,16 +184,17 @@
             // 
             // button1
             // 
+            button1.BackColor = Color.White;
             button1.FlatStyle = FlatStyle.Flat;
             button1.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             button1.Image = (Image)resources.GetObject("button1.Image");
             button1.ImageAlign = ContentAlignment.MiddleLeft;
-            button1.Location = new Point(235, 320);
+            button1.Location = new Point(224, 291);
             button1.Name = "button1";
             button1.Size = new Size(150, 42);
             button1.TabIndex = 3;
             button1.Text = "موافق";
-            button1.UseVisualStyleBackColor = true;
+            button1.UseVisualStyleBackColor = false;
             button1.Click += button1_Click;
             // 
             // groupBox1
@@ -306,5 +324,6 @@
         private Label label3;
         private Button button1;
         private Button button2;
+        private Label lblCon;
     }
 }

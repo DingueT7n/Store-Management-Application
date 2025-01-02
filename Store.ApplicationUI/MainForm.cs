@@ -32,6 +32,7 @@ namespace Store.ApplicationUI
         {
             InitializeComponent();
             KeyPreview = true;
+            Code.Helper.ConStringHelper.SetConString();
 
             pageHelper = new(this);
             pageHelper.SetNewPage(Gui.HomeGui.HomeUserControl.Instance(this));
@@ -671,16 +672,19 @@ namespace Store.ApplicationUI
                         var databaseName = Context?.Database.GetDbConnection().Database;
                         var connectionString = Context?.Database.GetDbConnection().ConnectionString;
 
-                        Server server = new Server(connectionString);
+
+                        Server server = new Server($"{Properties.Settings.Default.Server}");
+                        Database db = server.Databases[$"{Properties.Settings.Default.DataBase}"];
                         //Database db = server.Databases[databaseName];
-                        if (databaseName != null)
+                        if (db != null)
                         {
-                            server.KillAllProcesses(databaseName);
+                            server.KillAllProcesses(db.Name);
                         }
                         Restore restore = new Restore();
-                        restore.Database = databaseName;
+                        restore.Database = db.Name;
                         restore.Action = RestoreActionType.Database;
                         restore.Devices.AddDevice(openFileDialog.FileName, DeviceType.File);
+
                         restore.ReplaceDatabase = true;
                         restore.NoRecovery = false;
                         restore.SqlRestore(server);
@@ -705,6 +709,45 @@ namespace Store.ApplicationUI
             {
                 MessageBox.Show($"حدث خطأ أثناء استعادة قاعدة البيانات: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+
+
+
+            //try
+            //{
+
+            //    Server server = new Server($"{Properties.Settings.Default.Server}");
+            //    Database db = server.Databases[$"{Properties.Settings.Default.DataBase}"];
+            //    if (db != null)
+            //    {
+            //        server.KillAllProcesses(db.Name);
+            //    }
+            //    Restore restore = new Restore();
+            //    restore.Database = db.Name;
+            //    restore.Action = RestoreActionType.Database;
+            //    OpenFileDialog openFileDialog = new OpenFileDialog
+            //    {
+            //        Filter = "Backup Files (*.bak)|*.bak",
+            //        Title = "اختر ملف النسخة الاحتياطية"
+            //    };
+            //    if (openFileDialog.ShowDialog() == DialogResult.OK)
+            //    {
+
+            //        restore.Devices.AddDevice(openFileDialog.FileName, DeviceType.File);
+            //        restore.ReplaceDatabase = true;
+            //        restore.NoRecovery = false;
+            //        restore.SqlRestore(server);
+
+            //        MessageBox.Show("Restore Has Been Successfully", "Operation Finished");
+
+
+            //    }
+
+            //}
+            //catch (Exception)
+            //{
+
+            //}
 
         }
 

@@ -44,7 +44,7 @@
             labelCopyright.Appearance.Font = new Font("Calibri", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             labelCopyright.Appearance.Options.UseFont = true;
             labelCopyright.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
-            labelCopyright.Location = new Point(25, 360);
+            labelCopyright.Location = new Point(48, 360);
             labelCopyright.Name = "labelCopyright";
             labelCopyright.Size = new Size(90, 15);
             labelCopyright.TabIndex = 6;
@@ -54,12 +54,12 @@
             // 
             labelStatus.Appearance.Font = new Font("Calibri", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             labelStatus.Appearance.Options.UseFont = true;
-            labelStatus.Location = new Point(27, 251);
+            labelStatus.Location = new Point(454, 252);
             labelStatus.Margin = new Padding(3, 3, 3, 1);
             labelStatus.Name = "labelStatus";
-            labelStatus.Size = new Size(60, 18);
+            labelStatus.Size = new Size(94, 18);
             labelStatus.TabIndex = 7;
-            labelStatus.Text = "Starting...";
+            labelStatus.Text = ".......بداية البرنامج";
             // 
             // peImage
             // 
@@ -82,7 +82,7 @@
             // 
             peLogo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             peLogo.EditValue = resources.GetObject("peLogo.EditValue");
-            peLogo.Location = new Point(288, 346);
+            peLogo.Location = new Point(254, 333);
             peLogo.Name = "peLogo";
             peLogo.Properties.AllowFocused = false;
             peLogo.Properties.Appearance.BackColor = Color.Transparent;
@@ -98,7 +98,7 @@
             // 
             progressBarControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             progressBarControl.EditValue = 0;
-            progressBarControl.Location = new Point(24, 274);
+            progressBarControl.Location = new Point(22, 274);
             progressBarControl.Name = "progressBarControl";
             progressBarControl.Properties.Appearance.BackColor = Color.Fuchsia;
             progressBarControl.Properties.Appearance.BorderColor = Color.Fuchsia;
@@ -106,7 +106,7 @@
             progressBarControl.Properties.AppearanceFocused.BorderColor = Color.Fuchsia;
             progressBarControl.Properties.MarqueeAnimationSpeed = 105;
             progressBarControl.Properties.TextOrientation = DevExpress.Utils.Drawing.TextOrientation.Horizontal;
-            progressBarControl.Size = new Size(517, 24);
+            progressBarControl.Size = new Size(526, 24);
             progressBarControl.TabIndex = 5;
             // 
             // SplashScreen

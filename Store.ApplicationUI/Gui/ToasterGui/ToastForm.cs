@@ -14,7 +14,7 @@ namespace Store.ApplicationUI.Gui.ToasterGui
             _player = new MediaPlayer(); // Initialize MediaPlayer
         }
 
-        public static ToastForm Instance(string title, string description)
+        public static ToastForm Instance(string title, string description, System.Drawing.Color? color)
         {
             if (_Form == null || _Form.IsDisposed)
             {
@@ -25,10 +25,22 @@ namespace Store.ApplicationUI.Gui.ToasterGui
                 // Bring the form to the front if it exists.
                 if (!_Form.Visible)
                 {
+
+
+                    _Form.PlayNotificationSound();
                     _Form.Show();
+                    _Form.timer1.Stop();  // Stop the timer to reset it
+                    _Form.timer1.Start();
+                    //Thread.Sleep(500);
+
                 }
                 _Form.BringToFront();
             }
+            if (color is not null)
+                _Form.lblDescription.BackColor = _Form.lblTitle.BackColor = (System.Drawing.Color)color;
+            else
+                _Form.lblDescription.BackColor = _Form.lblTitle.BackColor = System.Drawing.Color.GreenYellow;
+
             _Form.lblTitle.Text = title;
             _Form.lblDescription.Text = description;
             return _Form;
@@ -62,7 +74,12 @@ namespace Store.ApplicationUI.Gui.ToasterGui
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            this.Close();
+            if (_Form is not null)
+            {
+                _Form?.Hide(); // Hide the form when the timer elapses
+                timer1.Stop(); // Stop the timer to prevent repeated hiding
+
+            }
         }
     }
 }
