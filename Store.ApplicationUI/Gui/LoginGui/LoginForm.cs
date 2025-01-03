@@ -25,6 +25,8 @@ namespace Store.ApplicationUI.Gui.LoginGui
                     lblCon.Visible = true;
                 }
                 Thread.Sleep(5000);
+                _splashScreen.Dispose();
+
 
             }
             catch (Exception)
@@ -34,12 +36,13 @@ namespace Store.ApplicationUI.Gui.LoginGui
             }
 
         }
-
+        private SplashScreen? _splashScreen;
         private void StartSplash()
         {
             try
             {
-                Application.Run(new SplashScreen());
+                _splashScreen = new SplashScreen();
+                Application.Run(_splashScreen);
             }
             catch (Exception)
             {

@@ -89,7 +89,7 @@
             // dtpJoined
             // 
             dtpJoined.Format = DateTimePickerFormat.Short;
-            dtpJoined.Location = new Point(13, 88);
+            dtpJoined.Location = new Point(10, 47);
             dtpJoined.Name = "dtpJoined";
             dtpJoined.Size = new Size(121, 27);
             dtpJoined.TabIndex = 43;
@@ -98,7 +98,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label5.Location = new Point(155, 92);
+            label5.Location = new Point(152, 51);
             label5.Name = "label5";
             label5.Size = new Size(89, 19);
             label5.TabIndex = 42;
@@ -116,7 +116,7 @@
             // 
             // txtQty
             // 
-            txtQty.Location = new Point(13, 132);
+            txtQty.Location = new Point(10, 91);
             txtQty.Name = "txtQty";
             txtQty.Size = new Size(121, 27);
             txtQty.TabIndex = 36;
@@ -127,7 +127,7 @@
             // 
             label9.AutoSize = true;
             label9.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label9.Location = new Point(143, 135);
+            label9.Location = new Point(140, 94);
             label9.Name = "label9";
             label9.Size = new Size(101, 19);
             label9.TabIndex = 35;

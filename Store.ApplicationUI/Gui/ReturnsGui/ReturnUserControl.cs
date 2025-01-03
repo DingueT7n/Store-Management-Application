@@ -641,6 +641,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
 
         private void btnPay_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (!(DgvِProducts.Rows.Count > 0))
                 return;
             if (!MsgHelper.ShowRefundDialog())

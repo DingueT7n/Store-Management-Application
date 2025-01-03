@@ -32,7 +32,6 @@
             OperationsflowLayoutPanel = new FlowLayoutPanel();
             btnAdd = new Button();
             btnEdit = new Button();
-            btnExit = new Button();
             gbInfoEmployee = new GroupBox();
             dtpJoined = new DateTimePicker();
             label5 = new Label();
@@ -59,7 +58,6 @@
             OperationsflowLayoutPanel.AutoScroll = true;
             OperationsflowLayoutPanel.Controls.Add(btnAdd);
             OperationsflowLayoutPanel.Controls.Add(btnEdit);
-            OperationsflowLayoutPanel.Controls.Add(btnExit);
             OperationsflowLayoutPanel.Dock = DockStyle.Bottom;
             OperationsflowLayoutPanel.Location = new Point(0, 233);
             OperationsflowLayoutPanel.Margin = new Padding(5);
@@ -93,18 +91,6 @@
             btnEdit.UseVisualStyleBackColor = true;
             btnEdit.Visible = false;
             btnEdit.Click += btnEdit_Click;
-            // 
-            // btnExit
-            // 
-            btnExit.Image = (Image)resources.GetObject("btnExit.Image");
-            btnExit.ImageAlign = ContentAlignment.MiddleLeft;
-            btnExit.Location = new Point(392, 3);
-            btnExit.Name = "btnExit";
-            btnExit.Size = new Size(100, 40);
-            btnExit.TabIndex = 7;
-            btnExit.Text = "      الخروج";
-            btnExit.UseVisualStyleBackColor = true;
-            btnExit.Click += btnExit_Click;
             // 
             // gbInfoEmployee
             // 
@@ -321,7 +307,6 @@
         private FlowLayoutPanel OperationsflowLayoutPanel;
         private Button btnAdd;
         private Button btnEdit;
-        private Button btnExit;
         private GroupBox gbInfoEmployee;
         private Label lblِCustomerId;
         private Label label13;

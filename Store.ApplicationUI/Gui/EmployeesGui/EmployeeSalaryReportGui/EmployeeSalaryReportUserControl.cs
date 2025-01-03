@@ -120,6 +120,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryReportGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 if (MsgHelper.ShowDeleteDialog())
                 {
                     for (int i = 0; i <= DgvSales.Rows.Count - 1; i++)

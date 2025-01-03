@@ -1,4 +1,6 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using System.Data;
+using DevExpress.Xpo;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.ProductsGui;
 using Store.Infrastructure.Data;
@@ -97,6 +99,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui
         private void btnAddSupplier_Click(object sender, EventArgs e)
         {
 
+            ToasterHelper.PlayNotificationSound();
             addSupplierrForm = AddSupplierForm.Instance(_main);
             addSupplierrForm.Show();
 
@@ -104,6 +107,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui
 
         private void btnEditSupplier_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (DgvِSupplier.Rows.Count > 0)
             {
                 if (addSupplierrForm == null || addSupplierrForm.IsDisposed)
@@ -127,6 +131,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui
 
         private void btnDeleteSupplier_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
                 suppliersRepository.DeleteAsync(DgvِSupplier.CurrentRow.Cells[6].Value.ToString());
@@ -135,9 +140,11 @@ namespace Store.ApplicationUI.Gui.SupplierGui
             }
             RefreshDgv();
         }
+        private List<Core.Entities.Suppliers.Supplier> data;
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             DgvِSupplier.DataSource = suppliersRepository.SearchAll(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِSupplier);
             txtSearch.Text = string.Empty;
@@ -145,7 +152,63 @@ namespace Store.ApplicationUI.Gui.SupplierGui
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             LoadData();
+        }
+
+        private async void btnExportSupplier_Click(object sender, EventArgs e)
+        {
+
+            data = await _context.Suppliers.ToListAsync();
+
+
+
+            LoadingForm.Instance(_main).Hide();
+
+            ExportExcel(data);
+        }
+        private void ExportExcel(List<Core.Entities.Suppliers.Supplier> data)
+        {
+            // Define Data Table
+            DataTable dataTable = new DataTable();
+
+            // Convert to Data Table
+            using (var reader = FastMember.ObjectReader.Create(data))
+            {
+                dataTable.Load(reader);
+            }
+
+            // Re-Set DataTable
+            dataTable = arrangedDataTable(dataTable);
+
+            // Send to export
+            ExcelHelper.Export(dataTable, "Suppliers");
+        }
+        private DataTable arrangedDataTable(DataTable dataTable)
+        {
+            dataTable.Columns["Id"].SetOrdinal(0);
+            dataTable.Columns["Id"].ColumnName = "معرف";
+
+            dataTable.Columns["SupplierName"].SetOrdinal(1);
+            dataTable.Columns["SupplierName"].ColumnName = "اسم المورد";
+
+
+            dataTable.Columns["Address"].SetOrdinal(2);
+            dataTable.Columns["Address"].ColumnName = "عنوان المورد";
+
+
+            dataTable.Columns["PhoneNumber"].SetOrdinal(3);
+            dataTable.Columns["PhoneNumber"].ColumnName = "رقم هاتف المورد";
+
+            dataTable.Columns["Notes"].SetOrdinal(4);
+            dataTable.Columns["Notes"].ColumnName = "الملاحظة";
+
+            dataTable.Columns["MaxDebtAllowed"].SetOrdinal(5);
+            dataTable.Columns["MaxDebtAllowed"].ColumnName = "اقصى دين";
+
+            dataTable.Columns["TotalDebts"].SetOrdinal(6);
+            dataTable.Columns["TotalDebts"].ColumnName = "مجموع الديون الغير مسددة";
+            return dataTable;
         }
     }
 }

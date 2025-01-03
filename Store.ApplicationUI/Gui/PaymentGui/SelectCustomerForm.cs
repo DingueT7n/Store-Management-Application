@@ -102,6 +102,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
 
         private void btnChooseCustomer_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (!dgvHelper.IsEmpty(DgvProducts))
                 if (PosForm.GetPosUserControl() is not null)
                 {

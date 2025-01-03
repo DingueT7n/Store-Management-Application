@@ -135,6 +135,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             LoadData();
         }
 
@@ -237,6 +238,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
 
         private void btnNext_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex == -1)
             {
                 cmbpagination.SelectedIndex = 0;  // Set to first page if no page is selected
@@ -257,6 +259,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
         private void btnPrev_Click(object sender, EventArgs e)
         {
 
+            ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex == -1)
             {
                 cmbpagination.SelectedIndex = 0;
@@ -271,6 +274,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
 
         private void cmbpagination_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex == -1)
             {
                 cmbpagination.SelectedIndex = 0;

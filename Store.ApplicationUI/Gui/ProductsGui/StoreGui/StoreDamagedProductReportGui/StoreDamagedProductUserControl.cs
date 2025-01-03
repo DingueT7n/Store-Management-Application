@@ -126,6 +126,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDamagedProductReport
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 if (MsgHelper.ShowDeleteDialog())
                 {
                     for (int i = 0; i <= DgvSales.Rows.Count - 1; i++)

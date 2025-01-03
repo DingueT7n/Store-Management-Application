@@ -32,10 +32,8 @@
             labelCopyright = new DevExpress.XtraEditors.LabelControl();
             labelStatus = new DevExpress.XtraEditors.LabelControl();
             peImage = new DevExpress.XtraEditors.PictureEdit();
-            peLogo = new DevExpress.XtraEditors.PictureEdit();
             progressBarControl = new DevExpress.XtraEditors.MarqueeProgressBarControl();
             ((System.ComponentModel.ISupportInitialize)peImage.Properties).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)peLogo.Properties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)progressBarControl.Properties).BeginInit();
             SuspendLayout();
             // 
@@ -44,7 +42,7 @@
             labelCopyright.Appearance.Font = new Font("Calibri", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             labelCopyright.Appearance.Options.UseFont = true;
             labelCopyright.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
-            labelCopyright.Location = new Point(48, 360);
+            labelCopyright.Location = new Point(327, 360);
             labelCopyright.Name = "labelCopyright";
             labelCopyright.Size = new Size(90, 15);
             labelCopyright.TabIndex = 6;
@@ -78,22 +76,6 @@
             peImage.Size = new Size(563, 238);
             peImage.TabIndex = 9;
             // 
-            // peLogo
-            // 
-            peLogo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            peLogo.EditValue = resources.GetObject("peLogo.EditValue");
-            peLogo.Location = new Point(254, 333);
-            peLogo.Name = "peLogo";
-            peLogo.Properties.AllowFocused = false;
-            peLogo.Properties.Appearance.BackColor = Color.Transparent;
-            peLogo.Properties.Appearance.Options.UseBackColor = true;
-            peLogo.Properties.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
-            peLogo.Properties.ShowMenu = false;
-            peLogo.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Squeeze;
-            peLogo.Size = new Size(273, 42);
-            peLogo.TabIndex = 8;
-            peLogo.Visible = false;
-            // 
             // progressBarControl
             // 
             progressBarControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
@@ -115,14 +97,12 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(565, 392);
             Controls.Add(peImage);
-            Controls.Add(peLogo);
             Controls.Add(labelStatus);
             Controls.Add(labelCopyright);
             Controls.Add(progressBarControl);
             Name = "SplashScreen";
             Padding = new Padding(1);
             ((System.ComponentModel.ISupportInitialize)peImage.Properties).EndInit();
-            ((System.ComponentModel.ISupportInitialize)peLogo.Properties).EndInit();
             ((System.ComponentModel.ISupportInitialize)progressBarControl.Properties).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -131,7 +111,6 @@
         #endregion
         private DevExpress.XtraEditors.LabelControl labelCopyright;
         private DevExpress.XtraEditors.LabelControl labelStatus;
-        private DevExpress.XtraEditors.PictureEdit peLogo;
         private DevExpress.XtraEditors.PictureEdit peImage;
         private DevExpress.XtraEditors.MarqueeProgressBarControl progressBarControl;
     }

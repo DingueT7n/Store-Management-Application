@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Globalization;
+using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Buys;
@@ -318,6 +319,78 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
         {
             ToasterHelper.PlayNotificationSound();
             LoadData();
+        }
+
+        private async void btnDeleteCurrentPage_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (MsgHelper.ShowDeleteDialog())
+            {
+                for (int i = 0; i < DgvBuys.Rows.Count; i++)
+                {
+
+                    Buy buy = _context.Buys.FirstOrDefault(x => x.Id.ToString() == DgvBuys.Rows[i].Cells[0].Value.ToString());
+                    _context.Remove(buy);
+                    await _context.SaveChangesAsync();
+                }
+                Code.Helper.ToasterHelper.ShowDeletedToast();
+
+                LoadData();
+
+            }
+        }
+
+        private async void btnDeleteReportsInPeriod_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (MsgHelper.ShowDeleteDialog())
+            {
+                try
+                {
+                    var query = _context.Buys
+                        .Where(x => dtpFrom.Value <= x.Date && x.Date <= dtpTo.Value)
+                        .ToList();
+
+                    if (query.Any())
+                    {
+                        _context.Buys.RemoveRange(query);
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+
+                        MessageBox.Show("لا توجد بيانات في الفترة المحددة", "معلومة", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    LoadData();
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
+
+                }
+                catch (Exception ex)
+                {
+                    // Handle or log the exception
+                    MessageBox.Show($"لقد حدث خطأ : {ex.Message}", "خطأ برمجي", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void btnDeleteAllReports_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (MsgHelper.ShowDeleteDialog())
+            {
+                try
+                {
+                    _context.Database.ExecuteSqlRaw($"DELETE FROM [Buys]");
+                    LoadData();
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
+
+                }
+                catch (Exception ex)
+                {
+                    // Handle or log the exception
+                    MessageBox.Show($"لقد حدث خطأ : {ex.Message}", "خطأ برمجي", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

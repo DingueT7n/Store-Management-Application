@@ -172,19 +172,20 @@
             button1.TextAlign = ContentAlignment.MiddleRight;
             button1.UseVisualStyleBackColor = true;
             button1.Visible = false;
+            button1.Click += button1_Click;
             // 
             // btnExportProduct
             // 
             btnExportProduct.Anchor = AnchorStyles.None;
             btnExportProduct.Image = (Image)resources.GetObject("btnExportProduct.Image");
             btnExportProduct.ImageAlign = ContentAlignment.MiddleLeft;
-            btnExportProduct.Location = new Point(57, 3);
+            btnExportProduct.Location = new Point(64, 3);
             btnExportProduct.Name = "btnExportProduct";
-            btnExportProduct.Size = new Size(100, 40);
+            btnExportProduct.Size = new Size(93, 40);
             btnExportProduct.TabIndex = 6;
             btnExportProduct.Text = "   تصدير";
             btnExportProduct.UseVisualStyleBackColor = true;
-            btnExportProduct.Visible = false;
+            btnExportProduct.Click += btnExportProduct_Click;
             // 
             // SearchPanel
             // 

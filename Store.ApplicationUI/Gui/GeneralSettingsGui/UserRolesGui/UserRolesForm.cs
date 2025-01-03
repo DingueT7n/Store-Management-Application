@@ -178,6 +178,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (txtUserName.Text.IsNullOrEmpty() || txtPassowrd.Text.IsNullOrEmpty())
             {
                 MsgHelper.ShowRequiredFields();
@@ -255,6 +256,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
         }
         private void btnEdit_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowEditDialog())
             {
                 if (Dgv.SelectedRows.Count > 0)
@@ -278,6 +280,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
         }
         private void btnDelete_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
                 if (Dgv.SelectedRows.Count > 0)
@@ -352,6 +355,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             Dgv.DataSource = _context.Users.Where(x => x.Id.ToString() == txtSearch.Text ||
            x.UserName == (txtSearch.Text)).ToList();
             lblEmptyData.Visible = dgvHelper.IsEmpty(Dgv);
@@ -360,6 +364,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             btnAdd.Enabled = true;
             vider();
             btnEdit.Enabled = false;
@@ -419,6 +424,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 var user = _context.UserSettings.FirstOrDefault(x => x.User_Id.ToString() == cmbUserGS.SelectedValue.ToString());
                 if (user != null)
                 {
@@ -478,6 +484,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 var user = _context.UserProductsAndStores.FirstOrDefault(x => x.User_Id.ToString() == cmbUserPs.SelectedValue.ToString());
                 if (user != null)
                 {
@@ -530,6 +537,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 var user = _context.UserCustomers.FirstOrDefault(x => x.User_Id.ToString() == cmbUserCustomers.SelectedValue.ToString());
                 if (user != null)
                 {
@@ -579,6 +587,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 var user = _context.UserSuppliers.FirstOrDefault(x => x.User_Id.ToString() == cmbSuppliers.SelectedValue.ToString());
                 if (user != null)
                 {
@@ -620,6 +629,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 var user = _context.UserBuys.FirstOrDefault(x => x.User_Id.ToString() == cmbBuys.SelectedValue.ToString());
                 if (user != null)
                 {
@@ -659,6 +669,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 var user = _context.UserSales.FirstOrDefault(x => x.User_Id.ToString() == cmbSales.SelectedValue.ToString());
                 if (user != null)
                 {
@@ -681,6 +692,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 var user = _context.UserCaissesAndBanks.FirstOrDefault(x => x.User_Id.ToString() == cmbCaisseAndBanks.SelectedValue.ToString());
                 if (user != null)
                 {
@@ -746,6 +758,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 var user = _context.UserDeservedAndTaxs.FirstOrDefault(x => x.User_Id.ToString() == cmbDeservedAndTax.SelectedValue.ToString());
                 if (user != null)
                 {
@@ -783,6 +796,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 var user = _context.UserRefunds.FirstOrDefault(x => x.User_Id.ToString() == cmbRefund.SelectedValue.ToString());
                 if (user != null)
                 {
@@ -826,6 +840,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 var user = _context.UserEmployees.FirstOrDefault(x => x.User_Id.ToString() == cmbEmployee.SelectedValue.ToString());
                 if (user != null)
                 {

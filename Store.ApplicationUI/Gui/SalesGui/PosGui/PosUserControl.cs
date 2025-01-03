@@ -254,6 +254,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             {
                 SetProductsToTable();
                 AddNewRow();
+                CalculateAmount();
+                CalculateStatistics();
                 txtSearchBarCode.Clear();
                 return;
             }
@@ -295,11 +297,11 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         }
         public void InitializeTextBoxesAndLables(Product product)
         {
-
+            var idstore = Properties.Settings.Default.FastSaleStore;
             ProductDiscount productDiscount = _context.ProductDiscounts.
-                Where(x => x.Id.ToString() == product.Id.ToString() && x.Quentity > 0
+                Where(x => x.Pro_Id.ToString() == product.Id.ToString() && x.Quentity > 0
 
-                && x.Store_Id == Properties.Settings.Default.FastSaleStore
+                && x.Store_Id == idstore
                 && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
                 ).FirstOrDefault();
             txtProductName.Text = product.ProductName;
@@ -367,7 +369,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                      && txtSaleDiscount.Text != string.Empty)
                 {
                     ProductDiscount productDiscount = _context.ProductDiscounts.
-              Where(x => x.Id.ToString() == _product.Id.ToString() && x.Quentity >= ConvertToFloat(txtQty.Text)
+              Where(x => x.Pro_Id.ToString() == _product.Id.ToString() && x.Quentity >= ConvertToFloat(txtQty.Text)
 
               && x.Store_Id == Properties.Settings.Default.FastSaleStore
               && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
@@ -435,11 +437,11 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                         if (DgvِProducts.Rows[i].Cells[5].Value.ToString() == _product.Id.ToString())
                         {
                             ProductDiscount productDiscount = _context.ProductDiscounts.
-              Where(x => x.Id == _product.Id && x.Quentity >= (ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()) + 1)
+                      Where(x => x.Pro_Id == _product.Id && x.Quentity >= (ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()) + 1)
 
-              && x.Store_Id == Properties.Settings.Default.FastSaleStore
-              && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
-              ).FirstOrDefault();
+                      && x.Store_Id == Properties.Settings.Default.FastSaleStore
+                      && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
+                      ).FirstOrDefault();
 
 
                             if (productDiscount != null && btnPrices.Text == "سعر 1")
@@ -455,10 +457,16 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                               (ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()) + _product.NbrProductInColis).ToString() : (ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()) + 1).ToString();
                             DgvِProducts.Rows[i].Cells[4].Value = (ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()) *
                                 ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString())).ToString();
+                            decimal Discount = Convert.ToDecimal(DgvِProducts.Rows[i].Cells[3].Value.ToString());
+                            decimal Amount = Convert.ToDecimal(DgvِProducts.Rows[i].Cells[4].Value.ToString());
+                            decimal TotalAmount = Amount - (Amount * (Discount / 100));
+                            TotalAmount = Math.Round(TotalAmount, 2);
 
+                            DgvِProducts.Rows[i].Cells[4].Value = TotalAmount;
                             txtSearchBarCode.Focus();
                             ClearBoxes();
                             CalculateStatistics();
+                            CalculateAmount();
                             txtSearchBarCode.Clear();
 
                             return;
@@ -512,6 +520,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         }
         public void EditUsingPlusMinus(object sender, KeyEventArgs e)
         {
+
             if (e.KeyCode == Keys.Oemplus)
             {
                 EditFromTable(1);
@@ -704,7 +713,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 txtSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[1].Value.ToString();
 
                 ProductDiscount productDiscount = _context.ProductDiscounts.
-               Where(x => x.Id == _product.Id && x.Quentity > 0
+               Where(x => x.Pro_Id == _product.Id && x.Quentity > 0
 
                && x.Store_Id == Properties.Settings.Default.FastSaleStore
                && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
@@ -746,6 +755,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
         private void btnEditSelected_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (DgvِProducts.Rows.Count > 0)
             {
                 BringTofront(true);
@@ -795,6 +805,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         }
         private void btnDeleteSelected_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             DeleteItemFromDgv();
         }
 
@@ -834,6 +845,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
         private void btnSearchImage_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             SelectProductsForm selectProductsForm = SelectProductsForm.Instance(_posForm);
             selectProductsForm.Show();
         }
@@ -922,7 +934,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             }
 
             ProductDiscount productDiscount = _context.ProductDiscounts.
-                Where(x => x.Id.ToString() == product.Id.ToString() && x.Quentity > 0
+                Where(x => x.Pro_Id.ToString() == product.Id.ToString() && x.Quentity > 0
 
                 && x.Store_Id == Properties.Settings.Default.FastSaleStore
                 && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
@@ -1043,6 +1055,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
         private async void btnPay_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (!dgvHelper.IsEmpty(DgvِProducts))
                 await PayNowAsync(false);
 
@@ -1085,15 +1098,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                     {
                         try
                         {
-                            if (IdCustomer.Text != Properties.Settings.Default.IdCustomerSale)
-                            {
-                                var customer = _context.Customers.FirstOrDefault(x => x.Id.ToString() == IdCustomer.Text);
-                                if (customer.MaxDebtAllowed < customer.TotalDebts + Remain)
-                                {
-                                    MsgHelper.ShowMaxDebtAllowedExceeded();
-                                    return;
-                                }
-                            }
+
                             var sale = SetSale();
                             await _context.AddAsync(sale);
                             await _context.SaveChangesAsync();
@@ -1204,16 +1209,17 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                             _context.Update(SetProductRefund(i, DgvِProducts.Rows[i].Cells[5].Value.ToString()));
                             SetProductQuentityRefund(i, _context);
                         }
-                        if (PaidUp >= TotalFacture)
-                        {
 
-                            SetCaisseSaleRefund(TotalFacture, _context);
-                            _context.CaissesWithdraws.Add(SetCaisseWithdraw(TotalFacture, _context));
-                            _context.SaveChanges();
-                        }
+
+                        SetCaisseSaleRefund(TotalFacture, _context);
+                        _context.CaissesWithdraws.Add(SetCaisseWithdraw(TotalFacture, _context));
+                        _context.SaveChanges();
+
 
                         transaction.Commit();
-                        ResetForm();
+                        Code.Helper.ToasterHelper.ShowAddedRefund();
+
+                        CleanForm();
 
                     }
                     catch (Exception ex)
@@ -1369,12 +1375,14 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         }
         private void btnChoseCustomer_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             SelectCustomerForm SelectCustomerForm = SelectCustomerForm.Instance(_posForm);
             SelectCustomerForm.Show();
         }
 
         private async void button1_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (!dgvHelper.IsEmpty(DgvِProducts))
                 await PayNowAsync(true);
 
@@ -1382,6 +1390,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
         private void btnPrices_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (btnPrices.Text == "سعر 1")
             {
                 btnPrices.BackColor = Color.Yellow;

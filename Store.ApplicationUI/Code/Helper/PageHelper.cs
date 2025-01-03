@@ -53,6 +53,7 @@ namespace Store.ApplicationUI.Code.Helper
         }
         public static void SetOperation(UserControl pageUserControl, CaisseDetailsForm detailsForm)
         {
+            if (Code.Models.LocalUser.User is null) return;
             ToasterHelper.PlayNotificationSound();
             var oldPage = detailsForm.panelUserControls.Controls.OfType<UserControl>().FirstOrDefault();
 

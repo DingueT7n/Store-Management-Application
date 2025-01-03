@@ -1,6 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Entities.Caisses;
 using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.CaisseAndBankGui
@@ -167,6 +168,19 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
                         _context.Remove(caisse);
                         _context.SaveChanges();
                         Code.Helper.ToasterHelper.ShowDeletedToast();
+                    }
+                    if (_context.Caisses.Count() < 1)
+                    {
+                        var val = new Caisse
+                        {
+                            CaisseName = "الصندوق الاول",
+                            MoneyinCaisse = 0
+                        };
+                        _context.Add(val);
+                        _context.SaveChanges();
+
+                        Properties.Settings.Default.DefaultCaisseId = val.Id;
+                        Properties.Settings.Default.Save();
                     }
                 }
                 RefreshDgv();

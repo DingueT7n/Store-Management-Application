@@ -1,6 +1,9 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using System.Data;
+using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.ProductsGui;
+using Store.Core.Entities.Customers;
 using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
@@ -150,6 +153,22 @@ namespace Store.ApplicationUI.Gui.CustomersGui
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
                 }
+                if (_context.Customers.Count() < 1)
+                {
+                    var cust = new Customer
+                    {
+                        CustomerName = "مشتري عادي",
+                        MaxDebtAllowed = 0,
+                        TotalDebts = 0,
+
+                    };
+                    _context.Add(cust);
+                    _context.SaveChanges();
+
+                    Properties.Settings.Default.DefaultCustomerSale = Properties.Settings.Default.IdCustomerSale = cust.Id.ToString();
+
+                    Properties.Settings.Default.Save();
+                }
                 RefreshDgv();
             }
             catch (Exception ex)
@@ -159,12 +178,68 @@ namespace Store.ApplicationUI.Gui.CustomersGui
             }
 
         }
+        private List<Core.Entities.Customers.Customer> data;
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
             DgvِCustomer.DataSource = customersRepository.SearchAll(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
             txtSearch.Text = string.Empty;
+        }
+
+        private async void btnExportCustomer_Click(object sender, EventArgs e)
+        {
+
+            data = await _context.Customers.ToListAsync();
+
+
+
+            LoadingForm.Instance(_main).Hide();
+
+            ExportExcel(data);
+        }
+        private void ExportExcel(List<Core.Entities.Customers.Customer> data)
+        {
+            // Define Data Table
+            DataTable dataTable = new DataTable();
+
+            // Convert to Data Table
+            using (var reader = FastMember.ObjectReader.Create(data))
+            {
+                dataTable.Load(reader);
+            }
+
+            // Re-Set DataTable
+            dataTable = arrangedDataTable(dataTable);
+
+            // Send to export
+            ExcelHelper.Export(dataTable, "Customers");
+        }
+        private DataTable arrangedDataTable(DataTable dataTable)
+        {
+            dataTable.Columns["Id"].SetOrdinal(0);
+            dataTable.Columns["Id"].ColumnName = "معرف";
+
+            dataTable.Columns["CustomerName"].SetOrdinal(1);
+            dataTable.Columns["CustomerName"].ColumnName = "اسم العميل";
+
+
+            dataTable.Columns["Address"].SetOrdinal(2);
+            dataTable.Columns["Address"].ColumnName = "عنوان العميل";
+
+
+            dataTable.Columns["PhoneNumber"].SetOrdinal(3);
+            dataTable.Columns["PhoneNumber"].ColumnName = "رقم هاتف العميل";
+
+            dataTable.Columns["Notes"].SetOrdinal(4);
+            dataTable.Columns["Notes"].ColumnName = "الملاحظة";
+
+            dataTable.Columns["MaxDebtAllowed"].SetOrdinal(5);
+            dataTable.Columns["MaxDebtAllowed"].ColumnName = "اقصى دين";
+
+            dataTable.Columns["TotalDebts"].SetOrdinal(6);
+            dataTable.Columns["TotalDebts"].ColumnName = "مجموع الديون الغير مسددة";
+            return dataTable;
         }
     }
 }

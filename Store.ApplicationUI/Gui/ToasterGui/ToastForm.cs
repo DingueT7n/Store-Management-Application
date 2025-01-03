@@ -61,9 +61,9 @@ namespace Store.ApplicationUI.Gui.ToasterGui
                 _player.MediaEnded += (s, e) => _player.Close(); // Cleanup after playback
                 _player.Play();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show($"Error playing sound: {ex.Message}");
+                //MessageBox.Show($"Error playing sound: {ex.Message}");
             }
         }
 

@@ -100,6 +100,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (addEmployeeForm == null || addEmployeeForm.IsDisposed)
             {
                 addEmployeeForm = AddEmployeeForm.Instance(_main);
@@ -113,6 +114,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (DgvِCustomer.Rows.Count > 0)
             {
                 if (addEmployeeForm == null || addEmployeeForm.IsDisposed)
@@ -144,6 +146,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 if (MsgHelper.ShowDeleteDialog())
                 {
                     var customer = employeesRepository.DeleteAsync(DgvِCustomer.CurrentRow.Cells[7].Value.ToString());
@@ -163,6 +166,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             DgvِCustomer.DataSource = employeesRepository.SearchAll(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
             txtSearch.Text = string.Empty;

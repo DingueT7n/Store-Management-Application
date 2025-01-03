@@ -92,36 +92,78 @@ namespace Store.Infrastructure.Repositories
         }
         public bool TransactionOfSupplierDebt(string order_Id, string sup_Id, string price, string sup_Name, DateTime date)
         {
-            _context = new ApplicationDbContext();
-            using (var transaction = _context.Database.BeginTransaction())
+            try
             {
-                try
+                using (var context = new ApplicationDbContext())
                 {
-                    Supplier supplier = _context.Suppliers.Where(x => x.Id.ToString() == sup_Id).FirstOrDefault();
-                    if (supplier is not null)
+                    using (var transaction = context.Database.BeginTransaction())
                     {
-                        supplier.TotalDebts = supplier.TotalDebts - ConvertToFloat(price);
-                    }
-                    _context.Update(supplier);
-                    _context.SaveChanges();
+                        try
+                        {
+                            // Validate inputs
+                            if (!decimal.TryParse(price, out decimal parsedPrice))
+                            {
+                                throw new ArgumentException("Invalid price format.");
+                            }
+                            if (!int.TryParse(sup_Id, out int supplierId))
+                            {
+                                throw new ArgumentException("Invalid supplier ID format.");
+                            }
+                            if (!int.TryParse(order_Id, out int orderId))
+                            {
+                                throw new ArgumentException("Invalid order ID format.");
+                            }
 
-                    DeleteFacture(order_Id, sup_Id, price);
-                    SupplierReport supplierReport = new SupplierReport();
-                    supplierReport.Sup_ID = Convert.ToInt32(sup_Id);
-                    supplierReport.SupplierName = sup_Name;
-                    supplierReport.Date = date;
-                    supplierReport.Order_ID = Convert.ToInt32(order_Id);
-                    supplierReport.Price = ConvertToFloat(price);
-                    supplierReport.Time = DateTime.Now.ToString("HH:mm");
-                    _context.Add(supplierReport);
-                    _context.SaveChanges();
-                    transaction.CommitAsync();
-                    return true;
+                            // Fetch supplier
+                            Supplier supplier = context.Suppliers.FirstOrDefault(x => x.Id == supplierId);
+                            if (supplier == null)
+                            {
+                                throw new InvalidOperationException("Supplier not found.");
+                            }
+
+                            // Update supplier debts
+                            supplier.TotalDebts -= parsedPrice;
+                            context.Update(supplier);
+                            context.SaveChanges();
+
+
+                            // Delete facture
+                            if (!DeleteFacture(order_Id, sup_Id, price))
+                            {
+                                throw new InvalidOperationException("Failed to delete facture.");
+                            }
+
+                            // Add supplier report
+                            var supplierReport = new SupplierReport
+                            {
+                                Sup_ID = supplierId,
+                                SupplierName = sup_Name,
+                                Date = date,
+                                Order_ID = orderId,
+                                Price = parsedPrice,
+                                Time = DateTime.Now.ToString("HH:mm")
+                            };
+                            context.SuppliersReports.Add(supplierReport);
+                            context.SaveChanges();
+
+                            transaction.Commit();
+                            return true;
+                        }
+                        catch (Exception ex)
+                        {
+                            // Log exception details
+                            transaction.Rollback();
+                            Console.WriteLine($"Error: {ex.Message}");
+                            return false;
+                        }
+                    }
                 }
-                catch
-                {
-                    return false;
-                }
+            }
+            catch (Exception ex)
+            {
+                // Log exception details
+                Console.WriteLine($"Error: {ex.Message}");
+                return false;
             }
         }
         public bool UpdateFacture(string order_Id, string sup_Id, string price, string PayedValue)
@@ -181,6 +223,7 @@ namespace Store.Infrastructure.Repositories
                 }
                 catch
                 {
+                    transaction.Rollback();
                     return false;
                 }
             }

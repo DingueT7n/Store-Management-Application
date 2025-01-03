@@ -1,4 +1,5 @@
-﻿using Store.ApplicationUI.Gui.BuysGui;
+﻿using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Gui.BuysGui;
 using Store.ApplicationUI.Gui.SalesGui;
 using Store.ApplicationUI.Gui.SalesGui.PosGui;
 
@@ -37,10 +38,12 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         private void button1_Click(object sender, EventArgs e)
         {
 
+            ToasterHelper.PlayNotificationSound();
             this.Close();
         }
         private void btnSearchImage_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (Convert.ToDecimal(txtRemain.Text) + Convert.ToDecimal(txtpaidUp.Text) >= Convert.ToDecimal(txtFacturePrice.Text))
             {
                 if (this._form == 1)

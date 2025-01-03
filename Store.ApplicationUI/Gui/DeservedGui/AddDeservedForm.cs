@@ -1,6 +1,7 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.AllDeserved;
+using Store.Core.Entities.Caisses;
 using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
@@ -29,14 +30,20 @@ namespace Store.ApplicationUI.Gui.DeservedGui
         public static AddDeservedForm Instance(MainForm main)
         {
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
 
-
-            _adddeservedForm = new AddDeservedForm(_main);
-
-
-
-            // Return the singleton instance
+            if (_adddeservedForm == null || _adddeservedForm.IsDisposed)
+            {
+                _adddeservedForm = new AddDeservedForm(main);
+            }
+            else
+            {
+                // Bring the form to the front if it exists.
+                if (!_adddeservedForm.Visible)
+                {
+                    _adddeservedForm.Show();
+                }
+                _adddeservedForm.BringToFront();
+            }
 
             return _adddeservedForm;
         }
@@ -127,7 +134,68 @@ namespace Store.ApplicationUI.Gui.DeservedGui
             lblDeservedID.Visible = true;
             label13.Visible = true;
         }
+        Caisse SetCaisse(decimal value)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
 
+            Caisse caisse = _context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefault();
+            if (caisse is not null)
+            {
+                caisse.MoneyinCaisse -= value;
+            }
+            return caisse is not null ? caisse : new Caisse { CaisseName = "CaisseNull", MoneyinCaisse = -value };
+
+        }
+        Caisse SetCaissedepos(decimal value)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+
+            Caisse caisse = _context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefault();
+            if (caisse is not null)
+            {
+                caisse.MoneyinCaisse += value;
+            }
+            return caisse is not null ? caisse : new Caisse { CaisseName = "CaisseNull", MoneyinCaisse = -value };
+
+        }
+        CaisseWithdraw SetCaisseWithdraw(decimal value)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+
+
+            var caisseWithdraw = new CaisseWithdraw
+            {
+                Caisse_ID = Properties.Settings.Default.DefaultCaisseId,
+                Time = DateTime.Now.ToString("HH:mm"),
+                Date = DateTime.Now,
+                Name = $"{Properties.Settings.Default.UserName}",
+                Money = value,
+                Reason = $"مصروفة {CMBType.Text}",
+                Type = "سحب عن طريق مصروفة"
+            };
+
+            return caisseWithdraw;
+
+        }
+        CaisseDeposit SetCaisseDeposit(decimal value)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+
+
+            var caisseWithdraw = new CaisseDeposit
+            {
+                Caisse_ID = Properties.Settings.Default.DefaultCaisseId,
+                Time = DateTime.Now.ToString("HH:mm"),
+                Date = DateTime.Now,
+                Name = $"{Properties.Settings.Default.UserName}",
+                Money = value,
+                Reason = $"مصروفة {CMBType.Text}",
+                Type = "ايداع عن طريق مصروفة"
+            };
+
+            return caisseWithdraw;
+
+        }
         private void btnAddDeserved_Click(object sender, EventArgs e)
         {
             try
@@ -147,6 +215,9 @@ namespace Store.ApplicationUI.Gui.DeservedGui
                         Time = DateTime.Now.ToString("HH:mm:ss"),
                     });
                     _context.SaveChanges();
+                    _context.Update(SetCaisse(Convert.ToDecimal(txtValueDeserved.Text)));
+                    _context.Add(SetCaisseWithdraw(Convert.ToDecimal(txtValueDeserved.Text)));
+
                     Code.Helper.ToasterHelper.ShowAddToast();
 
                     if (!DeservedUserControl.CheckInstance())
@@ -168,19 +239,32 @@ namespace Store.ApplicationUI.Gui.DeservedGui
         {
             try
             {
-
+                decimal value = Convert.ToDecimal(txtValueDeserved.Text);
                 ToasterHelper.PlayNotificationSound();
 
                 Deserved deserved = _context.Deserveds.FirstOrDefault(x => x.Id.ToString() == lblDeservedID.Text);
+
                 if (deserved != null)
                 {
+                    if (deserved.Price > Convert.ToDecimal(txtValueDeserved.Text))
+                    {
+                        value = deserved.Price - Convert.ToDecimal(txtValueDeserved.Text);
+                        _context.Update(SetCaissedepos(value));
+                        _context.Add(SetCaisseDeposit(value));
+                    }
+                    else if (deserved.Price < Convert.ToDecimal(txtValueDeserved.Text))
+                    {
+                        value = Convert.ToDecimal(txtValueDeserved.Text) - deserved.Price;
+                        _context.Update(SetCaisse(value));
+                        _context.Add(SetCaisseWithdraw(value));
+                    }
                     deserved.TypeId = Convert.ToInt32(CMBType.SelectedValue);
                     deserved.UserName = txtUserName.Text;
                     deserved.Price = Convert.ToDecimal(txtValueDeserved.Text);
                     deserved.Date = DtpExperation.Value;
                     deserved.Notes = txtNotes.Text;
                     _context.Update(deserved);
-                    await _context.SaveChangesAsync();
+                    _context.SaveChanges();
                     Code.Helper.ToasterHelper.ShowEditToast();
 
                     if (!DeservedUserControl.CheckInstance())

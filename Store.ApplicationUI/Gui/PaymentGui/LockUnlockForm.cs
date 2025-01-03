@@ -1,4 +1,6 @@
-﻿namespace Store.ApplicationUI.Gui.PaymentGui
+﻿using Store.ApplicationUI.Code.Helper;
+
+namespace Store.ApplicationUI.Gui.PaymentGui
 {
     public partial class LockUnlockForm : Form
     {
@@ -18,6 +20,7 @@
             //{
             //    Close();
             //}
+            ToasterHelper.PlayNotificationSound();
             if (maskedTextBox1.Text == Code.Models.LocalUser.User.Password && maskedTextBox2.Text == Code.Models.LocalUser.User.UserName)
             {
                 Close();

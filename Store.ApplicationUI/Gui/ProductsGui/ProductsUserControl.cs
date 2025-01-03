@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Data;
+using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.ProductsGui.Category;
@@ -51,6 +52,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void btnAddProduct_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (addProductForm == null || addProductForm.IsDisposed)
             {
                 addProductForm = AddProductForm.Instance(_main);
@@ -175,12 +177,14 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             LoadData();
 
         }
 
         private void btnEditProduct_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (DgvProducts.Rows.Count > 0)
             {
                 if (addProductForm == null || addProductForm.IsDisposed)
@@ -221,6 +225,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void btnDeleteProduct_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
                 productsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[15].Value.ToString());
@@ -240,6 +245,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void btnAddCategory_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (addCategoryForm == null || addCategoryForm.IsDisposed)
             {
                 addCategoryForm = new AddCategoryForm(_main);
@@ -253,6 +259,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void btnAddStore_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (addStoreForm == null || addStoreForm.IsDisposed)
             {
                 addStoreForm = new(_main);
@@ -266,6 +273,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void btnAddSimilareProduct_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (DgvProducts.Rows.Count > 0)
             {
                 if (addProductForm == null || addProductForm.IsDisposed)
@@ -311,6 +319,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         }
         private void btnNext_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1)
             {
                 cmbpagination.SelectedIndex++;
@@ -322,6 +331,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void btnPrev_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex > 0)
             {
                 cmbpagination.SelectedIndex--;
@@ -333,11 +343,107 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void cmbpagination_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex != -1)
             {
                 int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
                 SetProductsToDgv(skip);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+        private List<Core.Entities.Products.Product> data;
+        private async void btnExportProduct_Click(object sender, EventArgs e)
+        {
+
+            data = await _context.Products.Include(x => x.Category).ToListAsync();
+
+
+
+            LoadingForm.Instance(_main).Hide();
+
+            ExportExcel(data);
+
+
+        }
+        private void ExportExcel(List<Core.Entities.Products.Product> data)
+        {
+
+            DataTable dataTable = new DataTable();
+
+
+            using (var reader = FastMember.ObjectReader.Create(data))
+            {
+                dataTable.Load(reader);
+            }
+
+
+            dataTable = arrangedDataTable(dataTable);
+
+
+            ExcelHelper.Export(dataTable, "Products");
+        }
+        private DataTable arrangedDataTable(DataTable dataTable)
+        {
+            dataTable.Columns["Id"].SetOrdinal(0);
+            dataTable.Columns["Id"].ColumnName = "معرف";
+
+            dataTable.Columns["CodeBar"].SetOrdinal(1);
+            dataTable.Columns["CodeBar"].ColumnName = "الباركود";
+
+
+            dataTable.Columns["ProductName"].SetOrdinal(2);
+            dataTable.Columns["ProductName"].ColumnName = "اسم المستخدم";
+
+
+            dataTable.Columns["Quentity"].SetOrdinal(3);
+            dataTable.Columns["Quentity"].ColumnName = "الكمية";
+
+            dataTable.Columns["BuyPrice"].SetOrdinal(4);
+            dataTable.Columns["BuyPrice"].ColumnName = "سعر الشراء";
+
+            dataTable.Columns["SalePrice"].SetOrdinal(5);
+            dataTable.Columns["SalePrice"].ColumnName = "سعر البيع";
+
+            dataTable.Columns["WholesalePrice"].SetOrdinal(6);
+            dataTable.Columns["WholesalePrice"].ColumnName = "سعر الجملة";
+
+            dataTable.Columns["DateExperation"].SetOrdinal(7);
+            dataTable.Columns["DateExperation"].ColumnName = "تاريخ انتهاء الصلاحية";
+
+
+            dataTable.Columns["MinQty"].SetOrdinal(8);
+            dataTable.Columns["MinQty"].ColumnName = "كمية التنبيه";
+
+
+            dataTable.Columns["Category"].SetOrdinal(9);
+            dataTable.Columns["Category"].ColumnName = "الصنف";
+
+
+            dataTable.Columns["IsTaxed"].SetOrdinal(10);
+            dataTable.Columns["IsTaxed"].ColumnName = "عليه ضريبة";
+
+
+            dataTable.Columns["NbrProductInColis"].SetOrdinal(11);
+            dataTable.Columns["NbrProductInColis"].ColumnName = "عدد المنتجات في الكرتونة";
+
+            dataTable.Columns["ColisageBareCode"].SetOrdinal(12);
+            dataTable.Columns["ColisageBareCode"].ColumnName = "باركود الكرتونة";
+
+
+
+            // Removed columns
+            dataTable.Columns.Remove("ProductImage");
+            dataTable.Columns.Remove("CategoryId");
+            dataTable.Columns.Remove("ProductFamilies");
+            dataTable.Columns.Remove("MaxDiscount");
+            dataTable.Columns.Remove("TaxValue");
+            dataTable.Columns.Remove("SalePriceSeconde");
+
+            return dataTable;
         }
     }
 }

@@ -299,6 +299,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
 
         private void btnNext_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex == -1)
             {
                 cmbpagination.SelectedIndex = 0;  // Set to first page if no page is selected
@@ -313,6 +314,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
 
         private void btnPrev_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex == -1)
             {
                 cmbpagination.SelectedIndex = 0;
@@ -327,6 +329,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
 
         private void cmbpagination_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex == -1)
             {
                 cmbpagination.SelectedIndex = 0;
@@ -344,6 +347,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
 
         private async void btnDeleteCurrentPage_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
                 for (int i = 0; i < DgvSalesProfit.Rows.Count; i++)
@@ -361,6 +365,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
 
         private async void btnDeleteReportsInPeriod_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
                 try
@@ -393,6 +398,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
 
         private void btnDeleteAllReports_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
                 try
@@ -414,6 +420,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 if (DgvSalesProfit.SelectedRows.Count > 0)
                 {
                     DataTable ProfitDetailsTable = await FactureHelper.GetProfitReportDataTableAsync(dtpFrom.Value, dtpTo.Value);
@@ -435,6 +442,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 if (DgvSalesProfit.SelectedRows.Count > 0)
                 {
                     DataTable ProfitDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(Convert.ToInt32(DgvSalesProfit.CurrentRow.Cells[0].Value.ToString()));
@@ -449,6 +457,136 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
 
                 throw;
             }
+        }
+
+
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            var result =
+
+                  _context.SalesProfits
+                   .Include(bd => bd.Sale)
+                   .Include(bd => bd.Product)
+                   .AsEnumerable()
+                   //.Where(bd =>
+                   //    bd.Customer.CustomerName.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
+                   //    bd.Order_ID.ToString() == searchItem)
+                   .OrderByDescending(bd => bd.Sale.Id)
+
+                   .Select(bd => new SaleProfitDto
+                   {
+                       Order_ID = bd.Order_ID,
+                       Pro_ID = bd.Pro_ID,
+                       ProductName = bd.Product.ProductName,    // Assuming `ProductName` is correct
+                       Cust_Name = bd.Cust_Name, // Assuming `SupplierName` is correct
+                       Tax_Value = bd.Tax_Value,
+                       Quentity = bd.Quentity,
+                       Price = bd.Price,
+                       Buy_Price = bd.Buy_Price,
+                       Discount = bd.Discount,
+                       Total = bd.Total,
+                       profit = Convert.ToDecimal((bd.Total - (bd.Quentity * bd.Buy_Price))),
+                       TotalFacture = bd.Sale.TotalOrder,
+                       PaidUp = bd.Sale.PaidUP,
+                       Remain = bd.Sale.Remain,
+                       Time = bd.Time,
+                       date = bd.Sale.Date,
+                       Sallesman = bd.Sale.User_Name,
+                   })
+                   .ToList();
+
+
+
+
+
+
+            LoadingForm.Instance(_main).Hide();
+
+            ExportExcel(result);
+        }
+        private void ExportExcel(List<Core.Entities.Sales.SaleProfitDto> data)
+        {
+
+            DataTable dataTable = new DataTable();
+
+
+            using (var reader = FastMember.ObjectReader.Create(data))
+            {
+                dataTable.Load(reader);
+            }
+
+
+            dataTable = arrangedDataTable(dataTable);
+
+
+            ExcelHelper.Export(dataTable, "Sales Profit");
+        }
+        private DataTable arrangedDataTable(DataTable dataTable)
+        {
+            dataTable.Columns["Order_ID"].SetOrdinal(0);
+            dataTable.Columns["Order_ID"].ColumnName = "معرف الفاتورة";
+
+            dataTable.Columns["Pro_ID"].SetOrdinal(1);
+            dataTable.Columns["Pro_ID"].ColumnName = "معرف المنتج";
+
+
+            dataTable.Columns["ProductName"].SetOrdinal(2);
+            dataTable.Columns["ProductName"].ColumnName = "اسم المنتج";
+
+
+            dataTable.Columns["Cust_Name"].SetOrdinal(3);
+            dataTable.Columns["Cust_Name"].ColumnName = "اسم العميل";
+
+            dataTable.Columns["Tax_Value"].SetOrdinal(4);
+            dataTable.Columns["Tax_Value"].ColumnName = "قيمة الضريبة";
+
+            dataTable.Columns["Quentity"].SetOrdinal(5);
+            dataTable.Columns["Quentity"].ColumnName = "الكمية";
+
+            dataTable.Columns["Price"].SetOrdinal(6);
+            dataTable.Columns["Price"].ColumnName = "سعر البيع";
+
+            dataTable.Columns["Buy_Price"].SetOrdinal(7);
+            dataTable.Columns["Buy_Price"].ColumnName = "سعر الشراء";
+
+
+            dataTable.Columns["Discount"].SetOrdinal(8);
+            dataTable.Columns["Discount"].ColumnName = "التخفيض";
+
+
+            dataTable.Columns["Total"].SetOrdinal(9);
+            dataTable.Columns["Total"].ColumnName = "سعر المنتج الكلي";
+
+
+            dataTable.Columns["profit"].SetOrdinal(10);
+            dataTable.Columns["profit"].ColumnName = "الربح";
+
+
+            dataTable.Columns["TotalFacture"].SetOrdinal(11);
+            dataTable.Columns["TotalFacture"].ColumnName = "اجمالي الفاتورة";
+
+            dataTable.Columns["PaidUp"].SetOrdinal(12);
+            dataTable.Columns["PaidUp"].ColumnName = "المدفوع";
+
+
+
+
+            dataTable.Columns["Remain"].SetOrdinal(13);
+            dataTable.Columns["Remain"].ColumnName = "الباقي";
+
+            dataTable.Columns["Time"].SetOrdinal(14);
+            dataTable.Columns["Time"].ColumnName = "الوقت";
+
+            dataTable.Columns["date"].SetOrdinal(15);
+            dataTable.Columns["date"].ColumnName = "التاريخ";
+
+            dataTable.Columns["Sallesman"].SetOrdinal(16);
+            dataTable.Columns["Sallesman"].ColumnName = "البائع";
+
+            // Removed columns
+
+
+            return dataTable;
         }
     }
 }

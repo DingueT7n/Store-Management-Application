@@ -169,6 +169,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             {
 
 
+                ToasterHelper.PlayNotificationSound();
                 Supplier customer = new Supplier();
                 customer.SupplierName = txtNameSupplier.Text;
                 customer.Address = txtAddress.Text;
@@ -210,6 +211,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             {
 
 
+                ToasterHelper.PlayNotificationSound();
                 Supplier customer = _suppliersRepository.Find(lblِSupplierId.Text);
                 if (customer is not null)
                 {
@@ -237,6 +239,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         }
         private void button1_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             this.Close();
         }
     }

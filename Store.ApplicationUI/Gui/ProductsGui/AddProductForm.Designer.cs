@@ -602,6 +602,7 @@
             PbImageProduct.BorderStyle = BorderStyle.FixedSingle;
             PbImageProduct.Name = "PbImageProduct";
             PbImageProduct.TabStop = false;
+            PbImageProduct.Click += PbImageProduct_Click_1;
             // 
             // AddProductForm
             // 

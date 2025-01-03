@@ -99,6 +99,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
 
         private void btnExit_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             Close();
         }
 
@@ -127,6 +128,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
             {
 
 
+                ToasterHelper.PlayNotificationSound();
                 Employee Employee = new Employee();
                 Employee.EmployeeName = txtNameEmployee.Text;
                 Employee.Address = txtAddress.Text;
@@ -157,6 +159,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
             {
 
 
+                ToasterHelper.PlayNotificationSound();
                 Employee Employee = _employeesRepository.Find(lblِCustomerId.Text);
                 if (Employee is not null)
                 {

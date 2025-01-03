@@ -75,6 +75,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.TransferBetweenStoresGui
                 //No Connection
                 MsgHelper.ShowServerError();
             }
+            txtMaker.Text = Code.Models.LocalUser.User.UserName;
             //Hideloading
             LoadingForm.Instance(_main).Hide();
             // Show EmptyDAta
@@ -252,6 +253,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.TransferBetweenStoresGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 if (txtQtyTransfert.Text == string.Empty || txtProductName.Text == string.Empty)
                     return;
                 if (cmbStoresFrom.SelectedValue.ToString() == cmbStoreTo.SelectedValue.ToString())

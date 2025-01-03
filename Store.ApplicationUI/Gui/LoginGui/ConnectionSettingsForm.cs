@@ -1,4 +1,5 @@
-﻿using Store.Infrastructure.Data;
+﻿using Store.ApplicationUI.Code.Helper;
+using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.LoginGui
 {
@@ -19,6 +20,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
         private void button1_Click(object sender, EventArgs e)
         {
 
+            ToasterHelper.PlayNotificationSound();
             Properties.Settings.Default.Server = txtServer.Text;
             Properties.Settings.Default.DataBase = txtDb.Text;
 
@@ -53,6 +55,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
 
         private async void button2_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             string con;
 
 

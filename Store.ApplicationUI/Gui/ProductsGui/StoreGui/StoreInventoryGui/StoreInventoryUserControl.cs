@@ -180,6 +180,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
 
         private void button2_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (storeTransfertForm == null || storeTransfertForm.IsDisposed)
             {
                 storeTransfertForm = StoreTransfertForm.Instance(_main);
@@ -193,6 +194,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
 
         private void button1_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (storeDamagedProductForm == null || storeDamagedProductForm.IsDisposed)
             {
                 storeDamagedProductForm = StoreDamagedProductForm.Instance(_main);

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Store.Core.Entities.Buys;
 using Store.Core.Entities.Products;
 using Store.Core.Interfaces;
@@ -156,6 +157,7 @@ namespace Store.Infrastructure.Repositories
         {
             try
             {
+                if (barCode.IsNullOrEmpty()) { return null; }
 
                 var product = _context.Products.FirstOrDefault(x => x.CodeBar == barCode);
 
@@ -164,8 +166,6 @@ namespace Store.Infrastructure.Repositories
                 {
                     product = _context.Products.FirstOrDefault(x => x.ColisageBareCode == barCode);
                 }
-
-
                 if (product == null)
                 {
                     product = _context.ProductFamilies
@@ -173,8 +173,6 @@ namespace Store.Infrastructure.Repositories
                         .Select(x => x.Product)
                         .FirstOrDefault();
                 }
-
-
 
                 return product;
             }

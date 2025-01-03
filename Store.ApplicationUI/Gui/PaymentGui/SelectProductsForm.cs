@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Gui.BuysGui;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.SalesGui;
 using Store.ApplicationUI.Gui.SalesGui.PosGui;
@@ -32,7 +33,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         {
             _main = main;
             _selectProductsForm = new SelectProductsForm(_main);
-            _selectProductsForm._context = new ApplicationDbContext();
+
 
 
             _selectProductsForm.LoadData();
@@ -66,6 +67,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
 
         void AddProductToDgvIfNotExist(PictureBox pictureBox)
         {
+            ToasterHelper.PlayNotificationSound();
             int productId = 0;
             if (pictureBox != null)
             {
@@ -78,6 +80,14 @@ namespace Store.ApplicationUI.Gui.PaymentGui
             if (!SalesUserControl.CheckInstance())
             {
                 if (SalesUserControl.setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == productId)))
+                {
+
+                }
+
+            }
+            if (!BuysUserControl.CheckInstance())
+            {
+                if (BuysUserControl.setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == productId)))
                 {
 
                 }

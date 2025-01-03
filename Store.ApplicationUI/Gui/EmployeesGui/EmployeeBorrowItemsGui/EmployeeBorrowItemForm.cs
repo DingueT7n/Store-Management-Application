@@ -150,6 +150,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowItemsGui
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (_product is null) return;
             if (txtQty.Text == string.Empty) return;
             using (var transaction = _context.Database.BeginTransaction())

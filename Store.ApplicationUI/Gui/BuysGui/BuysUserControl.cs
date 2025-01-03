@@ -44,6 +44,25 @@ namespace Store.ApplicationUI.Gui.BuysGui
             _buysUserControl.LoadData();
             return _buysUserControl;
         }
+        public static bool CheckInstance()
+        {
+            return (_buysUserControl == null);
+        }
+        private void setPrivateProductAndAdditTotable(Product product)
+        {
+            txtSearchBarCode.Text = product.CodeBar;
+            SetProductsToTable();
+            AddNewRow();
+        }
+        public static bool setProductFromSelector(Product product)
+        {
+            if (product is not null)
+            {
+                _buysUserControl.setPrivateProductAndAdditTotable(product);
+                return true;
+            }
+            return false;
+        }
         public static void RefreshDgv()
         {
             //DgvِProducts.DataSource = await Task.Run(() => productsRepository.GetAllProducts());
@@ -643,6 +662,15 @@ namespace Store.ApplicationUI.Gui.BuysGui
             {
                 try
                 {
+                    if (isDebt)
+                    {
+                        var Suppliers = _context.Suppliers.FirstOrDefault(x => x.Id == Convert.ToInt32(cmbSuppliers.SelectedValue));
+                        if (Suppliers.MaxDebtAllowed <= Suppliers.TotalDebts + Remain)
+                        {
+                            MsgHelper.ShowMaxDebtAllowedExceeded();
+                            return;
+                        }
+                    }
                     var buy = SetBuy();
                     _context.Add(buy);
                     await _context.SaveChangesAsync();
@@ -1120,6 +1148,13 @@ namespace Store.ApplicationUI.Gui.BuysGui
         {
             EditFromTable();
 
+        }
+
+        private void btnSearchImage_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            SelectProductsForm selectProductsForm = SelectProductsForm.Instance(_main);
+            selectProductsForm.ShowDialog();
         }
     }
 }

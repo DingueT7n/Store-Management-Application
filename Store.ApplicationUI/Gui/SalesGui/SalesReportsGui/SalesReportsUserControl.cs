@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Sales;
@@ -214,6 +215,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
         private void btnNext_Click(object sender, EventArgs e)
         {
 
+            ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex == -1)
             {
                 cmbpagination.SelectedIndex = 0;  // Set to first page if no page is selected
@@ -228,6 +230,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
 
         private void btnPrev_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex == -1)
             {
                 cmbpagination.SelectedIndex = 0;
@@ -242,6 +245,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
 
         private void cmbpagination_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex == -1)
             {
                 cmbpagination.SelectedIndex = 0;
@@ -261,6 +265,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 if (DgvSales.SelectedRows.Count > 0)
                 {
                     DataTable saleDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(Convert.ToInt32(DgvSales.CurrentRow.Cells[0].Value.ToString()));
@@ -286,6 +291,92 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
         private void button1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            LoadData();
+        }
+
+        private async void btnDeleteCurrentPage_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (MsgHelper.ShowDeleteDialog())
+            {
+                for (int i = 0; i < DgvSales.Rows.Count; i++)
+                {
+                    //string idfacture = DgvSales.Rows[i].Cells[0].Value.ToString();
+                    //_contex.SalesProfits.Where(x => x.Order_ID.ToString() == idfacture).ExecuteDelete();
+                    //_contex.SaveChanges();
+                    //var saleDetails = _contex.SalesDetails.Where(x => x.Order_ID.ToString() == idfacture);
+                    //_contex.SalesDetails.RemoveRange(saleDetails);
+                    //_contex.SaveChanges();
+                    //_contex.Sales.Remove(_contex.Sales.FirstOrDefault(x => x.Id.ToString() == idfacture));
+                    //_contex.SaveChanges();
+
+                    Sale sale = _contex.Sales.FirstOrDefault(x => x.Id.ToString() == DgvSales.Rows[i].Cells[0].Value.ToString());
+                    _contex.Sales.Remove(sale);
+                    await _contex.SaveChangesAsync();
+                }
+                Code.Helper.ToasterHelper.ShowDeletedToast();
+
+                LoadData();
+
+            }
+        }
+
+        private async void btnDeleteReportsInPeriod_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (MsgHelper.ShowDeleteDialog())
+            {
+                try
+                {
+                    var query = _contex.Sales
+                        .Where(x => dtpFrom.Value <= x.Date && x.Date <= dtpTo.Value)
+                        .ToList();
+
+                    if (query.Any())
+                    {
+                        _contex.Sales.RemoveRange(query);
+                        await _contex.SaveChangesAsync();
+                    }
+                    else
+                    {
+
+                        MessageBox.Show("لا توجد بيانات في الفترة المحددة", "معلومة", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    LoadData();
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
+
+                }
+                catch (Exception ex)
+                {
+                    // Handle or log the exception
+                    MessageBox.Show($"لقد حدث خطأ : {ex.Message}", "خطأ برمجي", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void btnDeleteAllReports_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (MsgHelper.ShowDeleteDialog())
+            {
+                try
+                {
+                    _contex.Database.ExecuteSqlRaw($"DELETE FROM [Sales]");
+                    LoadData();
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
+
+                }
+                catch (Exception ex)
+                {
+                    // Handle or log the exception
+                    MessageBox.Show($"لقد حدث خطأ : {ex.Message}", "خطأ برمجي", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

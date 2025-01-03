@@ -99,8 +99,8 @@ namespace Store.ApplicationUI.Gui.DeservedGui
         private void btnAddDeserved_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            AddDeservedForm addDeservedForm = new(_main);
-            addDeservedForm.ShowDialog();
+            AddDeservedForm addDeservedForm = AddDeservedForm.Instance(_main);
+            addDeservedForm.Show();
         }
 
         private void btnEditDeserved_Click(object sender, EventArgs e)

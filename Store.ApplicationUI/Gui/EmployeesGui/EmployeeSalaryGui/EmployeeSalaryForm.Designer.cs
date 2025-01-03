@@ -72,6 +72,7 @@
             gbInfo.TabIndex = 0;
             gbInfo.TabStop = false;
             gbInfo.Text = "اذن الصرف لـ";
+            gbInfo.Enter += gbInfo_Enter;
             // 
             // txtNetSalary
             // 

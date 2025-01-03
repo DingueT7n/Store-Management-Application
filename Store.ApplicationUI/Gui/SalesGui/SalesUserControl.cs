@@ -171,7 +171,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 }
                 decimal qty = !txtQty.Text.IsNullOrEmpty() ? Convert.ToDecimal(txtQty.Text) : 0;
                 ProductDiscount productDiscount = _context.ProductDiscounts
-                                 .FirstOrDefault(x => x.Id == product.Id && x.Quentity >= qty && x.Store_Id == storeId
+                                 .FirstOrDefault(x => x.Pro_Id == product.Id && x.Quentity >= qty && x.Store_Id == storeId
                                      && x.DateStart <= now && x.DateEnd > now);
                 if (productDiscount != null)
                 {
@@ -257,6 +257,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             DgvِProducts.Rows.Clear();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِProducts);
         }
@@ -428,6 +429,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 if (DgvِProducts.Rows.Count > 0)
                 {
                     rowIndex = DgvِProducts.CurrentCell.RowIndex;
@@ -448,6 +450,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 if (DgvِProducts.Rows.Count > 0)
                 {
                     //rowIndex = dgvProducts.Rows.GetRowCount(DataGridViewElementStates.Selected);
@@ -570,6 +573,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
             try
             {
                 //(Keys.Delete);
+                ToasterHelper.PlayNotificationSound();
                 if (DgvِProducts.Rows.Count > 0)
                 {
                     // rowIndex = dgvProducts.CurrentCell.RowIndex;
@@ -683,7 +687,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                     product.Quentity = 0;
             }
             ProductDiscount productDiscount = _context.ProductDiscounts.
-             Where(x => x.Id.ToString() == product.Id.ToString() && x.Quentity > 0
+             Where(x => x.Pro_Id.ToString() == product.Id.ToString() && x.Quentity > 0
 
              && x.Store_Id == Properties.Settings.Default.FastSaleStore
              && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
@@ -807,6 +811,14 @@ namespace Store.ApplicationUI.Gui.SalesGui
             {
                 try
                 {
+
+                    var customer = _context.Customers.FirstOrDefault(x => x.Id == Convert.ToInt32(cmbCustomers.SelectedValue));
+                    if (customer.MaxDebtAllowed <= customer.TotalDebts + Remain)
+                    {
+                        MsgHelper.ShowMaxDebtAllowedExceeded();
+                        return;
+                    }
+
                     var sale = SetSale();
                     _context.Add(sale);
                     _context.SaveChanges();
@@ -935,6 +947,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
         private void btnPay_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (!(DgvِProducts.Rows.Count > 0))
                 return;
             if (ValidatePay())
@@ -950,7 +963,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                         if (cmbCustomers.SelectedValue.ToString() != Properties.Settings.Default.IdCustomerSale)
                         {
                             var customer = _context.Customers.FirstOrDefault(x => x.Id.ToString() == cmbCustomers.SelectedValue.ToString());
-                            if (customer.MaxDebtAllowed < customer.TotalDebts + Remain)
+                            if (customer.MaxDebtAllowed <= customer.TotalDebts + Remain)
                             {
                                 MsgHelper.ShowMaxDebtAllowedExceeded();
                                 return;
@@ -968,7 +981,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                         if (cmbCustomers.SelectedValue.ToString() != Properties.Settings.Default.IdCustomerSale)
                         {
                             var customer = _context.Customers.FirstOrDefault(x => x.Id.ToString() == cmbCustomers.SelectedValue.ToString());
-                            if (customer.MaxDebtAllowed < customer.TotalDebts + Remain)
+                            if (customer.MaxDebtAllowed <= customer.TotalDebts + Remain)
                             {
                                 MsgHelper.ShowMaxDebtAllowedExceeded();
                                 return;
@@ -1056,7 +1069,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                     txtWholeSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[4].Value.ToString();
 
                     ProductDiscount productDiscount = _context.ProductDiscounts.
-                   Where(x => x.Id == _product.Id && x.Quentity > 0
+                   Where(x => x.Pro_Id == _product.Id && x.Quentity > 0
 
                    && x.Store_Id == Properties.Settings.Default.FastSaleStore
                    && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
@@ -1091,6 +1104,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
         private void btnEditSelected_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             EditFromTable(0);
         }
 
@@ -1124,6 +1138,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
         private void btnSearchImage_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             SelectProductsForm selectProductsForm = SelectProductsForm.Instance(_main);
             selectProductsForm.ShowDialog();
         }

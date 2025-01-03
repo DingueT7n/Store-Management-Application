@@ -401,6 +401,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 if (!ValidateUniqueProductBareCode()) { MsgHelper.BareCodeMesssageDuplicated(); return; }
                 if (CMBCategory.Text != "اختر صنف"
                     && !string.IsNullOrEmpty(txtBuyPrice.Text)
@@ -592,6 +593,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 if (!ValidateUniqueProductBareCode()) { MsgHelper.BareCodeMesssageDuplicated(); return; }
 
 
@@ -786,6 +788,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         private void btnAddCategory_Click(object sender, EventArgs e)
         {
 
+            ToasterHelper.PlayNotificationSound();
             AddCategoryForm addCategoryForm = AddCategoryForm.Instance(_main);
             this.Hide();
             addCategoryForm.ShowDialog();
@@ -837,6 +840,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         }
         private void btnPrintBarCode_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (txtBarCode.Text.IsNullOrEmpty())
             {
                 var bc = _context.RandomBarcode
@@ -977,6 +981,11 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
             decimal priceWithTax = price + (price * (taxRate / 100));
             return Math.Round(priceWithTax, 2); // Rounds to 2 decimal places
+        }
+
+        private void PbImageProduct_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

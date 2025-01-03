@@ -172,28 +172,61 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
         }
         private void btnPay_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (DgvِCustomer.SelectedRows.Count > 0 && !dgvHelper.IsEmpty(DgvِCustomer))
             {
-                _context = new ApplicationDbContext();
                 if (rbPayFacture.Checked)
                 {
-                    suppliersRepository.TransactionOfSupplierDebt(
-                        DgvِCustomer.CurrentRow.Cells[1].Value.ToString(),
-                        DgvِCustomer.CurrentRow.Cells[0].Value.ToString(),
-                        DgvِCustomer.CurrentRow.Cells[3].Value.ToString(),
-                        DgvِCustomer.CurrentRow.Cells[2].Value.ToString(),
-                        DateTime.Now
-                        );
-                    _context.Update(SetCaisse(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString())));
-                    _context.SaveChanges();
-                    if (_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString()) > 0)
+                    try
                     {
-                        _context.Add(SetCaisseWithdraw(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString()),
-                            DgvِCustomer.CurrentRow.Cells[2].Value.ToString()
-                            ));
-                        _context.SaveChanges();
-                    }
+                        // Validate DataGridView cell values
+                        if (DgvِCustomer.CurrentRow == null)
+                            throw new InvalidOperationException("No row is selected in the DataGridView.");
 
+                        string orderId = DgvِCustomer.CurrentRow.Cells[1]?.Value?.ToString();
+                        string supplierId = DgvِCustomer.CurrentRow.Cells[0]?.Value?.ToString();
+                        string price = DgvِCustomer.CurrentRow.Cells[3]?.Value?.ToString();
+                        string supplierName = DgvِCustomer.CurrentRow.Cells[2]?.Value?.ToString();
+
+                        if (string.IsNullOrWhiteSpace(orderId) ||
+                            string.IsNullOrWhiteSpace(supplierId) ||
+                            string.IsNullOrWhiteSpace(price) ||
+                            string.IsNullOrWhiteSpace(supplierName))
+                        {
+                            throw new InvalidOperationException("One or more required fields are empty.");
+                        }
+
+                        decimal parsedPrice = _main.ConvertToFloat(price);
+
+                        // Start a transaction
+                        using (var transaction = _context.Database.BeginTransaction())
+                        {
+                            // Perform supplier debt transaction
+                            suppliersRepository.TransactionOfSupplierDebt(orderId, supplierId, price, supplierName, DateTime.Now);
+
+                            // Update the caisse
+                            var updatedCaisse = SetCaisse(parsedPrice);
+                            _context.Update(updatedCaisse);
+                            _context.SaveChanges();
+
+                            // Add a caisse withdrawal if the price is greater than 0
+                            if (parsedPrice > 0)
+                            {
+                                var caisseWithdraw = SetCaisseWithdraw(parsedPrice, supplierName);
+                                _context.Add(caisseWithdraw);
+                                _context.SaveChanges();
+                            }
+
+                            // Commit the transaction
+                            transaction.Commit();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log the exception for debugging
+                        Console.WriteLine($"Error: {ex.Message}");
+                        throw; // Re-throw the exception for higher-level handling if necessary
+                    }
                 }
                 else if (rbPayPartialFacture.Checked)
                 {
@@ -239,6 +272,8 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
 
                     }
                 }
+                ToasterHelper.ShowDebtAdded();
+
                 SetDataToDgv();
             }
         }
@@ -247,6 +282,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 if (DgvِCustomer.SelectedRows.Count > 0)
                 {
                     DataTable suplierAccountDetailsTable = await FactureHelper.GetSupplierAccountDataTableAsync(Convert.ToInt32(DgvِCustomer.CurrentRow.Cells[0].Value.ToString()));

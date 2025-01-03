@@ -80,6 +80,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
         }
         private void btnAddStore_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (txtNameِCategory.Text.IsNullOrEmpty())
             {
                 MsgHelper.ShowRequiredFields();
@@ -99,18 +100,21 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
 
         private void btnEditStore_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowEditDialog())
             {
                 Store.Core.Entities.Stores.Store store = _context.Stores.FirstOrDefault(x => x.Id ==
                 Convert.ToInt32(DgvStore.CurrentRow.Cells[1].Value.ToString())
                 );
+                if (store != null)
+                {
+                    store.StoreName = txtNameِCategory.Text;
+                    _context.Update(store);
+                    _context.SaveChanges();
+                    Code.Helper.ToasterHelper.ShowEditToast();
 
-                store.StoreName = txtNameِCategory.Text;
-                _context.Update(store);
-                _context.SaveChanges();
-                Code.Helper.ToasterHelper.ShowEditToast();
-
-                vider();
+                    vider();
+                }
             }
         }
         private void RefreshDgv()
@@ -121,18 +125,35 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
         }
         private void btnDeleteStore_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
-                _context.Remove(Convert.ToInt32(DgvStore.CurrentRow.Cells[1].Value.ToString()));
-                _context.SaveChanges();
-                Code.Helper.ToasterHelper.ShowDeletedToast();
-
+                var store = _context.Stores.FirstOrDefault(x => x.Id == Convert.ToInt32(DgvStore.CurrentRow.Cells[1].Value.ToString()));
+                if (store != null)
+                {
+                    _context.Remove(store);
+                    _context.SaveChanges();
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
+                }
+                if (_context.Stores.Count() < 1)
+                {
+                    var val = new Store.Core.Entities.Stores.Store
+                    {
+                        StoreName = "مخزن رئيسي",
+                    };
+                    _context.Add(val);
+                    _context.SaveChanges();
+                    Properties.Settings.Default.FastSaleStore = Properties.Settings.Default.StoreIdDefault = val.Id;
+                    Properties.Settings.Default.DefaultStoreSaleId = val.Id.ToString();
+                    Properties.Settings.Default.Save();
+                }
             }
             RefreshDgv();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             DgvStore.DataSource = _context.Stores.Where(x => x.Id.ToString() == txtSearch.Text ||
             x.StoreName.Contains(txtSearch.Text)).ToList();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvStore);
@@ -146,6 +167,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             btnAddStore.Enabled = true;
             vider();
             btnEditStore.Enabled = false;

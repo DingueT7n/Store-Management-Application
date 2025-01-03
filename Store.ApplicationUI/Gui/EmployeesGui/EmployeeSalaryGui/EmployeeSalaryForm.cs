@@ -161,6 +161,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryGui
         private void btnAdd_Click(object sender, EventArgs e)
         {
 
+            ToasterHelper.PlayNotificationSound();
             if (txtNetSalary.Text == string.Empty) return;
             if (Convert.ToDouble(txtNetSalary.Text) < 0)
             {
@@ -232,6 +233,11 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryGui
                 }
 
             }
+        }
+
+        private void gbInfo_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

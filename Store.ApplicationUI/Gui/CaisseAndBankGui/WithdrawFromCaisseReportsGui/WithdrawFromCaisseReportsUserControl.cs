@@ -94,11 +94,11 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseReportsGui
         {
             //DgvSales.Columns[0].HeaderCell.Value = "المعرف"; ""    
             DgvSales.Columns[0].HeaderCell.Value = "معرف الصندوق";
-            DgvSales.Columns[1].HeaderCell.Value = "قيمة الايداع";
-            DgvSales.Columns[2].HeaderCell.Value = "تاريخ الايداع";
-            DgvSales.Columns[3].HeaderCell.Value = "وقت الايداع";
+            DgvSales.Columns[1].HeaderCell.Value = "قيمة السحب";
+            DgvSales.Columns[2].HeaderCell.Value = "تاريخ السحب";
+            DgvSales.Columns[3].HeaderCell.Value = "وقت السحب";
             DgvSales.Columns[4].HeaderCell.Value = "اسم المودع";
-            DgvSales.Columns[5].HeaderCell.Value = "نوع الايداع";
+            DgvSales.Columns[5].HeaderCell.Value = "نوع السحب";
             DgvSales.Columns[6].HeaderCell.Value = "السبب";
             DgvSales.Columns[7].HeaderCell.Value = "الصندوق";
             DgvSales.Columns[8].HeaderCell.Value = "معرف العملية";

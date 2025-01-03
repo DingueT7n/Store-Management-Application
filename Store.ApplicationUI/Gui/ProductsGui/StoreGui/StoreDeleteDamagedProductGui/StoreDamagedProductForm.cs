@@ -205,6 +205,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDeleteDamagedProduct
         {
             try
             {
+                ToasterHelper.PlayNotificationSound();
                 if (txtQtyTransfert.Text == string.Empty || txtProductName.Text == string.Empty)
                     return;
 
