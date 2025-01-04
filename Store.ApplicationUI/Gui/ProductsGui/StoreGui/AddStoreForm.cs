@@ -145,6 +145,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
                     _context.SaveChanges();
                     Properties.Settings.Default.FastSaleStore = Properties.Settings.Default.StoreIdDefault = val.Id;
                     Properties.Settings.Default.DefaultStoreSaleId = val.Id.ToString();
+
                     Properties.Settings.Default.Save();
                 }
             }

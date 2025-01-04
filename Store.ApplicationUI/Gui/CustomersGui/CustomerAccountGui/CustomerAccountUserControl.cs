@@ -307,5 +307,13 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
         {
             txtPayAmout.Enabled = rbPayPartialFacture.Checked;
         }
+
+        private void txtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnSearch_Click(sender, e);
+            }
+        }
     }
 }

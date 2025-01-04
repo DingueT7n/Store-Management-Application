@@ -182,6 +182,7 @@
             // 
             resources.ApplyResources(txtSearch, "txtSearch");
             txtSearch.Name = "txtSearch";
+            txtSearch.KeyDown += txtSearch_KeyDown;
             // 
             // btnSearch
             // 

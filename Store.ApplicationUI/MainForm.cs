@@ -42,7 +42,7 @@ namespace Store.ApplicationUI
             SetScreenState(Properties.Settings.Default.IsMaxScreen);
 
             isPanelNull = true;
-            //btnStatistics.Enabled = LocalUser.User.user
+            //btnStatistics.Enabled = LocalUser.User.UserName
             if (LocalUser.User is not null)
             {
                 btnAllProducts.Enabled = LocalUser.User.UserProductAndStore.AllProducts;
@@ -350,7 +350,9 @@ namespace Store.ApplicationUI
 
         private void btnNewBuy_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.BuysGui.BuysUserControl.Instance(this));
+            Context = new ApplicationDbContext();
+            if (Code.Helper.VerificationSettingsHelper.IsAllSettingsAreApplied(Context))
+                pageHelper.SetNewPage(Gui.BuysGui.BuysUserControl.Instance(this));
         }
 
         private void btnSalesPanel_Click(object sender, EventArgs e)
@@ -362,7 +364,9 @@ namespace Store.ApplicationUI
 
         private void button7_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.SalesGui.SalesUserControl.Instance(this));
+            Context = new ApplicationDbContext();
+            if (Code.Helper.VerificationSettingsHelper.IsAllSettingsAreApplied(Context))
+                pageHelper.SetNewPage(Gui.SalesGui.SalesUserControl.Instance(this));
         }
 
         private void btnBuysReports_Click(object sender, EventArgs e)
@@ -372,12 +376,16 @@ namespace Store.ApplicationUI
 
         private void btnComptoire_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            ToasterHelper.PlayNotificationSound();
+            Context = new ApplicationDbContext();
+            if (Code.Helper.VerificationSettingsHelper.IsAllSettingsAreApplied(Context))
+            {
+                this.Hide();
+                ToasterHelper.PlayNotificationSound();
 
-            PosForm posForm = new PosForm();
-            posForm.ShowDialog();
-            this.Show();
+                PosForm posForm = new PosForm();
+                posForm.ShowDialog();
+                this.Show();
+            }
         }
 
         private void button8_Click(object sender, EventArgs e)

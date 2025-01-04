@@ -61,21 +61,23 @@ namespace Store.ApplicationUI.Gui.ProductsGui.BarcodeGui
                             else { return; }
                         }
                         // Initialize the report
+                        Code.Helper.ToasterHelper.ShowPrinting();
                         Reports.ProductsReports.ProductBarCode barCode = new();
 
                         // Set the report's label values
                         barCode.lblCodeBar.Text = txtBarCode.Text;
                         barCode.lblProductLineBar.Text = txtBarCode.Text;
                         barCode.lblProductName.Text = txtProductName.Text;
-                        barCode.lblPrice.Text = txtPrice.Text;
+                        barCode.lblPrice.Text = $"السعر {txtPrice.Text}";
 
+                        barCode.CreateDocument();
                         // Ensure DataSource is set properly, even if it's empty
                         //barCode.DataSource = new DataTable();
 
                         // Use the report in a form viewer
                         var xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(barCode);
                         xtraForm1.Show();
-                        //barCode.CreateDocument();
+
                         //xtraForm1.documentViewer1.DocumentSource = barCode;
                         //xtraForm1.Show();
 
@@ -93,5 +95,42 @@ namespace Store.ApplicationUI.Gui.ProductsGui.BarcodeGui
             }
         }
 
+        private void btnPrint_Click(object sender, EventArgs e)
+        {
+            Code.Helper.ToasterHelper.ShowPrinting();
+            Reports.ProductsReports.ProductBarCode barCode = new();
+
+            // Set the report's label values
+            barCode.lblCodeBar.Text = txtBarCode.Text;
+            barCode.lblProductLineBar.Text = txtBarCode.Text;
+            barCode.lblProductName.Text = txtProductName.Text;
+            barCode.lblPrice.Text = $"السعر {txtPrice.Text}";
+            barCode.CreateDocument();
+            string printername = Properties.Settings.Default.PrinterBarCode;
+            for (int i = 0; i < Convert.ToInt32(nbrCopies.Value); i++)
+            {
+
+
+                // Force print to the specified printer
+                var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(barCode);
+                printTool.PrinterSettings.PrinterName = printername;
+                printTool.Print(printername);
+
+            }
+        }
+
+        private void BarCodeForm_Load(object sender, EventArgs e)
+        {
+
+            Reports.ProductsReports.ProductBarCode barCode = new();
+
+            // Set the report's label values
+            barCode.lblCodeBar.Text = txtBarCode.Text;
+            barCode.lblProductLineBar.Text = txtBarCode.Text;
+            barCode.lblProductName.Text = txtProductName.Text;
+            barCode.lblPrice.Text = $"السعر {txtPrice.Text}";
+            barCode.CreateDocument();
+            documentViewer1.DocumentSource = barCode;
+        }
     }
 }

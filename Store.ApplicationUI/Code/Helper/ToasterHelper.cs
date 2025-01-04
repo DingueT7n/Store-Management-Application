@@ -92,6 +92,10 @@ namespace Store.ApplicationUI.Code.Helper
         {
             ToastForm.Instance("اضافة المرتجعات", "تم اضافة المرتجعات بنجاح", null).Show();
         }
+        public static void ShowPrinting()
+        {
+            ToastForm.Instance("الطباعة جارية", "يتم الطبع الان . . . . .", null).Show();
+        }
 
         public static void ShowConnectionIsEstablished()
         {
@@ -101,5 +105,10 @@ namespace Store.ApplicationUI.Code.Helper
         {
             ToastForm.Instance("اتصال بالسيريفر", "لم يتم الاتصال بالسيرفر ", System.Drawing.Color.Red).Show();
         }
+        public static void ShowSettingCaisse()
+        {
+            ToastForm.Instance("خلل في الاعدادات", "هناك خلل في الاعدادات ,من فضلك راجع شاشة اعدادات البرنامج ", System.Drawing.Color.Red).Show();
+        }
+
     }
 }

@@ -31,12 +31,12 @@
             this.TopMargin = new DevExpress.XtraReports.UI.TopMarginBand();
             this.BottomMargin = new DevExpress.XtraReports.UI.BottomMarginBand();
             this.Detail = new DevExpress.XtraReports.UI.DetailBand();
-            this.lblPrice = new DevExpress.XtraReports.UI.XRLabel();
+            this.ReportHeader = new DevExpress.XtraReports.UI.ReportHeaderBand();
+            this.xrLabel1 = new DevExpress.XtraReports.UI.XRLabel();
             this.lblProductName = new DevExpress.XtraReports.UI.XRLabel();
             this.lblProductLineBar = new DevExpress.XtraReports.UI.XRLabel();
             this.lblCodeBar = new DevExpress.XtraReports.UI.XRLabel();
-            this.ReportHeader = new DevExpress.XtraReports.UI.ReportHeaderBand();
-            this.xrLabel1 = new DevExpress.XtraReports.UI.XRLabel();
+            this.lblPrice = new DevExpress.XtraReports.UI.XRLabel();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             // 
             // TopMargin
@@ -66,17 +66,29 @@
             this.Detail.StylePriority.UseBorders = false;
             this.Detail.Visible = false;
             // 
-            // lblPrice
+            // ReportHeader
             // 
-            this.lblPrice.Dpi = 254F;
-            this.lblPrice.Font = new DevExpress.Drawing.DXFont("Calibri", 8F);
-            this.lblPrice.LocationFloat = new DevExpress.Utils.PointFloat(0F, 207.6241F);
-            this.lblPrice.Multiline = true;
-            this.lblPrice.Name = "lblPrice";
-            this.lblPrice.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
-            this.lblPrice.SizeF = new System.Drawing.SizeF(380F, 41.96625F);
-            this.lblPrice.StylePriority.UseFont = false;
-            this.lblPrice.Text = "سعر المنتج 8940030539803";
+            this.ReportHeader.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
+            this.xrLabel1,
+            this.lblCodeBar,
+            this.lblProductLineBar,
+            this.lblPrice,
+            this.lblProductName});
+            this.ReportHeader.Dpi = 254F;
+            this.ReportHeader.HeightF = 238.125F;
+            this.ReportHeader.Name = "ReportHeader";
+            // 
+            // xrLabel1
+            // 
+            this.xrLabel1.Dpi = 254F;
+            this.xrLabel1.Font = new DevExpress.Drawing.DXFont("Calibri", 8F);
+            this.xrLabel1.LocationFloat = new DevExpress.Utils.PointFloat(0F, 0F);
+            this.xrLabel1.Multiline = true;
+            this.xrLabel1.Name = "xrLabel1";
+            this.xrLabel1.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
+            this.xrLabel1.SizeF = new System.Drawing.SizeF(380F, 31.46872F);
+            this.xrLabel1.StylePriority.UseFont = false;
+            this.xrLabel1.Text = "ALG-D";
             // 
             // lblProductName
             // 
@@ -112,35 +124,23 @@
             this.lblCodeBar.Multiline = true;
             this.lblCodeBar.Name = "lblCodeBar";
             this.lblCodeBar.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
-            this.lblCodeBar.SizeF = new System.Drawing.SizeF(380F, 56.84904F);
+            this.lblCodeBar.SizeF = new System.Drawing.SizeF(380F, 45.38377F);
             this.lblCodeBar.StylePriority.UseFont = false;
             this.lblCodeBar.StylePriority.UseTextAlignment = false;
             this.lblCodeBar.Text = "6745754745745745";
             this.lblCodeBar.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
-            // ReportHeader
+            // lblPrice
             // 
-            this.ReportHeader.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
-            this.xrLabel1,
-            this.lblCodeBar,
-            this.lblProductLineBar,
-            this.lblPrice,
-            this.lblProductName});
-            this.ReportHeader.Dpi = 254F;
-            this.ReportHeader.HeightF = 249.5903F;
-            this.ReportHeader.Name = "ReportHeader";
-            // 
-            // xrLabel1
-            // 
-            this.xrLabel1.Dpi = 254F;
-            this.xrLabel1.Font = new DevExpress.Drawing.DXFont("Calibri", 8F);
-            this.xrLabel1.LocationFloat = new DevExpress.Utils.PointFloat(0F, 0F);
-            this.xrLabel1.Multiline = true;
-            this.xrLabel1.Name = "xrLabel1";
-            this.xrLabel1.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
-            this.xrLabel1.SizeF = new System.Drawing.SizeF(380F, 31.46872F);
-            this.xrLabel1.StylePriority.UseFont = false;
-            this.xrLabel1.Text = "ALG-D";
+            this.lblPrice.Dpi = 254F;
+            this.lblPrice.Font = new DevExpress.Drawing.DXFont("Calibri", 8F);
+            this.lblPrice.LocationFloat = new DevExpress.Utils.PointFloat(2.69148E-05F, 196.1588F);
+            this.lblPrice.Multiline = true;
+            this.lblPrice.Name = "lblPrice";
+            this.lblPrice.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
+            this.lblPrice.SizeF = new System.Drawing.SizeF(380F, 41.9662F);
+            this.lblPrice.StylePriority.UseFont = false;
+            this.lblPrice.Text = "سعر المنتج 8940030539803";
             // 
             // ProductBarCode
             // 
@@ -158,6 +158,7 @@
             this.ReportUnit = DevExpress.XtraReports.UI.ReportUnit.TenthsOfAMillimeter;
             this.RightToLeft = DevExpress.XtraReports.UI.RightToLeft.Yes;
             this.RightToLeftLayout = DevExpress.XtraReports.UI.RightToLeftLayout.Yes;
+            this.RollPaper = true;
             this.SnapGridSize = 25F;
             this.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopCenter;
             this.Version = "24.1";
@@ -170,11 +171,11 @@
         private DevExpress.XtraReports.UI.TopMarginBand TopMargin;
         private DevExpress.XtraReports.UI.BottomMarginBand BottomMargin;
         private DevExpress.XtraReports.UI.DetailBand Detail;
-        public DevExpress.XtraReports.UI.XRLabel lblPrice;
-        public DevExpress.XtraReports.UI.XRLabel lblProductName;
-        public DevExpress.XtraReports.UI.XRLabel lblProductLineBar;
-        public DevExpress.XtraReports.UI.XRLabel lblCodeBar;
         private DevExpress.XtraReports.UI.ReportHeaderBand ReportHeader;
         public DevExpress.XtraReports.UI.XRLabel xrLabel1;
+        public DevExpress.XtraReports.UI.XRLabel lblCodeBar;
+        public DevExpress.XtraReports.UI.XRLabel lblProductLineBar;
+        public DevExpress.XtraReports.UI.XRLabel lblPrice;
+        public DevExpress.XtraReports.UI.XRLabel lblProductName;
     }
 }

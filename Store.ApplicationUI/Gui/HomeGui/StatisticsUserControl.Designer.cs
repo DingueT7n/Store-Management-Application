@@ -45,6 +45,8 @@
             DevExpress.XtraCharts.LineSeriesView lineSeriesView7 = new DevExpress.XtraCharts.LineSeriesView();
             DevExpress.XtraCharts.Series series8 = new DevExpress.XtraCharts.Series();
             DevExpress.XtraCharts.LineSeriesView lineSeriesView8 = new DevExpress.XtraCharts.LineSeriesView();
+            DevExpress.XtraCharts.Series series9 = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.LineSeriesView lineSeriesView9 = new DevExpress.XtraCharts.LineSeriesView();
             OperationsflowLayoutPanel = new FlowLayoutPanel();
             flowLayoutPanel1 = new FlowLayoutPanel();
             lblFrom = new Label();
@@ -95,6 +97,8 @@
             flowLayoutPanel12 = new FlowLayoutPanel();
             label8 = new Label();
             txtNetProfits = new TextBox();
+            panel9 = new Panel();
+            chartControl9 = new DevExpress.XtraCharts.ChartControl();
             OperationsflowLayoutPanel.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
@@ -140,6 +144,10 @@
             flowLayoutPanel6.SuspendLayout();
             flowLayoutPanel11.SuspendLayout();
             flowLayoutPanel12.SuspendLayout();
+            panel9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)chartControl9).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)series9).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)lineSeriesView9).BeginInit();
             SuspendLayout();
             // 
             // OperationsflowLayoutPanel
@@ -367,6 +375,7 @@
             flowLayoutPanel10.Controls.Add(panel3);
             flowLayoutPanel10.Controls.Add(panel5);
             flowLayoutPanel10.Controls.Add(panel6);
+            flowLayoutPanel10.Controls.Add(panel9);
             flowLayoutPanel10.Dock = DockStyle.Fill;
             flowLayoutPanel10.Location = new Point(0, 146);
             flowLayoutPanel10.Name = "flowLayoutPanel10";
@@ -748,6 +757,37 @@
             txtNetProfits.Size = new Size(160, 27);
             txtNetProfits.TabIndex = 29;
             // 
+            // panel9
+            // 
+            panel9.Controls.Add(chartControl9);
+            panel9.Location = new Point(518, 2143);
+            panel9.Name = "panel9";
+            panel9.Size = new Size(509, 529);
+            panel9.TabIndex = 20;
+            // 
+            // chartControl9
+            // 
+            chartControl9.AppearanceNameSerializable = "Pastel Kit";
+            chartControl9.BorderOptions.Color = Color.FromArgb(192, 80, 77);
+            chartControl9.BorderOptions.Thickness = 2;
+            chartControl9.BorderOptions.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            chartControl9.Dock = DockStyle.Fill;
+            chartControl9.Location = new Point(0, 0);
+            chartControl9.Name = "chartControl9";
+            chartControl9.PaletteBaseColorNumber = 4;
+            chartControl9.PaletteName = "Pastel Kit";
+            series9.Name = "Series 1";
+            series9.SeriesID = 14;
+            series9.View = lineSeriesView9;
+            series9.Visible = false;
+            chartControl9.SeriesSerializable = new DevExpress.XtraCharts.Series[]
+    {
+    series9
+    };
+            chartControl9.SeriesTemplate.LegendTextPattern = "yyyy/MM/dd";
+            chartControl9.Size = new Size(509, 529);
+            chartControl9.TabIndex = 11;
+            // 
             // StatisticsUserControl
             // 
             AutoScaleDimensions = new SizeF(8F, 19F);
@@ -816,6 +856,10 @@
             flowLayoutPanel11.PerformLayout();
             flowLayoutPanel12.ResumeLayout(false);
             flowLayoutPanel12.PerformLayout();
+            panel9.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)lineSeriesView9).EndInit();
+            ((System.ComponentModel.ISupportInitialize)series9).EndInit();
+            ((System.ComponentModel.ISupportInitialize)chartControl9).EndInit();
             ResumeLayout(false);
         }
 
@@ -871,5 +915,7 @@
         private FlowLayoutPanel flowLayoutPanel12;
         private Label label8;
         private TextBox txtNetProfits;
+        private Panel panel9;
+        private DevExpress.XtraCharts.ChartControl chartControl9;
     }
 }

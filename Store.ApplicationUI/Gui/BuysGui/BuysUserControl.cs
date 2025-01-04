@@ -95,6 +95,10 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 DtpDateFacture.Value = DateTime.Now;
                 dtpReminderDate.Value = DateTime.Now.AddDays(Properties.Settings.Default.DaysAddDebt);
 
+                cmbStores.SelectedValue = Properties.Settings.Default.StoreIdDefault;
+                cmbStores.Text = _context.Stores.FirstOrDefault(x => x.Id == Properties.Settings.Default.StoreIdDefault).StoreName;
+
+
 
                 //_data.Clear();
             }
@@ -164,7 +168,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
             txtSalePrice.Text = product.SalePrice.ToString();
             txtWholeSalePrice.Text = product.WholesalePrice.ToString();
             txtPriceWithTax.Text = product.SalePriceTax.ToString();
-            dtpDateExpiration.Value = product.DateExperation;
+            dtpDateExpiration.Value = DateTime.Now.AddDays(20);
 
         }
         public static void InitializeData(string paidUp, string remain)

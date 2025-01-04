@@ -98,6 +98,10 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 DtpDateFacture.Value = DateTime.Now;
                 dtpReminderDate.Value = DateTime.Now.AddDays(Properties.Settings.Default.DaysAddDebt);
 
+                cmbStores.SelectedValue = Properties.Settings.Default.StoreIdDefault;
+                cmbStores.Text = _context.Stores.FirstOrDefault(x => x.Id == Properties.Settings.Default.StoreIdDefault).StoreName;
+
+
 
                 //_data.Clear();
             }
@@ -811,14 +815,6 @@ namespace Store.ApplicationUI.Gui.SalesGui
             {
                 try
                 {
-
-                    var customer = _context.Customers.FirstOrDefault(x => x.Id == Convert.ToInt32(cmbCustomers.SelectedValue));
-                    if (customer.MaxDebtAllowed <= customer.TotalDebts + Remain)
-                    {
-                        MsgHelper.ShowMaxDebtAllowedExceeded();
-                        return;
-                    }
-
                     var sale = SetSale();
                     _context.Add(sale);
                     _context.SaveChanges();
@@ -963,7 +959,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                         if (cmbCustomers.SelectedValue.ToString() != Properties.Settings.Default.IdCustomerSale)
                         {
                             var customer = _context.Customers.FirstOrDefault(x => x.Id.ToString() == cmbCustomers.SelectedValue.ToString());
-                            if (customer.MaxDebtAllowed <= customer.TotalDebts + Remain)
+                            if (customer.MaxDebtAllowed <= customer.TotalDebts + Remain && Remain > 0)
                             {
                                 MsgHelper.ShowMaxDebtAllowedExceeded();
                                 return;
@@ -981,7 +977,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                         if (cmbCustomers.SelectedValue.ToString() != Properties.Settings.Default.IdCustomerSale)
                         {
                             var customer = _context.Customers.FirstOrDefault(x => x.Id.ToString() == cmbCustomers.SelectedValue.ToString());
-                            if (customer.MaxDebtAllowed <= customer.TotalDebts + Remain)
+                            if (customer.MaxDebtAllowed <= customer.TotalDebts + Remain && Remain > 0)
                             {
                                 MsgHelper.ShowMaxDebtAllowedExceeded();
                                 return;

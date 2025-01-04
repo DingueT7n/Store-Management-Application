@@ -274,10 +274,11 @@
             txtSearch.Location = new Point(50, 0);
             txtSearch.Multiline = true;
             txtSearch.Name = "txtSearch";
-            txtSearch.PlaceholderText = "ابحث عن رقم مصروفة";
+            txtSearch.PlaceholderText = "ابحث عن سند";
             txtSearch.Size = new Size(210, 40);
             txtSearch.TabIndex = 9;
             txtSearch.TextAlign = HorizontalAlignment.Center;
+            txtSearch.KeyDown += txtSearch_KeyDown;
             // 
             // btnSearch
             // 
@@ -288,6 +289,7 @@
             btnSearch.Size = new Size(50, 40);
             btnSearch.TabIndex = 7;
             btnSearch.UseVisualStyleBackColor = true;
+            btnSearch.Click += btnSearch_Click;
             // 
             // panel1
             // 

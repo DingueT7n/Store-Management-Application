@@ -262,5 +262,31 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                 }
             }
         }
+
+        private void txtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnSearch_Click(sender, e);
+            }
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            if (rbReciptVoucher.Checked)
+                DgvProducts.DataSource = _context.ReceiptVouchers.Where
+                    (x => x.From == txtSearch.Text || x.ReciverName == txtSearch.Text
+                    || (x.Date >= dtpFrom.Value && x.Date <= dtpTo.Value)).ToList();
+            else
+                DgvProducts.DataSource = _context.SendVouchers.Where
+                    (x => x.To == txtSearch.Text || x.SenderName == txtSearch.Text
+                    || (x.Date >= dtpFrom.Value && x.Date <= dtpTo.Value)).ToList();
+            if (rbReciptVoucher.Checked)
+                SetColumnsForRecipent();
+            else
+                SetColumnsForSender();
+
+            lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
+        }
     }
 }

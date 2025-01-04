@@ -248,7 +248,6 @@
             zoomTrackBarEditItem1 = new DevExpress.XtraPrinting.Preview.ZoomTrackBarEditItem();
             repositoryItemZoomTrackBar1 = new DevExpress.XtraEditors.Repository.RepositoryItemZoomTrackBar();
             skinDropDownButtonItem1 = new DevExpress.XtraBars.SkinDropDownButtonItem();
-            barStaticItem1 = new DevExpress.XtraBars.BarStaticItem();
             ribbonMiniToolbar1 = new DevExpress.XtraBars.Ribbon.RibbonMiniToolbar(components);
             printPreviewRibbonPage = new DevExpress.XtraPrinting.Preview.PrintPreviewRibbonPage();
             printPreviewRibbonPageGroup1 = new DevExpress.XtraPrinting.Preview.PrintPreviewRibbonPageGroup();
@@ -259,7 +258,6 @@
             printPreviewRibbonPageGroup6 = new DevExpress.XtraPrinting.Preview.PrintPreviewRibbonPageGroup();
             printPreviewRibbonPageGroup7 = new DevExpress.XtraPrinting.Preview.PrintPreviewRibbonPageGroup();
             printPreviewRibbonPageGroup8 = new DevExpress.XtraPrinting.Preview.PrintPreviewRibbonPageGroup();
-            ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             ribbonStatusBar1 = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             ((System.ComponentModel.ISupportInitialize)documentViewerRibbonController1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ribbonControl1).BeginInit();
@@ -283,6 +281,7 @@
             documentViewer1.PageBorderColor = Color.White;
             documentViewer1.Size = new Size(1237, 468);
             documentViewer1.TabIndex = 0;
+            documentViewer1.TooltipFont = new Font("Calibri", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             // 
             // documentViewerRibbonController1
             // 
@@ -296,9 +295,9 @@
             ribbonControl1.AutoHideEmptyItems = true;
             ribbonControl1.ExpandCollapseItem.Id = 0;
             ribbonControl1.Font = new Font("Calibri", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            ribbonControl1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl1.ExpandCollapseItem, printPreviewBarItem1, printPreviewBarItem2, printPreviewBarItem3, printPreviewBarItem4, printPreviewBarItem5, printPreviewBarItem6, printPreviewBarItem7, printPreviewBarItem8, printPreviewBarItem9, printPreviewBarItem10, printPreviewBarItem11, printPreviewBarItem12, printPreviewBarItem13, printPreviewBarItem14, printPreviewBarItem15, printPreviewBarItem16, printPreviewBarItem17, printPreviewBarItem18, printPreviewBarItem19, printPreviewBarItem20, printPreviewBarItem21, printPreviewBarItem22, printPreviewBarItem23, printPreviewBarItem24, printPreviewBarItem25, printPreviewBarItem26, printPreviewBarItem27, printPreviewBarItem28, printPreviewBarItem29, printPreviewBarItem30, printPreviewBarItem31, printPreviewBarItem32, printPreviewBarItem33, printPreviewBarItem34, printPreviewBarItem35, printPreviewBarItem36, printPreviewBarItem37, printPreviewBarItem38, printPreviewBarItem39, printPreviewBarItem40, printPreviewBarItem41, printPreviewBarItem42, printPreviewBarItem43, printPreviewBarItem44, printPreviewBarItem45, printPreviewBarItem46, printPreviewBarItem47, printPreviewBarItem48, printPreviewBarItem49, printPreviewBarItem50, printPreviewBarItem51, printPreviewStaticItem1, progressBarEditItem1, printPreviewBarItem52, printPreviewStaticItem2, zoomTrackBarEditItem1, skinDropDownButtonItem1, barStaticItem1 });
+            ribbonControl1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl1.ExpandCollapseItem, printPreviewBarItem1, printPreviewBarItem2, printPreviewBarItem3, printPreviewBarItem4, printPreviewBarItem5, printPreviewBarItem6, printPreviewBarItem7, printPreviewBarItem8, printPreviewBarItem9, printPreviewBarItem10, printPreviewBarItem11, printPreviewBarItem12, printPreviewBarItem13, printPreviewBarItem14, printPreviewBarItem15, printPreviewBarItem16, printPreviewBarItem17, printPreviewBarItem18, printPreviewBarItem19, printPreviewBarItem20, printPreviewBarItem21, printPreviewBarItem22, printPreviewBarItem23, printPreviewBarItem24, printPreviewBarItem25, printPreviewBarItem26, printPreviewBarItem27, printPreviewBarItem28, printPreviewBarItem29, printPreviewBarItem30, printPreviewBarItem31, printPreviewBarItem32, printPreviewBarItem33, printPreviewBarItem34, printPreviewBarItem35, printPreviewBarItem36, printPreviewBarItem37, printPreviewBarItem38, printPreviewBarItem39, printPreviewBarItem40, printPreviewBarItem41, printPreviewBarItem42, printPreviewBarItem43, printPreviewBarItem44, printPreviewBarItem45, printPreviewBarItem46, printPreviewBarItem47, printPreviewBarItem48, printPreviewBarItem49, printPreviewBarItem50, printPreviewBarItem51, printPreviewStaticItem1, progressBarEditItem1, printPreviewBarItem52, printPreviewStaticItem2, zoomTrackBarEditItem1, skinDropDownButtonItem1 });
             ribbonControl1.Location = new Point(0, 0);
-            ribbonControl1.MaxItemId = 59;
+            ribbonControl1.MaxItemId = 60;
             ribbonControl1.MiniToolbars.Add(ribbonMiniToolbar1);
             ribbonControl1.Name = "ribbonControl1";
             ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] { printPreviewRibbonPage });
@@ -621,16 +620,16 @@
             // 
             // printPreviewBarItem18
             // 
-            printPreviewBarItem18.Caption = "Last  Page ";
-            printPreviewBarItem18.Command = DevExpress.XtraPrinting.PrintingSystemCommand.ShowLastPage;
+            printPreviewBarItem18.Caption = "First Page";
+            printPreviewBarItem18.Command = DevExpress.XtraPrinting.PrintingSystemCommand.ShowFirstPage;
             printPreviewBarItem18.ContextSpecifier = documentViewerRibbonController1;
             printPreviewBarItem18.Enabled = false;
             printPreviewBarItem18.Id = 18;
             printPreviewBarItem18.Name = "printPreviewBarItem18";
             superToolTip18.FixedTooltipWidth = true;
-            toolTipTitleItem18.Text = "Last Page (End)";
+            toolTipTitleItem18.Text = "First Page (Home)";
             toolTipItem18.LeftIndent = 6;
-            toolTipItem18.Text = "Navigate to the last page of the document.";
+            toolTipItem18.Text = "Navigate to the first page of the document.";
             superToolTip18.Items.Add(toolTipTitleItem18);
             superToolTip18.Items.Add(toolTipItem18);
             superToolTip18.MaxWidth = 210;
@@ -638,16 +637,16 @@
             // 
             // printPreviewBarItem19
             // 
-            printPreviewBarItem19.Caption = "Next  Page ";
-            printPreviewBarItem19.Command = DevExpress.XtraPrinting.PrintingSystemCommand.ShowNextPage;
+            printPreviewBarItem19.Caption = "Previous Page";
+            printPreviewBarItem19.Command = DevExpress.XtraPrinting.PrintingSystemCommand.ShowPrevPage;
             printPreviewBarItem19.ContextSpecifier = documentViewerRibbonController1;
             printPreviewBarItem19.Enabled = false;
             printPreviewBarItem19.Id = 19;
             printPreviewBarItem19.Name = "printPreviewBarItem19";
             superToolTip19.FixedTooltipWidth = true;
-            toolTipTitleItem19.Text = "Next Page (Right Arrow)";
+            toolTipTitleItem19.Text = "Previous Page (Left Arrow)";
             toolTipItem19.LeftIndent = 6;
-            toolTipItem19.Text = "Navigate to the next page of the document.";
+            toolTipItem19.Text = "Navigate to the previous page of the document.";
             superToolTip19.Items.Add(toolTipTitleItem19);
             superToolTip19.Items.Add(toolTipItem19);
             superToolTip19.MaxWidth = 210;
@@ -655,16 +654,16 @@
             // 
             // printPreviewBarItem20
             // 
-            printPreviewBarItem20.Caption = "Previous Page";
-            printPreviewBarItem20.Command = DevExpress.XtraPrinting.PrintingSystemCommand.ShowPrevPage;
+            printPreviewBarItem20.Caption = "Next  Page ";
+            printPreviewBarItem20.Command = DevExpress.XtraPrinting.PrintingSystemCommand.ShowNextPage;
             printPreviewBarItem20.ContextSpecifier = documentViewerRibbonController1;
             printPreviewBarItem20.Enabled = false;
             printPreviewBarItem20.Id = 20;
             printPreviewBarItem20.Name = "printPreviewBarItem20";
             superToolTip20.FixedTooltipWidth = true;
-            toolTipTitleItem20.Text = "Previous Page (Left Arrow)";
+            toolTipTitleItem20.Text = "Next Page (Right Arrow)";
             toolTipItem20.LeftIndent = 6;
-            toolTipItem20.Text = "Navigate to the previous page of the document.";
+            toolTipItem20.Text = "Navigate to the next page of the document.";
             superToolTip20.Items.Add(toolTipTitleItem20);
             superToolTip20.Items.Add(toolTipItem20);
             superToolTip20.MaxWidth = 210;
@@ -672,16 +671,16 @@
             // 
             // printPreviewBarItem21
             // 
-            printPreviewBarItem21.Caption = "First Page";
-            printPreviewBarItem21.Command = DevExpress.XtraPrinting.PrintingSystemCommand.ShowFirstPage;
+            printPreviewBarItem21.Caption = "Last  Page ";
+            printPreviewBarItem21.Command = DevExpress.XtraPrinting.PrintingSystemCommand.ShowLastPage;
             printPreviewBarItem21.ContextSpecifier = documentViewerRibbonController1;
             printPreviewBarItem21.Enabled = false;
             printPreviewBarItem21.Id = 21;
             printPreviewBarItem21.Name = "printPreviewBarItem21";
             superToolTip21.FixedTooltipWidth = true;
-            toolTipTitleItem21.Text = "First Page (Home)";
+            toolTipTitleItem21.Text = "Last Page (End)";
             toolTipItem21.LeftIndent = 6;
-            toolTipItem21.Text = "Navigate to the first page of the document.";
+            toolTipItem21.Text = "Navigate to the last page of the document.";
             superToolTip21.Items.Add(toolTipTitleItem21);
             superToolTip21.Items.Add(toolTipItem21);
             superToolTip21.MaxWidth = 210;
@@ -1278,12 +1277,7 @@
             skinDropDownButtonItem1.ButtonStyle = DevExpress.XtraBars.BarButtonStyle.DropDown;
             skinDropDownButtonItem1.Id = 57;
             skinDropDownButtonItem1.Name = "skinDropDownButtonItem1";
-            // 
-            // barStaticItem1
-            // 
-            barStaticItem1.Caption = "barStaticItem1";
-            barStaticItem1.Id = 58;
-            barStaticItem1.Name = "barStaticItem1";
+            skinDropDownButtonItem1.RememberLastCommand = true;
             // 
             // ribbonMiniToolbar1
             // 
@@ -1292,7 +1286,7 @@
             // printPreviewRibbonPage
             // 
             printPreviewRibbonPage.ContextSpecifier = documentViewerRibbonController1;
-            printPreviewRibbonPage.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] { printPreviewRibbonPageGroup1, printPreviewRibbonPageGroup2, printPreviewRibbonPageGroup3, printPreviewRibbonPageGroup4, printPreviewRibbonPageGroup5, printPreviewRibbonPageGroup6, printPreviewRibbonPageGroup7, printPreviewRibbonPageGroup8, ribbonPageGroup1 });
+            printPreviewRibbonPage.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] { printPreviewRibbonPageGroup1, printPreviewRibbonPageGroup2, printPreviewRibbonPageGroup3, printPreviewRibbonPageGroup4, printPreviewRibbonPageGroup5, printPreviewRibbonPageGroup6, printPreviewRibbonPageGroup7, printPreviewRibbonPageGroup8 });
             printPreviewRibbonPage.Name = "printPreviewRibbonPage";
             printPreviewRibbonPage.Text = "Print Preview";
             // 
@@ -1407,12 +1401,6 @@
             printPreviewRibbonPageGroup8.Name = "printPreviewRibbonPageGroup8";
             printPreviewRibbonPageGroup8.Text = "Close";
             // 
-            // ribbonPageGroup1
-            // 
-            ribbonPageGroup1.ItemLinks.Add(barStaticItem1);
-            ribbonPageGroup1.Name = "ribbonPageGroup1";
-            ribbonPageGroup1.Text = "ribbonPageGroup1";
-            // 
             // ribbonStatusBar1
             // 
             ribbonStatusBar1.ItemLinks.Add(printPreviewStaticItem1);
@@ -1443,6 +1431,7 @@
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "شاشة عرض الفاتورات";
+            Load += PerviweForm_Load;
             ((System.ComponentModel.ISupportInitialize)documentViewerRibbonController1).EndInit();
             ((System.ComponentModel.ISupportInitialize)ribbonControl1).EndInit();
             ((System.ComponentModel.ISupportInitialize)applicationMenu1).EndInit();
@@ -1454,7 +1443,7 @@
 
         #endregion
 
-        private DevExpress.XtraPrinting.Preview.DocumentViewer documentViewer1;
+        private DevExpress.XtraPrinting.Preview.DocumentViewer documentViewer1 ;
         private DevExpress.XtraPrinting.Preview.DocumentViewerRibbonController documentViewerRibbonController1;
         private DevExpress.XtraBars.Ribbon.RibbonControl ribbonControl1;
         private DevExpress.XtraPrinting.Preview.PrintPreviewBarItem printPreviewBarItem1;
@@ -1526,8 +1515,6 @@
         private DevExpress.XtraPrinting.Preview.PrintPreviewRibbonPageGroup printPreviewRibbonPageGroup8;
         private DevExpress.XtraBars.Ribbon.RibbonStatusBar ribbonStatusBar1;
         private DevExpress.XtraBars.SkinDropDownButtonItem skinDropDownButtonItem1;
-        private DevExpress.XtraBars.BarStaticItem barStaticItem1;
-        private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup1;
         private DevExpress.XtraBars.Ribbon.RibbonMiniToolbar ribbonMiniToolbar1;
         private DevExpress.XtraBars.Ribbon.ApplicationMenu applicationMenu1;
     }

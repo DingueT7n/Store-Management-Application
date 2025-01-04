@@ -1,4 +1,5 @@
 ﻿using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.Models;
 
 namespace Store.ApplicationUI.Gui.PaymentGui
 {
@@ -21,15 +22,17 @@ namespace Store.ApplicationUI.Gui.PaymentGui
             //    Close();
             //}
             ToasterHelper.PlayNotificationSound();
-            if (maskedTextBox1.Text == Code.Models.LocalUser.User.Password && maskedTextBox2.Text == Code.Models.LocalUser.User.UserName)
-            {
-                Close();
-            }
-            else
-            {
-                maskedTextBox1.Text = "";
-                maskedTextBox2.Text = "";
-            }
+            if (LocalUser.User is not null)
+
+                if (maskedTextBox1.Text == Code.Models.LocalUser.User.Password && maskedTextBox2.Text == Code.Models.LocalUser.User.UserName)
+                {
+                    Close();
+                }
+                else
+                {
+                    maskedTextBox1.Text = "";
+                    maskedTextBox2.Text = "";
+                }
         }
     }
 }

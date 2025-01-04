@@ -157,5 +157,13 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBankReportGui
                 throw;
             }
         }
+
+        private void txtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnSearch_Click(sender, e);
+            }
+        }
     }
 }

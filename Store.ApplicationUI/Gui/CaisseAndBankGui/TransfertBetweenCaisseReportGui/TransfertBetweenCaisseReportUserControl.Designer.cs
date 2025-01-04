@@ -225,6 +225,7 @@
             txtSearch.Size = new Size(244, 40);
             txtSearch.TabIndex = 9;
             txtSearch.TextAlign = HorizontalAlignment.Center;
+            txtSearch.KeyDown += txtSearch_KeyDown;
             // 
             // btnSearch
             // 

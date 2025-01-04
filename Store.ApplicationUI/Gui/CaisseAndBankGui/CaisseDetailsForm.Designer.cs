@@ -314,6 +314,7 @@
             txtSearch.Size = new Size(182, 50);
             txtSearch.TabIndex = 10;
             txtSearch.TextAlign = HorizontalAlignment.Center;
+            txtSearch.KeyDown += txtSearch_KeyDown;
             // 
             // btnDepositToCaisse
             // 

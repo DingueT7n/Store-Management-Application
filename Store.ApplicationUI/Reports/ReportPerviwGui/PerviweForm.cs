@@ -27,6 +27,8 @@ namespace Store.ApplicationUI.Reports.ReportPerviwGui
             }
             if (_Form != null && report is not null)
             {
+
+                _Form.documentViewer1.LookAndFeel.SetSkinStyle(DevExpress.LookAndFeel.SkinStyle.WXI);
                 _Form.documentViewer1.DocumentSource = report;
                 report.CreateDocument();
             }
@@ -34,5 +36,13 @@ namespace Store.ApplicationUI.Reports.ReportPerviwGui
             return _Form;
         }
 
+        private void PerviweForm_Load(object sender, EventArgs e)
+        {
+
+            documentViewer1.LookAndFeel.SetSkinStyle(DevExpress.LookAndFeel.SkinStyle.WXI);
+            var a = documentViewer1.LookAndFeel.SkinName;
+
+
+        }
     }
 }

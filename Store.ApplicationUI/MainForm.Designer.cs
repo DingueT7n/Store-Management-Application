@@ -844,7 +844,7 @@
             flowLayoutPaneReturns.Controls.Add(btnAddRefund);
             flowLayoutPaneReturns.Controls.Add(btnRefundReport);
             flowLayoutPaneReturns.Location = new Point(6, 2097);
-            flowLayoutPaneReturns.MaximumSize = new Size(209, 143);
+            flowLayoutPaneReturns.MaximumSize = new Size(205, 98);
             flowLayoutPaneReturns.Name = "flowLayoutPaneReturns";
             flowLayoutPaneReturns.Size = new Size(205, 98);
             flowLayoutPaneReturns.TabIndex = 18;

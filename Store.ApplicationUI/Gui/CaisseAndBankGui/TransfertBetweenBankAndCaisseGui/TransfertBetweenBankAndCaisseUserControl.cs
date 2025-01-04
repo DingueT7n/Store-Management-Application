@@ -59,8 +59,9 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenBankAndCaisse
             {
                 MsgHelper.ShowServerError();
             }
+            if (LocalUser.User is not null)
 
-            txtDepositorName.Text = LocalUser.User.UserName;
+                txtDepositorName.Text = LocalUser.User.UserName;
 
         }
 

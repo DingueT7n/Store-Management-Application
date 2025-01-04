@@ -79,14 +79,17 @@ namespace Store.ApplicationUI.Gui.HomeGui
             //Hideloading
             LoadingForm.Instance(_main).Hide();
             // Show EmptyDAta
+            cmbCaisse.SelectedValue = Properties.Settings.Default.DefaultCaisseId;
 
 
         }
         private void LoadChartData()
         {
+
             var selectedCaisseId = cmbCaisse.SelectedValue as int?;
             var selectedCustomerId = cmbCustomers.Text == "اختر العميل" ? "" : cmbCustomers.Text;
             var selectedUserId = cmbUser.Text == "اختر البائع" ? "" : cmbUser.Text;
+
             // Step 1: Retrieve Data for Sales and Buys
 
             var salesData = GetChartData(
@@ -130,6 +133,82 @@ namespace Store.ApplicationUI.Gui.HomeGui
             chartControl4.Series.Clear();
             // Add "مجموع المشتريات" Series
             AddSeriesToChart(chartControl4, "مجموع المصروفات", deservedData, ViewType.Line, Color.Blue, "إحصائيات المصروفات");
+            chartControl9.Series.Clear();
+            var caisseDepositData = GetChartData(
+                _context.CaissesDeposits,
+                s => s.Date,
+                s => s.Money,
+                    s => s.Caisse_ID == (selectedCaisseId is not null ? selectedCaisseId : null)
+
+                        //selectedCaisseId is not null ? s => s.Id == selectedCaisseId : null
+                        );
+            //s => selectedCustomerId == null || s.Caisse_ID.ToString() == (selectedCustomerId)
+            var caisseWithdrawData = GetChartData(
+                 _context.CaissesWithdraws,
+                 s => s.Date,
+                 s => s.Money,
+                    s => s.Caisse_ID == (selectedCaisseId is not null ? selectedCaisseId : null)
+
+             );
+
+            // Combine the data into a single list for plotting
+            var combinedData = caisseDepositData
+                .Select(d => new { d.Date, Total = d.Total, Type = "Deposit" })
+                .Concat(
+                    caisseWithdrawData.Select(w => new { w.Date, Total = w.Total, Type = "Withdraw" })
+                )
+                .OrderBy(x => x.Date) // Ensure the data is sorted by date
+                .ToList();
+
+            // Group data for easier plotting (optional, in case dates overlap)
+            var groupedData = combinedData
+                .GroupBy(x => new { x.Date, x.Type })
+                .Select(g => (g.Key.Date, g.Key.Type, Total: g.Sum(x => x.Total)))
+                .ToList();
+            var combinedData1 = caisseDepositData
+     .Select(d => new { d.Date, Amount = d.Total }) // Deposits as positive
+     .Concat(
+         caisseWithdrawData.Select(w => new { w.Date, Amount = -w.Total }) // Withdrawals as negative
+     )
+     .OrderBy(x => x.Date) // Ensure sorted by date
+     .ToList();
+
+            // Step 2: Calculate cumulative real value
+            decimal cumulativeValue = 0;
+            var realValueData = combinedData1
+                .GroupBy(x => x.Date) // Group by date
+                .OrderBy(g => g.Key)  // Ensure dates are processed in order
+                .Select(g =>
+                {
+                    cumulativeValue += g.Sum(x => x.Amount); // Update cumulative value
+                    return (Date: g.Key, CumulativeValue: cumulativeValue);
+                })
+                .ToList();
+
+
+
+            AddSeriesToChart(chartControl9,
+                "الايداع في الصناديق",
+                groupedData.Where(g => g.Type == "Deposit").Select(g => (g.Date, g.Total)).ToList(),
+                ViewType.Line,
+                Color.Blue,
+                "معاملات الصناديق");
+
+
+            AddSeriesToChart(chartControl9,
+                "السحب من الصناديق",
+                groupedData.Where(g => g.Type == "Withdraw").Select(g => (g.Date, g.Total)).ToList(),
+                ViewType.Line,
+                Color.Red,
+                "معاملات الصناديق");
+
+
+            AddSeriesToChart(chartControl9,
+                "القيمة الحقيقية في الصناديق",
+                realValueData,
+                ViewType.Line,
+                Color.Green,
+                "القيمة الحقيقية");
             PieBuysSales(salesData, buysData, deservedData);
 
             VisualizeTop10Products();
@@ -188,7 +267,9 @@ namespace Store.ApplicationUI.Gui.HomeGui
             ChartTitle chartTitle = new ChartTitle();
             chartTitle.Text = "نسبة المبيعات والمشتريات والمصروفات"; // Title Text
             chartTitle.Alignment = StringAlignment.Center; // Center Align
-            chartTitle.Font = new Font("Calibri", 12, FontStyle.Bold); // Custom Font
+            chartTitle.Font = new Font("Calibri", 16, FontStyle.Bold); // Custom Font
+            chartTitle.TextColor = Color.Black;
+
             if (chartControl3.Titles.Count == 0)
                 chartControl3.Titles.Add(chartTitle);
 
@@ -247,6 +328,8 @@ namespace Store.ApplicationUI.Gui.HomeGui
             ViewType viewType,
             Color color, string Title)
         {
+            chartControl.ClearCache();
+            chartControl.ClearSelection();
             var series = new Series(seriesName, viewType)
             {
                 View = { Color = color }
@@ -262,12 +345,32 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 {
                     Text = Title,
                     Alignment = StringAlignment.Center,
-                    Font = new Font("Calibri", 12, FontStyle.Bold)
+                    TextColor = Color.Black,
+                    Font = new Font("Calibri", 16, FontStyle.Bold)
                 });
                 chartControl.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
             }
             chartControl.Series.Add(series);
+            // Step 4: Configure X and Y axis
+            if (chartControl.Diagram is XYDiagram diagram)
+            {
+                // Configure X-axis
+                diagram.AxisX.Title.Text = "التاريخ";
+                diagram.AxisX.Title.TextColor = Color.Black;
+
+                diagram.AxisX.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
+                diagram.AxisX.Label.Angle = -45;
+                diagram.AxisX.DateTimeScaleOptions.MeasureUnit = DateTimeMeasureUnit.Day;
+
+                // Configure Y-axis
+                diagram.AxisY.Title.Text = "القيمة المالية";
+                diagram.AxisY.Title.TextColor = Color.Black;
+
+                diagram.AxisY.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
+                diagram.AxisY.Label.TextPattern = "{V} دج";
+            }
         }
+
 
         private void VisualizeTop10ProductsByProfit()
         {
@@ -304,6 +407,8 @@ namespace Store.ApplicationUI.Gui.HomeGui
             if (label != null)
             {
                 label.TextPattern = "{A}: {V} دج"; // Show Product Name (A) and Profit Value (V) as Currency
+                label.TextColor = Color.Black;
+
             }
 
             // Step 5: Add Series to ChartControl
@@ -312,8 +417,10 @@ namespace Store.ApplicationUI.Gui.HomeGui
             // Step 6: Add a Title to the Chart
             ChartTitle chartTitle = new ChartTitle();
             chartTitle.Text = "أفضل 15 منتجات مبيعًا حسب الربح";
-            chartTitle.Font = new Font("Calibri", 12, FontStyle.Bold);
+            chartTitle.Font = new Font("Calibri", 16, FontStyle.Bold);
             chartTitle.Alignment = StringAlignment.Center;
+            chartTitle.TextColor = Color.Black;
+
 
             chartControl6.Titles.Clear();
             chartControl6.Titles.Add(chartTitle);
@@ -326,9 +433,11 @@ namespace Store.ApplicationUI.Gui.HomeGui
             if (diagram != null)
             {
                 diagram.AxisX.Title.Text = "المنتج";
+                diagram.AxisX.Title.TextColor = Color.Black;
                 diagram.AxisX.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
 
                 diagram.AxisY.Title.Text = "(اجمال الربح (دج";
+                diagram.AxisY.Title.TextColor = Color.Black;
                 diagram.AxisY.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
 
                 diagram.AxisY.Label.TextPattern = "{V} دج"; // Format Y-axis as currency
@@ -404,6 +513,8 @@ namespace Store.ApplicationUI.Gui.HomeGui
             // Enable labels and set their text pattern
             series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
             series.Label.TextPattern = "{V} دج";
+            series.Label.TextColor = Color.Black;
+
 
             // Customize Series Appearance
             if (series.View is LineSeriesView view)
@@ -420,8 +531,10 @@ namespace Store.ApplicationUI.Gui.HomeGui
             ChartTitle chartTitle = new ChartTitle
             {
                 Text = "صافي الربح حسب التاريخ",
-                Font = new Font("Calibri", 12, FontStyle.Bold),
-                Alignment = StringAlignment.Center
+                Font = new Font("Calibri", 16, FontStyle.Bold),
+                Alignment = StringAlignment.Center,
+                TextColor = Color.Black
+
             };
 
             chartControl7.Titles.Clear();
@@ -432,12 +545,16 @@ namespace Store.ApplicationUI.Gui.HomeGui
             {
                 // Configure X-axis
                 diagram.AxisX.Title.Text = "التاريخ";
+                diagram.AxisX.Title.TextColor = Color.Black;
+
                 diagram.AxisX.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
                 diagram.AxisX.Label.Angle = -45;
                 diagram.AxisX.DateTimeScaleOptions.MeasureUnit = DateTimeMeasureUnit.Day;
 
                 // Configure Y-axis
                 diagram.AxisY.Title.Text = "(صافي الربح (دج";
+                diagram.AxisY.Title.TextColor = Color.Black;
+
                 diagram.AxisY.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
                 diagram.AxisY.Label.TextPattern = "{V} دج";
             }
@@ -476,7 +593,8 @@ namespace Store.ApplicationUI.Gui.HomeGui
             // Enable labels and set their text pattern
             series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
             series.Label.TextPattern = "{V} دج"; // Display net profit values in دج
-                                                 // Customize Series Appearance
+            series.Label.TextColor = Color.Black;
+            // Customize Series Appearance
 
             LineSeriesView view = series.View as LineSeriesView;
             if (view != null)
@@ -495,8 +613,10 @@ namespace Store.ApplicationUI.Gui.HomeGui
             ChartTitle chartTitle = new ChartTitle
             {
                 Text = "الربح حسب التاريخ",
-                Font = new Font("Calibri", 12, FontStyle.Bold),
-                Alignment = StringAlignment.Center
+                Font = new Font("Calibri", 16, FontStyle.Bold),
+                Alignment = StringAlignment.Center,
+                TextColor = Color.Black
+
             };
 
             chartControl8.Titles.Clear();
@@ -509,11 +629,15 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 // Configure X-axis
                 diagram.AxisX.Title.Text = "التاريخ";
                 diagram.AxisX.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
+                diagram.AxisX.Title.TextColor = Color.Black;
+
                 diagram.AxisX.Label.Angle = -45; // Rotate labels for better readability
                 diagram.AxisX.DateTimeScaleOptions.MeasureUnit = DateTimeMeasureUnit.Day;
 
                 // Configure Y-axis
                 diagram.AxisY.Title.Text = "الربح دج";
+                diagram.AxisY.Title.TextColor = Color.Black;
+
                 diagram.AxisY.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
                 diagram.AxisY.Label.TextPattern = "{V} دج"; // Format Y-axis labels with currency
             }
@@ -560,8 +684,10 @@ namespace Store.ApplicationUI.Gui.HomeGui
             // Step 6: Add a Title to the Chart
             ChartTitle chartTitle = new ChartTitle();
             chartTitle.Text = "أفضل 15 منتجات مبيعًا حسب الكمية";
-            chartTitle.Font = new Font("Calibri", 12, FontStyle.Bold);
+            chartTitle.Font = new Font("Calibri", 16, FontStyle.Bold);
             chartTitle.Alignment = StringAlignment.Center;
+            chartTitle.TextColor = Color.Black;
+
 
             chartControl5.Titles.Clear();
             chartControl5.Titles.Add(chartTitle);
@@ -569,8 +695,11 @@ namespace Store.ApplicationUI.Gui.HomeGui
             // Step 7: Optional - Customize the Chart Appearance
             chartControl5.Legend.Visibility = DevExpress.Utils.DefaultBoolean.False;
             ((XYDiagram)chartControl5.Diagram).AxisX.Title.Text = "المنتج";
+            ((XYDiagram)chartControl5.Diagram).AxisX.Title.TextColor = Color.Black;
             ((XYDiagram)chartControl5.Diagram).AxisX.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
             ((XYDiagram)chartControl5.Diagram).AxisY.Title.Text = "الكمية المباعة";
+            ((XYDiagram)chartControl5.Diagram).AxisY.Title.TextColor = Color.Black;
+
             ((XYDiagram)chartControl5.Diagram).AxisY.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
         }
         #endregion

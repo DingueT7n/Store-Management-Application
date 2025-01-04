@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.Models;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Products;
 using Store.Infrastructure.Data;
@@ -75,7 +76,9 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.TransferBetweenStoresGui
                 //No Connection
                 MsgHelper.ShowServerError();
             }
-            txtMaker.Text = Code.Models.LocalUser.User.UserName;
+            if (LocalUser.User is not null)
+
+                txtMaker.Text = Code.Models.LocalUser.User.UserName;
             //Hideloading
             LoadingForm.Instance(_main).Hide();
             // Show EmptyDAta

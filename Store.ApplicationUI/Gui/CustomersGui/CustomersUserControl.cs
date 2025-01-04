@@ -241,5 +241,13 @@ namespace Store.ApplicationUI.Gui.CustomersGui
             dataTable.Columns["TotalDebts"].ColumnName = "مجموع الديون الغير مسددة";
             return dataTable;
         }
+
+        private void txtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnSearch_Click(sender, e);
+            }
+        }
     }
 }

@@ -55,7 +55,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseGui
             {
                 MsgHelper.ShowServerError();
             }
-            txtDepositorName.Text = LocalUser.User.UserName;
+            if (LocalUser.User is not null)
+                txtDepositorName.Text = LocalUser.User.UserName;
 
 
         }
