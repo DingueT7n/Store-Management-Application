@@ -216,7 +216,7 @@
             button1.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             button1.Image = (Image)resources.GetObject("button1.Image");
             button1.ImageAlign = ContentAlignment.MiddleLeft;
-            button1.Location = new Point(251, 354);
+            button1.Location = new Point(251, 349);
             button1.Name = "button1";
             button1.Size = new Size(150, 42);
             button1.TabIndex = 6;

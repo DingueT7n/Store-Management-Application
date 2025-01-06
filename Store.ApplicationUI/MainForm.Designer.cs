@@ -1106,7 +1106,7 @@
             // animationTimer
             // 
             animationTimer.Enabled = true;
-            animationTimer.Interval = 15;
+            animationTimer.Interval = 2;
             animationTimer.Tick += animationTimer_Tick;
             // 
             // MainForm

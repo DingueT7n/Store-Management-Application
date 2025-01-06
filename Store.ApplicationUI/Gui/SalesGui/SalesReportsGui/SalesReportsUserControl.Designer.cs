@@ -43,10 +43,11 @@
             rbCustomerAndOrder = new RadioButton();
             rbDateSearch = new RadioButton();
             panelstatisticsandOperations = new Panel();
+            flowLayoutPanel = new FlowLayoutPanel();
+            lblTotalIncome = new Label();
+            lblTotalBuys = new Label();
+            lblTotalProfit = new Label();
             lblTitleForm = new Label();
-            flowLayoutPanel1 = new FlowLayoutPanel();
-            lblTotalDebt = new Label();
-            lblTotalCustomers = new Label();
             SearchPanel = new Panel();
             txtSearch = new TextBox();
             btnSearch = new Button();
@@ -68,7 +69,7 @@
             OperationsflowLayoutPanel.SuspendLayout();
             gbPayChoiches.SuspendLayout();
             panelstatisticsandOperations.SuspendLayout();
-            flowLayoutPanel1.SuspendLayout();
+            flowLayoutPanel.SuspendLayout();
             SearchPanel.SuspendLayout();
             GbDeletes.SuspendLayout();
             panelButtons.SuspendLayout();
@@ -186,13 +187,57 @@
             // 
             // panelstatisticsandOperations
             // 
+            panelstatisticsandOperations.Controls.Add(flowLayoutPanel);
             panelstatisticsandOperations.Controls.Add(lblTitleForm);
-            panelstatisticsandOperations.Controls.Add(flowLayoutPanel1);
             panelstatisticsandOperations.Controls.Add(SearchPanel);
             panelstatisticsandOperations.Location = new Point(251, 3);
             panelstatisticsandOperations.Name = "panelstatisticsandOperations";
             panelstatisticsandOperations.Size = new Size(300, 158);
             panelstatisticsandOperations.TabIndex = 10;
+            // 
+            // flowLayoutPanel
+            // 
+            flowLayoutPanel.Controls.Add(lblTotalIncome);
+            flowLayoutPanel.Controls.Add(lblTotalBuys);
+            flowLayoutPanel.Controls.Add(lblTotalProfit);
+            flowLayoutPanel.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel.Location = new Point(31, 79);
+            flowLayoutPanel.Name = "flowLayoutPanel";
+            flowLayoutPanel.Size = new Size(247, 76);
+            flowLayoutPanel.TabIndex = 14;
+            // 
+            // lblTotalIncome
+            // 
+            lblTotalIncome.AutoSize = true;
+            lblTotalIncome.ImeMode = ImeMode.NoControl;
+            lblTotalIncome.Location = new Point(138, 3);
+            lblTotalIncome.Margin = new Padding(3);
+            lblTotalIncome.Name = "lblTotalIncome";
+            lblTotalIncome.Size = new Size(106, 19);
+            lblTotalIncome.TabIndex = 9;
+            lblTotalIncome.Text = "مجموع المداخيل :";
+            // 
+            // lblTotalBuys
+            // 
+            lblTotalBuys.AutoSize = true;
+            lblTotalBuys.ImeMode = ImeMode.NoControl;
+            lblTotalBuys.Location = new Point(156, 28);
+            lblTotalBuys.Margin = new Padding(3);
+            lblTotalBuys.Name = "lblTotalBuys";
+            lblTotalBuys.Size = new Size(88, 19);
+            lblTotalBuys.TabIndex = 10;
+            lblTotalBuys.Text = "مجموع الشراء :";
+            // 
+            // lblTotalProfit
+            // 
+            lblTotalProfit.AutoSize = true;
+            lblTotalProfit.ImeMode = ImeMode.NoControl;
+            lblTotalProfit.Location = new Point(127, 53);
+            lblTotalProfit.Margin = new Padding(3);
+            lblTotalProfit.Name = "lblTotalProfit";
+            lblTotalProfit.Size = new Size(117, 19);
+            lblTotalProfit.TabIndex = 11;
+            lblTotalProfit.Text = "مجموع المدفوعات :";
             // 
             // lblTitleForm
             // 
@@ -206,37 +251,6 @@
             lblTitleForm.Size = new Size(143, 23);
             lblTitleForm.TabIndex = 13;
             lblTitleForm.Text = "تقارير جميع المبيعات";
-            // 
-            // flowLayoutPanel1
-            // 
-            flowLayoutPanel1.Controls.Add(lblTotalDebt);
-            flowLayoutPanel1.Controls.Add(lblTotalCustomers);
-            flowLayoutPanel1.Location = new Point(25, 79);
-            flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(247, 76);
-            flowLayoutPanel1.TabIndex = 12;
-            // 
-            // lblTotalDebt
-            // 
-            lblTotalDebt.AutoSize = true;
-            lblTotalDebt.ImeMode = ImeMode.NoControl;
-            lblTotalDebt.Location = new Point(41, 3);
-            lblTotalDebt.Margin = new Padding(3);
-            lblTotalDebt.Name = "lblTotalDebt";
-            lblTotalDebt.Size = new Size(203, 19);
-            lblTotalDebt.TabIndex = 9;
-            lblTotalDebt.Text = "مجموع مدفوعات العملاء في الجدول:";
-            // 
-            // lblTotalCustomers
-            // 
-            lblTotalCustomers.AutoSize = true;
-            lblTotalCustomers.ImeMode = ImeMode.NoControl;
-            lblTotalCustomers.Location = new Point(131, 28);
-            lblTotalCustomers.Margin = new Padding(3);
-            lblTotalCustomers.Name = "lblTotalCustomers";
-            lblTotalCustomers.Size = new Size(113, 19);
-            lblTotalCustomers.TabIndex = 10;
-            lblTotalCustomers.Text = "مجموع العملاء:000";
             // 
             // SearchPanel
             // 
@@ -348,8 +362,9 @@
             button2.Name = "button2";
             button2.Size = new Size(244, 40);
             button2.TabIndex = 8;
-            button2.Text = "      تصدير/طباعة جميع الفاتورات";
+            button2.Text = "طباعة تقرير المبيعات";
             button2.UseVisualStyleBackColor = true;
+            button2.Visible = false;
             button2.Click += button2_Click;
             // 
             // button1
@@ -362,7 +377,7 @@
             button1.Name = "button1";
             button1.Size = new Size(244, 40);
             button1.TabIndex = 7;
-            button1.Text = "       تصدير/طباعة جميع فاتورات العميل";
+            button1.Text = "تصدير جميع الفاتورات Excel";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
@@ -376,7 +391,7 @@
             btnExportCustomer.Name = "btnExportCustomer";
             btnExportCustomer.Size = new Size(244, 40);
             btnExportCustomer.TabIndex = 6;
-            btnExportCustomer.Text = "   تصدير/طباعة الفاتورة";
+            btnExportCustomer.Text = "طباعة الفاتورة المحددة 8cm";
             btnExportCustomer.UseVisualStyleBackColor = true;
             btnExportCustomer.Click += btnExportCustomer_Click;
             // 
@@ -522,8 +537,8 @@
             gbPayChoiches.PerformLayout();
             panelstatisticsandOperations.ResumeLayout(false);
             panelstatisticsandOperations.PerformLayout();
-            flowLayoutPanel1.ResumeLayout(false);
-            flowLayoutPanel1.PerformLayout();
+            flowLayoutPanel.ResumeLayout(false);
+            flowLayoutPanel.PerformLayout();
             SearchPanel.ResumeLayout(false);
             SearchPanel.PerformLayout();
             GbDeletes.ResumeLayout(false);
@@ -547,9 +562,6 @@
         private RadioButton rbDateSearch;
         private Panel panelstatisticsandOperations;
         private Label lblTitleForm;
-        private FlowLayoutPanel flowLayoutPanel1;
-        private Label lblTotalDebt;
-        private Label lblTotalCustomers;
         private Panel SearchPanel;
         private TextBox txtSearch;
         private Button btnSearch;
@@ -568,5 +580,9 @@
         private Button btnDeleteCurrentPage;
         private Button btnDeleteAllReports;
         private Button btnDeleteReportsInPeriod;
+        private FlowLayoutPanel flowLayoutPanel;
+        private Label lblTotalIncome;
+        private Label lblTotalBuys;
+        private Label lblTotalProfit;
     }
 }

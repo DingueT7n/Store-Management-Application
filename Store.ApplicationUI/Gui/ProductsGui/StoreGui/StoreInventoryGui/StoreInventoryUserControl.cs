@@ -175,6 +175,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
             RefreshDgv();
         }
 
@@ -203,6 +204,14 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
             else
             {
                 storeDamagedProductForm.Focus();
+            }
+        }
+
+        private void txtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnSearch_Click(sender, e);
             }
         }
     }

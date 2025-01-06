@@ -55,6 +55,7 @@
             btnDeleteAllReports = new Button();
             btnDeleteReportsInPeriod = new Button();
             panelButtons = new Panel();
+            button3 = new Button();
             button2 = new Button();
             button1 = new Button();
             btnExportCustomer = new Button();
@@ -329,13 +330,28 @@
             // 
             // panelButtons
             // 
+            panelButtons.Controls.Add(button3);
             panelButtons.Controls.Add(button2);
             panelButtons.Controls.Add(button1);
             panelButtons.Controls.Add(btnExportCustomer);
-            panelButtons.Location = new Point(777, 167);
+            panelButtons.Location = new Point(593, 167);
             panelButtons.Name = "panelButtons";
-            panelButtons.Size = new Size(237, 158);
+            panelButtons.Size = new Size(421, 158);
             panelButtons.TabIndex = 9;
+            // 
+            // button3
+            // 
+            button3.Anchor = AnchorStyles.None;
+            button3.Image = (Image)resources.GetObject("button3.Image");
+            button3.ImageAlign = ContentAlignment.MiddleLeft;
+            button3.ImeMode = ImeMode.NoControl;
+            button3.Location = new Point(7, 10);
+            button3.Name = "button3";
+            button3.Size = new Size(200, 40);
+            button3.TabIndex = 9;
+            button3.Text = "تصدير جميع المشتريات";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
             // 
             // button2
             // 
@@ -343,11 +359,11 @@
             button2.Image = (Image)resources.GetObject("button2.Image");
             button2.ImageAlign = ContentAlignment.MiddleLeft;
             button2.ImeMode = ImeMode.NoControl;
-            button2.Location = new Point(3, 110);
+            button2.Location = new Point(213, 109);
             button2.Name = "button2";
-            button2.Size = new Size(238, 40);
+            button2.Size = new Size(200, 40);
             button2.TabIndex = 8;
-            button2.Text = "      تصدير/طباعة جميع الفاتورات";
+            button2.Text = "طباعة الفاتورة نوع A4";
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
@@ -357,9 +373,9 @@
             button1.Image = (Image)resources.GetObject("button1.Image");
             button1.ImageAlign = ContentAlignment.MiddleLeft;
             button1.ImeMode = ImeMode.NoControl;
-            button1.Location = new Point(3, 61);
+            button1.Location = new Point(213, 60);
             button1.Name = "button1";
-            button1.Size = new Size(238, 40);
+            button1.Size = new Size(200, 40);
             button1.TabIndex = 7;
             button1.Text = "طباعة فاتورة التقارير";
             button1.UseVisualStyleBackColor = true;
@@ -371,11 +387,11 @@
             btnExportCustomer.Image = (Image)resources.GetObject("btnExportCustomer.Image");
             btnExportCustomer.ImageAlign = ContentAlignment.MiddleLeft;
             btnExportCustomer.ImeMode = ImeMode.NoControl;
-            btnExportCustomer.Location = new Point(3, 11);
+            btnExportCustomer.Location = new Point(213, 10);
             btnExportCustomer.Name = "btnExportCustomer";
-            btnExportCustomer.Size = new Size(238, 40);
+            btnExportCustomer.Size = new Size(200, 40);
             btnExportCustomer.TabIndex = 6;
-            btnExportCustomer.Text = "   تصدير/طباعة الفاتورة";
+            btnExportCustomer.Text = "طباعة الفاتورة نوع 8cm";
             btnExportCustomer.UseVisualStyleBackColor = true;
             btnExportCustomer.Click += btnExportCustomer_Click;
             // 
@@ -566,5 +582,6 @@
         private Button btnDeleteCurrentPage;
         private Button btnDeleteAllReports;
         private Button btnDeleteReportsInPeriod;
+        private Button button3;
     }
 }

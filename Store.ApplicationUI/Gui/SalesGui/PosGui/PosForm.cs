@@ -15,6 +15,12 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             InitializeTabs();
             posForm = this;
 
+            if (Properties.Settings.Default.PrintSaleOnOrOff)
+            {
+                btnTurnOffPrinter.Text = "اطفاء الطابعة";
+            }
+            else
+                btnTurnOffPrinter.Text = "اشعال الطابعة";
 
 
         }
@@ -101,7 +107,10 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
         private void PosForm_KeyDown(object sender, KeyEventArgs e)
         {
+
             TabPage selectedTab = tabControl.SelectedTab;
+
+
             if (e.Control && e.KeyCode == Keys.E)
             {
                 // Handle Ctrl + E combination
@@ -124,7 +133,26 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 }
 
             }
-
+            else if (e.Control && e.KeyCode == Keys.N)
+            {
+                AddNewClientTab();
+            }
+            else if (e.Control && e.KeyCode == Keys.D)
+            {
+                btnCleanComptoire_Click(sender, e);
+            }
+            else if (e.KeyCode == Keys.F6)
+            {
+                btnDeleteComptoire_Click(sender, e);
+            }
+            else if (e.KeyCode == Keys.F1)
+            {
+                btnEditProduct_Click(sender, e);
+            }
+            else if (e.KeyCode == Keys.F3)
+            {
+                btnPrintLastFacture_Click_1(sender, e);
+            }
             if (selectedTab != null)
             {
                 foreach (Control control in selectedTab.Controls)
@@ -166,6 +194,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
         private void btnDeleteProduct_Click(object sender, EventArgs e)
         {
+            Code.Helper.ToasterHelper.PlayNotificationSound();
             if (tabControl.SelectedTab != null && tabControl.TabCount > 1)
             {
                 TabPage selectedTab = tabControl.SelectedTab;
@@ -177,6 +206,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
         private void btnEditProduct_Click(object sender, EventArgs e)
         {
+            Code.Helper.ToasterHelper.PlayNotificationSound();
             LockUnlockForm lockUnlockForm = new LockUnlockForm();
             lockUnlockForm.ShowDialog();
 
@@ -185,6 +215,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
         private void btnCleanCart_Click(object sender, EventArgs e)
         {
+            Code.Helper.ToasterHelper.PlayNotificationSound();
             var control = GetPosUserControl();
             if (control != null)
             {
@@ -194,6 +225,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
         private void btnTurnOffPrinter_Click(object sender, EventArgs e)
         {
+            Code.Helper.ToasterHelper.PlayNotificationSound();
             if (btnTurnOffPrinter.Text == "اطفاء الطابعة")
             {
                 btnTurnOffPrinter.Text = "اشعال الطابعة";
@@ -210,6 +242,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
         private void btnPrintLastFacture_Click(object sender, EventArgs e)
         {
+            Code.Helper.ToasterHelper.PlayNotificationSound();
             var control = GetPosUserControl();
             if (control != null)
             {
@@ -219,6 +252,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
         private void btnLastFactureA4_Click(object sender, EventArgs e)
         {
+            Code.Helper.ToasterHelper.PlayNotificationSound();
             var control = GetPosUserControl();
             if (control != null)
             {
@@ -231,6 +265,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             try
             {
                 // Start the calculator process
+                Code.Helper.ToasterHelper.PlayNotificationSound();
                 Process.Start("calc.exe");
             }
             catch (Exception ex)
@@ -244,6 +279,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         {
             try
             {
+                Code.Helper.ToasterHelper.PlayNotificationSound();
                 // Create a new process for the on-screen keyboard
                 Process process = new Process
                 {
@@ -268,6 +304,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             try
             {
                 // Start the calculator process
+                Code.Helper.ToasterHelper.PlayNotificationSound();
                 ToasterHelper.PlayNotificationSound();
                 Process.Start("calc.exe");
             }

@@ -151,6 +151,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
         private void btnSearch_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
 
             int take = Properties.Settings.Default.NoOfDataInDgvs;
             int selectedi = cmbpagination.SelectedIndex;
@@ -399,6 +400,107 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
             {
                 btnSearch_Click(sender, e);
             }
+        }
+
+
+        private async void button3_Click(object sender, EventArgs e)
+        {
+            var lastBuy = await _context.BuyDetails
+
+                  .Include(x => x.Buy)
+                  .Include(x => x.Product)
+                  .Include(x => x.Supplier).
+                  OrderByDescending(x => x.Buy.Id)
+                  .Select(bd => new BuyDetailDto
+                  {
+                      Order_ID = bd.Order_ID,
+                      Date = bd.Buy.Date,
+                      Time = bd.Buy.Time,
+                      User_Name = bd.Buy.User_Name,
+                      TotalFacture = bd.Buy.Total,
+                      PaidUp = bd.Buy.PaidUP,
+                      Remain = bd.Buy.Remain,
+                      SupplierName = bd.Supplier.SupplierName, // Assuming `Name` is the property for the supplier's name
+                      ProductName = bd.Product.ProductName,   // Assuming `Name` is the property for the product's name
+                      Quantity = bd.Quentity,
+                      PriceWithTax = bd.PriceWithTax,
+                      TotalPrice = bd.Total,
+                      Discount = bd.Discount,
+                  })
+                  .ToListAsync();
+
+
+
+
+
+            ExportExcel(lastBuy);
+
+        }
+        private void ExportExcel(List<Core.Entities.Buys.BuyDetailDto> data)
+        {
+
+            DataTable dataTable = new DataTable();
+
+
+            using (var reader = FastMember.ObjectReader.Create(data))
+            {
+                dataTable.Load(reader);
+            }
+
+
+            dataTable = arrangedDataTable(dataTable);
+
+
+            ExcelHelper.Export(dataTable, $"AllBuys {data.Count}");
+        }
+        private DataTable arrangedDataTable(DataTable dataTable)
+        {
+
+            dataTable.Columns["Order_ID"].SetOrdinal(0);
+            dataTable.Columns["Order_ID"].ColumnName = "معرف الفاتورة";
+
+            dataTable.Columns["SupplierName"].SetOrdinal(1);
+            dataTable.Columns["SupplierName"].ColumnName = "اسم المورد";
+
+
+            dataTable.Columns["Date"].SetOrdinal(2);
+            dataTable.Columns["Date"].ColumnName = "تاريخ الفاتورة";
+
+
+            dataTable.Columns["Time"].SetOrdinal(3);
+            dataTable.Columns["Time"].ColumnName = "وقت الفاتورة";
+
+            dataTable.Columns["ProductName"].SetOrdinal(4);
+            dataTable.Columns["ProductName"].ColumnName = "اسم المنتج";
+
+            dataTable.Columns["Quantity"].SetOrdinal(5);
+            dataTable.Columns["Quantity"].ColumnName = "الكمية";
+
+            dataTable.Columns["PriceWithTax"].SetOrdinal(6);
+            dataTable.Columns["PriceWithTax"].ColumnName = "سعر المنتج";
+
+            dataTable.Columns["Discount"].SetOrdinal(7);
+            dataTable.Columns["Discount"].ColumnName = "التخفيض";
+
+
+            dataTable.Columns["TotalPrice"].SetOrdinal(8);
+            dataTable.Columns["TotalPrice"].ColumnName = "السعر الاجمالي";
+
+
+            dataTable.Columns["User_Name"].SetOrdinal(9);
+            dataTable.Columns["User_Name"].ColumnName = "المشتري";
+
+
+            dataTable.Columns["TotalFacture"].SetOrdinal(10);
+            dataTable.Columns["TotalFacture"].ColumnName = "حسبة الفاتورة";
+
+
+            dataTable.Columns["PaidUp"].SetOrdinal(11);
+            dataTable.Columns["PaidUp"].ColumnName = "المدفوع";
+
+            dataTable.Columns["Remain"].SetOrdinal(12);
+            dataTable.Columns["Remain"].ColumnName = "الباقي";
+            return dataTable;
         }
     }
 }

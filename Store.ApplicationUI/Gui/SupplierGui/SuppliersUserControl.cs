@@ -145,6 +145,8 @@ namespace Store.ApplicationUI.Gui.SupplierGui
         private void btnSearch_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+
             DgvِSupplier.DataSource = suppliersRepository.SearchAll(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِSupplier);
             txtSearch.Text = string.Empty;
@@ -209,6 +211,14 @@ namespace Store.ApplicationUI.Gui.SupplierGui
             dataTable.Columns["TotalDebts"].SetOrdinal(6);
             dataTable.Columns["TotalDebts"].ColumnName = "مجموع الديون الغير مسددة";
             return dataTable;
+        }
+
+        private void txtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnSearch_Click(sender, e);
+            }
         }
     }
 }

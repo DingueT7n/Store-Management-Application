@@ -32,81 +32,91 @@ namespace Store.ApplicationUI
         {
             InitializeComponent();
             KeyPreview = true;
-            Code.Helper.ConStringHelper.SetConString();
-
-            pageHelper = new(this);
-            pageHelper.SetNewPage(Gui.HomeGui.HomeUserControl.Instance(this));
-
-
-            Context = new ApplicationDbContext();
-            SetScreenState(Properties.Settings.Default.IsMaxScreen);
-
-            isPanelNull = true;
-            //btnStatistics.Enabled = LocalUser.User.UserName
-            if (LocalUser.User is not null)
+            try
             {
-                btnAllProducts.Enabled = LocalUser.User.UserProductAndStore.AllProducts;
-                btnAllStores.Enabled = LocalUser.User.UserProductAndStore.allStores;
-                btnAddProduct.Enabled = LocalUser.User.UserProductAndStore.AddProduct;
-                btnAllCategories.Enabled = LocalUser.User.UserProductAndStore.AllCategories;
-                btnStoreInventory.Enabled = LocalUser.User.UserProductAndStore.StoreInventory;
-                btnProductTransfertReport.Enabled = LocalUser.User.UserProductAndStore.TransfertReport;
-                btnProductOutStoreReport.Enabled = LocalUser.User.UserProductAndStore.ProductOutStoreReport;
 
 
-                btnAllCustomers.Enabled = LocalUser.User.UserCustomer.AllCustomers;
-                btnAddCustomer.Enabled = LocalUser.User.UserCustomer.AddCustomer;
-                btnCustomerAccount.Enabled = LocalUser.User.UserCustomer.CustomerAccount;
-                btnCustomerReport.Enabled = LocalUser.User.UserCustomer.CustomerReport;
+                Code.Helper.ConStringHelper.SetConString();
+
+                pageHelper = new(this);
+                pageHelper.SetNewPage(Gui.HomeGui.HomeUserControl.Instance(this));
 
 
-                btnAllSuppliers.Enabled = LocalUser.User.UserSupplier.AllSuppliers;
-                btnAddSupplier.Enabled = LocalUser.User.UserSupplier.AddSuppliers;
-                btnSupplierAccount.Enabled = LocalUser.User.UserSupplier.SuppliersAccount;
-                btnSupplierReports.Enabled = LocalUser.User.UserSupplier.SuppliersReport;
+                Context = new ApplicationDbContext();
+                SetScreenState(Properties.Settings.Default.IsMaxScreen);
+
+                isPanelNull = true;
+                //btnStatistics.Enabled = LocalUser.User.UserName
+                if (LocalUser.User is not null)
+                {
+                    btnAllProducts.Enabled = LocalUser.User.UserProductAndStore.AllProducts;
+                    btnAllStores.Enabled = LocalUser.User.UserProductAndStore.allStores;
+                    btnAddProduct.Enabled = LocalUser.User.UserProductAndStore.AddProduct;
+                    btnAllCategories.Enabled = LocalUser.User.UserProductAndStore.AllCategories;
+                    btnStoreInventory.Enabled = LocalUser.User.UserProductAndStore.StoreInventory;
+                    btnProductTransfertReport.Enabled = LocalUser.User.UserProductAndStore.TransfertReport;
+                    btnProductOutStoreReport.Enabled = LocalUser.User.UserProductAndStore.ProductOutStoreReport;
 
 
-                btnNewBuy.Enabled = LocalUser.User.UserBuy.NewBuy;
-                btnBuysReports.Enabled = LocalUser.User.UserBuy.BuyReports;
+                    btnAllCustomers.Enabled = LocalUser.User.UserCustomer.AllCustomers;
+                    btnAddCustomer.Enabled = LocalUser.User.UserCustomer.AddCustomer;
+                    btnCustomerAccount.Enabled = LocalUser.User.UserCustomer.CustomerAccount;
+                    btnCustomerReport.Enabled = LocalUser.User.UserCustomer.CustomerReport;
 
 
-                btnNewSale.Enabled = LocalUser.User.UserSale.NewSale;
-                btnSalesReport.Enabled = LocalUser.User.UserSale.SaleReports;
-                btnProfitReport.Enabled = LocalUser.User.UserSale.SaleProfits;
-
-                btnCaisseAndBank.Enabled = LocalUser.User.UserCaisseAndBank.CaissesAndBanks;
-                btnDepositToCaisseReport.Enabled = LocalUser.User.UserCaisseAndBank.DepositToCaisse;
-                btnDepositToBankReport.Enabled = LocalUser.User.UserCaisseAndBank.DepositToBank;
-                btnWithdrawToCaisseReport.Enabled = LocalUser.User.UserCaisseAndBank.WithdrawFromCaisse;
-                btnWithdrawBankReport.Enabled = LocalUser.User.UserCaisseAndBank.WithdrawFromBank;
-                btnTransfertCaisse.Enabled = LocalUser.User.UserCaisseAndBank.TransfertBetweenCaisse;
-                btnTreansfertBankCaisse.Enabled = LocalUser.User.UserCaisseAndBank.TransfertBetweenCaisseAndBank;
-
-                btnAllDeserved.Enabled = LocalUser.User.UserDeservedAndTax.Deserved;
-                btnVouchers.Enabled = LocalUser.User.UserDeservedAndTax.Vouchers;
-                btnVouchersReport.Enabled = LocalUser.User.UserDeservedAndTax.Vouchers;
+                    btnAllSuppliers.Enabled = LocalUser.User.UserSupplier.AllSuppliers;
+                    btnAddSupplier.Enabled = LocalUser.User.UserSupplier.AddSuppliers;
+                    btnSupplierAccount.Enabled = LocalUser.User.UserSupplier.SuppliersAccount;
+                    btnSupplierReports.Enabled = LocalUser.User.UserSupplier.SuppliersReport;
 
 
-                btnAddRefund.Enabled = LocalUser.User.UserRefund.RefundProduct;
-                btnRefundReport.Enabled = LocalUser.User.UserRefund.RefundReport;
-                btnAllEmployees.Enabled = LocalUser.User.UserEmployee.AllEmployee;
-                btnNewEmployee.Enabled = LocalUser.User.UserEmployee.AddEmployee;
-                btnEmployeeBorrowItems.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowItem;
-                btnBorrowMonies.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowMoney;
-                btnSalaries.Enabled = LocalUser.User.UserEmployee.EmployeeSalaries;
-                btnBorrowItemsReport.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowItemsReport;
-                btnBorrowMoniesReport.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowMoneyReport;
-                btnSalariesReport.Enabled = LocalUser.User.UserEmployee.EmployeeSalariesReport;
+                    btnNewBuy.Enabled = LocalUser.User.UserBuy.NewBuy;
+                    btnBuysReports.Enabled = LocalUser.User.UserBuy.BuyReports;
 
-                btnApplicationSettings.Enabled = LocalUser.User.UserSetting.ApplicationSettings;
-                btnUsersRoles.Enabled = LocalUser.User.UserSetting.UserPermession;
-                btnProductDiscount.Enabled = LocalUser.User.UserSetting.ProductDiscounts;
-                btnComptoire.Enabled = LocalUser.User.UserSetting.Pos;
-                btnStatistics.Enabled = LocalUser.User.UserSetting.Statistics;
-                btnBackUp.Enabled = LocalUser.User.UserSetting.BackUp;
-                btnRestore.Enabled = LocalUser.User.UserSetting.Restore;
+
+                    btnNewSale.Enabled = LocalUser.User.UserSale.NewSale;
+                    btnSalesReport.Enabled = LocalUser.User.UserSale.SaleReports;
+                    btnProfitReport.Enabled = LocalUser.User.UserSale.SaleProfits;
+
+                    btnCaisseAndBank.Enabled = LocalUser.User.UserCaisseAndBank.CaissesAndBanks;
+                    btnDepositToCaisseReport.Enabled = LocalUser.User.UserCaisseAndBank.DepositToCaisse;
+                    btnDepositToBankReport.Enabled = LocalUser.User.UserCaisseAndBank.DepositToBank;
+                    btnWithdrawToCaisseReport.Enabled = LocalUser.User.UserCaisseAndBank.WithdrawFromCaisse;
+                    btnWithdrawBankReport.Enabled = LocalUser.User.UserCaisseAndBank.WithdrawFromBank;
+                    btnTransfertCaisse.Enabled = LocalUser.User.UserCaisseAndBank.TransfertBetweenCaisse;
+                    btnTreansfertBankCaisse.Enabled = LocalUser.User.UserCaisseAndBank.TransfertBetweenCaisseAndBank;
+
+                    btnAllDeserved.Enabled = LocalUser.User.UserDeservedAndTax.Deserved;
+                    btnVouchers.Enabled = LocalUser.User.UserDeservedAndTax.Vouchers;
+                    btnVouchersReport.Enabled = LocalUser.User.UserDeservedAndTax.Vouchers;
+
+
+                    btnAddRefund.Enabled = LocalUser.User.UserRefund.RefundProduct;
+                    btnRefundReport.Enabled = LocalUser.User.UserRefund.RefundReport;
+                    btnAllEmployees.Enabled = LocalUser.User.UserEmployee.AllEmployee;
+                    btnNewEmployee.Enabled = LocalUser.User.UserEmployee.AddEmployee;
+                    btnEmployeeBorrowItems.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowItem;
+                    btnBorrowMonies.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowMoney;
+                    btnSalaries.Enabled = LocalUser.User.UserEmployee.EmployeeSalaries;
+                    btnBorrowItemsReport.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowItemsReport;
+                    btnBorrowMoniesReport.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowMoneyReport;
+                    btnSalariesReport.Enabled = LocalUser.User.UserEmployee.EmployeeSalariesReport;
+
+                    btnApplicationSettings.Enabled = LocalUser.User.UserSetting.ApplicationSettings;
+                    btnUsersRoles.Enabled = LocalUser.User.UserSetting.UserPermession;
+                    btnProductDiscount.Enabled = LocalUser.User.UserSetting.ProductDiscounts;
+                    btnComptoire.Enabled = LocalUser.User.UserSetting.Pos;
+                    btnStatistics.Enabled = LocalUser.User.UserSetting.Statistics;
+                    btnBackUp.Enabled = LocalUser.User.UserSetting.BackUp;
+                    btnRestore.Enabled = LocalUser.User.UserSetting.Restore;
+                }
             }
+            catch (Exception ex)
+            {
 
+                ToasterHelper.ShowErrorHappened(ex.Message);
+
+            }
         }
         private void SetScreenState(bool isMax)
         {
@@ -140,7 +150,6 @@ namespace Store.ApplicationUI
                 isPanelCollapsing = true;
                 isPanelAnimating = true;
                 animationTimer.Start();
-
             }
         }
         void TiltOptions()
@@ -153,7 +162,6 @@ namespace Store.ApplicationUI
 
             if (isPanelAnimating)
                 return;
-
             generalFlowLayout = flowLayoutPanel;
 
             if (generalFlowLayout.Visible == true)
@@ -170,6 +178,8 @@ namespace Store.ApplicationUI
                 generalFlowLayout.Show();
                 animationTimer.Start();
             }
+
+
         }
 
         private bool isPanelExpanding = false;
@@ -249,15 +259,15 @@ namespace Store.ApplicationUI
         {
 
             AddProductForm addProductForm = AddProductForm.Instance(this);
-
             addProductForm.Show();
             CloseSubPanels();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            AddCategoryForm addCategoryForm = AddCategoryForm.Instance(this); ;
-            addCategoryForm.ShowDialog();
+            ToasterHelper.PlayNotificationSound();
+            AddCategoryForm addCategoryForm = AddCategoryForm.Instance(this);
+            addCategoryForm.Show();
             CloseSubPanels();
 
         }
@@ -328,8 +338,11 @@ namespace Store.ApplicationUI
 
         private void button5_Click(object sender, EventArgs e)
         {
-            AddStoreForm addStoreForm = AddStoreForm.Instance(this); ;
-            addStoreForm.ShowDialog();
+            ToasterHelper.PlayNotificationSound();
+            AddStoreForm addStoreForm = AddStoreForm.Instance(this);
+            addStoreForm.Show();
+            CloseSubPanels();
+
         }
         public decimal ConvertToFloat(string value)
         {
@@ -597,7 +610,7 @@ namespace Store.ApplicationUI
             try
             {
                 // Define the backup file path
-                string backupFilePath = @"C:\DatabaseBackups\MyDatabaseBackup.bak";
+                string backupFilePath = $@"C:\DatabaseBackups\MyDatabaseBackup {DateTime.Now.Year} - {DateTime.Now.Month} - {DateTime.Now.Day} Time ; {DateTime.Now.Hour}H - {DateTime.Now.Minute}m - {DateTime.Now.Second}s.bak";
 
                 // Create the backup directory if it doesn't exist
                 string backupDirectory = Path.GetDirectoryName(backupFilePath);
@@ -615,12 +628,17 @@ namespace Store.ApplicationUI
                 // Execute the SQL command
                 await Context.Database.ExecuteSqlRawAsync(backupSql);
 
-                MessageBox.Show($"تم النسخ الاحتياطي لقاعدة البيانات بنجاح.\nملف النسخة الاحتياطية: {backupFilePath}", "نجاح النسخ الاحتياطي", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                MessageBox.Show($"تم النسخ الاحتياطي لقاعدة البيانات بنجاح.\n ملف النسخة الاحتياطية: {backupFilePath}", "نجاح النسخ الاحتياطي", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ToasterHelper.ShowBackUp();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"حدث خطأ أثناء النسخ الاحتياطي لقاعدة البيانات:\n{ex.Message}", "فشل النسخ الاحتياطي", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+
+
+                ToasterHelper.ShowErrorHappened(ex.Message);
+
 
             }
         }
@@ -655,12 +673,14 @@ namespace Store.ApplicationUI
                         command.ExecuteNonQuery();
                     }
 
-                    Console.WriteLine($"All processes for database '{databaseName}' have been killed successfully.");
+
                 }
+
+
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred: {ex.Message}");
+                ToasterHelper.ShowErrorHappened(ex.Message);
             }
         }
         private void button9_Click_1(object sender, EventArgs e)
@@ -716,7 +736,7 @@ namespace Store.ApplicationUI
                         //        command.ExecuteNonQuery();
                         //    }
                         //}
-
+                        ToasterHelper.ShowRestore();
                         MessageBox.Show("تم استعادة قاعدة البيانات بنجاح!", "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }

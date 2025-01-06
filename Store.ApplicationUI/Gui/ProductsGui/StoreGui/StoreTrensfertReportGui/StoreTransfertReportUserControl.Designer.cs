@@ -261,7 +261,7 @@
             txtSearch.Location = new Point(50, 0);
             txtSearch.Multiline = true;
             txtSearch.Name = "txtSearch";
-            txtSearch.PlaceholderText = "ادخل باركود المنتج";
+            txtSearch.PlaceholderText = "ادخل معلومة للبحث مثال الباركود";
             txtSearch.Size = new Size(244, 40);
             txtSearch.TabIndex = 9;
             txtSearch.TextAlign = HorizontalAlignment.Center;

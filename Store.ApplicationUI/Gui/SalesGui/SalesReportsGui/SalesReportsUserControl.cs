@@ -100,6 +100,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
                 SetProductsToDgv(0);
                 SetColumns();
                 //_data.Clear();
+                CalculateStatistics();
             }
             else
             {
@@ -147,6 +148,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+
             int take = Properties.Settings.Default.NoOfDataInDgvs;
             int selectedi = cmbpagination.SelectedIndex;
 
@@ -191,6 +194,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
             }
             PaginationHide();
 
+            CalculateStatistics();
 
         }
 
@@ -260,7 +264,82 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
                 btnSearch_Click(sender, e);
             }
         }
+        void CalculateStatistics()
+        {
+            try
+            {
 
+                lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
+                if (DgvSales.Rows.Count > 0)
+                {
+                    // Calculate total buys
+                    //var totalBuy = DgvSales.Rows
+                    //    .Cast<DataGridViewRow>()
+                    //    .Where(row => !string.IsNullOrEmpty(row.Cells[7].FormattedValue.ToString()) &&
+                    //                  !string.IsNullOrEmpty(row.Cells[5].FormattedValue.ToString()))
+                    //    .Sum(row =>
+                    //    {
+                    //        decimal.TryParse(row.Cells[7].FormattedValue.ToString(), out decimal cell8);
+                    //        decimal.TryParse(row.Cells[5].FormattedValue.ToString(), out decimal cell6);
+                    //        return cell8 * cell6;
+                    //    })
+                    //    .ToString("f2");
+
+                    // Calculate total income
+                    var totalIncome = DgvSales.Rows
+                        .Cast<DataGridViewRow>()
+                        .Where(row => !string.IsNullOrEmpty(row.Cells[6].FormattedValue.ToString()) &&
+                      !string.IsNullOrEmpty(row.Cells[5].FormattedValue.ToString()) &&
+                      !string.IsNullOrEmpty(row.Cells[4].FormattedValue.ToString())
+                        )
+
+                        .Sum(row =>
+                        {
+                            decimal.TryParse(row.Cells[6].FormattedValue.ToString(), out decimal cell6);
+                            decimal.TryParse(row.Cells[7].FormattedValue.ToString(), out decimal cell7);
+                            decimal.TryParse(row.Cells[5].FormattedValue.ToString(), out decimal cell5);
+                            return ((cell6 * cell5) - ((cell6 * cell5) * (cell7 / 100)));
+                        })
+                        .ToString("f2");
+
+                    //  var totalPaidUp = DgvSales.Rows
+                    //  .Cast<DataGridViewRow>()
+                    //  .Where(row =>
+                    //!string.IsNullOrEmpty(row.Cells[11].FormattedValue.ToString())
+                    //  )
+
+                    //  .Sum(row =>
+                    //  {
+                    //      decimal.TryParse(row.Cells[11].FormattedValue.ToString(), out decimal cell6);
+                    //      return cell6;
+                    //  })
+                    //  .ToString("f2");
+
+
+                    //var totalProfit = DgvSales.Rows
+                    //    .Cast<DataGridViewRow>()
+                    //    .Where(row => !string.IsNullOrEmpty(row.Cells[10].FormattedValue.ToString()))
+                    //    .Sum(row =>
+                    //    {
+                    //        decimal.TryParse(row.Cells[10].FormattedValue.ToString(), out decimal cell11);
+                    //        return cell11;
+                    //    })
+                    //    .ToString("f2");
+
+
+                    lblTotalIncome.Text = $"مجموع المداخيل : {totalIncome}";
+                    //lblTotalProfit.Text = $"مجموع المدفوعات : {totalPaidUp}";
+                    //lblTotalBuys.Text = $"مجموع المشتريات : {totalBuy}";
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
         private async void btnExportCustomer_Click(object sender, EventArgs e)
         {
             try
@@ -288,11 +367,102 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            var sales = await _contex.SalesDetails
+                   .OrderByDescending(x => x.Sale.Id)
+                   .Include(x => x.Sale)
+                   .Include(x => x.Product)
+                   .Include(x => x.Customer)
+
+                   .Select(bd => new SaleDetailDto
+                   {
+                       Order_ID = bd.Order_ID,
+                       Date = bd.Sale.Date,
+                       Time = bd.Sale.Time,
+                       User_Name = bd.Sale.User_Name,
+                       TotalFacture = bd.Sale.TotalOrder,
+                       PaidUp = bd.Sale.PaidUP,
+                       Remain = bd.Sale.Remain,
+                       CustomerName = bd.Customer.CustomerName, // Assuming `Name` is the property for the supplier's name
+                       ProductName = bd.Product.ProductName,   // Assuming `Name` is the property for the product's name
+                       Quantity = bd.Quentity,
+                       PriceWithTax = bd.PriceWithTax,
+                       TotalPrice = bd.Total,
+                       Discount = bd.Discount,
+                   })
+                   .ToListAsync();
+
+
+
+            ExportExcel(sales);
+        }
+        private void ExportExcel(List<Core.Entities.Sales.SaleDetailDto> data)
         {
 
-        }
+            DataTable dataTable = new DataTable();
 
+
+            using (var reader = FastMember.ObjectReader.Create(data))
+            {
+                dataTable.Load(reader);
+            }
+
+
+            dataTable = arrangedDataTable(dataTable);
+
+
+            ExcelHelper.Export(dataTable, $"AllSales {data.Count}");
+        }
+        private DataTable arrangedDataTable(DataTable dataTable)
+        {
+
+            dataTable.Columns["Order_ID"].SetOrdinal(0);
+            dataTable.Columns["Order_ID"].ColumnName = "معرف الفاتورة";
+
+            dataTable.Columns["CustomerName"].SetOrdinal(1);
+            dataTable.Columns["CustomerName"].ColumnName = "اسم العميل";
+
+
+            dataTable.Columns["Date"].SetOrdinal(2);
+            dataTable.Columns["Date"].ColumnName = "تاريخ الفاتورة";
+
+
+            dataTable.Columns["Time"].SetOrdinal(3);
+            dataTable.Columns["Time"].ColumnName = "وقت الفاتورة";
+
+            dataTable.Columns["ProductName"].SetOrdinal(4);
+            dataTable.Columns["ProductName"].ColumnName = "اسم المنتج";
+
+            dataTable.Columns["Quantity"].SetOrdinal(5);
+            dataTable.Columns["Quantity"].ColumnName = "الكمية";
+
+            dataTable.Columns["PriceWithTax"].SetOrdinal(6);
+            dataTable.Columns["PriceWithTax"].ColumnName = "سعر المنتج";
+
+            dataTable.Columns["Discount"].SetOrdinal(7);
+            dataTable.Columns["Discount"].ColumnName = "التخفيض";
+
+
+            dataTable.Columns["TotalPrice"].SetOrdinal(8);
+            dataTable.Columns["TotalPrice"].ColumnName = "السعر الاجمالي";
+
+
+            dataTable.Columns["User_Name"].SetOrdinal(9);
+            dataTable.Columns["User_Name"].ColumnName = "البائع";
+
+
+            dataTable.Columns["TotalFacture"].SetOrdinal(10);
+            dataTable.Columns["TotalFacture"].ColumnName = "حسبة الفاتورة";
+
+
+            dataTable.Columns["PaidUp"].SetOrdinal(11);
+            dataTable.Columns["PaidUp"].ColumnName = "المدفوع";
+
+            dataTable.Columns["Remain"].SetOrdinal(12);
+            dataTable.Columns["Remain"].ColumnName = "الباقي";
+            return dataTable;
+        }
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();

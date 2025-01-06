@@ -1,4 +1,5 @@
 using System.Globalization;
+using Store.ApplicationUI.Gui.LoginGui;
 
 namespace Store.ApplicationUI
 {
@@ -21,9 +22,8 @@ namespace Store.ApplicationUI
                 Properties.Settings.Default.Save();
             }
             Application.EnableVisualStyles();
-
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            Application.Run(new LoginForm());
         }
     }
 }

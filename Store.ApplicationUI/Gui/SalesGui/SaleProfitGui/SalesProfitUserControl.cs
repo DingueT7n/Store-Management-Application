@@ -163,6 +163,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
         {
             try
             {
+                txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
 
 
                 int take = Properties.Settings.Default.NoOfDataInDgvs;
@@ -500,7 +501,6 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
 
 
 
-            LoadingForm.Instance(_main).Hide();
 
             ExportExcel(result);
         }

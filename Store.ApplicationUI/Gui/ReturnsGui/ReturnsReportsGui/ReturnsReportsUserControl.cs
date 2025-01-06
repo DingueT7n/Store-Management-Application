@@ -159,6 +159,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui.ReturnsReportsGui
         }
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
             int type = rbRefundBuys.Checked ? 2 : 1;
             if (rbRefundAll.Checked) type = 0;
 
@@ -203,6 +204,14 @@ namespace Store.ApplicationUI.Gui.ReturnsGui.ReturnsReportsGui
             }
 
 
+        }
+
+        private void txtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnSearch_Click(sender, e);
+            }
         }
     }
 }

@@ -20,17 +20,20 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
         }
         public static AddStoreForm Instance(MainForm main)
         {
-            _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _context = new ApplicationDbContext();
-            if (_addStoreForm == null)
+            if (_addStoreForm == null || _addStoreForm.IsDisposed)
             {
 
-                _addStoreForm = new AddStoreForm(_main);
+                _addStoreForm = new AddStoreForm(main);
             }
-
-            // Return the singleton instance
-
+            else
+            {
+                if (!_addStoreForm.Visible)
+                {
+                    _addStoreForm.Show();
+                }
+                _addStoreForm.BringToFront();
+            }
+            _context = new ApplicationDbContext();
             return _addStoreForm;
         }
         public void SetCategoryToDgv()
@@ -155,6 +158,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
         private void btnSearch_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+
             DgvStore.DataSource = _context.Stores.Where(x => x.Id.ToString() == txtSearch.Text ||
             x.StoreName.Contains(txtSearch.Text)).ToList();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvStore);

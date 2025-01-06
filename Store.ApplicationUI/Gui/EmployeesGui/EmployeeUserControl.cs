@@ -167,6 +167,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
         private void btnSearch_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
             DgvِCustomer.DataSource = employeesRepository.SearchAll(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
             txtSearch.Text = string.Empty;

@@ -162,6 +162,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
 
             int take = Properties.Settings.Default.NoOfDataInDgvs;
             int selectedi = cmbpagination.SelectedIndex;
@@ -286,6 +287,14 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
             else
             {
 
+                btnSearch_Click(sender, e);
+            }
+        }
+
+        private void txtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
                 btnSearch_Click(sender, e);
             }
         }

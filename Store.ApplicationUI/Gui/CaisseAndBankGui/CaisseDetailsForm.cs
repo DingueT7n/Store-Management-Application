@@ -192,8 +192,10 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
             }
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+      private void btnSearch_Click(object sender, EventArgs e)
         {
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+
             DgvCaisser.DataSource = _context.Caisses.Where(x => x.Id.ToString() == txtSearch.Text ||
             x.CaisseName.Contains(txtSearch.Text)).ToList();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvCaisser);

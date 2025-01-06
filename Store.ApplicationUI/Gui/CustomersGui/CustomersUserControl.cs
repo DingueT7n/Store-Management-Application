@@ -182,6 +182,8 @@ namespace Store.ApplicationUI.Gui.CustomersGui
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+
             DgvِCustomer.DataSource = customersRepository.SearchAll(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
             txtSearch.Text = string.Empty;

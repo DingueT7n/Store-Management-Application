@@ -702,6 +702,7 @@
             // flowLayoutPanelCusotnmer
             // 
             flowLayoutPanelCusotnmer.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            flowLayoutPanelCusotnmer.AutoScroll = true;
             flowLayoutPanelCusotnmer.BackColor = Color.FromArgb(137, 207, 240);
             flowLayoutPanelCusotnmer.Controls.Add(label3);
             flowLayoutPanelCusotnmer.Controls.Add(lblCustomerName);
@@ -709,7 +710,7 @@
             flowLayoutPanelCusotnmer.Controls.Add(IdCustomer);
             flowLayoutPanelCusotnmer.Location = new Point(908, 3);
             flowLayoutPanelCusotnmer.Name = "flowLayoutPanelCusotnmer";
-            flowLayoutPanelCusotnmer.Size = new Size(214, 125);
+            flowLayoutPanelCusotnmer.Size = new Size(214, 133);
             flowLayoutPanelCusotnmer.TabIndex = 34;
             // 
             // label3
@@ -744,9 +745,9 @@
             // 
             gbOperation.Controls.Add(rbRefund);
             gbOperation.Controls.Add(rbSale);
-            gbOperation.Location = new Point(32, 42);
+            gbOperation.Location = new Point(47, 42);
             gbOperation.Name = "gbOperation";
-            gbOperation.Size = new Size(179, 76);
+            gbOperation.Size = new Size(164, 83);
             gbOperation.TabIndex = 32;
             gbOperation.TabStop = false;
             gbOperation.Text = "نوع العميلة";
@@ -754,7 +755,7 @@
             // rbRefund
             // 
             rbRefund.AutoSize = true;
-            rbRefund.Location = new Point(57, 47);
+            rbRefund.Location = new Point(57, 42);
             rbRefund.Name = "rbRefund";
             rbRefund.Size = new Size(103, 23);
             rbRefund.TabIndex = 1;
@@ -766,7 +767,7 @@
             // 
             rbSale.AutoSize = true;
             rbSale.Checked = true;
-            rbSale.Location = new Point(69, 21);
+            rbSale.Location = new Point(69, 17);
             rbSale.Name = "rbSale";
             rbSale.Size = new Size(91, 23);
             rbSale.TabIndex = 0;
@@ -781,7 +782,7 @@
             IdCustomer.BackColor = Color.Transparent;
             IdCustomer.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             IdCustomer.ForeColor = Color.SeaGreen;
-            IdCustomer.Location = new Point(6, 42);
+            IdCustomer.Location = new Point(21, 42);
             IdCustomer.Margin = new Padding(3);
             IdCustomer.Name = "IdCustomer";
             IdCustomer.Size = new Size(20, 23);

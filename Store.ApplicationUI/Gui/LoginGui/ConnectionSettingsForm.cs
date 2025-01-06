@@ -12,9 +12,12 @@ namespace Store.ApplicationUI.Gui.LoginGui
             txtDb.Text = Properties.Settings.Default.DataBase;
 
 
-
-            txtUserCon.Text = Properties.Settings.Default.UserName;
-            txtUserpass.Text = Properties.Settings.Default.PassCon;
+            if (Properties.Settings.Default.ConType != "local")
+            {
+                rbWide.Checked = true;
+                txtUserCon.Text = Properties.Settings.Default.UserCon;
+                txtUserpass.Text = Properties.Settings.Default.PassCon;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -27,7 +30,8 @@ namespace Store.ApplicationUI.Gui.LoginGui
 
             if (rbWide.Checked)
             {
-                Properties.Settings.Default.UserName = txtUserCon.Text;
+                Properties.Settings.Default.ConType = "Wide";
+                Properties.Settings.Default.UserCon = txtUserCon.Text;
                 Properties.Settings.Default.PassCon = txtUserpass.Text;
 
 

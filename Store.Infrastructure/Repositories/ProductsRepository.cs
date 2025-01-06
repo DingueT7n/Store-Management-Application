@@ -126,8 +126,12 @@ namespace Store.Infrastructure.Repositories
             try
             {
                 _context = new ApplicationDbContext();
-                return _context.Products.Include(x => x.Category).Where(x => x.Id.ToString() == searchIteam ||
-                x.Quentity.ToString() == searchIteam ||
+                var result = _context.Products
+                    .Include(x => x.Category)
+                    .Include(x => x.ProductFamilies).AsQueryable()
+                    .Where(x => x.Id.ToString() == searchIteam ||
+                x.CodeBar == (searchIteam) ||
+                x.ColisageBareCode == (searchIteam) ||
                 x.ProductName.Contains(searchIteam) ||
                 x.IsTaxed.ToString() == (searchIteam) ||
                 x.SalePrice.ToString() == (searchIteam) ||
@@ -135,6 +139,10 @@ namespace Store.Infrastructure.Repositories
 
                 )
                     .OrderBy(x => x.Id).ToList();
+                var pf = _context.ProductFamilies.Include(x => x.Product).FirstOrDefault(x => x.CodeBar == searchIteam);
+                if (pf != null)
+                    result.Add(pf.Product);
+                return result;
 
             }
             catch

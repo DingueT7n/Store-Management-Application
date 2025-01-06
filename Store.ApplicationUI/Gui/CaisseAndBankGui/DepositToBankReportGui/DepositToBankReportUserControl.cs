@@ -123,6 +123,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankReportGui
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
             RefreshDgv();
         }
         private void button2_Click(object sender, EventArgs e)

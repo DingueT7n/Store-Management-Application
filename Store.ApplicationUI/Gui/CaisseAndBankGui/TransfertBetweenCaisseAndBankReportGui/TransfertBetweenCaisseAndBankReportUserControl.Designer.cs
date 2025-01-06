@@ -305,7 +305,7 @@
             txtSearch.Location = new Point(50, 0);
             txtSearch.Multiline = true;
             txtSearch.Name = "txtSearch";
-            txtSearch.PlaceholderText = "ادخل اسم الشخص";
+            txtSearch.PlaceholderText = "ادخل معلومة للبحث";
             txtSearch.Size = new Size(244, 40);
             txtSearch.TabIndex = 9;
             txtSearch.TextAlign = HorizontalAlignment.Center;

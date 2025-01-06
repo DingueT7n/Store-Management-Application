@@ -163,6 +163,8 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+
             DgvTypes.DataSource = _context.DeservedsTypes.Where(x => x.Id.ToString() == txtSearch.Text ||
            x.Description.Contains(txtSearch.Text)).ToList();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvTypes);

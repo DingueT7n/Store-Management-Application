@@ -163,5 +163,18 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryReportGui
             RefreshDgv();
 
         }
+
+        private void txtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                RefreshDgv();
+            }
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            RefreshDgv();
+        }
     }
 }

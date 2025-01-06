@@ -571,6 +571,10 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             this.DeleteSenderEvent(sender, e);
             this.Arrows(sender, e);
             this.PayNowEvent(sender, e);
+            if (e.KeyCode == Keys.F5)
+            {
+                btnPrices_Click(sender, e);
+            }
 
         }
         private void SetQuickColumns()
@@ -660,7 +664,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         public async void PrintLastFacture(bool A4)
         {
             int LastFactureId = _context.Sales.OrderByDescending(s => s.Id).FirstOrDefault().Id;
-            if (!A4)
+            if (!A4 && Properties.Settings.Default.PrintSaleOnOrOff)
             {
                 try
                 {
@@ -675,7 +679,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                     throw;
                 }
             }
-            else
+            else if (Properties.Settings.Default.PrintSaleOnOrOff)
             {
                 try
                 {
@@ -1085,6 +1089,12 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                     AddPaymentForm addPaymentForm = new(_posForm, 3);
                     addPaymentForm.LoadData(TotalFacture.ToString(), TotalFacture.ToString(), "0");
                     addPaymentForm.ShowDialog();
+                    var customer = _context.Customers.FirstOrDefault(x => x.Id.ToString() == IdCustomer.Text);
+                    if (customer.MaxDebtAllowed <= customer.TotalDebts + Remain && Remain > 0)
+                    {
+                        MsgHelper.ShowMaxDebtAllowedExceeded();
+                        return;
+                    }
                 }
                 else
                 {
@@ -1138,7 +1148,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                             Code.Helper.ToasterHelper.ShowNewSaleAdd();
 
                             ResetForm();
-                            if (facture)
+                            if (facture && Properties.Settings.Default.PrintSaleOnOrOff)
                             {
                                 //if (Properties.Settings.Default.PrintSaleOnOrOff)
                                 //{
@@ -1417,7 +1427,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 ChangeLabelColeurs(Color.Red);
             }
             else
-                ChangeLabelColeurs(Color.PaleGreen);
+                ChangeLabelColeurs(Color.SeaGreen);
         }
 
         private void rbRefund_CheckedChanged_1(object sender, EventArgs e)
@@ -1430,7 +1440,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             }
             else
             {
-                ChangeLabelColeurs(Color.PaleGreen);
+                ChangeLabelColeurs(Color.SeaGreen);
                 btnPrices.Text = "سعر 1";
                 btnPrices.BackColor = Color.SeaGreen;
             }

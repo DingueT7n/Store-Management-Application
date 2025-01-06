@@ -136,6 +136,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
             DgvِCustomer.DataSource = suppliersRepository.SearchAll(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
             txtSearch.Text = string.Empty;
@@ -324,6 +325,56 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
         {
             txtPayAmout.Enabled = rbPayPartialFacture.Checked;
 
+        }
+
+        private void txtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnSearch_Click(sender, e);
+            }
+        }
+
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ToasterHelper.PlayNotificationSound();
+                if (DgvِCustomer.SelectedRows.Count > 0)
+                {
+                    DataTable buyDetailsTable = await FactureHelper.GetBuyDetailsDataTableAsync(Convert.ToInt32(DgvِCustomer.CurrentRow.Cells[1].Value.ToString()));
+                    Reports.BuysReports.buyA4 buyA4 = new();
+                    buyA4.DataSource = buyDetailsTable;
+                    Reports.ReportPerviwGui.PerviweForm perv = Reports.ReportPerviwGui.PerviweForm.Instance(buyA4);
+                    perv.Show();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ToasterHelper.PlayNotificationSound();
+                if (DgvِCustomer.SelectedRows.Count > 0)
+                {
+                    DataTable buyDetailsTable = await FactureHelper.GetBuyDetailsDataTableAsync(Convert.ToInt32(DgvِCustomer.CurrentRow.Cells[0].Value.ToString()));
+                    Reports.BuysReports.buy8cm buy8cm = new();
+                    buy8cm.DataSource = buyDetailsTable;
+                    Reports.ReportPerviwGui.PerviweForm perv = Reports.ReportPerviwGui.PerviweForm.Instance(buy8cm);
+                    perv.Show();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

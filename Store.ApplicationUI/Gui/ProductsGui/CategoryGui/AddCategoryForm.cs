@@ -21,18 +21,19 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
         }
         public static AddCategoryForm Instance(MainForm main)
         {
-            _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            if (_addCategoryForm == null)
+            if (_addCategoryForm == null || _addCategoryForm.IsDisposed)
             {
                 _context = new ApplicationDbContext();
-
-                _addCategoryForm = new AddCategoryForm(_main);
-
+                _addCategoryForm = new AddCategoryForm(main);
             }
-
-            // Return the singleton instance
-
+            else
+            {
+                if (!_addCategoryForm.Visible)
+                {
+                    _addCategoryForm.Show();
+                }
+                _addCategoryForm.BringToFront();
+            }
             return _addCategoryForm;
         }
         public void SetCategoryToDgv()
@@ -174,6 +175,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+
             DgvCategory.DataSource = _context.Categories.Where(x => x.Id.ToString() == txtSearch.Text ||
             x.CategoryName.Contains(txtSearch.Text)).ToList();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvCategory);

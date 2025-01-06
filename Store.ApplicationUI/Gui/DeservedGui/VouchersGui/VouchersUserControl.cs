@@ -273,6 +273,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
             if (rbReciptVoucher.Checked)
                 DgvProducts.DataSource = _context.ReceiptVouchers.Where
                     (x => x.From == txtSearch.Text || x.ReciverName == txtSearch.Text

@@ -15,11 +15,21 @@
         public static LoadingForm Instance(MainForm main)
         {
             _main = main;
-            if (loadingForm == null)
+            // If the instance is null or has been disposed, create a new one.
+            if (loadingForm == null || loadingForm.IsDisposed)
             {
-
                 loadingForm = new LoadingForm();
             }
+            else
+            {
+                // Bring the form to the front if it exists.
+                if (!loadingForm.Visible)
+                {
+                    loadingForm.Show();
+                }
+                loadingForm.BringToFront();
+            }
+
             return loadingForm;
         }
 

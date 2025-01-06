@@ -237,9 +237,12 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+
 
             DgvProducts.DataSource = productsRepository.SearchAll(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
+
             txtSearch.Text = string.Empty;
         }
 
@@ -360,7 +363,6 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         {
 
             data = await _context.Products.Include(x => x.Category).ToListAsync();
-
 
 
             LoadingForm.Instance(_main).Hide();

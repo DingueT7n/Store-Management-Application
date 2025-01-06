@@ -41,7 +41,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
         public async void LoadData()
         {
 
-            dtpTo.Value = DateTime.Now;
+            dtpTo.Value = DateTime.Now.AddDays(30);
             //ShowLoading
             LoadingForm.Instance(_main).Show();
             if (await Task.Run(() => _context.Database.CanConnect()))
@@ -96,6 +96,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
               _context.Sales,
               s => s.Date,
               s => s.TotalOrder,
+              s => (s.Date >= dtpFrom.Value && s.Date <= dtpTo.Value),
               // Apply filters dynamically
               //s => selectedCaisseId == null || s. == selectedCaisseId,
               s => selectedCustomerId == null || s.Customer.CustomerName.Contains(selectedCustomerId),
@@ -106,7 +107,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
             var buysData = GetChartData(
                 _context.Buys,
                 b => b.Date,
-                b => b.Total,
+                b => b.Total, s => (s.Date >= dtpFrom.Value && s.Date <= dtpTo.Value),
                 //b => selectedCaisseId == null || b.CaisseId == selectedCaisseId,
                 //b => selectedCustomerId == null || b.CustomerId == selectedCustomerId,
                 b => selectedUserId == null || b.User_Name.Contains(selectedUserId)
@@ -116,7 +117,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
             var deservedData = GetChartData(
                 _context.Deserveds,
                 d => d.Date,
-                d => d.Price,
+                d => d.Price, s => (s.Date >= dtpFrom.Value && s.Date <= dtpTo.Value),
                 //d => selectedCaisseId == null || d.CaisseId == selectedCaisseId,
                 //d => selectedCustomerId == null || d.CustomerId == selectedCustomerId,
                 d => selectedUserId == null || d.UserName.Contains(selectedUserId)

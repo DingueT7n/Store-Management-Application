@@ -96,6 +96,14 @@ namespace Store.ApplicationUI.Code.Helper
         {
             ToastForm.Instance("الطباعة جارية", "يتم الطبع الان . . . . .", null).Show();
         }
+        public static void ShowLoginFailed()
+        {
+            ToastForm.Instance("فشل تسجيل الدخول", "اسم المستخدم او كلمة السر غير صحيحة , يرجى اعادة النظر", System.Drawing.Color.Red).Show();
+        }
+        public static void ShowLoginSucceded()
+        {
+            ToastForm.Instance("تم تسجيل الدخول", "معلومات صحيحة , تم تسجيل الدخول", null).Show();
+        }
 
         public static void ShowConnectionIsEstablished()
         {
@@ -105,10 +113,26 @@ namespace Store.ApplicationUI.Code.Helper
         {
             ToastForm.Instance("اتصال بالسيريفر", "لم يتم الاتصال بالسيرفر ", System.Drawing.Color.Red).Show();
         }
+        public static void ShowConnectionIsNotEstablishedByError(string error)
+        {
+            ToastForm.Instance("اتصال بالسيريفر", $"لم يتم الاتصال بالسيرفر بسبب :{error}", System.Drawing.Color.Red).Show();
+        }
+        public static void ShowErrorHappened(string error)
+        {
+            ToastForm.Instance("للاسف فشلت العملية", $"لقد حدث خطأ :{error}", System.Drawing.Color.Red).Show();
+            MessageBox.Show($"لقد حدث خطأ :{error}");
+        }
         public static void ShowSettingCaisse()
         {
             ToastForm.Instance("خلل في الاعدادات", "هناك خلل في الاعدادات ,من فضلك راجع شاشة اعدادات البرنامج ", System.Drawing.Color.Red).Show();
         }
-
+        public static void ShowRestore()
+        {
+            ToastForm.Instance("استعادة نسخة الاحتياطية", "تم استعادة النسخ الاحتياطي لقاعدة البيانات بنجاح", null).Show();
+        }
+        public static void ShowBackUp()
+        {
+            ToastForm.Instance("اخذ نسخة الاحتياطية", "تم اخذ النسخ الاحتياطي لقاعدة البيانات بنجاح", null).Show();
+        }
     }
 }

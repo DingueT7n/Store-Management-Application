@@ -25,83 +25,66 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
         }
         public static UserRolesForm Instance(MainForm main)
         {
-            if (_userRolesForm == null || _userRolesForm.IsDisposed)
+            try
             {
-                _userRolesForm = new UserRolesForm(main);
-            }
-            else
-            {
-                // Bring the form to the front if it exists.
-                if (!_userRolesForm.Visible)
+
+
+                if (_userRolesForm == null || _userRolesForm.IsDisposed)
                 {
-                    _userRolesForm.Show();
+                    _userRolesForm = new UserRolesForm(main);
                 }
-                _userRolesForm.BringToFront();
+                else
+                {
+                    // Bring the form to the front if it exists.
+                    if (!_userRolesForm.Visible)
+                    {
+                        _userRolesForm.Show();
+                    }
+                    _userRolesForm.BringToFront();
+                }
+
+                return _userRolesForm;
             }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
 
-            return _userRolesForm;
-
+                throw;
+            }
         }
+        private void PopulateComboBox(ComboBox comboBox, IEnumerable<object> dataSource, string displayMember, string valueMember)
+        {
+            comboBox.DataSource = dataSource;
+            comboBox.DisplayMember = displayMember;
+            comboBox.ValueMember = valueMember;
+        }
+
         public void SetCategoryToDgv()
         {
-            //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            Dgv.DataSource = _context.Users
-                .ToList();
-            lblidCaisse.Text = (_context.Users.Count() + 1).ToString();
-            var data = _context.Caisses.ToList();
-            cmbCaisse.DataSource = data;
-            cmbCaisse.DisplayMember = "CaisseName";
-            cmbCaisse.ValueMember = "Id";
+            try
+            {
+                var users = _context.Users.ToList();
+                PopulateComboBox(cmbSuppliers, users, "UserName", "Id");
+                PopulateComboBox(cmbUserGS, users, "UserName", "Id");
+                PopulateComboBox(cmbUserPs, users, "UserName", "Id");
+                PopulateComboBox(cmbUserCustomers, users, "UserName", "Id");
+                PopulateComboBox(cmbBuys, users, "UserName", "Id");
+                PopulateComboBox(cmbSales, users, "UserName", "Id");
+                PopulateComboBox(cmbCaisseAndBanks, users, "UserName", "Id");
+                PopulateComboBox(cmbDeservedAndTax, users, "UserName", "Id");
+                PopulateComboBox(cmbRefund, users, "UserName", "Id");
+                PopulateComboBox(cmbEmployee, users, "UserName", "Id");
 
-            var users = _context.Users.ToList();
-            cmbSuppliers.DataSource = users;
-            cmbSuppliers.DisplayMember = "UserName";
-            cmbSuppliers.ValueMember = "Id";
+                var caisses = _context.Caisses.ToList();
+                PopulateComboBox(cmbCaisse, caisses, "CaisseName", "Id");
 
-            cmbUserGS.DataSource = users;
-            cmbUserGS.DisplayMember = "UserName";
-            cmbUserGS.ValueMember = "Id";
-
-            cmbUserPs.DataSource = users;
-            cmbUserPs.DisplayMember = "UserName";
-            cmbUserPs.ValueMember = "Id";
-
-
-            cmbUserCustomers.DataSource = users;
-            cmbUserCustomers.DisplayMember = "UserName";
-            cmbUserCustomers.ValueMember = "Id";
-
-            cmbBuys.DataSource = users;
-            cmbBuys.DisplayMember = "UserName";
-            cmbBuys.ValueMember = "Id";
-
-            cmbSuppliers.DataSource = users;
-            cmbSuppliers.DisplayMember = "UserName";
-            cmbSuppliers.ValueMember = "Id";
-
-            cmbSales.DataSource = users;
-            cmbSales.DisplayMember = "UserName";
-            cmbSales.ValueMember = "Id";
-
-            cmbCaisseAndBanks.DataSource = users;
-            cmbCaisseAndBanks.DisplayMember = "UserName";
-            cmbCaisseAndBanks.ValueMember = "Id";
-
-            cmbDeservedAndTax.DataSource = users;
-            cmbDeservedAndTax.DisplayMember = "UserName";
-            cmbDeservedAndTax.ValueMember = "Id";
-
-            cmbRefund.DataSource = users;
-            cmbRefund.DisplayMember = "UserName";
-            cmbRefund.ValueMember = "Id";
-
-            cmbEmployee.DataSource = users;
-            cmbEmployee.DisplayMember = "UserName";
-            cmbEmployee.ValueMember = "Id";
-
-            cmbType.SelectedIndex = 0;
-
-            lblEmptyData.Visible = dgvHelper.IsEmpty(Dgv);
+                Dgv.DataSource = users;
+                lblEmptyData.Visible = dgvHelper.IsEmpty(Dgv);
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+            }
         }
         public async void LoadData()
         {
@@ -135,6 +118,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             btnEdit.Enabled = false;
             RefreshDgv();
         }
+
         private void SetColumns()
         {
             //DgvProducts.Columns[0].HeaderCell.Value = "المعرف";
@@ -143,19 +127,14 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             Dgv.Columns[2].HeaderCell.Value = "نوع المستخدم";
             Dgv.Columns[3].HeaderCell.Value = "معرف الخزنة";
             Dgv.Columns[4].HeaderCell.Value = "نسبة الربح";
-
-            Dgv.Columns[5].Visible = false;
-            Dgv.Columns[6].Visible = false;
-            Dgv.Columns[7].Visible = false;
-            Dgv.Columns[8].Visible = false;
-            Dgv.Columns[9].Visible = false;
-            Dgv.Columns[10].Visible = false;
-            Dgv.Columns[11].Visible = false;
-            Dgv.Columns[12].Visible = false;
-            Dgv.Columns[13].Visible = false;
-            Dgv.Columns[14].Visible = false;
-
             Dgv.Columns[15].HeaderCell.Value = "معرف المستخدم";
+
+            var columnsToHide = new[] { 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+            foreach (var index in columnsToHide)
+            {
+                Dgv.Columns[index].Visible = false;
+            }
+
             Dgv.CellFormatting += (s, e) =>
             {
                 // Check if this is the column you want to mask
@@ -355,6 +334,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
             ToasterHelper.PlayNotificationSound();
             Dgv.DataSource = _context.Users.Where(x => x.Id.ToString() == txtSearch.Text ||
            x.UserName == (txtSearch.Text)).ToList();

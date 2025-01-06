@@ -165,6 +165,8 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+
             DgvِCustomer.DataSource = customersRepository.SearchAll(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
             txtSearch.Text = string.Empty;
@@ -313,6 +315,48 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
             if (e.KeyCode == Keys.Enter)
             {
                 btnSearch_Click(sender, e);
+            }
+        }
+
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ToasterHelper.PlayNotificationSound();
+                if (DgvِCustomer.SelectedRows.Count > 0)
+                {
+                    DataTable saleDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(Convert.ToInt32(DgvِCustomer.CurrentRow.Cells[1].Value.ToString()));
+                    Reports.sale8cm sale8Cm = new();
+                    sale8Cm.DataSource = saleDetailsTable;
+                    var xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(sale8Cm);
+                    xtraForm1.Show();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ToasterHelper.PlayNotificationSound();
+                if (DgvِCustomer.SelectedRows.Count > 0)
+                {
+                    DataTable ProfitDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(Convert.ToInt32(DgvِCustomer.CurrentRow.Cells[1].Value.ToString()));
+                    Reports.SalesReports.salesA4 salesA4 = new();
+                    salesA4.DataSource = ProfitDetailsTable;
+                    Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(salesA4);
+                    xtraForm1.Show();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
     }

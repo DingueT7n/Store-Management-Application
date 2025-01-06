@@ -195,6 +195,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
             RefreshDgv();
         }
 
