@@ -6,6 +6,7 @@ using Microsoft.SqlServer.Management.Smo;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.Models;
 using Store.ApplicationUI.Gui.CaisseAndBankGui;
+using Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui;
 using Store.ApplicationUI.Gui.EmployeesGui;
 using Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowItemsGui;
 using Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowMoneyGui;
@@ -389,15 +390,29 @@ namespace Store.ApplicationUI
 
         private void btnComptoire_Click(object sender, EventArgs e)
         {
+            ToasterHelper.PlayNotificationSound();
             Context = new ApplicationDbContext();
             if (Code.Helper.VerificationSettingsHelper.IsAllSettingsAreApplied(Context))
             {
-                this.Hide();
-                ToasterHelper.PlayNotificationSound();
+                var caisse = Context.Caisses.FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
+                if (caisse != null)
+                {
+                    if (caisse.Status == Core.Entities.Caisses.CaisseStatus.Closed)
+                    {
+                        OpenOrCloseCaisseForm Form = new OpenOrCloseCaisseForm(this);
+                        Form.ShowDialog();
+                    }
+                    else if (caisse.Status == Core.Entities.Caisses.CaisseStatus.Open)
+                    {
+                        this.Hide();
+                        PosForm posForm = new PosForm(this);
+                        posForm.ShowDialog();
+                        this.Show();
 
-                PosForm posForm = new PosForm();
-                posForm.ShowDialog();
-                this.Show();
+                    }
+                }
+                CloseSubPanels();
+
             }
         }
 
@@ -809,6 +824,12 @@ namespace Store.ApplicationUI
         private void btnProductDiscount_Click(object sender, EventArgs e)
         {
             pageHelper.SetNewPage(Gui.ProductsGui.ProductDiscountGui.ProductDiscountUserControl.Instance(this));
+
+        }
+
+        private void button1_Click_3(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.CaisseAndBankGui.FondCaisseGui.CaisseStatusAndOperationUserControl.Instance(this));
 
         }
     }

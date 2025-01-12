@@ -217,6 +217,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
                     _context.SaveChanges();
                     _context.Update(SetCaisse(Convert.ToDecimal(txtValueDeserved.Text)));
                     _context.Add(SetCaisseWithdraw(Convert.ToDecimal(txtValueDeserved.Text)));
+                    _context.SaveChanges();
 
                     Code.Helper.ToasterHelper.ShowAddToast();
 
@@ -251,12 +252,16 @@ namespace Store.ApplicationUI.Gui.DeservedGui
                         value = deserved.Price - Convert.ToDecimal(txtValueDeserved.Text);
                         _context.Update(SetCaissedepos(value));
                         _context.Add(SetCaisseDeposit(value));
+                        _context.SaveChanges();
+
                     }
                     else if (deserved.Price < Convert.ToDecimal(txtValueDeserved.Text))
                     {
                         value = Convert.ToDecimal(txtValueDeserved.Text) - deserved.Price;
                         _context.Update(SetCaisse(value));
                         _context.Add(SetCaisseWithdraw(value));
+                        _context.SaveChanges();
+
                     }
                     deserved.TypeId = Convert.ToInt32(CMBType.SelectedValue);
                     deserved.UserName = txtUserName.Text;

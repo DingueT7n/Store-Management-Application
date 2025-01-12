@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui;
 using Store.ApplicationUI.Gui.PaymentGui;
+using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 {
@@ -8,13 +10,15 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
     {
         private bool dragging = false;
         private int draggedTabIndex;
+        private MainForm _main;
         private static PosForm posForm;
+        private ApplicationDbContext _contex;
         public PosForm()
         {
             InitializeComponent();
             InitializeTabs();
             posForm = this;
-
+            _contex = new ApplicationDbContext();
             if (Properties.Settings.Default.PrintSaleOnOrOff)
             {
                 btnTurnOffPrinter.Text = "اطفاء الطابعة";
@@ -24,7 +28,22 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
 
         }
+        public PosForm(MainForm main)
+        {
+            InitializeComponent();
+            InitializeTabs();
+            _main = main;
+            posForm = this;
+            _contex = new ApplicationDbContext();
+            if (Properties.Settings.Default.PrintSaleOnOrOff)
+            {
+                btnTurnOffPrinter.Text = "اطفاء الطابعة";
+            }
+            else
+                btnTurnOffPrinter.Text = "اشعال الطابعة";
 
+
+        }
         private void InitializeTabs()
         {
             // Add initial tab for client 1
@@ -413,6 +432,21 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         private void btnCaisse_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
+
+            var caisse = _contex.Caisses.FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
+            if (caisse != null)
+            {
+                if (caisse.Status == Core.Entities.Caisses.CaisseStatus.Open)
+                {
+                    OpenOrCloseCaisseForm Form = new OpenOrCloseCaisseForm(this);
+                    Form.btnClose.Visible = true;
+                    Form.btnOpen.Visible = false;
+
+                    OpenOrCloseCaisseForm.SetPose(this);
+                    Form.ShowDialog();
+                }
+            }
+
 
         }
     }

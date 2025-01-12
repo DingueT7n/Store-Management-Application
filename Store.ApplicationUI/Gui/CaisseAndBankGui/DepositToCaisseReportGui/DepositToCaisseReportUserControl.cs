@@ -133,9 +133,16 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui
             }
         }
 
-
-        private void rbStoresFromAll_CheckedChanged(object sender, EventArgs e) => RefreshDgvAsync(0);
-        private void rbStoresFrom_CheckedChanged(object sender, EventArgs e) => RefreshDgvAsync(0);
+        private void rbStoresFromAll_CheckedChanged(object sender, EventArgs e)
+        {
+            cmbCaisse.Enabled = rbStoresFrom.Checked;
+            RefreshDgvAsync(0);
+        }
+        private void rbStoresFrom_CheckedChanged(object sender, EventArgs e)
+        {
+            cmbCaisse.Enabled = rbStoresFrom.Checked;
+            RefreshDgvAsync(0);
+        }
         private void btnSearch_Click(object sender, EventArgs e) => RefreshDgvAsync(0);
         private void cmbCaisse_SelectionChangeCommitted(object sender, EventArgs e) => RefreshDgvAsync(0);
 

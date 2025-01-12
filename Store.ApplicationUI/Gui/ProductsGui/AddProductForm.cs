@@ -968,7 +968,6 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
             }
         }
-
         private void txtSalePrice_KeyUp(object sender, KeyEventArgs e)
         {
             txtSalePrice2.Text = txtSalePrice.Text;

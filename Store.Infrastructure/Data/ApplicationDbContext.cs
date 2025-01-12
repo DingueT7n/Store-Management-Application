@@ -82,8 +82,8 @@ namespace Store.Infrastructure.Data
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //string conString = @"Server=.\SQLEXPRESS; Database=StoreDbEFCore;Encrypt=false; Integrated Security = true;";
-            optionsBuilder.UseSqlServer(ConString.ConStringValue).EnableSensitiveDataLogging() // Enables detailed logging
+            string conString = @"Server=.\SQLEXPRESS; Database=StoreDbEFCore;Encrypt=false; Integrated Security = true;";
+            optionsBuilder.UseSqlServer(/*ConString.ConStringValue*/conString).EnableSensitiveDataLogging() // Enables detailed logging
                   .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information); ;
             base.OnConfiguring(optionsBuilder);
             //     string conString = "Server=localhost;Database=StoreDbEFCore;User=root;Password=admin;";
@@ -148,6 +148,8 @@ namespace Store.Infrastructure.Data
         public DbSet<SaleProfit> SalesProfits { get; set; }
         public DbSet<Core.Entities.Stores.Store> Stores { get; set; }
         public DbSet<Caisse> Caisses { get; set; }
+        public DbSet<CaisseOperation> CaisseOperations { get; set; }
+        public DbSet<CaisseStatusDetail> CaisseStatusDetails { get; set; }
         public DbSet<CaisseDeposit> CaissesDeposits { get; set; }
         public DbSet<CaisseWithdraw> CaissesWithdraws { get; set; }
         public DbSet<CaisseTransfere> CaissesTransferes { get; set; }

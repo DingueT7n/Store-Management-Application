@@ -21,6 +21,13 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
             this.Owner = main;
             LoadData();
         }
+        public static void CheckInstance()
+        {
+            if (_caisseDetailsForm is not null)
+            {
+                _caisseDetailsForm.LoadData();
+            }
+        }
         public static CaisseDetailsForm Instance(MainForm main)
         {
             if (_caisseDetailsForm == null || _caisseDetailsForm.IsDisposed)
@@ -38,17 +45,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
             }
 
             return _caisseDetailsForm;
-            _main = main;
-            // If the instance is null, create a new one and assign it to the static field
 
-
-            _caisseDetailsForm = new CaisseDetailsForm(_main);
-
-
-
-            // Return the singleton instance
-
-            return _caisseDetailsForm;
         }
         public void SetCategoryToDgv()
         {
@@ -89,9 +86,14 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
         private void SetColumns()
         {
             //DgvProducts.Columns[0].HeaderCell.Value = "المعرف";
-            DgvCaisser.Columns[2].HeaderCell.Value = "معرف الصندوق";
             DgvCaisser.Columns[0].HeaderCell.Value = "اسم الصندوق";
             DgvCaisser.Columns[1].HeaderCell.Value = "رصيد الصندوق";
+            DgvCaisser.Columns[2].HeaderCell.Value = "حالة الصندوق";
+            DgvCaisser.Columns[5].HeaderCell.Value = "معرف الصندوق";
+            DgvCaisser.Columns[3].Visible = false;
+            DgvCaisser.Columns[4].Visible = false;
+            //DgvCaisser.Columns[3].Visible = false;
+
         }
         private void RefreshDgv()
         {
@@ -131,7 +133,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
                 if (MsgHelper.ShowEditDialog())
                 {
                     Store.Core.Entities.Caisses.Caisse caisse = _context.Caisses.FirstOrDefault(x => x.Id ==
-                    Convert.ToInt32(DgvCaisser.CurrentRow.Cells[2].Value.ToString())
+                    Convert.ToInt32(DgvCaisser.CurrentRow.Cells[5].Value.ToString())
                     );
                     if (caisse != null)
                     {
@@ -161,7 +163,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
                 if (MsgHelper.ShowDeleteDialog())
                 {
                     Store.Core.Entities.Caisses.Caisse caisse = _context.Caisses.FirstOrDefault(x => x.Id ==
-                    Convert.ToInt32(DgvCaisser.CurrentRow.Cells[2].Value.ToString())
+                    Convert.ToInt32(DgvCaisser.CurrentRow.Cells[5].Value.ToString())
                     );
                     if (caisse != null)
                     {
@@ -192,7 +194,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
             }
         }
 
-      private void btnSearch_Click(object sender, EventArgs e)
+        private void btnSearch_Click(object sender, EventArgs e)
         {
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
 
@@ -223,7 +225,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
                 {
                     btnAddCaisse.Enabled = false;
                     txtNameِCategory.Text = DgvCaisser.CurrentRow.Cells[0].Value.ToString();
-                    lblidCaisse.Text = DgvCaisser.CurrentRow.Cells[2].Value.ToString();
+                    lblidCaisse.Text = DgvCaisser.CurrentRow.Cells[5].Value.ToString();
                     btnEditCaisse.Enabled = true;
                     //btnRefresh.Enabled = true;
                 }

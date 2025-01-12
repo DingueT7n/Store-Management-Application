@@ -96,7 +96,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
               _context.Sales,
               s => s.Date,
               s => s.TotalOrder,
-              s => (s.Date >= dtpFrom.Value && s.Date <= dtpTo.Value),
+              s => (s.Date.Date >= dtpFrom.Value.Date && s.Date.Date <= dtpTo.Value.Date),
               // Apply filters dynamically
               //s => selectedCaisseId == null || s. == selectedCaisseId,
               s => selectedCustomerId == null || s.Customer.CustomerName.Contains(selectedCustomerId),
@@ -107,7 +107,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
             var buysData = GetChartData(
                 _context.Buys,
                 b => b.Date,
-                b => b.Total, s => (s.Date >= dtpFrom.Value && s.Date <= dtpTo.Value),
+                b => b.Total, s => (s.Date.Date >= dtpFrom.Value.Date && s.Date.Date <= dtpTo.Value.Date),
                 //b => selectedCaisseId == null || b.CaisseId == selectedCaisseId,
                 //b => selectedCustomerId == null || b.CustomerId == selectedCustomerId,
                 b => selectedUserId == null || b.User_Name.Contains(selectedUserId)
@@ -117,7 +117,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
             var deservedData = GetChartData(
                 _context.Deserveds,
                 d => d.Date,
-                d => d.Price, s => (s.Date >= dtpFrom.Value && s.Date <= dtpTo.Value),
+                d => d.Price, s => (s.Date.Date >= dtpFrom.Value.Date && s.Date.Date <= dtpTo.Value.Date),
                 //d => selectedCaisseId == null || d.CaisseId == selectedCaisseId,
                 //d => selectedCustomerId == null || d.CustomerId == selectedCustomerId,
                 d => selectedUserId == null || d.UserName.Contains(selectedUserId)
@@ -139,45 +139,56 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 _context.CaissesDeposits,
                 s => s.Date,
                 s => s.Money,
-                    s => s.Caisse_ID == (selectedCaisseId is not null ? selectedCaisseId : null)
+                s => s.Caisse_ID == (selectedCaisseId is not null ? selectedCaisseId : null),
+                s => (s.Date.Date >= dtpFrom.Value.Date && s.Date.Date <= dtpTo.Value.Date)
 
                         //selectedCaisseId is not null ? s => s.Id == selectedCaisseId : null
                         );
             //s => selectedCustomerId == null || s.Caisse_ID.ToString() == (selectedCustomerId)
             var caisseWithdrawData = GetChartData(
                  _context.CaissesWithdraws,
-                 s => s.Date,
+                 s => s.Date.Date,
                  s => s.Money,
-                    s => s.Caisse_ID == (selectedCaisseId is not null ? selectedCaisseId : null)
+                    s => s.Caisse_ID == (selectedCaisseId is not null ? selectedCaisseId : null),
+                    s => (s.Date.Date >= dtpFrom.Value.Date && s.Date.Date <= dtpTo.Value.Date)
 
              );
 
             // Combine the data into a single list for plotting
             var combinedData = caisseDepositData
-                .Select(d => new { d.Date, Total = d.Total, Type = "Deposit" })
+                .Select(d => new { d.Date.Date, Total = d.Total, Type = "Deposit" })
                 .Concat(
-                    caisseWithdrawData.Select(w => new { w.Date, Total = w.Total, Type = "Withdraw" })
+                    caisseWithdrawData.Select(w => new { w.Date.Date, Total = w.Total, Type = "Withdraw" })
                 )
-                .OrderBy(x => x.Date) // Ensure the data is sorted by date
+                .OrderBy(x => x.Date.Date) // Ensure the data is sorted by date
                 .ToList();
+            var combinedDataq = caisseDepositData
+            .Select(d => new { d.Date.Date, Total = d.Total, Type = "Deposit" })
+            .Concat(
+                caisseWithdrawData.Select(w => new { w.Date.Date, Total = w.Total, Type = "Withdraw" })
+            )
+            .GroupBy(x => new { x.Date.Date, x.Type })
+            .Select(g => new { g.Key.Date.Date, g.Key.Type, Total = g.Sum(x => x.Total) })
+            .OrderBy(x => x.Date.Date)
+            .ToList();
 
             // Group data for easier plotting (optional, in case dates overlap)
             var groupedData = combinedData
-                .GroupBy(x => new { x.Date, x.Type })
-                .Select(g => (g.Key.Date, g.Key.Type, Total: g.Sum(x => x.Total)))
+                .GroupBy(x => new { x.Date.Date, x.Type })
+                .Select(g => (g.Key.Date.Date, g.Key.Type, Total: g.Sum(x => x.Total)))
                 .ToList();
             var combinedData1 = caisseDepositData
-     .Select(d => new { d.Date, Amount = d.Total }) // Deposits as positive
+     .Select(d => new { d.Date.Date, Amount = d.Total }) // Deposits as positive
      .Concat(
-         caisseWithdrawData.Select(w => new { w.Date, Amount = -w.Total }) // Withdrawals as negative
+         caisseWithdrawData.Select(w => new { w.Date.Date, Amount = -w.Total }) // Withdrawals as negative
      )
-     .OrderBy(x => x.Date) // Ensure sorted by date
+     .OrderBy(x => x.Date.Date) // Ensure sorted by date
      .ToList();
 
             // Step 2: Calculate cumulative real value
             decimal cumulativeValue = 0;
             var realValueData = combinedData1
-                .GroupBy(x => x.Date) // Group by date
+                .GroupBy(x => x.Date.Date) // Group by date
                 .OrderBy(g => g.Key)  // Ensure dates are processed in order
                 .Select(g =>
                 {
@@ -190,15 +201,15 @@ namespace Store.ApplicationUI.Gui.HomeGui
 
             AddSeriesToChart(chartControl9,
                 "الايداع في الصناديق",
-                groupedData.Where(g => g.Type == "Deposit").Select(g => (g.Date, g.Total)).ToList(),
+                groupedData.Where(g => g.Type == "Deposit").Select(g => (g.Date.Date, g.Total)).ToList(),
                 ViewType.Line,
                 Color.Blue,
-                "معاملات الصناديق");
+                "معاملات الصناديق السحب والايداع");
 
 
             AddSeriesToChart(chartControl9,
                 "السحب من الصناديق",
-                groupedData.Where(g => g.Type == "Withdraw").Select(g => (g.Date, g.Total)).ToList(),
+                groupedData.Where(g => g.Type == "Withdraw").Select(g => (g.Date.Date, g.Total)).ToList(),
                 ViewType.Line,
                 Color.Red,
                 "معاملات الصناديق");
@@ -310,7 +321,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 .Select(g => new { Date = g.Key, Total = g.Sum(sumSelector) })
                 //.Where(x => dtpFrom.Value <= x.Date && dtpTo.Value >= x.Date)
                 .AsEnumerable()
-                .Select(x => (x.Date, x.Total))
+                .Select(x => (x.Date.Date, x.Total))
                 .ToList();
         }
 
@@ -380,7 +391,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
 
             // Step 1: Retrieve the Top 10 Products Sold by Profit
             var top10ProductsByProfit = _context.SalesProfits // Adjust the table name if needed
-               .Where(x => dtpFrom.Value <= x.Sale.Date && dtpTo.Value >= x.Sale.Date)
+               .Where(x => dtpFrom.Value.Date <= x.Sale.Date && dtpTo.Value.Date >= x.Sale.Date)
 
                 .GroupBy(s => s.Product.ProductName) // Group by Product Name
                                                      // Group by Product Name
@@ -454,7 +465,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
             var netProfitData = _context.SalesProfits.Where(s => selectedCustomerId == null || s.Cust_Name.Contains(selectedCustomerId))
                 .Where(
               s => selectedUserId == null || s.Sale.User_Name.Contains(selectedUserId))
-                .Where(x => dtpFrom.Value <= x.Sale.Date && dtpTo.Value >= x.Sale.Date)
+                .Where(x => dtpFrom.Value.Date <= x.Sale.Date && dtpTo.Value.Date >= x.Sale.Date)
                 .GroupBy(sp => sp.Sale.Date.Date)
                 .Select(g => new
                 {
@@ -468,7 +479,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
 
             var deservedData = _context.Deserveds
                 .Where(s => s.UserName.Contains(selectedUserId))
-                .Where(x => dtpFrom.Value <= x.Date && dtpTo.Value >= x.Date)
+                .Where(x => dtpFrom.Value.Date <= x.Date.Date && dtpTo.Value.Date >= x.Date.Date)
                 .GroupBy(d => d.Date.Date)
                 .Select(g => new
                 {
@@ -571,7 +582,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
             var netProfitData = _context.SalesProfits.Where(s => selectedCustomerId == null || s.Cust_Name.Contains(selectedCustomerId))
                 .Where(
               s => selectedUserId == null || s.Sale.User_Name.Contains(selectedUserId))
-               .Where(x => dtpFrom.Value <= x.Sale.Date && dtpTo.Value >= x.Sale.Date)
+               .Where(x => dtpFrom.Value.Date <= x.Sale.Date && dtpTo.Value.Date >= x.Sale.Date)
                 .GroupBy(sp => sp.Sale.Date.Date) // Group by Date
 
                 .Select(g => new
@@ -651,7 +662,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
 
             // Step 1: Retrieve the Top 10 Products Sold by Quantity
             var top15Products = _context.SalesDetails // Adjust table name as necessary
-               .Where(x => dtpFrom.Value <= x.Sale.Date && dtpTo.Value >= x.Sale.Date)
+               .Where(x => dtpFrom.Value.Date <= x.Sale.Date && dtpTo.Value.Date >= x.Sale.Date)
                 .GroupBy(s => s.Product.ProductName) // Group by Product Name
                 .Select(g => new
                 {

@@ -22,4 +22,12 @@ namespace Store.Core.Interfaces
     {
 
     }
+    public interface ICaisseStatusDetailRepository : IGenericRepository<CaisseStatusDetail>
+    {
+
+    }
+    public interface ICaisseOperationRepository : IGenericRepository<CaisseOperation>
+    {
+
+    }
 }

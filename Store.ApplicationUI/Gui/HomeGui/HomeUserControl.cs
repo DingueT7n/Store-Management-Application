@@ -1,4 +1,5 @@
 ﻿using DevExpress.Data.Linq.Helpers;
+using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.Models;
 using Store.ApplicationUI.Gui.CaisseAndBankGui;
@@ -75,7 +76,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
             lblEmptyData3.Visible = dgvHelper.IsEmpty(dataCustomerDebts);
         }
 
-        private void GetStatics()
+        private async void GetStatics()
         {
             SummaryDataBuys.Text = _context.Buys.Count().ToString();
             SummaryDataCustomers.Text = _context.Customers.Count().ToString();
@@ -84,7 +85,19 @@ namespace Store.ApplicationUI.Gui.HomeGui
             SummaryDataDeserved.Text = _context.Deserveds.Count().ToString();
             SummaryDataProducts.Text = _context.Products.Count().ToString();
             SummaryDataSuppliers.Text = _context.Suppliers.Count().ToString();
-
+            var result = _context.Users
+                        .Include(u => u.UserBuy)
+                        .Include(u => u.UserCaisseAndBank)
+                        .Include(u => u.UserCustomer)
+                        .Include(u => u.UserDeservedAndTax)
+                        .Include(u => u.UserEmployee)
+                        .Include(u => u.UserProductAndStore)
+                        .Include(u => u.UserRefund)
+                        .Include(u => u.UserSale)
+                        .Include(u => u.UserSetting)
+                        .Include(u => u.UserSupplier)
+                        .FirstOrDefault(u => u.UserName == "علاء الدين" && u.Password == "g");
+            LocalUser.User = result;
         }
         private void SetColumns()
         {
@@ -295,7 +308,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 if (LocalUser.User.UserCaisseAndBank.CaissesAndBanks)
                 {
                     _main.CloseSubPanels();
-                    PosForm posForm = new PosForm();
+                    PosForm posForm = new PosForm(_main);
                     posForm.ShowDialog();
                     _main.Show();
                 }

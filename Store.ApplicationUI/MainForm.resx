@@ -636,6 +636,24 @@
         jeK9fvq9dkYR6CfyKFljh+y2/xkGBRQOilDDlHfIdWf8CzjOb4bZNPG9NQF4AAAAAElFTkSuQmCC
 </value>
   </data>
+  <data name="button1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAt1JREFUWEft
+        lN1LFGEUxvdP8DpvxkXDwmqKzE9yEhT6oBYqobAS0lAyGMQu+oB5wYvILqSkwm7Uq8qIhL4uQlYI3erG
+        /oBgvOzO/Q+eznnnvOvr5o67UwaBD/w4c57zvHtmlp1N7ei/VLUPd9cNhASqb2BC7O2TMwiHCAw1Qwid
+        IWQcH1V0vZgexHRhPoQrcuzvqWEQP7sC5E6OIcvUXwNklKJr1TSC0Mz2XceP+gH0yfjP5PZDuVexRqAY
+        iZjMb3Mi6w7AlVjlau6D19SHVaqOWAWRX7gBmitG2oLYo9y8tJXL64USMh29QDES07lN5is842sdSqLu
+        i1A2Ymt1X8B3AhYZGWmxZ9dEOt0DZSN2WaK8XmxqIvWcg7Jhb2QZ/sgSglKMfobHufNno8WmJtLlDJQN
+        e08WgDgeL0S5S2eixaYmUv8pKBv2Pr0DYnkb5SivF5uaSMMnoGzYC1/DD19BlWQueu+Hj0eLTU2k0W4o
+        G/GCOG52oUNyerGpiXS3E8qGvdudCOK4dSy6gTud0WJTE2nMg7LR3lEEpdCHRGMd0WJTE+l+O5QNew/a
+        EZRCHyLd8+CMtwPjbQgLtQ3T7EukPD1shbJhb7IZQTGPWqKvnTXZggz1a5ynmf5PmGiFyz35eb7WwXI0
+        dQTKRnuHERTzrDG6gafNcKYasUZ9YYk5x2Kf5nnOiRWv2UNQNuIFNjoomj2IGZMzon7Db4DnnJM2Xs9d
+        KBv2Xu5HYKODohcHsDrnrj89nyEP5iyLrj3yQmnj9aYBykbskppv2Pi03NM5j6tc688ozpXUx3ooiywR
+        bAHe713/Bqjnc/iwB75Y7HlEXtp4ZWvhZ+swk3VQld0NtSV1WOQqxzeV5Mr7DfDi5TTyS2lM59IItoJz
+        lMeSs/mrxj5/Xs6p4P9ghW7iSxo+LVDlQvn8V7qhZSd6Pb/RYu7Zz9VG/w3bKn7CXA1meCEBvZj6ip58
+        R/9OqdQv1/ZfqyQeI2sAAAAASUVORK5CYII=
+</value>
+  </data>
   <data name="btnDepositToCaisseReport.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAehJREFUWEft

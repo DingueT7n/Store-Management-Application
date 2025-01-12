@@ -73,5 +73,28 @@ namespace Store.Infrastructure.Data.Config
 
         }
     }
+    public class CaisseStatusDetailConfiguration : IEntityTypeConfiguration<CaisseStatusDetail>
+    {
+        public void Configure(EntityTypeBuilder<CaisseStatusDetail> builder)
+        {
+            builder.Property(x => x.Id).IsRequired();
+            builder.HasKey(x => x.Id);
+            builder.HasOne(bd => bd.Caisse).WithMany().HasForeignKey(bd => bd.CaisseId).OnDelete(DeleteBehavior.Restrict);
+
+            builder.Property(p => p.MoneyBeforeInCaisse).HasColumnType("decimal(18,2)");
+            builder.Property(p => p.MoneyBefore).HasColumnType("decimal(18,2)");
+            builder.Property(p => p.MoneyAfterInCaisse).HasColumnType("decimal(18,2)");
+            builder.Property(p => p.MoneyAfter).HasColumnType("decimal(18,2)");
+        }
+    }
+    public class CaisseOperationConfiguration : IEntityTypeConfiguration<CaisseOperation>
+    {
+        public void Configure(EntityTypeBuilder<CaisseOperation> builder)
+        {
+            builder.Property(x => x.Id).IsRequired();
+            builder.HasKey(x => x.Id);
+            builder.HasOne(bd => bd.CaisseStatusDetail).WithMany().HasForeignKey(bd => bd.CaisseStatusDetailId).OnDelete(DeleteBehavior.Restrict);
+        }
+    }
 
 }

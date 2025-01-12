@@ -188,4 +188,322 @@ namespace Store.Infrastructure.Repositories
         }
     }
 
+    public class CaisseStatusDetailRepository : GenericRepository<CaisseStatusDetail>, ICaisseStatusDetailRepository
+    {
+        public (List<CaisseStatusDetail> Deposits, int TotalCount) GetAllStatus(
+            string t1,
+
+            string OperatorBy,
+            DateTime dtpFrom,
+            DateTime dtpTo,
+            int take,
+            int skip)
+        {
+            try
+            {
+                // Query base
+                var query = _context.CaisseStatusDetails
+
+                    .OrderBy(x => x.Id)
+                    .AsQueryable();
+
+                // Filter by barcode if provided
+
+                if (!string.IsNullOrEmpty(OperatorBy))
+                    query = query.Where(x => x.OpenedBy == OperatorBy || x.OpenedBy.Contains(OperatorBy));
+                if (!string.IsNullOrEmpty(OperatorBy))
+                    query = query.Where(x => x.ClosedBy == OperatorBy || x.ClosedBy.Contains(OperatorBy));
+
+
+                // Filter by Caisse name if provided
+                if (!string.IsNullOrEmpty(t1))
+                    query = query.Where(x => x.Caisse != null && x.Caisse.CaisseName == t1);
+
+                // Filter by date range
+
+                query = query.Where(x => (x.OpeningTime != null ? (x.OpeningTime >= dtpFrom) : true)
+                && ((x.ClosingTime != null ? (x.ClosingTime <= dtpTo) : true)));
+
+                // Calculate total count before applying pagination
+                int totalCount = query.Count();
+
+                // Apply pagination (skip and take)
+                var deposits = query
+                    .OrderByDescending(x => x.Id)
+                    // Ensure consistent ordering
+                    .Skip(skip)
+                    .Take(take)
+                    .ToList();
+
+                return (deposits, totalCount);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error retrieving the deposits", ex);
+            }
+        }
+        public (List<CaisseOperation> Deposits, int TotalCount) GetAllStatusOperations(
+           string t1,
+
+           string OperatorBy,
+           DateTime dtpFrom,
+           DateTime dtpTo,
+           int take,
+           int skip)
+        {
+            try
+            {
+                // Query base
+                var query = _context.CaisseOperations
+                    .Include(x => x.CaisseStatusDetail)
+                    .OrderBy(x => x.Id)
+                    .AsQueryable();
+
+                // Filter by barcode if provided
+
+                if (!string.IsNullOrEmpty(OperatorBy))
+                    query = query.Where(x => x.CaisseStatusDetail.OpenedBy == OperatorBy || x.CaisseStatusDetail.OpenedBy.Contains(OperatorBy));
+                if (!string.IsNullOrEmpty(OperatorBy))
+                    query = query.Where(x => x.CaisseStatusDetail.ClosedBy == OperatorBy || x.CaisseStatusDetail.ClosedBy.Contains(OperatorBy));
+
+
+                // Filter by Caisse name if provided
+                if (!string.IsNullOrEmpty(t1))
+                    query = query.Where(x => x.CaisseStatusDetail.Caisse != null && x.CaisseStatusDetail.Caisse.CaisseName == t1);
+
+                // Filter by date range
+
+                query = query.Where(x => (x.OperationDate.Date >= dtpFrom.Date)
+                && (x.OperationDate.Date <= dtpTo.Date));
+
+                // Calculate total count before applying pagination
+                int totalCount = query.Count();
+
+                // Apply pagination (skip and take)
+                var deposits = query
+                    .OrderByDescending(x => x.Id)
+                    // Ensure consistent ordering
+                    .Skip(skip)
+                    .Take(take)
+                    .ToList();
+
+                return (deposits, totalCount);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error retrieving the deposits", ex);
+            }
+        }
+        public CaisseStatusDetailRepository(ApplicationDbContext context) : base(context)
+        {
+
+        }
+        public async Task OpenCaisse(int caisseId, string userName, decimal beforeMoney,
+     decimal DA2000, decimal DA1000, decimal DA500, decimal DA200, decimal DA100, decimal DA50,
+     decimal DA20, decimal DA10, decimal DA5, decimal Default)
+        {
+            var caisse = _context.Caisses.FirstOrDefault(x => x.Id == caisseId);
+            if (caisse == null)
+                throw new ArgumentException("Caisse not found.");
+
+            if (caisse.Status == CaisseStatus.Open)
+                throw new InvalidOperationException("Caisse is already open.");
+
+            caisse.Status = CaisseStatus.Open;
+            _context.Caisses.Update(caisse);
+            await _context.SaveChangesAsync();
+
+            var caisseStatusDetail = new CaisseStatusDetail
+            {
+                CaisseId = caisseId,
+                Status = CaisseStatus.Open,
+                CaisseName = caisse.CaisseName,
+                MoneyBeforeInCaisse = caisse.MoneyinCaisse,
+                MoneyBefore = beforeMoney,
+                OpeningTime = DateTime.Now,
+                OpenedBy = userName
+            };
+            _context.CaisseStatusDetails.Add(caisseStatusDetail);
+            await _context.SaveChangesAsync();
+
+            var caisseOperation = new CaisseOperation
+            {
+                CaisseStatusDetailId = caisseStatusDetail.Id,
+                Status = CaisseStatus.Open,
+                Nbr2000DA = DA2000,
+                Nbr1000DA = DA1000,
+                Nbr500DA = DA500,
+                Nbr200DA = DA200,
+                Nbr100DA = DA100,
+                Nbr50DA = DA50,
+                Nbr20DA = DA20,
+                Nbr10DA = DA10,
+                Nbr5DA = DA5,
+                ValueAddedDefault = Default,
+                OperationDate = DateTime.Now,
+                Time = DateTime.Now.ToString("HH:mm:ss"),
+                PerformedBy = userName
+            };
+            _context.CaisseOperations.Add(caisseOperation);
+            await _context.SaveChangesAsync();
+        }
+
+        public decimal BeforeClosing(int caisseId, decimal moneyAfter
+            )
+        {
+            _context = new ApplicationDbContext();
+
+            try
+            {
+
+
+                var caisse = _context.Caisses.FirstOrDefault(x => x.Id == caisseId);
+                if (caisse == null)
+                    throw new ArgumentException("Caisse not found.");
+
+                if (caisse.Status == CaisseStatus.Closed)
+                    throw new InvalidOperationException("Caisse is already closed.");
+
+                var lastStatus = _context.CaisseStatusDetails
+                    .Where(x => x.CaisseId == caisseId && x.Status == CaisseStatus.Open)
+                    .OrderByDescending(x => x.Id)
+                    .FirstOrDefault();
+
+                if (lastStatus == null)
+                    throw new InvalidOperationException("No open session found for this caisse.");
+
+                var caisseDeposits = _context.CaissesDeposits.Where(x => x.Caisse_ID ==
+                caisse.Id && (x.Date >= lastStatus.OpeningTime && x.Date <= DateTime.Now)).Sum(x => x.Money);
+                var caisseWithdraw = _context.CaissesWithdraws.Where(x => x.Caisse_ID ==
+                caisse.Id && (x.Date >= lastStatus.OpeningTime && x.Date <= DateTime.Now)).Sum(x => x.Money);
+
+                lastStatus.IsBalanced = ((caisseDeposits - caisseWithdraw) + lastStatus.MoneyBefore) == moneyAfter;
+                return ((caisseDeposits - caisseWithdraw) + lastStatus.MoneyBefore) - moneyAfter;
+            }
+            catch (Exception ex)
+            {
+
+
+                throw ex;
+            }
+        }
+
+        public static string FormatTimeSpanToReadableString(TimeSpan timeSpan)
+        {
+            var parts = new List<string>();
+
+            // Add days if present
+            if (timeSpan.Days > 0)
+                parts.Add($"{timeSpan.Days} {(timeSpan.Days == 1 ? "يوم" : "ايام")}");
+
+            // Add hours if present
+            if (timeSpan.Hours > 0)
+                parts.Add($"{timeSpan.Hours} {(timeSpan.Hours == 1 ? "ساعة" : "ساعات")}");
+
+            // Add minutes if present
+            if (timeSpan.Minutes > 0)
+                parts.Add($"{timeSpan.Minutes} {(timeSpan.Minutes == 1 ? "دقيقة" : "دقائق")}");
+
+            // Add seconds if present
+            if (timeSpan.Seconds > 0)
+                parts.Add($"{timeSpan.Seconds} {(timeSpan.Seconds == 1 ? "ثانية" : "ثواني")}");
+
+            // Join the parts with "and" for better readability
+            return string.Join(" و ", parts);
+        }
+
+        public async Task CloseCaisse(int caisseId, string userName, decimal moneyAfter,
+            decimal DA2000, decimal DA1000, decimal DA500, decimal DA200, decimal DA100, decimal DA50,
+            decimal DA20, decimal DA10, decimal DA5, decimal Default)
+        {
+            _context = new ApplicationDbContext();
+            using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+
+
+                    var caisse = _context.Caisses.FirstOrDefault(x => x.Id == caisseId);
+                    if (caisse == null)
+                        throw new ArgumentException("Caisse not found.");
+
+                    if (caisse.Status == CaisseStatus.Closed)
+                        throw new InvalidOperationException("Caisse is already closed.");
+
+                    var lastStatus = _context.CaisseStatusDetails
+                        .Where(x => x.CaisseId == caisseId && x.Status == CaisseStatus.Open)
+                        .OrderByDescending(x => x.Id)
+                        .FirstOrDefault();
+
+                    if (lastStatus == null)
+                        throw new InvalidOperationException("No open session found for this caisse.");
+
+                    caisse.Status = CaisseStatus.Closed;
+                    _context.Caisses.Update(caisse);
+                    await _context.SaveChangesAsync();
+                    lastStatus.ClosingTime = DateTime.Now;
+
+                    var caisseDepositslist = _context.CaissesDeposits.Where(x => x.Caisse_ID ==
+                    caisse.Id && (x.Date >= lastStatus.OpeningTime && x.Date <= DateTime.Now)).ToList();
+                    var caisseDeposits = caisseDepositslist.Sum(x => x.Money);
+
+                    var caisseWithdraw = _context.CaissesWithdraws.Where(x => x.Caisse_ID ==
+                    caisse.Id && (x.Date >= lastStatus.OpeningTime && x.Date <= DateTime.Now)).Sum(x => x.Money);
+
+                    lastStatus.Status = CaisseStatus.Closed;
+                    lastStatus.MoneyAfterInCaisse = caisse.MoneyinCaisse;
+                    lastStatus.MoneyAfter = moneyAfter;
+                    lastStatus.ClosedBy = userName;
+                    lastStatus.IsBalanced = ((caisseDeposits - caisseWithdraw) + lastStatus.MoneyBefore) == moneyAfter;
+
+                    lastStatus.Duration = FormatTimeSpanToReadableString(lastStatus.ClosingTime.HasValue
+                    ? (lastStatus.ClosingTime.Value - lastStatus.OpeningTime.Value)
+                    : TimeSpan.Zero);
+
+
+                    _context.CaisseStatusDetails.Update(lastStatus);
+                    await _context.SaveChangesAsync();
+
+                    var caisseOperation = new CaisseOperation
+                    {
+                        CaisseStatusDetailId = lastStatus.Id,
+                        Status = CaisseStatus.Closed,
+                        Nbr2000DA = DA2000,
+                        Nbr1000DA = DA1000,
+                        Nbr500DA = DA500,
+                        Nbr200DA = DA200,
+                        Nbr100DA = DA100,
+                        Nbr50DA = DA50,
+                        Nbr20DA = DA20,
+                        Nbr10DA = DA10,
+                        Nbr5DA = DA5,
+                        ValueAddedDefault = Default,
+                        OperationDate = DateTime.Now,
+                        Time = DateTime.Now.ToString("HH:mm:ss"),
+                        PerformedBy = userName
+                    };
+                    _context.CaisseOperations.Add(caisseOperation);
+                    await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+
+                    throw ex;
+                }
+            }
+
+        }
+    }
+    public class CaisseOperationRepository : GenericRepository<CaisseOperation>, ICaisseOperationRepository
+    {
+
+        public CaisseOperationRepository(ApplicationDbContext context) : base(context)
+        {
+
+        }
+
+    }
+
 }

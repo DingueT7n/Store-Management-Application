@@ -309,5 +309,20 @@ namespace Store.ApplicationUI.Code.Helper
                   "ادخال غير صحيح "
                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+        public static bool ShowAreYouSureYouWantToCloseCAisseWithNegative()
+        {
+            var result = MessageBox.Show("هل انت متأكد من اغلاق الصندوق بالسالب ؟ ",
+                   "اغلاق الصندوق بالسالب"
+                   , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

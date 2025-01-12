@@ -6,26 +6,32 @@ namespace Store.ApplicationUI.Code.Helper
 {
     public static class ToasterHelper
     {
-        private static MediaPlayer _player = new(); // Field to keep MediaPlayer alive
-        static string soundFilePath = Path.Combine(Application.StartupPath, "ClickMouse.wav");
-
-        public static void PlayNotificationSound()
+        private static MediaPlayer _player = new();
+        private static readonly object _lock = new();
+        private static void PlaySound(string path)
         {
-            try
+            lock (_lock)
             {
-                if (!File.Exists(soundFilePath))
+                try
                 {
-                    //MessageBox.Show($"Sound file not found: {soundFilePath}");
-                    return;
+                    if (!File.Exists(path))
+                        return;
+
+                    _player.Open(new Uri(path));
+                    _player.MediaEnded += (s, e) => _player.Close();
+                    _player.Play();
                 }
-                _player.Open(new Uri(soundFilePath));
-                _player.MediaEnded += (s, e) => _player.Close(); // Cleanup after playback
-                _player.Play();
+                catch (Exception)
+                {
+                    throw;
+                    //Console.WriteLine($"Error playing sound: {ex.Message}");
+                }
             }
-            catch (Exception)
-            {
-                //MessageBox.Show($"Error playing sound: {ex.Message}");
-            }
+        }
+        public static void PlayNotificationSound(string soundFileName = "ClickMouse.wav")
+        {
+            string soundPath = Path.Combine(Application.StartupPath, soundFileName);
+            PlaySound(soundPath);
         }
         public static void ShowAddToast()
         {
@@ -133,6 +139,14 @@ namespace Store.ApplicationUI.Code.Helper
         public static void ShowBackUp()
         {
             ToastForm.Instance("اخذ نسخة الاحتياطية", "تم اخذ النسخ الاحتياطي لقاعدة البيانات بنجاح", null).Show();
+        }
+        public static void ShowOpenedCaisse()
+        {
+            ToastForm.Instance("فتح الصندوق", "تم فتح الصندوق بنجاح", null).Show();
+        }
+        public static void ShowCloseCaisse()
+        {
+            ToastForm.Instance("غلق الصندوق", "تم غلق الصندوق بنجاح", null).Show();
         }
     }
 }
