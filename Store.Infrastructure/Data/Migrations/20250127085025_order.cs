@@ -7,7 +7,7 @@
 namespace Store.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigrations : Migration
+    public partial class order : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +20,7 @@ namespace Store.Infrastructure.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Money = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Time = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    Time = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Reason = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -51,7 +51,7 @@ namespace Store.Infrastructure.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Money = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Time = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    Time = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Reason = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -68,7 +68,7 @@ namespace Store.Infrastructure.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProductBarcode = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    ProductBarcode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProductPrice = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Barcode = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -84,7 +84,8 @@ namespace Store.Infrastructure.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CaisseName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    MoneyinCaisse = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false)
+                    MoneyinCaisse = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -99,7 +100,7 @@ namespace Store.Infrastructure.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Money = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Time = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    Time = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     From_ = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     To_ = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -129,7 +130,7 @@ namespace Store.Infrastructure.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CustomerName = table.Column<string>(type: "nvarchar(75)", maxLength: 75, nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(250)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MaxDebtAllowed = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
@@ -146,7 +147,7 @@ namespace Store.Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(250)", nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -159,13 +160,13 @@ namespace Store.Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EmployeeName = table.Column<string>(type: "nvarchar(250)", nullable: true),
+                    EmployeeName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Salary = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     DateJoined = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    National_ID = table.Column<string>(type: "nvarchar(100)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    National_ID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(75)", maxLength: 75, nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(250)", nullable: true)
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -178,12 +179,17 @@ namespace Store.Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Logo = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    Logo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Phone1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Phone2 = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Fax = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CompteRib = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RC = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AI = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IDFiscal = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NIS = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -209,9 +215,9 @@ namespace Store.Infrastructure.Data.Migrations
                     ReciverName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Time = table.Column<string>(type: "nvarchar(100)", nullable: true),
-                    From = table.Column<string>(type: "nvarchar(250)", nullable: true),
-                    Reason = table.Column<string>(type: "nvarchar(250)", nullable: true)
+                    Time = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    From = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -225,7 +231,7 @@ namespace Store.Infrastructure.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Time = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    Time = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OrderType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     User_Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TotalOrder = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
@@ -352,6 +358,43 @@ namespace Store.Infrastructure.Data.Migrations
                         principalTable: "Caisses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CaisseStatusDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CaisseId = table.Column<int>(type: "int", nullable: false),
+                    CaisseName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OpenedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClosedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MoneyBeforeInCaisse = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    MoneyBefore = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    MoneyAfterInCaisse = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    MoneyAfter = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    OpeningTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ClosingTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Duration = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsBalanced = table.Column<bool>(type: "bit", nullable: false),
+                    CaisseId1 = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CaisseStatusDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CaisseStatusDetails_Caisses_CaisseId",
+                        column: x => x.CaisseId,
+                        principalTable: "Caisses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CaisseStatusDetails_Caisses_CaisseId1",
+                        column: x => x.CaisseId1,
+                        principalTable: "Caisses",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -595,6 +638,45 @@ namespace Store.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CaisseOperations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    PerformedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OperationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Nbr2000DA = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Nbr1000DA = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Nbr500DA = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Nbr200DA = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Nbr100DA = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Nbr50DA = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Nbr20DA = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Nbr10DA = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Nbr5DA = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    ValueAddedDefault = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Time = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CaisseStatusDetailId = table.Column<int>(type: "int", nullable: false),
+                    CaisseId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CaisseOperations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CaisseOperations_CaisseStatusDetails_CaisseStatusDetailId",
+                        column: x => x.CaisseStatusDetailId,
+                        principalTable: "CaisseStatusDetails",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CaisseOperations_Caisses_CaisseId",
+                        column: x => x.CaisseId,
+                        principalTable: "Caisses",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EmployeesBorrowItems",
                 columns: table => new
                 {
@@ -646,6 +728,12 @@ namespace Store.Infrastructure.Data.Migrations
                         name: "FK_ProductDiscounts_Products_Pro_Id",
                         column: x => x.Pro_Id,
                         principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductDiscounts_Stores_Store_Id",
+                        column: x => x.Store_Id,
+                        principalTable: "Stores",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -908,7 +996,7 @@ namespace Store.Infrastructure.Data.Migrations
                         column: x => x.Pro_ID,
                         principalTable: "Products",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_SalesDetails_Sales_Order_ID",
                         column: x => x.Order_ID,
@@ -1149,6 +1237,7 @@ namespace Store.Infrastructure.Data.Migrations
                     User_Id = table.Column<int>(type: "int", nullable: false),
                     AllProducts = table.Column<bool>(type: "bit", nullable: false),
                     AddProduct = table.Column<bool>(type: "bit", nullable: false),
+                    allStores = table.Column<bool>(type: "bit", nullable: false),
                     AllCategories = table.Column<bool>(type: "bit", nullable: false),
                     StoreInventory = table.Column<bool>(type: "bit", nullable: false),
                     TransfertReport = table.Column<bool>(type: "bit", nullable: false),
@@ -1266,7 +1355,12 @@ namespace Store.Infrastructure.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     User_Id = table.Column<int>(type: "int", nullable: false),
                     UserPermession = table.Column<bool>(type: "bit", nullable: false),
-                    ApplicationSettings = table.Column<bool>(type: "bit", nullable: false)
+                    ApplicationSettings = table.Column<bool>(type: "bit", nullable: false),
+                    Pos = table.Column<bool>(type: "bit", nullable: false),
+                    Statistics = table.Column<bool>(type: "bit", nullable: false),
+                    ProductDiscounts = table.Column<bool>(type: "bit", nullable: false),
+                    BackUp = table.Column<bool>(type: "bit", nullable: false),
+                    Restore = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1309,12 +1403,12 @@ namespace Store.Infrastructure.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Caisses",
-                columns: new[] { "Id", "CaisseName", "MoneyinCaisse" },
+                columns: new[] { "Id", "CaisseName", "MoneyinCaisse", "Status" },
                 values: new object[,]
                 {
-                    { 1, "الصندوق الأول", 0m },
-                    { 2, "الصندوق الثاني", 0m },
-                    { 3, "الصندوق الثالث", 0m }
+                    { 1, "الصندوق الأول", 0m, 1 },
+                    { 2, "الصندوق الثاني", 0m, 1 },
+                    { 3, "الصندوق الثالث", 0m, 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -1379,9 +1473,29 @@ namespace Store.Infrastructure.Data.Migrations
                 column: "SupplierId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CaisseOperations_CaisseId",
+                table: "CaisseOperations",
+                column: "CaisseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CaisseOperations_CaisseStatusDetailId",
+                table: "CaisseOperations",
+                column: "CaisseStatusDetailId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CaissesDeposits_Caisse_ID",
                 table: "CaissesDeposits",
                 column: "Caisse_ID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CaisseStatusDetails_CaisseId",
+                table: "CaisseStatusDetails",
+                column: "CaisseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CaisseStatusDetails_CaisseId1",
+                table: "CaisseStatusDetails",
+                column: "CaisseId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CaissesTransferes_Caisse_From",
@@ -1452,6 +1566,11 @@ namespace Store.Infrastructure.Data.Migrations
                 name: "IX_ProductDiscounts_Pro_Id",
                 table: "ProductDiscounts",
                 column: "Pro_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductDiscounts_Store_Id",
+                table: "ProductDiscounts",
+                column: "Store_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductFamilies_Pro_Id",
@@ -1790,6 +1909,9 @@ namespace Store.Infrastructure.Data.Migrations
                 name: "BuyDetails");
 
             migrationBuilder.DropTable(
+                name: "CaisseOperations");
+
+            migrationBuilder.DropTable(
                 name: "CaissesBankTransferes");
 
             migrationBuilder.DropTable(
@@ -1874,7 +1996,7 @@ namespace Store.Infrastructure.Data.Migrations
                 name: "TaxesReports");
 
             migrationBuilder.DropTable(
-                name: "Caisses");
+                name: "CaisseStatusDetails");
 
             migrationBuilder.DropTable(
                 name: "DeservedsTypes");
@@ -1896,6 +2018,9 @@ namespace Store.Infrastructure.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Buys");
+
+            migrationBuilder.DropTable(
+                name: "Caisses");
 
             migrationBuilder.DropTable(
                 name: "Categories");

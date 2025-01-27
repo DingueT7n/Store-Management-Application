@@ -97,13 +97,11 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
             txtValue.Text = "0.00";
             txtUserName.Text = Properties.Settings.Default.UserName;
             txtNotes.Text = "";
-
         }
         private void button1_Click(object sender, EventArgs e)
         {
             Close();
         }
-
         private void txtValue_KeyPress(object sender, KeyPressEventArgs e)
         {
             string currentText = (sender as TextBox)?.Text ?? string.Empty;
@@ -142,18 +140,14 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
             txtPerson.Text = toPerson;
             btnAddDeserved.Visible = false;
             btnEditDeserved.Visible = true;
-
         }
-
         private void btnAddDeserved_Click(object sender, EventArgs e)
         {
             try
             {
-
-
                 if (rbReciptVoucher.Checked)
                 {
-                    _context.ReceiptVouchers.Add(new Core.Entities.Vouchers.ReceiptVoucher
+                    _context.ReceiptVouchers.Add(new ReceiptVoucher
                     {
                         From = txtPerson.Text,
                         ReciverName = txtUserName.Text,
@@ -164,10 +158,11 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                     });
                     _context.Update(AddCaisse(Convert.ToDecimal(txtValue.Text)));
                     _context.Add(SetCaisseDeposit(Convert.ToDecimal(txtValue.Text)));
+                    _context.SaveChanges();
                 }
                 else
                 {
-                    _context.SendVouchers.Add(new Core.Entities.Vouchers.SendVoucher
+                    _context.SendVouchers.Add(new SendVoucher
                     {
                         To = txtPerson.Text,
                         SenderName = txtUserName.Text,
@@ -178,19 +173,16 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                     });
                     _context.Update(MinusCaisse(Convert.ToDecimal(txtValue.Text)));
                     _context.Add(SetCaisseWithdraw(Convert.ToDecimal(txtValue.Text)));
-
+                    _context.SaveChanges();
                 }
-                _context.SaveChanges();
                 if (!VouchersUserControl.CheckInstance())
                 {
                     VouchersUserControl.RefreshDgv();
                 }
-                Code.Helper.ToasterHelper.ShowAddToast();
-
+                ToasterHelper.ShowAddToast();
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -217,7 +209,6 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
         CaisseDeposit SetCaisseDeposit(decimal value)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
-
             return new CaisseDeposit
             {
                 Caisse_ID = Properties.Settings.Default.DefaultCaisseId,
@@ -232,8 +223,6 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
         CaisseWithdraw SetCaisseWithdraw(decimal value)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
-
-
             var caisseWithdraw = new CaisseWithdraw
             {
                 Caisse_ID = Properties.Settings.Default.DefaultCaisseId,
@@ -266,6 +255,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                         receipt.Reason = txtNotes.Text;
 
                         _context.Update(receipt);
+                        await _context.SaveChangesAsync();
                     }
 
                 }
@@ -280,9 +270,11 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                         receipt.Date = Dtp.Value;
                         receipt.Reason = txtNotes.Text;
                         _context.Update(receipt);
+                        await _context.SaveChangesAsync();
+
                     }
                 }
-                await _context.SaveChangesAsync();
+
                 if (!VouchersUserControl.CheckInstance())
                 {
                     VouchersUserControl.RefreshDgv();

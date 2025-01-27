@@ -312,7 +312,7 @@ namespace Store.Infrastructure.Repositories
                         Buy_Price = bd.Buy_Price,
                         Discount = bd.Discount,
                         Total = bd.Total,
-                        profit = Convert.ToDecimal((bd.Total - (bd.Quentity * bd.Buy_Price))),
+                        profit = Convert.ToDecimal((bd.Total - (bd.Quentity * bd.Buy_Price)).ToString("f2")),
                         TotalFacture = bd.Sale.TotalOrder,
                         PaidUp = bd.Sale.PaidUP,
                         Remain = bd.Sale.Remain,
@@ -365,7 +365,8 @@ namespace Store.Infrastructure.Repositories
                         Buy_Price = bd.Buy_Price,
                         Discount = bd.Discount,
                         Total = bd.Total,
-                        profit = Convert.ToDecimal((bd.Total - (bd.Quentity * bd.Buy_Price))),
+                        profit = Convert.ToDecimal((bd.Total - (bd.Quentity * bd.Buy_Price)).ToString("f2")),
+
                         TotalFacture = bd.Sale.TotalOrder,
                         PaidUp = bd.Sale.PaidUP,
                         Remain = bd.Sale.Remain,
@@ -414,7 +415,8 @@ namespace Store.Infrastructure.Repositories
                         Buy_Price = bd.Buy_Price,
                         Discount = bd.Discount,
                         Total = bd.Total,
-                        profit = Convert.ToDecimal((bd.Total - (bd.Quentity * bd.Buy_Price))),
+                        profit = Convert.ToDecimal((bd.Total - (bd.Quentity * bd.Buy_Price)).ToString("f2")),
+
                         TotalFacture = bd.Sale.TotalOrder,
                         PaidUp = bd.Sale.PaidUP,
                         Remain = bd.Sale.Remain,
@@ -464,7 +466,8 @@ namespace Store.Infrastructure.Repositories
                         Buy_Price = bd.Buy_Price,
                         Discount = bd.Discount,
                         Total = bd.Total,
-                        profit = Convert.ToDecimal((bd.Total - (bd.Quentity * bd.Buy_Price))),
+                        profit = Convert.ToDecimal((bd.Total - (bd.Quentity * bd.Buy_Price)).ToString("f2")),
+
                         TotalFacture = bd.Sale.TotalOrder,
                         PaidUp = bd.Sale.PaidUP,
                         Remain = bd.Sale.Remain,

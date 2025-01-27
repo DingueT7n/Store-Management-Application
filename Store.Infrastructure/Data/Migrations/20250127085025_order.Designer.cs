@@ -12,8 +12,8 @@ using Store.Infrastructure.Data;
 namespace Store.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250102203200_AddingSomeUserRoles2")]
-    partial class AddingSomeUserRoles2
+    [Migration("20250127085025_order")]
+    partial class order
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -314,6 +314,9 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Caisses");
@@ -323,19 +326,22 @@ namespace Store.Infrastructure.Data.Migrations
                         {
                             Id = 1,
                             CaisseName = "الصندوق الأول",
-                            MoneyinCaisse = 0m
+                            MoneyinCaisse = 0m,
+                            Status = 1
                         },
                         new
                         {
                             Id = 2,
                             CaisseName = "الصندوق الثاني",
-                            MoneyinCaisse = 0m
+                            MoneyinCaisse = 0m,
+                            Status = 1
                         },
                         new
                         {
                             Id = 3,
                             CaisseName = "الصندوق الثالث",
-                            MoneyinCaisse = 0m
+                            MoneyinCaisse = 0m,
+                            Status = 1
                         });
                 });
 
@@ -406,6 +412,144 @@ namespace Store.Infrastructure.Data.Migrations
                     b.HasIndex("Caisse_ID");
 
                     b.ToTable("CaissesDeposits");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Caisses.CaisseOperation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CaisseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CaisseStatusDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Nbr1000DA")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Nbr100DA")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Nbr10DA")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Nbr2000DA")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Nbr200DA")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Nbr20DA")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Nbr500DA")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Nbr50DA")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Nbr5DA")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("OperationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PerformedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Time")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("ValueAddedDefault")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CaisseId");
+
+                    b.HasIndex("CaisseStatusDetailId");
+
+                    b.ToTable("CaisseOperations");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Caisses.CaisseStatusDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CaisseId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CaisseId1")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CaisseName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClosedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ClosingTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Duration")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsBalanced")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("MoneyAfter")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("MoneyAfterInCaisse")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("MoneyBefore")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("MoneyBeforeInCaisse")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("OpenedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("OpeningTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CaisseId");
+
+                    b.HasIndex("CaisseId1");
+
+                    b.ToTable("CaisseStatusDetails");
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Caisses.CaisseTransfere", b =>
@@ -859,14 +1003,29 @@ namespace Store.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AI")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompteRib")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Logo")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("Fax")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IDFiscal")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Logo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NIS")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -874,7 +1033,7 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<string>("Phone1")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phone2")
+                    b.Property<string>("RC")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -2238,6 +2397,36 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Navigation("Caisse");
                 });
 
+            modelBuilder.Entity("Store.Core.Entities.Caisses.CaisseOperation", b =>
+                {
+                    b.HasOne("Store.Core.Entities.Caisses.Caisse", null)
+                        .WithMany("Operations")
+                        .HasForeignKey("CaisseId");
+
+                    b.HasOne("Store.Core.Entities.Caisses.CaisseStatusDetail", "CaisseStatusDetail")
+                        .WithMany()
+                        .HasForeignKey("CaisseStatusDetailId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CaisseStatusDetail");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Caisses.CaisseStatusDetail", b =>
+                {
+                    b.HasOne("Store.Core.Entities.Caisses.Caisse", "Caisse")
+                        .WithMany()
+                        .HasForeignKey("CaisseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Store.Core.Entities.Caisses.Caisse", null)
+                        .WithMany("StatusDetails")
+                        .HasForeignKey("CaisseId1");
+
+                    b.Navigation("Caisse");
+                });
+
             modelBuilder.Entity("Store.Core.Entities.Caisses.CaisseTransfere", b =>
                 {
                     b.HasOne("Store.Core.Entities.Caisses.Caisse", "CaisseFrom")
@@ -2738,6 +2927,13 @@ namespace Store.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Caisses.Caisse", b =>
+                {
+                    b.Navigation("Operations");
+
+                    b.Navigation("StatusDetails");
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Products.Product", b =>

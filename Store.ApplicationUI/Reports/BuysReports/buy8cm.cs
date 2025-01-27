@@ -24,6 +24,7 @@ namespace Store.ApplicationUI.Reports.BuysReports
             lblPhoneNumber.Text = Properties.Settings.Default.FacturePhoneNumber;
             lblStoreName.Text = Properties.Settings.Default.StoreNameFacture;
             lblSentenceUnderFacture.Text = Properties.Settings.Default.SentenceUnderFacture;
+
             if (!Properties.Settings.Default.AddressStore.IsNullOrEmpty())
             {
                 lblAddress.Text = Properties.Settings.Default.AddressStore;

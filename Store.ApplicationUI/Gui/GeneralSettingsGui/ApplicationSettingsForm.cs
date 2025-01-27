@@ -2,6 +2,7 @@
 using System.IO;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Entities.Helpers;
 using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.GeneralSettingsGui
@@ -126,6 +127,28 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
                 txtSentenceUnderFacture.Text = Properties.Settings.Default.SentenceUnderFacture;
                 txtPhoneNumber.Text = Properties.Settings.Default.FacturePhoneNumber;
                 txtAddress.Text = Properties.Settings.Default.AddressStore;
+                var data = _context.OrderPrintData.FirstOrDefault();
+                if (data != null)
+                {
+                    if (!string.IsNullOrEmpty(data.Logo))
+                    {
+                        byte[] imageBytes = Convert.FromBase64String(data.Logo);
+                        using (MemoryStream ms = new MemoryStream(imageBytes))
+                        {
+                            pbLogo.Image = Image.FromStream(ms);
+
+                        }
+                    }
+                    txtStoreName.Text = data.Name;
+                    txtAddress.Text = data.Address;
+                    txtSentenceUnderFacture.Text = data.Description;
+                    txtPhoneNumber.Text = data.Phone1;
+                    txtFax.Text = data.Fax;
+                    txtRC.Text = data.RC;
+                    txtAI.Text = data.AI;
+                    txtIdFiscale.Text = data.IDFiscal;
+                    txtNIS.Text = data.NIS;
+                }
             }
             else
             {
@@ -162,7 +185,6 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
                 using (MemoryStream ms = new MemoryStream(imageBytes))
                 {
                     pbLogo.Image = Image.FromStream(ms);
-
                 }
             }
             else
@@ -170,7 +192,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
 
             }
         }
-        private void SaveImageAsBase64()
+        private string SaveImageAsBase64()
         {
             if (pbLogo.Image != null)
             {
@@ -182,6 +204,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
                     // Save Base64 string to settings
                     Properties.Settings.Default.LogoPicture = base64Image;
                     Properties.Settings.Default.Save();
+                    return base64Image;
 
                 }
             }
@@ -189,12 +212,54 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
             {
                 Properties.Settings.Default.LogoPicture = string.Empty;
                 Properties.Settings.Default.Save();
+                return string.Empty;
+
             }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+
             ToasterHelper.PlayNotificationSound();
+            var data = _context.OrderPrintData.FirstOrDefault();
+            if (data is null)
+            {
+
+                OrderPrintData orderPrintData = new()
+                {
+                    Logo = SaveImageAsBase64(),
+                    Name = txtStoreName.Text,
+                    Address = txtAddress.Text,
+                    Description = txtSentenceUnderFacture.Text,
+                    Phone1 = txtPhoneNumber.Text,
+                    Fax = txtFax.Text,
+                    CompteRib = string.Empty,
+                    RC = txtRC.Text,
+                    AI = txtAI.Text,
+                    IDFiscal = txtIdFiscale.Text,
+                    NIS = txtNIS.Text,
+                };
+                _context.Add(orderPrintData);
+                _context.SaveChanges();
+            }
+            else
+            {
+
+                data.Logo = SaveImageAsBase64();
+                data.Name = txtStoreName.Text;
+                data.Address = txtAddress.Text;
+                data.Description = txtSentenceUnderFacture.Text;
+                data.Phone1 = txtPhoneNumber.Text;
+                data.Fax = txtFax.Text;
+                data.CompteRib = string.Empty;
+                data.RC = txtRC.Text;
+                data.AI = txtAI.Text;
+                data.IDFiscal = txtIdFiscale.Text;
+                data.NIS = txtNIS.Text;
+                _context.Update(data);
+                _context.SaveChanges();
+
+            }
             if (cblogoStore.Checked)
                 SaveImageAsBase64();
             Properties.Settings.Default.SentenceUnderFacture = txtSentenceUnderFacture.Text;

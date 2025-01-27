@@ -39,6 +39,16 @@
             label2 = new Label();
             label1 = new Label();
             tabPageFacturesSettings = new TabPage();
+            txtNIS = new TextBox();
+            label19 = new Label();
+            txtIdFiscale = new TextBox();
+            label18 = new Label();
+            txtAI = new TextBox();
+            label17 = new Label();
+            txtRC = new TextBox();
+            label16 = new Label();
+            txtFax = new TextBox();
+            label15 = new Label();
             txtStoreName = new TextBox();
             label14 = new Label();
             btnDeletePicture = new Button();
@@ -186,6 +196,16 @@
             // tabPageFacturesSettings
             // 
             tabPageFacturesSettings.BackColor = Color.White;
+            tabPageFacturesSettings.Controls.Add(txtNIS);
+            tabPageFacturesSettings.Controls.Add(label19);
+            tabPageFacturesSettings.Controls.Add(txtIdFiscale);
+            tabPageFacturesSettings.Controls.Add(label18);
+            tabPageFacturesSettings.Controls.Add(txtAI);
+            tabPageFacturesSettings.Controls.Add(label17);
+            tabPageFacturesSettings.Controls.Add(txtRC);
+            tabPageFacturesSettings.Controls.Add(label16);
+            tabPageFacturesSettings.Controls.Add(txtFax);
+            tabPageFacturesSettings.Controls.Add(label15);
             tabPageFacturesSettings.Controls.Add(txtStoreName);
             tabPageFacturesSettings.Controls.Add(label14);
             tabPageFacturesSettings.Controls.Add(btnDeletePicture);
@@ -206,10 +226,105 @@
             tabPageFacturesSettings.TabIndex = 1;
             tabPageFacturesSettings.Text = "اعدادات الفاتورة";
             // 
+            // txtNIS
+            // 
+            txtNIS.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            txtNIS.Location = new Point(9, 253);
+            txtNIS.Name = "txtNIS";
+            txtNIS.PlaceholderText = "ادخل NIS";
+            txtNIS.Size = new Size(232, 27);
+            txtNIS.TabIndex = 36;
+            txtNIS.TextAlign = HorizontalAlignment.Center;
+            // 
+            // label19
+            // 
+            label19.AutoSize = true;
+            label19.Location = new Point(246, 256);
+            label19.Name = "label19";
+            label19.Size = new Size(165, 19);
+            label19.TabIndex = 35;
+            label19.Text = "رقم التعريف الإحصائي (NIS):";
+            // 
+            // txtIdFiscale
+            // 
+            txtIdFiscale.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            txtIdFiscale.Location = new Point(9, 205);
+            txtIdFiscale.Name = "txtIdFiscale";
+            txtIdFiscale.PlaceholderText = "ادخل معرف الضريبة (NIF)";
+            txtIdFiscale.Size = new Size(232, 27);
+            txtIdFiscale.TabIndex = 34;
+            txtIdFiscale.TextAlign = HorizontalAlignment.Center;
+            // 
+            // label18
+            // 
+            label18.AutoSize = true;
+            label18.Location = new Point(246, 208);
+            label18.Name = "label18";
+            label18.Size = new Size(165, 19);
+            label18.TabIndex = 33;
+            label18.Text = "معرف الضريبة (ID Fiscale):";
+            // 
+            // txtAI
+            // 
+            txtAI.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            txtAI.Location = new Point(9, 160);
+            txtAI.Name = "txtAI";
+            txtAI.PlaceholderText = "ادخل مقالة التسجيل";
+            txtAI.Size = new Size(232, 27);
+            txtAI.TabIndex = 32;
+            txtAI.TextAlign = HorizontalAlignment.Center;
+            // 
+            // label17
+            // 
+            label17.AutoSize = true;
+            label17.Location = new Point(246, 163);
+            label17.Name = "label17";
+            label17.Size = new Size(118, 19);
+            label17.TabIndex = 31;
+            label17.Text = "مقالة التسجيل (AI):";
+            // 
+            // txtRC
+            // 
+            txtRC.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            txtRC.Location = new Point(9, 113);
+            txtRC.Name = "txtRC";
+            txtRC.PlaceholderText = "ادخل السجل التجاري";
+            txtRC.Size = new Size(232, 27);
+            txtRC.TabIndex = 30;
+            txtRC.TextAlign = HorizontalAlignment.Center;
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(246, 116);
+            label16.Name = "label16";
+            label16.Size = new Size(112, 19);
+            label16.TabIndex = 29;
+            label16.Text = "سجل تجاري (RC):";
+            // 
+            // txtFax
+            // 
+            txtFax.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            txtFax.Location = new Point(415, 305);
+            txtFax.Name = "txtFax";
+            txtFax.PlaceholderText = "ادخل رقم الفاكس";
+            txtFax.Size = new Size(232, 27);
+            txtFax.TabIndex = 28;
+            txtFax.TextAlign = HorizontalAlignment.Center;
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(664, 308);
+            label15.Name = "label15";
+            label15.Size = new Size(74, 19);
+            label15.TabIndex = 27;
+            label15.Text = "رقم الفاكس:";
+            // 
             // txtStoreName
             // 
             txtStoreName.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            txtStoreName.Location = new Point(415, 232);
+            txtStoreName.Location = new Point(415, 215);
             txtStoreName.Name = "txtStoreName";
             txtStoreName.PlaceholderText = "ادخل اسم المحل";
             txtStoreName.Size = new Size(232, 27);
@@ -219,7 +334,7 @@
             // label14
             // 
             label14.AutoSize = true;
-            label14.Location = new Point(664, 235);
+            label14.Location = new Point(664, 218);
             label14.Name = "label14";
             label14.Size = new Size(71, 19);
             label14.TabIndex = 25;
@@ -231,9 +346,9 @@
             btnDeletePicture.Enabled = false;
             btnDeletePicture.Image = (Image)resources.GetObject("btnDeletePicture.Image");
             btnDeletePicture.ImageAlign = ContentAlignment.MiddleLeft;
-            btnDeletePicture.Location = new Point(403, 160);
+            btnDeletePicture.Location = new Point(415, 143);
             btnDeletePicture.Name = "btnDeletePicture";
-            btnDeletePicture.Size = new Size(121, 34);
+            btnDeletePicture.Size = new Size(109, 34);
             btnDeletePicture.TabIndex = 24;
             btnDeletePicture.Text = "امسح الصورة";
             btnDeletePicture.TextAlign = ContentAlignment.MiddleRight;
@@ -246,9 +361,9 @@
             btnChoosePicture.Enabled = false;
             btnChoosePicture.Image = (Image)resources.GetObject("btnChoosePicture.Image");
             btnChoosePicture.ImageAlign = ContentAlignment.MiddleLeft;
-            btnChoosePicture.Location = new Point(530, 160);
+            btnChoosePicture.Location = new Point(542, 143);
             btnChoosePicture.Name = "btnChoosePicture";
-            btnChoosePicture.Size = new Size(105, 34);
+            btnChoosePicture.Size = new Size(93, 34);
             btnChoosePicture.TabIndex = 23;
             btnChoosePicture.Text = "اختر الصورة";
             btnChoosePicture.TextAlign = ContentAlignment.MiddleRight;
@@ -260,9 +375,9 @@
             pbLogo.BorderStyle = BorderStyle.FixedSingle;
             pbLogo.Enabled = false;
             pbLogo.Image = (Image)resources.GetObject("pbLogo.Image");
-            pbLogo.Location = new Point(403, 37);
+            pbLogo.Location = new Point(415, 20);
             pbLogo.Name = "pbLogo";
-            pbLogo.Size = new Size(232, 117);
+            pbLogo.Size = new Size(220, 117);
             pbLogo.SizeMode = PictureBoxSizeMode.StretchImage;
             pbLogo.TabIndex = 22;
             pbLogo.TabStop = false;
@@ -272,7 +387,7 @@
             button2.Anchor = AnchorStyles.None;
             button2.Image = (Image)resources.GetObject("button2.Image");
             button2.ImageAlign = ContentAlignment.MiddleLeft;
-            button2.Location = new Point(200, 302);
+            button2.Location = new Point(189, 344);
             button2.Name = "button2";
             button2.Size = new Size(273, 45);
             button2.TabIndex = 21;
@@ -283,7 +398,7 @@
             // txtAddress
             // 
             txtAddress.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            txtAddress.Location = new Point(8, 181);
+            txtAddress.Location = new Point(9, 65);
             txtAddress.Name = "txtAddress";
             txtAddress.PlaceholderText = "ادخل عنوان المحل";
             txtAddress.Size = new Size(232, 27);
@@ -293,7 +408,7 @@
             // txtPhoneNumber
             // 
             txtPhoneNumber.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            txtPhoneNumber.Location = new Point(8, 115);
+            txtPhoneNumber.Location = new Point(415, 258);
             txtPhoneNumber.Name = "txtPhoneNumber";
             txtPhoneNumber.PlaceholderText = "ادخل رقم الهاتف";
             txtPhoneNumber.Size = new Size(232, 27);
@@ -303,7 +418,7 @@
             // txtSentenceUnderFacture
             // 
             txtSentenceUnderFacture.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            txtSentenceUnderFacture.Location = new Point(8, 44);
+            txtSentenceUnderFacture.Location = new Point(9, 20);
             txtSentenceUnderFacture.Name = "txtSentenceUnderFacture";
             txtSentenceUnderFacture.PlaceholderText = "ادخل الجملة";
             txtSentenceUnderFacture.Size = new Size(232, 27);
@@ -313,7 +428,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(246, 118);
+            label7.Location = new Point(664, 261);
             label7.Name = "label7";
             label7.Size = new Size(71, 19);
             label7.TabIndex = 6;
@@ -322,7 +437,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(246, 47);
+            label5.Location = new Point(246, 23);
             label5.Name = "label5";
             label5.Size = new Size(125, 19);
             label5.TabIndex = 4;
@@ -331,7 +446,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(246, 184);
+            label4.Location = new Point(246, 68);
             label4.Name = "label4";
             label4.Size = new Size(82, 19);
             label4.TabIndex = 3;
@@ -340,7 +455,7 @@
             // cblogoStore
             // 
             cblogoStore.AutoSize = true;
-            cblogoStore.Location = new Point(640, 44);
+            cblogoStore.Location = new Point(640, 27);
             cblogoStore.Name = "cblogoStore";
             cblogoStore.Size = new Size(95, 23);
             cblogoStore.TabIndex = 2;
@@ -728,5 +843,15 @@
         private Button button3;
         private TextBox txtStoreName;
         private Label label14;
+        private TextBox txtFax;
+        private Label label15;
+        private TextBox txtAI;
+        private Label label17;
+        private TextBox txtRC;
+        private Label label16;
+        private TextBox txtIdFiscale;
+        private Label label18;
+        private TextBox txtNIS;
+        private Label label19;
     }
 }

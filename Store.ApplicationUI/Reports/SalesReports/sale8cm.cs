@@ -23,6 +23,8 @@ namespace Store.ApplicationUI.Reports
                     ?? "الصندوق الافتراضي";
             lblPhoneNumber.Text = Properties.Settings.Default.FacturePhoneNumber;
             lblStoreName.Text = Properties.Settings.Default.StoreNameFacture;
+            xrLabel6.Visible = lblPhoneNumber.Visible = lblPhoneNumber.Text != string.Empty || lblPhoneNumber.Text != "";
+            lblStoreName.Visible = lblStoreName.Text != string.Empty;
             lblSentenceUnderFacture.Text = Properties.Settings.Default.SentenceUnderFacture;
             if (!Properties.Settings.Default.AddressStore.IsNullOrEmpty())
             {

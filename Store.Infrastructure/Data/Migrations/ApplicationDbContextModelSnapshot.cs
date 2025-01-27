@@ -509,8 +509,8 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<DateTime?>("ClosingTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<TimeSpan?>("Duration")
-                        .HasColumnType("time");
+                    b.Property<string>("Duration")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsBalanced")
                         .HasColumnType("bit");
@@ -1000,14 +1000,29 @@ namespace Store.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AI")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompteRib")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Logo")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("Fax")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IDFiscal")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Logo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NIS")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -1015,7 +1030,7 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<string>("Phone1")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phone2")
+                    b.Property<string>("RC")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

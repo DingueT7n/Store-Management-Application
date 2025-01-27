@@ -65,7 +65,20 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
 
         }
-
+        void CalcStats()
+        {
+            txtAllProducts.Text = _context.Products.Where(x => x.Quentity > 0).Count().ToString();
+            txtProductSum.Text = _context.Products.Count().ToString("f2");
+            txtAllQty.Text = _context.Products.Sum(x => x.Quentity).ToString("f2");
+            txtAllCategories.Text = _context.Products.Where(x => x.Quentity > 0)
+                .Select(x => x.CategoryId)
+                .Distinct()
+                .Count().ToString("f2");
+            txttotalBuy.Text = _context.Products.Sum(x => x.BuyPrice * x.Quentity).ToString("f2");
+            txttotalSell.Text = _context.Products.Sum(x => x.SalePriceTax * x.Quentity).ToString("f2");
+            txtTotalProfitExpected.Text = _context.Products.Sum(x => (x.SalePriceTax - x.BuyPrice) * x.Quentity)
+                .ToString("f2");
+        }
         public async void SetProductsToDgv(int skip)
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
@@ -89,7 +102,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             {
                 cmbpagination.SelectedIndex = skip / Properties.Settings.Default.NoOfDataInDgvs;
             }
-
+            CalcStats();
             PaginationHide();
         }
 
@@ -228,7 +241,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
-                productsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[15].Value.ToString());
+                productsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[19].Value.ToString());
                 Code.Helper.ToasterHelper.ShowDeletedToast();
 
             }

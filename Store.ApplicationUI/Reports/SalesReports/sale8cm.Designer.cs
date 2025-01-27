@@ -87,7 +87,6 @@
             this.DetailReport = new DevExpress.XtraReports.UI.DetailReportBand();
             this.Detail1 = new DevExpress.XtraReports.UI.DetailBand();
             this.PageHeader = new DevExpress.XtraReports.UI.PageHeaderBand();
-            this.PageFooter = new DevExpress.XtraReports.UI.PageFooterBand();
             ((System.ComponentModel.ISupportInitialize)(this.xrTable1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xrTable2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
@@ -116,7 +115,7 @@
             // 
             this.pbLogo.Dpi = 254F;
             this.pbLogo.ImageSource = new DevExpress.XtraPrinting.Drawing.ImageSource("img", resources.GetString("pbLogo.ImageSource"));
-            this.pbLogo.LocationFloat = new DevExpress.Utils.PointFloat(195.7917F, 0F);
+            this.pbLogo.LocationFloat = new DevExpress.Utils.PointFloat(225F, 0F);
             this.pbLogo.Name = "pbLogo";
             this.pbLogo.SizeF = new System.Drawing.SizeF(300F, 300F);
             this.pbLogo.Sizing = DevExpress.XtraPrinting.ImageSizeMode.ZoomImage;
@@ -369,7 +368,7 @@
             // 
             // xrTableCell4
             // 
-            this.xrTableCell4.Borders = DevExpress.XtraPrinting.BorderSide.None;
+            this.xrTableCell4.Borders = DevExpress.XtraPrinting.BorderSide.Left;
             this.xrTableCell4.Dpi = 254F;
             this.xrTableCell4.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[get_all_sell_details].[ الوحدة سعر]")});
@@ -399,7 +398,7 @@
             // 
             // xrTableCell6
             // 
-            this.xrTableCell6.Borders = DevExpress.XtraPrinting.BorderSide.None;
+            this.xrTableCell6.Borders = DevExpress.XtraPrinting.BorderSide.Right;
             this.xrTableCell6.Dpi = 254F;
             this.xrTableCell6.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "[get_all_sell_details].[اسم المنتج]")});
@@ -624,9 +623,9 @@
             // xrLine2
             // 
             this.xrLine2.Dpi = 254F;
-            this.xrLine2.LocationFloat = new DevExpress.Utils.PointFloat(0F, 0F);
+            this.xrLine2.LocationFloat = new DevExpress.Utils.PointFloat(1F, 0F);
             this.xrLine2.Name = "xrLine2";
-            this.xrLine2.SizeF = new System.Drawing.SizeF(744.9999F, 5F);
+            this.xrLine2.SizeF = new System.Drawing.SizeF(750F, 5F);
             // 
             // xrLabel9
             // 
@@ -775,12 +774,6 @@
             this.PageHeader.HeightF = 364.1042F;
             this.PageHeader.Name = "PageHeader";
             // 
-            // PageFooter
-            // 
-            this.PageFooter.Dpi = 254F;
-            this.PageFooter.HeightF = 0F;
-            this.PageFooter.Name = "PageFooter";
-            // 
             // sale8cm
             // 
             this.Bands.AddRange(new DevExpress.XtraReports.UI.Band[] {
@@ -791,8 +784,7 @@
             this.Detail,
             this.ReportFooter,
             this.DetailReport,
-            this.PageHeader,
-            this.PageFooter});
+            this.PageHeader});
             this.CalculatedFields.AddRange(new DevExpress.XtraReports.UI.CalculatedField[] {
             this.NbrArticales});
             this.ComponentStorage.AddRange(new System.ComponentModel.IComponent[] {
@@ -881,6 +873,5 @@
         private DevExpress.XtraReports.UI.XRLabel xrLabel20;
         public DevExpress.XtraReports.UI.XRLabel lblAddress;
         private DevExpress.XtraReports.UI.PageHeaderBand PageHeader;
-        private DevExpress.XtraReports.UI.PageFooterBand PageFooter;
     }
 }

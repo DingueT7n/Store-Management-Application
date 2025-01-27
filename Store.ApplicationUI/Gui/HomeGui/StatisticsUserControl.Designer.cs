@@ -78,9 +78,13 @@
             panel3 = new Panel();
             chartControl3 = new DevExpress.XtraCharts.ChartControl();
             panel5 = new Panel();
+            cmbNbrProductQty = new ComboBox();
             chartControl5 = new DevExpress.XtraCharts.ChartControl();
             panel6 = new Panel();
+            cmbSaleProfit = new ComboBox();
             chartControl6 = new DevExpress.XtraCharts.ChartControl();
+            panel9 = new Panel();
+            chartControl9 = new DevExpress.XtraCharts.ChartControl();
             flowLayoutPanel9 = new FlowLayoutPanel();
             label6 = new Label();
             txtTotalDeserved = new TextBox();
@@ -97,8 +101,23 @@
             flowLayoutPanel12 = new FlowLayoutPanel();
             label8 = new Label();
             txtNetProfits = new TextBox();
-            panel9 = new Panel();
-            chartControl9 = new DevExpress.XtraCharts.ChartControl();
+            button1 = new Button();
+            panelZakat = new Panel();
+            pictureBox1 = new PictureBox();
+            label14 = new Label();
+            txtZakat = new TextBox();
+            label13 = new Label();
+            txtTotal = new TextBox();
+            label12 = new Label();
+            txtDebtSupplier = new TextBox();
+            label11 = new Label();
+            txtCaisseValue = new TextBox();
+            label10 = new Label();
+            txtDebtCustomer = new TextBox();
+            label9 = new Label();
+            txtBuySale = new TextBox();
+            rbSale = new RadioButton();
+            rbBuy = new RadioButton();
             OperationsflowLayoutPanel.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
@@ -138,21 +157,22 @@
             ((System.ComponentModel.ISupportInitialize)chartControl6).BeginInit();
             ((System.ComponentModel.ISupportInitialize)series8).BeginInit();
             ((System.ComponentModel.ISupportInitialize)lineSeriesView8).BeginInit();
+            panel9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)chartControl9).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)series9).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)lineSeriesView9).BeginInit();
             flowLayoutPanel9.SuspendLayout();
             flowLayoutPanel7.SuspendLayout();
             flowLayoutPanel8.SuspendLayout();
             flowLayoutPanel6.SuspendLayout();
             flowLayoutPanel11.SuspendLayout();
             flowLayoutPanel12.SuspendLayout();
-            panel9.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)chartControl9).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)series9).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)lineSeriesView9).BeginInit();
+            panelZakat.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // OperationsflowLayoutPanel
             // 
-            OperationsflowLayoutPanel.AutoScroll = true;
             OperationsflowLayoutPanel.BorderStyle = BorderStyle.FixedSingle;
             OperationsflowLayoutPanel.Controls.Add(flowLayoutPanel1);
             OperationsflowLayoutPanel.Controls.Add(flowLayoutPanel2);
@@ -180,23 +200,25 @@
             // lblFrom
             // 
             lblFrom.AutoSize = true;
+            lblFrom.Font = new Font("Calibri", 12F, FontStyle.Bold);
             lblFrom.ImeMode = ImeMode.NoControl;
-            lblFrom.Location = new Point(136, 10);
+            lblFrom.Location = new Point(135, 10);
             lblFrom.Margin = new Padding(5, 10, 5, 10);
             lblFrom.Name = "lblFrom";
-            lblFrom.Size = new Size(28, 19);
+            lblFrom.Size = new Size(29, 19);
             lblFrom.TabIndex = 28;
             lblFrom.Text = "من:";
             // 
             // dtpFrom
             // 
             dtpFrom.CustomFormat = "yyyy-MM-dd";
+            dtpFrom.Font = new Font("Calibri", 12F, FontStyle.Bold);
             dtpFrom.Format = DateTimePickerFormat.Short;
-            dtpFrom.Location = new Point(13, 7);
+            dtpFrom.Location = new Point(14, 7);
             dtpFrom.Margin = new Padding(5, 7, 5, 7);
             dtpFrom.MaxDate = new DateTime(2101, 1, 1, 0, 0, 0, 0);
             dtpFrom.Name = "dtpFrom";
-            dtpFrom.Size = new Size(113, 27);
+            dtpFrom.Size = new Size(111, 27);
             dtpFrom.TabIndex = 31;
             dtpFrom.Value = new DateTime(2024, 8, 23, 21, 42, 30, 0);
             // 
@@ -213,6 +235,7 @@
             // lblTo
             // 
             lblTo.AutoSize = true;
+            lblTo.Font = new Font("Calibri", 12F, FontStyle.Bold);
             lblTo.ImeMode = ImeMode.NoControl;
             lblTo.Location = new Point(135, 10);
             lblTo.Margin = new Padding(5, 10, 5, 10);
@@ -224,6 +247,7 @@
             // dtpTo
             // 
             dtpTo.CustomFormat = "yyyy-MM-dd";
+            dtpTo.Font = new Font("Calibri", 12F, FontStyle.Bold);
             dtpTo.Format = DateTimePickerFormat.Short;
             dtpTo.Location = new Point(12, 7);
             dtpTo.Margin = new Padding(5, 7, 5, 7);
@@ -246,21 +270,23 @@
             // label1
             // 
             label1.AutoSize = true;
+            label1.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.ImeMode = ImeMode.NoControl;
-            label1.Location = new Point(135, 10);
+            label1.Location = new Point(134, 10);
             label1.Margin = new Padding(5, 10, 5, 10);
             label1.Name = "label1";
-            label1.Size = new Size(61, 19);
+            label1.Size = new Size(62, 19);
             label1.TabIndex = 30;
             label1.Text = "الصندوق:";
             // 
             // cmbCaisse
             // 
+            cmbCaisse.Font = new Font("Calibri", 12F, FontStyle.Bold);
             cmbCaisse.FormattingEnabled = true;
-            cmbCaisse.Location = new Point(5, 7);
+            cmbCaisse.Location = new Point(7, 7);
             cmbCaisse.Margin = new Padding(5, 7, 5, 7);
             cmbCaisse.Name = "cmbCaisse";
-            cmbCaisse.Size = new Size(120, 27);
+            cmbCaisse.Size = new Size(117, 27);
             cmbCaisse.TabIndex = 31;
             // 
             // flowLayoutPanel4
@@ -276,21 +302,23 @@
             // label2
             // 
             label2.AutoSize = true;
+            label2.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label2.ImeMode = ImeMode.NoControl;
-            label2.Location = new Point(135, 10);
+            label2.Location = new Point(134, 10);
             label2.Margin = new Padding(5, 10, 5, 10);
             label2.Name = "label2";
-            label2.Size = new Size(68, 19);
+            label2.Size = new Size(69, 19);
             label2.TabIndex = 30;
             label2.Text = "المستخدم:";
             // 
             // cmbUser
             // 
+            cmbUser.Font = new Font("Calibri", 12F, FontStyle.Bold);
             cmbUser.FormattingEnabled = true;
-            cmbUser.Location = new Point(5, 7);
+            cmbUser.Location = new Point(6, 7);
             cmbUser.Margin = new Padding(5, 7, 5, 7);
             cmbUser.Name = "cmbUser";
-            cmbUser.Size = new Size(120, 27);
+            cmbUser.Size = new Size(118, 27);
             cmbUser.TabIndex = 31;
             // 
             // flowLayoutPanel5
@@ -298,16 +326,17 @@
             flowLayoutPanel5.BorderStyle = BorderStyle.FixedSingle;
             flowLayoutPanel5.Controls.Add(label3);
             flowLayoutPanel5.Controls.Add(cmbCustomers);
-            flowLayoutPanel5.Location = new Point(62, 3);
+            flowLayoutPanel5.Location = new Point(59, 3);
             flowLayoutPanel5.Name = "flowLayoutPanel5";
-            flowLayoutPanel5.Size = new Size(190, 40);
+            flowLayoutPanel5.Size = new Size(193, 40);
             flowLayoutPanel5.TabIndex = 34;
             // 
             // label3
             // 
             label3.AutoSize = true;
+            label3.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label3.ImeMode = ImeMode.NoControl;
-            label3.Location = new Point(135, 10);
+            label3.Location = new Point(138, 10);
             label3.Margin = new Padding(5, 10, 5, 10);
             label3.Name = "label3";
             label3.Size = new Size(48, 19);
@@ -316,18 +345,19 @@
             // 
             // cmbCustomers
             // 
+            cmbCustomers.Font = new Font("Calibri", 12F, FontStyle.Bold);
             cmbCustomers.FormattingEnabled = true;
-            cmbCustomers.Location = new Point(5, 7);
+            cmbCustomers.Location = new Point(10, 7);
             cmbCustomers.Margin = new Padding(5, 7, 5, 7);
             cmbCustomers.Name = "cmbCustomers";
-            cmbCustomers.Size = new Size(120, 27);
+            cmbCustomers.Size = new Size(118, 27);
             cmbCustomers.TabIndex = 31;
             // 
             // btnSearch
             // 
             btnSearch.Image = (Image)resources.GetObject("btnSearch.Image");
             btnSearch.ImeMode = ImeMode.NoControl;
-            btnSearch.Location = new Point(16, 3);
+            btnSearch.Location = new Point(13, 3);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(40, 40);
             btnSearch.TabIndex = 10;
@@ -367,6 +397,7 @@
             // flowLayoutPanel10
             // 
             flowLayoutPanel10.AutoScroll = true;
+            flowLayoutPanel10.AutoSize = true;
             flowLayoutPanel10.Controls.Add(panel1);
             flowLayoutPanel10.Controls.Add(panel2);
             flowLayoutPanel10.Controls.Add(panel4);
@@ -377,9 +408,9 @@
             flowLayoutPanel10.Controls.Add(panel6);
             flowLayoutPanel10.Controls.Add(panel9);
             flowLayoutPanel10.Dock = DockStyle.Fill;
-            flowLayoutPanel10.Location = new Point(0, 146);
+            flowLayoutPanel10.Location = new Point(0, 126);
             flowLayoutPanel10.Name = "flowLayoutPanel10";
-            flowLayoutPanel10.Size = new Size(1034, 535);
+            flowLayoutPanel10.Size = new Size(1034, 555);
             flowLayoutPanel10.TabIndex = 13;
             flowLayoutPanel10.Paint += flowLayoutPanel10_Paint;
             // 
@@ -536,11 +567,26 @@
             // 
             // panel5
             // 
+            panel5.Controls.Add(cmbNbrProductQty);
             panel5.Controls.Add(chartControl5);
             panel5.Location = new Point(518, 1608);
             panel5.Name = "panel5";
             panel5.Size = new Size(509, 529);
             panel5.TabIndex = 16;
+            // 
+            // cmbNbrProductQty
+            // 
+            cmbNbrProductQty.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            cmbNbrProductQty.FormattingEnabled = true;
+            cmbNbrProductQty.Items.AddRange(new object[] { "15", "25", "40", "50" });
+            cmbNbrProductQty.Location = new Point(454, 7);
+            cmbNbrProductQty.Margin = new Padding(5, 7, 5, 7);
+            cmbNbrProductQty.Name = "cmbNbrProductQty";
+            cmbNbrProductQty.Size = new Size(48, 27);
+            cmbNbrProductQty.TabIndex = 32;
+            cmbNbrProductQty.Text = "15";
+            cmbNbrProductQty.SelectedIndexChanged += cmbNbrProductQty_SelectedIndexChanged;
+            cmbNbrProductQty.SelectionChangeCommitted += cmbNbrProductQty_SelectionChangeCommitted;
             // 
             // chartControl5
             // 
@@ -567,11 +613,26 @@
             // 
             // panel6
             // 
+            panel6.Controls.Add(cmbSaleProfit);
             panel6.Controls.Add(chartControl6);
             panel6.Location = new Point(3, 1608);
             panel6.Name = "panel6";
             panel6.Size = new Size(509, 529);
             panel6.TabIndex = 17;
+            // 
+            // cmbSaleProfit
+            // 
+            cmbSaleProfit.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            cmbSaleProfit.FormattingEnabled = true;
+            cmbSaleProfit.Items.AddRange(new object[] { "15", "25", "40", "50" });
+            cmbSaleProfit.Location = new Point(451, 7);
+            cmbSaleProfit.Margin = new Padding(5, 7, 5, 7);
+            cmbSaleProfit.Name = "cmbSaleProfit";
+            cmbSaleProfit.Size = new Size(53, 27);
+            cmbSaleProfit.TabIndex = 33;
+            cmbSaleProfit.Text = "15";
+            cmbSaleProfit.SelectedIndexChanged += cmbSaleProfit_SelectedIndexChanged;
+            cmbSaleProfit.SelectionChangeCommitted += cmbSaleProfit_SelectionChangeCommitted;
             // 
             // chartControl6
             // 
@@ -595,167 +656,6 @@
             chartControl6.SeriesTemplate.LegendTextPattern = "yyyy/MM/dd";
             chartControl6.Size = new Size(509, 529);
             chartControl6.TabIndex = 11;
-            // 
-            // flowLayoutPanel9
-            // 
-            flowLayoutPanel9.BorderStyle = BorderStyle.FixedSingle;
-            flowLayoutPanel9.Controls.Add(label6);
-            flowLayoutPanel9.Controls.Add(txtTotalDeserved);
-            flowLayoutPanel9.Location = new Point(303, 3);
-            flowLayoutPanel9.Name = "flowLayoutPanel9";
-            flowLayoutPanel9.Size = new Size(177, 67);
-            flowLayoutPanel9.TabIndex = 12;
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.ImeMode = ImeMode.NoControl;
-            label6.Location = new Point(64, 5);
-            label6.Margin = new Padding(5);
-            label6.Name = "label6";
-            label6.Size = new Size(106, 19);
-            label6.TabIndex = 28;
-            label6.Text = "مجموع المصاريف:";
-            // 
-            // txtTotalDeserved
-            // 
-            txtTotalDeserved.Location = new Point(12, 32);
-            txtTotalDeserved.Name = "txtTotalDeserved";
-            txtTotalDeserved.ReadOnly = true;
-            txtTotalDeserved.Size = new Size(160, 27);
-            txtTotalDeserved.TabIndex = 29;
-            // 
-            // flowLayoutPanel7
-            // 
-            flowLayoutPanel7.BorderStyle = BorderStyle.FixedSingle;
-            flowLayoutPanel7.Controls.Add(label4);
-            flowLayoutPanel7.Controls.Add(txtTotalSales);
-            flowLayoutPanel7.Location = new Point(669, 3);
-            flowLayoutPanel7.Name = "flowLayoutPanel7";
-            flowLayoutPanel7.Size = new Size(177, 67);
-            flowLayoutPanel7.TabIndex = 10;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.ImeMode = ImeMode.NoControl;
-            label4.Location = new Point(69, 5);
-            label4.Margin = new Padding(5);
-            label4.Name = "label4";
-            label4.Size = new Size(101, 19);
-            label4.TabIndex = 28;
-            label4.Text = "مجموع المبيعات:";
-            // 
-            // txtTotalSales
-            // 
-            txtTotalSales.Location = new Point(12, 32);
-            txtTotalSales.Name = "txtTotalSales";
-            txtTotalSales.ReadOnly = true;
-            txtTotalSales.Size = new Size(160, 27);
-            txtTotalSales.TabIndex = 29;
-            // 
-            // flowLayoutPanel8
-            // 
-            flowLayoutPanel8.BorderStyle = BorderStyle.FixedSingle;
-            flowLayoutPanel8.Controls.Add(label5);
-            flowLayoutPanel8.Controls.Add(txtTotalBuys);
-            flowLayoutPanel8.Location = new Point(852, 3);
-            flowLayoutPanel8.Name = "flowLayoutPanel8";
-            flowLayoutPanel8.Size = new Size(177, 67);
-            flowLayoutPanel8.TabIndex = 11;
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.ImeMode = ImeMode.NoControl;
-            label5.Location = new Point(63, 5);
-            label5.Margin = new Padding(5);
-            label5.Name = "label5";
-            label5.Size = new Size(107, 19);
-            label5.TabIndex = 28;
-            label5.Text = "مجموع المشتريات:";
-            // 
-            // txtTotalBuys
-            // 
-            txtTotalBuys.Location = new Point(12, 32);
-            txtTotalBuys.Name = "txtTotalBuys";
-            txtTotalBuys.ReadOnly = true;
-            txtTotalBuys.Size = new Size(160, 27);
-            txtTotalBuys.TabIndex = 29;
-            // 
-            // flowLayoutPanel6
-            // 
-            flowLayoutPanel6.AutoScroll = true;
-            flowLayoutPanel6.BorderStyle = BorderStyle.FixedSingle;
-            flowLayoutPanel6.Controls.Add(flowLayoutPanel8);
-            flowLayoutPanel6.Controls.Add(flowLayoutPanel7);
-            flowLayoutPanel6.Controls.Add(flowLayoutPanel11);
-            flowLayoutPanel6.Controls.Add(flowLayoutPanel9);
-            flowLayoutPanel6.Controls.Add(flowLayoutPanel12);
-            flowLayoutPanel6.Dock = DockStyle.Top;
-            flowLayoutPanel6.Location = new Point(0, 51);
-            flowLayoutPanel6.Margin = new Padding(5, 20, 5, 20);
-            flowLayoutPanel6.Name = "flowLayoutPanel6";
-            flowLayoutPanel6.Size = new Size(1034, 95);
-            flowLayoutPanel6.TabIndex = 10;
-            // 
-            // flowLayoutPanel11
-            // 
-            flowLayoutPanel11.BorderStyle = BorderStyle.FixedSingle;
-            flowLayoutPanel11.Controls.Add(label7);
-            flowLayoutPanel11.Controls.Add(txtProfit);
-            flowLayoutPanel11.Location = new Point(486, 3);
-            flowLayoutPanel11.Name = "flowLayoutPanel11";
-            flowLayoutPanel11.Size = new Size(177, 67);
-            flowLayoutPanel11.TabIndex = 13;
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.ImeMode = ImeMode.NoControl;
-            label7.Location = new Point(90, 5);
-            label7.Margin = new Padding(5);
-            label7.Name = "label7";
-            label7.Size = new Size(80, 19);
-            label7.TabIndex = 28;
-            label7.Text = "مجموع الربح:";
-            // 
-            // txtProfit
-            // 
-            txtProfit.Location = new Point(12, 32);
-            txtProfit.Name = "txtProfit";
-            txtProfit.ReadOnly = true;
-            txtProfit.Size = new Size(160, 27);
-            txtProfit.TabIndex = 29;
-            // 
-            // flowLayoutPanel12
-            // 
-            flowLayoutPanel12.BorderStyle = BorderStyle.FixedSingle;
-            flowLayoutPanel12.Controls.Add(label8);
-            flowLayoutPanel12.Controls.Add(txtNetProfits);
-            flowLayoutPanel12.Location = new Point(120, 3);
-            flowLayoutPanel12.Name = "flowLayoutPanel12";
-            flowLayoutPanel12.Size = new Size(177, 67);
-            flowLayoutPanel12.TabIndex = 14;
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.ImeMode = ImeMode.NoControl;
-            label8.Location = new Point(53, 5);
-            label8.Margin = new Padding(5);
-            label8.Name = "label8";
-            label8.Size = new Size(117, 19);
-            label8.TabIndex = 28;
-            label8.Text = "مجموع الربح الصافي:";
-            // 
-            // txtNetProfits
-            // 
-            txtNetProfits.Location = new Point(12, 32);
-            txtNetProfits.Name = "txtNetProfits";
-            txtNetProfits.ReadOnly = true;
-            txtNetProfits.Size = new Size(160, 27);
-            txtNetProfits.TabIndex = 29;
             // 
             // panel9
             // 
@@ -787,6 +687,381 @@
             chartControl9.SeriesTemplate.LegendTextPattern = "yyyy/MM/dd";
             chartControl9.Size = new Size(509, 529);
             chartControl9.TabIndex = 11;
+            // 
+            // flowLayoutPanel9
+            // 
+            flowLayoutPanel9.BorderStyle = BorderStyle.FixedSingle;
+            flowLayoutPanel9.Controls.Add(label6);
+            flowLayoutPanel9.Controls.Add(txtTotalDeserved);
+            flowLayoutPanel9.Location = new Point(338, 3);
+            flowLayoutPanel9.Name = "flowLayoutPanel9";
+            flowLayoutPanel9.Size = new Size(168, 67);
+            flowLayoutPanel9.TabIndex = 12;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            label6.ImeMode = ImeMode.NoControl;
+            label6.Location = new Point(50, 5);
+            label6.Margin = new Padding(5);
+            label6.Name = "label6";
+            label6.Size = new Size(111, 19);
+            label6.TabIndex = 28;
+            label6.Text = "مجموع المصاريف:";
+            // 
+            // txtTotalDeserved
+            // 
+            txtTotalDeserved.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            txtTotalDeserved.Location = new Point(3, 32);
+            txtTotalDeserved.Name = "txtTotalDeserved";
+            txtTotalDeserved.ReadOnly = true;
+            txtTotalDeserved.Size = new Size(160, 27);
+            txtTotalDeserved.TabIndex = 29;
+            // 
+            // flowLayoutPanel7
+            // 
+            flowLayoutPanel7.BorderStyle = BorderStyle.FixedSingle;
+            flowLayoutPanel7.Controls.Add(label4);
+            flowLayoutPanel7.Controls.Add(txtTotalSales);
+            flowLayoutPanel7.Location = new Point(688, 3);
+            flowLayoutPanel7.Name = "flowLayoutPanel7";
+            flowLayoutPanel7.Size = new Size(167, 67);
+            flowLayoutPanel7.TabIndex = 10;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            label4.ImeMode = ImeMode.NoControl;
+            label4.Location = new Point(56, 5);
+            label4.Margin = new Padding(5);
+            label4.Name = "label4";
+            label4.Size = new Size(104, 19);
+            label4.TabIndex = 28;
+            label4.Text = "مجموع المبيعات:";
+            // 
+            // txtTotalSales
+            // 
+            txtTotalSales.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            txtTotalSales.Location = new Point(2, 32);
+            txtTotalSales.Name = "txtTotalSales";
+            txtTotalSales.ReadOnly = true;
+            txtTotalSales.Size = new Size(160, 27);
+            txtTotalSales.TabIndex = 29;
+            // 
+            // flowLayoutPanel8
+            // 
+            flowLayoutPanel8.BorderStyle = BorderStyle.FixedSingle;
+            flowLayoutPanel8.Controls.Add(label5);
+            flowLayoutPanel8.Controls.Add(txtTotalBuys);
+            flowLayoutPanel8.Location = new Point(861, 3);
+            flowLayoutPanel8.Name = "flowLayoutPanel8";
+            flowLayoutPanel8.Size = new Size(168, 67);
+            flowLayoutPanel8.TabIndex = 11;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            label5.ImeMode = ImeMode.NoControl;
+            label5.Location = new Point(50, 5);
+            label5.Margin = new Padding(5);
+            label5.Name = "label5";
+            label5.Size = new Size(111, 19);
+            label5.TabIndex = 28;
+            label5.Text = "مجموع المشتريات:";
+            // 
+            // txtTotalBuys
+            // 
+            txtTotalBuys.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            txtTotalBuys.Location = new Point(3, 32);
+            txtTotalBuys.Name = "txtTotalBuys";
+            txtTotalBuys.ReadOnly = true;
+            txtTotalBuys.Size = new Size(160, 27);
+            txtTotalBuys.TabIndex = 29;
+            // 
+            // flowLayoutPanel6
+            // 
+            flowLayoutPanel6.BorderStyle = BorderStyle.FixedSingle;
+            flowLayoutPanel6.Controls.Add(flowLayoutPanel8);
+            flowLayoutPanel6.Controls.Add(flowLayoutPanel7);
+            flowLayoutPanel6.Controls.Add(flowLayoutPanel11);
+            flowLayoutPanel6.Controls.Add(flowLayoutPanel9);
+            flowLayoutPanel6.Controls.Add(flowLayoutPanel12);
+            flowLayoutPanel6.Controls.Add(button1);
+            flowLayoutPanel6.Controls.Add(panelZakat);
+            flowLayoutPanel6.Dock = DockStyle.Top;
+            flowLayoutPanel6.Location = new Point(0, 51);
+            flowLayoutPanel6.Margin = new Padding(5, 20, 5, 20);
+            flowLayoutPanel6.Name = "flowLayoutPanel6";
+            flowLayoutPanel6.Size = new Size(1034, 75);
+            flowLayoutPanel6.TabIndex = 10;
+            // 
+            // flowLayoutPanel11
+            // 
+            flowLayoutPanel11.BorderStyle = BorderStyle.FixedSingle;
+            flowLayoutPanel11.Controls.Add(label7);
+            flowLayoutPanel11.Controls.Add(txtProfit);
+            flowLayoutPanel11.Location = new Point(512, 3);
+            flowLayoutPanel11.Name = "flowLayoutPanel11";
+            flowLayoutPanel11.Size = new Size(170, 67);
+            flowLayoutPanel11.TabIndex = 13;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            label7.ImeMode = ImeMode.NoControl;
+            label7.Location = new Point(78, 5);
+            label7.Margin = new Padding(5);
+            label7.Name = "label7";
+            label7.Size = new Size(85, 19);
+            label7.TabIndex = 28;
+            label7.Text = "مجموع الربح:";
+            // 
+            // txtProfit
+            // 
+            txtProfit.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            txtProfit.Location = new Point(5, 32);
+            txtProfit.Name = "txtProfit";
+            txtProfit.ReadOnly = true;
+            txtProfit.Size = new Size(160, 27);
+            txtProfit.TabIndex = 29;
+            // 
+            // flowLayoutPanel12
+            // 
+            flowLayoutPanel12.BorderStyle = BorderStyle.FixedSingle;
+            flowLayoutPanel12.Controls.Add(label8);
+            flowLayoutPanel12.Controls.Add(txtNetProfits);
+            flowLayoutPanel12.Location = new Point(167, 3);
+            flowLayoutPanel12.Name = "flowLayoutPanel12";
+            flowLayoutPanel12.Size = new Size(165, 67);
+            flowLayoutPanel12.TabIndex = 14;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            label8.ImeMode = ImeMode.NoControl;
+            label8.Location = new Point(34, 5);
+            label8.Margin = new Padding(5);
+            label8.Name = "label8";
+            label8.Size = new Size(124, 19);
+            label8.TabIndex = 28;
+            label8.Text = "مجموع الربح الصافي:";
+            // 
+            // txtNetProfits
+            // 
+            txtNetProfits.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            txtNetProfits.Location = new Point(3, 32);
+            txtNetProfits.Name = "txtNetProfits";
+            txtNetProfits.ReadOnly = true;
+            txtNetProfits.Size = new Size(157, 27);
+            txtNetProfits.TabIndex = 29;
+            // 
+            // button1
+            // 
+            button1.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button1.Image = (Image)resources.GetObject("button1.Image");
+            button1.ImageAlign = ContentAlignment.MiddleLeft;
+            button1.ImeMode = ImeMode.NoControl;
+            button1.Location = new Point(46, 20);
+            button1.Margin = new Padding(3, 20, 3, 3);
+            button1.Name = "button1";
+            button1.Size = new Size(115, 40);
+            button1.TabIndex = 15;
+            button1.Text = "حساب الزكات";
+            button1.TextAlign = ContentAlignment.MiddleRight;
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
+            // panelZakat
+            // 
+            panelZakat.BorderStyle = BorderStyle.FixedSingle;
+            panelZakat.Controls.Add(pictureBox1);
+            panelZakat.Controls.Add(label14);
+            panelZakat.Controls.Add(txtZakat);
+            panelZakat.Controls.Add(label13);
+            panelZakat.Controls.Add(txtTotal);
+            panelZakat.Controls.Add(label12);
+            panelZakat.Controls.Add(txtDebtSupplier);
+            panelZakat.Controls.Add(label11);
+            panelZakat.Controls.Add(txtCaisseValue);
+            panelZakat.Controls.Add(label10);
+            panelZakat.Controls.Add(txtDebtCustomer);
+            panelZakat.Controls.Add(label9);
+            panelZakat.Controls.Add(txtBuySale);
+            panelZakat.Controls.Add(rbSale);
+            panelZakat.Controls.Add(rbBuy);
+            panelZakat.Location = new Point(682, 76);
+            panelZakat.Name = "panelZakat";
+            panelZakat.Size = new Size(347, 381);
+            panelZakat.TabIndex = 16;
+            panelZakat.Visible = false;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(0, -1);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(37, 32);
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox1.TabIndex = 42;
+            pictureBox1.TabStop = false;
+            pictureBox1.Click += pictureBox1_Click;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label14.ImeMode = ImeMode.NoControl;
+            label14.Location = new Point(292, 338);
+            label14.Margin = new Padding(5);
+            label14.Name = "label14";
+            label14.Size = new Size(49, 23);
+            label14.TabIndex = 41;
+            label14.Text = "الزكات";
+            // 
+            // txtZakat
+            // 
+            txtZakat.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtZakat.Location = new Point(11, 335);
+            txtZakat.Name = "txtZakat";
+            txtZakat.ReadOnly = true;
+            txtZakat.Size = new Size(216, 31);
+            txtZakat.TabIndex = 40;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label13.ImeMode = ImeMode.NoControl;
+            label13.Location = new Point(262, 283);
+            label13.Margin = new Padding(5);
+            label13.Name = "label13";
+            label13.Size = new Size(80, 23);
+            label13.TabIndex = 39;
+            label13.Text = "المجموع =";
+            // 
+            // txtTotal
+            // 
+            txtTotal.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtTotal.Location = new Point(12, 280);
+            txtTotal.Name = "txtTotal";
+            txtTotal.ReadOnly = true;
+            txtTotal.Size = new Size(215, 31);
+            txtTotal.TabIndex = 38;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            label12.ImeMode = ImeMode.NoControl;
+            label12.Location = new Point(262, 230);
+            label12.Margin = new Padding(5);
+            label12.Name = "label12";
+            label12.Size = new Size(79, 19);
+            label12.TabIndex = 37;
+            label12.Text = "دين الموردين";
+            // 
+            // txtDebtSupplier
+            // 
+            txtDebtSupplier.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            txtDebtSupplier.Location = new Point(12, 227);
+            txtDebtSupplier.Name = "txtDebtSupplier";
+            txtDebtSupplier.ReadOnly = true;
+            txtDebtSupplier.Size = new Size(172, 27);
+            txtDebtSupplier.TabIndex = 36;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            label11.ImeMode = ImeMode.NoControl;
+            label11.Location = new Point(243, 178);
+            label11.Margin = new Padding(5);
+            label11.Name = "label11";
+            label11.Size = new Size(102, 19);
+            label11.TabIndex = 35;
+            label11.Text = "مجموع الصناديق";
+            // 
+            // txtCaisseValue
+            // 
+            txtCaisseValue.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            txtCaisseValue.Location = new Point(12, 175);
+            txtCaisseValue.Name = "txtCaisseValue";
+            txtCaisseValue.ReadOnly = true;
+            txtCaisseValue.Size = new Size(172, 27);
+            txtCaisseValue.TabIndex = 34;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            label10.ImeMode = ImeMode.NoControl;
+            label10.Location = new Point(275, 121);
+            label10.Margin = new Padding(5);
+            label10.Name = "label10";
+            label10.Size = new Size(67, 19);
+            label10.TabIndex = 33;
+            label10.Text = "دين الزبائن";
+            // 
+            // txtDebtCustomer
+            // 
+            txtDebtCustomer.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            txtDebtCustomer.Location = new Point(12, 118);
+            txtDebtCustomer.Name = "txtDebtCustomer";
+            txtDebtCustomer.ReadOnly = true;
+            txtDebtCustomer.Size = new Size(172, 27);
+            txtDebtCustomer.TabIndex = 32;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            label9.ImeMode = ImeMode.NoControl;
+            label9.Location = new Point(197, 63);
+            label9.Margin = new Padding(5);
+            label9.Name = "label9";
+            label9.Size = new Size(149, 19);
+            label9.TabIndex = 31;
+            label9.Text = "قيمة المشتريات/المبيعات";
+            // 
+            // txtBuySale
+            // 
+            txtBuySale.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            txtBuySale.Location = new Point(14, 60);
+            txtBuySale.Name = "txtBuySale";
+            txtBuySale.ReadOnly = true;
+            txtBuySale.Size = new Size(172, 27);
+            txtBuySale.TabIndex = 30;
+            // 
+            // rbSale
+            // 
+            rbSale.AutoSize = true;
+            rbSale.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            rbSale.Location = new Point(210, 14);
+            rbSale.Name = "rbSale";
+            rbSale.Size = new Size(81, 23);
+            rbSale.TabIndex = 1;
+            rbSale.Text = "سعر البيع";
+            rbSale.UseVisualStyleBackColor = true;
+            rbSale.CheckedChanged += rbSale_CheckedChanged;
+            // 
+            // rbBuy
+            // 
+            rbBuy.AutoSize = true;
+            rbBuy.Checked = true;
+            rbBuy.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            rbBuy.Location = new Point(71, 14);
+            rbBuy.Name = "rbBuy";
+            rbBuy.Size = new Size(88, 23);
+            rbBuy.TabIndex = 0;
+            rbBuy.TabStop = true;
+            rbBuy.Text = "سعر الشراء";
+            rbBuy.UseVisualStyleBackColor = true;
+            rbBuy.CheckedChanged += rbBuy_CheckedChanged;
             // 
             // StatisticsUserControl
             // 
@@ -845,6 +1120,10 @@
             ((System.ComponentModel.ISupportInitialize)lineSeriesView8).EndInit();
             ((System.ComponentModel.ISupportInitialize)series8).EndInit();
             ((System.ComponentModel.ISupportInitialize)chartControl6).EndInit();
+            panel9.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)lineSeriesView9).EndInit();
+            ((System.ComponentModel.ISupportInitialize)series9).EndInit();
+            ((System.ComponentModel.ISupportInitialize)chartControl9).EndInit();
             flowLayoutPanel9.ResumeLayout(false);
             flowLayoutPanel9.PerformLayout();
             flowLayoutPanel7.ResumeLayout(false);
@@ -856,11 +1135,11 @@
             flowLayoutPanel11.PerformLayout();
             flowLayoutPanel12.ResumeLayout(false);
             flowLayoutPanel12.PerformLayout();
-            panel9.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)lineSeriesView9).EndInit();
-            ((System.ComponentModel.ISupportInitialize)series9).EndInit();
-            ((System.ComponentModel.ISupportInitialize)chartControl9).EndInit();
+            panelZakat.ResumeLayout(false);
+            panelZakat.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -917,5 +1196,24 @@
         private TextBox txtNetProfits;
         private Panel panel9;
         private DevExpress.XtraCharts.ChartControl chartControl9;
+        private Button button1;
+        private Panel panelZakat;
+        private RadioButton rbSale;
+        private RadioButton rbBuy;
+        private Label label9;
+        private TextBox txtBuySale;
+        private Label label12;
+        private TextBox txtDebtSupplier;
+        private Label label11;
+        private TextBox txtCaisseValue;
+        private Label label10;
+        private TextBox txtDebtCustomer;
+        private Label label13;
+        private TextBox txtTotal;
+        private Label label14;
+        private TextBox txtZakat;
+        private PictureBox pictureBox1;
+        private ComboBox cmbNbrProductQty;
+        private ComboBox cmbSaleProfit;
     }
 }

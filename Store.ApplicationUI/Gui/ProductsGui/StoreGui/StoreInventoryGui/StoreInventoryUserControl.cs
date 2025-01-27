@@ -41,12 +41,115 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
             _storeInventoryUserControl.LoadData();
             return _storeInventoryUserControl;
         }
+        void CalcStats()
+        {
+            try
+            {
+
+                lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
+                if (DgvSales.Rows.Count > 0)
+                {
+                    // Calculate total buys
+                    var totalBuy = DgvSales.Rows
+                        .Cast<DataGridViewRow>()
+                        .Where(row => !string.IsNullOrEmpty(row.Cells[4].FormattedValue.ToString()) &&
+                                      !string.IsNullOrEmpty(row.Cells[3].FormattedValue.ToString()))
+                        .Sum(row =>
+                        {
+                            decimal.TryParse(row.Cells[4].FormattedValue.ToString(), out decimal cell4);
+                            decimal.TryParse(row.Cells[3].FormattedValue.ToString(), out decimal cell3);
+                            return cell4 * cell3;
+                        })
+                        .ToString("f2");
+
+                    // Calculate total income
+                    var totalSales = DgvSales.Rows
+                        .Cast<DataGridViewRow>()
+                        .Where(row => !string.IsNullOrEmpty(row.Cells[5].FormattedValue.ToString()) &&
+                      !string.IsNullOrEmpty(row.Cells[3].FormattedValue.ToString())
+                        )
+
+                        .Sum(row =>
+                        {
+                            decimal.TryParse(row.Cells[5].FormattedValue.ToString(), out decimal cell5);
+                            decimal.TryParse(row.Cells[3].FormattedValue.ToString(), out decimal cell3);
+                            return cell5 * cell3;
+                        })
+                        .ToString("f2");
+                    var expectedSales = DgvSales.Rows
+                       .Cast<DataGridViewRow>()
+                       .Where(row => !string.IsNullOrEmpty(row.Cells[5].FormattedValue.ToString()) &&
+                       !string.IsNullOrEmpty(row.Cells[4].FormattedValue.ToString()) &&
+                     !string.IsNullOrEmpty(row.Cells[3].FormattedValue.ToString())
+                       )
+
+                       .Sum(row =>
+                       {
+                           decimal.TryParse(row.Cells[5].FormattedValue.ToString(), out decimal cell5);
+                           decimal.TryParse(row.Cells[4].FormattedValue.ToString(), out decimal cell4);
+                           decimal.TryParse(row.Cells[3].FormattedValue.ToString(), out decimal cell3);
+                           return (cell5 - cell4) * cell3;
+                       })
+                       .ToString("f2");
+
+                    // Calculate total profit
+                    var totalQty = DgvSales.Rows
+                        .Cast<DataGridViewRow>()
+                        .Where(row => !string.IsNullOrEmpty(row.Cells[3].FormattedValue.ToString()))
+                        .Sum(row =>
+                        {
+                            decimal.TryParse(row.Cells[3].FormattedValue.ToString(), out decimal cell3);
+                            return cell3;
+                        })
+                        .ToString("f2");
+
+                    // Calculate total profit
+                    var totalProduct = DgvSales.Rows
+                        .Cast<DataGridViewRow>()
+                        .Where(row => !string.IsNullOrEmpty(row.Cells[0].FormattedValue.ToString()))
+                        .Select(row =>
+                        {
+                            decimal.TryParse(row.Cells[0].FormattedValue.ToString(), out decimal cell0);
+                            return cell0;
+                        })
+                        .Distinct()
+                        .Count()
+                        .ToString("f2");
+
+                    // Set the labels with formatted values
+                    lblBuys.Text = $"مجموع الشراء  : {totalBuy}";
+                    lblSales.Text = $"مجموع البيع المتوقع : {totalSales}";
+                    lblProfitExpected.Text = $"الأرباح المتوقعة : {expectedSales}";
+                    lblQtyInTable.Text = $"الكميات في الجدول : {totalQty}";
+                    lblProductInTables.Text = $"المنتجات في الجدول : {totalProduct}";
+                }
+
+
+
+                txtAllProducts.Text = _contex.ProductsQuantities.Where(x => x.Qty > 0)
+                    .Select(x => x.Pro_ID).Distinct().Count().ToString("f2");
+                txtProductSum.Text = _contex.Products.Count().ToString("f2");
+                txtAllQty.Text = _contex.ProductsQuantities.Sum(x => x.Qty).ToString("f2");
+                txttotalBuy.Text = _contex.ProductsQuantities.Sum(x => x.Buy_Price * x.Qty).ToString("f2");
+                txttotalSell.Text = _contex.ProductsQuantities.Sum(x => x.Sale_PriceTax * x.Qty).ToString("f2");
+                txtTotalProfitExpected.Text = _contex.ProductsQuantities
+                    .Sum(x => (x.Sale_PriceTax - x.Buy_Price) * x.Qty).ToString("f2");
+                txtCapital.Text = (Convert.ToDecimal(txttotalBuy.Text) + _contex.Banks.Sum(x => x.Money) +
+                    _contex.Caisses.Sum(x => x.MoneyinCaisse)).ToString("f2");
+            }
+            catch (Exception ex)
+            {
+
+                ToasterHelper.ShowErrorHappened(ex.Message);
+            }
+        }
         public async void SetProductsToDgv(int type)
         {
             ////DgvSales.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             //var CustomerMoneyList = MainForm.Context.CustomersReports.
             //    Include(x => x.Customer).Include(x => x.Sale)
             //    .ToList();
+
             string searchitem = txtSearch.Text == string.Empty ? "" : txtSearch.Text;
             if (type == 0)
             {
@@ -59,7 +162,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
                 DgvSales.DataSource = data.result;
             }
 
-
+            CalcStats();
 
         }
         void RefreshDgv()

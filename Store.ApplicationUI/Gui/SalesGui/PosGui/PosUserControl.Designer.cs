@@ -341,10 +341,10 @@
             flowLayoutPanel2.Controls.Add(gpSearchAvailable);
             flowLayoutPanel2.Controls.Add(gbOperations);
             flowLayoutPanel2.Controls.Add(ModifiertableLayoutPanel);
-            flowLayoutPanel2.Location = new Point(12, 3);
+            flowLayoutPanel2.Location = new Point(12, 0);
             flowLayoutPanel2.Margin = new Padding(0);
             flowLayoutPanel2.Name = "flowLayoutPanel2";
-            flowLayoutPanel2.Size = new Size(1042, 112);
+            flowLayoutPanel2.Size = new Size(1042, 115);
             flowLayoutPanel2.TabIndex = 25;
             // 
             // ModifiertableLayoutPanel
@@ -497,7 +497,6 @@
             // txtTotalSaleProduct
             // 
             txtTotalSaleProduct.Anchor = AnchorStyles.None;
-            txtTotalSaleProduct.Enabled = false;
             txtTotalSaleProduct.Font = new Font("Calibri", 12F, FontStyle.Bold);
             txtTotalSaleProduct.Location = new Point(34, 57);
             txtTotalSaleProduct.Multiline = true;
@@ -506,6 +505,9 @@
             txtTotalSaleProduct.Size = new Size(149, 32);
             txtTotalSaleProduct.TabIndex = 22;
             txtTotalSaleProduct.TextAlign = HorizontalAlignment.Center;
+            txtTotalSaleProduct.KeyDown += txtTotalSaleProduct_KeyDown;
+            txtTotalSaleProduct.KeyPress += txtTotalSaleProduct_KeyPress;
+            txtTotalSaleProduct.KeyUp += txtTotalSaleProduct_KeyUp;
             // 
             // tableLayoutPanel
             // 
@@ -517,7 +519,7 @@
             tableLayoutPanel.Name = "tableLayoutPanel";
             tableLayoutPanel.RowCount = 1;
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 59.1623039F));
-            tableLayoutPanel.Size = new Size(1066, 119);
+            tableLayoutPanel.Size = new Size(1066, 115);
             tableLayoutPanel.TabIndex = 26;
             // 
             // lblEmptyData
@@ -569,7 +571,7 @@
             DgvِProducts.Dock = DockStyle.Fill;
             DgvِProducts.EnableHeadersVisualStyles = false;
             DgvِProducts.GridColor = SystemColors.ControlDark;
-            DgvِProducts.Location = new Point(0, 257);
+            DgvِProducts.Location = new Point(0, 253);
             DgvِProducts.MultiSelect = false;
             DgvِProducts.Name = "DgvِProducts";
             DgvِProducts.ReadOnly = true;
@@ -588,7 +590,7 @@
             dataGridViewCellStyle5.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
             DgvِProducts.RowsDefaultCellStyle = dataGridViewCellStyle5;
             DgvِProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DgvِProducts.Size = new Size(1066, 360);
+            DgvِProducts.Size = new Size(1066, 364);
             DgvِProducts.TabIndex = 29;
             DgvِProducts.RowsAdded += DgvِProducts_RowsAdded;
             DgvِProducts.RowsRemoved += DgvِProducts_RowsRemoved;

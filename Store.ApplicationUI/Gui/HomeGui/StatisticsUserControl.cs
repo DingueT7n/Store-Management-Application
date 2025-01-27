@@ -10,7 +10,6 @@ namespace Store.ApplicationUI.Gui.HomeGui
         private static StatisticsUserControl? _UserControl;
         private static MainForm? _main;
         private static ApplicationDbContext? _context;
-
         public StatisticsUserControl()
         {
             InitializeComponent();
@@ -85,150 +84,158 @@ namespace Store.ApplicationUI.Gui.HomeGui
         }
         private void LoadChartData()
         {
+            try
+            {
 
-            var selectedCaisseId = cmbCaisse.SelectedValue as int?;
-            var selectedCustomerId = cmbCustomers.Text == "اختر العميل" ? "" : cmbCustomers.Text;
-            var selectedUserId = cmbUser.Text == "اختر البائع" ? "" : cmbUser.Text;
 
-            // Step 1: Retrieve Data for Sales and Buys
+                var selectedCaisseId = cmbCaisse.SelectedValue as int?;
+                var selectedCustomerId = cmbCustomers.Text == "اختر العميل" ? "" : cmbCustomers.Text;
+                var selectedUserId = cmbUser.Text == "اختر البائع" ? "" : cmbUser.Text;
 
-            var salesData = GetChartData(
-              _context.Sales,
-              s => s.Date,
-              s => s.TotalOrder,
-              s => (s.Date.Date >= dtpFrom.Value.Date && s.Date.Date <= dtpTo.Value.Date),
-              // Apply filters dynamically
-              //s => selectedCaisseId == null || s. == selectedCaisseId,
-              s => selectedCustomerId == null || s.Customer.CustomerName.Contains(selectedCustomerId),
-              s => selectedUserId == null || s.User_Name.Contains(selectedUserId)
-          );
+                // Step 1: Retrieve Data for Sales and Buys
 
-            // Buys data filtered by the selected values
-            var buysData = GetChartData(
-                _context.Buys,
-                b => b.Date,
-                b => b.Total, s => (s.Date.Date >= dtpFrom.Value.Date && s.Date.Date <= dtpTo.Value.Date),
-                //b => selectedCaisseId == null || b.CaisseId == selectedCaisseId,
-                //b => selectedCustomerId == null || b.CustomerId == selectedCustomerId,
-                b => selectedUserId == null || b.User_Name.Contains(selectedUserId)
-            );
+                var salesData = GetChartData(
+                  _context.Sales,
+                  s => s.Date,
+                  s => s.TotalOrder,
+                  s => (s.Date.Date >= dtpFrom.Value.Date && s.Date.Date <= dtpTo.Value.Date),
+                  // Apply filters dynamically
+                  //s => selectedCaisseId == null || s. == selectedCaisseId,
+                  s => selectedCustomerId == null || s.Customer.CustomerName.Contains(selectedCustomerId),
+                  s => selectedUserId == null || s.User_Name.Contains(selectedUserId)
+              );
 
-            // Deserved data filtered by the selected values
-            var deservedData = GetChartData(
-                _context.Deserveds,
-                d => d.Date,
-                d => d.Price, s => (s.Date.Date >= dtpFrom.Value.Date && s.Date.Date <= dtpTo.Value.Date),
-                //d => selectedCaisseId == null || d.CaisseId == selectedCaisseId,
-                //d => selectedCustomerId == null || d.CustomerId == selectedCustomerId,
-                d => selectedUserId == null || d.UserName.Contains(selectedUserId)
-            );
-            // Step 2: Clear existing series and add new series to chartControl1
-            chartControl1.Series.Clear(); // Clear previous data
+                // Buys data filtered by the selected values
+                var buysData = GetChartData(
+                    _context.Buys,
+                    b => b.Date,
+                    b => b.Total, s => (s.Date.Date >= dtpFrom.Value.Date && s.Date.Date <= dtpTo.Value.Date),
+                    //b => selectedCaisseId == null || b.CaisseId == selectedCaisseId,
+                    //b => selectedCustomerId == null || b.CustomerId == selectedCustomerId,
+                    b => selectedUserId == null || b.User_Name.Contains(selectedUserId)
+                );
 
-            // Add "مجموع المبيعات" Series
-            AddSeriesToChart(chartControl1, "مجموع المبيعات", salesData, ViewType.Line, Color.Green, "إحصائيات المبيعات");
-            chartControl2.Series.Clear();
-            // Add "مجموع المشتريات" Series
-            AddSeriesToChart(chartControl2, "مجموع المشتريات", buysData, ViewType.Line, Color.Blue, "إحصائيات المشتريات");
+                // Deserved data filtered by the selected values
+                var deservedData = GetChartData(
+                    _context.Deserveds,
+                    d => d.Date,
+                    d => d.Price, s => (s.Date.Date >= dtpFrom.Value.Date && s.Date.Date <= dtpTo.Value.Date),
+                    //d => selectedCaisseId == null || d.CaisseId == selectedCaisseId,
+                    //d => selectedCustomerId == null || d.CustomerId == selectedCustomerId,
+                    d => selectedUserId == null || d.UserName.Contains(selectedUserId)
+                );
+                // Step 2: Clear existing series and add new series to chartControl1
+                chartControl1.Series.Clear(); // Clear previous data
 
-            chartControl4.Series.Clear();
-            // Add "مجموع المشتريات" Series
-            AddSeriesToChart(chartControl4, "مجموع المصروفات", deservedData, ViewType.Line, Color.Blue, "إحصائيات المصروفات");
-            chartControl9.Series.Clear();
-            var caisseDepositData = GetChartData(
-                _context.CaissesDeposits,
-                s => s.Date,
-                s => s.Money,
-                s => s.Caisse_ID == (selectedCaisseId is not null ? selectedCaisseId : null),
-                s => (s.Date.Date >= dtpFrom.Value.Date && s.Date.Date <= dtpTo.Value.Date)
+                // Add "مجموع المبيعات" Series
+                AddSeriesToChart(chartControl1, "مجموع المبيعات", salesData, ViewType.Line, Color.Green, "إحصائيات المبيعات");
+                chartControl2.Series.Clear();
+                // Add "مجموع المشتريات" Series
+                AddSeriesToChart(chartControl2, "مجموع المشتريات", buysData, ViewType.Line, Color.Blue, "إحصائيات المشتريات");
 
-                        //selectedCaisseId is not null ? s => s.Id == selectedCaisseId : null
-                        );
-            //s => selectedCustomerId == null || s.Caisse_ID.ToString() == (selectedCustomerId)
-            var caisseWithdrawData = GetChartData(
-                 _context.CaissesWithdraws,
-                 s => s.Date.Date,
-                 s => s.Money,
+                chartControl4.Series.Clear();
+                // Add "مجموع المشتريات" Series
+                AddSeriesToChart(chartControl4, "مجموع المصروفات", deservedData, ViewType.Line, Color.Blue, "إحصائيات المصروفات");
+                chartControl9.Series.Clear();
+                var caisseDepositData = GetChartData(
+                    _context.CaissesDeposits,
+                    s => s.Date,
+                    s => s.Money,
                     s => s.Caisse_ID == (selectedCaisseId is not null ? selectedCaisseId : null),
                     s => (s.Date.Date >= dtpFrom.Value.Date && s.Date.Date <= dtpTo.Value.Date)
 
-             );
+                            //selectedCaisseId is not null ? s => s.Id == selectedCaisseId : null
+                            );
+                //s => selectedCustomerId == null || s.Caisse_ID.ToString() == (selectedCustomerId)
+                var caisseWithdrawData = GetChartData(
+                     _context.CaissesWithdraws,
+                     s => s.Date.Date,
+                     s => s.Money,
+                        s => s.Caisse_ID == (selectedCaisseId is not null ? selectedCaisseId : null),
+                        s => (s.Date.Date >= dtpFrom.Value.Date && s.Date.Date <= dtpTo.Value.Date)
 
-            // Combine the data into a single list for plotting
-            var combinedData = caisseDepositData
+                 );
+
+                // Combine the data into a single list for plotting
+                var combinedData = caisseDepositData
+                    .Select(d => new { d.Date.Date, Total = d.Total, Type = "Deposit" })
+                    .Concat(
+                        caisseWithdrawData.Select(w => new { w.Date.Date, Total = w.Total, Type = "Withdraw" })
+                    )
+                    .OrderBy(x => x.Date.Date) // Ensure the data is sorted by date
+                    .ToList();
+                var combinedDataq = caisseDepositData
                 .Select(d => new { d.Date.Date, Total = d.Total, Type = "Deposit" })
                 .Concat(
                     caisseWithdrawData.Select(w => new { w.Date.Date, Total = w.Total, Type = "Withdraw" })
                 )
-                .OrderBy(x => x.Date.Date) // Ensure the data is sorted by date
-                .ToList();
-            var combinedDataq = caisseDepositData
-            .Select(d => new { d.Date.Date, Total = d.Total, Type = "Deposit" })
-            .Concat(
-                caisseWithdrawData.Select(w => new { w.Date.Date, Total = w.Total, Type = "Withdraw" })
-            )
-            .GroupBy(x => new { x.Date.Date, x.Type })
-            .Select(g => new { g.Key.Date.Date, g.Key.Type, Total = g.Sum(x => x.Total) })
-            .OrderBy(x => x.Date.Date)
-            .ToList();
-
-            // Group data for easier plotting (optional, in case dates overlap)
-            var groupedData = combinedData
                 .GroupBy(x => new { x.Date.Date, x.Type })
-                .Select(g => (g.Key.Date.Date, g.Key.Type, Total: g.Sum(x => x.Total)))
-                .ToList();
-            var combinedData1 = caisseDepositData
-     .Select(d => new { d.Date.Date, Amount = d.Total }) // Deposits as positive
-     .Concat(
-         caisseWithdrawData.Select(w => new { w.Date.Date, Amount = -w.Total }) // Withdrawals as negative
-     )
-     .OrderBy(x => x.Date.Date) // Ensure sorted by date
-     .ToList();
-
-            // Step 2: Calculate cumulative real value
-            decimal cumulativeValue = 0;
-            var realValueData = combinedData1
-                .GroupBy(x => x.Date.Date) // Group by date
-                .OrderBy(g => g.Key)  // Ensure dates are processed in order
-                .Select(g =>
-                {
-                    cumulativeValue += g.Sum(x => x.Amount); // Update cumulative value
-                    return (Date: g.Key, CumulativeValue: cumulativeValue);
-                })
+                .Select(g => new { g.Key.Date.Date, g.Key.Type, Total = g.Sum(x => x.Total) })
+                .OrderBy(x => x.Date.Date)
                 .ToList();
 
+                // Group data for easier plotting (optional, in case dates overlap)
+                var groupedData = combinedData
+                    .GroupBy(x => new { x.Date.Date, x.Type })
+                    .Select(g => (g.Key.Date.Date, g.Key.Type, Total: g.Sum(x => x.Total)))
+                    .ToList();
+                var combinedData1 = caisseDepositData
+         .Select(d => new { d.Date.Date, Amount = d.Total }) // Deposits as positive
+         .Concat(
+             caisseWithdrawData.Select(w => new { w.Date.Date, Amount = -w.Total }) // Withdrawals as negative
+         )
+         .OrderBy(x => x.Date.Date) // Ensure sorted by date
+         .ToList();
+
+                // Step 2: Calculate cumulative real value
+                decimal cumulativeValue = 0;
+                var realValueData = combinedData1
+                    .GroupBy(x => x.Date.Date) // Group by date
+                    .OrderBy(g => g.Key)  // Ensure dates are processed in order
+                    .Select(g =>
+                    {
+                        cumulativeValue += g.Sum(x => x.Amount); // Update cumulative value
+                        return (Date: g.Key, CumulativeValue: cumulativeValue);
+                    })
+                    .ToList();
 
 
-            AddSeriesToChart(chartControl9,
-                "الايداع في الصناديق",
-                groupedData.Where(g => g.Type == "Deposit").Select(g => (g.Date.Date, g.Total)).ToList(),
-                ViewType.Line,
-                Color.Blue,
-                "معاملات الصناديق السحب والايداع");
+
+                AddSeriesToChart(chartControl9,
+                    "الايداع في الصناديق",
+                    groupedData.Where(g => g.Type == "Deposit").Select(g => (g.Date.Date, g.Total)).ToList(),
+                    ViewType.Line,
+                    Color.Blue,
+                    "معاملات الصناديق السحب والايداع");
 
 
-            AddSeriesToChart(chartControl9,
-                "السحب من الصناديق",
-                groupedData.Where(g => g.Type == "Withdraw").Select(g => (g.Date.Date, g.Total)).ToList(),
-                ViewType.Line,
-                Color.Red,
-                "معاملات الصناديق");
+                AddSeriesToChart(chartControl9,
+                    "السحب من الصناديق",
+                    groupedData.Where(g => g.Type == "Withdraw").Select(g => (g.Date.Date, g.Total)).ToList(),
+                    ViewType.Line,
+                    Color.Red,
+                    "معاملات الصناديق");
 
 
-            AddSeriesToChart(chartControl9,
-                "القيمة الحقيقية في الصناديق",
-                realValueData,
-                ViewType.Line,
-                Color.Green,
-                "القيمة الحقيقية");
-            PieBuysSales(salesData, buysData, deservedData);
+                AddSeriesToChart(chartControl9,
+                    "القيمة الحقيقية في الصناديق",
+                    realValueData,
+                    ViewType.Line,
+                    Color.Green,
+                    "القيمة الحقيقية");
+                PieBuysSales(salesData, buysData, deservedData);
 
-            VisualizeTop10Products();
+                VisualizeTop10Products();
 
-            VisualizeTop10ProductsByProfit();
-            VisualizeNetProfit();
-            VisualizeProfit();
-
+                VisualizeTop10ProductsByProfit();
+                VisualizeNetProfit();
+                VisualizeProfit();
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
 
         }
         void PieBuysSales(List<(DateTime, decimal Total)> salesData, List<(DateTime, decimal Total)> buysData, List<(DateTime, decimal Total)> deservedData)
@@ -242,9 +249,9 @@ namespace Store.ApplicationUI.Gui.HomeGui
             var BuysSums = buysData.Sum(s => s.Total);
             var deservedSums = deservedData.Sum(s => s.Total);
 
-            txtTotalSales.Text = salesSums.ToString();
-            txtTotalBuys.Text = BuysSums.ToString();
-            txtTotalDeserved.Text = deservedSums.ToString();
+            txtTotalSales.Text = salesSums.ToString("f2");
+            txtTotalBuys.Text = BuysSums.ToString("f2");
+            txtTotalDeserved.Text = deservedSums.ToString("f2");
 
             // Add Points for Sales and Buys
             series.Points.Add(new SeriesPoint("مجموع المبيعات", salesSums));
@@ -401,11 +408,11 @@ namespace Store.ApplicationUI.Gui.HomeGui
                     TotalProfit = g.Sum(s => (s.Price - s.Buy_Price) * s.Quentity) // Calculate Profit (SalePrice - BuyPrice)
                 })
                 .OrderByDescending(p => p.TotalProfit) // Sort by Profit Descending
-                .Take(15) // Take the Top 10 Products
+                .Take(Convert.ToInt32(cmbSaleProfit.Text)) // Take the Top 10 Products
                 .ToList();
 
             // Step 2: Create a Series for Visualization
-            Series series = new Series("أفضل 15 منتجات مبيعًا حسب الربح", ViewType.Bar);
+            Series series = new Series($"أفضل {Convert.ToInt32(cmbSaleProfit.Text)} منتجات مبيعًا حسب الربح", ViewType.Bar);
 
             // Step 3: Add Data Points to the Series
             foreach (var product in top10ProductsByProfit)
@@ -428,7 +435,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
 
             // Step 6: Add a Title to the Chart
             ChartTitle chartTitle = new ChartTitle();
-            chartTitle.Text = "أفضل 15 منتجات مبيعًا حسب الربح";
+            chartTitle.Text = $"أفضل {Convert.ToInt32(cmbSaleProfit.Text)} منتجات مبيعًا حسب الربح";
             chartTitle.Font = new Font("Calibri", 16, FontStyle.Bold);
             chartTitle.Alignment = StringAlignment.Center;
             chartTitle.TextColor = Color.Black;
@@ -475,7 +482,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 .ToList();
 
             var totalSalesProfit = netProfitData.Sum(s => s.TotalSalesProfit);
-            txtProfit.Text = totalSalesProfit.ToString();
+            txtProfit.Text = totalSalesProfit.ToString("f2");
 
             var deservedData = _context.Deserveds
                 .Where(s => s.UserName.Contains(selectedUserId))
@@ -571,7 +578,6 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 diagram.AxisY.Label.TextPattern = "{V} دج";
             }
         }
-
         private void VisualizeProfit()
         {
             // Clear any existing series in the chart
@@ -670,11 +676,11 @@ namespace Store.ApplicationUI.Gui.HomeGui
                     TotalQuantity = g.Sum(s => s.Quentity) // Sum of Quantity Sold
                 })
                 .OrderByDescending(p => p.TotalQuantity) // Sort by Quantity Descending
-                .Take(15) // Get the top 10 products
+                .Take(Convert.ToInt32(cmbNbrProductQty.Text)) // Get the top 10 products
                 .ToList();
 
             // Step 2: Create a Series for Visualization
-            Series series = new Series("أفضل 15 منتجات مبيعًا حسب الكمية", ViewType.Bar);
+            Series series = new Series($"أفضل {cmbNbrProductQty.Text} منتجات مبيعًا حسب الكمية", ViewType.Bar);
 
             // Step 3: Add Data Points to the Series
             foreach (var product in top15Products)
@@ -695,7 +701,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
 
             // Step 6: Add a Title to the Chart
             ChartTitle chartTitle = new ChartTitle();
-            chartTitle.Text = "أفضل 15 منتجات مبيعًا حسب الكمية";
+            chartTitle.Text = $"أفضل {cmbNbrProductQty.Text} منتجات مبيعًا حسب الكمية";
             chartTitle.Font = new Font("Calibri", 16, FontStyle.Bold);
             chartTitle.Alignment = StringAlignment.Center;
             chartTitle.TextColor = Color.Black;
@@ -727,6 +733,85 @@ namespace Store.ApplicationUI.Gui.HomeGui
         {
             ToasterHelper.PlayNotificationSound();
             LoadChartData();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            //flowLayoutPanel6.Size = new Size(1034, 463);
+            flowLayoutPanel6.AutoSize = true;
+            calcZakat();
+            panelZakat.Visible = true;
+
+        }
+
+        private void calcZakat()
+        {
+            try
+            {
+                _context = new();
+                decimal totalbuySales = 0.00m;
+                if (rbBuy.Checked)
+                {
+                    totalbuySales = _context.Products.Sum(x => x.Quentity * x.BuyPrice);
+                }
+                else if (rbSale.Checked)
+                {
+                    totalbuySales = _context.Products.Sum(x => x.Quentity * x.SalePriceTax);
+                }
+                txtBuySale.Text = totalbuySales.ToString("f2");
+                var customerDebts = _context.Customers.Sum(x => x.TotalDebts);
+                txtDebtCustomer.Text = customerDebts.ToString("f2");
+
+                var caisseAndBank = _context.Caisses.Sum(x => x.MoneyinCaisse) + _context.Banks.Sum(x => x.Money);
+                txtCaisseValue.Text = caisseAndBank.ToString("f2");
+                var SupplierDebts = _context.Suppliers.Sum(x => x.TotalDebts);
+                txtDebtSupplier.Text = SupplierDebts.ToString("f2");
+                txtTotal.Text = ((totalbuySales + customerDebts + caisseAndBank) - SupplierDebts).ToString("f2");
+                txtZakat.Text = ((Convert.ToDecimal(txtTotal.Text) * 2.5m) / 100).ToString("f2");
+
+
+            }
+            catch (Exception ex)
+            {
+
+                ToasterHelper.ShowErrorHappened(ex.Message);
+            }
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            panelZakat.Visible = false;
+
+
+
+        }
+
+        private void cmbNbrProductQty_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+
+        }
+        private void cmbSaleProfit_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+
+        }
+        private void cmbNbrProductQty_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            VisualizeTop10Products();
+        }
+        private void cmbSaleProfit_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            VisualizeTop10ProductsByProfit();
+        }
+
+        private void rbSale_CheckedChanged(object sender, EventArgs e)
+        {
+            calcZakat();
+        }
+
+        private void rbBuy_CheckedChanged(object sender, EventArgs e)
+        {
+            calcZakat();
         }
     }
 }

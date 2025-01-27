@@ -389,7 +389,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                     decimal Amount = Convert.ToDecimal(txtSalePrice.Text);
                     decimal TotalAmount = Amount - (Amount * (Discount / 100));
                     TotalAmount = Math.Round(TotalAmount, 2);
-                    txtTotalSaleProduct.Text = (ConvertToFloat(TotalAmount.ToString()) * Convert.ToDecimal(txtQty.Text)).ToString();
+                    txtTotalSaleProduct.Text = ((ConvertToFloat(TotalAmount.ToString()) * Convert.ToDecimal(txtQty.Text))).ToString(("f2"));
 
                 }
                 if (txtQty.Text == string.Empty)
@@ -499,9 +499,15 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                                           where row.Cells[4].FormattedValue.ToString() != string.Empty
                                           select Convert.ToDecimal(row.Cells[4].FormattedValue)).Sum()
                                           .ToString("f2");
-                    TotalFacture = (from DataGridViewRow row in DgvِProducts.Rows
-                                    where row.Cells[4].FormattedValue.ToString() != string.Empty
-                                    select Convert.ToDecimal(row.Cells[4].FormattedValue)).Sum();
+                    var round = (Convert.ToDecimal(lblValuePrice.Text) % 10);
+                    if (round > 5)
+                        round = round - 5;
+                    else if (round == 5)
+                        round = 0;
+                    lblValuePrice.Text = (Convert.ToDecimal(lblValuePrice.Text) - round).ToString("f2");
+                    TotalFacture = ((from DataGridViewRow row in DgvِProducts.Rows
+                                     where row.Cells[4].FormattedValue.ToString() != string.Empty
+                                     select Convert.ToDecimal(row.Cells[4].FormattedValue)).Sum()) - round;
                     lblQuentityValue.Text =
                               (from DataGridViewRow row in DgvِProducts.Rows
                                where row.Cells[2].FormattedValue.ToString() != string.Empty
@@ -1444,6 +1450,70 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 btnPrices.Text = "سعر 1";
                 btnPrices.BackColor = Color.SeaGreen;
             }
+        }
+
+        private void txtTotalSaleProduct_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (txtQty.Text != string.Empty && txtTotalSaleProduct.Text != string.Empty)
+                    if (!(Convert.ToDecimal(txtQty.Text) > 0 && Convert.ToDecimal(txtTotalSaleProduct.Text) > 0))
+                    {
+                        txtQty.Text = "1";
+                        txtTotalSaleProduct.Text = _product.SalePrice.ToString("f2");
+                    }
+                    else
+                    {
+                        BringTofront(false);
+                        AddNewRow();
+                        txtQty.Text = string.Empty;
+                    }
+            }
+        }
+
+        private void txtTotalSaleProduct_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            string currentText = (sender as TextBox)?.Text ?? string.Empty;
+
+
+            char decimalSeparator = Properties.Settings.Default.DecimalSEP[0];
+
+
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != decimalSeparator && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+
+            else if (e.KeyChar == decimalSeparator && currentText.Contains(decimalSeparator))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtTotalSaleProduct_KeyUp(object sender, KeyEventArgs e)
+        {
+
+            if (txtTotalSaleProduct.Text != string.Empty)
+            {
+                try
+                {
+                    if (Convert.ToDecimal(txtSalePrice.Text) > 0)
+                    {
+                        txtQty.Text = Math.Round((Convert.ToDecimal(txtTotalSaleProduct.Text)
+                            / Convert.ToDecimal(txtSalePrice.Text))).ToString("f2");
+                    }
+                    if (txtSalePrice.Text != string.Empty && txtQty.Text != string.Empty
+                         && txtSaleDiscount.Text != string.Empty)
+                    {
+
+                        txtSaleDiscount.Text = "0";
+
+                    }
+
+                }
+                catch (Exception ex) { MessageBox.Show(ex.Message); }
+            }
+
         }
     }
 }
