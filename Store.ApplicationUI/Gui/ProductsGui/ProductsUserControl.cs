@@ -250,13 +250,24 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+            try
+            {
 
 
-            DgvProducts.DataSource = productsRepository.SearchAll(txtSearch.Text);
-            lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
+                txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
 
-            txtSearch.Text = string.Empty;
+
+                DgvProducts.DataSource = productsRepository.SearchAll(txtSearch.Text, Properties.Settings.Default.NoOfDataInDgvs);
+                lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
+
+                txtSearch.Text = string.Empty;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         private void btnAddCategory_Click(object sender, EventArgs e)

@@ -260,6 +260,20 @@ namespace Store.ApplicationUI.Code.Helper
                 return false;
             }
         }
+        public static bool ShowResolveDialog()
+        {
+            var result = MessageBox.Show("هل انت متأكد من هذا الاجراء؟ ",
+                   "اجراء تصليح التنبيه"
+                   , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public static bool ShowRefundDialog()
         {
             var result = MessageBox.Show("هل انت متأكد من هذا الاجراء ؟ لا يمكن استرجاع البيانات ",

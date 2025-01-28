@@ -486,8 +486,11 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
                     //_contex.SaveChanges();
 
                     Sale sale = _contex.Sales.FirstOrDefault(x => x.Id.ToString() == DgvSales.Rows[i].Cells[0].Value.ToString());
-                    _contex.Sales.Remove(sale);
-                    await _contex.SaveChangesAsync();
+                    if (sale != null)
+                    {
+                        _contex.Sales.Remove(sale);
+                        await _contex.SaveChangesAsync();
+                    }
                 }
                 Code.Helper.ToasterHelper.ShowDeletedToast();
 

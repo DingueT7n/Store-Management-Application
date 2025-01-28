@@ -123,6 +123,7 @@ namespace Store.Infrastructure.Data
         public DbSet<ReceiptVoucher> ReceiptVouchers { get; set; }
         public DbSet<SendVoucher> SendVouchers { get; set; }
         public DbSet<OrderPrintData> OrderPrintData { get; set; }
+        public DbSet<AlertTable> AlertsTable { get; set; }
         public DbSet<RandomBarcode> RandomBarcode { get; set; }
         public DbSet<BarcodePrint> BarcodePrints { get; set; }
         public DbSet<Category> Categories { get; set; }

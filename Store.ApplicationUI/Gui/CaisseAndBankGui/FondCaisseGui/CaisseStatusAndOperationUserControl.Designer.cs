@@ -463,6 +463,7 @@
             button2.TabIndex = 8;
             button2.Text = "حذف جميع بيانات الجدول";
             button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // tabPage2
             // 
@@ -802,6 +803,7 @@
             button3.TabIndex = 8;
             button3.Text = "حذف جميع بيانات الجدول";
             button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
             // 
             // CaisseStatusAndOperationUserControl
             // 

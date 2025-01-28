@@ -47,7 +47,7 @@
             tableLayoutPanel.RowCount = 1;
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel.Size = new Size(1099, 628);
+            tableLayoutPanel.Size = new Size(1265, 629);
             tableLayoutPanel.TabIndex = 0;
             // 
             // flowLayoutPanel
@@ -56,7 +56,7 @@
             flowLayoutPanel.Dock = DockStyle.Fill;
             flowLayoutPanel.Location = new Point(3, 3);
             flowLayoutPanel.Name = "flowLayoutPanel";
-            flowLayoutPanel.Size = new Size(1093, 622);
+            flowLayoutPanel.Size = new Size(1259, 623);
             flowLayoutPanel.TabIndex = 0;
             // 
             // panelTitle
@@ -65,17 +65,17 @@
             panelTitle.Dock = DockStyle.Top;
             panelTitle.Location = new Point(0, 0);
             panelTitle.Name = "panelTitle";
-            panelTitle.Size = new Size(1099, 54);
+            panelTitle.Size = new Size(1265, 54);
             panelTitle.TabIndex = 1;
             // 
             // lblTitleForm
             // 
-            lblTitleForm.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            lblTitleForm.Anchor = AnchorStyles.None;
             lblTitleForm.AutoSize = true;
             lblTitleForm.Font = new Font("Calibri", 14.25F);
             lblTitleForm.ForeColor = Color.Red;
             lblTitleForm.ImeMode = ImeMode.NoControl;
-            lblTitleForm.Location = new Point(405, 12);
+            lblTitleForm.Location = new Point(488, 16);
             lblTitleForm.Margin = new Padding(3);
             lblTitleForm.Name = "lblTitleForm";
             lblTitleForm.Size = new Size(288, 23);
@@ -87,15 +87,14 @@
             AutoScaleDimensions = new SizeF(8F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(1099, 682);
+            ClientSize = new Size(1265, 683);
             Controls.Add(tableLayoutPanel);
             Controls.Add(panelTitle);
             Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(4);
             MaximizeBox = false;
-            MaximumSize = new Size(1115, 721);
             MinimizeBox = false;
-            MinimumSize = new Size(1115, 721);
+            MinimumSize = new Size(1281, 722);
             Name = "SelectProductsForm";
             RightToLeft = RightToLeft.Yes;
             RightToLeftLayout = true;

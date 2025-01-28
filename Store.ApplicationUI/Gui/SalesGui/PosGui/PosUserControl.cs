@@ -856,7 +856,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         private void btnSearchImage_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            SelectProductsForm selectProductsForm = SelectProductsForm.Instance(_posForm);
+            SelectProductsForm selectProductsForm = SelectProductsForm.Instance(_posForm,true);
             selectProductsForm.Show();
         }
         Sale SetSale()

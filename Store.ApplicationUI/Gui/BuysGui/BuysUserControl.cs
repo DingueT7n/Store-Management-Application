@@ -1157,7 +1157,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
         private void btnSearchImage_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            SelectProductsForm selectProductsForm = SelectProductsForm.Instance(_main);
+            SelectProductsForm selectProductsForm = SelectProductsForm.Instance(_main, true);
             selectProductsForm.ShowDialog();
         }
     }

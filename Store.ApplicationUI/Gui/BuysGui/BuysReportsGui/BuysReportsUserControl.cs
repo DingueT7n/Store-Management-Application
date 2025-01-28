@@ -331,8 +331,11 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
                 {
 
                     Buy buy = _context.Buys.FirstOrDefault(x => x.Id.ToString() == DgvBuys.Rows[i].Cells[0].Value.ToString());
-                    _context.Remove(buy);
-                    await _context.SaveChangesAsync();
+                    if (buy != null)
+                    {
+                        _context.Remove(buy);
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 Code.Helper.ToasterHelper.ShowDeletedToast();
 

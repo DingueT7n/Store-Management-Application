@@ -16,33 +16,38 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         private static SelectProductsForm _selectProductsForm;
         private ApplicationDbContext _context;
 
-        public SelectProductsForm(MainForm main)
+        public SelectProductsForm(MainForm main, bool buy)
         {
             InitializeComponent();
             _context = new ApplicationDbContext();
             this.Owner = _main;
+            this.buy = buy;
+            pos = false;
         }
-        public SelectProductsForm(PosForm main)
+        public SelectProductsForm(PosForm main, bool pos)
         {
             _context = new ApplicationDbContext();
-
+            buy = false;
+            this.pos = pos;
             InitializeComponent();
             this.Owner = _PosForm;
         }
-        public static SelectProductsForm Instance(MainForm main)
+        bool buy = false;
+        bool pos = false;
+        public static SelectProductsForm Instance(MainForm main, bool buy)
         {
             _main = main;
-            _selectProductsForm = new SelectProductsForm(_main);
+            _selectProductsForm = new SelectProductsForm(_main, buy);
 
 
 
             _selectProductsForm.LoadData();
             return _selectProductsForm;
         }
-        public static SelectProductsForm Instance(PosForm main)
+        public static SelectProductsForm Instance(PosForm main, bool pos)
         {
             _PosForm = main;
-            _selectProductsForm = new SelectProductsForm(_PosForm);
+            _selectProductsForm = new SelectProductsForm(_PosForm, pos);
             _selectProductsForm._context = new ApplicationDbContext();
 
 
@@ -77,7 +82,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
             }
 
 
-            if (!SalesUserControl.CheckInstance())
+            if (!SalesUserControl.CheckInstance() & !buy)
             {
                 if (SalesUserControl.setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == productId)))
                 {
@@ -85,7 +90,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
                 }
 
             }
-            if (!BuysUserControl.CheckInstance())
+            if (!BuysUserControl.CheckInstance() & buy)
             {
                 if (BuysUserControl.setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == productId)))
                 {
@@ -96,7 +101,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
 
             {
                 var posUserControl = PosForm.GetPosUserControl();
-                if (posUserControl != null)
+                if (posUserControl != null && pos)
                 {
                     posUserControl.setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == productId));
                 }
@@ -112,6 +117,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         private void PictureBox_Click(object sender, EventArgs e)
         {
             // Get the clicked PictureBox
+            ToasterHelper.PlayNotificationSound();
             PictureBox pictureBox = sender as PictureBox;
             AddProductToDgvIfNotExist(pictureBox);
 
@@ -133,82 +139,98 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         //}
         public async void LoadData()
         {
+            // Show loading form
             LoadingForm.Instance(_main).Show();
+
             if (await Task.Run(() => _context.Database.CanConnect()))
             {
+                // Fetch data from the database
+                List<ProductQuickAccess> productQuicks = await Task.Run(() => _context.ProductQuickAccess.ToList());
 
-                //DgvProducts.DataSource = _context.ProductQuickAccess.ToList();
-                //SetColumns();
-                List<ProductQuickAccess> productQuicks = _context.ProductQuickAccess.ToList();
+                // Clear existing controls in the FlowLayoutPanel
+                flowLayoutPanel.Controls.Clear();
+
                 foreach (var productImage in productQuicks)
                 {
-                    Panel qucikPan = new Panel
+                    // Create the main panel for the product
+                    Panel productPanel = new Panel
                     {
                         BackColor = Color.White,
-                        Width = 110,
-                        Height = 105,
+                        Width = flowLayoutPanel.Width / 4 - 10, // Adjust based on FlowLayoutPanel width
+                        Height = 150,
+                        Margin = new Padding(10),
+                        Padding = new Padding(5),
+                        BorderStyle = BorderStyle.FixedSingle
                     };
-                    Label labelName = new Label
+
+                    // Add rounded corners and shadow effect
+                    productPanel.Paint += (s, e) =>
                     {
-                        Text = productImage.ProductName,
-                        BackColor = Color.White,
-                        ForeColor = Color.Red,
-                        Margin = new(40, 3, 3, 3)
+                        ControlPaint.DrawBorder(e.Graphics, productPanel.ClientRectangle,
+                            Color.Gray, 1, ButtonBorderStyle.Solid,
+                            Color.Gray, 1, ButtonBorderStyle.Solid,
+                            Color.Gray, 1, ButtonBorderStyle.Solid,
+                            Color.Gray, 1, ButtonBorderStyle.Solid);
                     };
 
-                    Label labelid = new Label
-                    {
-                        Text = productImage.Pro_Id.ToString(),
-                        BackColor = Color.White,
-                        ForeColor = Color.Red,
-                        Margin = new(40, 3, 3, 3)
-
-                    };
-                    FlowLayoutPanel flowLayoutPanelfortext = new FlowLayoutPanel
-                    {
-                        FlowDirection = FlowDirection.RightToLeft,
-                        Dock = DockStyle.Bottom,
-                        Size = new Size(110, 50)
-
-
-                    };
-                    flowLayoutPanelfortext.Controls.Add(labelName);
-                    flowLayoutPanelfortext.Controls.Add(labelid);
-                    qucikPan.Controls.Add(flowLayoutPanelfortext);
-
-
-
+                    // Add product image
                     PictureBox pictureBox = new PictureBox
                     {
                         Image = SetImage(productImage.ProductImage),
-                        SizeMode = PictureBoxSizeMode.StretchImage,
-                        Width = 75,
-                        Height = 45,
-                        Tag = productImage.Pro_Id,
+                        SizeMode = PictureBoxSizeMode.Zoom,
+                        Width = productPanel.Width - 10,
+                        Height = 75,
                         Dock = DockStyle.Top,
-
-
+                        Cursor = Cursors.Hand
                     };
 
-                    // Add click event handler
+                    // Handle click event
                     pictureBox.Click += PictureBox_Click;
-                    qucikPan.Controls.Add(pictureBox);
-                    // Add PictureBox to FlowLayoutPanel
-                    flowLayoutPanel.Controls.Add(qucikPan);
+                    pictureBox.Tag = productImage.Pro_Id;
+
+                    productPanel.Controls.Add(pictureBox);
+
+                    // Create a label for the product name
+                    Label labelName = new Label
+                    {
+                        Text = productImage.ProductName,
+                        Font = new Font("Arial", 10, FontStyle.Bold),
+                        ForeColor = Color.Black,
+                        TextAlign = ContentAlignment.MiddleCenter,
+                        Dock = DockStyle.Top,
+                        AutoSize = false,
+                        Height = 30
+                    };
+
+                    productPanel.Controls.Add(labelName);
+
+                    // Create a label for the product ID
+                    Label labelId = new Label
+                    {
+                        Text = $"ID: {productImage.Pro_Id}",
+                        Font = new Font("Arial", 8, FontStyle.Italic),
+                        ForeColor = Color.Gray,
+                        TextAlign = ContentAlignment.MiddleCenter,
+                        Dock = DockStyle.Top,
+                        AutoSize = false,
+                        Height = 20
+                    };
+
+                    productPanel.Controls.Add(labelId);
+
+                    // Add the product panel to the FlowLayoutPanel
+                    flowLayoutPanel.Controls.Add(productPanel);
                 }
             }
             else
             {
-
+                // Hide loading form and show error message
                 LoadingForm.Instance(_main).Hide();
-                //No Connection
                 MsgHelper.ShowServerError();
             }
-            //Hideloading
-            LoadingForm.Instance(_main).Hide();
-            //lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
-            // Show EmptyDAta
 
+            // Hide loading form
+            LoadingForm.Instance(_main).Hide();
         }
 
         private void DgvProducts_CellContentClick(object sender, DataGridViewCellEventArgs e)

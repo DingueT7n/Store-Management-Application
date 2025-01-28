@@ -43,6 +43,8 @@
    
     <PackageReference Include="FastMember" Version="1.5.0" />
    
+    <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.4" />
+   
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -52,11 +54,19 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="172.52.0" />
+    <PackageReference Include="SKGL" Version="2.0.5.3" />
+    <PackageReference Include="SoftwareProtector" Version="1.0.5.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Store.Core\Store.Core.csproj" />
     <ProjectReference Include="..\Store.Infrastructure\Store.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="FoxLearn.License">
+      <HintPath>..\..\..\..\Desktop\FoxLearn.License.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

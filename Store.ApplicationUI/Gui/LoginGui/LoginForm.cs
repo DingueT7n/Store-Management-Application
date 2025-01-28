@@ -37,6 +37,11 @@ namespace Store.ApplicationUI.Gui.LoginGui
                 ToasterHelper.ShowConnectionIsNotEstablishedByError(ex.Message);
 
             }
+            //if (Convert.ToDouble(Properties.Settings.Default.Days_left) < 0)
+            //{
+            //    LoginGui.KeyActivationForm.KeyActivationForm activationForm = new();
+            //    activationForm.ShowDialog();
+            //}
 
         }
         private SplashScreen? _splashScreen;
@@ -88,7 +93,34 @@ namespace Store.ApplicationUI.Gui.LoginGui
         {
             try
             {
+                //    SKGL.Validate validate = new SKGL.Validate();
+                //    validate.secretPhase = Properties.Settings.Default.Key_crypt;
+                //    validate.Key = Properties.Settings.Default.Key;
+                //    try
+                //    {
+                //        double daysLeft = Convert.ToDouble(Properties.Settings.Default.Days_left);
+                //        DateTime dateTimeCreate = Convert.ToDateTime(Properties.Settings.Default.Creation);
+                //        DateTime dateTimeExp = Convert.ToDateTime(Properties.Settings.Default.Expiration);
+                //        if (DateTime.Now.Date < dateTimeCreate.Date)
+                //            return;
+                //        if (DateTime.Now.Date > dateTimeExp.Date)
+                //        {
+                //            Properties.Settings.Default.Days_left = "0";
+                //            Properties.Settings.Default.Save();
+                //        }
+                //        if (daysLeft < 0)
+                //        {
+                //            ToasterHelper.ShowActivationCompleted();
+                //            MessageBox.Show("يرجى الاتصال بالمطور", "التفعيل", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //            return;
+                //        }
 
+                //    }
+                //    catch (Exception)
+                //    {
+
+                //        throw;
+                //    }
 
                 ToasterHelper.PlayNotificationSound();
                 Code.Helper.ConStringHelper.SetConString();

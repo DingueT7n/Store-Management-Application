@@ -68,13 +68,13 @@ namespace Store.Infrastructure.Repositories
         //}
 
 
-        public List<ProductOutdated> GetAllProductOutdated()
+        public async Task<List<ProductOutdated>> GetAllProductOutdated()
         {
             try
             {
                 _context = new ApplicationDbContext();
 
-                var products = _context.ProductsQuantities
+                var products = await _context.ProductsQuantities
                     .Include(x => x.Product)
                                 .Where(x => x.DateExpiration <= DateTime.Now && x.Qty > 0)
                     .Select(bd => new ProductOutdated
@@ -85,7 +85,7 @@ namespace Store.Infrastructure.Repositories
                         StoreName = bd.StoreName,
                         Quentity = bd.Qty
                     })
-                    .ToList();
+                    .ToListAsync();
                 return products;
             }
             catch (Exception ex)
@@ -94,13 +94,13 @@ namespace Store.Infrastructure.Repositories
                 throw new Exception("Error retrieving the buyFactures", ex);
             }
         }
-        public List<ProductMinQty> GetAllProductMinQty()
+        public async Task<List<ProductMinQty>> GetAllProductMinQty()
         {
             try
             {
                 _context = new ApplicationDbContext();
 
-                var products = _context.Products
+                var products = await _context.Products
                     .Include(x => x.Category)
                                 .Where(x => x.Quentity <= x.MinQty)
                     .Select(bd => new ProductMinQty
@@ -111,7 +111,7 @@ namespace Store.Infrastructure.Repositories
                         CategoryName = bd.Category.CategoryName,
                         Quentity = bd.Quentity
                     })
-                    .ToList();
+                    .ToListAsync();
                 return products;
             }
             catch (Exception ex)
@@ -120,30 +120,35 @@ namespace Store.Infrastructure.Repositories
                 throw new Exception("Error retrieving the buyFactures", ex);
             }
         }
-        public List<Product> SearchAll(string searchIteam)
+        public List<Product> SearchAll(string searchIteam, int take)
         {
 
             try
             {
-                _context = new ApplicationDbContext();
-                var result = _context.Products
-                    .Include(x => x.Category)
-                    .Include(x => x.ProductFamilies).AsQueryable()
-                    .Where(x => x.Id.ToString() == searchIteam ||
-                x.CodeBar == (searchIteam) ||
-                x.ColisageBareCode == (searchIteam) ||
-                x.ProductName.Contains(searchIteam) ||
-                x.IsTaxed.ToString() == (searchIteam) ||
-                x.SalePrice.ToString() == (searchIteam) ||
-                x.Category.CategoryName.Contains(searchIteam)
+                if (string.IsNullOrEmpty(searchIteam))
+                {
+                    _context = new ApplicationDbContext();
+                    var result = _context.Products
+                        .Include(x => x.Category)
+                        .Include(x => x.ProductFamilies).AsQueryable()
+                        .Where(x => x.Id.ToString() == searchIteam ||
+                    x.CodeBar == (searchIteam) ||
+                    x.ColisageBareCode == (searchIteam) ||
+                    x.ProductName.Contains(searchIteam) ||
+                    x.IsTaxed.ToString() == (searchIteam) ||
+                    x.SalePrice.ToString() == (searchIteam) ||
+                    x.Category.CategoryName.Contains(searchIteam)
 
-                )
-                    .OrderBy(x => x.Id).ToList();
-                var pf = _context.ProductFamilies.Include(x => x.Product).FirstOrDefault(x => x.CodeBar == searchIteam);
-                if (pf != null)
-                    result.Add(pf.Product);
-                return result;
-
+                    )
+                        .OrderBy(x => x.Id).ToList();
+                    var pf = _context.ProductFamilies.Include(x => x.Product).FirstOrDefault(x => x.CodeBar == searchIteam);
+                    if (pf != null)
+                        result.Add(pf.Product);
+                    return result;
+                }
+                return _context.Products
+                        .Include(x => x.Category)
+                        .Include(x => x.ProductFamilies).AsQueryable().Take(take).ToList();
             }
             catch
             {

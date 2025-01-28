@@ -45,6 +45,10 @@ namespace Store.ApplicationUI.Code.Helper
         {
             ToastForm.Instance("حذف البيانات", "تم حذف البيانات بنجاح", null).Show();
         }
+        public static void ShowResolvedAlertsToast()
+        {
+            ToastForm.Instance("تصليح البيانات", "تم تصليح التنبيه بنجاح", null).Show();
+        }
         public static void ShowTransfertProduct()
         {
             ToastForm.Instance("تحويل المنتجات", "تم تحويل المنتجات بنجاح", null).Show();
@@ -132,6 +136,10 @@ namespace Store.ApplicationUI.Code.Helper
         {
             ToastForm.Instance("خلل في الاعدادات", "هناك خلل في الاعدادات ,من فضلك راجع شاشة اعدادات البرنامج ", System.Drawing.Color.Red).Show();
         }
+        public static void ShowActivationCompleted()
+        {
+            ToastForm.Instance("الاشتراك اكتمل", "انتهاء مدة التفعيل يرجى الاتصال بالمطور", System.Drawing.Color.Red).Show();
+        }
         public static void ShowRestore()
         {
             ToastForm.Instance("استعادة نسخة الاحتياطية", "تم استعادة النسخ الاحتياطي لقاعدة البيانات بنجاح", null).Show();
@@ -147,6 +155,14 @@ namespace Store.ApplicationUI.Code.Helper
         public static void ShowCloseCaisse()
         {
             ToastForm.Instance("غلق الصندوق", "تم غلق الصندوق بنجاح", null).Show();
+        }
+        public static void ShowTrialVersionActivated()
+        {
+            ToastForm.Instance("تفعيل البرنامج", "تم الاستفادة من فترة التجربة", null).Show();
+        }
+        public static void ShowFullVersionActivated()
+        {
+            ToastForm.Instance("تفعيل البرنامج", "تم تفعيل البرنامج", null).Show();
         }
     }
 }

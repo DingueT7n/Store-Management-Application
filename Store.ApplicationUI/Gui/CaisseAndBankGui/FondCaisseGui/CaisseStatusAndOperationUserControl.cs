@@ -335,5 +335,66 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
                 await RefreshDgvAsync2(skip);
             }
         }
+
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ToasterHelper.PlayNotificationSound();
+                if (MsgHelper.ShowDeleteDialog())
+                {
+                    foreach (DataGridViewRow row in Dgv1.Rows)
+                    {
+                        int id = Convert.ToInt32(row.Cells[14].Value);
+                        var deposit = _contex.CaisseStatusDetails.FirstOrDefault(x => x.Id == id);
+
+                        if (deposit != null)
+                        {
+                            _contex.CaisseStatusDetails.Remove(deposit);
+                            _contex.SaveChanges();
+                        }
+                    }
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
+
+                    Dgv1.DataSource = null;
+                    await RefreshDgvAsync1(0);
+                }
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+            }
+        }
+
+        private async void button3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ToasterHelper.PlayNotificationSound();
+                if (MsgHelper.ShowDeleteDialog())
+                {
+                    foreach (DataGridViewRow row in Dgv2.Rows)
+                    {
+                        int id = Convert.ToInt32(row.Cells[16].Value);
+                        var deposit = _contex.CaisseOperations.FirstOrDefault(x => x.Id == id);
+
+                        if (deposit != null)
+                        {
+                            _contex.CaisseOperations.Remove(deposit);
+                            _contex.SaveChanges();
+                        }
+                    }
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
+
+                    Dgv2.DataSource = null;
+                    await RefreshDgvAsync2(0);
+                }
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+
+            }
+        }
     }
 }

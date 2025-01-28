@@ -832,5 +832,11 @@ namespace Store.ApplicationUI
             pageHelper.SetNewPage(Gui.CaisseAndBankGui.FondCaisseGui.CaisseStatusAndOperationUserControl.Instance(this));
 
         }
+
+        private void btnAlerts_Click(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(Gui.HomeGui.AlertsUserControl.Instance(this));
+
+        }
     }
 }
