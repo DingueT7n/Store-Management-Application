@@ -88,6 +88,10 @@
             label9 = new Label();
             label8 = new Label();
             cmbCustomers = new ComboBox();
+            groupBox4 = new GroupBox();
+            cbEditBuyPrice = new CheckBox();
+            cbEditSalePrice = new CheckBox();
+            cbEditWholeSaleprice = new CheckBox();
             tabControl.SuspendLayout();
             tabPagePrintersSettings.SuspendLayout();
             tabPageFacturesSettings.SuspendLayout();
@@ -97,6 +101,7 @@
             gbFastSales.SuspendLayout();
             groupBox3.SuspendLayout();
             groupBox2.SuspendLayout();
+            groupBox4.SuspendLayout();
             SuspendLayout();
             // 
             // tabControl
@@ -109,7 +114,7 @@
             tabControl.Name = "tabControl";
             tabControl.RightToLeftLayout = true;
             tabControl.SelectedIndex = 0;
-            tabControl.Size = new Size(751, 427);
+            tabControl.Size = new Size(751, 511);
             tabControl.TabIndex = 0;
             // 
             // tabPagePrintersSettings
@@ -471,7 +476,7 @@
             tabPageGeneralsettings.Location = new Point(4, 28);
             tabPageGeneralsettings.Name = "tabPageGeneralsettings";
             tabPageGeneralsettings.Padding = new Padding(3);
-            tabPageGeneralsettings.Size = new Size(743, 395);
+            tabPageGeneralsettings.Size = new Size(743, 479);
             tabPageGeneralsettings.TabIndex = 2;
             tabPageGeneralsettings.Text = "اعدادات عامة";
             // 
@@ -491,7 +496,7 @@
             groupBox1.Dock = DockStyle.Left;
             groupBox1.Location = new Point(3, 3);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(412, 389);
+            groupBox1.Size = new Size(412, 473);
             groupBox1.TabIndex = 10;
             groupBox1.TabStop = false;
             groupBox1.Text = "معلومات اختيارية";
@@ -501,7 +506,7 @@
             button3.Anchor = AnchorStyles.None;
             button3.Image = (Image)resources.GetObject("button3.Image");
             button3.ImageAlign = ContentAlignment.MiddleLeft;
-            button3.Location = new Point(57, 308);
+            button3.Location = new Point(60, 422);
             button3.Name = "button3";
             button3.Size = new Size(215, 45);
             button3.TabIndex = 22;
@@ -615,6 +620,7 @@
             // 
             // gbFastSales
             // 
+            gbFastSales.Controls.Add(groupBox4);
             gbFastSales.Controls.Add(groupBox3);
             gbFastSales.Controls.Add(groupBox2);
             gbFastSales.Controls.Add(cmbFastCaisse);
@@ -626,7 +632,7 @@
             gbFastSales.Dock = DockStyle.Right;
             gbFastSales.Location = new Point(421, 3);
             gbFastSales.Name = "gbFastSales";
-            gbFastSales.Size = new Size(319, 389);
+            gbFastSales.Size = new Size(319, 473);
             gbFastSales.TabIndex = 9;
             gbFastSales.TabStop = false;
             gbFastSales.Text = "بيانات البيع السريع";
@@ -701,7 +707,7 @@
             // 
             cmbFastCaisse.Anchor = AnchorStyles.None;
             cmbFastCaisse.FormattingEnabled = true;
-            cmbFastCaisse.Location = new Point(29, 36);
+            cmbFastCaisse.Location = new Point(29, 44);
             cmbFastCaisse.Name = "cmbFastCaisse";
             cmbFastCaisse.Size = new Size(151, 27);
             cmbFastCaisse.TabIndex = 4;
@@ -710,7 +716,7 @@
             // 
             cmbFastStores.Anchor = AnchorStyles.None;
             cmbFastStores.FormattingEnabled = true;
-            cmbFastStores.Location = new Point(29, 142);
+            cmbFastStores.Location = new Point(29, 150);
             cmbFastStores.Name = "cmbFastStores";
             cmbFastStores.Size = new Size(151, 27);
             cmbFastStores.TabIndex = 8;
@@ -719,7 +725,7 @@
             // 
             label6.Anchor = AnchorStyles.None;
             label6.AutoSize = true;
-            label6.Location = new Point(189, 39);
+            label6.Location = new Point(189, 47);
             label6.Name = "label6";
             label6.Size = new Size(124, 19);
             label6.TabIndex = 3;
@@ -729,7 +735,7 @@
             // 
             label9.Anchor = AnchorStyles.None;
             label9.AutoSize = true;
-            label9.Location = new Point(200, 145);
+            label9.Location = new Point(200, 153);
             label9.Name = "label9";
             label9.Size = new Size(113, 19);
             label9.TabIndex = 7;
@@ -739,7 +745,7 @@
             // 
             label8.Anchor = AnchorStyles.None;
             label8.AutoSize = true;
-            label8.Location = new Point(184, 91);
+            label8.Location = new Point(184, 99);
             label8.Name = "label8";
             label8.Size = new Size(129, 19);
             label8.TabIndex = 5;
@@ -749,24 +755,66 @@
             // 
             cmbCustomers.Anchor = AnchorStyles.None;
             cmbCustomers.FormattingEnabled = true;
-            cmbCustomers.Location = new Point(29, 88);
+            cmbCustomers.Location = new Point(29, 96);
             cmbCustomers.Name = "cmbCustomers";
             cmbCustomers.Size = new Size(151, 27);
             cmbCustomers.TabIndex = 6;
+            // 
+            // groupBox4
+            // 
+            groupBox4.Controls.Add(cbEditWholeSaleprice);
+            groupBox4.Controls.Add(cbEditSalePrice);
+            groupBox4.Controls.Add(cbEditBuyPrice);
+            groupBox4.Location = new Point(6, 359);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new Size(307, 108);
+            groupBox4.TabIndex = 17;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "اعدادات المشتريات (تعديل على المنتجات)";
+            // 
+            // cbEditBuyPrice
+            // 
+            cbEditBuyPrice.AutoSize = true;
+            cbEditBuyPrice.Location = new Point(183, 26);
+            cbEditBuyPrice.Name = "cbEditBuyPrice";
+            cbEditBuyPrice.Size = new Size(122, 23);
+            cbEditBuyPrice.TabIndex = 0;
+            cbEditBuyPrice.Text = "تعديل سعر الشراء";
+            cbEditBuyPrice.UseVisualStyleBackColor = true;
+            // 
+            // cbEditSalePrice
+            // 
+            cbEditSalePrice.AutoSize = true;
+            cbEditSalePrice.Location = new Point(153, 63);
+            cbEditSalePrice.Name = "cbEditSalePrice";
+            cbEditSalePrice.Size = new Size(154, 23);
+            cbEditSalePrice.TabIndex = 1;
+            cbEditSalePrice.Text = "تعديل سعر البيع 1 و 2 ";
+            cbEditSalePrice.UseVisualStyleBackColor = true;
+            // 
+            // cbEditWholeSaleprice
+            // 
+            cbEditWholeSaleprice.AutoSize = true;
+            cbEditWholeSaleprice.Location = new Point(35, 26);
+            cbEditWholeSaleprice.Name = "cbEditWholeSaleprice";
+            cbEditWholeSaleprice.Size = new Size(126, 23);
+            cbEditWholeSaleprice.TabIndex = 2;
+            cbEditWholeSaleprice.Text = "تعديل سعر الجملة";
+            cbEditWholeSaleprice.UseVisualStyleBackColor = true;
             // 
             // ApplicationSettingsForm
             // 
             AutoScaleDimensions = new SizeF(8F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(751, 427);
+            ClientSize = new Size(751, 511);
             Controls.Add(tabControl);
             Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(3, 4, 3, 4);
             MaximizeBox = false;
-            MaximumSize = new Size(767, 466);
+            MaximumSize = new Size(767, 550);
             MinimizeBox = false;
-            MinimumSize = new Size(767, 466);
+            MinimumSize = new Size(767, 550);
             Name = "ApplicationSettingsForm";
             RightToLeft = RightToLeft.Yes;
             RightToLeftLayout = true;
@@ -789,6 +837,8 @@
             groupBox3.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
+            groupBox4.ResumeLayout(false);
+            groupBox4.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -853,5 +903,9 @@
         private Label label18;
         private TextBox txtNIS;
         private Label label19;
+        private GroupBox groupBox4;
+        private CheckBox cbEditWholeSaleprice;
+        private CheckBox cbEditSalePrice;
+        private CheckBox cbEditBuyPrice;
     }
 }

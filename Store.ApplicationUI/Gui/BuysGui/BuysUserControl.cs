@@ -255,7 +255,6 @@ namespace Store.ApplicationUI.Gui.BuysGui
             DgvِProducts.Rows.Clear();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِProducts);
         }
-
         private void txtSearchBarCode_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -264,13 +263,12 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 SetProductsToTable();
             }
         }
-
         private void txtSearchBarCode_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != 8)
-            {
-                e.Handled = true;
-            }
+            //if (!char.IsDigit(e.KeyChar) && e.KeyChar != 8)
+            //{
+            //    e.Handled = true;
+            //}
         }
         void new_row()
         {
@@ -598,6 +596,16 @@ namespace Store.ApplicationUI.Gui.BuysGui
             if (product is not null)
             {
                 product.Quentity = product.Quentity + _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+                if (Properties.Settings.Default.ApplyWholeSale)
+                    product.WholesalePrice = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[5].Value.ToString());
+                if (Properties.Settings.Default.ApplySalePrice)
+                {
+                    product.SalePrice = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
+                    product.SalePriceTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
+                    product.SalePriceSeconde = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
+                }
+                if (Properties.Settings.Default.ApplyBuyPrice)
+                    product.BuyPrice = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
 
             }
             return product;

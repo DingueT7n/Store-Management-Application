@@ -41,6 +41,7 @@
             tileGroup2 = new DevExpress.XtraEditors.TileGroup();
             tileItem1 = new DevExpress.XtraEditors.TileItem();
             panel1 = new Panel();
+            lblActivation = new Label();
             lblCon = new Label();
             button2 = new Button();
             button1 = new Button();
@@ -106,6 +107,7 @@
             tileItem1.BackgroundImageAlignment = DevExpress.XtraEditors.TileItemContentAlignment.MiddleCenter;
             tileItem1.BackgroundImageScaleMode = DevExpress.XtraEditors.TileItemImageScaleMode.Stretch;
             tileItem1.ContentAnimation = DevExpress.XtraEditors.TileItemContentAnimationType.Fade;
+            tileItem1.CurrentFrameIndex = 1;
             tileItemElement5.Text = "";
             tileItem1.Elements.Add(tileItemElement5);
             tileItem1.FrameAnimationInterval = 2000;
@@ -142,6 +144,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(lblActivation);
             panel1.Controls.Add(lblCon);
             panel1.Controls.Add(button2);
             panel1.Controls.Add(button1);
@@ -153,6 +156,20 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(394, 387);
             panel1.TabIndex = 1;
+            // 
+            // lblActivation
+            // 
+            lblActivation.AutoSize = true;
+            lblActivation.Cursor = Cursors.Hand;
+            lblActivation.Font = new Font("Calibri", 12F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
+            lblActivation.ForeColor = Color.Blue;
+            lblActivation.Location = new Point(9, 362);
+            lblActivation.Name = "lblActivation";
+            lblActivation.Size = new Size(87, 19);
+            lblActivation.TabIndex = 6;
+            lblActivation.Text = "شاشة التفعيل";
+            lblActivation.Visible = false;
+            lblActivation.Click += label5_Click;
             // 
             // lblCon
             // 
@@ -301,6 +318,7 @@
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "واجهة تسجيل الدخول للبرنامج";
+            Load += LoginForm_Load;
             KeyDown += LoginForm_KeyDown;
             tableLayoutPanel1.ResumeLayout(false);
             panel1.ResumeLayout(false);
@@ -327,5 +345,6 @@
         private Button button1;
         private Button button2;
         private Label lblCon;
+        private Label lblActivation;
     }
 }

@@ -13,15 +13,11 @@ namespace Store.ApplicationUI.Gui.HomeGui
         public StatisticsUserControl()
         {
             InitializeComponent();
-
         }
         public static bool CheckInstance()
         {
             return (_UserControl == null);
-
-
         }
-
         public static StatisticsUserControl? Instance(MainForm main)
         {
             _main = main;
@@ -35,11 +31,8 @@ namespace Store.ApplicationUI.Gui.HomeGui
             _UserControl?.LoadData();
             return _UserControl;
         }
-
-
         public async void LoadData()
         {
-
             dtpTo.Value = DateTime.Now.AddDays(30);
             //ShowLoading
             LoadingForm.Instance(_main).Show();
@@ -48,24 +41,31 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 //Start Load Data
 
                 // if its an admin or Normal user 
+                try
+                {
+                    var dataCaisse = _context.Caisses.ToList();
+                    cmbCaisse.DataSource = dataCaisse;
+                    cmbCaisse.DisplayMember = "CaisseName";
+                    cmbCaisse.ValueMember = "Id";
+                    cmbCustomers.Text = "اختر الصندوق";
 
-                var dataCaisse = _context.Caisses.ToList();
-                cmbCaisse.DataSource = dataCaisse;
-                cmbCaisse.DisplayMember = "CaisseName";
-                cmbCaisse.ValueMember = "Id";
-                cmbCustomers.Text = "اختر الصندوق";
+                    cmbCustomers.DataSource = _context.Customers.ToList();
+                    cmbCustomers.DisplayMember = "CustomerName";
+                    cmbCustomers.ValueMember = "Id";
+                    cmbCustomers.Text = "اختر العميل";
 
-                cmbCustomers.DataSource = _context.Customers.ToList();
-                cmbCustomers.DisplayMember = "CustomerName";
-                cmbCustomers.ValueMember = "Id";
-                cmbCustomers.Text = "اختر العميل";
+                    cmbUser.DataSource = _context.Users.ToList();
+                    cmbUser.DisplayMember = "UserName";
+                    cmbUser.ValueMember = "Id";
+                    cmbUser.Text = "اختر البائع";
 
-                cmbUser.DataSource = _context.Users.ToList();
-                cmbUser.DisplayMember = "UserName";
-                cmbUser.ValueMember = "Id";
-                cmbUser.Text = "اختر البائع";
-
-                LoadChartData();
+                    LoadChartData();
+                }
+                catch (Exception ex)
+                {
+                    ToasterHelper.ShowErrorHappened(ex.Message);
+                    throw;
+                }
                 //_data.Clear();
             }
             else
@@ -240,65 +240,75 @@ namespace Store.ApplicationUI.Gui.HomeGui
         }
         void PieBuysSales(List<(DateTime, decimal Total)> salesData, List<(DateTime, decimal Total)> buysData, List<(DateTime, decimal Total)> deservedData)
         {
-            chartControl3.Series.Clear();
-
-            // Create Pie Chart Series
-            Series series = new Series("نسبة المبيعات والمشتريات", ViewType.Pie);
-
-            var salesSums = salesData.Sum(s => s.Total);
-            var BuysSums = buysData.Sum(s => s.Total);
-            var deservedSums = deservedData.Sum(s => s.Total);
-
-            txtTotalSales.Text = salesSums.ToString("f2");
-            txtTotalBuys.Text = BuysSums.ToString("f2");
-            txtTotalDeserved.Text = deservedSums.ToString("f2");
-
-            // Add Points for Sales and Buys
-            series.Points.Add(new SeriesPoint("مجموع المبيعات", salesSums));
-            series.Points.Add(new SeriesPoint("مجموع المشتريات", BuysSums));
-            series.Points.Add(new SeriesPoint("مجموع المصروفات", deservedSums));
-
-            // Set custom colors for each point
-            series.Points[0].Color = Color.Green; // مجموع المبيعات (Green)
-            series.Points[1].Color = Color.Blue;   // مجموع المشتريات (Red)
-            series.Points[2].Color = Color.Red;   // مجموع المشتريات (Red)
-
-            // Add the Series to the ChartControl
-            chartControl3.Series.Add(series);
-
-            // Show Labels
-            series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
-
-            // Optional: Customize Label Position (if needed)
-            PieSeriesLabel label = (PieSeriesLabel)series.Label;
-            label.Position = PieSeriesLabelPosition.TwoColumns;
-
-            // Optional: Adjust Legend Visibility
-
-            // Enable Labels and Percentages
-            series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
-
-            label.Position = PieSeriesLabelPosition.TwoColumns; // Position outside for clarity
-            label.TextPattern = "{A}: {VP:p2}"; // Show argument and percentage (e.g., 78.33%)
+            try
+            {
 
 
-            // Add a Title to the Chart
-            ChartTitle chartTitle = new ChartTitle();
-            chartTitle.Text = "نسبة المبيعات والمشتريات والمصروفات"; // Title Text
-            chartTitle.Alignment = StringAlignment.Center; // Center Align
-            chartTitle.Font = new Font("Calibri", 16, FontStyle.Bold); // Custom Font
-            chartTitle.TextColor = Color.Black;
+                chartControl3.Series.Clear();
 
-            if (chartControl3.Titles.Count == 0)
-                chartControl3.Titles.Add(chartTitle);
+                // Create Pie Chart Series
+                Series series = new Series("نسبة المبيعات والمشتريات", ViewType.Pie);
 
-            // Optional: Adjust Legend
-            chartControl3.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
-            chartControl3.Legend.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
-            chartControl3.Legend.AlignmentVertical = LegendAlignmentVertical.Bottom;
+                var salesSums = salesData.Sum(s => s.Total);
+                var BuysSums = buysData.Sum(s => s.Total);
+                var deservedSums = deservedData.Sum(s => s.Total);
 
-            // Optional: Customize Appearance
-            series.View.Color = Color.Black; // Keep custom colors
+                txtTotalSales.Text = salesSums.ToString("f2");
+                txtTotalBuys.Text = BuysSums.ToString("f2");
+                txtTotalDeserved.Text = deservedSums.ToString("f2");
+
+                // Add Points for Sales and Buys
+                series.Points.Add(new SeriesPoint("مجموع المبيعات", salesSums));
+                series.Points.Add(new SeriesPoint("مجموع المشتريات", BuysSums));
+                series.Points.Add(new SeriesPoint("مجموع المصروفات", deservedSums));
+
+                // Set custom colors for each point
+                series.Points[0].Color = Color.Green; // مجموع المبيعات (Green)
+                series.Points[1].Color = Color.Blue;   // مجموع المشتريات (Red)
+                series.Points[2].Color = Color.Red;   // مجموع المشتريات (Red)
+
+                // Add the Series to the ChartControl
+                chartControl3.Series.Add(series);
+
+                // Show Labels
+                series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
+
+                // Optional: Customize Label Position (if needed)
+                PieSeriesLabel label = (PieSeriesLabel)series.Label;
+                label.Position = PieSeriesLabelPosition.TwoColumns;
+
+                // Optional: Adjust Legend Visibility
+
+                // Enable Labels and Percentages
+                series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
+
+                label.Position = PieSeriesLabelPosition.TwoColumns; // Position outside for clarity
+                label.TextPattern = "{A}: {VP:p2}"; // Show argument and percentage (e.g., 78.33%)
+
+
+                // Add a Title to the Chart
+                ChartTitle chartTitle = new ChartTitle();
+                chartTitle.Text = "نسبة المبيعات والمشتريات والمصروفات"; // Title Text
+                chartTitle.Alignment = StringAlignment.Center; // Center Align
+                chartTitle.Font = new Font("Calibri", 16, FontStyle.Bold); // Custom Font
+                chartTitle.TextColor = Color.Black;
+
+                if (chartControl3.Titles.Count == 0)
+                    chartControl3.Titles.Add(chartTitle);
+
+                // Optional: Adjust Legend
+                chartControl3.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
+                chartControl3.Legend.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+                chartControl3.Legend.AlignmentVertical = LegendAlignmentVertical.Bottom;
+
+                // Optional: Customize Appearance
+                series.View.Color = Color.Black; // Keep custom colors
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
         }
 
         #region Helper Methods
@@ -393,332 +403,372 @@ namespace Store.ApplicationUI.Gui.HomeGui
 
         private void VisualizeTop10ProductsByProfit()
         {
-            // Clear previous series
-            chartControl6.Series.Clear();
+            try
+            {
 
-            // Step 1: Retrieve the Top 10 Products Sold by Profit
-            var top10ProductsByProfit = _context.SalesProfits // Adjust the table name if needed
-               .Where(x => dtpFrom.Value.Date <= x.Sale.Date && dtpTo.Value.Date >= x.Sale.Date)
 
-                .GroupBy(s => s.Product.ProductName) // Group by Product Name
-                                                     // Group by Product Name
-                .Select(g => new
+                // Clear previous series
+                chartControl6.Series.Clear();
+
+                // Step 1: Retrieve the Top 10 Products Sold by Profit
+                var top10ProductsByProfit = _context.SalesProfits // Adjust the table name if needed
+                   .Where(x => dtpFrom.Value.Date <= x.Sale.Date && dtpTo.Value.Date >= x.Sale.Date)
+
+                    .GroupBy(s => s.Product.ProductName) // Group by Product Name
+                                                         // Group by Product Name
+                    .Select(g => new
+                    {
+                        ProductName = g.Key,
+                        TotalProfit = g.Sum(s => (s.Price - s.Buy_Price) * s.Quentity) // Calculate Profit (SalePrice - BuyPrice)
+                    })
+                    .OrderByDescending(p => p.TotalProfit) // Sort by Profit Descending
+                    .Take(Convert.ToInt32(cmbSaleProfit.Text)) // Take the Top 10 Products
+                    .ToList();
+
+                // Step 2: Create a Series for Visualization
+                Series series = new Series($"أفضل {Convert.ToInt32(cmbSaleProfit.Text)} منتجات مبيعًا حسب الربح", ViewType.Bar);
+
+                // Step 3: Add Data Points to the Series
+                foreach (var product in top10ProductsByProfit)
                 {
-                    ProductName = g.Key,
-                    TotalProfit = g.Sum(s => (s.Price - s.Buy_Price) * s.Quentity) // Calculate Profit (SalePrice - BuyPrice)
-                })
-                .OrderByDescending(p => p.TotalProfit) // Sort by Profit Descending
-                .Take(Convert.ToInt32(cmbSaleProfit.Text)) // Take the Top 10 Products
-                .ToList();
+                    series.Points.Add(new SeriesPoint(product.ProductName, product.TotalProfit));
+                }
 
-            // Step 2: Create a Series for Visualization
-            Series series = new Series($"أفضل {Convert.ToInt32(cmbSaleProfit.Text)} منتجات مبيعًا حسب الربح", ViewType.Bar);
+                // Step 4: Customize Series Appearance
+                series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
+                BarSeriesLabel label = series.Label as BarSeriesLabel;
+                if (label != null)
+                {
+                    label.TextPattern = "{A}: {V} دج"; // Show Product Name (A) and Profit Value (V) as Currency
+                    label.TextColor = Color.Black;
 
-            // Step 3: Add Data Points to the Series
-            foreach (var product in top10ProductsByProfit)
-            {
-                series.Points.Add(new SeriesPoint(product.ProductName, product.TotalProfit));
+                }
+
+                // Step 5: Add Series to ChartControl
+                chartControl6.Series.Add(series);
+
+                // Step 6: Add a Title to the Chart
+                ChartTitle chartTitle = new ChartTitle();
+                chartTitle.Text = $"أفضل {Convert.ToInt32(cmbSaleProfit.Text)} منتجات مبيعًا حسب الربح";
+                chartTitle.Font = new Font("Calibri", 16, FontStyle.Bold);
+                chartTitle.Alignment = StringAlignment.Center;
+                chartTitle.TextColor = Color.Black;
+
+
+                chartControl6.Titles.Clear();
+                chartControl6.Titles.Add(chartTitle);
+
+                // Step 7: Optional - Customize the Chart Appearance
+                chartControl6.Legend.Visibility = DevExpress.Utils.DefaultBoolean.False;
+
+                // Configure X and Y axis titles
+                XYDiagram diagram = chartControl6.Diagram as XYDiagram;
+                if (diagram != null)
+                {
+                    diagram.AxisX.Title.Text = "المنتج";
+                    diagram.AxisX.Title.TextColor = Color.Black;
+                    diagram.AxisX.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
+
+                    diagram.AxisY.Title.Text = "(اجمال الربح (دج";
+                    diagram.AxisY.Title.TextColor = Color.Black;
+                    diagram.AxisY.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
+
+                    diagram.AxisY.Label.TextPattern = "{V} دج"; // Format Y-axis as currency
+                }
             }
-
-            // Step 4: Customize Series Appearance
-            series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
-            BarSeriesLabel label = series.Label as BarSeriesLabel;
-            if (label != null)
+            catch (Exception ex)
             {
-                label.TextPattern = "{A}: {V} دج"; // Show Product Name (A) and Profit Value (V) as Currency
-                label.TextColor = Color.Black;
-
-            }
-
-            // Step 5: Add Series to ChartControl
-            chartControl6.Series.Add(series);
-
-            // Step 6: Add a Title to the Chart
-            ChartTitle chartTitle = new ChartTitle();
-            chartTitle.Text = $"أفضل {Convert.ToInt32(cmbSaleProfit.Text)} منتجات مبيعًا حسب الربح";
-            chartTitle.Font = new Font("Calibri", 16, FontStyle.Bold);
-            chartTitle.Alignment = StringAlignment.Center;
-            chartTitle.TextColor = Color.Black;
-
-
-            chartControl6.Titles.Clear();
-            chartControl6.Titles.Add(chartTitle);
-
-            // Step 7: Optional - Customize the Chart Appearance
-            chartControl6.Legend.Visibility = DevExpress.Utils.DefaultBoolean.False;
-
-            // Configure X and Y axis titles
-            XYDiagram diagram = chartControl6.Diagram as XYDiagram;
-            if (diagram != null)
-            {
-                diagram.AxisX.Title.Text = "المنتج";
-                diagram.AxisX.Title.TextColor = Color.Black;
-                diagram.AxisX.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
-
-                diagram.AxisY.Title.Text = "(اجمال الربح (دج";
-                diagram.AxisY.Title.TextColor = Color.Black;
-                diagram.AxisY.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
-
-                diagram.AxisY.Label.TextPattern = "{V} دج"; // Format Y-axis as currency
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
             }
         }
         private void VisualizeNetProfit()
         {
-            // Clear any existing series in the chart
-            chartControl7.Series.Clear();
-            var selectedCustomerId = cmbCustomers.Text == "اختر العميل" ? "" : cmbCustomers.Text;
-            var selectedUserId = cmbUser.Text == "اختر البائع" ? "" : cmbUser.Text;
-            // Step 1: Calculate Net Profit
-            var netProfitData = _context.SalesProfits.Where(s => selectedCustomerId == null || s.Cust_Name.Contains(selectedCustomerId))
-                .Where(
-              s => selectedUserId == null || s.Sale.User_Name.Contains(selectedUserId))
-                .Where(x => dtpFrom.Value.Date <= x.Sale.Date && dtpTo.Value.Date >= x.Sale.Date)
-                .GroupBy(sp => sp.Sale.Date.Date)
-                .Select(g => new
-                {
-                    Date = g.Key,
-                    TotalSalesProfit = g.Sum(sp => (sp.Price - sp.Buy_Price) * sp.Quentity)
-                })
-                .ToList();
+            try
+            {
 
-            var totalSalesProfit = netProfitData.Sum(s => s.TotalSalesProfit);
-            txtProfit.Text = totalSalesProfit.ToString("f2");
 
-            var deservedData = _context.Deserveds
-                .Where(s => s.UserName.Contains(selectedUserId))
-                .Where(x => dtpFrom.Value.Date <= x.Date.Date && dtpTo.Value.Date >= x.Date.Date)
-                .GroupBy(d => d.Date.Date)
-                .Select(g => new
-                {
-                    Date = g.Key,
-                    TotalDeserved = g.Sum(d => d.Price)
-                })
-                .ToList();
-
-            // Combine SalesProfits and Deserveds data
-            var combinedData = netProfitData
-                .Concat(
-                    deservedData
-                        .Where(d => !netProfitData.Any(s => s.Date == d.Date))
-                        .Select(d => new
-                        {
-                            Date = d.Date,
-                            TotalSalesProfit = 0m // No sales profit for this date
-                        })
-                )
-                .GroupJoin(deservedData,
-                    sales => sales.Date,
-                    deserved => deserved.Date,
-                    (sales, deserved) => new
+                // Clear any existing series in the chart
+                chartControl7.Series.Clear();
+                var selectedCustomerId = cmbCustomers.Text == "اختر العميل" ? "" : cmbCustomers.Text;
+                var selectedUserId = cmbUser.Text == "اختر البائع" ? "" : cmbUser.Text;
+                // Step 1: Calculate Net Profit
+                var netProfitData = _context.SalesProfits.Where(s => selectedCustomerId == null || s.Cust_Name.Contains(selectedCustomerId))
+                    .Where(
+                  s => selectedUserId == null || s.Sale.User_Name.Contains(selectedUserId))
+                    .Where(x => dtpFrom.Value.Date <= x.Sale.Date && dtpTo.Value.Date >= x.Sale.Date)
+                    .GroupBy(sp => sp.Sale.Date.Date)
+                    .Select(g => new
                     {
-                        Date = sales.Date,
-                        NetProfit = sales.TotalSalesProfit - deserved.Sum(d => d.TotalDeserved)
+                        Date = g.Key,
+                        TotalSalesProfit = g.Sum(sp => (sp.Price - sp.Buy_Price) * sp.Quentity)
                     })
-                .OrderBy(data => data.Date)
-                .ToList();
+                    .ToList();
 
-            var totalNetProfit = combinedData.Sum(data => data.NetProfit);
-            txtNetProfits.Text = totalNetProfit.ToString();
+                var totalSalesProfit = netProfitData.Sum(s => s.TotalSalesProfit);
+                txtProfit.Text = totalSalesProfit.ToString("f2");
 
-            // Step 2: Create Series for Net Profit Visualization
-            Series series = new Series("صافي الربح", ViewType.Line);
+                var deservedData = _context.Deserveds
+                    .Where(s => s.UserName.Contains(selectedUserId))
+                    .Where(x => dtpFrom.Value.Date <= x.Date.Date && dtpTo.Value.Date >= x.Date.Date)
+                    .GroupBy(d => d.Date.Date)
+                    .Select(g => new
+                    {
+                        Date = g.Key,
+                        TotalDeserved = g.Sum(d => d.Price)
+                    })
+                    .ToList();
 
-            // Add Data Points for Net Profit
-            foreach (var data in combinedData)
-            {
-                series.Points.Add(new SeriesPoint(data.Date, data.NetProfit));
+                // Combine SalesProfits and Deserveds data
+                var combinedData = netProfitData
+                    .Concat(
+                        deservedData
+                            .Where(d => !netProfitData.Any(s => s.Date == d.Date))
+                            .Select(d => new
+                            {
+                                Date = d.Date,
+                                TotalSalesProfit = 0m // No sales profit for this date
+                            })
+                    )
+                    .GroupJoin(deservedData,
+                        sales => sales.Date,
+                        deserved => deserved.Date,
+                        (sales, deserved) => new
+                        {
+                            Date = sales.Date,
+                            NetProfit = sales.TotalSalesProfit - deserved.Sum(d => d.TotalDeserved)
+                        })
+                    .OrderBy(data => data.Date)
+                    .ToList();
+
+                var totalNetProfit = combinedData.Sum(data => data.NetProfit);
+                txtNetProfits.Text = totalNetProfit.ToString();
+
+                // Step 2: Create Series for Net Profit Visualization
+                Series series = new Series("صافي الربح", ViewType.Line);
+
+                // Add Data Points for Net Profit
+                foreach (var data in combinedData)
+                {
+                    series.Points.Add(new SeriesPoint(data.Date, data.NetProfit));
+                }
+
+                // Enable labels and set their text pattern
+                series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
+                series.Label.TextPattern = "{V} دج";
+                series.Label.TextColor = Color.Black;
+
+
+                // Customize Series Appearance
+                if (series.View is LineSeriesView view)
+                {
+                    view.Color = Color.Orange; // Set line color to orange
+                    view.LineMarkerOptions.Kind = MarkerKind.Circle; // Add markers
+
+                }
+
+                // Add series to chart
+                chartControl7.Series.Add(series);
+
+                // Step 3: Add a Title to the Chart
+                ChartTitle chartTitle = new ChartTitle
+                {
+                    Text = "صافي الربح حسب التاريخ",
+                    Font = new Font("Calibri", 16, FontStyle.Bold),
+                    Alignment = StringAlignment.Center,
+                    TextColor = Color.Black
+
+                };
+
+                chartControl7.Titles.Clear();
+                chartControl7.Titles.Add(chartTitle);
+
+                // Step 4: Configure X and Y axis
+                if (chartControl7.Diagram is XYDiagram diagram)
+                {
+                    // Configure X-axis
+                    diagram.AxisX.Title.Text = "التاريخ";
+                    diagram.AxisX.Title.TextColor = Color.Black;
+
+                    diagram.AxisX.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
+                    diagram.AxisX.Label.Angle = -45;
+                    diagram.AxisX.DateTimeScaleOptions.MeasureUnit = DateTimeMeasureUnit.Day;
+
+                    // Configure Y-axis
+                    diagram.AxisY.Title.Text = "(صافي الربح (دج";
+                    diagram.AxisY.Title.TextColor = Color.Black;
+
+                    diagram.AxisY.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
+                    diagram.AxisY.Label.TextPattern = "{V} دج";
+                }
             }
-
-            // Enable labels and set their text pattern
-            series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
-            series.Label.TextPattern = "{V} دج";
-            series.Label.TextColor = Color.Black;
-
-
-            // Customize Series Appearance
-            if (series.View is LineSeriesView view)
+            catch (Exception ex)
             {
-                view.Color = Color.Orange; // Set line color to orange
-                view.LineMarkerOptions.Kind = MarkerKind.Circle; // Add markers
-
-            }
-
-            // Add series to chart
-            chartControl7.Series.Add(series);
-
-            // Step 3: Add a Title to the Chart
-            ChartTitle chartTitle = new ChartTitle
-            {
-                Text = "صافي الربح حسب التاريخ",
-                Font = new Font("Calibri", 16, FontStyle.Bold),
-                Alignment = StringAlignment.Center,
-                TextColor = Color.Black
-
-            };
-
-            chartControl7.Titles.Clear();
-            chartControl7.Titles.Add(chartTitle);
-
-            // Step 4: Configure X and Y axis
-            if (chartControl7.Diagram is XYDiagram diagram)
-            {
-                // Configure X-axis
-                diagram.AxisX.Title.Text = "التاريخ";
-                diagram.AxisX.Title.TextColor = Color.Black;
-
-                diagram.AxisX.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
-                diagram.AxisX.Label.Angle = -45;
-                diagram.AxisX.DateTimeScaleOptions.MeasureUnit = DateTimeMeasureUnit.Day;
-
-                // Configure Y-axis
-                diagram.AxisY.Title.Text = "(صافي الربح (دج";
-                diagram.AxisY.Title.TextColor = Color.Black;
-
-                diagram.AxisY.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
-                diagram.AxisY.Label.TextPattern = "{V} دج";
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
             }
         }
         private void VisualizeProfit()
         {
-            // Clear any existing series in the chart
-            chartControl8.Series.Clear();
-            var selectedCustomerId = cmbCustomers.Text == "اختر العميل" ? "" : cmbCustomers.Text;
-            var selectedUserId = cmbUser.Text == "اختر البائع" ? "" : cmbUser.Text;
-            // Step 1: Calculate Net Profit
-            var netProfitData = _context.SalesProfits.Where(s => selectedCustomerId == null || s.Cust_Name.Contains(selectedCustomerId))
-                .Where(
-              s => selectedUserId == null || s.Sale.User_Name.Contains(selectedUserId))
-               .Where(x => dtpFrom.Value.Date <= x.Sale.Date && dtpTo.Value.Date >= x.Sale.Date)
-                .GroupBy(sp => sp.Sale.Date.Date) // Group by Date
+            try
+            {
 
-                .Select(g => new
+
+                // Clear any existing series in the chart
+                chartControl8.Series.Clear();
+                var selectedCustomerId = cmbCustomers.Text == "اختر العميل" ? "" : cmbCustomers.Text;
+                var selectedUserId = cmbUser.Text == "اختر البائع" ? "" : cmbUser.Text;
+                // Step 1: Calculate Net Profit
+                var netProfitData = _context.SalesProfits.Where(s => selectedCustomerId == null || s.Cust_Name.Contains(selectedCustomerId))
+                    .Where(
+                  s => selectedUserId == null || s.Sale.User_Name.Contains(selectedUserId))
+                   .Where(x => dtpFrom.Value.Date <= x.Sale.Date && dtpTo.Value.Date >= x.Sale.Date)
+                    .GroupBy(sp => sp.Sale.Date.Date) // Group by Date
+
+                    .Select(g => new
+                    {
+                        Date = g.Key,
+                        TotalSalesProfit = g.Sum(sp => (sp.Price - sp.Buy_Price) * sp.Quentity) // Sum of Profit per Date
+                    })
+                    .ToList();
+
+                // Step 2: Create Series for Net Profit Visualization
+                Series series = new Series("الربح", ViewType.Line);
+
+                // Add Data Points for Net Profit
+                foreach (var data in netProfitData)
                 {
-                    Date = g.Key,
-                    TotalSalesProfit = g.Sum(sp => (sp.Price - sp.Buy_Price) * sp.Quentity) // Sum of Profit per Date
-                })
-                .ToList();
+                    series.Points.Add(new SeriesPoint(data.Date, data.TotalSalesProfit));
+                }
 
-            // Step 2: Create Series for Net Profit Visualization
-            Series series = new Series("الربح", ViewType.Line);
 
-            // Add Data Points for Net Profit
-            foreach (var data in netProfitData)
-            {
-                series.Points.Add(new SeriesPoint(data.Date, data.TotalSalesProfit));
+                // Enable labels and set their text pattern
+                series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
+                series.Label.TextPattern = "{V} دج"; // Display net profit values in دج
+                series.Label.TextColor = Color.Black;
+                // Customize Series Appearance
+
+                LineSeriesView view = series.View as LineSeriesView;
+                if (view != null)
+                {
+                    view.Color = Color.Orange; // Set line color to orange
+                    view.LineMarkerOptions.Kind = MarkerKind.Circle; // Add markers for better visualization
+                }
+
+                // Set label text pattern to show currency
+
+
+                // Add series to chart
+                chartControl8.Series.Add(series);
+
+                // Step 3: Add a Title to the Chart
+                ChartTitle chartTitle = new ChartTitle
+                {
+                    Text = "الربح حسب التاريخ",
+                    Font = new Font("Calibri", 16, FontStyle.Bold),
+                    Alignment = StringAlignment.Center,
+                    TextColor = Color.Black
+
+                };
+
+                chartControl8.Titles.Clear();
+                chartControl8.Titles.Add(chartTitle);
+
+                // Step 4: Configure X and Y axis
+                XYDiagram diagram = chartControl8.Diagram as XYDiagram;
+                if (diagram != null)
+                {
+                    // Configure X-axis
+                    diagram.AxisX.Title.Text = "التاريخ";
+                    diagram.AxisX.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
+                    diagram.AxisX.Title.TextColor = Color.Black;
+
+                    diagram.AxisX.Label.Angle = -45; // Rotate labels for better readability
+                    diagram.AxisX.DateTimeScaleOptions.MeasureUnit = DateTimeMeasureUnit.Day;
+
+                    // Configure Y-axis
+                    diagram.AxisY.Title.Text = "الربح دج";
+                    diagram.AxisY.Title.TextColor = Color.Black;
+
+                    diagram.AxisY.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
+                    diagram.AxisY.Label.TextPattern = "{V} دج"; // Format Y-axis labels with currency
+                }
             }
-
-
-            // Enable labels and set their text pattern
-            series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
-            series.Label.TextPattern = "{V} دج"; // Display net profit values in دج
-            series.Label.TextColor = Color.Black;
-            // Customize Series Appearance
-
-            LineSeriesView view = series.View as LineSeriesView;
-            if (view != null)
+            catch (Exception ex)
             {
-                view.Color = Color.Orange; // Set line color to orange
-                view.LineMarkerOptions.Kind = MarkerKind.Circle; // Add markers for better visualization
-            }
-
-            // Set label text pattern to show currency
-
-
-            // Add series to chart
-            chartControl8.Series.Add(series);
-
-            // Step 3: Add a Title to the Chart
-            ChartTitle chartTitle = new ChartTitle
-            {
-                Text = "الربح حسب التاريخ",
-                Font = new Font("Calibri", 16, FontStyle.Bold),
-                Alignment = StringAlignment.Center,
-                TextColor = Color.Black
-
-            };
-
-            chartControl8.Titles.Clear();
-            chartControl8.Titles.Add(chartTitle);
-
-            // Step 4: Configure X and Y axis
-            XYDiagram diagram = chartControl8.Diagram as XYDiagram;
-            if (diagram != null)
-            {
-                // Configure X-axis
-                diagram.AxisX.Title.Text = "التاريخ";
-                diagram.AxisX.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
-                diagram.AxisX.Title.TextColor = Color.Black;
-
-                diagram.AxisX.Label.Angle = -45; // Rotate labels for better readability
-                diagram.AxisX.DateTimeScaleOptions.MeasureUnit = DateTimeMeasureUnit.Day;
-
-                // Configure Y-axis
-                diagram.AxisY.Title.Text = "الربح دج";
-                diagram.AxisY.Title.TextColor = Color.Black;
-
-                diagram.AxisY.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
-                diagram.AxisY.Label.TextPattern = "{V} دج"; // Format Y-axis labels with currency
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
             }
         }
 
         private void VisualizeTop10Products()
         {
-            // Clear previous series
-            chartControl5.Series.Clear();
+            try
+            {
 
-            // Step 1: Retrieve the Top 10 Products Sold by Quantity
-            var top15Products = _context.SalesDetails // Adjust table name as necessary
-               .Where(x => dtpFrom.Value.Date <= x.Sale.Date && dtpTo.Value.Date >= x.Sale.Date)
-                .GroupBy(s => s.Product.ProductName) // Group by Product Name
-                .Select(g => new
+
+                // Clear previous series
+                chartControl5.Series.Clear();
+
+                // Step 1: Retrieve the Top 10 Products Sold by Quantity
+                var top15Products = _context.SalesDetails // Adjust table name as necessary
+                   .Where(x => dtpFrom.Value.Date <= x.Sale.Date && dtpTo.Value.Date >= x.Sale.Date)
+                    .GroupBy(s => s.Product.ProductName) // Group by Product Name
+                    .Select(g => new
+                    {
+                        ProductName = g.Key,
+                        TotalQuantity = g.Sum(s => s.Quentity) // Sum of Quantity Sold
+                    })
+                    .OrderByDescending(p => p.TotalQuantity) // Sort by Quantity Descending
+                    .Take(Convert.ToInt32(cmbNbrProductQty.Text)) // Get the top 10 products
+                    .ToList();
+
+                // Step 2: Create a Series for Visualization
+                Series series = new Series($"أفضل {cmbNbrProductQty.Text} منتجات مبيعًا حسب الكمية", ViewType.Bar);
+
+                // Step 3: Add Data Points to the Series
+                foreach (var product in top15Products)
                 {
-                    ProductName = g.Key,
-                    TotalQuantity = g.Sum(s => s.Quentity) // Sum of Quantity Sold
-                })
-                .OrderByDescending(p => p.TotalQuantity) // Sort by Quantity Descending
-                .Take(Convert.ToInt32(cmbNbrProductQty.Text)) // Get the top 10 products
-                .ToList();
+                    series.Points.Add(new SeriesPoint(product.ProductName, product.TotalQuantity));
+                }
 
-            // Step 2: Create a Series for Visualization
-            Series series = new Series($"أفضل {cmbNbrProductQty.Text} منتجات مبيعًا حسب الكمية", ViewType.Bar);
+                // Step 4: Customize Series Appearance
+                series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
+                BarSeriesLabel label = series.Label as BarSeriesLabel;
+                if (label != null)
+                {
+                    label.TextPattern = "{A}: {V}"; // Show Product Name (A) and Quantity Sold (V)
+                }
 
-            // Step 3: Add Data Points to the Series
-            foreach (var product in top15Products)
-            {
-                series.Points.Add(new SeriesPoint(product.ProductName, product.TotalQuantity));
+                // Step 5: Add Series to ChartControl
+                chartControl5.Series.Add(series);
+
+                // Step 6: Add a Title to the Chart
+                ChartTitle chartTitle = new ChartTitle();
+                chartTitle.Text = $"أفضل {cmbNbrProductQty.Text} منتجات مبيعًا حسب الكمية";
+                chartTitle.Font = new Font("Calibri", 16, FontStyle.Bold);
+                chartTitle.Alignment = StringAlignment.Center;
+                chartTitle.TextColor = Color.Black;
+
+
+                chartControl5.Titles.Clear();
+                chartControl5.Titles.Add(chartTitle);
+
+                // Step 7: Optional - Customize the Chart Appearance
+                chartControl5.Legend.Visibility = DevExpress.Utils.DefaultBoolean.False;
+                ((XYDiagram)chartControl5.Diagram).AxisX.Title.Text = "المنتج";
+                ((XYDiagram)chartControl5.Diagram).AxisX.Title.TextColor = Color.Black;
+                ((XYDiagram)chartControl5.Diagram).AxisX.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
+                ((XYDiagram)chartControl5.Diagram).AxisY.Title.Text = "الكمية المباعة";
+                ((XYDiagram)chartControl5.Diagram).AxisY.Title.TextColor = Color.Black;
+
+                ((XYDiagram)chartControl5.Diagram).AxisY.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
             }
-
-            // Step 4: Customize Series Appearance
-            series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
-            BarSeriesLabel label = series.Label as BarSeriesLabel;
-            if (label != null)
+            catch (Exception ex)
             {
-                label.TextPattern = "{A}: {V}"; // Show Product Name (A) and Quantity Sold (V)
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
             }
-
-            // Step 5: Add Series to ChartControl
-            chartControl5.Series.Add(series);
-
-            // Step 6: Add a Title to the Chart
-            ChartTitle chartTitle = new ChartTitle();
-            chartTitle.Text = $"أفضل {cmbNbrProductQty.Text} منتجات مبيعًا حسب الكمية";
-            chartTitle.Font = new Font("Calibri", 16, FontStyle.Bold);
-            chartTitle.Alignment = StringAlignment.Center;
-            chartTitle.TextColor = Color.Black;
-
-
-            chartControl5.Titles.Clear();
-            chartControl5.Titles.Add(chartTitle);
-
-            // Step 7: Optional - Customize the Chart Appearance
-            chartControl5.Legend.Visibility = DevExpress.Utils.DefaultBoolean.False;
-            ((XYDiagram)chartControl5.Diagram).AxisX.Title.Text = "المنتج";
-            ((XYDiagram)chartControl5.Diagram).AxisX.Title.TextColor = Color.Black;
-            ((XYDiagram)chartControl5.Diagram).AxisX.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
-            ((XYDiagram)chartControl5.Diagram).AxisY.Title.Text = "الكمية المباعة";
-            ((XYDiagram)chartControl5.Diagram).AxisY.Title.TextColor = Color.Black;
-
-            ((XYDiagram)chartControl5.Diagram).AxisY.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
         }
         #endregion
 

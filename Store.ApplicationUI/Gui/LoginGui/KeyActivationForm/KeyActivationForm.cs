@@ -104,6 +104,8 @@ namespace Store.ApplicationUI.Gui.LoginGui.KeyActivationForm
                             txtDaysLeft.Text = (validate.DaysLeft).ToString();
                             MessageBox.Show("تم الاستفادة من فترة التجربة", "التفعيل", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             ToasterHelper.ShowTrialVersionActivated();
+                            Properties.Settings.Default.TrialVersion = true;
+                            Properties.Settings.Default.Save();
                         }
                     }
                 }
@@ -126,6 +128,8 @@ namespace Store.ApplicationUI.Gui.LoginGui.KeyActivationForm
                             txtDaysLeft.Text = (validate.DaysLeft).ToString();
                             ToasterHelper.ShowFullVersionActivated();
                             MessageBox.Show("تم تفعيل البرنامج", "التفعيل", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            Properties.Settings.Default.TrialVersion = false;
+                            Properties.Settings.Default.Save();
 
                         }
                     }

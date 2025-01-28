@@ -47,7 +47,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
 
                 SetColumns();
                 await SetAlertsToPanel();
-                await SetProductsToDgv();
+                await SetProductsToDgv(0);
                 //_data.Clear();
             }
             else
@@ -71,8 +71,6 @@ namespace Store.ApplicationUI.Gui.HomeGui
         {
             try
             {
-
-
                 DgvProducts.DataSource = new List<ProductMinQty>();
                 DgvProducts.Columns[0].HeaderCell.Value = "باركود";
                 DgvProducts.Columns[1].HeaderCell.Value = "اسم المنتج";
@@ -121,11 +119,12 @@ namespace Store.ApplicationUI.Gui.HomeGui
             }
 
         }
-        public async Task SetProductsToDgv()
+
+        public async Task SetProductsToDgv(int skip)
         {
             try
             {
-                var data = await _repository.GetAllProductMinQty();
+                var data = await _repository.GetAllProductMinQty(skip, Properties.Settings.Default.NoOfDataInDgvs);
                 DgvProducts.DataSource = data;
                 var dataOutDated = await _repository.GetAllProductOutdated();
                 dgvDataOutdated.DataSource = dataOutDated;
@@ -135,12 +134,37 @@ namespace Store.ApplicationUI.Gui.HomeGui
 
                 var dataReminderDateIsUpCustomer = await GetAllDebtCustomer();
                 dataCustomerDebts.DataSource = dataReminderDateIsUpCustomer;
+
+                double value = await _context.Products
+                    .Include(x => x.Category)
+                                .Where(x => x.Quentity <= x.MinQty).CountAsync() / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
+                int pageCount = Convert.ToInt32(Math.Ceiling(value));
+
+                // Update pagination combo box
+                cmbpagination.Items.Clear();
+                for (int i = 0; i < pageCount; i++)
+                {
+                    cmbpagination.Items.Add(i + 1);
+                }
+
+                if (cmbpagination.Items.Count > 0)
+                {
+                    cmbpagination.SelectedIndex = skip / Properties.Settings.Default.NoOfDataInDgvs;
+                }
+
+                PaginationHide();
             }
             catch (Exception ex)
             {
                 ToasterHelper.ShowErrorHappened(ex.Message);
                 throw;
             }
+        }
+        void PaginationHide()
+        {
+            btnNext.Enabled = cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1 && !dgvHelper.IsEmpty(DgvProducts);
+            btnPrev.Enabled = cmbpagination.SelectedIndex > 0 && !dgvHelper.IsEmpty(DgvProducts);
+            cmbpagination.Enabled = !dgvHelper.IsEmpty(DgvProducts);
         }
         public async Task SetAlertsToPanel()
         {
@@ -233,7 +257,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
                         // Call the method to mark the alert as resolved
                         if (MsgHelper.ShowResolveDialog())
                         {
-                            PictureBox pictureBox = sender as PictureBox;
+                            PictureBox? pictureBox = sender as PictureBox;
                             int alertid = 0;
                             if (pictureBox != null)
                             {
@@ -292,6 +316,9 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 if (alert != null)
                 {
                     alert.IsResolved = true;
+                    alert.ResolvedDate = DateTime.Now;
+                    alert.ResolvedBy = Code.Models.LocalUser.User.UserName;
+
                     _context.Update(alert);
                     await _context.SaveChangesAsync();
                     flowLayoutPanel1.Controls.Remove(alertPanel);
@@ -356,6 +383,40 @@ namespace Store.ApplicationUI.Gui.HomeGui
             {
 
                 throw new Exception("Error retrieving the buyFactures", ex);
+            }
+        }
+
+        private async void btnNext_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1)
+            {
+                cmbpagination.SelectedIndex++;
+                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+                await SetProductsToDgv(skip);
+
+            }
+        }
+
+        private async void btnPrev_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (cmbpagination.SelectedIndex > 0)
+            {
+                cmbpagination.SelectedIndex--;
+                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+
+                await SetProductsToDgv(skip);
+            }
+        }
+
+        private async void cmbpagination_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (cmbpagination.SelectedIndex != -1)
+            {
+                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+                await SetProductsToDgv(skip);
             }
         }
     }

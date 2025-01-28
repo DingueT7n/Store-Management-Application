@@ -123,6 +123,10 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
 
                 cmbFastStores.SelectedValue = Properties.Settings.Default.FastSaleStore;
 
+                cbEditBuyPrice.Checked = Properties.Settings.Default.ApplyBuyPrice;
+                cbEditWholeSaleprice.Checked = Properties.Settings.Default.ApplyWholeSale;
+                cbEditSalePrice.Checked = Properties.Settings.Default.ApplySalePrice;
+
 
                 txtSentenceUnderFacture.Text = Properties.Settings.Default.SentenceUnderFacture;
                 txtPhoneNumber.Text = Properties.Settings.Default.FacturePhoneNumber;
@@ -339,6 +343,10 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
 
 
             Properties.Settings.Default.PrintSaleFactureType8cm = rbSale8cm.Checked;
+
+            Properties.Settings.Default.ApplyBuyPrice = cbEditBuyPrice.Checked;
+            Properties.Settings.Default.ApplyWholeSale = cbEditWholeSaleprice.Checked;
+            Properties.Settings.Default.ApplySalePrice = cbEditSalePrice.Checked;
 
 
             Properties.Settings.Default.IdCustomerSale = Convert.ToInt32(cmbCustomers.SelectedValue).ToString();

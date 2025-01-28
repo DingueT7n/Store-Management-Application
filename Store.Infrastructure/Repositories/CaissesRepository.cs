@@ -161,11 +161,13 @@ namespace Store.Infrastructure.Repositories
     }
     public class CaisseWithdrawRepository : GenericRepository<CaisseWithdraw>, ICaisseWithdrawRepository
     {
-        public List<CaisseWithdraw> GetAllDepositToCaisse(string t1, string barcode, DateTime dtpFrom, DateTime dtpTo)
+        public (List<CaisseWithdraw> Deposits, int TotalCount) GetAllDepositToCaisse(string t1, string barcode, DateTime dtpFrom, DateTime dtpTo,
+             int take,
+             int skip)
         {
             try
             {
-                var allTransfers = _context.CaissesWithdraws
+                var allTransfers = _context.CaissesWithdraws.OrderByDescending(x => x.Date)
                     .Include(x => x.Caisse)
                       .AsEnumerable();
                 if (barcode != string.Empty) allTransfers = allTransfers.Where(x => x.Caisse.CaisseName == barcode || x.Name.Contains(barcode));
@@ -174,8 +176,17 @@ namespace Store.Infrastructure.Repositories
 
                 allTransfers = allTransfers.Where(x => x.Date >= dtpFrom && x.Date <= dtpTo)
                      ;
+                int totalCount = allTransfers.Count();
 
-                return allTransfers.ToList();
+                // Apply pagination (skip and take)
+                var deposits = allTransfers
+                    .OrderBy(x => x.Date) // Ensure consistent ordering
+                    .Skip(skip)
+                    .Take(take)
+                    .ToList();
+
+                return (deposits, totalCount);
+
             }
             catch (Exception ex)
             {
@@ -204,7 +215,7 @@ namespace Store.Infrastructure.Repositories
                 // Query base
                 var query = _context.CaisseStatusDetails
 
-                    .OrderBy(x => x.Id)
+                    .OrderByDescending(x => x.Id)
                     .AsQueryable();
 
                 // Filter by barcode if provided

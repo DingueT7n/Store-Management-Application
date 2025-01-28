@@ -95,7 +95,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             cmbpagination.Items.Clear();
             for (int i = 0; i < pageCount; i++)
             {
-                cmbpagination.Items.Add(i);
+                cmbpagination.Items.Add(i + 1);
             }
 
             if (cmbpagination.Items.Count > 0)
@@ -104,6 +104,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             }
             CalcStats();
             PaginationHide();
+            lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
+
         }
 
         public static void RefreshDgv()
@@ -257,7 +259,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
 
 
-                DgvProducts.DataSource = productsRepository.SearchAll(txtSearch.Text, Properties.Settings.Default.NoOfDataInDgvs);
+                DgvProducts.DataSource = productsRepository?.SearchAll(txtSearch.Text, Properties.Settings.Default.NoOfDataInDgvs,
+                    cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs);
                 lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
 
                 txtSearch.Text = string.Empty;

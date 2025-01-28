@@ -277,10 +277,10 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
         private void txtSearchBarCode_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != 8)
-            {
-                e.Handled = true;
-            }
+            //if (!char.IsDigit(e.KeyChar) && e.KeyChar != 8)
+            //{
+            //    e.Handled = true;
+            //}
         }
 
         void new_row()

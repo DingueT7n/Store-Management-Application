@@ -250,6 +250,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         private void txtSearchBarCode_KeyDown(object sender, KeyEventArgs e)
         {
 
+
             if (e.KeyCode == Keys.Enter)
             {
                 SetProductsToTable();
@@ -267,21 +268,23 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         public async void SetProductsToTable()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            _product = salesRepository.GetProductBarCode(txtSearchBarCode.Text);
+            _product = salesRepository.GetProductBarCode(txtSearchBarCode.Text.Replace("\r\n", ""));
             if (_product is not null)
             {
+                Console.WriteLine(_product.ProductName);
                 InitializeTextBoxesAndLables(_product);
 
                 txtQty.Focus();
                 txtQty.SelectAll();
                 CalculateAmount();
                 CalculateStatistics();
+                txtSearchBarCode.Clear();
             }
             else
             {
                 //MsgHelper.ShowEmptyResult();
                 txtSearchBarCode.Focus();
-
+                txtSearchBarCode.Clear();
             }
             //txtSearchBarCode.Clear();
 
@@ -756,10 +759,10 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
         private void txtSearchBarCode_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
-            {
-                e.Handled = true;
-            }
+            //if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
+            //{
+            //    e.Handled = true;
+            //}
 
         }
 
@@ -856,7 +859,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         private void btnSearchImage_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            SelectProductsForm selectProductsForm = SelectProductsForm.Instance(_posForm,true);
+            SelectProductsForm selectProductsForm = SelectProductsForm.Instance(_posForm, true);
             selectProductsForm.Show();
         }
         Sale SetSale()

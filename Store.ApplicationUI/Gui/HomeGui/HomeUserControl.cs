@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Globalization;
+using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.Models;
 using Store.ApplicationUI.Gui.CaisseAndBankGui;
@@ -22,11 +23,98 @@ namespace Store.ApplicationUI.Gui.HomeGui
         public HomeUserControl()
         {
             InitializeComponent();
+            animationTimer.Interval = 10; // Animation speed
+            animationTimer.Tick += AnimationTimer_Tick;
 
+            textAnimationTimer.Interval = 100; // Text fade effect speed
+            textAnimationTimer.Tick += TextAnimationTimer_Tick;
 
+            // Set default size and handlers
+            //panelTimes.Width = panelWidth;
+            //panelTimes.MouseHover += PanelTimes_MouseHover;
+            //panelTimes.MouseLeave += PanelTimes_MouseLeave;
+            //panelTimes.Click += PanelTimes_Click;
 
+            lblhora.MouseHover += LblTimer_Hover;
+            lblFecha.MouseHover += LblTimer_Hover;
+            lblhora.MouseLeave += LblTimer_Leave;
+            lblFecha.MouseLeave += LblTimer_Leave;
+        }
+        private void PanelTimes_MouseHover(object sender, EventArgs e)
+        {
+            isExpanding = true; // Expand panel
+            animationTimer.Start();
         }
 
+        private void PanelTimes_MouseLeave(object sender, EventArgs e)
+        {
+            isExpanding = false; // Shrink panel
+            animationTimer.Start();
+        }
+
+        //private void PanelTimes_Click(object sender, EventArgs e)
+        //{
+        //    panelTimes.BackColor = Color.LightBlue; // Highlight on click
+        //    Task.Delay(200).ContinueWith(_ =>
+        //    {
+        //        this.Invoke(new Action(() => panelTimes.BackColor = SystemColors.Control)); // Reset after delay
+        //    });
+        //}
+
+        private void AnimationTimer_Tick(object sender, EventArgs e)
+        {
+            if (isExpanding)
+            {
+                //if (panelTimes.Width < expandedWidth)
+                //{
+                //    panelTimes.Width += 10; // Expand width
+                //}
+                //else
+                //{
+                //    animationTimer.Stop();
+                //}
+            }
+            else
+            {
+                //if (panelTimes.Width > panelWidth)
+                //{
+                //    panelTimes.Width -= 10; // Shrink width
+                //}
+                //else
+                //{
+                //    animationTimer.Stop();
+                //}
+            }
+        }
+
+        private void LblTimer_Hover(object sender, EventArgs e)
+        {
+            textFading = true;
+            textAnimationTimer.Start();
+        }
+
+        private void LblTimer_Leave(object sender, EventArgs e)
+        {
+            textFading = false;
+            textAnimationTimer.Start();
+        }
+
+        private void TextAnimationTimer_Tick(object sender, EventArgs e)
+        {
+            if (textFading)
+            {
+                // Fade to a lighter color
+                lblhora.ForeColor = Color.Blue;
+                lblFecha.ForeColor = Color.Blue;
+            }
+            else
+            {
+                // Restore original color
+                lblhora.ForeColor = originalColor;
+                lblFecha.ForeColor = originalColor;
+                textAnimationTimer.Stop();
+            }
+        }
         public static HomeUserControl Instance(MainForm main)
         {
             _main = main;
@@ -114,12 +202,33 @@ namespace Store.ApplicationUI.Gui.HomeGui
             }
         }
 
+        // Animation-related variables
+        private int panelWidth = 200; // Default width of panel
+        private int expandedWidth = 400; // Maximum width when expanded
+        private bool isExpanding = false; // Tracks panel animation direction
+        private System.Windows.Forms.Timer animationTimer = new System.Windows.Forms.Timer(); // Timer for animations
+        private System.Windows.Forms.Timer textAnimationTimer = new System.Windows.Forms.Timer(); // Timer for text effects
+        private Color originalColor = Color.Black; // Default label color
+        private bool textFading = false; // Tracks text fading animation
 
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            lblhora.Text = DateTime.Now.ToString("hh:mm:ss ");
-            lblFecha.Text = DateTime.Now.ToLongDateString();
+            lblhora.Text = DateTime.Now.ToString("hh:mm:ss tt");
+
+            // Get current Gregorian date in Arabic
+            CultureInfo gregorianCulture = new CultureInfo("ar-SA");
+            gregorianCulture.DateTimeFormat.Calendar = new GregorianCalendar(); // Force Gregorian calendar
+            string gregorianDate = DateTime.Now.ToString("dddd, dd MMMM yyyy", gregorianCulture);
+
+            // Get current Hijri date in Arabic
+            HijriCalendar hijriCalendar = new HijriCalendar();
+            CultureInfo hijriCulture = new CultureInfo("ar-SA");
+            hijriCulture.DateTimeFormat.Calendar = hijriCalendar; // Force Hijri calendar
+            string hijriDate = DateTime.Now.ToString("dddd, dd MMMM yyyy", hijriCulture);
+
+            // Combine both dates into the label
+            lblFecha.Text = $"التاريخ الميلادي: {gregorianDate} \nالتاريخ الهجري: {hijriDate}";
         }
 
         private void tiltUsersManagment_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
@@ -230,6 +339,11 @@ namespace Store.ApplicationUI.Gui.HomeGui
                     posForm.ShowDialog();
                     _main.Show();
                 }
+        }
+
+        private void lblhora_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

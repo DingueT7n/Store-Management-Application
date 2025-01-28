@@ -115,11 +115,10 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void txtBarCode_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
-
-            {
-                e.Handled = true;
-            }
+            //if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
+            //{
+            //    e.Handled = true;
+            //}
         }
 
         private void txtMinQty_KeyPress(object sender, KeyPressEventArgs e)

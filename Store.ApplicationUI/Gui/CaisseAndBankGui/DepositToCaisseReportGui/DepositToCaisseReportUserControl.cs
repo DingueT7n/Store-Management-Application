@@ -54,7 +54,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui
                 cmbpagination.Items.Clear();
                 for (int i = 0; i < pageCount; i++)
                 {
-                    cmbpagination.Items.Add(i);
+                    cmbpagination.Items.Add(i + 1);
                 }
 
                 if (cmbpagination.Items.Count > 0)
@@ -64,9 +64,9 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui
 
                 PaginationHide();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                ToasterHelper.ShowErrorHappened(ex.Message);
             }
         }
 
@@ -82,6 +82,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui
             }
             catch (Exception ex)
             {
+                ToasterHelper.ShowErrorHappened(ex.Message);
             }
         }
         public async Task LoadDataAsync()
@@ -109,6 +110,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui
             }
             catch (Exception ex)
             {
+                ToasterHelper.ShowErrorHappened(ex.Message);
 
             }
             finally
@@ -172,6 +174,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui
             }
             catch (Exception ex)
             {
+                ToasterHelper.ShowErrorHappened(ex.Message);
             }
         }
 

@@ -8,7 +8,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseReportsGui
     public partial class WithdrawFromCaisseReportsUserControl : UserControl
     {
         private static MainForm? _main;
-        private static ApplicationDbContext _contex;
+        private static ApplicationDbContext? _contex;
         public static CaisseWithdrawRepository? repository;
         private static WithdrawFromCaisseReportsUserControl? _UserControl;
 
@@ -37,24 +37,49 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseReportsGui
             _UserControl.LoadData();
             return _UserControl;
         }
-        public async void SetProductsToDgv(string t1, string barcode)
+        public async void SetProductsToDgv(string t1, string barcode, int skip)
         {
             ////DgvSales.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             //var CustomerMoneyList = MainForm.Context.CustomersReports.
             //    Include(x => x.Customer).Include(x => x.Sale)
             //    .ToList();
+            try
+            {
+                var data = repository.GetAllDepositToCaisse(t1, barcode, dtpFrom.Value, dtpTo.Value, Properties.Settings.Default.NoOfDataInDgvs, skip);
+                // Set data source
+                DgvSales.DataSource = data.Deposits;
 
-            var data = repository.GetAllDepositToCaisse(t1, barcode, dtpFrom.Value, dtpTo.Value);
-            DgvSales.DataSource = data;
+                // Calculate total pages
+                double value = data.TotalCount / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
+                int pageCount = Convert.ToInt32(Math.Ceiling(value));
+
+                // Update pagination combo box
+                cmbpagination.Items.Clear();
+                for (int i = 0; i < pageCount; i++)
+                {
+                    cmbpagination.Items.Add(i + 1);
+                }
+
+                if (cmbpagination.Items.Count > 0)
+                {
+                    cmbpagination.SelectedIndex = skip / Properties.Settings.Default.NoOfDataInDgvs;
+                }
+
+                PaginationHide();
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+            }
 
         }
-        void RefreshDgv()
+        void RefreshDgv(int skip)
         {
             string t1 = string.Empty;
 
             if (rbStoresFrom.Checked) t1 = cmbCaisse.Text;
 
-            SetProductsToDgv(t1, txtSearch.Text);
+            SetProductsToDgv(t1, txtSearch.Text, skip);
             SetColumns();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
         }
@@ -73,7 +98,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseReportsGui
 
 
                 // if its an admin or Normal user 
-                RefreshDgv();
+                RefreshDgv(0);
                 //_data.Clear();
             }
             else
@@ -119,24 +144,24 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseReportsGui
         private void rbStoresFromAll_CheckedChanged(object sender, EventArgs e)
         {
             cmbCaisse.Enabled = false;
-            RefreshDgv();
+            RefreshDgv(0);
         }
 
         private void rbStoresFrom_CheckedChanged(object sender, EventArgs e)
         {
             cmbCaisse.Enabled = true;
-            RefreshDgv();
+            RefreshDgv(0);
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
-            RefreshDgv();
+            RefreshDgv(0);
         }
 
         private void cmbCaisse_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            RefreshDgv();
+            RefreshDgv(0);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -158,11 +183,12 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseReportsGui
                     }
                     Code.Helper.ToasterHelper.ShowDeletedToast();
                     DgvSales.DataSource = null;
-                    RefreshDgv();
+                    RefreshDgv(0);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                ToasterHelper.ShowErrorHappened(ex.Message);
                 throw;
             }
         }
@@ -172,6 +198,45 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseReportsGui
             if (e.KeyCode == Keys.Enter)
             {
                 btnSearch_Click(sender, e);
+            }
+        }
+
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1)
+            {
+                cmbpagination.SelectedIndex++;
+                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+                RefreshDgv(skip);
+
+            }
+        }
+
+        private void btnPrev_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (cmbpagination.SelectedIndex > 0)
+            {
+                cmbpagination.SelectedIndex--;
+                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+
+                RefreshDgv(skip);
+            }
+        }
+        void PaginationHide()
+        {
+            btnNext.Enabled = cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1 && !dgvHelper.IsEmpty(DgvSales);
+            btnPrev.Enabled = cmbpagination.SelectedIndex > 0 && !dgvHelper.IsEmpty(DgvSales);
+            cmbpagination.Enabled = !dgvHelper.IsEmpty(DgvSales);
+        }
+        private void cmbpagination_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (cmbpagination.SelectedIndex != -1)
+            {
+                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+                RefreshDgv(skip);
             }
         }
     }

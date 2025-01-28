@@ -156,7 +156,6 @@
             tiltStatistiocs = new DevExpress.XtraEditors.TileItem();
             tiltReturns = new DevExpress.XtraEditors.TileItem();
             tiltPos = new DevExpress.XtraEditors.TileItem();
-            panelTimes = new Panel();
             SummrayPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)SummaryPb1).BeginInit();
             summurayTopPanel1.SuspendLayout();
@@ -181,7 +180,6 @@
             ((System.ComponentModel.ISupportInitialize)SummaryPb7).BeginInit();
             panel12.SuspendLayout();
             leftSidePanel.SuspendLayout();
-            panelTimes.SuspendLayout();
             SuspendLayout();
             // 
             // SummrayPanel1
@@ -236,7 +234,7 @@
             // SummaryDataCustomers
             // 
             SummaryDataCustomers.AutoSize = true;
-            SummaryDataCustomers.BackColor = Color.White;
+            SummaryDataCustomers.BackColor = Color.Transparent;
             SummaryDataCustomers.Font = new Font("Calibri", 12F, FontStyle.Bold);
             SummaryDataCustomers.ForeColor = Color.BlueViolet;
             SummaryDataCustomers.Location = new Point(37, 125);
@@ -298,7 +296,7 @@
             // SummaryDataEmployees
             // 
             SummaryDataEmployees.AutoSize = true;
-            SummaryDataEmployees.BackColor = Color.White;
+            SummaryDataEmployees.BackColor = Color.Transparent;
             SummaryDataEmployees.Font = new Font("Calibri", 12F, FontStyle.Bold);
             SummaryDataEmployees.ForeColor = Color.BlueViolet;
             SummaryDataEmployees.Location = new Point(37, 125);
@@ -360,7 +358,7 @@
             // SummaryDataSuppliers
             // 
             SummaryDataSuppliers.AutoSize = true;
-            SummaryDataSuppliers.BackColor = Color.White;
+            SummaryDataSuppliers.BackColor = Color.Transparent;
             SummaryDataSuppliers.Font = new Font("Calibri", 12F, FontStyle.Bold);
             SummaryDataSuppliers.ForeColor = Color.BlueViolet;
             SummaryDataSuppliers.Location = new Point(37, 125);
@@ -422,7 +420,7 @@
             // SummaryDataProducts
             // 
             SummaryDataProducts.AutoSize = true;
-            SummaryDataProducts.BackColor = Color.White;
+            SummaryDataProducts.BackColor = Color.Transparent;
             SummaryDataProducts.Font = new Font("Calibri", 12F, FontStyle.Bold);
             SummaryDataProducts.ForeColor = Color.BlueViolet;
             SummaryDataProducts.Location = new Point(37, 125);
@@ -484,7 +482,7 @@
             // SummaryDataBuys
             // 
             SummaryDataBuys.AutoSize = true;
-            SummaryDataBuys.BackColor = Color.White;
+            SummaryDataBuys.BackColor = Color.Transparent;
             SummaryDataBuys.Font = new Font("Calibri", 12F, FontStyle.Bold);
             SummaryDataBuys.ForeColor = Color.BlueViolet;
             SummaryDataBuys.Location = new Point(37, 125);
@@ -545,7 +543,8 @@
             // SummaryDataSales
             // 
             SummaryDataSales.AutoSize = true;
-            SummaryDataSales.BackColor = Color.White;
+            SummaryDataSales.BackColor = Color.Transparent;
+            SummaryDataSales.FlatStyle = FlatStyle.Flat;
             SummaryDataSales.Font = new Font("Calibri", 12F, FontStyle.Bold);
             SummaryDataSales.ForeColor = Color.BlueViolet;
             SummaryDataSales.Location = new Point(37, 125);
@@ -557,6 +556,7 @@
             // 
             // SummaryflowLayoutPanel
             // 
+            SummaryflowLayoutPanel.BackColor = Color.Transparent;
             SummaryflowLayoutPanel.Controls.Add(groupBox1);
             SummaryflowLayoutPanel.Controls.Add(flowLayoutPanel2);
             SummaryflowLayoutPanel.Dock = DockStyle.Top;
@@ -642,7 +642,7 @@
             // SummaryDataDeserved
             // 
             SummaryDataDeserved.AutoSize = true;
-            SummaryDataDeserved.BackColor = Color.White;
+            SummaryDataDeserved.BackColor = Color.Transparent;
             SummaryDataDeserved.Font = new Font("Calibri", 12F, FontStyle.Bold);
             SummaryDataDeserved.ForeColor = Color.BlueViolet;
             SummaryDataDeserved.Location = new Point(37, 125);
@@ -656,30 +656,34 @@
             // 
             lblhora.AutoSize = true;
             lblhora.BackColor = Color.Transparent;
-            lblhora.BorderStyle = BorderStyle.FixedSingle;
-            lblhora.Font = new Font("Calibri", 48F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblhora.Dock = DockStyle.Right;
+            lblhora.FlatStyle = FlatStyle.Flat;
+            lblhora.Font = new Font("Calibri", 36F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblhora.ForeColor = Color.FromArgb(64, 64, 64);
-            lblhora.Location = new Point(159, 2);
-            lblhora.Margin = new Padding(0);
+            lblhora.Location = new Point(837, 0);
+            lblhora.Margin = new Padding(20);
             lblhora.Name = "lblhora";
             lblhora.RightToLeft = RightToLeft.Yes;
-            lblhora.Size = new Size(261, 80);
+            lblhora.Size = new Size(195, 59);
             lblhora.TabIndex = 10;
             lblhora.Text = "10:59:58";
+            lblhora.TextAlign = ContentAlignment.MiddleCenter;
+            lblhora.Click += lblhora_Click;
             // 
             // lblFecha
             // 
-            lblFecha.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblFecha.AutoSize = true;
             lblFecha.BackColor = Color.Transparent;
-            lblFecha.BorderStyle = BorderStyle.FixedSingle;
-            lblFecha.Font = new Font("Calibri", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblFecha.Dock = DockStyle.Right;
+            lblFecha.FlatStyle = FlatStyle.Flat;
+            lblFecha.Font = new Font("Calibri", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblFecha.ForeColor = Color.FromArgb(0, 122, 204);
-            lblFecha.Location = new Point(203, 70);
-            lblFecha.Margin = new Padding(0);
+            lblFecha.Location = new Point(626, 0);
+            lblFecha.Margin = new Padding(10);
             lblFecha.Name = "lblFecha";
+            lblFecha.Padding = new Padding(5);
             lblFecha.RightToLeft = RightToLeft.Yes;
-            lblFecha.Size = new Size(176, 25);
+            lblFecha.Size = new Size(211, 36);
             lblFecha.TabIndex = 11;
             lblFecha.Text = "الجمعة , 23 نوفمبر 2024";
             // 
@@ -691,8 +695,9 @@
             // leftSidePanel
             // 
             leftSidePanel.BorderStyle = BorderStyle.FixedSingle;
+            leftSidePanel.Controls.Add(lblFecha);
+            leftSidePanel.Controls.Add(lblhora);
             leftSidePanel.Controls.Add(tileControl1);
-            leftSidePanel.Controls.Add(panelTimes);
             leftSidePanel.Dock = DockStyle.Fill;
             leftSidePanel.Location = new Point(0, 195);
             leftSidePanel.Name = "leftSidePanel";
@@ -701,6 +706,8 @@
             // 
             // tileControl1
             // 
+            tileControl1.BackgroundImage = (Image)resources.GetObject("tileControl1.BackgroundImage");
+            tileControl1.BackgroundImageLayout = ImageLayout.Stretch;
             tileControl1.Dock = DockStyle.Fill;
             tileControl1.Groups.Add(tileGroup2);
             tileControl1.Groups.Add(tileGroup3);
@@ -708,10 +715,10 @@
             tileControl1.IndentBetweenGroups = 10;
             tileControl1.IndentBetweenItems = 4;
             tileControl1.ItemSize = 170;
-            tileControl1.Location = new Point(0, 99);
+            tileControl1.Location = new Point(0, 0);
             tileControl1.MaxId = 11;
             tileControl1.Name = "tileControl1";
-            tileControl1.Size = new Size(1032, 385);
+            tileControl1.Size = new Size(1032, 484);
             tileControl1.TabIndex = 13;
             tileControl1.Text = "tileControl1";
             // 
@@ -1532,22 +1539,12 @@
             tiltPos.Name = "tiltPos";
             tiltPos.ItemClick += tiltPos_ItemClick;
             // 
-            // panelTimes
-            // 
-            panelTimes.BorderStyle = BorderStyle.FixedSingle;
-            panelTimes.Controls.Add(lblFecha);
-            panelTimes.Controls.Add(lblhora);
-            panelTimes.Dock = DockStyle.Top;
-            panelTimes.Location = new Point(0, 0);
-            panelTimes.Name = "panelTimes";
-            panelTimes.Size = new Size(1032, 99);
-            panelTimes.TabIndex = 12;
-            // 
             // HomeUserControl
             // 
             AutoScaleDimensions = new SizeF(8F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
+            BackgroundImageLayout = ImageLayout.Stretch;
             Controls.Add(leftSidePanel);
             Controls.Add(SummaryflowLayoutPanel);
             Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -1592,8 +1589,7 @@
             panel12.ResumeLayout(false);
             panel12.PerformLayout();
             leftSidePanel.ResumeLayout(false);
-            panelTimes.ResumeLayout(false);
-            panelTimes.PerformLayout();
+            leftSidePanel.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -1640,7 +1636,6 @@
         private Panel leftSidePanel;
         private FlowLayoutPanel flowLayoutPanel2;
         private GroupBox groupBox1;
-        private Panel panelTimes;
         private DevExpress.XtraEditors.TileControl tileControl1;
         private DevExpress.XtraEditors.TileGroup tileGroup2;
         private DevExpress.XtraEditors.TileItem tiltUsersManagment;

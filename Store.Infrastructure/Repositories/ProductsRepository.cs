@@ -94,7 +94,7 @@ namespace Store.Infrastructure.Repositories
                 throw new Exception("Error retrieving the buyFactures", ex);
             }
         }
-        public async Task<List<ProductMinQty>> GetAllProductMinQty()
+        public async Task<List<ProductMinQty>> GetAllProductMinQty(int skip, int take)
         {
             try
             {
@@ -110,7 +110,7 @@ namespace Store.Infrastructure.Repositories
                         ProductName = bd.ProductName, // Assuming `Name` is the property for the supplier's name
                         CategoryName = bd.Category.CategoryName,
                         Quentity = bd.Quentity
-                    })
+                    }).Skip(skip).Take(take)
                     .ToListAsync();
                 return products;
             }
@@ -120,35 +120,46 @@ namespace Store.Infrastructure.Repositories
                 throw new Exception("Error retrieving the buyFactures", ex);
             }
         }
-        public List<Product> SearchAll(string searchIteam, int take)
+        public List<Product> SearchAll(string searchItem, int pageSize, int skip)
         {
 
             try
             {
-                if (string.IsNullOrEmpty(searchIteam))
-                {
-                    _context = new ApplicationDbContext();
-                    var result = _context.Products
-                        .Include(x => x.Category)
-                        .Include(x => x.ProductFamilies).AsQueryable()
-                        .Where(x => x.Id.ToString() == searchIteam ||
-                    x.CodeBar == (searchIteam) ||
-                    x.ColisageBareCode == (searchIteam) ||
-                    x.ProductName.Contains(searchIteam) ||
-                    x.IsTaxed.ToString() == (searchIteam) ||
-                    x.SalePrice.ToString() == (searchIteam) ||
-                    x.Category.CategoryName.Contains(searchIteam)
+                _context = new ApplicationDbContext();
+                IQueryable<Product> query = _context.Products
+                    .Include(x => x.Category)
+                    .Include(x => x.ProductFamilies);
 
-                    )
-                        .OrderBy(x => x.Id).ToList();
-                    var pf = _context.ProductFamilies.Include(x => x.Product).FirstOrDefault(x => x.CodeBar == searchIteam);
-                    if (pf != null)
-                        result.Add(pf.Product);
-                    return result;
+                if (!string.IsNullOrEmpty(searchItem))
+                {
+                    query = query.Where(x => x.Id.ToString() == searchItem ||
+                                             x.CodeBar == searchItem ||
+                                             x.ColisageBareCode == searchItem ||
+                                             x.ProductName.Contains(searchItem) ||
+                                             x.IsTaxed.ToString() == searchItem ||
+                                             x.SalePrice.ToString() == searchItem ||
+                                             x.Category.CategoryName.Contains(searchItem));
                 }
-                return _context.Products
-                        .Include(x => x.Category)
-                        .Include(x => x.ProductFamilies).AsQueryable().Take(take).ToList();
+
+                // Apply pagination
+                var result = query.OrderBy(x => x.Id)
+                                  .Skip(skip)
+                                  .Take(pageSize)
+                                  .ToList();
+
+                // Add product family search result if applicable
+                if (!string.IsNullOrEmpty(searchItem))
+                {
+                    var pf = _context.ProductFamilies
+                        .Include(x => x.Product)
+                        .FirstOrDefault(x => x.CodeBar == searchItem);
+                    if (pf != null && !result.Contains(pf.Product))
+                    {
+                        result.Add(pf.Product);
+                    }
+                }
+
+                return result;
             }
             catch
             {

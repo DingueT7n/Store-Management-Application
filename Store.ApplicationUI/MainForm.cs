@@ -48,11 +48,11 @@ namespace Store.ApplicationUI
 
                 isPanelNull = true;
                 //btnStatistics.Enabled = LocalUser.User.UserName
-                if (LocalUser.User is not null)
+                if (LocalUser.User is not null && Code.Helper.VerificationSettingsHelper.ValidateActivationKey())
                 {
                     btnAllProducts.Enabled = LocalUser.User.UserProductAndStore.AllProducts;
                     btnAllStores.Enabled = LocalUser.User.UserProductAndStore.allStores;
-                    btnAddProduct.Enabled = LocalUser.User.UserProductAndStore.AddProduct;
+                    btnAddProduct.Enabled = LocalUser.User.UserProductAndStore.AddProduct && !Properties.Settings.Default.TrialVersion;
                     btnAllCategories.Enabled = LocalUser.User.UserProductAndStore.AllCategories;
                     btnStoreInventory.Enabled = LocalUser.User.UserProductAndStore.StoreInventory;
                     btnProductTransfertReport.Enabled = LocalUser.User.UserProductAndStore.TransfertReport;
@@ -60,19 +60,19 @@ namespace Store.ApplicationUI
 
 
                     btnAllCustomers.Enabled = LocalUser.User.UserCustomer.AllCustomers;
-                    btnAddCustomer.Enabled = LocalUser.User.UserCustomer.AddCustomer;
+                    btnAddCustomer.Enabled = LocalUser.User.UserCustomer.AddCustomer && !Properties.Settings.Default.TrialVersion;
                     btnCustomerAccount.Enabled = LocalUser.User.UserCustomer.CustomerAccount;
                     btnCustomerReport.Enabled = LocalUser.User.UserCustomer.CustomerReport;
 
 
                     btnAllSuppliers.Enabled = LocalUser.User.UserSupplier.AllSuppliers;
-                    btnAddSupplier.Enabled = LocalUser.User.UserSupplier.AddSuppliers;
+                    btnAddSupplier.Enabled = LocalUser.User.UserSupplier.AddSuppliers && !Properties.Settings.Default.TrialVersion;
                     btnSupplierAccount.Enabled = LocalUser.User.UserSupplier.SuppliersAccount;
                     btnSupplierReports.Enabled = LocalUser.User.UserSupplier.SuppliersReport;
 
 
                     btnNewBuy.Enabled = LocalUser.User.UserBuy.NewBuy;
-                    btnBuysReports.Enabled = LocalUser.User.UserBuy.BuyReports;
+                    btnBuysReports.Enabled = LocalUser.User.UserBuy.BuyReports && !Properties.Settings.Default.TrialVersion;
 
 
                     btnNewSale.Enabled = LocalUser.User.UserSale.NewSale;
@@ -104,12 +104,14 @@ namespace Store.ApplicationUI
                     btnSalariesReport.Enabled = LocalUser.User.UserEmployee.EmployeeSalariesReport;
 
                     btnApplicationSettings.Enabled = LocalUser.User.UserSetting.ApplicationSettings;
-                    btnUsersRoles.Enabled = LocalUser.User.UserSetting.UserPermession;
+                    btnUsersRoles.Enabled = LocalUser.User.UserSetting.UserPermession && !Properties.Settings.Default.TrialVersion;
                     btnProductDiscount.Enabled = LocalUser.User.UserSetting.ProductDiscounts;
                     btnComptoire.Enabled = LocalUser.User.UserSetting.Pos;
                     btnStatistics.Enabled = LocalUser.User.UserSetting.Statistics;
-                    btnBackUp.Enabled = LocalUser.User.UserSetting.BackUp;
-                    btnRestore.Enabled = LocalUser.User.UserSetting.Restore;
+                    btnBackUp.Enabled = LocalUser.User.UserSetting.BackUp && !Properties.Settings.Default.TrialVersion;
+                    btnRestore.Enabled = LocalUser.User.UserSetting.Restore && !Properties.Settings.Default.TrialVersion;
+                    btnBackUp.Visible = LocalUser.User.UserSetting.BackUp && !Properties.Settings.Default.TrialVersion;
+                    btnRestore.Visible = LocalUser.User.UserSetting.Restore && !Properties.Settings.Default.TrialVersion;
                 }
             }
             catch (Exception ex)

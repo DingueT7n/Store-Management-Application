@@ -466,5 +466,53 @@ namespace Store.ApplicationUI.Properties {
                 this["Key_crypt"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ApplyBuyPrice {
+            get {
+                return ((bool)(this["ApplyBuyPrice"]));
+            }
+            set {
+                this["ApplyBuyPrice"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ApplySalePrice {
+            get {
+                return ((bool)(this["ApplySalePrice"]));
+            }
+            set {
+                this["ApplySalePrice"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ApplyWholeSale {
+            get {
+                return ((bool)(this["ApplyWholeSale"]));
+            }
+            set {
+                this["ApplyWholeSale"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TrialVersion {
+            get {
+                return ((bool)(this["TrialVersion"]));
+            }
+            set {
+                this["TrialVersion"] = value;
+            }
+        }
     }
 }
