@@ -1,10 +1,12 @@
 ﻿using System.Data;
 using Microsoft.IdentityModel.Tokens;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.Models;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.PaymentGui;
 using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Customers;
+using Store.Core.Entities.Helpers;
 using Store.Core.Entities.Products;
 using Store.Core.Entities.Sales;
 using Store.Infrastructure.Data;
@@ -689,23 +691,41 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 product.Quentity -= _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
                 if (product.Quentity < 0)
                     product.Quentity = 0;
+
+                ProductDiscount productDiscount = _context.ProductDiscounts.
+                 Where(x => x.Pro_Id.ToString() == product.Id.ToString() && x.Quentity > 0
+
+                 && x.Store_Id == Properties.Settings.Default.FastSaleStore
+                 && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
+                 ).FirstOrDefault();
+                if (productDiscount != null)
+                {
+
+                    productDiscount.Quentity -= _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+                    if (productDiscount.Quentity < 0)
+                    {
+                        productDiscount.Quentity = 0;
+
+                        string alerttype = "انتهاء التخفيض";
+                        string Message = $"انتهاء التخفيض الخاص بالمنتج {product.ProductName} الذي كان بسعر {productDiscount.DiscountValue}";
+                        var alert = _context.AlertsTable.FirstOrDefault(x => x.AlertType == alerttype && x.Message == Message && !x.IsResolved);
+                        if (alert == null)
+                        {
+                            AlertTable alertTable = new AlertTable();
+                            alertTable.AlertType = alerttype;
+                            alertTable.Message = Message;
+                            alertTable.Priority = PriorityAlert.Low;
+                            alertTable.CreatedDate = DateTime.Now;
+                            alertTable.IsResolved = false;
+                            alertTable.Category = LocalUser.User.UserName;
+                            _context.Add(alertTable);
+                            _context.SaveChanges();
+                        }
+                    }
+                    _context.Update(productDiscount);
+                    _context.SaveChanges();
+                }
             }
-            ProductDiscount productDiscount = _context.ProductDiscounts.
-             Where(x => x.Pro_Id.ToString() == product.Id.ToString() && x.Quentity > 0
-
-             && x.Store_Id == Properties.Settings.Default.FastSaleStore
-             && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
-             ).FirstOrDefault();
-            if (productDiscount != null)
-            {
-
-                productDiscount.Quentity -= _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
-                if (productDiscount.Quentity < 0)
-                { productDiscount.Quentity = 0; }
-                _context.Update(productDiscount);
-                _context.SaveChanges();
-            }
-
             return product;
         }
         decimal SetProductQuentity(decimal quentity, int i, int sale_Id)

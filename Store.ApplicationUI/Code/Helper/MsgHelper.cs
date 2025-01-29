@@ -338,5 +338,19 @@ namespace Store.ApplicationUI.Code.Helper
                 return false;
             }
         }
+        public static bool ShowAreYouSureYouWantToOpenCAisseWithNegative()
+        {
+            var result = MessageBox.Show("هل انت متأكد من فتح الصندوق بالسالب ؟ ",
+                   "فتح الصندوق بالسالب"
+                   , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

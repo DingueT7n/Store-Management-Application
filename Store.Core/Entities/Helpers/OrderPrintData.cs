@@ -40,5 +40,7 @@
         public string Message { get; set; }
         public PriorityAlert Priority { get; set; }
         public DateTime CreatedDate { get; set; }
+        public string Category { get; set; } // Category of the alert (e.g., "Inventory", "Orders")
+
     }
 }

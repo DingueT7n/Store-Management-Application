@@ -23,7 +23,23 @@ namespace Store.ApplicationUI
             }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new LoginForm());
+            // Show the login form
+            LoginForm loginForm = new LoginForm();
+            if (loginForm.ShowDialog() == DialogResult.OK)
+            {
+                // If login is successful, show the main form
+                MainForm mainForm = new MainForm();
+
+                loginForm.Dispose();
+                loginForm = null;
+                Application.Run(mainForm);
+            }
+            else
+            {
+                // If login fails, exit the application
+                Application.Exit();
+            }
+            //Application.Run(new LoginForm());
         }
     }
 }

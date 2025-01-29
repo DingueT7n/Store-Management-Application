@@ -672,39 +672,54 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         }
         public async void PrintLastFacture(bool A4)
         {
-            int LastFactureId = _context.Sales.OrderByDescending(s => s.Id).FirstOrDefault().Id;
-            if (!A4 && Properties.Settings.Default.PrintSaleOnOrOff)
+            try
             {
-                try
+
+
+                var facture = _context.Sales.OrderByDescending(s => s.Id).FirstOrDefault();
+                int LastFactureId = 0;
+                if (facture is not null)
                 {
-                    DataTable saleDetailsTable = await GetSellDetailsDataTableAsync(LastFactureId);
-                    Reports.sale8cm sale8Cm = new();
-                    sale8Cm.DataSource = saleDetailsTable;
-                    var xtraForm11 = Reports.ReportPerviwGui.PerviweForm.Instance(sale8Cm);
-                    xtraForm11.Show();
-                }
-                catch (Exception)
-                {
-                    throw;
+                    LastFactureId = facture.Id;
+                    if (!A4 && Properties.Settings.Default.PrintSaleOnOrOff)
+                    {
+                        try
+                        {
+                            DataTable saleDetailsTable = await GetSellDetailsDataTableAsync(LastFactureId);
+                            Reports.sale8cm sale8Cm = new();
+                            sale8Cm.DataSource = saleDetailsTable;
+                            var xtraForm11 = Reports.ReportPerviwGui.PerviweForm.Instance(sale8Cm);
+                            xtraForm11.Show();
+                        }
+                        catch (Exception)
+                        {
+                            throw;
+                        }
+                    }
+                    else if (Properties.Settings.Default.PrintSaleOnOrOff)
+                    {
+                        try
+                        {
+
+                            DataTable ProfitDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(LastFactureId);
+                            Reports.SalesReports.salesA4 salesA4 = new();
+                            salesA4.DataSource = ProfitDetailsTable;
+                            Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(salesA4);
+                            xtraForm1.Show();
+
+                        }
+                        catch (Exception ex)
+                        {
+                            ToasterHelper.ShowErrorHappened(ex.Message);
+                            throw;
+                        }
+                    }
                 }
             }
-            else if (Properties.Settings.Default.PrintSaleOnOrOff)
+            catch (Exception ex)
             {
-                try
-                {
-
-                    DataTable ProfitDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(LastFactureId);
-                    Reports.SalesReports.salesA4 salesA4 = new();
-                    salesA4.DataSource = ProfitDetailsTable;
-                    Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(salesA4);
-                    xtraForm1.Show();
-
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
             }
         }
         void EditFromTable(int q)
@@ -752,7 +767,11 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 //          Where(x => x.Pro_ID == _product.Id && x.Qty >= ConvertToFloat(txtQty.Text)
                 //          && x.Store_ID == Properties.Settings.Default.FastSaleStore).FirstOrDefault();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
 
         }
 
@@ -793,7 +812,11 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 else
                     txtSearchBarCode.Focus();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
         }
         private void btnDown_Click(object sender, EventArgs e)
         {
@@ -814,7 +837,11 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 }
                 else txtSearchBarCode.Focus();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
         }
         private void btnDeleteSelected_Click(object sender, EventArgs e)
         {
@@ -849,7 +876,11 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 else
                     txtSearchBarCode.Focus();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
         }
         private void btnUp_Click(object sender, EventArgs e)
         {
@@ -1203,7 +1234,10 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                         catch (Exception ex)
                         {
                             await transaction.RollbackAsync();
-                            MessageBox.Show(ex.Message);
+
+                            ToasterHelper.ShowErrorHappened(ex.Message);
+                            throw;
+
                         }
                     }
                 }

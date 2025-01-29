@@ -89,8 +89,8 @@ namespace Store.ApplicationUI.Gui.HomeGui
 
 
                 var selectedCaisseId = cmbCaisse.SelectedValue as int?;
-                var selectedCustomerId = cmbCustomers.Text == "اختر العميل" ? "" : cmbCustomers.Text;
-                var selectedUserId = cmbUser.Text == "اختر البائع" ? "" : cmbUser.Text;
+                var selectedCustomerId = cmbCustomers.Text == "اختر العميل" ? null : cmbCustomers.Text;
+                var selectedUserId = cmbUser.Text == "اختر البائع" ? null : cmbUser.Text;
 
                 // Step 1: Retrieve Data for Sales and Buys
 
@@ -101,8 +101,8 @@ namespace Store.ApplicationUI.Gui.HomeGui
                   s => (s.Date.Date >= dtpFrom.Value.Date && s.Date.Date <= dtpTo.Value.Date),
                   // Apply filters dynamically
                   //s => selectedCaisseId == null || s. == selectedCaisseId,
-                  s => selectedCustomerId == null || s.Customer.CustomerName.Contains(selectedCustomerId),
-                  s => selectedUserId == null || s.User_Name.Contains(selectedUserId)
+                  s => selectedCustomerId == null || s.Customer.CustomerName.ToLower().Contains(selectedCustomerId.ToLower()),
+                  s => selectedUserId == null || s.User_Name.ToLower().Contains(selectedUserId.ToLower())
               );
 
                 // Buys data filtered by the selected values
@@ -112,7 +112,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
                     b => b.Total, s => (s.Date.Date >= dtpFrom.Value.Date && s.Date.Date <= dtpTo.Value.Date),
                     //b => selectedCaisseId == null || b.CaisseId == selectedCaisseId,
                     //b => selectedCustomerId == null || b.CustomerId == selectedCustomerId,
-                    b => selectedUserId == null || b.User_Name.Contains(selectedUserId)
+                    b => selectedUserId == null || b.User_Name.ToLower().Contains(selectedUserId.ToLower())
                 );
 
                 // Deserved data filtered by the selected values
@@ -122,7 +122,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
                     d => d.Price, s => (s.Date.Date >= dtpFrom.Value.Date && s.Date.Date <= dtpTo.Value.Date),
                     //d => selectedCaisseId == null || d.CaisseId == selectedCaisseId,
                     //d => selectedCustomerId == null || d.CustomerId == selectedCustomerId,
-                    d => selectedUserId == null || d.UserName.Contains(selectedUserId)
+                    d => selectedUserId == null || d.UserName.ToLower().Contains(selectedUserId.ToLower())
                 );
                 // Step 2: Clear existing series and add new series to chartControl1
                 chartControl1.Series.Clear(); // Clear previous data
@@ -495,7 +495,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 // Step 1: Calculate Net Profit
                 var netProfitData = _context.SalesProfits.Where(s => selectedCustomerId == null || s.Cust_Name.Contains(selectedCustomerId))
                     .Where(
-                  s => selectedUserId == null || s.Sale.User_Name.Contains(selectedUserId))
+                  s => selectedUserId == null || s.Sale.User_Name.ToLower().Contains(selectedUserId.ToLower()))
                     .Where(x => dtpFrom.Value.Date <= x.Sale.Date && dtpTo.Value.Date >= x.Sale.Date)
                     .GroupBy(sp => sp.Sale.Date.Date)
                     .Select(g => new

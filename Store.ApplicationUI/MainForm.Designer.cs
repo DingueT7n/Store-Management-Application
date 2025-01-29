@@ -1149,6 +1149,7 @@
             Controls.Add(ContainerPanel);
             Controls.Add(flowLayoutPanelNavBar);
             Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);
             MinimumSize = new Size(1300, 718);
             Name = "MainForm";

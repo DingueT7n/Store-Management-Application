@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
 using DevExpress.XtraReports.UI;
 using Microsoft.IdentityModel.Tokens;
 using Store.Infrastructure.Data;
@@ -24,7 +25,7 @@ namespace Store.ApplicationUI.Reports.BuysReports
             lblPhoneNumber.Text = Properties.Settings.Default.FacturePhoneNumber;
             lblStoreName.Text = Properties.Settings.Default.StoreNameFacture;
             lblSentenceUnderFacture.Text = Properties.Settings.Default.SentenceUnderFacture;
-
+            xrLabel6.Visible = lblPhoneNumber.Visible = lblPhoneNumber.Text != string.Empty || lblPhoneNumber.Text != "";
             if (!Properties.Settings.Default.AddressStore.IsNullOrEmpty())
             {
                 lblAddress.Text = Properties.Settings.Default.AddressStore;
@@ -33,7 +34,11 @@ namespace Store.ApplicationUI.Reports.BuysReports
             }
             pbLogo.Visible = Properties.Settings.Default.LogoYesNo;
             ReportHeader.Visible = Properties.Settings.Default.LogoYesNo;
-
+            HijriCalendar hijriCalendar = new HijriCalendar();
+            CultureInfo hijriCulture = new CultureInfo("ar-SA");
+            hijriCulture.DateTimeFormat.Calendar = hijriCalendar; // Force Hijri calendar
+            string hijriDate = DateTime.Now.ToString("dddd, dd MMMM yyyy", hijriCulture);
+            pageInfo1.TextFormatString = hijriDate;
             if (Properties.Settings.Default.LogoYesNo)
             {
                 LoadImageFromBase64();

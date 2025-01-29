@@ -44,7 +44,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
             if (await Task.Run(() => _context.Database.CanConnect()))
             {
                 //Start Load Data
-
+                flowLayoutPanel1.Controls.Clear();
                 SetColumns();
                 await SetAlertsToPanel();
                 await SetProductsToDgv(0);
@@ -178,17 +178,19 @@ namespace Store.ApplicationUI.Gui.HomeGui
                         Message = bd.Message,
                         Priority = bd.Priority,
                         CreatedDate = bd.CreatedDate,
+                        Category = bd.Category,
+
                     }).ToListAsync();
 
-                var alerts = new List<AlertDto>
-        {
-            new AlertDto {Id=1, AlertType = "Stock Low", Message = "Product X is running low on stock.", Priority = PriorityAlert.High, CreatedDate = DateTime.Now.AddDays(-3)  },
-            new AlertDto {Id =2 ,AlertType = "Price Change", Message = "Price of Product Y has changed.", Priority = PriorityAlert.Medium, CreatedDate = DateTime.Now },
-            new AlertDto {Id=3, AlertType = "Expired Product", Message = "Product Z has expired.", Priority = PriorityAlert.Low, CreatedDate = DateTime.Now },
-        };
+                //        var alerts = new List<AlertDto>
+                //{
+                //    new AlertDto {Id=1, AlertType = "Stock Low", Message = "Product X is running low on stock.", Priority = PriorityAlert.High, CreatedDate = DateTime.Now.AddDays(-3)  },
+                //    new AlertDto {Id =2 ,AlertType = "Price Change", Message = "Price of Product Y has changed.", Priority = PriorityAlert.Medium, CreatedDate = DateTime.Now },
+                //    new AlertDto {Id=3, AlertType = "Expired Product", Message = "Product Z has expired.", Priority = PriorityAlert.Low, CreatedDate = DateTime.Now },
+                //};
 
                 // Create a new panel for each alert and add it to the FlowLayoutPanel
-                foreach (var alert in alerts)
+                foreach (var alert in AlertsList)
                 {
                     var alertPanel = new Panel
                     {
@@ -225,7 +227,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
                     // Add label for the created date
                     var dateLabel = new Label
                     {
-                        Text = $" {alert.CreatedDate:MM/dd/yyyy hh:mm tt}",
+                        Text = $" {alert.CreatedDate:MM/dd/yyyy hh:mm tt}\n عن طريق {alert.Category}",
                         Font = new System.Drawing.Font("Arial", 8),
                         AutoSize = true,
                         Location = new Point(10, 60) // Position the label below the message

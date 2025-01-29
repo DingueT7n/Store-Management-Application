@@ -358,6 +358,44 @@ namespace Store.Infrastructure.Repositories
             _context.CaisseOperations.Add(caisseOperation);
             await _context.SaveChangesAsync();
         }
+        public decimal BeforeOpening(int caisseId, decimal moneybefore
+          )
+        {
+            _context = new ApplicationDbContext();
+
+            try
+            {
+
+
+                var caisse = _context.Caisses.FirstOrDefault(x => x.Id == caisseId);
+                if (caisse == null)
+                    throw new ArgumentException("Caisse not found.");
+
+                if (caisse.Status == CaisseStatus.Open)
+                    throw new InvalidOperationException("Caisse is already Opened.");
+
+                var lastStatus = _context.CaisseStatusDetails
+                    .Where(x => x.CaisseId == caisseId && x.Status == CaisseStatus.Closed)
+                    .OrderByDescending(x => x.Id)
+                    .FirstOrDefault();
+
+                if (lastStatus == null)
+                    throw new InvalidOperationException("No open session found for this caisse.");
+
+                var caisseDeposits = _context.CaissesDeposits.Where(x => x.Caisse_ID ==
+                caisse.Id && (x.Date >= lastStatus.OpeningTime && x.Date <= DateTime.Now)).Sum(x => x.Money);
+                var caisseWithdraw = _context.CaissesWithdraws.Where(x => x.Caisse_ID ==
+                caisse.Id && (x.Date >= lastStatus.OpeningTime && x.Date <= DateTime.Now)).Sum(x => x.Money);
+
+                lastStatus.IsBalanced = caisse.MoneyinCaisse == moneybefore;
+                return (caisse.MoneyinCaisse) - moneybefore;
+            }
+            catch (Exception ex)
+            {
+
+                throw new InvalidOperationException(ex.Message);
+            }
+        }
 
         public decimal BeforeClosing(int caisseId, decimal moneyAfter
             )
@@ -394,8 +432,7 @@ namespace Store.Infrastructure.Repositories
             catch (Exception ex)
             {
 
-
-                throw ex;
+                throw new InvalidOperationException(ex.Message);
             }
         }
 

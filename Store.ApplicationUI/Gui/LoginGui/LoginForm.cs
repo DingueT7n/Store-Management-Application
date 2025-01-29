@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.Models;
 using Store.Core.Entities.Caisses;
+using Store.Core.Entities.Helpers;
 using Store.Core.Entities.Users;
 using Store.Infrastructure.Data;
 
@@ -329,8 +331,27 @@ namespace Store.ApplicationUI.Gui.LoginGui
                     ToasterHelper.ShowLoginFailed();
                     return false;
                 }
-
                 Code.Models.LocalUser.User = user;
+                if (Convert.ToDouble(Properties.Settings.Default.Days_left) < 530)
+                {
+                    string alerttype = "الاشتراك على وشك الانتهاء";
+                    string Message = $"الاشتراك السنوي للبرنامج سوف ينتهي بعد {Properties.Settings.Default.Days_left} يرجي الاتصال بالمطور واخذ نسخة احتياطية من البرنامج";
+                    var alert = _context.AlertsTable.FirstOrDefault(x => x.AlertType == alerttype && x.Message == Message && !x.IsResolved);
+                    if (alert == null)
+                    {
+                        AlertTable alertTable = new AlertTable();
+                        alertTable.AlertType = alerttype;
+                        alertTable.Message = Message;
+                        alertTable.Priority = PriorityAlert.High;
+                        alertTable.CreatedDate = DateTime.Now;
+                        alertTable.IsResolved = false;
+                        alertTable.Category = LocalUser.User.UserName;
+                        _context.Add(alertTable);
+                        _context.SaveChanges();
+                    }
+                }
+                Properties.Settings.Default.UserName = user.UserName;
+                Properties.Settings.Default.Save();
                 return true;
 
             }
@@ -376,10 +397,13 @@ namespace Store.ApplicationUI.Gui.LoginGui
         private void NavigateToMainForm()
         {
             _oginForm.Hide();
-            MainForm mainForm = new MainForm();
-            Properties.Settings.Default.UserName = txtUsername.Text;
-            Properties.Settings.Default.Save();
-            mainForm.Show();
+            //MainForm mainForm = new MainForm();
+
+            //mainForm.Show();
+            _oginForm.DialogResult = DialogResult.OK;
+            _oginForm.Close();
+            _oginForm.Dispose();
+
         }
 
         private void ClearFormFields()

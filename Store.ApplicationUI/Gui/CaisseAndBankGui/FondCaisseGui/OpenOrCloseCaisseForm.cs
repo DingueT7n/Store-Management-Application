@@ -1,6 +1,7 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.Models;
 using Store.ApplicationUI.Gui.SalesGui.PosGui;
+using Store.Core.Entities.Helpers;
 using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
@@ -39,27 +40,81 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
         }
         private async void btnOpen_Click(object sender, EventArgs e)
         {
-            calculate();
-            await _repository.OpenCaisse(Properties.Settings.Default.DefaultCaisseId
-                 , LocalUser.User.UserName,
-                 numericUpDown12.Value,
-                 (numericUpDown1.Value),
-                 (numericUpDown2.Value),
-                 (numericUpDown3.Value),
-                 (numericUpDown4.Value),
-                 (numericUpDown5.Value),
-                 (numericUpDown6.Value),
-                 (numericUpDown7.Value),
-                 (numericUpDown8.Value),
-                 (numericUpDown9.Value), (numericUpDown11.Value));
-            ToasterHelper.ShowOpenedCaisse();
-            this.Hide();
+            try
+            {
+                // Ensure calculations are performed before proceeding
+                calculate();
 
-            _main.Hide();
-            PosForm posForm = new PosForm(_main);
-            posForm.ShowDialog();
-            _main.Show();
+                bool confirmClose = true;
+
+                // Check if there is an error related to money and confirm action if needed
+                if (lblErrorMoney.Visible)
+                {
+                    confirmClose = MsgHelper.ShowAreYouSureYouWantToOpenCAisseWithNegative();
+                }
+
+                // Proceed only if the user confirms
+                if (confirmClose)
+                {
+                    // Validate repository and settings before making the call
+                    if (_repository == null)
+                    {
+                        throw new InvalidOperationException("Repository is not initialized.");
+                    }
+
+                    if (Properties.Settings.Default.DefaultCaisseId <= 0)
+                    {
+                        throw new ArgumentException("Invalid Caisse ID in settings.");
+                    }
+
+
+                    await _repository.OpenCaisse(Properties.Settings.Default.DefaultCaisseId
+                         , LocalUser.User.UserName,
+                         numericUpDown12.Value,
+                         (numericUpDown1.Value),
+                         (numericUpDown2.Value),
+                         (numericUpDown3.Value),
+                         (numericUpDown4.Value),
+                         (numericUpDown5.Value),
+                         (numericUpDown6.Value),
+                         (numericUpDown7.Value),
+                         (numericUpDown8.Value),
+                         (numericUpDown9.Value), (numericUpDown11.Value));
+                    ToasterHelper.ShowOpenedCaisse();
+
+                    if (lblErrorMoney.Visible)
+                    {
+                        string caissename = _context.Caisses.FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId).CaisseName;
+                        string alerttype = "فتح الصندوق بالسالب";
+                        string Message = $"لقد تم فتح الصندوق {caissename} عن طريق {LocalUser.User.UserName} بنقص يقدر ب {amoutmis} يرجى مراجعة معلومات البرنامج والقيمة الحقيقة للصندوق";
+                        var alert = _context.AlertsTable.FirstOrDefault(x => x.AlertType == alerttype && x.Message == Message && !x.IsResolved);
+                        if (alert == null)
+                        {
+                            AlertTable alertTable = new AlertTable();
+                            alertTable.AlertType = alerttype;
+                            alertTable.Message = Message;
+                            alertTable.Priority = PriorityAlert.Low;
+                            alertTable.CreatedDate = DateTime.Now;
+                            alertTable.IsResolved = false;
+                            alertTable.Category = LocalUser.User.UserName;
+                            _context.Add(alertTable);
+                            _context.SaveChanges();
+                        }
+                    }
+                    this.Hide();
+                    _main.Hide();
+                    PosForm posForm = new PosForm(_main);
+                    posForm.ShowDialog();
+                    _main.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
         }
+        decimal amoutmis = 0.00m;
         void calculate()
         {
             try
@@ -83,6 +138,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
                     var amountmissing = _repository.BeforeClosing(Properties.Settings.Default.DefaultCaisseId, numericUpDown12.Value);
                     if (amountmissing > 0)
                     {
+                        amoutmis = amountmissing;
                         lblErrorMoney.Visible = true;
                         lblErrorMoney.Text = $"يجب اعادة الحسبة لأنها تنقص {amountmissing} دج";
 
@@ -90,15 +146,32 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
                     }
                     else
                     {
+                        amoutmis = amountmissing;
                         lblErrorMoney.Visible = false;
 
                     }
 
                 }
+                else if (btnOpen.Visible)
+                {
+                    var amountmissing = _repository.BeforeOpening(Properties.Settings.Default.DefaultCaisseId, numericUpDown12.Value);
+                    if (amountmissing > 0)
+                    {
+                        amoutmis = amountmissing;
+                        lblErrorMoney.Visible = true;
+                        lblErrorMoney.Text = $"يجب اعادة الحسبة لأنها تنقص {amountmissing} دج";
+                    }
+                    else
+                    {
+                        amoutmis = amountmissing;
+                        lblErrorMoney.Visible = false;
+
+                    }
+                }
             }
             catch (Exception ex)
             {
-
+                ToasterHelper.ShowErrorHappened(ex.Message);
                 throw;
             }
         }
@@ -156,6 +229,25 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
                     // Show success notification
                     ToasterHelper.ShowCloseCaisse();
 
+                    if (lblErrorMoney.Visible)
+                    {
+                        string caissename = _context.Caisses.FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId).CaisseName;
+                        string alerttype = "اغلاق الصندوق بالسالب";
+                        string Message = $"لقد تم اغلاق الصندوق {caissename} عن طريق {LocalUser.User.UserName} بنقص يقدر ب {amoutmis} يرجى مراجعة معلومات البرنامج والقيمة الحقيقة للصندوق";
+                        var alert = _context.AlertsTable.FirstOrDefault(x => x.AlertType == alerttype && x.Message == Message && !x.IsResolved);
+                        if (alert == null)
+                        {
+                            AlertTable alertTable = new AlertTable();
+                            alertTable.AlertType = alerttype;
+                            alertTable.Message = Message;
+                            alertTable.Priority = PriorityAlert.Low;
+                            alertTable.CreatedDate = DateTime.Now;
+                            alertTable.IsResolved = false;
+                            alertTable.Category = LocalUser.User.UserName;
+                            _context.Add(alertTable);
+                            _context.SaveChanges();
+                        }
+                    }
                     // Hide current form and close the POS
                     this.Hide();
                     _pos?.Close();

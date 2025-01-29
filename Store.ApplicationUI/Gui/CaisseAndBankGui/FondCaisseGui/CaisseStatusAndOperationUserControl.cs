@@ -348,8 +348,9 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
                         int id = Convert.ToInt32(row.Cells[14].Value);
                         var deposit = _contex.CaisseStatusDetails.FirstOrDefault(x => x.Id == id);
 
-                        if (deposit != null)
+                        if (deposit != null && deposit.Status == Core.Entities.Caisses.CaisseStatus.Closed)
                         {
+
                             _contex.CaisseStatusDetails.Remove(deposit);
                             _contex.SaveChanges();
                         }
