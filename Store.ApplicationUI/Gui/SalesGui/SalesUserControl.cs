@@ -831,6 +831,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
         private async void ProcessTransaction(decimal paymentAmount, bool isDebt)
         {
             _context = new ApplicationDbContext();
+            int id = 0;
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
@@ -854,55 +855,8 @@ namespace Store.ApplicationUI.Gui.SalesGui
                     // Handle Caisse and Customer updates
                     HandleFinancialUpdates(paymentAmount, isDebt, sale.Id);
                     transaction.Commit();
+                    id = sale.Id;
                     Code.Helper.ToasterHelper.ShowNewSaleAdd();
-
-                    DataTable saleDetailsTable = await Code.Helper.FactureHelper.GetSellDetailsDataTableAsync(sale.Id);
-                    string printername = Properties.Settings.Default.Printer8cm;
-
-                    if (Properties.Settings.Default.PrintSaleFactureType8cm)
-                    {
-                        Reports.sale8cm sale8Cm = new();
-                        sale8Cm.DataSource = saleDetailsTable;
-
-                        if (rbPrinterDirectly.Checked)
-                        {
-                            for (int i = 0; i < Properties.Settings.Default.NbrCopyOfSaleFacture; i++)
-                            {
-                                var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(sale8Cm);
-                                printTool.PrinterSettings.PrinterName = printername;
-                                printTool.Print(printername);
-                            }
-                        }
-                        else if (rbAnalysis.Checked)
-                        {
-                            var xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(sale8Cm);
-                            xtraForm1.Show();
-                        }
-                    }
-                    else
-                    {
-                        Reports.SalesReports.salesA4 salesA4 = new();
-                        salesA4.DataSource = saleDetailsTable;
-                        printername = Properties.Settings.Default.PrinterA4;
-
-                        if (rbPrinterDirectly.Checked)
-                        {
-                            for (int i = 0; i < Properties.Settings.Default.NbrCopyOfSaleFacture; i++)
-                            {
-                                var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(salesA4);
-                                printTool.PrinterSettings.PrinterName = printername;
-                                printTool.Print(printername);
-                            }
-
-                        }
-                        else if (rbAnalysis.Checked)
-                        {
-                            var xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(salesA4);
-                            xtraForm1.Show();
-                        }
-
-                    }
-
                     ResetForm();
                 }
                 catch (Exception ex)
@@ -911,6 +865,64 @@ namespace Store.ApplicationUI.Gui.SalesGui
                     MessageBox.Show(ex.Message);
                 }
             }
+            try
+            {
+
+
+                DataTable saleDetailsTable = await Code.Helper.FactureHelper.GetSellDetailsDataTableAsync(id);
+                string printername = Properties.Settings.Default.Printer8cm;
+
+                if (Properties.Settings.Default.PrintSaleFactureType8cm)
+                {
+                    Reports.sale8cm sale8Cm = new();
+                    sale8Cm.DataSource = saleDetailsTable;
+
+                    if (rbPrinterDirectly.Checked)
+                    {
+                        for (int i = 0; i < Properties.Settings.Default.NbrCopyOfSaleFacture; i++)
+                        {
+                            var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(sale8Cm);
+                            printTool.PrinterSettings.PrinterName = printername;
+                            printTool.Print(printername);
+                        }
+                    }
+                    else if (rbAnalysis.Checked)
+                    {
+                        var xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(sale8Cm);
+                        xtraForm1.Show();
+                    }
+                }
+                else
+                {
+                    Reports.SalesReports.salesA4 salesA4 = new();
+                    salesA4.DataSource = saleDetailsTable;
+                    printername = Properties.Settings.Default.PrinterA4;
+
+                    if (rbPrinterDirectly.Checked)
+                    {
+                        for (int i = 0; i < Properties.Settings.Default.NbrCopyOfSaleFacture; i++)
+                        {
+                            var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(salesA4);
+                            printTool.PrinterSettings.PrinterName = printername;
+                            printTool.Print(printername);
+                        }
+
+                    }
+                    else if (rbAnalysis.Checked)
+                    {
+                        var xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(salesA4);
+                        xtraForm1.Show();
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
         private void HandleFinancialUpdates(decimal paymentAmount, bool isDebt, int saleId)

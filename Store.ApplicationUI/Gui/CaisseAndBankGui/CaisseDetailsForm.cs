@@ -163,7 +163,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
                 if (MsgHelper.ShowDeleteDialog())
                 {
                     Store.Core.Entities.Caisses.Caisse caisse = _context.Caisses.FirstOrDefault(x => x.Id ==
-                    Convert.ToInt32(DgvCaisser.CurrentRow.Cells[5].Value.ToString())
+                    Convert.ToInt32(DgvCaisser.CurrentRow.Cells[5].Value.ToString()) && x.Status == CaisseStatus.Closed
                     );
                     if (caisse != null)
                     {

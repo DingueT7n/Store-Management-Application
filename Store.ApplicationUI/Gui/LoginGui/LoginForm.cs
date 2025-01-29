@@ -332,7 +332,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
                     return false;
                 }
                 Code.Models.LocalUser.User = user;
-                if (Convert.ToDouble(Properties.Settings.Default.Days_left) < 530)
+                if (Convert.ToDouble(Properties.Settings.Default.Days_left) < 30)
                 {
                     string alerttype = "الاشتراك على وشك الانتهاء";
                     string Message = $"الاشتراك السنوي للبرنامج سوف ينتهي بعد {Properties.Settings.Default.Days_left} يرجي الاتصال بالمطور واخذ نسخة احتياطية من البرنامج";

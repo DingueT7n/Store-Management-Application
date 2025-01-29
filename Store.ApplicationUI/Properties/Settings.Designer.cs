@@ -170,18 +170,6 @@ namespace Store.ApplicationUI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string LogoPicture {
-            get {
-                return ((string)(this["LogoPicture"]));
-            }
-            set {
-                this["LogoPicture"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string PrinterBarCode {
             get {
                 return ((string)(this["PrinterBarCode"]));
@@ -512,6 +500,18 @@ namespace Store.ApplicationUI.Properties {
             }
             set {
                 this["TrialVersion"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LogoPicture {
+            get {
+                return ((string)(this["LogoPicture"]));
+            }
+            set {
+                this["LogoPicture"] = value;
             }
         }
     }

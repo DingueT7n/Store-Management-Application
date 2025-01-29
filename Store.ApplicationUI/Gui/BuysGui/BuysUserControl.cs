@@ -670,6 +670,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
         }
         private async Task ProcessPaymentAsync(bool isDebt)
         {
+            int id = 0;
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
@@ -702,55 +703,8 @@ namespace Store.ApplicationUI.Gui.BuysGui
                     await HandleCaisseAndSupplierAsync(buy);
 
                     await transaction.CommitAsync();
+                    id = buy.Id;
                     Code.Helper.ToasterHelper.ShowNewBuyAdd();
-
-                    DataTable BuyDetailsTable = await Code.Helper.FactureHelper.GetBuyDetailsDataTableAsync(buy.Id);
-                    string printername = Properties.Settings.Default.Printer8cm;
-
-                    if (Properties.Settings.Default.PrintSaleFactureType8cm)
-                    {
-                        Reports.BuysReports.buy8cm buy8cm = new();
-                        buy8cm.DataSource = BuyDetailsTable;
-
-                        if (rbPrinterDirectly.Checked)
-                        {
-                            for (int i = 0; i < Properties.Settings.Default.NbrCopyOfBuyFacture; i++)
-                            {
-                                var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(buy8cm);
-                                printTool.PrinterSettings.PrinterName = printername;
-                                printTool.Print(printername);
-                            }
-
-                        }
-                        else if (rbAnalysis.Checked)
-                        {
-                            var perv = Reports.ReportPerviwGui.PerviweForm.Instance(buy8cm);
-                            perv.Show();
-                        }
-                    }
-                    else
-                    {
-                        Reports.BuysReports.buyA4 buyA4 = new();
-                        buyA4.DataSource = BuyDetailsTable;
-                        printername = Properties.Settings.Default.PrinterA4;
-
-                        if (rbPrinterDirectly.Checked)
-                        {
-                            for (int i = 0; i < Properties.Settings.Default.NbrCopyOfBuyFacture; i++)
-                            {
-                                var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(buyA4);
-                                printTool.PrinterSettings.PrinterName = printername;
-                                printTool.Print(printername);
-                            }
-                        }
-                        else if (rbAnalysis.Checked)
-                        {
-                            PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(buyA4);
-                            xtraForm1.Show();
-                        }
-
-                    }
-
                     ResetForm();
                 }
                 catch (Exception ex)
@@ -759,7 +713,63 @@ namespace Store.ApplicationUI.Gui.BuysGui
                     MessageBox.Show(ex.Message);
                 }
             }
+            try
+            {
+                DataTable BuyDetailsTable = await Code.Helper.FactureHelper.GetBuyDetailsDataTableAsync(id);
+                string printername = Properties.Settings.Default.Printer8cm;
+
+                if (Properties.Settings.Default.PrintSaleFactureType8cm)
+                {
+                    Reports.BuysReports.buy8cm buy8cm = new();
+                    buy8cm.DataSource = BuyDetailsTable;
+
+                    if (rbPrinterDirectly.Checked)
+                    {
+                        for (int i = 0; i < Properties.Settings.Default.NbrCopyOfBuyFacture; i++)
+                        {
+                            var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(buy8cm);
+                            printTool.PrinterSettings.PrinterName = printername;
+                            printTool.Print(printername);
+                        }
+
+                    }
+                    else if (rbAnalysis.Checked)
+                    {
+                        var perv = Reports.ReportPerviwGui.PerviweForm.Instance(buy8cm);
+                        perv.Show();
+                    }
+                }
+                else
+                {
+                    Reports.BuysReports.buyA4 buyA4 = new();
+                    buyA4.DataSource = BuyDetailsTable;
+                    printername = Properties.Settings.Default.PrinterA4;
+
+                    if (rbPrinterDirectly.Checked)
+                    {
+                        for (int i = 0; i < Properties.Settings.Default.NbrCopyOfBuyFacture; i++)
+                        {
+                            var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(buyA4);
+                            printTool.PrinterSettings.PrinterName = printername;
+                            printTool.Print(printername);
+                        }
+                    }
+                    else if (rbAnalysis.Checked)
+                    {
+                        PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(buyA4);
+                        xtraForm1.Show();
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+
         }
+
         private async Task HandleCaisseAndSupplierAsync(Buy buy)
         {
             if (PaidUp <= TotalFacture)

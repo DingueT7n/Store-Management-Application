@@ -82,7 +82,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
             }
 
 
-            if (!SalesUserControl.CheckInstance() & !buy)
+            if (!SalesUserControl.CheckInstance() && !buy && !pos)
             {
                 if (SalesUserControl.setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == productId)))
                 {
@@ -90,7 +90,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
                 }
 
             }
-            if (!BuysUserControl.CheckInstance() & buy)
+            if (!BuysUserControl.CheckInstance() && buy && !pos)
             {
                 if (BuysUserControl.setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == productId)))
                 {

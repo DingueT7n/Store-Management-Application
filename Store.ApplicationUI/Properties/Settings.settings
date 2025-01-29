@@ -38,9 +38,6 @@
     <Setting Name="StoreIdDefault" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="LogoPicture" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="PrinterBarCode" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -124,6 +121,9 @@
     </Setting>
     <Setting Name="TrialVersion" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="LogoPicture" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>
