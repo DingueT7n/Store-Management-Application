@@ -135,9 +135,10 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 var dataReminderDateIsUpCustomer = await GetAllDebtCustomer();
                 dataCustomerDebts.DataSource = dataReminderDateIsUpCustomer;
 
-                double value = await _context.Products
-                    .Include(x => x.Category)
-                                .Where(x => x.Quentity <= x.MinQty).CountAsync() / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
+                double value = await _context.Products.AsNoTracking()
+     .Where(x => x.Quentity <= x.MinQty)
+     .Select(x => x.Id) // Only select ID, avoids loading full objects
+     .CountAsync();
                 int pageCount = Convert.ToInt32(Math.Ceiling(value));
 
                 // Update pagination combo box
@@ -345,7 +346,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
         {
             try
             {
-                var products = await _context.SuppliersMoneys
+                var products = await _context.SuppliersMoneys.AsNoTracking()
                                 .Where(x => x.Reminder_Date <= DateTime.Now)
                     .Select(bd => new SupplierDebts
                     {
@@ -368,7 +369,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
         {
             try
             {
-                var products = await _context.CustomersMoneys
+                var products = await _context.CustomersMoneys.AsNoTracking()
                                 .Where(x => x.Reminder_Date <= DateTime.Now)
                     .Select(bd => new SupplierDebts
                     {

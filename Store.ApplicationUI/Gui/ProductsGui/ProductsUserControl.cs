@@ -67,16 +67,16 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         }
         void CalcStats()
         {
-            txtAllProducts.Text = _context.Products.Where(x => x.Quentity > 0).Count().ToString();
-            txtProductSum.Text = _context.Products.Count().ToString("f2");
-            txtAllQty.Text = _context.Products.Sum(x => x.Quentity).ToString("f2");
-            txtAllCategories.Text = _context.Products.Where(x => x.Quentity > 0)
+            txtAllProducts.Text = _context.Products.AsNoTracking().Where(x => x.Quentity > 0).Count().ToString();
+            txtProductSum.Text = _context.Products.AsNoTracking().Count().ToString("f2");
+            txtAllQty.Text = _context.Products.AsNoTracking().Sum(x => x.Quentity).ToString("f2");
+            txtAllCategories.Text = _context.Products.AsNoTracking().Where(x => x.Quentity > 0)
                 .Select(x => x.CategoryId)
                 .Distinct()
                 .Count().ToString("f2");
-            txttotalBuy.Text = _context.Products.Sum(x => x.BuyPrice * x.Quentity).ToString("f2");
-            txttotalSell.Text = _context.Products.Sum(x => x.SalePriceTax * x.Quentity).ToString("f2");
-            txtTotalProfitExpected.Text = _context.Products.Sum(x => (x.SalePriceTax - x.BuyPrice) * x.Quentity)
+            txttotalBuy.Text = _context.Products.AsNoTracking().Sum(x => x.BuyPrice * x.Quentity).ToString("f2");
+            txttotalSell.Text = _context.Products.AsNoTracking().Sum(x => x.SalePriceTax * x.Quentity).ToString("f2");
+            txtTotalProfitExpected.Text = _context.Products.AsNoTracking().Sum(x => (x.SalePriceTax - x.BuyPrice) * x.Quentity)
                 .ToString("f2");
         }
         public async void SetProductsToDgv(int skip)
@@ -88,7 +88,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
 
             // Calculate total pages
-            double value = _context.Products.Count() / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
+            double value = _context.Products.AsNoTracking().Count() / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
             int pageCount = Convert.ToInt32(Math.Ceiling(value));
 
             // Update pagination combo box
@@ -129,6 +129,24 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 SetProductsToDgv(0);
                 SetColumns();
                 //_data.Clear();
+                // Create ContextMenuStrip
+                ContextMenuStrip contextMenu = new ContextMenuStrip();
+
+                // Add menu items
+                ToolStripMenuItem editItem = new ToolStripMenuItem("التعديل");
+                ToolStripMenuItem deleteItem = new ToolStripMenuItem("الحذف");
+
+
+                // Add click events
+                editItem.Click += EditItem_Click;
+                deleteItem.Click += DeleteItem_Click;
+
+
+                // Add items to the menu
+                contextMenu.Items.AddRange(new ToolStripItem[] { editItem, deleteItem });
+
+                // Assign context menu to DataGridView
+                DgvProducts.ContextMenuStrip = contextMenu;
             }
             else
             {
@@ -142,6 +160,17 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             // Show EmptyDAta
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
         }
+        // Sample event handlers for menu items
+        private void EditItem_Click(object sender, EventArgs e)
+        {
+            //MessageBox.Show("Edit option clicked");
+        }
+
+        private void DeleteItem_Click(object sender, EventArgs e)
+        {
+            //MessageBox.Show("Delete option clicked");
+        }
+
 
         private void SetColumns()
         {

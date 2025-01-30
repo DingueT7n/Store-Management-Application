@@ -660,6 +660,7 @@
             lblhora.FlatStyle = FlatStyle.Flat;
             lblhora.Font = new Font("Calibri", 36F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblhora.ForeColor = Color.FromArgb(64, 64, 64);
+            lblhora.LiveSetting = System.Windows.Forms.Automation.AutomationLiveSetting.Polite;
             lblhora.Location = new Point(837, 0);
             lblhora.Margin = new Padding(20);
             lblhora.Name = "lblhora";
@@ -686,6 +687,7 @@
             lblFecha.Size = new Size(211, 36);
             lblFecha.TabIndex = 11;
             lblFecha.Text = "الجمعة , 23 نوفمبر 2024";
+            lblFecha.UseMnemonic = false;
             // 
             // timer1
             // 

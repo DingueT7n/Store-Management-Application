@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.Models;
 using Store.Core.Entities.Caisses;
@@ -14,12 +15,9 @@ namespace Store.ApplicationUI.Gui.LoginGui
         public static LoginForm _oginForm;
         Thread Thread;
         public LoginForm()
-
         {
             try
             {
-
-
                 Code.Helper.ConStringHelper.SetConString();
                 this._context = new ApplicationDbContext();
                 InitializeComponent();
@@ -28,10 +26,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
                 {
                     Thread = new Thread(new ThreadStart(StartSplash));
                     Thread.Start();
-                    if (!_context.Database.CanConnect())
-                    {
-                        lblCon.Visible = true;
-                    }
+
                     Thread.Sleep(5000);
                     _splashScreen?.Dispose();
 
@@ -49,12 +44,15 @@ namespace Store.ApplicationUI.Gui.LoginGui
                 ToasterHelper.ShowErrorHappened(ex.Message);
                 throw;
             }
-            if (double.TryParse(Properties.Settings.Default.Days_left, out double daysLeft))
+            if (!Properties.Settings.Default.Days_left.IsNullOrEmpty() || Properties.Settings.Default.Days_left == string.Empty)
             {
-                if (daysLeft < 0)
+                if (double.TryParse(Properties.Settings.Default.Days_left, out double daysLeft))
                 {
-                    LoginGui.KeyActivationForm.KeyActivationForm activationForm = new();
-                    activationForm.ShowDialog();
+                    if (daysLeft < 0)
+                    {
+                        LoginGui.KeyActivationForm.KeyActivationForm activationForm = new();
+                        activationForm.ShowDialog();
+                    }
                 }
             }
             else
@@ -66,12 +64,16 @@ namespace Store.ApplicationUI.Gui.LoginGui
 
         }
         private SplashScreen? _splashScreen;
-        private void StartSplash()
+        private async void StartSplash()
         {
             try
             {
+                if (!await _context.Database.CanConnectAsync())
+                {
+                    lblCon.Visible = true;
+                }
                 _splashScreen = new SplashScreen();
-                Application.Run(_splashScreen);
+                _splashScreen.ShowDialog();
             }
             catch (Exception ex)
             {
@@ -286,7 +288,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
                 MessageBox.Show("يرجى الاتصال بالمطور", "التفعيل", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return false;
             }
-            var daysleft = (validate.ExpireDate.Date - validate.CreationDate.Date).TotalDays;
+            var daysleft = (validate.ExpireDate.Date - DateTime.Now.Date).TotalDays;
             if (daysleft < 0)
             {
                 ToasterHelper.ShowActivationCompleted();
@@ -311,7 +313,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
                 ToasterHelper.ShowConnectionIsNotEstablished();
                 return false;
             }
-            if (_context.Users.Count() > 0)
+            if (_context.Users.AsNoTracking().Count() > 0)
             {
                 var user = await _context.Users
                 .Include(u => u.UserBuy)
@@ -336,7 +338,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
                 {
                     string alerttype = "الاشتراك على وشك الانتهاء";
                     string Message = $"الاشتراك السنوي للبرنامج سوف ينتهي بعد {Properties.Settings.Default.Days_left} يرجي الاتصال بالمطور واخذ نسخة احتياطية من البرنامج";
-                    var alert = _context.AlertsTable.FirstOrDefault(x => x.AlertType == alerttype && x.Message == Message && !x.IsResolved);
+                    var alert = _context.AlertsTable.AsNoTracking().FirstOrDefault(x => x.AlertType == alerttype && x.Message == Message && !x.IsResolved);
                     if (alert == null)
                     {
                         AlertTable alertTable = new AlertTable();
@@ -369,7 +371,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
                     };
                     if (_context.Caisses.Count() > 0)
                     {
-                        if (_context.Caisses.FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId) is not null)
+                        if (_context.Caisses.AsNoTracking().FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId) is not null)
                             user.Stock_Id = Properties.Settings.Default.DefaultCaisseId;
                         else
                         {
@@ -396,7 +398,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
 
         private void NavigateToMainForm()
         {
-            _oginForm.Hide();
+            //_oginForm.Hide();
             //MainForm mainForm = new MainForm();
 
             //mainForm.Show();

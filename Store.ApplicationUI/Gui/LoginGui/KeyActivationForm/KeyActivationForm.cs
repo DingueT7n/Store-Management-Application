@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using Microsoft.IdentityModel.Tokens;
 using Store.ApplicationUI.Code.Helper;
 
 
@@ -57,12 +58,32 @@ namespace Store.ApplicationUI.Gui.LoginGui.KeyActivationForm
 
         private void KeyActivationForm_Load(object sender, EventArgs e)
         {
+            if (Properties.Settings.Default.Key.IsNullOrEmpty() || Properties.Settings.Default.Key == string.Empty)
+            {
+                txtKey.Text = string.Empty;
+                txtDatecreated.Text = string.Empty;
+                txtDaysLeft.Text = string.Empty;
+                txtKeycrypt.Text = string.Empty;
+                txtDateExp.Text = string.Empty;
+            }
+            else
+            {
+                SKGL.Validate validate = new SKGL.Validate
+                {
+                    secretPhase = Properties.Settings.Default.Key_crypt,
+                    Key = Properties.Settings.Default.Key
+                };
 
-            txtKey.Text = Properties.Settings.Default.Key;
-            txtDatecreated.Text = Properties.Settings.Default.Creation;
-            txtDaysLeft.Text = Properties.Settings.Default.Days_left;
-            txtKeycrypt.Text = Properties.Settings.Default.Key_crypt;
-            txtDateExp.Text = Properties.Settings.Default.Expiration;
+                var daysleft = (validate.ExpireDate.Date - DateTime.Now.Date).TotalDays;
+                DateTime dateTimeCreate = Convert.ToDateTime(Properties.Settings.Default.Creation);
+                DateTime dateTimeExp = Convert.ToDateTime(Properties.Settings.Default.Expiration);
+
+                txtKey.Text = Properties.Settings.Default.Key;
+                txtDatecreated.Text = dateTimeCreate.ToString();
+                txtDaysLeft.Text = daysleft.ToString();
+                txtKeycrypt.Text = Properties.Settings.Default.Key_crypt;
+                txtDateExp.Text = dateTimeExp.ToString();
+            }
         }
 
         private void rbtrial_CheckedChanged(object sender, EventArgs e)

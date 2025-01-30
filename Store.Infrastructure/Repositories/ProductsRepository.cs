@@ -74,7 +74,7 @@ namespace Store.Infrastructure.Repositories
             {
                 _context = new ApplicationDbContext();
 
-                var products = await _context.ProductsQuantities
+                var products = await _context.ProductsQuantities.AsNoTracking()
                     .Include(x => x.Product)
                                 .Where(x => x.DateExpiration <= DateTime.Now && x.Qty > 0)
                     .Select(bd => new ProductOutdated
@@ -100,8 +100,7 @@ namespace Store.Infrastructure.Repositories
             {
                 _context = new ApplicationDbContext();
 
-                var products = await _context.Products
-                    .Include(x => x.Category)
+                var products = await _context.Products.AsNoTracking()
                                 .Where(x => x.Quentity <= x.MinQty)
                     .Select(bd => new ProductMinQty
                     {
@@ -126,7 +125,7 @@ namespace Store.Infrastructure.Repositories
             try
             {
                 _context = new ApplicationDbContext();
-                IQueryable<Product> query = _context.Products
+                IQueryable<Product> query = _context.Products.AsNoTracking()
                     .Include(x => x.Category)
                     .Include(x => x.ProductFamilies);
 
@@ -196,7 +195,7 @@ namespace Store.Infrastructure.Repositories
             {
                 _context = new ApplicationDbContext();
 
-                var allTransfers = _context.ProductsOutStore
+                var allTransfers = _context.ProductsOutStore.AsNoTracking()
                       .Include(x => x.Product)
                       .AsEnumerable();
                 if (barcode != string.Empty) allTransfers = allTransfers.Where(x => x.Product.CodeBar == barcode);
@@ -227,7 +226,7 @@ namespace Store.Infrastructure.Repositories
             {
                 _context = new ApplicationDbContext();
 
-                var lastRefund = _context.ProductsQuantities
+                var lastRefund = _context.ProductsQuantities.AsNoTracking()
                     .Include(x => x.Product)
                                 .Where(x => (barcode != string.Empty ? barcode == x.Product.CodeBar : true))
 
@@ -262,7 +261,7 @@ namespace Store.Infrastructure.Repositories
             {
                 _context = new ApplicationDbContext();
 
-                var lastRefund = _context.ProductsQuantities
+                var lastRefund = _context.ProductsQuantities.AsNoTracking()
                     .Include(x => x.Product)
                     .Where(x => x.Store_ID == storeId)
                     .Where(x => (barcode != string.Empty ? barcode == x.Product.CodeBar : true))
@@ -304,7 +303,7 @@ namespace Store.Infrastructure.Repositories
             {
                 _context = new ApplicationDbContext();
 
-                var allTransfers = _context.ProductsTransfers
+                var allTransfers = _context.ProductsTransfers.AsNoTracking()
                       .Include(x => x.Product)
                       .AsEnumerable();
                 if (barcode != string.Empty) allTransfers = allTransfers.Where(x => x.Product.CodeBar == barcode);
@@ -340,7 +339,7 @@ namespace Store.Infrastructure.Repositories
             {
                 _context = new ApplicationDbContext();
 
-                var allTransfers = _context.ProductDiscounts
+                var allTransfers = _context.ProductDiscounts.AsNoTracking()
                       .Include(x => x.Product)
                       .Include(x => x.Store)
                       .AsEnumerable();

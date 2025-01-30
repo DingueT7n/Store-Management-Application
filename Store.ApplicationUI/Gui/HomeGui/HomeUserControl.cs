@@ -8,16 +8,13 @@ using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.ProductsGui;
 using Store.ApplicationUI.Gui.SalesGui.PosGui;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.HomeGui
 {
     public partial class HomeUserControl : UserControl
     {
         private static HomeUserControl? _homeUserControl;
-        private static ApplicationDbContext _context;
-        private static ProductsRepository _repository;
-
+        private static ApplicationDbContext? _context;
         private static MainForm? _main;
 
         public HomeUserControl()
@@ -123,7 +120,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
             {
                 _homeUserControl = new HomeUserControl();
                 _context = new ApplicationDbContext();
-                _repository = new ProductsRepository(_context);
+
             }
             _ = _homeUserControl.LoadData();
             // Return the singleton instance
@@ -166,13 +163,13 @@ namespace Store.ApplicationUI.Gui.HomeGui
 
 
                 // Run the database queries asynchronously
-                var buysCountTask = await _context.Buys.CountAsync();
-                var customersCountTask = await _context.Customers.CountAsync();
-                var employeesCountTask = await _context.Employees.CountAsync();
-                var salesCountTask = await _context.Sales.CountAsync();
-                var deservedCountTask = await _context.Deserveds.CountAsync();
-                var productsCountTask = await _context.Products.CountAsync();
-                var suppliersCountTask = await _context.Suppliers.CountAsync();
+                var buysCountTask = await _context.Buys.AsNoTracking().CountAsync();
+                var customersCountTask = await _context.Customers.AsNoTracking().CountAsync();
+                var employeesCountTask = await _context.Employees.AsNoTracking().CountAsync();
+                var salesCountTask = await _context.Sales.AsNoTracking().CountAsync();
+                var deservedCountTask = await _context.Deserveds.AsNoTracking().CountAsync();
+                var productsCountTask = await _context.Products.AsNoTracking().CountAsync();
+                var suppliersCountTask = await _context.Suppliers.AsNoTracking().CountAsync();
 
                 SummaryDataBuys.Text = buysCountTask.ToString();
                 SummaryDataCustomers.Text = customersCountTask.ToString();
@@ -181,19 +178,22 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 SummaryDataDeserved.Text = deservedCountTask.ToString();
                 SummaryDataProducts.Text = productsCountTask.ToString();
                 SummaryDataSuppliers.Text = suppliersCountTask.ToString();
-                var result = await _context.Users
-                            .Include(u => u.UserBuy)
-                            .Include(u => u.UserCaisseAndBank)
-                            .Include(u => u.UserCustomer)
-                            .Include(u => u.UserDeservedAndTax)
-                            .Include(u => u.UserEmployee)
-                            .Include(u => u.UserProductAndStore)
-                            .Include(u => u.UserRefund)
-                            .Include(u => u.UserSale)
-                            .Include(u => u.UserSetting)
-                            .Include(u => u.UserSupplier)
-                            .FirstOrDefaultAsync(u => u.UserName == "Admin" && u.Password == "123");
-                LocalUser.User = result;
+                if (LocalUser.User is null)
+                {
+                    var result = await _context.Users.AsNoTracking()
+                                .Include(u => u.UserBuy)
+                                .Include(u => u.UserCaisseAndBank)
+                                .Include(u => u.UserCustomer)
+                                .Include(u => u.UserDeservedAndTax)
+                                .Include(u => u.UserEmployee)
+                                .Include(u => u.UserProductAndStore)
+                                .Include(u => u.UserRefund)
+                                .Include(u => u.UserSale)
+                                .Include(u => u.UserSetting)
+                                .Include(u => u.UserSupplier)
+                                .FirstOrDefaultAsync(u => u.UserName == "Admin" && u.Password == "123");
+                    LocalUser.User = result;
+                }
             }
             catch (Exception ex)
             {
