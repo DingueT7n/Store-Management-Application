@@ -76,6 +76,10 @@
             txtDaysDelaysDebt = new TextBox();
             label10 = new Label();
             gbFastSales = new GroupBox();
+            groupBox4 = new GroupBox();
+            cbEditWholeSaleprice = new CheckBox();
+            cbEditSalePrice = new CheckBox();
+            cbEditBuyPrice = new CheckBox();
             groupBox3 = new GroupBox();
             rbBuyA4 = new RadioButton();
             rbBuy8cm = new RadioButton();
@@ -88,10 +92,6 @@
             label9 = new Label();
             label8 = new Label();
             cmbCustomers = new ComboBox();
-            groupBox4 = new GroupBox();
-            cbEditBuyPrice = new CheckBox();
-            cbEditSalePrice = new CheckBox();
-            cbEditWholeSaleprice = new CheckBox();
             tabControl.SuspendLayout();
             tabPagePrintersSettings.SuspendLayout();
             tabPageFacturesSettings.SuspendLayout();
@@ -99,9 +99,9 @@
             tabPageGeneralsettings.SuspendLayout();
             groupBox1.SuspendLayout();
             gbFastSales.SuspendLayout();
+            groupBox4.SuspendLayout();
             groupBox3.SuspendLayout();
             groupBox2.SuspendLayout();
-            groupBox4.SuspendLayout();
             SuspendLayout();
             // 
             // tabControl
@@ -130,7 +130,7 @@
             tabPagePrintersSettings.Location = new Point(4, 28);
             tabPagePrintersSettings.Name = "tabPagePrintersSettings";
             tabPagePrintersSettings.Padding = new Padding(3);
-            tabPagePrintersSettings.Size = new Size(743, 395);
+            tabPagePrintersSettings.Size = new Size(743, 479);
             tabPagePrintersSettings.TabIndex = 0;
             tabPagePrintersSettings.Text = "اعدادات الطابعات";
             // 
@@ -227,7 +227,7 @@
             tabPageFacturesSettings.Location = new Point(4, 28);
             tabPageFacturesSettings.Name = "tabPageFacturesSettings";
             tabPageFacturesSettings.Padding = new Padding(3);
-            tabPageFacturesSettings.Size = new Size(743, 395);
+            tabPageFacturesSettings.Size = new Size(743, 479);
             tabPageFacturesSettings.TabIndex = 1;
             tabPageFacturesSettings.Text = "اعدادات الفاتورة";
             // 
@@ -351,9 +351,9 @@
             btnDeletePicture.Enabled = false;
             btnDeletePicture.Image = (Image)resources.GetObject("btnDeletePicture.Image");
             btnDeletePicture.ImageAlign = ContentAlignment.MiddleLeft;
-            btnDeletePicture.Location = new Point(415, 143);
+            btnDeletePicture.Location = new Point(396, 143);
             btnDeletePicture.Name = "btnDeletePicture";
-            btnDeletePicture.Size = new Size(109, 34);
+            btnDeletePicture.Size = new Size(113, 34);
             btnDeletePicture.TabIndex = 24;
             btnDeletePicture.Text = "امسح الصورة";
             btnDeletePicture.TextAlign = ContentAlignment.MiddleRight;
@@ -366,9 +366,9 @@
             btnChoosePicture.Enabled = false;
             btnChoosePicture.Image = (Image)resources.GetObject("btnChoosePicture.Image");
             btnChoosePicture.ImageAlign = ContentAlignment.MiddleLeft;
-            btnChoosePicture.Location = new Point(542, 143);
+            btnChoosePicture.Location = new Point(529, 143);
             btnChoosePicture.Name = "btnChoosePicture";
-            btnChoosePicture.Size = new Size(93, 34);
+            btnChoosePicture.Size = new Size(105, 34);
             btnChoosePicture.TabIndex = 23;
             btnChoosePicture.Text = "اختر الصورة";
             btnChoosePicture.TextAlign = ContentAlignment.MiddleRight;
@@ -380,9 +380,9 @@
             pbLogo.BorderStyle = BorderStyle.FixedSingle;
             pbLogo.Enabled = false;
             pbLogo.Image = (Image)resources.GetObject("pbLogo.Image");
-            pbLogo.Location = new Point(415, 20);
+            pbLogo.Location = new Point(396, 20);
             pbLogo.Name = "pbLogo";
-            pbLogo.Size = new Size(220, 117);
+            pbLogo.Size = new Size(238, 117);
             pbLogo.SizeMode = PictureBoxSizeMode.StretchImage;
             pbLogo.TabIndex = 22;
             pbLogo.TabStop = false;
@@ -637,6 +637,48 @@
             gbFastSales.TabStop = false;
             gbFastSales.Text = "بيانات البيع السريع";
             // 
+            // groupBox4
+            // 
+            groupBox4.Controls.Add(cbEditWholeSaleprice);
+            groupBox4.Controls.Add(cbEditSalePrice);
+            groupBox4.Controls.Add(cbEditBuyPrice);
+            groupBox4.Location = new Point(6, 359);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new Size(307, 108);
+            groupBox4.TabIndex = 17;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "اعدادات المشتريات (تعديل على المنتجات)";
+            // 
+            // cbEditWholeSaleprice
+            // 
+            cbEditWholeSaleprice.AutoSize = true;
+            cbEditWholeSaleprice.Location = new Point(35, 26);
+            cbEditWholeSaleprice.Name = "cbEditWholeSaleprice";
+            cbEditWholeSaleprice.Size = new Size(126, 23);
+            cbEditWholeSaleprice.TabIndex = 2;
+            cbEditWholeSaleprice.Text = "تعديل سعر الجملة";
+            cbEditWholeSaleprice.UseVisualStyleBackColor = true;
+            // 
+            // cbEditSalePrice
+            // 
+            cbEditSalePrice.AutoSize = true;
+            cbEditSalePrice.Location = new Point(153, 63);
+            cbEditSalePrice.Name = "cbEditSalePrice";
+            cbEditSalePrice.Size = new Size(154, 23);
+            cbEditSalePrice.TabIndex = 1;
+            cbEditSalePrice.Text = "تعديل سعر البيع 1 و 2 ";
+            cbEditSalePrice.UseVisualStyleBackColor = true;
+            // 
+            // cbEditBuyPrice
+            // 
+            cbEditBuyPrice.AutoSize = true;
+            cbEditBuyPrice.Location = new Point(183, 26);
+            cbEditBuyPrice.Name = "cbEditBuyPrice";
+            cbEditBuyPrice.Size = new Size(122, 23);
+            cbEditBuyPrice.TabIndex = 0;
+            cbEditBuyPrice.Text = "تعديل سعر الشراء";
+            cbEditBuyPrice.UseVisualStyleBackColor = true;
+            // 
             // groupBox3
             // 
             groupBox3.Controls.Add(rbBuyA4);
@@ -760,48 +802,6 @@
             cmbCustomers.Size = new Size(151, 27);
             cmbCustomers.TabIndex = 6;
             // 
-            // groupBox4
-            // 
-            groupBox4.Controls.Add(cbEditWholeSaleprice);
-            groupBox4.Controls.Add(cbEditSalePrice);
-            groupBox4.Controls.Add(cbEditBuyPrice);
-            groupBox4.Location = new Point(6, 359);
-            groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(307, 108);
-            groupBox4.TabIndex = 17;
-            groupBox4.TabStop = false;
-            groupBox4.Text = "اعدادات المشتريات (تعديل على المنتجات)";
-            // 
-            // cbEditBuyPrice
-            // 
-            cbEditBuyPrice.AutoSize = true;
-            cbEditBuyPrice.Location = new Point(183, 26);
-            cbEditBuyPrice.Name = "cbEditBuyPrice";
-            cbEditBuyPrice.Size = new Size(122, 23);
-            cbEditBuyPrice.TabIndex = 0;
-            cbEditBuyPrice.Text = "تعديل سعر الشراء";
-            cbEditBuyPrice.UseVisualStyleBackColor = true;
-            // 
-            // cbEditSalePrice
-            // 
-            cbEditSalePrice.AutoSize = true;
-            cbEditSalePrice.Location = new Point(153, 63);
-            cbEditSalePrice.Name = "cbEditSalePrice";
-            cbEditSalePrice.Size = new Size(154, 23);
-            cbEditSalePrice.TabIndex = 1;
-            cbEditSalePrice.Text = "تعديل سعر البيع 1 و 2 ";
-            cbEditSalePrice.UseVisualStyleBackColor = true;
-            // 
-            // cbEditWholeSaleprice
-            // 
-            cbEditWholeSaleprice.AutoSize = true;
-            cbEditWholeSaleprice.Location = new Point(35, 26);
-            cbEditWholeSaleprice.Name = "cbEditWholeSaleprice";
-            cbEditWholeSaleprice.Size = new Size(126, 23);
-            cbEditWholeSaleprice.TabIndex = 2;
-            cbEditWholeSaleprice.Text = "تعديل سعر الجملة";
-            cbEditWholeSaleprice.UseVisualStyleBackColor = true;
-            // 
             // ApplicationSettingsForm
             // 
             AutoScaleDimensions = new SizeF(8F, 19F);
@@ -833,12 +833,12 @@
             groupBox1.PerformLayout();
             gbFastSales.ResumeLayout(false);
             gbFastSales.PerformLayout();
+            groupBox4.ResumeLayout(false);
+            groupBox4.PerformLayout();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
-            groupBox4.ResumeLayout(false);
-            groupBox4.PerformLayout();
             ResumeLayout(false);
         }
 

@@ -138,7 +138,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 double value = await _context.Products.AsNoTracking()
      .Where(x => x.Quentity <= x.MinQty)
      .Select(x => x.Id) // Only select ID, avoids loading full objects
-     .CountAsync();
+     .CountAsync() / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
                 int pageCount = Convert.ToInt32(Math.Ceiling(value));
 
                 // Update pagination combo box

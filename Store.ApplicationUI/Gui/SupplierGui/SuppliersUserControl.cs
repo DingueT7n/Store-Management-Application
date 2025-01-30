@@ -1,5 +1,5 @@
 ﻿using System.Data;
-using DevExpress.Xpo;
+using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.ProductsGui;
@@ -12,7 +12,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui
     {
         private static SuppliersUserControl? _suppliersUserControl;
         private static MainForm? _main;
-        private static ApplicationDbContext _context;
+        private static ApplicationDbContext? _context;
         public static SuppliersRepository? suppliersRepository;
         private AddSupplierForm addSupplierrForm;
         public SuppliersUserControl()
@@ -39,14 +39,14 @@ namespace Store.ApplicationUI.Gui.SupplierGui
             }
 
             // Return the singleton instance
-            _suppliersUserControl.LoadData();
+            _suppliersUserControl?.LoadData();
             return _suppliersUserControl;
         }
         public async void SetProductsToDgv()
         {
             //DgvِSupplier.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            DgvِSupplier.DataSource = _context.Suppliers.OrderBy(x => x.SupplierName)
-                .ToList();
+            DgvِSupplier.DataSource = await _context.Suppliers.AsNoTracking().OrderBy(x => x.SupplierName)
+                .ToListAsync();
         }
 
         public static void RefreshDgv()

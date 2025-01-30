@@ -473,7 +473,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                             txtSearchBarCode.Clear();
 
                             return;
-                            EditFromTable(1);
+                            //EditFromTable(1);
                             //CalculateAmount();
                             ////AddNewRow();
                         }

@@ -49,8 +49,11 @@ namespace Store.Infrastructure.Repositories
             try
             {
                 var entity = _context.Set<T>().Find(Convert.ToInt32(id));
-                _context.Set<T>().Remove(entity);
-                _context.SaveChanges();
+                if (entity is not null)
+                {
+                    _context.Set<T>().Remove(entity);
+                    _context.SaveChanges();
+                }
             }
             catch (Exception ex)
             {
@@ -68,7 +71,7 @@ namespace Store.Infrastructure.Repositories
                 IQueryable<T> query = _context.Set<T>().AsNoTracking().Where(x => x.Id.ToString() == id);
                 return (query).FirstOrDefault();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 return null;

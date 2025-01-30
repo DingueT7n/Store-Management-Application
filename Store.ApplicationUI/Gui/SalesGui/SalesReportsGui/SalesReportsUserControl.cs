@@ -48,9 +48,9 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
             var data = salesRepository.GetAllSalesWithDetails(Properties.Settings.Default.NoOfDataInDgvs, skip);
             DgvSales.DataSource = data.result;
             double value = data.count / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
-            int PageValue = Convert.ToInt32(Math.Round(value, MidpointRounding.AwayFromZero));
+            int PageValue = Convert.ToInt32(Math.Ceiling(value));
             cmbpagination.Items.Clear();
-            for (int i = 0; i <= PageValue; i++)
+            for (int i = 0; i < PageValue; i++)
             {
                 cmbpagination.Items.Add(i + 1);
 

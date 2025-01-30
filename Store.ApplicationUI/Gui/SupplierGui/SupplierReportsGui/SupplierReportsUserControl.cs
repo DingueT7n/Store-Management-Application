@@ -52,7 +52,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
                 .Count();
             DgvِCustomer.DataSource = SuppliersMoneyList.Result;
             double value = SuppliersMoneyList.count / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
-            int PageValue = Convert.ToInt32(Math.Round(value, MidpointRounding.AwayFromZero));
+            int PageValue = Convert.ToInt32(Math.Ceiling(value));
 
             cmbpagination.Items.Clear();
 

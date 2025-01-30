@@ -16,13 +16,14 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         private AddProductForm addProductForm;
         public AddCategoryForm addCategoryForm;
         public AddStoreForm addStoreForm;
-        private static ApplicationDbContext _context;
+        private static ApplicationDbContext? _context;
         public static ProductsRepository? productsRepository;
         public static CategorysRepository? categoryRepository;
         public ProductsUserControl()
         {
             InitializeComponent();
         }
+
         public static ProductsUserControl Instance(MainForm main)
         {
             _main = main;

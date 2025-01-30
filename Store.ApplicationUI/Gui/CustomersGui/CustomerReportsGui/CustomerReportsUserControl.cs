@@ -53,7 +53,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
             DgvِCustomer.DataSource = CustomerMoneyList.Result;
 
             double value = CustomerMoneyList.count / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
-            int PageValue = Convert.ToInt32(Math.Round(value, MidpointRounding.AwayFromZero));
+            int PageValue = Convert.ToInt32(Math.Ceiling(value));
 
             cmbpagination.Items.Clear();
             for (int i = 0; i < PageValue; i++)
@@ -241,35 +241,52 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
         {
 
             ToasterHelper.PlayNotificationSound();
-            if (cmbpagination.SelectedIndex == -1)
-            {
-                cmbpagination.SelectedIndex = 0;  // Set to first page if no page is selected
-            }
-
             if (cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1)
             {
-                cmbpagination.SelectedIndex += 1;
+                cmbpagination.SelectedIndex++;
+                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+
                 btnSearch_Click(sender, e);
+
+
             }
+            //if (cmbpagination.SelectedIndex == -1)
+            //{
+            //    cmbpagination.SelectedIndex = 0;  // Set to first page if no page is selected
+            //}
+
+            //if (cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1)
+            //{
+            //    cmbpagination.SelectedIndex += 1;
+            //    btnSearch_Click(sender, e);
+            //}
         }
         void PaginationHide()
         {
-            btnNext.Enabled = cmbpagination.SelectedIndex <= cmbpagination.Items.Count - 1 && !dgvHelper.IsEmpty(DgvِCustomer);
-            btnPrev.Enabled = cmbpagination.SelectedIndex >= 0 && !dgvHelper.IsEmpty(DgvِCustomer);
+            btnNext.Enabled = cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1 && !dgvHelper.IsEmpty(DgvِCustomer);
+            btnPrev.Enabled = cmbpagination.SelectedIndex > 0 && !dgvHelper.IsEmpty(DgvِCustomer);
             cmbpagination.Enabled = !dgvHelper.IsEmpty(DgvِCustomer);
         }
         private void btnPrev_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            if (cmbpagination.SelectedIndex == -1)
-            {
-                cmbpagination.SelectedIndex = 0;
-            }
+            //if (cmbpagination.SelectedIndex == -1)
+            //{
+            //    cmbpagination.SelectedIndex = 0;
+            //}
+
+            //if (cmbpagination.SelectedIndex > 0)
+            //{
+            //    cmbpagination.SelectedIndex -= 1;
+            //    btnSearch_Click(sender, e);
+            //}
 
             if (cmbpagination.SelectedIndex > 0)
             {
-                cmbpagination.SelectedIndex -= 1;
+                cmbpagination.SelectedIndex--;
+                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
                 btnSearch_Click(sender, e);
+                SetProductsToDgv(skip);
             }
         }
 
