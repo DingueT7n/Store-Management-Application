@@ -273,6 +273,8 @@ namespace Store.ApplicationUI.Gui.SalesGui
             if (e.KeyCode == Keys.Enter)
             {
                 SetProductsToTable();
+                txtSearchBarCode.Clear();
+
             }
             EditUsingPlusMinus(sender, e);
         }
@@ -877,7 +879,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                     Reports.sale8cm sale8Cm = new();
                     sale8Cm.DataSource = saleDetailsTable;
 
-                    if (rbPrinterDirectly.Checked)
+                    if (rbPrinterDirectly.Checked && !printername.IsNullOrEmpty())
                     {
                         for (int i = 0; i < Properties.Settings.Default.NbrCopyOfSaleFacture; i++)
                         {
@@ -898,7 +900,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                     salesA4.DataSource = saleDetailsTable;
                     printername = Properties.Settings.Default.PrinterA4;
 
-                    if (rbPrinterDirectly.Checked)
+                    if (rbPrinterDirectly.Checked && !printername.IsNullOrEmpty())
                     {
                         for (int i = 0; i < Properties.Settings.Default.NbrCopyOfSaleFacture; i++)
                         {

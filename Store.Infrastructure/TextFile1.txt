@@ -38,12 +38,13 @@ GO
 USE [StoreDbEFCore]
 GO
 
-/****** Object:  StoredProcedure [dbo].[get_all_buy_details_reports]    Script Date: 2024-12-28 7:37:14 PM ******/
+/****** Object:  StoredProcedure [dbo].[get_all_buy_details_reports]    Script Date: 2025-01-31 3:16:23 PM ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE proc [dbo].[get_all_buy_details_reports]
 @orderFrom date,
@@ -60,7 +61,7 @@ BEGIN
 				B.Id AS InvoiceId,
 				MAX(B.Total) AS TotalPaidPerInvoice -- Use MAX to ensure only one PaidUP per invoice
 			FROM [dbo].Buys AS B
-			WHERE B.Date BETWEEN @orderFrom AND @orderTo
+			WHERE CAST(B.Date AS DATE) BETWEEN @orderFrom AND @orderTo
 			GROUP BY B.Id
 		) AS PaidUpSummary;
     -- Calculate the total PaidUP for the specified date range
@@ -72,7 +73,7 @@ BEGIN
             B.Id AS InvoiceId,
             MAX(B.PaidUP) AS TotalPaidPerInvoice -- Use MAX to ensure only one PaidUP per invoice
         FROM [dbo].Buys AS B
-        WHERE B.Date BETWEEN @orderFrom AND @orderTo
+        WHERE CAST(B.Date AS DATE) BETWEEN @orderFrom AND @orderTo
         GROUP BY B.Id
     ) AS PaidUpSummary;
 
@@ -84,7 +85,7 @@ BEGIN
             B.Id AS InvoiceId,
             MAX(B.Remain) AS TotalRemainPerInvoice -- Use MAX to ensure only one PaidUP per invoice
         FROM [dbo].Buys AS B
-        WHERE B.Date BETWEEN @orderFrom AND @orderTo
+        WHERE CAST(B.Date AS DATE) BETWEEN @orderFrom AND @orderTo
         GROUP BY B.Id
     ) AS RemainpSummary;
 
@@ -98,7 +99,7 @@ BEGIN
             COUNT(DISTINCT BD.Pro_ID) AS ProductCount
         FROM [dbo].BuyDetails AS BD
         JOIN [dbo].Buys AS B ON BD.Order_ID = B.Id
-        WHERE B.Date BETWEEN @orderFrom AND @orderTo
+        WHERE CAST(B.Date AS DATE) BETWEEN @orderFrom AND @orderTo
         GROUP BY BD.Order_ID
     ) AS ProductCounts;
 
@@ -129,7 +130,7 @@ BEGIN
     JOIN [dbo].Suppliers ON BuyDetails.Sup_ID = Suppliers.Id
     JOIN [dbo].Products ON BuyDetails.Pro_ID = Products.Id
     JOIN [dbo].Buys ON BuyDetails.Order_ID = Buys.Id
-    WHERE Buys.Date BETWEEN @orderFrom AND @orderTo
+    WHERE CAST(Buys.Date AS DATE) BETWEEN @orderFrom AND @orderTo
     ORDER BY Order_ID ASC;
 END
 GO
@@ -171,12 +172,13 @@ GO
 USE [StoreDbEFCore]
 GO
 
-/****** Object:  StoredProcedure [dbo].[get_all_profit_reports]    Script Date: 2024-12-28 7:37:31 PM ******/
+/****** Object:  StoredProcedure [dbo].[get_all_profit_reports]    Script Date: 2025-01-31 3:15:28 PM ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE proc [dbo].[get_all_profit_reports]
@@ -194,7 +196,7 @@ BEGIN
             B.Id AS InvoiceId,
             MAX(B.TotalOrder) AS TotalPaidPerInvoice -- Use MAX to ensure only one PaidUP per invoice
         FROM [dbo].Sales AS B
-        WHERE B.Date BETWEEN @orderFrom AND @orderTo
+        WHERE CAST(B.Date AS DATE) BETWEEN @orderFrom AND @orderTo
         GROUP BY B.Id
     ) AS PaidUpSummary;
 
@@ -206,7 +208,7 @@ BEGIN
             B.Id AS InvoiceId,
             MAX(B.PaidUP) AS TotalPaidPerInvoice -- Use MAX to ensure only one PaidUP per invoice
         FROM [dbo].Sales AS B
-        WHERE B.Date BETWEEN @orderFrom AND @orderTo
+        WHERE CAST(B.Date AS DATE) BETWEEN @orderFrom AND @orderTo
         GROUP BY B.Id
     ) AS PaidUpSummary;
 
@@ -218,7 +220,7 @@ BEGIN
             B.Id AS InvoiceId,
             MAX(B.Remain) AS TotalRemainPerInvoice -- Use MAX to ensure only one PaidUP per invoice
         FROM [dbo].Sales AS B
-        WHERE B.Date BETWEEN @orderFrom AND @orderTo
+        WHERE CAST(B.Date AS DATE) BETWEEN @orderFrom AND @orderTo
         GROUP BY B.Id
     ) AS RemainpSummary;
 
@@ -234,7 +236,7 @@ BEGIN
             COUNT(DISTINCT BD.Pro_ID) AS ProductCount
         FROM [dbo].SalesDetails AS BD
         JOIN [dbo].Sales AS B ON BD.Order_ID = B.Id
-        WHERE B.Date BETWEEN @orderFrom AND @orderTo
+        WHERE CAST(B.Date AS DATE) BETWEEN @orderFrom AND @orderTo
         GROUP BY BD.Order_ID
     ) AS ProductCounts;
 
@@ -262,10 +264,12 @@ BEGIN
     JOIN [dbo].Products ON SalesProfits.Pro_ID = Products.Id
     JOIN [dbo].Sales ON SalesProfits.Order_ID = Sales.Id
 
-    WHERE Sales.Date BETWEEN @orderFrom AND @orderTo
+   WHERE CAST(Sales.Date AS DATE) BETWEEN @orderFrom AND @orderTo
     ORDER BY Order_ID ASC;
 END
 GO
+
+
 USE [StoreDbEFCore]
 GO
 

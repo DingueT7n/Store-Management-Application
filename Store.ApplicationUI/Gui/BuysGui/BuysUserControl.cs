@@ -546,7 +546,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
             buy.PaidUP = _main.ConvertToFloat(PaidUp.ToString());
             buy.Remain = _main.ConvertToFloat(Remain.ToString());
             buy.Time = DateTime.Now.ToString("HH:mm");
-            buy.User_Name = "Alaa";
+            buy.User_Name = Properties.Settings.Default.UserName;
             return buy;
         }
         SupplierReport SetSupReport()

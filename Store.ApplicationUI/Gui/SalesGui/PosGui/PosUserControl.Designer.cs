@@ -645,7 +645,7 @@
             dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
             DgvQuickProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
-            DgvQuickProducts.ColumnHeadersHeight = 20;
+            DgvQuickProducts.ColumnHeadersHeight = 30;
             DgvQuickProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle8.BackColor = SystemColors.Window;
@@ -733,12 +733,12 @@
             // 
             lblCustomerName.AutoSize = true;
             lblCustomerName.BackColor = Color.Transparent;
-            lblCustomerName.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblCustomerName.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblCustomerName.ForeColor = Color.SeaGreen;
-            lblCustomerName.Location = new Point(5, 5);
+            lblCustomerName.Location = new Point(18, 5);
             lblCustomerName.Margin = new Padding(5);
             lblCustomerName.Name = "lblCustomerName";
-            lblCustomerName.Size = new Size(94, 23);
+            lblCustomerName.Size = new Size(81, 19);
             lblCustomerName.TabIndex = 1;
             lblCustomerName.Text = "مشتري عادي";
             lblCustomerName.TextAlign = ContentAlignment.MiddleRight;
@@ -749,7 +749,7 @@
             gbOperation.Controls.Add(rbSale);
             gbOperation.Location = new Point(47, 42);
             gbOperation.Name = "gbOperation";
-            gbOperation.Size = new Size(164, 83);
+            gbOperation.Size = new Size(164, 67);
             gbOperation.TabIndex = 32;
             gbOperation.TabStop = false;
             gbOperation.Text = "نوع العميلة";

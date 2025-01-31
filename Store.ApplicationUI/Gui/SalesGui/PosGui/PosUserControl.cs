@@ -1188,13 +1188,23 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                             Code.Helper.ToasterHelper.ShowNewSaleAdd();
 
                             ResetForm();
-                            if (facture && Properties.Settings.Default.PrintSaleOnOrOff)
-                            {
-                                //if (Properties.Settings.Default.PrintSaleOnOrOff)
-                                //{
+                        }
+                        catch (Exception ex)
+                        {
+                            await transaction.RollbackAsync();
 
-                                DataTable saleDetailsTable = await GetSellDetailsDataTableAsync(saleID);
-                                string printername = Properties.Settings.Default.Printer8cm;
+                            ToasterHelper.ShowErrorHappened(ex.Message);
+                            throw;
+
+                        }
+                        if (facture && Properties.Settings.Default.PrintSaleOnOrOff)
+                        {
+                            //if (Properties.Settings.Default.PrintSaleOnOrOff)
+                            //{
+
+                            DataTable saleDetailsTable = await GetSellDetailsDataTableAsync(saleID);
+                            string printername = Properties.Settings.Default.Printer8cm;
+                            if (!printername.IsNullOrEmpty())
                                 for (int i = 0; i < Properties.Settings.Default.NbrCopyOfSaleFacture; i++)
                                 {
                                     if (Properties.Settings.Default.PrintSaleFactureType8cm)
@@ -1219,38 +1229,30 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                                         printTool.Print(printername);
                                     }
                                 }
-                                //XtraForm1 xtraForm11 = new(sale8Cm);
-                                //xtraForm11.ShowDialog();
-                                //}
-                                //else
-                                //{
-                                //}
-                            }
-
-
-
-
+                            //XtraForm1 xtraForm11 = new(sale8Cm);
+                            //xtraForm11.ShowDialog();
+                            //}
+                            //else
+                            //{
+                            //}
                         }
-                        catch (Exception ex)
-                        {
-                            await transaction.RollbackAsync();
 
-                            ToasterHelper.ShowErrorHappened(ex.Message);
-                            throw;
 
-                        }
+
+
+
                     }
                 }
             }
             else if (DgvِProducts.Rows.Count > 0 && rbRefund.Checked)
             {
-                using (var transaction = _context.Database.BeginTransaction())
+                using (var transaction = await _context.Database.BeginTransactionAsync())
                 {
                     try
                     {
                         var refund = SetRefundSale();
                         _context.Add(refund);
-                        _context.SaveChanges();
+                        await _context.SaveChangesAsync();
 
                         for (int i = 0; i < DgvِProducts.Rows.Count; i++)
                         {
@@ -1258,18 +1260,21 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                             refundSaleDetail.Order_ID = refund.Id;
                             _context.ReturnsDetails.Add(refundSaleDetail);
 
-                            // Update product and add quantity
-                            _context.Update(SetProductRefund(i, DgvِProducts.Rows[i].Cells[5].Value.ToString()));
-                            SetProductQuentityRefund(i, _context);
+                            var product = await SetProductRefund(i, DgvِProducts.Rows[i].Cells[5].Value.ToString(), _context);
+                            _context.Update(product);
+
+                            //_context.Update(SetProductRefund(i, DgvِProducts.Rows[i].Cells[5].Value.ToString()));
+                            await SetProductQuantityAsync(i, _context);
                         }
+                        await _context.SaveChangesAsync();
 
 
-                        SetCaisseSaleRefund(TotalFacture, _context);
+                        await SetCaisseSaleRefund(TotalFacture, _context);
                         _context.CaissesWithdraws.Add(SetCaisseWithdraw(TotalFacture, _context));
-                        _context.SaveChanges();
+                        await _context.SaveChangesAsync();
 
 
-                        transaction.Commit();
+                        await transaction.CommitAsync();
                         Code.Helper.ToasterHelper.ShowAddedRefund();
 
                         CleanForm();
@@ -1277,23 +1282,42 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                        await transaction.RollbackAsync();
                         MessageBox.Show(ex.Message);
                     }
                 }
             }
         }
-        Caisse SetCaisseSaleRefund(decimal value, ApplicationDbContext context)
+        //private async Task ProcessRefundDetailsAsync(ApplicationDbContext context, int refundId)
+        //{
+        //    for (int i = 0; i < DgvِProducts.Rows.Count; i++)
+        //    {
+        //        var refundDetail = SetRefundSaleDetail(i);
+        //        refundDetail.Order_ID = refundId;
+        //        context.ReturnsDetails.Add(refundDetail);
+
+        //        // Update product quantity
+        //        var productId = DgvِProducts.Rows[i].Cells[5].Value?.ToString();
+        //        if (productId != null)
+        //        {
+        //            var product = SetProductRefund(i, productId);
+        //            context.Update(product);
+        //            await SetProductQuantityAsync(i, context);
+        //        }
+        //    }
+        //    await context.SaveChangesAsync();
+        //}
+        async Task<Caisse> SetCaisseSaleRefund(decimal value, ApplicationDbContext context)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
 
-            Caisse caisse = context.Caisses.Where(x => x.Id == Properties.Settings.Default.FastSaleStore).FirstOrDefault();
+            Caisse caisse = await context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefaultAsync();
             if (caisse is not null)
             {
                 caisse.MoneyinCaisse -= value;
+                context.Caisses.Update(caisse);
+                await context.SaveChangesAsync();
             }
-            context.Caisses.Update(caisse);
-            context.SaveChanges();
             return caisse;
 
         }
@@ -1304,7 +1328,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
             var caisseWithdraw = new CaisseWithdraw
             {
-                Caisse_ID = Properties.Settings.Default.FastSaleStore,
+                Caisse_ID = Properties.Settings.Default.DefaultCaisseId,
                 Time = DateTime.Now.ToString("yyyy:MM:dd:HH:mm"),
                 Date = DateTime.Now,
                 Name = $" ({Properties.Settings.Default.UserName})  العميل ({lblCustomerName.Text}) بحساب ",
@@ -1316,20 +1340,100 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             return caisseWithdraw;
 
         }
+        private async Task SetProductQuantityAsync(int rowIndex, ApplicationDbContext context)
+        {
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
+            if (rowIndex < 0 || rowIndex >= DgvِProducts.Rows.Count)
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
+
+            try
+            {
+                // Determine the product ID based on the selected radio button
+                var productId = DgvِProducts.Rows[rowIndex].Cells[5].Value?.ToString();
+
+                if (string.IsNullOrEmpty(productId))
+                    throw new InvalidOperationException("Product ID is missing or invalid.");
+
+                // Parse the quantity to be updated
+                if (!decimal.TryParse(DgvِProducts.Rows[rowIndex].Cells[2].Value?.ToString(), out decimal quantity))
+                    throw new InvalidOperationException("Invalid quantity value.");
+                ProductsQuantitie productQuantity = new();
+
+                var productQty = await
+                     context.ProductsQuantities.Where(x => x.Pro_ID == Convert.ToInt32(productId)).OrderBy(x => x.Id)
+                    .FirstOrDefaultAsync();
+                if (productQty is not null)
+                {
+
+                    productQty.Qty += quantity;
+                    context.Update(productQty);
+                    await context.SaveChangesAsync();
+
+
+                }
+
+
+                //if (productQuantity is null)
+                //    productQuantity = new ProductsQuantitie
+                //    {
+                //        Id = Convert.ToInt32(productId),
+                //        Qty = 0,
+                //        Store_ID = Properties.Settings.Default.FastSaleStore,
+                //        Pro_ID = Convert.ToInt32(productId),
+                //        StoreName = context.Stores.FirstOrDefault(x => x.Id == Properties.Settings.Default.FastSaleStore).StoreName,
+                //        Buy_Price = context.Products.FirstOrDefault(x => x.Id.ToString() == productId).BuyPrice,
+                //        Sale_PriceTax = _main.ConvertToFloat(DgvِProducts.Rows[rowIndex].Cells[1].Value.ToString()),
+                //        DateExpiration = context.Products.FirstOrDefault(x => x.Id.ToString() == productId).DateExperation
+                //    };
+
+                //// Add the new product quantity record to the database
+                //context.ProductsQuantities.Add(productQuantity);
+                //await context.SaveChangesAsync();
+
+
+
+                // Update the product quantity based on the operation
+                //if (rbSale.Checked)
+                //{
+                //    // For buy refunds, add the quantity back to the product
+                //    productQuantity.Qty = quantity;
+                //}
+                //else
+                //{
+                //    // For sale refunds, subtract the quantity from the product
+                //    productQuantity.Qty = quantity;
+                //}
+
+                //// Save changes to the database
+                //context.Update(productQuantity);
+                //await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (consider using a logging framework like NLog or Serilog)
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw; // Re-throw the exception to propagate it up the call stack
+            }
+        }
         ProductsQuantitie SetProductQuentityRefund(int i, ApplicationDbContext context)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
             ProductsQuantitie productQty = new();
 
             var lis = context.ProductsQuantities.Where(x => x.Id == Convert.ToInt32(DgvِProducts.Rows[i].Cells[5].Value.ToString())).ToList();
-            productQty = lis.Last();
-
             decimal removeQty = ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
-            if (productQty is not null)
+            if (lis.Count > 0)
             {
-                productQty.Qty += removeQty;
-                context.Update(productQty);
-                context.SaveChanges();
+                productQty = lis.Last();
+
+                if (productQty is not null)
+                {
+                    productQty.Qty += removeQty;
+                    context.Update(productQty);
+                    context.SaveChanges();
+                }
             }
             else
             {
@@ -1347,17 +1451,18 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 return productQty;
 
             }
+
             return productQty;
         }
-        Product SetProductRefund(int i, string idprod)
+        async Task<Product> SetProductRefund(int i, string idprod, ApplicationDbContext context)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
 
-            Product product = _context.Products.Where(x => x.Id.ToString() == idprod).FirstOrDefault();
-            var qty = ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+            Product product = await context.Products.FirstOrDefaultAsync(x => x.Id.ToString() == idprod);
             if (product is not null)
             {
-                product.Quentity = product.Quentity + qty;
+                var qty = ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+                product.Quentity += qty;
             }
             return product;
         }
@@ -1406,7 +1511,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             buy.PaidUP = TotalFacture;
             buy.Remain = 0.00m;
             buy.Time = DateTime.Now.ToString("yyyy:MM:dd:HH:mm");
-            buy.User_Name = "Alaa";
+            buy.User_Name = Properties.Settings.Default.UserName;
             buy.OrderType = "Refund Sale";
 
             return buy;
@@ -1416,7 +1521,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
             ReturnDetail buyDetail = new ReturnDetail();
 
-            buyDetail.Cust_Name = IdCustomer.Text;
+            buyDetail.Cust_Name = lblCustomerName.Text;
             buyDetail.Date = DateTime.Now.ToString("yyyy-MM-dd");
             buyDetail.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[5].Value.ToString());
             buyDetail.Qty = ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
@@ -1536,8 +1641,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 {
                     if (Convert.ToDecimal(txtSalePrice.Text) > 0)
                     {
-                        txtQty.Text = Math.Round((Convert.ToDecimal(txtTotalSaleProduct.Text)
-                            / Convert.ToDecimal(txtSalePrice.Text))).ToString("f2");
+                        txtQty.Text = (Convert.ToDecimal(txtTotalSaleProduct.Text)
+                            / Convert.ToDecimal(txtSalePrice.Text)).ToString("f2");
                     }
                     if (txtSalePrice.Text != string.Empty && txtQty.Text != string.Empty
                          && txtSaleDiscount.Text != string.Empty)

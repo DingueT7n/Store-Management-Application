@@ -87,7 +87,7 @@
             txtFacturePrice.PlaceholderText = "مبلغ الفاتورة";
             txtFacturePrice.ReadOnly = true;
             txtFacturePrice.Size = new Size(186, 36);
-            txtFacturePrice.TabIndex = 19;
+            txtFacturePrice.TabIndex = 21;
             txtFacturePrice.TextAlign = HorizontalAlignment.Center;
             txtFacturePrice.KeyPress += txtpaidUp_KeyPress;
             // 
@@ -100,7 +100,7 @@
             txtpaidUp.Name = "txtpaidUp";
             txtpaidUp.PlaceholderText = "مبلغ الدفع";
             txtpaidUp.Size = new Size(186, 36);
-            txtpaidUp.TabIndex = 20;
+            txtpaidUp.TabIndex = 1;
             txtpaidUp.TextAlign = HorizontalAlignment.Center;
             txtpaidUp.TextChanged += txtpaidUp_TextChanged;
             txtpaidUp.KeyPress += txtpaidUp_KeyPress;
@@ -153,7 +153,7 @@
             button1.Location = new Point(3, 242);
             button1.Name = "button1";
             button1.Size = new Size(186, 40);
-            button1.TabIndex = 23;
+            button1.TabIndex = 3;
             button1.Text = "الغاء الدفع";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
@@ -168,7 +168,7 @@
             btnConfirmePay.Location = new Point(195, 242);
             btnConfirmePay.Name = "btnConfirmePay";
             btnConfirmePay.Size = new Size(186, 40);
-            btnConfirmePay.TabIndex = 22;
+            btnConfirmePay.TabIndex = 2;
             btnConfirmePay.Text = "ادفع الآن (12)";
             btnConfirmePay.UseVisualStyleBackColor = true;
             btnConfirmePay.Click += btnSearchImage_Click;
@@ -194,6 +194,7 @@
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "بوابة الدفع اليديوية";
+            KeyDown += AddPaymentForm_KeyDown;
             PaymentstableLayoutPanel.ResumeLayout(false);
             PaymentstableLayoutPanel.PerformLayout();
             ResumeLayout(false);

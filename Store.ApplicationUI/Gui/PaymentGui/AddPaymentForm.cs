@@ -32,6 +32,9 @@ namespace Store.ApplicationUI.Gui.PaymentGui
             txtFacturePrice.Text = Total;
             txtpaidUp.Text = paidUp;
             txtRemain.Text = remaining;
+            txtpaidUp.Focus();
+            txtpaidUp.SelectAll();
+
 
         }
 
@@ -43,12 +46,16 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         }
         private void btnSearchImage_Click(object sender, EventArgs e)
         {
+            PaymentActivate();
+
+        }
+        void PaymentActivate()
+        {
             ToasterHelper.PlayNotificationSound();
             if (Convert.ToDecimal(txtRemain.Text) + Convert.ToDecimal(txtpaidUp.Text) >= Convert.ToDecimal(txtFacturePrice.Text))
             {
                 if (this._form == 1)
                 {
-
                     SalesGui.SalesUserControl.InitializeData(txtpaidUp.Text, txtRemain.Text);
                     SalesUserControl.Process = true;
                 }
@@ -60,13 +67,9 @@ namespace Store.ApplicationUI.Gui.PaymentGui
                 else if (PosForm.GetPosUserControl() is not null)
                 {
                     PosForm.GetPosUserControl().InitializeData(txtpaidUp.Text, txtRemain.Text);
-
-
-
                 }
                 this.Close();
             }
-
         }
         private void txtpaidUp_TextChanged(object sender, EventArgs e)
         {
@@ -102,6 +105,14 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         private void txtFacturePrice_KeyPress(object sender, KeyPressEventArgs e)
         {
 
+        }
+
+        private void AddPaymentForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F12)
+            {
+                PaymentActivate();
+            }
         }
     }
 }

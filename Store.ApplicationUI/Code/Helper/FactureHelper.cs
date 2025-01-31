@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Globalization;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Store.Infrastructure.Data;
@@ -287,5 +288,37 @@ namespace Store.ApplicationUI.Code.Helper
                 }
             }
         }
+        public static string GetHijriDate()
+        {
+            // Set Algeria's timezone (CET: UTC+1)
+            TimeZoneInfo algeriaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+            DateTime algeriaTime = TimeZoneInfo.ConvertTime(DateTime.Now, algeriaTimeZone);
+
+            // Use UmAlQuraCalendar (More accurate than HijriCalendar)
+            UmAlQuraCalendar umAlQuraCalendar = new UmAlQuraCalendar();
+            CultureInfo hijriCulture = new CultureInfo("ar-SA"); // Saudi Arabic Culture
+            hijriCulture.DateTimeFormat.Calendar = umAlQuraCalendar; // Use UmAlQuraCalendar
+
+            // Get Hijri Date Components
+            int hijriYear = umAlQuraCalendar.GetYear(algeriaTime);
+            int hijriMonth = umAlQuraCalendar.GetMonth(algeriaTime);
+            int hijriDay = umAlQuraCalendar.GetDayOfMonth(algeriaTime);
+            // Create the Correct Hijri Date
+            DateTime hijriDate = umAlQuraCalendar.ToDateTime(hijriYear, hijriMonth, hijriDay,
+                                                             algeriaTime.Hour, algeriaTime.Minute,
+                                                             algeriaTime.Second, algeriaTime.Millisecond);
+            return hijriDate.ToString("dddd, dd MMMM yyyy", hijriCulture);
+
+        }
+        public static string GetGregorianDate()
+        {
+
+            // Get current Gregorian date in Arabic
+            CultureInfo gregorianCulture = new CultureInfo("ar-DZ");
+            gregorianCulture.DateTimeFormat.Calendar = new GregorianCalendar(); // Force Gregorian calendar
+            return DateTime.Now.ToString("dddd, dd MMMM yyyy", gregorianCulture);
+
+        }
+
     }
 }

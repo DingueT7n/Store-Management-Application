@@ -408,7 +408,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
             buy.PaidUP = _main.ConvertToFloat(paidUp.ToString());
             buy.Remain = _main.ConvertToFloat(remain.ToString());
             buy.Time = DateTime.Now.ToString("yyyy:MM:dd:HH:mm");
-            buy.User_Name = "Alaa";
+            buy.User_Name = Properties.Settings.Default.UserName;
             buy.OrderType = "Refund Buy";
             return buy;
         }
@@ -438,7 +438,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
             buy.PaidUP = paidUp;
             buy.Remain = remain;
             buy.Time = DateTime.Now.ToString("yyyy:MM:dd:HH:mm");
-            buy.User_Name = "Alaa";
+            buy.User_Name = Properties.Settings.Default.UserName;
             buy.OrderType = "Refund Sale";
 
             return buy;
@@ -485,21 +485,21 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
             buyDetail.PriceWithTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
             return buyDetail;
         }
-        Product SetProduct(int i, bool tru, string idprod, ApplicationDbContext context)
-        {
-            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+        //Product SetProduct(int i, bool tru, string idprod, ApplicationDbContext context)
+        //{
+        //    //dgvProducts.Rows[i].Cells[0].Value.ToString()
 
-            Product product = context.Products.Where(x => x.Id.ToString() == idprod).FirstOrDefault();
-            var qty = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
-            if (product is not null)
-            {
-                if (tru)
-                    product.Quentity = product.Quentity > 0 ? product.Quentity - qty : 0;
-                else
-                    product.Quentity = product.Quentity + qty;
-            }
-            return product;
-        }
+        //    Product product = context.Products.Where(x => x.Id.ToString() == idprod).FirstOrDefault();
+        //    var qty = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+        //    if (product is not null)
+        //    {
+        //        if (tru)
+        //            product.Quentity = product.Quentity > 0 ? product.Quentity - qty : 0;
+        //        else
+        //            product.Quentity = product.Quentity + qty;
+        //    }
+        //    return product;
+        //}
         Supplier SetSupplier()
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
@@ -523,57 +523,110 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
             }
             return customer;
         }
-        ProductsQuantitie SetProductQuentity(int i, ApplicationDbContext context)
-        {
-            //dgvProducts.Rows[i].Cells[0].Value.ToString()
-            ProductsQuantitie productQty = new();
-            if (rbBuy.Checked)
-            {
-                var lis = context.ProductsQuantities.Where(x => x.Id == Convert.ToInt32(DgvِProducts.Rows[i].Cells[7].Value.ToString())).ToList();
-                productQty = lis.Last();
-            }
-            else
-            {
-                var lis = context.ProductsQuantities.Where(x => x.Id == Convert.ToInt32(DgvِProducts.Rows[i].Cells[5].Value.ToString())).ToList();
-                productQty = lis.Last();
-            }
-            decimal removeQty = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
-            if (productQty is not null)
-            {
-                if (rbBuy.Checked)
-                {
-                    while (removeQty > 0)
-                    {
-                        if (productQty.Qty >= removeQty)
-                        {
-                            productQty.Qty -= removeQty;
-                            removeQty = 0;
-                            context.Update(productQty);
-                            context.SaveChanges();
-                        }
-                        else
-                        {
-                            removeQty -= productQty.Qty;
-                            productQty.Qty = 0;
-                            context.Update(productQty);
-                            context.SaveChanges();
-                            productQty = context.ProductsQuantities.FirstOrDefault(x => x.Id == Convert.ToInt32(DgvِProducts.Rows[i].Cells[7].Value.ToString()));
-                            removeQty = (productQty == null || productQty.Qty == 0) ? 0 : removeQty;
+        //public ProductsQuantitie SetProductQuantity(int rowIndex, ApplicationDbContext context)
+        //{
+        //    if (context == null)
+        //        throw new ArgumentNullException(nameof(context));
 
-                        }
-                    }
+        //    if (rowIndex < 0 || rowIndex >= DgvِProducts.Rows.Count)
+        //        throw new ArgumentOutOfRangeException(nameof(rowIndex));
 
-                }
-                else
-                {
-                    productQty.Qty += removeQty;
-                    context.Update(productQty);
-                    context.SaveChanges();
+        //    ProductsQuantitie productQty = null;
+        //    int productId;
 
-                }
-            }
-            return productQty;
-        }
+        //    try
+        //    {
+        //        // Determine the product ID based on the selected radio button
+        //        productId = rbBuy.Checked
+        //            ? Convert.ToInt32(DgvِProducts.Rows[rowIndex].Cells[7].Value?.ToString())
+        //            : Convert.ToInt32(DgvِProducts.Rows[rowIndex].Cells[5].Value?.ToString());
+
+        //        if (productId <= 0)
+        //            throw new InvalidOperationException("Invalid product ID.");
+
+        //        // Get the latest product quantity entry
+        //        productQty = context.ProductsQuantities
+        //                            .Where(x => x.Id == productId)
+        //                            .OrderByDescending(x => x.Id)
+        //                            .FirstOrDefault();
+
+        //        if (productQty == null)
+        //            throw new InvalidOperationException("Product quantity not found.");
+
+        //        // Parse the quantity to be removed/added
+        //        if (!decimal.TryParse(DgvِProducts.Rows[rowIndex].Cells[2].Value?.ToString(), out decimal removeQty))
+        //            throw new InvalidOperationException("Invalid quantity value.");
+
+        //        // Update the product quantity based on the operation
+        //        if (rbBuy.Checked)
+        //        {
+        //            UpdateProductQuantityOnBuy(context, productQty, removeQty, productId);
+        //        }
+        //        else
+        //        {
+        //            UpdateProductQuantityOnSell(context, productQty, removeQty);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Log the exception (consider using a logging framework like NLog or Serilog)
+        //        Console.WriteLine($"An error occurred: {ex.Message}");
+        //        throw; // Re-throw the exception to propagate it up the call stack
+        //    }
+
+        //    return productQty;
+        //}
+
+        //private void UpdateProductQuantityOnBuy(ApplicationDbContext context, ProductsQuantitie productQty, decimal removeQty, int productId)
+        //{
+        //    using (var transaction = context.Database.BeginTransaction())
+        //    {
+        //        try
+        //        {
+        //            while (removeQty > 0)
+        //            {
+        //                if (productQty.Qty >= removeQty)
+        //                {
+        //                    productQty.Qty -= removeQty;
+        //                    removeQty = 0;
+        //                }
+        //                else
+        //                {
+        //                    removeQty -= productQty.Qty;
+        //                    productQty.Qty = 0;
+        //                }
+
+        //                context.Update(productQty);
+        //                context.SaveChanges();
+
+        //                if (removeQty > 0)
+        //                {
+        //                    productQty = context.ProductsQuantities
+        //                                        .Where(x => x.Id == productId)
+        //                                        .OrderByDescending(x => x.Id)
+        //                                        .FirstOrDefault();
+
+        //                    if (productQty == null || productQty.Qty == 0)
+        //                        break;
+        //                }
+        //            }
+
+        //            transaction.Commit();
+        //        }
+        //        catch
+        //        {
+        //            transaction.Rollback();
+        //            throw;
+        //        }
+        //    }
+        //}
+
+        //private void UpdateProductQuantityOnSell(ApplicationDbContext context, ProductsQuantitie productQty, decimal addQty)
+        //{
+        //    productQty.Qty += addQty;
+        //    context.Update(productQty);
+        //    context.SaveChanges();
+        //}
         Caisse SetCaisseBuyRefund(decimal value, ApplicationDbContext context)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
@@ -639,145 +692,523 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
 
         }
 
-        private void btnPay_Click(object sender, EventArgs e)
+        //private void btnPay_Click(object sender, EventArgs e)
+        //{
+        //    ToasterHelper.PlayNotificationSound();
+        //    if (!(DgvِProducts.Rows.Count > 0))
+        //        return;
+        //    if (!MsgHelper.ShowRefundDialog())
+        //        return;
+        //    using (var _context = new ApplicationDbContext())
+        //    {
+        //        if (rbBuy.Checked)
+        //        {
+        //            using (var transaction = _context.Database.BeginTransaction())
+        //            {
+        //                try
+        //                {
+        //                    _context.Buys.Remove(_context.Buys.FirstOrDefault(x => x.Id == idfacture));
+        //                    _context.SaveChanges();
+        //                    var bd = _context.BuyDetails.FirstOrDefault(x => x.Order_ID == idfacture);
+        //                    _context.BuyDetails.Where(x => x.Order_ID == idfacture).ExecuteDelete();
+        //                    _context.SaveChanges();
+        //                    var refund = SetRefundBuy();
+        //                    _context.Add(refund);
+        //                    _context.SaveChanges();
+
+        //                    for (int i = 0; i < DgvِProducts.Rows.Count; i++)
+        //                    {
+        //                        var refundBuyDetail = SetRefundBuyDetail(i);
+        //                        refundBuyDetail.Order_ID = refund.Id;
+        //                        _context.ReturnsDetails.Add(refundBuyDetail);
+
+        //                        // Update product and add quantity
+        //                        _context.Update(SetProduct(i, true, DgvِProducts.Rows[i].Cells[7].Value.ToString(), _context));
+        //                        SetProductQuantity(i, _context);
+        //                    }
+        //                    if (paidUp >= totalFacture)
+        //                    {
+        //                        var sm = _context.SuppliersMoneys.FirstOrDefault(x => x.Id == idfacture);
+        //                        if (sm != null)
+        //                        {
+        //                            _context.SuppliersMoneys.Remove(sm);
+        //                            _context.SaveChanges();
+        //                        }
+
+        //                        SetCaisseBuyRefund(totalFacture, _context);
+        //                        _context.CaissesDeposits.Add(SetCaisseDeposit(totalFacture));
+        //                        _context.SaveChanges();
+        //                    }
+        //                    else if (remain > 0)
+        //                    {
+        //                        var sm = _context.SuppliersMoneys.FirstOrDefault(x => x.Id == idfacture);
+        //                        if (sm != null)
+        //                        {
+        //                            _context.SuppliersMoneys.Remove(sm);
+        //                            _context.SaveChanges();
+        //                        }
+        //                        _context.Update(SetSupplier());
+        //                        SetCaisseBuyRefund(paidUp, _context);
+        //                        _context.Add(SetCaisseDeposit(paidUp));
+
+        //                        _context.SaveChanges();
+
+        //                    }
+        //                    transaction.CommitAsync();
+        //                    Code.Helper.ToasterHelper.ShowAddedRefund();
+
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    transaction.RollbackAsync();
+        //                    MessageBox.Show(ex.Message);
+        //                }
+        //            }
+
+        //        }
+        //        else
+        //        {
+        //            using (var transaction = _context.Database.BeginTransaction())
+        //            {
+        //                try
+        //                {
+        //                    _context.SalesProfits.Where(x => x.Order_ID == idfacture).ExecuteDelete();
+        //                    _context.SaveChanges();
+        //                    var saleDetails = _context.SalesDetails.Where(x => x.Order_ID == idfacture);
+        //                    _context.SalesDetails.RemoveRange(saleDetails);
+        //                    _context.SaveChanges();
+        //                    _context.Sales.Remove(_context.Sales.FirstOrDefault(x => x.Id == idfacture));
+        //                    _context.SaveChanges();
+
+        //                    var refund = SetRefundSale();
+        //                    _context.Add(refund);
+        //                    _context.SaveChanges();
+
+        //                    for (int i = 0; i < DgvِProducts.Rows.Count; i++)
+        //                    {
+        //                        var refundSaleDetail = SetRefundSaleDetail(i);
+        //                        refundSaleDetail.Order_ID = refund.Id;
+        //                        _context.ReturnsDetails.Add(refundSaleDetail);
+
+        //                        // Update product and add quantity
+        //                        _context.Update(SetProduct(i, false, DgvِProducts.Rows[i].Cells[5].Value.ToString(), _context));
+        //                        SetProductQuantity(i, _context);
+        //                    }
+        //                    if (paidUp >= totalFacture)
+        //                    {
+        //                        var cm = _context.CustomersMoneys.FirstOrDefault(x => x.Order_ID == idfacture);
+        //                        if (cm != null)
+        //                        {
+        //                            _context.CustomersMoneys.Remove(cm);
+        //                            _context.SaveChanges();
+        //                        }
+
+        //                        SetCaisseSaleRefund(totalFacture, _context);
+        //                        _context.CaissesWithdraws.Add(SetCaisseWithdraw(totalFacture));
+        //                        _context.SaveChanges();
+        //                    }
+        //                    else if (remain > 0)
+        //                    {
+        //                        var sm = _context.CustomersMoneys.FirstOrDefault(x => x.Order_ID == idfacture);
+        //                        if (sm != null)
+        //                        {
+        //                            _context.CustomersMoneys.Remove(sm);
+        //                            _context.SaveChanges();
+        //                        }
+        //                        _context.Update(setCustomer());
+        //                        SetCaisseSaleRefund(paidUp, _context);
+        //                        _context.Add(SetCaisseWithdraw(paidUp));
+        //                        _context.SaveChanges();
+        //                    }
+        //                    transaction.Commit();
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    transaction.Rollback();
+        //                    MessageBox.Show(ex.Message);
+        //                }
+        //            }
+        //        }
+
+        //        ResetForm();
+        //    }
+        //}
+
+
+
+
+
+
+
+
+
+
+
+        //--------------------------------------------------------------------------------------------------------------
+        private async void btnPay_Click(object sender, EventArgs e)
         {
-            ToasterHelper.PlayNotificationSound();
-            if (!(DgvِProducts.Rows.Count > 0))
-                return;
-            if (!MsgHelper.ShowRefundDialog())
-                return;
-            using (var _context = new ApplicationDbContext())
+            try
+            {
+                ToasterHelper.PlayNotificationSound();
+
+                if (DgvِProducts.Rows.Count <= 0 || !MsgHelper.ShowRefundDialog())
+                    return;
+
+                using (var context = new ApplicationDbContext())
+                {
+                    if (rbBuy.Checked)
+                    {
+                        await ProcessBuyRefundAsync(context);
+                    }
+                    else
+                    {
+                        await ProcessSaleRefundAsync(context);
+                    }
+
+                    ResetForm();
+                    ToasterHelper.ShowAddedRefund();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private async Task ProcessBuyRefundAsync(ApplicationDbContext context)
+        {
+            using (var transaction = await context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    // Remove Buy and BuyDetails
+                    var buy = await context.Buys.FirstOrDefaultAsync(x => x.Id == idfacture);
+                    if (buy != null)
+                    {
+                        context.Buys.Remove(buy);
+                        await context.SaveChangesAsync();
+                    }
+
+                    await context.BuyDetails.Where(x => x.Order_ID == idfacture).ExecuteDeleteAsync();
+                    await context.SaveChangesAsync();
+
+                    // Add Refund and RefundDetails
+                    var refund = SetRefundBuy();
+                    context.Add(refund);
+                    await context.SaveChangesAsync();
+
+                    await ProcessRefundDetailsAsync(context, refund.Id, true);
+
+                    // Handle Supplier and Caisse
+                    await HandleSupplierAndCaisseAsync(context, refund.TotalOrder, refund.PaidUP, refund.Remain);
+
+                    await transaction.CommitAsync();
+                }
+                catch (Exception ex)
+                {
+                    ToasterHelper.ShowErrorHappened(ex.Message);
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
+        }
+
+        private async Task ProcessSaleRefundAsync(ApplicationDbContext context)
+        {
+            using (var transaction = await context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    // Remove SalesProfit, SalesDetails, and Sales
+                    await context.SalesProfits.Where(x => x.Order_ID == idfacture).ExecuteDeleteAsync();
+                    await context.SaveChangesAsync();
+
+                    var saleDetails = await context.SalesDetails.Where(x => x.Order_ID == idfacture).ToListAsync();
+                    context.SalesDetails.RemoveRange(saleDetails);
+                    await context.SaveChangesAsync();
+
+                    var sale = await context.Sales.FirstOrDefaultAsync(x => x.Id == idfacture);
+                    if (sale != null)
+                    {
+                        context.Sales.Remove(sale);
+                        await context.SaveChangesAsync();
+                    }
+
+                    // Add Refund and RefundDetails
+                    var refund = SetRefundSale();
+
+                    context.Add(refund);
+                    await context.SaveChangesAsync();
+
+                    await ProcessRefundDetailsAsync(context, refund.Id, false);
+
+                    // Handle Customer and Caisse
+                    await HandleCustomerAndCaisseAsync(context, refund.TotalOrder, refund.PaidUP, refund.Remain);
+
+                    await transaction.CommitAsync();
+                }
+                catch
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
+        }
+
+        private async Task ProcessRefundDetailsAsync(ApplicationDbContext context, int refundId, bool isBuy)
+        {
+            for (int i = 0; i < DgvِProducts.Rows.Count; i++)
+            {
+                var refundDetail = isBuy ? SetRefundBuyDetail(i) : SetRefundSaleDetail(i);
+                refundDetail.Order_ID = refundId;
+                context.ReturnsDetails.Add(refundDetail);
+
+                // Update product quantity
+                var productId = isBuy ? DgvِProducts.Rows[i].Cells[7].Value?.ToString() : DgvِProducts.Rows[i].Cells[5].Value?.ToString();
+                if (productId != null)
+                {
+                    var product = await SetProductAsync(i, isBuy, productId, context);
+                    context.Update(product);
+                    await SetProductQuantityAsync(i, context);
+                }
+            }
+            await context.SaveChangesAsync();
+        }
+
+        private async Task HandleSupplierAndCaisseAsync(ApplicationDbContext context, decimal totalOrder, decimal paidUp, decimal remain)
+        {
+            if (paidUp >= totalOrder)
+            {
+                var supplierMoney = await context.SuppliersMoneys.FirstOrDefaultAsync(x => x.Id == idfacture);
+                if (supplierMoney != null)
+                {
+                    context.SuppliersMoneys.Remove(supplierMoney);
+                    await context.SaveChangesAsync();
+                }
+
+                SetCaisseBuyRefund(totalOrder, context);
+                context.CaissesDeposits.Add(SetCaisseDeposit(totalOrder));
+                await context.SaveChangesAsync();
+            }
+            else if (remain > 0)
+            {
+                var supplierMoney = await context.SuppliersMoneys.FirstOrDefaultAsync(x => x.Id == idfacture);
+                if (supplierMoney != null)
+                {
+                    context.SuppliersMoneys.Remove(supplierMoney);
+                    await context.SaveChangesAsync();
+                }
+
+                var supplier = SetSupplier();
+                if (supplier != null)
+                    context.Update(supplier);
+                SetCaisseBuyRefund(paidUp, context);
+                context.CaissesDeposits.Add(SetCaisseDeposit(paidUp));
+                await context.SaveChangesAsync();
+            }
+        }
+
+        private async Task HandleCustomerAndCaisseAsync(ApplicationDbContext context, decimal totalOrder, decimal paidUp, decimal remain)
+        {
+            if (paidUp >= totalOrder)
+            {
+                var customerMoney = await context.CustomersMoneys.FirstOrDefaultAsync(x => x.Order_ID == idfacture);
+                if (customerMoney != null)
+                {
+                    context.CustomersMoneys.Remove(customerMoney);
+                    await context.SaveChangesAsync();
+                }
+
+                SetCaisseSaleRefund(totalOrder, context);
+                context.CaissesWithdraws.Add(SetCaisseWithdraw(totalOrder));
+                await context.SaveChangesAsync();
+            }
+            else if (remain > 0)
+            {
+                var customerMoney = await context.CustomersMoneys.FirstOrDefaultAsync(x => x.Order_ID == idfacture);
+                if (customerMoney != null)
+                {
+                    context.CustomersMoneys.Remove(customerMoney);
+                    await context.SaveChangesAsync();
+                }
+
+                var customer = setCustomer();
+                if (customer != null)
+                    context.Update(customer);
+                SetCaisseSaleRefund(paidUp, context);
+                context.CaissesWithdraws.Add(SetCaisseWithdraw(paidUp));
+                await context.SaveChangesAsync();
+            }
+        }
+
+        private async Task<Product> SetProductAsync(int i, bool isBuy, string productId, ApplicationDbContext context)
+        {
+            var product = await context.Products.FirstOrDefaultAsync(x => x.Id.ToString() == productId);
+            if (product != null)
+            {
+                var qty = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value?.ToString());
+                product.Quentity = isBuy ? Math.Max(product.Quentity - qty, 0) : product.Quentity + qty;
+            }
+            return product;
+        }
+        ProductsQuantitie SetProductQuentity(int i, ApplicationDbContext context)
+        {
+            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+            ProductsQuantitie productQty = new();
+            if (rbBuy.Checked)
+            {
+                var lis = context.ProductsQuantities.Where(x => x.Id == Convert.ToInt32(DgvِProducts.Rows[i].Cells[7].Value.ToString())).ToList();
+                productQty = lis.Last();
+            }
+            else
+            {
+                var lis = context.ProductsQuantities.Where(x => x.Id == Convert.ToInt32(DgvِProducts.Rows[i].Cells[5].Value.ToString())).ToList();
+                productQty = lis.Last();
+            }
+            decimal removeQty = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+            if (productQty is not null)
             {
                 if (rbBuy.Checked)
                 {
-                    using (var transaction = _context.Database.BeginTransaction())
+                    while (removeQty > 0)
                     {
-                        try
+                        if (productQty.Qty >= removeQty)
                         {
-                            _context.Buys.Remove(_context.Buys.FirstOrDefault(x => x.Id == idfacture));
-                            _context.SaveChanges();
-                            var bd = _context.BuyDetails.FirstOrDefault(x => x.Order_ID == idfacture);
-                            _context.BuyDetails.Where(x => x.Order_ID == idfacture).ExecuteDelete();
-                            _context.SaveChanges();
-                            var refund = SetRefundBuy();
-                            _context.Add(refund);
-                            _context.SaveChanges();
-
-                            for (int i = 0; i < DgvِProducts.Rows.Count; i++)
-                            {
-                                var refundBuyDetail = SetRefundBuyDetail(i);
-                                refundBuyDetail.Order_ID = refund.Id;
-                                _context.ReturnsDetails.Add(refundBuyDetail);
-
-                                // Update product and add quantity
-                                _context.Update(SetProduct(i, true, DgvِProducts.Rows[i].Cells[7].Value.ToString(), _context));
-                                SetProductQuentity(i, _context);
-                            }
-                            if (paidUp >= totalFacture)
-                            {
-                                var sm = _context.SuppliersMoneys.FirstOrDefault(x => x.Id == idfacture);
-                                if (sm != null)
-                                {
-                                    _context.SuppliersMoneys.Remove(sm);
-                                    _context.SaveChanges();
-                                }
-
-                                SetCaisseBuyRefund(totalFacture, _context);
-                                _context.CaissesDeposits.Add(SetCaisseDeposit(totalFacture));
-                                _context.SaveChanges();
-                            }
-                            else if (remain > 0)
-                            {
-                                var sm = _context.SuppliersMoneys.FirstOrDefault(x => x.Id == idfacture);
-                                if (sm != null)
-                                {
-                                    _context.SuppliersMoneys.Remove(sm);
-                                    _context.SaveChanges();
-                                }
-                                _context.Update(SetSupplier());
-                                SetCaisseBuyRefund(paidUp, _context);
-                                _context.Add(SetCaisseDeposit(paidUp));
-
-                                _context.SaveChanges();
-
-                            }
-                            transaction.CommitAsync();
-                            Code.Helper.ToasterHelper.ShowAddedRefund();
-
+                            productQty.Qty -= removeQty;
+                            removeQty = 0;
+                            context.Update(productQty);
+                            context.SaveChanges();
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            transaction.RollbackAsync();
-                            MessageBox.Show(ex.Message);
+                            removeQty -= productQty.Qty;
+                            productQty.Qty = 0;
+                            context.Update(productQty);
+                            context.SaveChanges();
+                            productQty = context.ProductsQuantities.FirstOrDefault(x => x.Id == Convert.ToInt32(DgvِProducts.Rows[i].Cells[7].Value.ToString()));
+                            removeQty = (productQty == null || productQty.Qty == 0) ? 0 : removeQty;
+
                         }
                     }
 
                 }
                 else
                 {
-                    using (var transaction = _context.Database.BeginTransaction())
+                    productQty.Qty += removeQty;
+                    context.Update(productQty);
+                    context.SaveChanges();
+
+                }
+            }
+            return productQty;
+        }
+        private async Task SetProductQuantityAsync(int rowIndex, ApplicationDbContext context)
+        {
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
+            if (rowIndex < 0 || rowIndex >= DgvِProducts.Rows.Count)
+                throw new ArgumentOutOfRangeException(nameof(rowIndex));
+
+            try
+            {
+                // Determine the product ID based on the selected radio button
+                var productId = rbBuy.Checked
+                    ? DgvِProducts.Rows[rowIndex].Cells[7].Value?.ToString()
+                    : DgvِProducts.Rows[rowIndex].Cells[5].Value?.ToString();
+
+                if (string.IsNullOrEmpty(productId))
+                    throw new InvalidOperationException("Product ID is missing or invalid.");
+
+                // Parse the quantity to be updated
+                if (!decimal.TryParse(DgvِProducts.Rows[rowIndex].Cells[2].Value?.ToString(), out decimal quantity))
+                    throw new InvalidOperationException("Invalid quantity value.");
+                ProductsQuantitie productQuantity = new();
+
+                var productQty = rbBuy.Checked ? await context.ProductsQuantities.Where(x => x.Pro_ID == Convert.ToInt32(productId)).OrderByDescending(x => x.Id)
+                    .FirstOrDefaultAsync() : await
+                     context.ProductsQuantities.Where(x => x.Pro_ID == Convert.ToInt32(productId)).OrderBy(x => x.Id)
+                    .FirstOrDefaultAsync();
+                if (productQty is not null)
+                {
+                    if (rbBuy.Checked)
                     {
-                        try
+                        while (quantity > 0)
                         {
-                            _context.SalesProfits.Where(x => x.Order_ID == idfacture).ExecuteDelete();
-                            _context.SaveChanges();
-                            var saleDetails = _context.SalesDetails.Where(x => x.Order_ID == idfacture);
-                            _context.SalesDetails.RemoveRange(saleDetails);
-                            _context.SaveChanges();
-                            _context.Sales.Remove(_context.Sales.FirstOrDefault(x => x.Id == idfacture));
-                            _context.SaveChanges();
-
-                            var refund = SetRefundSale();
-                            _context.Add(refund);
-                            _context.SaveChanges();
-
-                            for (int i = 0; i < DgvِProducts.Rows.Count; i++)
+                            if (productQty is not null && productQty.Qty >= quantity)
                             {
-                                var refundSaleDetail = SetRefundSaleDetail(i);
-                                refundSaleDetail.Order_ID = refund.Id;
-                                _context.ReturnsDetails.Add(refundSaleDetail);
-
-                                // Update product and add quantity
-                                _context.Update(SetProduct(i, false, DgvِProducts.Rows[i].Cells[5].Value.ToString(), _context));
-                                SetProductQuentity(i, _context);
+                                productQty.Qty -= quantity;
+                                quantity = 0;
+                                context.Update(productQty);
+                                await context.SaveChangesAsync();
                             }
-                            if (paidUp >= totalFacture)
+                            else if (productQty is not null)
                             {
-                                var cm = _context.CustomersMoneys.FirstOrDefault(x => x.Order_ID == idfacture);
-                                if (cm != null)
-                                {
-                                    _context.CustomersMoneys.Remove(cm);
-                                    _context.SaveChanges();
-                                }
+                                quantity -= productQty.Qty;
+                                productQty.Qty = 0;
+                                context.Update(productQty);
+                                await context.SaveChangesAsync();
+                                productQty = context.ProductsQuantities.FirstOrDefault(x => x.Pro_ID == Convert.ToInt32(productId));
+                                quantity = (productQty == null || productQty.Qty == 0) ? 0 : quantity;
 
-                                SetCaisseSaleRefund(totalFacture, _context);
-                                _context.CaissesWithdraws.Add(SetCaisseWithdraw(totalFacture));
-                                _context.SaveChanges();
                             }
-                            else if (remain > 0)
+                            else
                             {
-                                var sm = _context.CustomersMoneys.FirstOrDefault(x => x.Order_ID == idfacture);
-                                if (sm != null)
-                                {
-                                    _context.CustomersMoneys.Remove(sm);
-                                    _context.SaveChanges();
-                                }
-                                _context.Update(setCustomer());
-                                SetCaisseSaleRefund(paidUp, _context);
-                                _context.Add(SetCaisseWithdraw(paidUp));
-                                _context.SaveChanges();
+                                quantity = 0;
                             }
-                            transaction.Commit();
                         }
-                        catch (Exception ex)
-                        {
-                            transaction.Rollback();
-                            MessageBox.Show(ex.Message);
-                        }
+
+                    }
+                    else
+                    {
+                        productQty.Qty += quantity;
+                        context.Update(productQty);
+                        await context.SaveChangesAsync();
+
                     }
                 }
 
-                ResetForm();
+
+                //if (productQuantity is null)
+                //    productQuantity = new ProductsQuantitie
+                //    {
+                //        Id = Convert.ToInt32(productId),
+                //        Qty = 0,
+                //        Store_ID = Properties.Settings.Default.FastSaleStore,
+                //        Pro_ID = Convert.ToInt32(productId),
+                //        StoreName = context.Stores.FirstOrDefault(x => x.Id == Properties.Settings.Default.FastSaleStore).StoreName,
+                //        Buy_Price = context.Products.FirstOrDefault(x => x.Id.ToString() == productId).BuyPrice,
+                //        Sale_PriceTax = _main.ConvertToFloat(DgvِProducts.Rows[rowIndex].Cells[1].Value.ToString()),
+                //        DateExpiration = context.Products.FirstOrDefault(x => x.Id.ToString() == productId).DateExperation
+                //    };
+
+                //// Add the new product quantity record to the database
+                //context.ProductsQuantities.Add(productQuantity);
+                //await context.SaveChangesAsync();
+
+
+
+                // Update the product quantity based on the operation
+                //if (rbSale.Checked)
+                //{
+                //    // For buy refunds, add the quantity back to the product
+                //    productQuantity.Qty = quantity;
+                //}
+                //else
+                //{
+                //    // For sale refunds, subtract the quantity from the product
+                //    productQuantity.Qty = quantity;
+                //}
+
+                //// Save changes to the database
+                //context.Update(productQuantity);
+                //await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (consider using a logging framework like NLog or Serilog)
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw; // Re-throw the exception to propagate it up the call stack
             }
         }
     }

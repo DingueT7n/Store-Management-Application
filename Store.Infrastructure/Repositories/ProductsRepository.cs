@@ -125,9 +125,9 @@ namespace Store.Infrastructure.Repositories
             try
             {
                 _context = new ApplicationDbContext();
-                IQueryable<Product> query = _context.Products.AsNoTracking()
-                    .Include(x => x.Category)
-                    .Include(x => x.ProductFamilies);
+                IQueryable<Product> query = _context.Products.AsNoTracking();
+
+
 
                 if (!string.IsNullOrEmpty(searchItem))
                 {
@@ -144,6 +144,8 @@ namespace Store.Infrastructure.Repositories
                 var result = query.OrderBy(x => x.Id)
                                   .Skip(skip)
                                   .Take(pageSize)
+                                   .Include(x => x.Category)
+                                    .Include(x => x.ProductFamilies)
                                   .ToList();
 
                 // Add product family search result if applicable

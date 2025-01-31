@@ -214,19 +214,14 @@ namespace Store.ApplicationUI.Gui.HomeGui
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            lblhora.Text = DateTime.Now.ToString("hh:mm:ss tt");
+            CultureInfo arCulture = new CultureInfo("ar-DZ"); // Arabic (Algeria)
+            arCulture.DateTimeFormat.AMDesignator = "ص"; // Arabic for AM
+            arCulture.DateTimeFormat.PMDesignator = "م"; // Arabic for PM
 
-            // Get current Gregorian date in Arabic
-            CultureInfo gregorianCulture = new CultureInfo("ar-SA");
-            gregorianCulture.DateTimeFormat.Calendar = new GregorianCalendar(); // Force Gregorian calendar
-            string gregorianDate = DateTime.Now.ToString("dddd, dd MMMM yyyy", gregorianCulture);
+            lblhora.Text = DateTime.Now.ToString("hh:mm:ss tt", arCulture);
 
-            // Get current Hijri date in Arabic
-            HijriCalendar hijriCalendar = new HijriCalendar();
-            CultureInfo hijriCulture = new CultureInfo("ar-SA");
-            hijriCulture.DateTimeFormat.Calendar = hijriCalendar; // Force Hijri calendar
-            string hijriDate = DateTime.Now.ToString("dddd, dd MMMM yyyy", hijriCulture);
-
+            string gregorianDate = Code.Helper.FactureHelper.GetGregorianDate();
+            string hijriDate = Code.Helper.FactureHelper.GetHijriDate();
             // Combine both dates into the label
             lblFecha.Text = $"التاريخ الميلادي: {gregorianDate} \nالتاريخ الهجري: {hijriDate}";
         }
