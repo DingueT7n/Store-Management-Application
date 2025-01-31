@@ -983,7 +983,15 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void PbImageProduct_Click_1(object sender, EventArgs e)
         {
-
+            ToasterHelper.PlayNotificationSound();
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "ملفات الصور |*.JPG; *.PNG; *.GIF; *.BMP";
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    PbImageProduct.Image = Image.FromFile(openFileDialog.FileName);
+                }
+            }
         }
     }
 }

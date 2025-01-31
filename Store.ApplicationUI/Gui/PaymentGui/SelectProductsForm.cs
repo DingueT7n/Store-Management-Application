@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.ComponentModel;
+using System.IO;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.BuysGui;
 using Store.ApplicationUI.Gui.LoadingGui;
@@ -54,21 +55,54 @@ namespace Store.ApplicationUI.Gui.PaymentGui
             _selectProductsForm.LoadData();
             return _selectProductsForm;
         }
+        ////private void PictureBox_Click(object sender, EventArgs e)
+        ////{
+
+        ////    PictureBox clickedPictureBox = sender as PictureBox;
+
+
+        ////    foreach (Control control in flowLayoutPanel.Controls)
+        ////    {
+        ////        if (control is Panel productPanel)
+        ////        {
+        ////            foreach (Control innerControl in productPanel.Controls)
+        ////            {
+        ////                if (innerControl is PictureBox pictureBox)
+        ////                {
+        ////          
+
+        ////                   pictureBox.BorderStyle = BorderStyle.None;
+        ////                }
+        ////            }
+        ////        }
+        ////    }
+
+
+
+        ////   clickedPictureBox.BorderStyle = BorderStyle.FixedSingle;
+        ////    clickedPictureBox.BorderColor = Color.Green; // Custom border color (requires custom PictureBox)
+        ////}
         public Image SetImage(byte[] retrivedData)
         {
             try
             {
-                byte[] Picture = retrivedData;
-                MemoryStream ms = new MemoryStream(Picture);
-                return Image.FromStream(ms);
+                if (retrivedData == null || retrivedData.Length == 0)
+                {
+                    return null; // Handle null or empty image data
+                }
+
+                using (MemoryStream ms = new MemoryStream(retrivedData))
+                {
+                    return Image.FromStream(ms);
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                return null; // Avoid rethrowing unless needed
             }
-
         }
+
 
         void AddProductToDgvIfNotExist(PictureBox pictureBox)
         {
@@ -107,6 +141,13 @@ namespace Store.ApplicationUI.Gui.PaymentGui
                 }
 
 
+                // Get the parent Panel of the clicked PictureBox
+                Panel parentPanel = pictureBox.Parent as Panel;
+
+
+
+                // Set the background color of the parent Panel to light green
+                parentPanel.BackColor = Color.LightGreen;
             }
             //else if (!BuysUserControl.CheckInstance())
             //{
@@ -158,8 +199,8 @@ namespace Store.ApplicationUI.Gui.PaymentGui
                         BackColor = Color.White,
                         Width = flowLayoutPanel.Width / 4 - 10, // Adjust based on FlowLayoutPanel width
                         Height = 150,
-                        Margin = new Padding(10),
-                        Padding = new Padding(5),
+                        Margin = new Padding(7),
+                        Padding = new Padding(2),
                         BorderStyle = BorderStyle.FixedSingle
                     };
 
@@ -263,5 +304,25 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         {
 
         }
+        public class CustomPictureBox : PictureBox
+        {
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+            public Color BorderColor { get; set; } = Color.Green;
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+            public int BorderWidth { get; set; } = 2;
+
+            protected override void OnPaint(PaintEventArgs pe)
+            {
+                base.OnPaint(pe);
+                if (BorderStyle == BorderStyle.FixedSingle)
+                {
+                    using (Pen pen = new Pen(BorderColor, BorderWidth))
+                    {
+                        pe.Graphics.DrawRectangle(pen, 0, 0, Width - 1, Height - 1);
+                    }
+                }
+            }
+        }
     }
+
 }

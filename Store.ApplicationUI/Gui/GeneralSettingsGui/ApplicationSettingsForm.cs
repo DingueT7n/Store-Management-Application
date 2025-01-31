@@ -191,10 +191,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
                     pbLogo.Image = Image.FromStream(ms);
                 }
             }
-            else
-            {
 
-            }
         }
         private string SaveImageAsBase64()
         {
