@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.ProductsGui;
+using Store.Core.Entities.Suppliers;
 using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 
@@ -45,7 +46,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui
         public async void SetProductsToDgv()
         {
             //DgvِSupplier.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            DgvِSupplier.DataSource = await _context.Suppliers.AsNoTracking().OrderBy(x => x.SupplierName)
+            DgvِSupplier.DataSource = await _context.Suppliers.AsNoTracking().OrderBy(x => x.Id)
                 .ToListAsync();
         }
 
@@ -67,8 +68,8 @@ namespace Store.ApplicationUI.Gui.SupplierGui
 
                 // if its an admin or Normal user 
 
-                SetProductsToDgv();
                 SetColumns();
+                SetProductsToDgv();
                 //_data.Clear();
             }
             else
@@ -86,6 +87,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui
 
         private void SetColumns()
         {
+            DgvِSupplier.DataSource = new List<Supplier>();
             //DgvِSupplier.Columns[0].HeaderCell.Value = "المعرف";
             DgvِSupplier.Columns[0].HeaderCell.Value = "اسم المورد";
             DgvِSupplier.Columns[1].HeaderCell.Value = "العنوان";

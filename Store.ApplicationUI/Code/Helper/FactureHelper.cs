@@ -288,8 +288,9 @@ namespace Store.ApplicationUI.Code.Helper
                 }
             }
         }
-        public static string GetHijriDate()
+        public static string GetHijriDate(bool withDay = true)
         {
+
             // Set Algeria's timezone (CET: UTC+1)
             TimeZoneInfo algeriaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
             DateTime algeriaTime = TimeZoneInfo.ConvertTime(DateTime.Now, algeriaTimeZone);
@@ -307,7 +308,12 @@ namespace Store.ApplicationUI.Code.Helper
             DateTime hijriDate = umAlQuraCalendar.ToDateTime(hijriYear, hijriMonth, hijriDay,
                                                              algeriaTime.Hour, algeriaTime.Minute,
                                                              algeriaTime.Second, algeriaTime.Millisecond);
-            return hijriDate.ToString("dddd, dd MMMM yyyy", hijriCulture);
+            if (!withDay)
+            {
+                return hijriDate.ToString("dd MMMM yyyy", hijriCulture);
+            }
+            else
+                return hijriDate.ToString("dddd, dd MMMM yyyy", hijriCulture);
 
         }
         public static string GetGregorianDate()

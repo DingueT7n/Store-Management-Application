@@ -143,6 +143,7 @@ namespace Store.ApplicationUI
         }
         public void CloseSubPanels()
         {
+            animationTimer.Interval = 10; // 10 milliseconds (100 FPS)
             ToasterHelper.PlayNotificationSound();
             if (isPanelAnimating)
                 return;
@@ -154,6 +155,7 @@ namespace Store.ApplicationUI
                 isPanelAnimating = true;
                 animationTimer.Start();
             }
+
         }
         void TiltOptions()
         {
@@ -839,6 +841,18 @@ namespace Store.ApplicationUI
         {
             pageHelper.SetNewPage(Gui.HomeGui.AlertsUserControl.Instance(this));
 
+        }
+
+        private void barButtonItem1_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            if (flowLayoutPanelNavBar.Visible == false)
+                flowLayoutPanelNavBar.Visible = true;
+            else flowLayoutPanelNavBar.Visible = false;
+        }
+
+        private void btnStatusAlert_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            btnAlerts_Click(sender, e);
         }
     }
 }

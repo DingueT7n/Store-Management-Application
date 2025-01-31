@@ -138,8 +138,6 @@
             panel12 = new Panel();
             SummaryTitle7 = new Label();
             SummaryDataDeserved = new Label();
-            lblhora = new Label();
-            lblFecha = new Label();
             timer1 = new System.Windows.Forms.Timer(components);
             leftSidePanel = new Panel();
             tileControl1 = new DevExpress.XtraEditors.TileControl();
@@ -652,43 +650,6 @@
             SummaryDataDeserved.TabIndex = 1;
             SummaryDataDeserved.Text = "لبل1";
             // 
-            // lblhora
-            // 
-            lblhora.AutoSize = true;
-            lblhora.BackColor = Color.Transparent;
-            lblhora.Dock = DockStyle.Right;
-            lblhora.FlatStyle = FlatStyle.Flat;
-            lblhora.Font = new Font("Calibri", 36F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblhora.ForeColor = Color.FromArgb(64, 64, 64);
-            lblhora.LiveSetting = System.Windows.Forms.Automation.AutomationLiveSetting.Polite;
-            lblhora.Location = new Point(837, 0);
-            lblhora.Margin = new Padding(20);
-            lblhora.Name = "lblhora";
-            lblhora.RightToLeft = RightToLeft.Yes;
-            lblhora.Size = new Size(195, 59);
-            lblhora.TabIndex = 10;
-            lblhora.Text = "10:59:58";
-            lblhora.TextAlign = ContentAlignment.MiddleCenter;
-            lblhora.Click += lblhora_Click;
-            // 
-            // lblFecha
-            // 
-            lblFecha.AutoSize = true;
-            lblFecha.BackColor = Color.Transparent;
-            lblFecha.Dock = DockStyle.Right;
-            lblFecha.FlatStyle = FlatStyle.Flat;
-            lblFecha.Font = new Font("Calibri", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblFecha.ForeColor = Color.FromArgb(0, 122, 204);
-            lblFecha.Location = new Point(626, 0);
-            lblFecha.Margin = new Padding(10);
-            lblFecha.Name = "lblFecha";
-            lblFecha.Padding = new Padding(5);
-            lblFecha.RightToLeft = RightToLeft.Yes;
-            lblFecha.Size = new Size(211, 36);
-            lblFecha.TabIndex = 11;
-            lblFecha.Text = "الجمعة , 23 نوفمبر 2024";
-            lblFecha.UseMnemonic = false;
-            // 
             // timer1
             // 
             timer1.Enabled = true;
@@ -697,8 +658,6 @@
             // leftSidePanel
             // 
             leftSidePanel.BorderStyle = BorderStyle.FixedSingle;
-            leftSidePanel.Controls.Add(lblFecha);
-            leftSidePanel.Controls.Add(lblhora);
             leftSidePanel.Controls.Add(tileControl1);
             leftSidePanel.Dock = DockStyle.Fill;
             leftSidePanel.Location = new Point(0, 195);
@@ -753,6 +712,7 @@
             tiltUsersManagment.BackgroundImage = (Image)resources.GetObject("tiltUsersManagment.BackgroundImage");
             tiltUsersManagment.BackgroundImageAlignment = DevExpress.XtraEditors.TileItemContentAlignment.TopCenter;
             tiltUsersManagment.BackgroundImageScaleMode = DevExpress.XtraEditors.TileItemImageScaleMode.NoScale;
+            tiltUsersManagment.CurrentFrameIndex = 2;
             tileItemElement1.Text = "صلاحيات المستخدمين";
             tileItemElement1.TextAlignment = DevExpress.XtraEditors.TileItemContentAlignment.BottomCenter;
             tiltUsersManagment.Elements.Add(tileItemElement1);
@@ -833,6 +793,7 @@
             tiltSuppAccount.BackgroundImage = (Image)resources.GetObject("tiltSuppAccount.BackgroundImage");
             tiltSuppAccount.BackgroundImageAlignment = DevExpress.XtraEditors.TileItemContentAlignment.TopCenter;
             tiltSuppAccount.BackgroundImageScaleMode = DevExpress.XtraEditors.TileItemImageScaleMode.NoScale;
+            tiltSuppAccount.CurrentFrameIndex = 2;
             tileItemElement5.Text = "حسابات الموردين";
             tileItemElement5.TextAlignment = DevExpress.XtraEditors.TileItemContentAlignment.BottomCenter;
             tiltSuppAccount.Elements.Add(tileItemElement5);
@@ -897,6 +858,7 @@
             tiltAddProduct.BackgroundImage = (Image)resources.GetObject("tiltAddProduct.BackgroundImage");
             tiltAddProduct.BackgroundImageAlignment = DevExpress.XtraEditors.TileItemContentAlignment.TopCenter;
             tiltAddProduct.BackgroundImageScaleMode = DevExpress.XtraEditors.TileItemImageScaleMode.StretchHorizontal;
+            tiltAddProduct.CurrentFrameIndex = 2;
             tileItemElement9.Text = "اضافة المنتجات";
             tileItemElement9.TextAlignment = DevExpress.XtraEditors.TileItemContentAlignment.BottomCenter;
             tiltAddProduct.Elements.Add(tileItemElement9);
@@ -979,6 +941,7 @@
             tiltCustomersAccount.BackgroundImage = (Image)resources.GetObject("tiltCustomersAccount.BackgroundImage");
             tiltCustomersAccount.BackgroundImageAlignment = DevExpress.XtraEditors.TileItemContentAlignment.TopCenter;
             tiltCustomersAccount.BackgroundImageScaleMode = DevExpress.XtraEditors.TileItemImageScaleMode.NoScale;
+            tiltCustomersAccount.CurrentFrameIndex = 2;
             tileItemElement13.Text = "حسابات العملاء";
             tileItemElement13.TextAlignment = DevExpress.XtraEditors.TileItemContentAlignment.BottomCenter;
             tiltCustomersAccount.Elements.Add(tileItemElement13);
@@ -1069,6 +1032,7 @@
             tiltBuys.BackgroundImage = (Image)resources.GetObject("tiltBuys.BackgroundImage");
             tiltBuys.BackgroundImageAlignment = DevExpress.XtraEditors.TileItemContentAlignment.TopCenter;
             tiltBuys.BackgroundImageScaleMode = DevExpress.XtraEditors.TileItemImageScaleMode.NoScale;
+            tiltBuys.CurrentFrameIndex = 2;
             tileItemElement17.Text = "ادارة المشتريات";
             tileItemElement17.TextAlignment = DevExpress.XtraEditors.TileItemContentAlignment.BottomCenter;
             tiltBuys.Elements.Add(tileItemElement17);
@@ -1153,6 +1117,7 @@
             tiltSales.BackgroundImage = (Image)resources.GetObject("tiltSales.BackgroundImage");
             tiltSales.BackgroundImageAlignment = DevExpress.XtraEditors.TileItemContentAlignment.TopCenter;
             tiltSales.BackgroundImageScaleMode = DevExpress.XtraEditors.TileItemImageScaleMode.NoScale;
+            tiltSales.CurrentFrameIndex = 2;
             tileItemElement21.Text = "ادارة المبيعات";
             tileItemElement21.TextAlignment = DevExpress.XtraEditors.TileItemContentAlignment.BottomCenter;
             tiltSales.Elements.Add(tileItemElement21);
@@ -1244,6 +1209,7 @@
             tiltCaisse.AppearanceItem.Selected.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
             tiltCaisse.BackgroundImage = (Image)resources.GetObject("tiltCaisse.BackgroundImage");
             tiltCaisse.BackgroundImageAlignment = DevExpress.XtraEditors.TileItemContentAlignment.TopCenter;
+            tiltCaisse.CurrentFrameIndex = 2;
             tileItemElement25.Text = "رصيد الصناديق";
             tileItemElement25.TextAlignment = DevExpress.XtraEditors.TileItemContentAlignment.BottomCenter;
             tiltCaisse.Elements.Add(tileItemElement25);
@@ -1328,6 +1294,7 @@
             tiltStatistiocs.BackgroundImage = (Image)resources.GetObject("tiltStatistiocs.BackgroundImage");
             tiltStatistiocs.BackgroundImageAlignment = DevExpress.XtraEditors.TileItemContentAlignment.TopCenter;
             tiltStatistiocs.BackgroundImageScaleMode = DevExpress.XtraEditors.TileItemImageScaleMode.NoScale;
+            tiltStatistiocs.CurrentFrameIndex = 2;
             tileItemElement29.Text = "الاحصائيات";
             tileItemElement29.TextAlignment = DevExpress.XtraEditors.TileItemContentAlignment.BottomCenter;
             tiltStatistiocs.Elements.Add(tileItemElement29);
@@ -1411,6 +1378,7 @@
             tiltReturns.AppearanceItem.Selected.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
             tiltReturns.BackgroundImage = (Image)resources.GetObject("tiltReturns.BackgroundImage");
             tiltReturns.BackgroundImageAlignment = DevExpress.XtraEditors.TileItemContentAlignment.TopCenter;
+            tiltReturns.CurrentFrameIndex = 2;
             tileItemElement33.Text = "المرتجعات";
             tileItemElement33.TextAlignment = DevExpress.XtraEditors.TileItemContentAlignment.BottomCenter;
             tiltReturns.Elements.Add(tileItemElement33);
@@ -1494,6 +1462,7 @@
             tiltPos.AppearanceItem.Selected.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
             tiltPos.BackgroundImage = (Image)resources.GetObject("tiltPos.BackgroundImage");
             tiltPos.BackgroundImageAlignment = DevExpress.XtraEditors.TileItemContentAlignment.TopCenter;
+            tiltPos.CurrentFrameIndex = 2;
             tileItemElement37.Text = "شاشة البيع السريع";
             tileItemElement37.TextAlignment = DevExpress.XtraEditors.TileItemContentAlignment.BottomCenter;
             tiltPos.Elements.Add(tileItemElement37);
@@ -1591,7 +1560,6 @@
             panel12.ResumeLayout(false);
             panel12.PerformLayout();
             leftSidePanel.ResumeLayout(false);
-            leftSidePanel.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -1632,8 +1600,6 @@
         private Panel panel12;
         private Label SummaryTitle7;
         private Label SummaryDataDeserved;
-        private Label lblhora;
-        private Label lblFecha;
         private System.Windows.Forms.Timer timer1;
         private Panel leftSidePanel;
         private FlowLayoutPanel flowLayoutPanel2;

@@ -1,4 +1,5 @@
 using System.Globalization;
+using Store.ApplicationUI.Gui.LoginGui;
 
 namespace Store.ApplicationUI
 {
@@ -23,23 +24,23 @@ namespace Store.ApplicationUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            //LoginForm loginForm = new LoginForm();
-            //if (loginForm.ShowDialog() == DialogResult.OK)
-            //{
+            LoginForm loginForm = new LoginForm();
+            if (loginForm.ShowDialog() == DialogResult.OK)
+            {
 
-            //    MainForm mainForm = new MainForm();
+                MainForm mainForm = new MainForm();
 
-            //    loginForm.Dispose();
-            //    loginForm = null;
-            //    Application.Run(mainForm);
-            //}
-            //else
-            //{
+                loginForm.Dispose();
+                loginForm = null;
+                Application.Run(mainForm);
+            }
+            else
+            {
 
-            //    Application.Exit();
-            //}
+                Application.Exit();
+            }
 
-            Application.Run(new MainForm());
+            //Application.Run(new MainForm());
         }
     }
 }

@@ -29,7 +29,17 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            DevExpress.XtraBars.Bar bar3;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
+            barStaticItem1 = new DevExpress.XtraBars.BarStaticItem();
+            barStaticItem2 = new DevExpress.XtraBars.BarStaticItem();
+            lblTIme = new DevExpress.XtraBars.BarStaticItem();
+            barStaticItem3 = new DevExpress.XtraBars.BarStaticItem();
+            lblDate = new DevExpress.XtraBars.BarStaticItem();
+            barStaticItem5 = new DevExpress.XtraBars.BarStaticItem();
+            lblUserName = new DevExpress.XtraBars.BarStaticItem();
+            btnStatusAlert = new DevExpress.XtraBars.BarButtonItem();
             flowLayoutPanelNavBar = new FlowLayoutPanel();
             btnHomeSummary = new Button();
             btnComptoire = new Button();
@@ -104,7 +114,13 @@
             btnBackUp = new Button();
             btnRestore = new Button();
             ContainerPanel = new Panel();
+            barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
+            barManager1 = new DevExpress.XtraBars.BarManager(components);
+            barDockControlTop = new DevExpress.XtraBars.BarDockControl();
+            barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
+            barDockControlRight = new DevExpress.XtraBars.BarDockControl();
             animationTimer = new System.Windows.Forms.Timer(components);
+            bar3 = new DevExpress.XtraBars.Bar();
             flowLayoutPanelNavBar.SuspendLayout();
             flowLayoutPanelStateAndDiscount.SuspendLayout();
             ProductsflowLayoutPanel.SuspendLayout();
@@ -117,7 +133,155 @@
             flowLayoutPaneReturns.SuspendLayout();
             flowLayoutPanelEmployees.SuspendLayout();
             flowLayoutPanelSettings.SuspendLayout();
+            ContainerPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)barManager1).BeginInit();
             SuspendLayout();
+            // 
+            // bar3
+            // 
+            bar3.BarAppearance.Disabled.BackColor = Color.White;
+            bar3.BarAppearance.Disabled.BorderColor = Color.White;
+            bar3.BarAppearance.Disabled.Options.UseBackColor = true;
+            bar3.BarAppearance.Disabled.Options.UseBorderColor = true;
+            bar3.BarAppearance.Hovered.BackColor = Color.White;
+            bar3.BarAppearance.Hovered.BorderColor = Color.White;
+            bar3.BarAppearance.Hovered.Options.UseBackColor = true;
+            bar3.BarAppearance.Hovered.Options.UseBorderColor = true;
+            bar3.BarAppearance.Normal.BackColor = Color.White;
+            bar3.BarAppearance.Normal.BorderColor = Color.White;
+            bar3.BarAppearance.Normal.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            bar3.BarAppearance.Normal.Options.UseBackColor = true;
+            bar3.BarAppearance.Normal.Options.UseBorderColor = true;
+            bar3.BarAppearance.Normal.Options.UseFont = true;
+            bar3.BarAppearance.Pressed.BackColor = Color.White;
+            bar3.BarAppearance.Pressed.BorderColor = Color.White;
+            bar3.BarAppearance.Pressed.Options.UseBackColor = true;
+            bar3.BarAppearance.Pressed.Options.UseBorderColor = true;
+            bar3.BarItemHorzIndent = 10;
+            bar3.BarName = "Status bar";
+            bar3.CanDockStyle = DevExpress.XtraBars.BarCanDockStyle.Bottom;
+            bar3.DockCol = 0;
+            bar3.DockRow = 0;
+            bar3.DockStyle = DevExpress.XtraBars.BarDockStyle.Bottom;
+            bar3.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] { new DevExpress.XtraBars.LinkPersistInfo(barButtonItem1), new DevExpress.XtraBars.LinkPersistInfo(barStaticItem1), new DevExpress.XtraBars.LinkPersistInfo(barStaticItem2), new DevExpress.XtraBars.LinkPersistInfo(lblTIme), new DevExpress.XtraBars.LinkPersistInfo(barStaticItem3), new DevExpress.XtraBars.LinkPersistInfo(lblDate), new DevExpress.XtraBars.LinkPersistInfo(barStaticItem5), new DevExpress.XtraBars.LinkPersistInfo(lblUserName), new DevExpress.XtraBars.LinkPersistInfo(btnStatusAlert) });
+            bar3.OptionsBar.AllowCollapse = true;
+            bar3.OptionsBar.AllowDelete = true;
+            bar3.OptionsBar.AllowQuickCustomization = false;
+            bar3.OptionsBar.DrawBorder = false;
+            bar3.OptionsBar.DrawDragBorder = false;
+            bar3.OptionsBar.ExpandAnimationDuration = 10;
+            bar3.OptionsBar.UseWholeRow = true;
+            bar3.Text = "شريط معلومات";
+            // 
+            // barButtonItem1
+            // 
+            barButtonItem1.AllowRightClickInMenu = false;
+            barButtonItem1.Border = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
+            barButtonItem1.ButtonStyle = DevExpress.XtraBars.BarButtonStyle.Check;
+            barButtonItem1.Caption = "اخفاء قائمة الشاشات";
+            barButtonItem1.Id = 6;
+            barButtonItem1.ImageOptions.AllowGlyphSkinning = DevExpress.Utils.DefaultBoolean.False;
+            barButtonItem1.ImageOptions.AllowStubGlyph = DevExpress.Utils.DefaultBoolean.True;
+            barButtonItem1.ImageOptions.Image = (Image)resources.GetObject("barButtonItem1.ImageOptions.Image");
+            barButtonItem1.ItemAppearance.Normal.Font = new Font("Calibri", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            barButtonItem1.ItemAppearance.Normal.Options.UseFont = true;
+            barButtonItem1.ItemAppearance.Normal.Options.UseTextOptions = true;
+            barButtonItem1.ItemAppearance.Normal.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
+            barButtonItem1.ItemAppearance.Pressed.Font = new Font("Calibri", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            barButtonItem1.ItemAppearance.Pressed.Options.UseFont = true;
+            barButtonItem1.ItemClickFireMode = DevExpress.XtraBars.BarItemEventFireMode.Postponed;
+            barButtonItem1.ItemInMenuAppearance.Normal.Font = new Font("Calibri", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            barButtonItem1.ItemInMenuAppearance.Normal.Options.UseFont = true;
+            barButtonItem1.Name = "barButtonItem1";
+            barButtonItem1.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            barButtonItem1.ItemClick += barButtonItem1_ItemClick;
+            // 
+            // barStaticItem1
+            // 
+            barStaticItem1.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
+            barStaticItem1.Border = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
+            barStaticItem1.Caption = "برنامج ALG-D للمبيعات";
+            barStaticItem1.Id = 0;
+            barStaticItem1.ItemAppearance.Normal.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            barStaticItem1.ItemAppearance.Normal.Options.UseFont = true;
+            barStaticItem1.ItemInMenuAppearance.Disabled.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            barStaticItem1.ItemInMenuAppearance.Disabled.Options.UseFont = true;
+            barStaticItem1.ItemInMenuAppearance.Hovered.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            barStaticItem1.ItemInMenuAppearance.Hovered.Options.UseFont = true;
+            barStaticItem1.ItemInMenuAppearance.Normal.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            barStaticItem1.ItemInMenuAppearance.Normal.Options.UseFont = true;
+            barStaticItem1.ItemInMenuAppearance.Normal.Options.UseTextOptions = true;
+            barStaticItem1.ItemInMenuAppearance.Normal.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
+            barStaticItem1.ItemInMenuAppearance.Pressed.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            barStaticItem1.ItemInMenuAppearance.Pressed.Options.UseFont = true;
+            barStaticItem1.Name = "barStaticItem1";
+            // 
+            // barStaticItem2
+            // 
+            barStaticItem2.Border = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            barStaticItem2.Caption = "الوقت :";
+            barStaticItem2.Id = 4;
+            barStaticItem2.ItemAppearance.Normal.Font = new Font("Calibri", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            barStaticItem2.ItemAppearance.Normal.Options.UseFont = true;
+            barStaticItem2.Name = "barStaticItem2";
+            // 
+            // lblTIme
+            // 
+            lblTIme.Border = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            lblTIme.Caption = "00:00";
+            lblTIme.Id = 5;
+            lblTIme.ItemAppearance.Normal.Font = new Font("Calibri", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblTIme.ItemAppearance.Normal.Options.UseFont = true;
+            lblTIme.Name = "lblTIme";
+            // 
+            // barStaticItem3
+            // 
+            barStaticItem3.Border = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            barStaticItem3.Caption = "التاريخ :";
+            barStaticItem3.Id = 7;
+            barStaticItem3.ItemAppearance.Normal.Font = new Font("Calibri", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            barStaticItem3.ItemAppearance.Normal.Options.UseFont = true;
+            barStaticItem3.Name = "barStaticItem3";
+            // 
+            // lblDate
+            // 
+            lblDate.Border = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            lblDate.Caption = "الخميس";
+            lblDate.Id = 8;
+            lblDate.ItemAppearance.Normal.Font = new Font("Calibri", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblDate.ItemAppearance.Normal.Options.UseFont = true;
+            lblDate.Name = "lblDate";
+            // 
+            // barStaticItem5
+            // 
+            barStaticItem5.Border = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            barStaticItem5.Caption = "المستخدم :";
+            barStaticItem5.Id = 9;
+            barStaticItem5.ItemAppearance.Normal.Font = new Font("Calibri", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            barStaticItem5.ItemAppearance.Normal.Options.UseFont = true;
+            barStaticItem5.Name = "barStaticItem5";
+            // 
+            // lblUserName
+            // 
+            lblUserName.Border = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            lblUserName.Caption = "Alaa";
+            lblUserName.Id = 10;
+            lblUserName.ItemAppearance.Normal.Font = new Font("Calibri", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblUserName.ItemAppearance.Normal.Options.UseFont = true;
+            lblUserName.Name = "lblUserName";
+            // 
+            // btnStatusAlert
+            // 
+            btnStatusAlert.Border = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
+            btnStatusAlert.Caption = "التنبيهات";
+            btnStatusAlert.Id = 11;
+            btnStatusAlert.ImageOptions.Image = (Image)resources.GetObject("btnStatusAlert.ImageOptions.Image");
+            btnStatusAlert.ImageToTextAlignment = DevExpress.XtraBars.BarItemImageToTextAlignment.AfterText;
+            btnStatusAlert.ItemAppearance.Normal.Font = new Font("Calibri", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnStatusAlert.ItemAppearance.Normal.Options.UseFont = true;
+            btnStatusAlert.Name = "btnStatusAlert";
+            btnStatusAlert.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            btnStatusAlert.ItemClick += btnStatusAlert_ItemClick;
             // 
             // flowLayoutPanelNavBar
             // 
@@ -365,6 +529,7 @@
             btnProductOutStoreReport.Location = new Point(18, 287);
             btnProductOutStoreReport.Margin = new Padding(4, 5, 4, 5);
             btnProductOutStoreReport.Name = "btnProductOutStoreReport";
+            btnProductOutStoreReport.RightToLeft = RightToLeft.Yes;
             btnProductOutStoreReport.Size = new Size(183, 37);
             btnProductOutStoreReport.TabIndex = 8;
             btnProductOutStoreReport.Text = "تقارير المنتجات المتلفة";
@@ -1127,12 +1292,60 @@
             // ContainerPanel
             // 
             ContainerPanel.BackColor = Color.White;
+            ContainerPanel.Controls.Add(barDockControlLeft);
+            ContainerPanel.Controls.Add(barDockControlRight);
+            ContainerPanel.Controls.Add(barDockControlBottom);
+            ContainerPanel.Controls.Add(barDockControlTop);
             ContainerPanel.Dock = DockStyle.Fill;
             ContainerPanel.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             ContainerPanel.Location = new Point(237, 0);
             ContainerPanel.Name = "ContainerPanel";
             ContainerPanel.Size = new Size(1047, 679);
             ContainerPanel.TabIndex = 1;
+            // 
+            // barDockControlLeft
+            // 
+            barDockControlLeft.CausesValidation = false;
+            barDockControlLeft.Dock = DockStyle.Left;
+            barDockControlLeft.Location = new Point(0, 0);
+            barDockControlLeft.Manager = barManager1;
+            barDockControlLeft.Size = new Size(0, 635);
+            // 
+            // barManager1
+            // 
+            barManager1.Bars.AddRange(new DevExpress.XtraBars.Bar[] { bar3 });
+            barManager1.DockControls.Add(barDockControlTop);
+            barManager1.DockControls.Add(barDockControlBottom);
+            barManager1.DockControls.Add(barDockControlLeft);
+            barManager1.DockControls.Add(barDockControlRight);
+            barManager1.Form = ContainerPanel;
+            barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { barStaticItem1, barStaticItem2, lblTIme, barButtonItem1, barStaticItem3, lblDate, barStaticItem5, lblUserName, btnStatusAlert });
+            barManager1.MaxItemId = 12;
+            barManager1.StatusBar = bar3;
+            // 
+            // barDockControlTop
+            // 
+            barDockControlTop.CausesValidation = false;
+            barDockControlTop.Dock = DockStyle.Top;
+            barDockControlTop.Location = new Point(0, 0);
+            barDockControlTop.Manager = barManager1;
+            barDockControlTop.Size = new Size(1047, 0);
+            // 
+            // barDockControlBottom
+            // 
+            barDockControlBottom.CausesValidation = false;
+            barDockControlBottom.Dock = DockStyle.Bottom;
+            barDockControlBottom.Location = new Point(0, 635);
+            barDockControlBottom.Manager = barManager1;
+            barDockControlBottom.Size = new Size(1047, 44);
+            // 
+            // barDockControlRight
+            // 
+            barDockControlRight.CausesValidation = false;
+            barDockControlRight.Dock = DockStyle.Right;
+            barDockControlRight.Location = new Point(1047, 0);
+            barDockControlRight.Manager = barManager1;
+            barDockControlRight.Size = new Size(0, 635);
             // 
             // animationTimer
             // 
@@ -1171,6 +1384,9 @@
             flowLayoutPaneReturns.ResumeLayout(false);
             flowLayoutPanelEmployees.ResumeLayout(false);
             flowLayoutPanelSettings.ResumeLayout(false);
+            ContainerPanel.ResumeLayout(false);
+            ContainerPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)barManager1).EndInit();
             ResumeLayout(false);
         }
 
@@ -1251,5 +1467,19 @@
         private Button btnProductDiscount;
         private Button button1;
         private Button btnAlerts;
+        private DevExpress.XtraBars.BarManager barManager1;
+        private DevExpress.XtraBars.BarStaticItem barStaticItem1;
+        private DevExpress.XtraBars.BarDockControl barDockControlTop;
+        private DevExpress.XtraBars.BarDockControl barDockControlBottom;
+        private DevExpress.XtraBars.BarDockControl barDockControlLeft;
+        private DevExpress.XtraBars.BarDockControl barDockControlRight;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem1;
+        private DevExpress.XtraBars.BarStaticItem barStaticItem3;
+        private DevExpress.XtraBars.BarStaticItem barStaticItem5;
+        public DevExpress.XtraBars.BarStaticItem lblTIme;
+        public DevExpress.XtraBars.BarStaticItem lblDate;
+        public DevExpress.XtraBars.BarStaticItem lblUserName;
+        protected DevExpress.XtraBars.BarStaticItem barStaticItem2;
+        public DevExpress.XtraBars.BarButtonItem btnStatusAlert;
     }
 }

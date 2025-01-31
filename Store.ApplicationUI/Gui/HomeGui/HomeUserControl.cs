@@ -32,10 +32,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
             //panelTimes.MouseLeave += PanelTimes_MouseLeave;
             //panelTimes.Click += PanelTimes_Click;
 
-            lblhora.MouseHover += LblTimer_Hover;
-            lblFecha.MouseHover += LblTimer_Hover;
-            lblhora.MouseLeave += LblTimer_Leave;
-            lblFecha.MouseLeave += LblTimer_Leave;
+
         }
         private void PanelTimes_MouseHover(object sender, EventArgs e)
         {
@@ -98,19 +95,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
 
         private void TextAnimationTimer_Tick(object sender, EventArgs e)
         {
-            if (textFading)
-            {
-                // Fade to a lighter color
-                lblhora.ForeColor = Color.Blue;
-                lblFecha.ForeColor = Color.Blue;
-            }
-            else
-            {
-                // Restore original color
-                lblhora.ForeColor = originalColor;
-                lblFecha.ForeColor = originalColor;
-                textAnimationTimer.Stop();
-            }
+
         }
         public static HomeUserControl Instance(MainForm main)
         {
@@ -170,6 +155,8 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 var deservedCountTask = await _context.Deserveds.AsNoTracking().CountAsync();
                 var productsCountTask = await _context.Products.AsNoTracking().CountAsync();
                 var suppliersCountTask = await _context.Suppliers.AsNoTracking().CountAsync();
+                var Alerts = await _context.AlertsTable.Where(x => x.IsResolved == false).AsNoTracking().CountAsync();
+                var productMinQty = await _context.Products.Where(x => x.MinQty >= x.Quentity).AsNoTracking().CountAsync();
 
                 SummaryDataBuys.Text = buysCountTask.ToString();
                 SummaryDataCustomers.Text = customersCountTask.ToString();
@@ -178,6 +165,14 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 SummaryDataDeserved.Text = deservedCountTask.ToString();
                 SummaryDataProducts.Text = productsCountTask.ToString();
                 SummaryDataSuppliers.Text = suppliersCountTask.ToString();
+                if (Alerts > 0 || productMinQty > 0)
+                {
+                    _main.btnStatusAlert.Caption = $"التنبيهات {Alerts}";
+                    _main.btnStatusAlert.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+                }
+                else
+                    _main.btnStatusAlert.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+
                 if (LocalUser.User is null)
                 {
                     var result = await _context.Users.AsNoTracking()
@@ -194,6 +189,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
                                 .FirstOrDefaultAsync(u => u.UserName == "Admin" && u.Password == "123");
                     LocalUser.User = result;
                 }
+                _main.lblUserName.Caption = LocalUser.User.UserName;
             }
             catch (Exception ex)
             {
@@ -218,12 +214,15 @@ namespace Store.ApplicationUI.Gui.HomeGui
             arCulture.DateTimeFormat.AMDesignator = "ص"; // Arabic for AM
             arCulture.DateTimeFormat.PMDesignator = "م"; // Arabic for PM
 
-            lblhora.Text = DateTime.Now.ToString("hh:mm:ss tt", arCulture);
+            //lblhora.Text = DateTime.Now.ToString("hh:mm:ss tt", arCulture);
+            _main.lblTIme.Caption = DateTime.Now.ToString("hh:mm:ss tt", arCulture);
 
             string gregorianDate = Code.Helper.FactureHelper.GetGregorianDate();
-            string hijriDate = Code.Helper.FactureHelper.GetHijriDate();
+            string hijriDate = Code.Helper.FactureHelper.GetHijriDate(false);
             // Combine both dates into the label
-            lblFecha.Text = $"التاريخ الميلادي: {gregorianDate} \nالتاريخ الهجري: {hijriDate}";
+            _main.lblDate.Caption = $"{gregorianDate} الموافق لـ {hijriDate}";
+
+            //lblFecha.Text = $"التاريخ الميلادي: {gregorianDate} \nالتاريخ الهجري: {hijriDate}";
         }
 
         private void tiltUsersManagment_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
