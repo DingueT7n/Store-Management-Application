@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -356,7 +357,7 @@ namespace Store.ApplicationUI
             //{
             //    return quantity;
             //}
-            return Convert.ToDecimal(value);
+            return Convert.ToDecimal(value, CultureInfo.InvariantCulture);
         }
 
         private void btnBuysPanel_Click(object sender, EventArgs e)

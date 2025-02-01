@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Globalization;
+using DevExpress.Xpo;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.PaymentGui;
@@ -195,25 +196,25 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 // Ensure buy price and quantity are not empty before calculation
                 if (!string.IsNullOrWhiteSpace(txtBuyPrice.Text) && !string.IsNullOrWhiteSpace(txtQty.Text))
                 {
-                    decimal buyPrice = decimal.Parse(txtBuyPrice.Text, CultureInfo.InvariantCulture);
+                    decimal buyPrice = decimal.Parse(txtBuyPrice.Text);
                     decimal quantity = Convert.ToDecimal(txtQty.Text);
 
-                    txtTotalBuyProduct.Text = (buyPrice * quantity).ToString("F2", CultureInfo.InvariantCulture); // Format to 2 decimal places
+                    txtTotalBuyProduct.Text = (buyPrice * quantity).ToString("F2"); // Format to 2 decimal places
                 }
 
                 // Ensure sale price and product object are valid
                 if (!string.IsNullOrWhiteSpace(txtSalePrice.Text) && _product is not null)
                 {
-                    decimal salePrice = decimal.Parse(txtSalePrice.Text, CultureInfo.InvariantCulture);
+                    decimal salePrice = decimal.Parse(txtSalePrice.Text);
 
                     if (_product.IsTaxed)
                     {
                         decimal taxAmount = (salePrice * _product.TaxValue) / 100;
-                        txtPriceWithTax.Text = (salePrice + taxAmount).ToString("F2", CultureInfo.InvariantCulture); // Format to 2 decimal places
+                        txtPriceWithTax.Text = (salePrice + taxAmount).ToString("F2"); // Format to 2 decimal places
                     }
                     else
                     {
-                        txtPriceWithTax.Text = salePrice.ToString("F2", CultureInfo.InvariantCulture); // Format to 2 decimal places
+                        txtPriceWithTax.Text = salePrice.ToString("F2"); // Format to 2 decimal places
                     }
                 }
             }
@@ -464,9 +465,9 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                ToasterHelper.ShowErrorHappened(ex.Message);
                 throw;
             }
 
@@ -671,13 +672,13 @@ namespace Store.ApplicationUI.Gui.BuysGui
         private async Task ProcessPaymentAsync(bool isDebt)
         {
             int id = 0;
-            using (var transaction = _context.Database.BeginTransaction())
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
                     if (isDebt)
                     {
-                        var Suppliers = _context.Suppliers.FirstOrDefault(x => x.Id == Convert.ToInt32(cmbSuppliers.SelectedValue));
+                        var Suppliers = await _context.Suppliers.FirstOrDefaultAsync(x => x.Id == Convert.ToInt32(cmbSuppliers.SelectedValue));
                         if (Suppliers.MaxDebtAllowed <= Suppliers.TotalDebts + Remain)
                         {
                             MsgHelper.ShowMaxDebtAllowedExceeded();
@@ -775,24 +776,24 @@ namespace Store.ApplicationUI.Gui.BuysGui
             if (PaidUp <= TotalFacture)
             {
                 _context.Update(SetCaisse(_main.ConvertToFloat(PaidUp.ToString())));
-                _context.Add(SetCaisseWithdraw(_main.ConvertToFloat(PaidUp.ToString())));
+                await _context.AddAsync(SetCaisseWithdraw(_main.ConvertToFloat(PaidUp.ToString())));
             }
             else
             {
                 _context.Update(SetCaisse(_main.ConvertToFloat(TotalFacture.ToString())));
-                _context.Add(SetCaisseWithdraw(_main.ConvertToFloat(TotalFacture.ToString())));
+                await _context.AddAsync(SetCaisseWithdraw(_main.ConvertToFloat(TotalFacture.ToString())));
             }
             if (PaidUp > 0)
             {
                 var supplierReport = SetSupReport();
                 supplierReport.Order_ID = buy.Id;
-                _context.Add(supplierReport);
+                await _context.AddAsync(supplierReport);
             }
             if (Remain > 0)
             {
                 var supplierMoney = SetSupMoney();
                 supplierMoney.Order_ID = buy.Id;
-                _context.Add(supplierMoney);
+                await _context.AddAsync(supplierMoney);
 
                 _context.Update(SetSupplier());
             }

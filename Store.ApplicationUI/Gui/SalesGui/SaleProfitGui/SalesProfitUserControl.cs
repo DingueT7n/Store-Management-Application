@@ -53,7 +53,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
             DgvSalesProfit.DataSource = saleProfitDtoReturned.Result;
 
             double value = saleProfitDtoReturned.Count / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
-            int PageValue = Convert.ToInt32(Math.Round(value, MidpointRounding.AwayFromZero));
+            int PageValue = Convert.ToInt32(Math.Ceiling(value));
             cmbpagination.Items.Clear();
             for (int i = 0; i < PageValue; i++)
             {
