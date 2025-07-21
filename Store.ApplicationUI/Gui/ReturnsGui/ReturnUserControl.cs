@@ -221,53 +221,72 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
         }
         private void SetColumnsSales()
         {
-
-            if (DgvِProducts.Columns.Count == 0) // Ensure columns are added only once
+            try
             {
-                DgvِProducts.Columns.Add("اسم المنتج", "اسم المنتج");
-                DgvِProducts.Columns.Add("سعر المنتج", "سعر المنتج");
-                DgvِProducts.Columns.Add("الكمية", "الكمية");
-                DgvِProducts.Columns.Add("التخفيض%", "التخفيض%");
 
-                DgvِProducts.Columns.Add("اجمالي البيع", "اجمالي البيع");
-                DgvِProducts.Columns.Add("معرف المنتوج", "معرف المنتوج");
-                DgvِProducts.Columns.Add("باركود", "باركود");
+
+                if (DgvِProducts.Columns.Count == 0) // Ensure columns are added only once
+                {
+                    DgvِProducts.Columns.Add("اسم المنتج", "اسم المنتج");
+                    DgvِProducts.Columns.Add("سعر المنتج", "سعر المنتج");
+                    DgvِProducts.Columns.Add("الكمية", "الكمية");
+                    DgvِProducts.Columns.Add("التخفيض%", "التخفيض%");
+
+                    DgvِProducts.Columns.Add("اجمالي البيع", "اجمالي البيع");
+                    DgvِProducts.Columns.Add("معرف المنتوج", "معرف المنتوج");
+                    DgvِProducts.Columns.Add("باركود", "باركود");
+                }
+                // Visible of Columns
+                //DgvProducts.Columns[0].Visible = false;
+                ////DgvِProducts.Columns[6].Visible = false;
+                DgvِProducts.Columns[6].Visible = false;
+                //DgvِProducts.Columns[7].Visible = false;
+                ////DgvِProducts.Columns[11].Visible = false;
+                ////DgvِProducts.Columns[12].Visible = false;
+                ////DgvِProducts.Columns[15].Visible = false;
+                ////DgvِProducts.Columns[13].Visible = false;
+                //DgvProducts.Columns[13].Visible = false;
+                //DgvProducts.Columns[14].Visible = false;
+                //DgvProducts.Columns[13].Visible = false;
+                //DgvProducts.Columns[15].Visible = false;
             }
-            // Visible of Columns
-            //DgvProducts.Columns[0].Visible = false;
-            ////DgvِProducts.Columns[6].Visible = false;
-            DgvِProducts.Columns[6].Visible = false;
-            //DgvِProducts.Columns[7].Visible = false;
-            ////DgvِProducts.Columns[11].Visible = false;
-            ////DgvِProducts.Columns[12].Visible = false;
-            ////DgvِProducts.Columns[15].Visible = false;
-            ////DgvِProducts.Columns[13].Visible = false;
-            //DgvProducts.Columns[13].Visible = false;
-            //DgvProducts.Columns[14].Visible = false;
-            //DgvProducts.Columns[13].Visible = false;
-            //DgvProducts.Columns[15].Visible = false;
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
         }
 
         private void SetColumnsbuys()
         {
-            if (DgvِProducts.Columns.Count == 0)
+            try
             {
-                DgvِProducts.Columns.Add("اسم المنتج", "اسم المنتج"); // String column
-                DgvِProducts.Columns.Add("سعر الشراء", "سعر الشراء"); // String or decimal column
-                DgvِProducts.Columns.Add("الكمية", "الكمية"); // String or decimal column
-                DgvِProducts.Columns.Add("اجمالي الشراء", "اجمالي الشراء"); // String or decimal column
-                DgvِProducts.Columns.Add("سعر البيع", "سعر البيع"); // String or decimal column
-                DgvِProducts.Columns.Add("سعر الجملة", "سعر الجملة"); // String or decimal column
-                DgvِProducts.Columns.Add("سعر البيع باحتساب الضريبة", "سعر البيع باحتساب الضريبة"); // String or decimal column
+
+
+
+                if (DgvِProducts.Columns.Count == 0)
+                {
+                    DgvِProducts.Columns.Add("اسم المنتج", "اسم المنتج"); // String column
+                    DgvِProducts.Columns.Add("سعر الشراء", "سعر الشراء"); // String or decimal column
+                    DgvِProducts.Columns.Add("الكمية", "الكمية"); // String or decimal column
+                    DgvِProducts.Columns.Add("اجمالي الشراء", "اجمالي الشراء"); // String or decimal column
+                    DgvِProducts.Columns.Add("سعر البيع", "سعر البيع"); // String or decimal column
+                    DgvِProducts.Columns.Add("سعر الجملة", "سعر الجملة"); // String or decimal column
+                    DgvِProducts.Columns.Add("سعر البيع باحتساب الضريبة", "سعر البيع باحتساب الضريبة"); // String or decimal column
 
 
 
 
-                DgvِProducts.Columns.Add("معرف المنتوج", "معرف المنتوج"); // ID column
-                DgvِProducts.Columns.Add("باركود", "باركود"); // String column for barcode
+                    DgvِProducts.Columns.Add("معرف المنتوج", "معرف المنتوج"); // ID column
+                    DgvِProducts.Columns.Add("باركود", "باركود"); // String column for barcode
+                }
+
             }
-
-
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
             //DgvِProducts.Columns[8].Visible = false;
             //DgvِProducts.Columns[7].Visible = false;
 
@@ -298,7 +317,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
         private Product _product;
 
 
-        private decimal TotalFacture;
+
 
 
         private void ResetForm()
@@ -402,7 +421,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
 
             Return buy = new Return();
 
-            buy.TotalOrder = _main.ConvertToFloat(TotalFacture.ToString());
+            buy.TotalOrder = _main.ConvertToFloat(totalFacture.ToString());
             //buy.SupplierId = Convert.ToInt32(cmbSuppliers.SelectedValue);
             buy.OrderDate = DateTime.Now;
             buy.PaidUP = _main.ConvertToFloat(paidUp.ToString());
@@ -500,28 +519,48 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
         //    }
         //    return product;
         //}
-        Supplier SetSupplier()
+        async Task<Supplier> SetSupplier()
         {
-            //dgvProducts.Rows[i].Cells[0].Value.ToString()
-            var supId = Convert.ToInt32(cmbSuppliers.SelectedValue);
-            Supplier supplier = _context.Suppliers.Where(x => x.Id == supId).FirstOrDefault();
-            if (supplier is not null)
+            try
             {
-                supplier.TotalDebts -= remain;
 
+
+                //dgvProducts.Rows[i].Cells[0].Value.ToString()
+                var supId = Convert.ToInt32(cmbSuppliers.SelectedValue);
+                Supplier? supplier = await _context.Suppliers.Where(x => x.Id == supId).FirstOrDefaultAsync();
+                if (supplier is not null)
+                {
+                    supplier.TotalDebts -= remain;
+
+                }
+                return supplier;
             }
-            return supplier;
-        }
-        Customer setCustomer()
-        {
-            //dgvProducts.Rows[i].Cells[0].Value.ToString()
-            var custID = Convert.ToInt32(cmbCustomers.SelectedValue);
-            Customer customer = _context.Customers.Where(x => x.Id == custID).FirstOrDefault();
-            if (customer is not null)
+            catch (Exception ex)
             {
-                customer.TotalDebts -= remain;
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
             }
-            return customer;
+        }
+        async Task<Customer> setCustomer()
+        {
+            try
+            {
+
+
+                //dgvProducts.Rows[i].Cells[0].Value.ToString()
+                var custID = Convert.ToInt32(cmbCustomers.SelectedValue);
+                Customer customer = await _context.Customers.Where(x => x.Id == custID).FirstOrDefaultAsync();
+                if (customer is not null)
+                {
+                    customer.TotalDebts -= remain;
+                }
+                return customer;
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
         }
         //public ProductsQuantitie SetProductQuantity(int rowIndex, ApplicationDbContext context)
         //{
@@ -627,33 +666,51 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
         //    context.Update(productQty);
         //    context.SaveChanges();
         //}
-        Caisse SetCaisseBuyRefund(decimal value, ApplicationDbContext context)
+        async Task SetCaisseBuyRefund(decimal value, ApplicationDbContext context)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
-
-            Caisse caisse = context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefault();
-            if (caisse is not null)
+            try
             {
-                caisse.MoneyinCaisse += value;
+                Caisse caisse = await context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefaultAsync();
+                if (caisse is not null)
+                {
+                    caisse.MoneyinCaisse += value;
+                    context.Caisses.Update(caisse);
+                    await context.SaveChangesAsync();
+                }
             }
-            context.Caisses.Update(caisse);
-            context.SaveChanges();
-            return caisse;
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
 
         }
-        Caisse SetCaisseSaleRefund(decimal value, ApplicationDbContext context)
+        async Task SetCaisseSaleRefund(decimal value, ApplicationDbContext context)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
-
-            Caisse caisse = context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefault();
-            if (caisse is not null)
+            try
             {
-                caisse.MoneyinCaisse -= value;
-            }
-            context.Caisses.Update(caisse);
-            context.SaveChanges();
-            return caisse;
 
+
+                Caisse? caisse = await context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefaultAsync();
+                if (caisse is not null)
+                {
+                    caisse.MoneyinCaisse -= value;
+                    context.Caisses.Update(caisse);
+                    await context.SaveChangesAsync();
+                }
+                else
+                {
+                    ToasterHelper.ShowErrorHappened("لا يوجد صندوق");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
         }
         CaisseDeposit SetCaisseDeposit(decimal value)
         {
@@ -868,10 +925,16 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                     ResetForm();
                     ToasterHelper.ShowAddedRefund();
                 }
+                //}
+                //catch (Exception ex)
+                //{
+                //    MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //}
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
             }
         }
 
@@ -946,10 +1009,12 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                     await HandleCustomerAndCaisseAsync(context, refund.TotalOrder, refund.PaidUP, refund.Remain);
 
                     await transaction.CommitAsync();
+
                 }
-                catch
+                catch (Exception ex)
                 {
                     await transaction.RollbackAsync();
+                    ToasterHelper.ShowErrorHappened(ex.Message);
                     throw;
                 }
             }
@@ -957,27 +1022,37 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
 
         private async Task ProcessRefundDetailsAsync(ApplicationDbContext context, int refundId, bool isBuy)
         {
-            for (int i = 0; i < DgvِProducts.Rows.Count; i++)
+            try
             {
-                var refundDetail = isBuy ? SetRefundBuyDetail(i) : SetRefundSaleDetail(i);
-                refundDetail.Order_ID = refundId;
-                context.ReturnsDetails.Add(refundDetail);
 
-                // Update product quantity
-                var productId = isBuy ? DgvِProducts.Rows[i].Cells[7].Value?.ToString() : DgvِProducts.Rows[i].Cells[5].Value?.ToString();
-                if (productId != null)
+
+                for (int i = 0; i < DgvِProducts.Rows.Count; i++)
                 {
-                    var product = await SetProductAsync(i, isBuy, productId, context);
-                    context.Update(product);
-                    await SetProductQuantityAsync(i, context);
-                }
-            }
-            await context.SaveChangesAsync();
-        }
+                    var refundDetail = isBuy ? SetRefundBuyDetail(i) : SetRefundSaleDetail(i);
+                    refundDetail.Order_ID = refundId;
+                    context.ReturnsDetails.Add(refundDetail);
 
+                    // Update product quantity
+                    var productId = isBuy ? DgvِProducts.Rows[i].Cells[7].Value?.ToString() : DgvِProducts.Rows[i].Cells[5].Value?.ToString();
+                    if (productId != null)
+                    {
+                        var product = await SetProductAsync(i, isBuy, productId, context);
+                        if (product != null)
+                            context.Update(product);
+                        await SetProductQuantityAsync(i, context);
+                    }
+                }
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
+        }
         private async Task HandleSupplierAndCaisseAsync(ApplicationDbContext context, decimal totalOrder, decimal paidUp, decimal remain)
         {
-            if (paidUp >= totalOrder)
+            try
             {
                 var supplierMoney = await context.SuppliersMoneys.FirstOrDefaultAsync(x => x.Id == idfacture);
                 if (supplierMoney != null)
@@ -985,71 +1060,93 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                     context.SuppliersMoneys.Remove(supplierMoney);
                     await context.SaveChangesAsync();
                 }
+                if (paidUp >= totalOrder)
+                {
+                    await SetCaisseBuyRefund(totalOrder, context);
+                    if (totalOrder > 0)
+                        context.CaissesDeposits.Add(SetCaisseDeposit(totalOrder));
+                    await context.SaveChangesAsync();
+                }
+                else if (remain > 0)
+                {
 
-                SetCaisseBuyRefund(totalOrder, context);
-                context.CaissesDeposits.Add(SetCaisseDeposit(totalOrder));
-                await context.SaveChangesAsync();
+                    var supplier = await SetSupplier();
+                    if (supplier != null)
+                        context.Update(supplier);
+                    await SetCaisseBuyRefund(paidUp, context);
+                    context.CaissesDeposits.Add(SetCaisseDeposit(paidUp));
+                    await context.SaveChangesAsync();
+                }
             }
-            else if (remain > 0)
+            catch (Exception ex)
             {
-                var supplierMoney = await context.SuppliersMoneys.FirstOrDefaultAsync(x => x.Id == idfacture);
-                if (supplierMoney != null)
-                {
-                    context.SuppliersMoneys.Remove(supplierMoney);
-                    await context.SaveChangesAsync();
-                }
-
-                var supplier = SetSupplier();
-                if (supplier != null)
-                    context.Update(supplier);
-                SetCaisseBuyRefund(paidUp, context);
-                context.CaissesDeposits.Add(SetCaisseDeposit(paidUp));
-                await context.SaveChangesAsync();
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
             }
         }
 
         private async Task HandleCustomerAndCaisseAsync(ApplicationDbContext context, decimal totalOrder, decimal paidUp, decimal remain)
         {
-            if (paidUp >= totalOrder)
+            try
             {
-                var customerMoney = await context.CustomersMoneys.FirstOrDefaultAsync(x => x.Order_ID == idfacture);
-                if (customerMoney != null)
+
+
+                if (paidUp >= totalOrder)
                 {
-                    context.CustomersMoneys.Remove(customerMoney);
+                    var customerMoney = await context.CustomersMoneys.FirstOrDefaultAsync(x => x.Order_ID == idfacture);
+                    if (customerMoney != null)
+                    {
+                        context.CustomersMoneys.Remove(customerMoney);
+                        await context.SaveChangesAsync();
+                    }
+
+                    await SetCaisseSaleRefund(totalOrder, context);
+                    context.CaissesWithdraws.Add(SetCaisseWithdraw(totalOrder));
                     await context.SaveChangesAsync();
                 }
+                else if (remain > 0)
+                {
+                    var customerMoney = await context.CustomersMoneys.FirstOrDefaultAsync(x => x.Order_ID == idfacture);
+                    if (customerMoney != null)
+                    {
+                        context.CustomersMoneys.Remove(customerMoney);
+                        await context.SaveChangesAsync();
+                    }
 
-                SetCaisseSaleRefund(totalOrder, context);
-                context.CaissesWithdraws.Add(SetCaisseWithdraw(totalOrder));
-                await context.SaveChangesAsync();
+                    var customer = await setCustomer();
+                    if (customer != null)
+                        context.Update(customer);
+                    await SetCaisseSaleRefund(paidUp, context);
+                    context.CaissesWithdraws.Add(SetCaisseWithdraw(paidUp));
+                    await context.SaveChangesAsync();
+                }
             }
-            else if (remain > 0)
+            catch (Exception ex)
             {
-                var customerMoney = await context.CustomersMoneys.FirstOrDefaultAsync(x => x.Order_ID == idfacture);
-                if (customerMoney != null)
-                {
-                    context.CustomersMoneys.Remove(customerMoney);
-                    await context.SaveChangesAsync();
-                }
-
-                var customer = setCustomer();
-                if (customer != null)
-                    context.Update(customer);
-                SetCaisseSaleRefund(paidUp, context);
-                context.CaissesWithdraws.Add(SetCaisseWithdraw(paidUp));
-                await context.SaveChangesAsync();
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
             }
         }
 
         private async Task<Product> SetProductAsync(int i, bool isBuy, string productId, ApplicationDbContext context)
         {
-            var product = await context.Products.FirstOrDefaultAsync(x => x.Id.ToString() == productId);
-            if (product != null)
+            try
             {
-                var qty = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value?.ToString());
-                product.Quentity = isBuy ? Math.Max(product.Quentity - qty, 0) : product.Quentity + qty;
+
+
+                var product = await context.Products.FirstOrDefaultAsync(x => x.Id.ToString() == productId);
+                if (product != null)
+                {
+                    var qty = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value?.ToString());
+                    product.Quentity = isBuy ? Math.Max(product.Quentity - qty, 0) : product.Quentity + qty;
+                }
+                return product;
             }
-            return product;
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
         }
         ProductsQuantitie SetProductQuentity(int i, ApplicationDbContext context)
         {

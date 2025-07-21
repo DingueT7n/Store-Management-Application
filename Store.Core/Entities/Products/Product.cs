@@ -5,6 +5,7 @@ namespace Store.Core.Entities.Products
 {
     public class Product : BaseEntity<int>
     {
+
         public string CodeBar { get; set; }
         public string ProductName { get; set; }
 
@@ -34,6 +35,8 @@ namespace Store.Core.Entities.Products
         public int CategoryId { get; set; } // Group
         public virtual Category Category { get; set; }
         public virtual ICollection<ProductFamily> ProductFamilies { get; set; } = new HashSet<ProductFamily>();
+        [Column(TypeName = "decimal(18,3)")]
+        public decimal Weight { get; set; } = 0;
         public override string ToString()
         {
             return ProductName;

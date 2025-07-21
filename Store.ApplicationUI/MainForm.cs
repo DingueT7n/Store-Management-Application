@@ -4,6 +4,7 @@ using System.IO;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.SqlServer.Management.Smo;
+using Store.ApplicationUI.Code.GUIHelper;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.Models;
 using Store.ApplicationUI.Gui.CaisseAndBankGui;
@@ -854,6 +855,53 @@ namespace Store.ApplicationUI
         private void btnStatusAlert_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             btnAlerts_Click(sender, e);
+        }
+        private IKeyAwareControl GetCurrentUserControl()
+        {
+            var uc = ContainerPanel.Controls.OfType<UserControl>().FirstOrDefault();
+            return uc as IKeyAwareControl;
+        }
+        private Control GetDeepFocusedControl(Control parent)
+        {
+            if (parent == null) return null;
+            Control focused = parent;
+            while (focused is ContainerControl container && container.ActiveControl != null)
+            {
+                focused = container.ActiveControl;
+            }
+            return focused;
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            var keyAware = GetCurrentUserControl();
+            Control focusedControl = GetDeepFocusedControl(this);
+
+            // Check if focused control is a text input and the key is a character key (A-Z, 0-9, etc.)
+            if (focusedControl is TextBoxBase || focusedControl is ComboBox || focusedControl is RichTextBox)
+            {
+                // Let character keys pass through (typing), but intercept function keys (F1–F12), etc.
+                if (!(keyData >= Keys.F1 && keyData <= Keys.F24))
+                {
+                    return base.ProcessCmdKey(ref msg, keyData);
+                }
+            }
+
+            // Escape: Return to Home
+            if (keyData == Keys.Escape)
+            {
+                pageHelper.SetNewPage(Gui.HomeGui.HomeUserControl.Instance(this));
+                return true;
+            }
+
+            // Handle custom global keys like F11
+            if (keyAware != null)
+            {
+                keyAware.HandleKeyDown(keyData);
+                return true;
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
         }
     }
 }

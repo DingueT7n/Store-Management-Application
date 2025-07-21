@@ -13,9 +13,6 @@ namespace Store.Core.Entities.Sales
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
 
-
-
-
     }
     public class sale8cm
     {

@@ -17,7 +17,6 @@ namespace Store.ApplicationUI
 
             NumberFormatInfo numberFormat = CultureInfo.CurrentCulture.NumberFormat;
             Properties.Settings.Default.DecimalSEP = numberFormat.NumberDecimalSeparator;
-
             Properties.Settings.Default.Save();
 
             Application.EnableVisualStyles();

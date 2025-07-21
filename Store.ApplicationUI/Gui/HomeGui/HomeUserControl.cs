@@ -1,8 +1,10 @@
 ﻿using System.Globalization;
 using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.GUIHelper;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.Models;
 using Store.ApplicationUI.Gui.CaisseAndBankGui;
+using Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui;
 using Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.ProductsGui;
@@ -11,7 +13,7 @@ using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.HomeGui
 {
-    public partial class HomeUserControl : UserControl
+    public partial class HomeUserControl : UserControl, IKeyAwareControl
     {
         private static HomeUserControl? _homeUserControl;
         private static ApplicationDbContext? _context;
@@ -326,18 +328,71 @@ namespace Store.ApplicationUI.Gui.HomeGui
         private void tiltPos_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
             if (LocalUser.User is not null)
-                if (LocalUser.User.UserCaisseAndBank.CaissesAndBanks)
+                if (LocalUser.User.UserSale.NewSale)
                 {
-                    _main.CloseSubPanels();
-                    PosForm posForm = new PosForm(_main);
-                    posForm.ShowDialog();
-                    _main.Show();
-                }
-        }
+                    if (Code.Helper.VerificationSettingsHelper.IsAllSettingsAreApplied(_context))
+                    {
+                        _context = new ApplicationDbContext();
+                        var caisse = _context.Caisses.FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
+                        if (caisse != null)
+                        {
+                            if (caisse.Status == Core.Entities.Caisses.CaisseStatus.Closed)
+                            {
+                                OpenOrCloseCaisseForm Form = new OpenOrCloseCaisseForm(_main);
+                                Form.ShowDialog();
+                            }
+                            else if (caisse.Status == Core.Entities.Caisses.CaisseStatus.Open)
+                            {
+                                this.Hide();
+                                PosForm posForm = new PosForm(_main);
+                                posForm.ShowDialog();
+                                this.Show();
 
-        private void lblhora_Click(object sender, EventArgs e)
+                            }
+                        }
+
+
+                    }
+                }
+            ToasterHelper.PlayNotificationSound();
+
+
+        }
+        private void HomeUserControl_KeyDown(object sender, KeyEventArgs e)
         {
 
+        }
+
+        public void HandleKeyDown(Keys key)
+        {
+            if (key == Keys.F12)
+            {
+                tiltPos_ItemClick(null, null);
+            }
+            else if (key == Keys.F10)
+            {
+                tiltStatistiocs_ItemClick(null, null);
+            }
+            else if (key == Keys.F5)
+            {
+                tiltAddProduct_ItemClick(null, null);
+
+            }
+            else if (key == Keys.F4)
+            {
+                tiltUsersManagment_ItemClick(null, null);
+
+            }
+            else if (key == Keys.F1)
+            {
+                tiltBuys_ItemClick(null, null);
+
+            }
+            else if (key == Keys.F2)
+            {
+                tiltSales_ItemClick(null, null);
+
+            }
         }
     }
 }

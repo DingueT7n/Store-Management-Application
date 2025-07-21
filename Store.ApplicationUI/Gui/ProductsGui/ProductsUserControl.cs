@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.GUIHelper;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.ProductsGui.Category;
@@ -9,7 +10,7 @@ using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.ProductsGui
 {
-    public partial class ProductsUserControl : UserControl
+    public partial class ProductsUserControl : UserControl, IKeyAwareControl
     {
         private static ProductsGui.ProductsUserControl? _productsUserControl;
         private static MainForm? _main;
@@ -195,7 +196,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             DgvProducts.Columns[16].HeaderCell.Value = "معرف الصنف";
             DgvProducts.Columns[17].HeaderCell.Value = "اسم الصنف";
             DgvProducts.Columns[18].HeaderCell.Value = "معرف المنتج";
-            DgvProducts.Columns[19].HeaderCell.Value = "معرف المنتج";
+            DgvProducts.Columns[19].HeaderCell.Value = "وزن المنتج";
+            DgvProducts.Columns[20].HeaderCell.Value = "معرف المنتج";
 
 
 
@@ -211,7 +213,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             DgvProducts.Columns[14].Visible = false;
             DgvProducts.Columns[16].Visible = false;
             DgvProducts.Columns[18].Visible = false;
-            DgvProducts.Columns[19].Visible = false;
+            DgvProducts.Columns[20].Visible = false;
             DgvProducts.Columns[15].Visible = false;
             DgvProducts.Columns[13].Visible = false;
             //DgvProducts.Columns[13].Visible = false;
@@ -251,12 +253,13 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                        Convert.ToDateTime(DgvProducts.CurrentRow.Cells[10].Value),
                         DgvProducts.CurrentRow.Cells[12].Value?.ToString(),
                         DgvProducts.CurrentRow.Cells[8].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[19].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[20].Value.ToString(),
                         (byte[])DgvProducts.CurrentRow.Cells[15].Value,
                           DgvProducts.CurrentRow.Cells[16].Value.ToString()
                           , DgvProducts.CurrentRow.Cells[5].Value.ToString()
                           , DgvProducts.CurrentRow.Cells[13].Value.ToString()
                           , DgvProducts.CurrentRow.Cells[14].Value.ToString()
+                          , DgvProducts.CurrentRow.Cells[19].Value.ToString()
                         );
 
                     addProductForm.Show();
@@ -273,7 +276,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
-                productsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[19].Value.ToString());
+                productsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[20].Value.ToString());
                 Code.Helper.ToasterHelper.ShowDeletedToast();
 
             }
@@ -355,12 +358,13 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                        Convert.ToDateTime(DgvProducts.CurrentRow.Cells[10].Value),
                         DgvProducts.CurrentRow.Cells[12].Value?.ToString(),
                         DgvProducts.CurrentRow.Cells[8].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[19].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[20].Value.ToString(),
                         (byte[])DgvProducts.CurrentRow.Cells[15].Value,
                           DgvProducts.CurrentRow.Cells[16].Value.ToString()
                           , DgvProducts.CurrentRow.Cells[5].Value.ToString()
                           , DgvProducts.CurrentRow.Cells[13].Value.ToString()
                           , DgvProducts.CurrentRow.Cells[14].Value.ToString()
+                          , DgvProducts.CurrentRow.Cells[19].Value.ToString()
                         );
 
                     addProductForm.Show();
@@ -511,6 +515,11 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             {
                 btnSearch_Click(sender, e);
             }
+        }
+
+        public void HandleKeyDown(Keys key)
+        {
+
         }
     }
 }

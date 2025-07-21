@@ -246,19 +246,151 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             //Add Roles
 
         }
+        public void ParseScaleBarcode(string barcodeWeight)
+        {
+            if (string.IsNullOrWhiteSpace(barcodeWeight) || barcodeWeight.Length < 12)
+                throw new ArgumentException("Invalid barcode length.");
+
+            //// Extract the first two digits as the prefix
+            //string prefix = barcode.Substring(0, 2);
+
+            //if (!ValidPrefixes.Contains(prefix))
+            //    throw new ArgumentException("Invalid barcode prefix for a weighing scale.");
+
+            // Determine product code length dynamically (4-6 digits)
+            int productCodeLength = barcodeWeight.Length - 7; // Ensure at least 5 digits for weight
+            if (productCodeLength < 4 || productCodeLength > 6)
+                throw new ArgumentException("Unexpected product code length.");
+
+            // Extract weight (last 5 digits)
+            string weightString = barcodeWeight.Substring(productCodeLength + 2, 5);
+
+            // Convert weight (assuming last 3 digits are decimals, e.g., 12345 -> 12.345kg)
+            if (!decimal.TryParse(weightString.Insert(weightString.Length - 3, "."), out decimal weight))
+                throw new FormatException("Invalid weight format.");
+            // Extract product code dynamically
+            string productBarCode = barcodeWeight.Substring(2, productCodeLength);
+            _product = salesRepository.GetProductBarCode(productBarCode);
+            if (_product != null)
+            {
+                InitializeTextBoxesAndLablesFromWeight(_product, weight);
+                txtQty.Focus();
+                txtQty.SelectAll();
+                CalculateAmount();
+                txtSearchBarCode.Clear();
+                txtSearchBarCode.Focus();
+            }
+            else
+            {
+                MsgHelper.ShowEmptyResult();
+                txtSearchBarCode.Focus();
+                txtQty.Clear();
+            }
+
+        }
+        public void InitializeTextBoxesAndLablesFromWeight(Product product, decimal weight)
+        {
+            try
+            {
+                var idstore = Properties.Settings.Default.FastSaleStore;
+
+                var now = DateTime.Now;
+
+                ProductDiscount productDiscount = _context.ProductDiscounts.
+                      Where(x => x.Pro_Id.ToString() == product.Id.ToString() && x.Quentity > weight
+                      && x.Store_Id == idstore
+                      && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
+                      ).FirstOrDefault();
+                if (productDiscount != null)
+                {
+                    txtSaleDiscount.Text = Code.Helper.FactureHelper.CalculateDiscountPercentage(product.SalePriceTax, productDiscount.DiscountValue).ToString();
+                }
+                else
+                {
+                    txtSaleDiscount.Text = "0";
+                }
+                txtQty.Text = weight.ToString();
+                txtTotalSaleProduct.Text = (product.SalePriceTax * weight).ToString();
+                txtSalePrice.Text = product.SalePriceTax.ToString();
+                //
+
+                txtProductName.Text = product.ProductName;
+
+
+
+                if (productDiscount != null && btnPrices.Text == "سعر 1")
+                {
+
+                    txtSaleDiscount.Text = Code.Helper.FactureHelper.CalculateDiscountPercentage(product.SalePriceTax, productDiscount.DiscountValue).ToString();
+
+                }
+                else
+                {
+                    txtSaleDiscount.Text = "0";
+                }
+                if (btnPrices.Text == "سعر 1")
+                {
+                    txtSalePrice.Text = (product.SalePriceTax).ToString();
+                    txtTotalSaleProduct.Text = (product.SalePriceTax * weight).ToString();
+                }
+                else if (btnPrices.Text == "سعر 2")
+                {
+                    txtSalePrice.Text = product.SalePriceSeconde.ToString();
+                    txtTotalSaleProduct.Text = (product.SalePriceSeconde * weight).ToString();
+                    txtSaleDiscount.Text = "0";
+
+
+                }
+                else
+                {
+                    txtSalePrice.Text = product.WholesalePrice.ToString();
+                    txtTotalSaleProduct.Text = (product.WholesalePrice * weight).ToString();
+                    txtSaleDiscount.Text = "0";
+
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
+        }
 
         private void txtSearchBarCode_KeyDown(object sender, KeyEventArgs e)
         {
-
-
             if (e.KeyCode == Keys.Enter)
             {
-                SetProductsToTable();
-                AddNewRow();
-                CalculateAmount();
-                CalculateStatistics();
+                txtSearchBarCode.Text = txtSearchBarCode.Text.Replace("\r\n", "");
+                if (txtSearchBarCode.Text.Replace("\r\n", "").Length > 2)
+                {
+                    string prefix = txtSearchBarCode.Text.Substring(0, 2);
+                    if (prefix == "21" && txtSearchBarCode.Text.Length >= 12)
+                    {
+                        ParseScaleBarcode(txtSearchBarCode.Text);
+                        AddNewRow();
+                        CalculateAmount();
+                        CalculateStatistics();
+                        txtSearchBarCode.Clear();
+                        txtSearchBarCode.Focus();
+                    }
+                }
+                else
+                {
+                    SetProductsToTable();
+                    AddNewRow();
+                    CalculateAmount();
+                    CalculateStatistics();
+                    txtSearchBarCode.Clear();
+                    return;
+                }
+
+                txtSearchBarCode.Text = "";
                 txtSearchBarCode.Clear();
-                return;
+                txtSearchBarCode.Focus();
+
+
             }
 
         }
@@ -271,7 +403,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             _product = salesRepository.GetProductBarCode(txtSearchBarCode.Text.Replace("\r\n", ""));
             if (_product is not null)
             {
-                Console.WriteLine(_product.ProductName);
+
                 InitializeTextBoxesAndLables(_product);
 
                 txtQty.Focus();
@@ -430,7 +562,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         void AddNewRow()
         {
 
-            if (txtProductName.Text != string.Empty && txtSalePrice.Text != string.Empty)
+            if (txtProductName.Text != string.Empty && txtSalePrice.Text != string.Empty && txtQty.Text != string.Empty)
             {
                 try
                 {
@@ -440,7 +572,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                         if (DgvِProducts.Rows[i].Cells[5].Value.ToString() == _product.Id.ToString())
                         {
                             ProductDiscount productDiscount = _context.ProductDiscounts.
-                      Where(x => x.Pro_Id == _product.Id && x.Quentity >= (ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()) + 1)
+                      Where(x => x.Pro_Id == _product.Id && x.Quentity >=
+                      (ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()) + ConvertToFloat(txtQty.Text))
 
                       && x.Store_Id == Properties.Settings.Default.FastSaleStore
                       && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
@@ -457,7 +590,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                             }
                             //MsgHelper.ShowDuplicatedItemsAndInformTeCaiser();  Toaster
                             DgvِProducts.Rows[i].Cells[2].Value = !_product.ColisageBareCode.IsNullOrEmpty() && _product.ColisageBareCode.ToString() == txtSearchBarCode.Text ?
-                              (ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()) + _product.NbrProductInColis).ToString() : (ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()) + 1).ToString();
+                              (ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()) + _product.NbrProductInColis).ToString() : (ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()) + ConvertToFloat(txtQty.Text)).ToString();
                             DgvِProducts.Rows[i].Cells[4].Value = (ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()) *
                                 ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString())).ToString();
                             decimal Discount = Convert.ToDecimal(DgvِProducts.Rows[i].Cells[3].Value.ToString());

@@ -43,11 +43,9 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
                 }
                 _caisseDetailsForm.BringToFront();
             }
-
             return _caisseDetailsForm;
-
         }
-        public void SetCategoryToDgv()
+        public async void SetCategoryToDgv()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             _context = new ApplicationDbContext();
@@ -60,10 +58,10 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
         {
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => _context.Database.CanConnect()))
+            if (await Task.Run(async () => await _context.Database.CanConnectAsync()))
             {
-                SetCategoryToDgv();
                 SetColumns();
+                SetCategoryToDgv();
 
             }
             else
@@ -86,6 +84,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
         private void SetColumns()
         {
             //DgvProducts.Columns[0].HeaderCell.Value = "المعرف";
+            DgvCaisser.DataSource = new List<Caisse>();
             DgvCaisser.Columns[0].HeaderCell.Value = "اسم الصندوق";
             DgvCaisser.Columns[1].HeaderCell.Value = "رصيد الصندوق";
             DgvCaisser.Columns[2].HeaderCell.Value = "حالة الصندوق";

@@ -45,18 +45,18 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 // if its an admin or Normal user 
                 try
                 {
-                    var dataCaisse = _context.Caisses.ToList();
+                    var dataCaisse = await _context.Caisses.ToListAsync();
                     cmbCaisse.DataSource = dataCaisse;
                     cmbCaisse.DisplayMember = "CaisseName";
                     cmbCaisse.ValueMember = "Id";
                     cmbCustomers.Text = "اختر الصندوق";
 
-                    cmbCustomers.DataSource = _context.Customers.ToList();
+                    cmbCustomers.DataSource = await _context.Customers.ToListAsync();
                     cmbCustomers.DisplayMember = "CustomerName";
                     cmbCustomers.ValueMember = "Id";
                     cmbCustomers.Text = "اختر العميل";
 
-                    cmbUser.DataSource = _context.Users.ToList();
+                    cmbUser.DataSource = await _context.Users.ToListAsync();
                     cmbUser.DisplayMember = "UserName";
                     cmbUser.ValueMember = "Id";
                     cmbUser.Text = "اختر البائع";

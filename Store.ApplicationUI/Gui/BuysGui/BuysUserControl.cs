@@ -117,42 +117,52 @@ namespace Store.ApplicationUI.Gui.BuysGui
         }
         private void SetColumns()
         {
-            if (DgvِProducts.Columns.Count == 0) // Ensure columns are added only once
+            try
             {
-                DgvِProducts.Columns.Add("اسم المنتج", "اسم المنتج"); // String column
-                DgvِProducts.Columns.Add("سعر الشراء", "سعر الشراء"); // String or decimal column
-                DgvِProducts.Columns.Add("الكمية", "الكمية"); // String or decimal column
-                DgvِProducts.Columns.Add("اجمالي الشراء", "اجمالي الشراء"); // String or decimal column
-                DgvِProducts.Columns.Add("سعر البيع", "سعر البيع"); // String or decimal column
-                DgvِProducts.Columns.Add("سعر الجملة", "سعر الجملة"); // String or decimal column
-                DgvِProducts.Columns.Add("سعر البيع باحتساب الضريبة", "سعر البيع باحتساب الضريبة"); // String or decimal column
 
-                // DateTime column for expiration date
-                DataGridViewColumn dateColumn = new DataGridViewTextBoxColumn();
-                dateColumn.Name = "تاريخ انتهاء الصلاحية";
-                dateColumn.HeaderText = "تاريخ انتهاء الصلاحية";
-                DgvِProducts.Columns.Add(dateColumn);
 
-                DgvِProducts.Columns.Add("معرف المنتوج", "معرف المنتوج"); // ID column
-                DgvِProducts.Columns.Add("باركود", "باركود"); // String column for barcode
+                if (DgvِProducts.Columns.Count == 0) // Ensure columns are added only once
+                {
+                    DgvِProducts.Columns.Add("اسم المنتج", "اسم المنتج"); // String column
+                    DgvِProducts.Columns.Add("سعر الشراء", "سعر الشراء"); // String or decimal column
+                    DgvِProducts.Columns.Add("الكمية", "الكمية"); // String or decimal column
+                    DgvِProducts.Columns.Add("اجمالي الشراء", "اجمالي الشراء"); // String or decimal column
+                    DgvِProducts.Columns.Add("سعر البيع", "سعر البيع"); // String or decimal column
+                    DgvِProducts.Columns.Add("سعر الجملة", "سعر الجملة"); // String or decimal column
+                    DgvِProducts.Columns.Add("سعر البيع باحتساب الضريبة", "سعر البيع باحتساب الضريبة"); // String or decimal column
+
+                    // DateTime column for expiration date
+                    DataGridViewColumn dateColumn = new DataGridViewTextBoxColumn();
+                    dateColumn.Name = "تاريخ انتهاء الصلاحية";
+                    dateColumn.HeaderText = "تاريخ انتهاء الصلاحية";
+                    DgvِProducts.Columns.Add(dateColumn);
+
+                    DgvِProducts.Columns.Add("معرف المنتوج", "معرف المنتوج"); // ID column
+                    DgvِProducts.Columns.Add("باركود", "باركود"); // String column for barcode
+                }
+
+
+
+
+                // Visible of Columns
+                //DgvProducts.Columns[0].Visible = false;
+                ////DgvِProducts.Columns[6].Visible = false;
+                DgvِProducts.Columns[9].Visible = false;
+                DgvِProducts.Columns[8].Visible = false;
+                ////DgvِProducts.Columns[11].Visible = false;
+                ////DgvِProducts.Columns[12].Visible = false;
+                ////DgvِProducts.Columns[15].Visible = false;
+                ////DgvِProducts.Columns[13].Visible = false;
+                //DgvProducts.Columns[13].Visible = false;
+                //DgvProducts.Columns[14].Visible = false;
+                //DgvProducts.Columns[13].Visible = false;
+                //DgvProducts.Columns[15].Visible = false;
             }
-
-
-
-
-            // Visible of Columns
-            //DgvProducts.Columns[0].Visible = false;
-            ////DgvِProducts.Columns[6].Visible = false;
-            DgvِProducts.Columns[9].Visible = false;
-            DgvِProducts.Columns[8].Visible = false;
-            ////DgvِProducts.Columns[11].Visible = false;
-            ////DgvِProducts.Columns[12].Visible = false;
-            ////DgvِProducts.Columns[15].Visible = false;
-            ////DgvِProducts.Columns[13].Visible = false;
-            //DgvProducts.Columns[13].Visible = false;
-            //DgvProducts.Columns[14].Visible = false;
-            //DgvProducts.Columns[13].Visible = false;
-            //DgvProducts.Columns[15].Visible = false;
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
         }
         public async void SetProductsToDgv()
         {
@@ -221,29 +231,47 @@ namespace Store.ApplicationUI.Gui.BuysGui
             catch (Exception ex)
             {
                 MessageBox.Show($"Error: {ex.Message}", "Calculation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+
             }
         }
         private Product _product;
         public async void SetProductsToTable()
         {
-            //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            _product = buysRepository.GetProductBarCode(txtSearchBarCode.Text);
-            if (_product is not null)
+            try
             {
-                InitializeTextBoxesAndLables(_product);
 
 
-                txtQty.Focus();
-                txtQty.SelectAll();
-                CalculateAmount();
+                //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
+                _product = buysRepository.GetProductBarCode(txtSearchBarCode.Text);
+                if (_product is not null)
+                {
+                    InitializeTextBoxesAndLables(_product);
+
+
+                    txtQty.Focus();
+                    txtQty.SelectAll();
+                    CalculateAmount();
+                }
+                else
+                {
+                    MsgHelper.ShowEmptyResult();
+                    txtSearchBarCode.Focus();
+
+                }
+                txtSearchBarCode.Clear();
             }
-            else
+            catch (Exception ex)
             {
-                MsgHelper.ShowEmptyResult();
-                txtSearchBarCode.Focus();
-
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
             }
-            txtSearchBarCode.Clear();
+            finally
+            {
+                txtSearchBarCode.Clear();
+            }
 
         }
         private void tableLayoutPanel_Paint(object sender, PaintEventArgs e)
@@ -294,7 +322,15 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 ClearBoxes();
                 txtSearchBarCode.Focus();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+
+
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+
+            }
 
         }
         void AddNewRow()
@@ -323,7 +359,15 @@ namespace Store.ApplicationUI.Gui.BuysGui
                     new_row();
                     CalculateStatistics();
                 }
-                catch (Exception ex) { MessageBox.Show(ex.Message); }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+
+
+                    ToasterHelper.ShowErrorHappened(ex.Message);
+                    throw;
+
+                }
             }
             else { MsgHelper.ShowEmptyResult(); }
             CalculateStatistics();
@@ -364,7 +408,14 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 CalculateStatistics();
 
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+
+            }
         }
         public bool ValidatePay()
         {
@@ -414,7 +465,11 @@ namespace Store.ApplicationUI.Gui.BuysGui
                     MsgHelper.ShowEmptyDataGridView();
                 txtSearchBarCode.Focus();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message); ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
         }
 
         private void btnDown_Click(object sender, EventArgs e)
@@ -437,7 +492,11 @@ namespace Store.ApplicationUI.Gui.BuysGui
                     MsgHelper.ShowEmptyDataGridView();
                 txtSearchBarCode.Focus();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message); ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
         }
         void CalculateStatistics()
         {
@@ -474,37 +533,43 @@ namespace Store.ApplicationUI.Gui.BuysGui
         }
         private void ResetForm()
         {
-
-            if (Process)
+            try
             {
-                Process = false;
-
-                // Clear all textboxes
-                foreach (Control ctrl in this.Controls)
+                if (Process)
                 {
-                    if (ctrl is TextBox)
+                    Process = false;
+
+                    // Clear all textboxes
+                    foreach (Control ctrl in this.Controls)
                     {
-                        ((TextBox)ctrl).Clear();
+                        if (ctrl is TextBox)
+                        {
+                            ((TextBox)ctrl).Clear();
+                        }
+                        else if (ctrl is ComboBox)
+                        {
+                            ((ComboBox)ctrl).SelectedIndex = -1; // Deselect ComboBox
+                        }
+                        else if (ctrl is CheckBox)
+                        {
+                            ((CheckBox)ctrl).Checked = false; // Uncheck CheckBox
+                        }
+                        // Add more control types if needed
                     }
-                    else if (ctrl is ComboBox)
-                    {
-                        ((ComboBox)ctrl).SelectedIndex = -1; // Deselect ComboBox
-                    }
-                    else if (ctrl is CheckBox)
-                    {
-                        ((CheckBox)ctrl).Checked = false; // Uncheck CheckBox
-                    }
-                    // Add more control types if needed
+
+                    // Reset any DataGridView
+                    DgvِProducts.Rows.Clear();
+                    CalculateStatistics();
+
+                    // Reinitialize form data (e.g., reload initial data)
+                    LoadData(); // This is a method where you load initial data
                 }
-
-                // Reset any DataGridView
-                DgvِProducts.Rows.Clear();
-                CalculateStatistics();
-
-                // Reinitialize form data (e.g., reload initial data)
-                LoadData(); // This is a method where you load initial data
             }
-
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
             // Optionally reset focus to the first control
             // Set focus to the first control
         }
@@ -524,7 +589,11 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 else return;
                 DgvِProducts.Focus();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message); ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
         }
 
         private void DgvِProducts_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
@@ -538,116 +607,191 @@ namespace Store.ApplicationUI.Gui.BuysGui
         }
         Buy SetBuy()
         {
+            try
+            {
 
-            Buy buy = new Buy();
 
-            buy.Total = _main.ConvertToFloat(TotalFacture.ToString());
-            buy.SupplierId = Convert.ToInt32(cmbSuppliers.SelectedValue);
-            buy.Date = DtpDateFacture.Value;
-            buy.PaidUP = _main.ConvertToFloat(PaidUp.ToString());
-            buy.Remain = _main.ConvertToFloat(Remain.ToString());
-            buy.Time = DateTime.Now.ToString("HH:mm");
-            buy.User_Name = Properties.Settings.Default.UserName;
-            return buy;
+                Buy buy = new Buy();
+
+                buy.Total = _main.ConvertToFloat(TotalFacture.ToString());
+                buy.SupplierId = Convert.ToInt32(cmbSuppliers.SelectedValue);
+                buy.Date = DtpDateFacture.Value;
+                buy.PaidUP = _main.ConvertToFloat(PaidUp.ToString());
+                buy.Remain = _main.ConvertToFloat(Remain.ToString());
+                buy.Time = DateTime.Now.ToString("HH:mm");
+                buy.User_Name = Properties.Settings.Default.UserName;
+                return buy;
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
         }
         SupplierReport SetSupReport()
         {
+            try
+            {
 
-            SupplierReport suppReport = new SupplierReport();
-            suppReport.Order_ID = Convert.ToInt32(txtFactureNumber.Text);
-            suppReport.Sup_ID = Convert.ToInt32(cmbSuppliers.SelectedValue);
-            suppReport.SupplierName = cmbSuppliers.Text;
-            suppReport.Date = DtpDateFacture.Value;
-            suppReport.Price = _main.ConvertToFloat(PaidUp.ToString());
-            suppReport.Time = DateTime.Now.ToString("HH:mm");
-            return suppReport;
+
+                SupplierReport suppReport = new SupplierReport();
+                suppReport.Order_ID = Convert.ToInt32(txtFactureNumber.Text);
+                suppReport.Sup_ID = Convert.ToInt32(cmbSuppliers.SelectedValue);
+                suppReport.SupplierName = cmbSuppliers.Text;
+                suppReport.Date = DtpDateFacture.Value;
+                suppReport.Price = _main.ConvertToFloat(PaidUp.ToString());
+                suppReport.Time = DateTime.Now.ToString("HH:mm");
+                return suppReport;
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
         }
         SupplierMoney SetSupMoney()
         {
+            try
+            {
 
-            SupplierMoney supplierMoney = new SupplierMoney();
-            supplierMoney.Order_ID = Convert.ToInt32(txtFactureNumber.Text);
-            supplierMoney.Sup_ID = Convert.ToInt32(cmbSuppliers.SelectedValue);
-            supplierMoney.SupplierName = cmbSuppliers.Text;
-            supplierMoney.Order_Date = DtpDateFacture.Value;
-            supplierMoney.Price = _main.ConvertToFloat(Remain.ToString());
-            supplierMoney.Time = DateTime.Now.ToString("HH:mm");
-            supplierMoney.Reminder_Date = dtpReminderDate.Value;
-            return supplierMoney;
+
+                SupplierMoney supplierMoney = new SupplierMoney();
+                supplierMoney.Order_ID = Convert.ToInt32(txtFactureNumber.Text);
+                supplierMoney.Sup_ID = Convert.ToInt32(cmbSuppliers.SelectedValue);
+                supplierMoney.SupplierName = cmbSuppliers.Text;
+                supplierMoney.Order_Date = DtpDateFacture.Value;
+                supplierMoney.Price = _main.ConvertToFloat(Remain.ToString());
+                supplierMoney.Time = DateTime.Now.ToString("HH:mm");
+                supplierMoney.Reminder_Date = dtpReminderDate.Value;
+                return supplierMoney;
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
         }
         BuyDetail SetBuyDetail(int i)
         {
-            //dgvProducts.Rows[i].Cells[0].Value.ToString()
-            BuyDetail buyDetail = new BuyDetail();
-            buyDetail.Order_ID = Convert.ToInt32(txtFactureNumber.Text);
-            buyDetail.Sup_ID = Convert.ToInt32(cmbSuppliers.SelectedValue);
-            buyDetail.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[8].Value.ToString());
-            buyDetail.Quentity = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
-            buyDetail.Price = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
-            buyDetail.Total = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[3].Value.ToString());
-            buyDetail.TaxValue = Properties.Settings.Default.TaxValue;
-            buyDetail.PriceWithTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
-            return buyDetail;
+            try
+            {
+
+
+                //dgvProducts.Rows[i].Cells[0].Value.ToString()
+                BuyDetail buyDetail = new BuyDetail();
+                buyDetail.Order_ID = Convert.ToInt32(txtFactureNumber.Text);
+                buyDetail.Sup_ID = Convert.ToInt32(cmbSuppliers.SelectedValue);
+                buyDetail.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[8].Value.ToString());
+                buyDetail.Quentity = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+                buyDetail.Price = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
+                buyDetail.Total = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[3].Value.ToString());
+                buyDetail.TaxValue = Properties.Settings.Default.TaxValue;
+                buyDetail.PriceWithTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
+                return buyDetail;
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
         }
         Product SetProduct(int i)
         {
-            //dgvProducts.Rows[i].Cells[0].Value.ToString()
-            var proId = DgvِProducts.Rows[i].Cells[8].Value.ToString();
-            Product product = _context.Products.Where(x => x.Id.ToString() == proId).FirstOrDefault();
-            if (product is not null)
+            try
             {
-                product.Quentity = product.Quentity + _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
-                if (Properties.Settings.Default.ApplyWholeSale)
-                    product.WholesalePrice = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[5].Value.ToString());
-                if (Properties.Settings.Default.ApplySalePrice)
-                {
-                    product.SalePrice = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
-                    product.SalePriceTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
-                    product.SalePriceSeconde = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
-                }
-                if (Properties.Settings.Default.ApplyBuyPrice)
-                    product.BuyPrice = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
 
+                //dgvProducts.Rows[i].Cells[0].Value.ToString()
+                var proId = DgvِProducts.Rows[i].Cells[8].Value.ToString();
+                Product product = _context.Products.Where(x => x.Id.ToString() == proId).FirstOrDefault();
+                if (product is not null)
+                {
+                    product.Quentity = product.Quentity + _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+                    if (Properties.Settings.Default.ApplyWholeSale)
+                        product.WholesalePrice = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[5].Value.ToString());
+                    if (Properties.Settings.Default.ApplySalePrice)
+                    {
+                        product.SalePrice = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
+                        product.SalePriceTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
+                        product.SalePriceSeconde = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
+                    }
+                    if (Properties.Settings.Default.ApplyBuyPrice)
+                        product.BuyPrice = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
+
+                }
+                return product;
             }
-            return product;
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
+
         }
         Supplier SetSupplier()
         {
-            //dgvProducts.Rows[i].Cells[0].Value.ToString()
-            var supId = Convert.ToInt32(cmbSuppliers.SelectedValue);
-            Supplier supplier = _context.Suppliers.Where(x => x.Id == supId).FirstOrDefault();
-            if (supplier is not null)
+            try
             {
-                supplier.TotalDebts = supplier.TotalDebts + Remain;
 
+
+                //dgvProducts.Rows[i].Cells[0].Value.ToString()
+                var supId = Convert.ToInt32(cmbSuppliers.SelectedValue);
+                Supplier supplier = _context.Suppliers.Where(x => x.Id == supId).FirstOrDefault();
+                if (supplier is not null)
+                {
+                    supplier.TotalDebts = supplier.TotalDebts + Remain;
+
+                }
+                return supplier;
             }
-            return supplier;
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
         }
         ProductsQuantitie SetProductQuentity(int i)
         {
-            //dgvProducts.Rows[i].Cells[0].Value.ToString()
-            ProductsQuantitie productQty = new();
+            try
+            {
 
-            productQty.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[8].Value.ToString());
-            productQty.Store_ID = Convert.ToInt32(cmbStores.SelectedValue);
-            productQty.StoreName = cmbStores.Text;
-            productQty.Qty = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
-            productQty.Buy_Price = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
-            productQty.Sale_PriceTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
-            productQty.DateExpiration = Convert.ToDateTime(DgvِProducts.Rows[i].Cells[7].Value);
 
-            return productQty;
+                //dgvProducts.Rows[i].Cells[0].Value.ToString()
+                ProductsQuantitie productQty = new();
+
+                productQty.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[8].Value.ToString());
+                productQty.Store_ID = Convert.ToInt32(cmbStores.SelectedValue);
+                productQty.StoreName = cmbStores.Text;
+                productQty.Qty = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+                productQty.Buy_Price = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
+                productQty.Sale_PriceTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
+                productQty.DateExpiration = Convert.ToDateTime(DgvِProducts.Rows[i].Cells[7].Value);
+                return productQty;
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
         }
         Caisse SetCaisse(decimal value)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
-
-            Caisse caisse = _context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefault();
-            if (caisse is not null)
+            try
             {
-                caisse.MoneyinCaisse -= value;
+
+
+                Caisse caisse = _context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefault();
+                if (caisse is not null)
+                {
+                    caisse.MoneyinCaisse -= value;
+                }
+                return caisse is not null ? caisse : new Caisse { CaisseName = "CaisseNull" };
             }
-            return caisse is not null ? caisse : new Caisse { CaisseName = "CaisseNull" };
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
 
         }
         CaisseWithdraw SetCaisseWithdraw(decimal value)
@@ -773,31 +917,41 @@ namespace Store.ApplicationUI.Gui.BuysGui
 
         private async Task HandleCaisseAndSupplierAsync(Buy buy)
         {
-            if (PaidUp <= TotalFacture)
+            try
             {
-                _context.Update(SetCaisse(_main.ConvertToFloat(PaidUp.ToString())));
-                await _context.AddAsync(SetCaisseWithdraw(_main.ConvertToFloat(PaidUp.ToString())));
-            }
-            else
-            {
-                _context.Update(SetCaisse(_main.ConvertToFloat(TotalFacture.ToString())));
-                await _context.AddAsync(SetCaisseWithdraw(_main.ConvertToFloat(TotalFacture.ToString())));
-            }
-            if (PaidUp > 0)
-            {
-                var supplierReport = SetSupReport();
-                supplierReport.Order_ID = buy.Id;
-                await _context.AddAsync(supplierReport);
-            }
-            if (Remain > 0)
-            {
-                var supplierMoney = SetSupMoney();
-                supplierMoney.Order_ID = buy.Id;
-                await _context.AddAsync(supplierMoney);
 
-                _context.Update(SetSupplier());
+
+                if (PaidUp <= TotalFacture)
+                {
+                    _context.Update(SetCaisse(_main.ConvertToFloat(PaidUp.ToString())));
+                    await _context.AddAsync(SetCaisseWithdraw(_main.ConvertToFloat(PaidUp.ToString())));
+                }
+                else
+                {
+                    _context.Update(SetCaisse(_main.ConvertToFloat(TotalFacture.ToString())));
+                    await _context.AddAsync(SetCaisseWithdraw(_main.ConvertToFloat(TotalFacture.ToString())));
+                }
+                if (PaidUp > 0)
+                {
+                    var supplierReport = SetSupReport();
+                    supplierReport.Order_ID = buy.Id;
+                    await _context.AddAsync(supplierReport);
+                }
+                if (Remain > 0)
+                {
+                    var supplierMoney = SetSupMoney();
+                    supplierMoney.Order_ID = buy.Id;
+                    await _context.AddAsync(supplierMoney);
+
+                    _context.Update(SetSupplier());
+                }
+                await _context.SaveChangesAsync();
             }
-            await _context.SaveChangesAsync();
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
         }
         public static bool Process = false;
         private async void btnPay_Click(object sender, EventArgs e)
@@ -1085,9 +1239,19 @@ namespace Store.ApplicationUI.Gui.BuysGui
 
         private void txtSalePrice_KeyUp(object sender, KeyEventArgs e)
         {
-            ErrorDetection();
-            CalculateAmount();
-            CalculateStatistics();
+            try
+            {
+
+
+                ErrorDetection();
+                CalculateAmount();
+                CalculateStatistics();
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
 
         }
 
@@ -1110,9 +1274,9 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 }
                 else labelError1.Visible = false;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                ToasterHelper.ShowErrorHappened(ex.Message);
                 throw;
             }
         }
@@ -1145,7 +1309,8 @@ namespace Store.ApplicationUI.Gui.BuysGui
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message); ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
             }
 
         }

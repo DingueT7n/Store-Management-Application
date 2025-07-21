@@ -221,9 +221,9 @@ namespace Store.Infrastructure.Repositories
                 // Filter by barcode if provided
 
                 if (!string.IsNullOrEmpty(OperatorBy))
-                    query = query.Where(x => x.OpenedBy == OperatorBy || x.OpenedBy.Contains(OperatorBy));
-                if (!string.IsNullOrEmpty(OperatorBy))
-                    query = query.Where(x => x.ClosedBy == OperatorBy || x.ClosedBy.Contains(OperatorBy));
+                    query = query.Where(x =>
+                        (!string.IsNullOrEmpty(x.OpenedBy) && x.OpenedBy.Contains(OperatorBy)) ||
+                        (!string.IsNullOrEmpty(x.ClosedBy) && x.ClosedBy.Contains(OperatorBy)));
 
 
                 // Filter by Caisse name if provided

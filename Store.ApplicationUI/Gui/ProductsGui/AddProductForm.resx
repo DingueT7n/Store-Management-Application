@@ -291,6 +291,105 @@
   <data name="&gt;&gt;OperationsflowLayoutPanel.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="label27.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="label27.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label27.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Calibri, 9pt</value>
+  </data>
+  <data name="label27.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label27.Location" type="System.Drawing.Point, System.Drawing">
+    <value>776, 285</value>
+  </data>
+  <data name="label27.Size" type="System.Drawing.Size, System.Drawing">
+    <value>13, 14</value>
+  </data>
+  <data name="label27.TabIndex" type="System.Int32, mscorlib">
+    <value>43</value>
+  </data>
+  <data name="label27.Text" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="label27.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="&gt;&gt;label27.Name" xml:space="preserve">
+    <value>label27</value>
+  </data>
+  <data name="&gt;&gt;label27.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label27.Parent" xml:space="preserve">
+    <value>GbInfoProduct</value>
+  </data>
+  <data name="&gt;&gt;label27.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="txtWeights.Location" type="System.Drawing.Point, System.Drawing">
+    <value>499, 283</value>
+  </data>
+  <data name="txtWeights.Size" type="System.Drawing.Size, System.Drawing">
+    <value>265, 27</value>
+  </data>
+  <data name="txtWeights.TabIndex" type="System.Int32, mscorlib">
+    <value>41</value>
+  </data>
+  <data name="txtWeights.Text" xml:space="preserve">
+    <value>0.00</value>
+  </data>
+  <data name="txtWeights.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;txtWeights.Name" xml:space="preserve">
+    <value>txtWeights</value>
+  </data>
+  <data name="&gt;&gt;txtWeights.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtWeights.Parent" xml:space="preserve">
+    <value>GbInfoProduct</value>
+  </data>
+  <data name="&gt;&gt;txtWeights.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="label28.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label28.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Calibri, 12pt</value>
+  </data>
+  <data name="label28.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label28.Location" type="System.Drawing.Point, System.Drawing">
+    <value>784, 286</value>
+  </data>
+  <data name="label28.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 19</value>
+  </data>
+  <data name="label28.TabIndex" type="System.Int32, mscorlib">
+    <value>42</value>
+  </data>
+  <data name="label28.Text" xml:space="preserve">
+    <value>وزن الوحدة:</value>
+  </data>
+  <data name="&gt;&gt;label28.Name" xml:space="preserve">
+    <value>label28</value>
+  </data>
+  <data name="&gt;&gt;label28.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label28.Parent" xml:space="preserve">
+    <value>GbInfoProduct</value>
+  </data>
+  <data name="&gt;&gt;label28.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
   <data name="label26.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>None</value>
   </data>
@@ -328,7 +427,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label26.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>3</value>
   </data>
   <data name="label25.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>None</value>
@@ -367,7 +466,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label25.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>4</value>
   </data>
   <data name="label24.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>None</value>
@@ -406,7 +505,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label24.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>5</value>
   </data>
   <data name="label23.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>None</value>
@@ -445,7 +544,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label23.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>6</value>
   </data>
   <data name="label22.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>None</value>
@@ -484,7 +583,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label22.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>7</value>
   </data>
   <data name="label21.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>None</value>
@@ -523,7 +622,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label21.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>8</value>
   </data>
   <data name="label20.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>None</value>
@@ -562,7 +661,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label20.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>9</value>
   </data>
   <data name="txtSalePrice2.Location" type="System.Drawing.Point, System.Drawing">
     <value>14, 163</value>
@@ -589,7 +688,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;txtSalePrice2.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>10</value>
   </data>
   <data name="label17.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -622,7 +721,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label17.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>11</value>
   </data>
   <data name="cbFavorite.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -649,7 +748,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;cbFavorite.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>12</value>
   </data>
   <data name="label1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -685,7 +784,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>13</value>
   </data>
   <data name="txtNameProduct.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -709,7 +808,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;txtNameProduct.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>14</value>
   </data>
   <data name="label2.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -745,7 +844,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>15</value>
   </data>
   <data name="txtBarCode.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -772,7 +871,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;txtBarCode.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>16</value>
   </data>
   <data name="label16.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>None</value>
@@ -811,7 +910,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label16.ZOrder" xml:space="preserve">
-    <value>14</value>
+    <value>17</value>
   </data>
   <data name="label15.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>None</value>
@@ -850,7 +949,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label15.ZOrder" xml:space="preserve">
-    <value>15</value>
+    <value>18</value>
   </data>
   <data name="label14.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>None</value>
@@ -889,7 +988,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label14.ZOrder" xml:space="preserve">
-    <value>16</value>
+    <value>19</value>
   </data>
   <data name="lblProductId.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -922,7 +1021,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;lblProductId.ZOrder" xml:space="preserve">
-    <value>17</value>
+    <value>20</value>
   </data>
   <data name="label13.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -958,7 +1057,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label13.ZOrder" xml:space="preserve">
-    <value>18</value>
+    <value>21</value>
   </data>
   <data name="txtBuyPrice.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -988,7 +1087,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;txtBuyPrice.ZOrder" xml:space="preserve">
-    <value>19</value>
+    <value>22</value>
   </data>
   <data name="label10.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -1024,7 +1123,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label10.ZOrder" xml:space="preserve">
-    <value>20</value>
+    <value>23</value>
   </data>
   <data name="txtTotalQty.Location" type="System.Drawing.Point, System.Drawing">
     <value>14, 32</value>
@@ -1051,7 +1150,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;txtTotalQty.ZOrder" xml:space="preserve">
-    <value>21</value>
+    <value>24</value>
   </data>
   <data name="label9.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1084,7 +1183,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label9.ZOrder" xml:space="preserve">
-    <value>22</value>
+    <value>25</value>
   </data>
   <data name="txtSaleAfterTax.Location" type="System.Drawing.Point, System.Drawing">
     <value>14, 250</value>
@@ -1111,7 +1210,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;txtSaleAfterTax.ZOrder" xml:space="preserve">
-    <value>23</value>
+    <value>26</value>
   </data>
   <data name="label8.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1144,7 +1243,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label8.ZOrder" xml:space="preserve">
-    <value>24</value>
+    <value>27</value>
   </data>
   <data name="txtDiscountAllowed.Location" type="System.Drawing.Point, System.Drawing">
     <value>14, 206</value>
@@ -1171,7 +1270,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;txtDiscountAllowed.ZOrder" xml:space="preserve">
-    <value>25</value>
+    <value>28</value>
   </data>
   <data name="label7.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1204,7 +1303,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label7.ZOrder" xml:space="preserve">
-    <value>26</value>
+    <value>29</value>
   </data>
   <data name="txtSalePrice.Location" type="System.Drawing.Point, System.Drawing">
     <value>14, 119</value>
@@ -1231,7 +1330,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;txtSalePrice.ZOrder" xml:space="preserve">
-    <value>27</value>
+    <value>30</value>
   </data>
   <data name="label5.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1264,7 +1363,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label5.ZOrder" xml:space="preserve">
-    <value>28</value>
+    <value>31</value>
   </data>
   <data name="txtWholeSalePrice.Location" type="System.Drawing.Point, System.Drawing">
     <value>14, 78</value>
@@ -1291,7 +1390,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;txtWholeSalePrice.ZOrder" xml:space="preserve">
-    <value>29</value>
+    <value>32</value>
   </data>
   <data name="label6.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1324,7 +1423,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label6.ZOrder" xml:space="preserve">
-    <value>30</value>
+    <value>33</value>
   </data>
   <data name="btnAddCategory.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -1370,7 +1469,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;btnAddCategory.ZOrder" xml:space="preserve">
-    <value>31</value>
+    <value>34</value>
   </data>
   <data name="txtTaxValue.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -1403,7 +1502,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;txtTaxValue.ZOrder" xml:space="preserve">
-    <value>32</value>
+    <value>35</value>
   </data>
   <data name="CbIsTaxed.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -1437,7 +1536,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;CbIsTaxed.ZOrder" xml:space="preserve">
-    <value>33</value>
+    <value>36</value>
   </data>
   <data name="CMBCategory.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -1464,7 +1563,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;CMBCategory.ZOrder" xml:space="preserve">
-    <value>34</value>
+    <value>37</value>
   </data>
   <data name="label4.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -1500,7 +1599,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
-    <value>35</value>
+    <value>38</value>
   </data>
   <data name="txtMinQty.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -1530,7 +1629,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;txtMinQty.ZOrder" xml:space="preserve">
-    <value>36</value>
+    <value>39</value>
   </data>
   <data name="label3.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -1566,7 +1665,7 @@
     <value>GbInfoProduct</value>
   </data>
   <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
-    <value>37</value>
+    <value>40</value>
   </data>
   <data name="GbInfoProduct.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -2168,7 +2267,7 @@
   <data name="PbImageProduct.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAc0AAAHICAYAAAAsiLGuAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        EQAACxEBf2RfkQAAaVxJREFUeF7tvYuXVNWZ9z9/3W8SRcblJKOOM45JjCvEScxFoyBeCMZbIireCYaY
+        DwAACw8BkvkDpQAAaVxJREFUeF7tvYuXVNWZ9z9/3W8SRcblJKOOM45JjCvEScxFoyBeCMZbIireCYaY
         mJgsc3sTs9Toz5i8OkZjHBEBQUAu0jQNdANt000LnPd8dvXTnK7eVV2Xc9n7nO93re+qqnNOVXeds2t/
         zvPs2z+dOXPmb8eOHUuOHj2apM8TND09nZw4cSI5e/ase33u3Dn3ODs7u+A4SSpaJ0+eTA4ePJgcOnTI
         eWRkxJnnbJ+YmHDHjY+PLzpucnLS7aMss29sbCw5depUcvjw4fnPyB7PI2VcksrQzMzMfPmljjUj6l7q

@@ -129,6 +129,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
             }
             catch (Exception ex)
             {
+                // Log to file or show error
+                ToasterHelper.ShowErrorHappened(ex.Message);
             }
         }
         private async Task RefreshDgvAsync2(int skip)
@@ -143,6 +145,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
             }
             catch (Exception ex)
             {
+                // Log to file or show error
+                ToasterHelper.ShowErrorHappened(ex.Message);
             }
         }
         public async Task LoadDataAsync()
@@ -176,7 +180,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
             }
             catch (Exception ex)
             {
-
+                // Log to file or show error
+                ToasterHelper.ShowErrorHappened(ex.Message);
             }
             finally
             {

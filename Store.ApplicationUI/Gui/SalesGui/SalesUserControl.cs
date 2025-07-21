@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using DevExpress.XtraReports.UI;
 using Microsoft.IdentityModel.Tokens;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.Models;
@@ -55,7 +56,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
         private void setPrivateProductAndAdditTotable(Product product)
         {
             txtSearchBarCode.Text = product.CodeBar;
-            SetProductsToTable();
+            SetProductsToTable(product.CodeBar);
             AddNewRow();
         }
         public static bool setProductFromSelector(Product product)
@@ -146,7 +147,6 @@ namespace Store.ApplicationUI.Gui.SalesGui
             //DgvProducts.Columns[13].Visible = false;
             //DgvProducts.Columns[15].Visible = false;
         }
-
         public void InitializeTextBoxesAndLables(Product product)
         {
             try
@@ -196,8 +196,46 @@ namespace Store.ApplicationUI.Gui.SalesGui
             {
                 throw;
             }
+        }
+        public void InitializeTextBoxesAndLablesFromWeight(Product product, decimal weight)
+        {
+            try
+            {
+                var storeId = Convert.ToInt32(cmbStores.SelectedValue);
+                var now = DateTime.Now;
+
+                txtProductName.Text = product.ProductName;
+                labelError1.Visible = product.Quentity <= 0;
+
+                ProductsQuantitie productQty = _context.ProductsQuantities
+                    .FirstOrDefault(x => x.Pro_ID == product.Id && weight > 0 && x.Store_ID == storeId);
+
+                lblError2.Visible = productQty is null;
 
 
+
+
+
+                ProductDiscount productDiscount = _context.ProductDiscounts
+                                 .FirstOrDefault(x => x.Pro_Id == product.Id && x.Quentity >= weight && x.Store_Id == storeId
+                                     && x.DateStart <= now && x.DateEnd > now);
+                if (productDiscount != null)
+                {
+                    txtSaleDiscount.Text = Code.Helper.FactureHelper.CalculateDiscountPercentage(product.SalePriceTax, productDiscount.DiscountValue).ToString();
+                }
+                else
+                {
+                    txtSaleDiscount.Text = "0";
+                }
+                txtQty.Text = weight.ToString();
+                txtTotalSaleProduct.Text = product.SalePriceTax.ToString();
+                txtSalePrice.Text = product.SalePriceTax.ToString();
+                txtWholeSalePrice.Text = product.WholesalePrice.ToString();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public static void InitializeData(string paidUp, string remain)
@@ -239,9 +277,9 @@ namespace Store.ApplicationUI.Gui.SalesGui
         private Product _product;
         private ProductDiscount _productDiscount;
         private ProductsQuantitie _productQuantitie;
-        public async void SetProductsToTable()
+        public async void SetProductsToTable(string barcode)
         {
-            _product = salesRepository.GetProductBarCode(txtSearchBarCode.Text);
+            _product = salesRepository.GetProductBarCode(barcode);
 
             if (_product != null)
             {
@@ -267,15 +305,75 @@ namespace Store.ApplicationUI.Gui.SalesGui
             DgvِProducts.Rows.Clear();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِProducts);
         }
+        public void ParseScaleBarcode(string barcodeWeight)
+        {
+            if (string.IsNullOrWhiteSpace(barcodeWeight) || barcodeWeight.Length < 12)
+                throw new ArgumentException("Invalid barcode length.");
 
+            //// Extract the first two digits as the prefix
+            //string prefix = barcode.Substring(0, 2);
+
+            //if (!ValidPrefixes.Contains(prefix))
+            //    throw new ArgumentException("Invalid barcode prefix for a weighing scale.");
+
+            // Determine product code length dynamically (4-6 digits)
+            int productCodeLength = barcodeWeight.Length - 7; // Ensure at least 5 digits for weight
+            if (productCodeLength < 4 || productCodeLength > 6)
+                throw new ArgumentException("Unexpected product code length.");
+
+            // Extract weight (last 5 digits)
+            string weightString = barcodeWeight.Substring(productCodeLength + 2, 5);
+
+            // Convert weight (assuming last 3 digits are decimals, e.g., 12345 -> 12.345kg)
+            if (!decimal.TryParse(weightString.Insert(weightString.Length - 3, "."), out decimal weight))
+                throw new FormatException("Invalid weight format.");
+            // Extract product code dynamically
+            string productBarCode = barcodeWeight.Substring(2, productCodeLength);
+            _product = salesRepository.GetProductBarCode(productBarCode);
+            if (_product != null)
+            {
+                InitializeTextBoxesAndLablesFromWeight(_product, weight);
+                txtQty.Focus();
+                txtQty.SelectAll();
+                CalculateAmount();
+                txtSearchBarCode.Clear();
+                txtSearchBarCode.Focus();
+            }
+            else
+            {
+                MsgHelper.ShowEmptyResult();
+                txtSearchBarCode.Focus();
+                txtQty.Clear();
+            }
+
+
+        }
         private void txtSearchBarCode_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                SetProductsToTable();
-                txtSearchBarCode.Clear();
+                string input = txtSearchBarCode.Text.Trim().Replace("\r", "").Replace("\n", "");
 
+                if (input.Length >= 2)
+                {
+                    string prefix = input.Substring(0, 2);
+                    if (prefix == "21")
+                    {
+                        ParseScaleBarcode(input);
+                    }
+                    else
+                    {
+                        SetProductsToTable(input);
+                    }
+                }
+                else if (input.Length > 0)
+                {
+                    SetProductsToTable(input); // fallback if it's short but not empty
+                }
+
+                txtSearchBarCode.Clear();
             }
+
             EditUsingPlusMinus(sender, e);
         }
 
@@ -923,6 +1021,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
             {
 
                 MessageBox.Show(ex.Message);
+                throw;
             }
 
         }

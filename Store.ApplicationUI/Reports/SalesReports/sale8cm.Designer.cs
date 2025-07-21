@@ -146,7 +146,7 @@
             this.xrLabel7.SizeF = new System.Drawing.SizeF(225.7884F, 58.41998F);
             this.xrLabel7.StylePriority.UseFont = false;
             this.xrLabel7.StylePriority.UseTextAlignment = false;
-            this.xrLabel7.Text = "اسم المشتري :";
+            this.xrLabel7.Text = "المشتري :";
             this.xrLabel7.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // lblPhoneNumber
@@ -165,7 +165,7 @@
             // 
             this.xrLabel6.Dpi = 254F;
             this.xrLabel6.Font = new DevExpress.Drawing.DXFont("Arial", 9.75F, DevExpress.Drawing.DXFontStyle.Bold);
-            this.xrLabel6.LocationFloat = new DevExpress.Utils.PointFloat(500F, 83.38008F);
+            this.xrLabel6.LocationFloat = new DevExpress.Utils.PointFloat(500F, 75F);
             this.xrLabel6.Multiline = true;
             this.xrLabel6.Name = "xrLabel6";
             this.xrLabel6.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
@@ -173,7 +173,7 @@
             this.xrLabel6.SizeF = new System.Drawing.SizeF(225.7883F, 58.42001F);
             this.xrLabel6.StylePriority.UseFont = false;
             this.xrLabel6.StylePriority.UseTextAlignment = false;
-            this.xrLabel6.Text = "رقم الهاتف :";
+            this.xrLabel6.Text = "الهاتف :";
             this.xrLabel6.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // xrLabel5
@@ -217,7 +217,7 @@
             this.xrLabel3.SizeF = new System.Drawing.SizeF(225.7884F, 58.42001F);
             this.xrLabel3.StylePriority.UseFont = false;
             this.xrLabel3.StylePriority.UseTextAlignment = false;
-            this.xrLabel3.Text = "تاريخ الفاتورة :";
+            this.xrLabel3.Text = "تاريخ :";
             this.xrLabel3.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // xrLabel2
@@ -335,7 +335,7 @@
             this.xrTableCell3.StylePriority.UseBorders = false;
             this.xrTableCell3.StylePriority.UseFont = false;
             this.xrTableCell3.StylePriority.UseTextAlignment = false;
-            this.xrTableCell3.Text = "اسم المنتج";
+            this.xrTableCell3.Text = "المنتج";
             this.xrTableCell3.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             this.xrTableCell3.Weight = 2.1191888108766017D;
             // 

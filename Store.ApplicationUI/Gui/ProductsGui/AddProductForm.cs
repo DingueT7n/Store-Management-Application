@@ -111,6 +111,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             txtTaxValue.Text = "0.00";
             txtTotalQty.Text = "0.00";
             txtWholeSalePrice.Text = "0.00";
+            txtWeights.Text = "0.00";
         }
 
         private void txtBarCode_KeyPress(object sender, KeyPressEventArgs e)
@@ -277,7 +278,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         public void SetDataToEdit(string NameProduct, string BarCode, string categoryId, string MinQty
             , bool IsTaxed, string TaxValue, string BuyPrice, string Quentity, string WholesalePrice
             , string SalePrice, DateTime DateExpiration, string MaxDiscount, string SaleAfterTax, string productId, byte[] image
-            , string catName, string SalePrice2, string NbrProductInColis, string ColisageBareCode)
+            , string catName, string SalePrice2, string NbrProductInColis, string ColisageBareCode, string weights)
         {
             LoadData();
             txtNameProduct.Text = NameProduct;
@@ -303,6 +304,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             txtSalePrice2.Text = SalePrice2;
             txtColisageBareCode.Text = ColisageBareCode;
             txtNbrIncolis.Text = NbrProductInColis;
+            txtWeights.Text = weights;
+
             Fill_familyBareCode(productId);
             btnAddProduct.Visible = false;
             btnEditProduct.Visible = true;
@@ -335,7 +338,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         public void SetSimilaireDataToAdd(string NameProduct, string BarCode, string categoryId, string MinQty
            , bool IsTaxed, string TaxValue, string BuyPrice, string Quentity, string WholesalePrice
            , string SalePrice, DateTime DateExpiration, string MaxDiscount, string SaleAfterTax, string productId, byte[] image
-           , string catName, string SalePrice2, string NbrProductInColis, string ColisageBareCode)
+           , string catName, string SalePrice2, string NbrProductInColis, string ColisageBareCode, string weights)
         {
             LoadData();
             txtNameProduct.Text = NameProduct;
@@ -366,7 +369,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             txtSalePrice2.Text = SalePrice2;
             txtColisageBareCode.Text = "";
             txtNbrIncolis.Text = NbrProductInColis;
-
+            txtWeights.Text = weights;
             cbFavorite.Checked = _context.ProductQuickAccess.FirstOrDefault(x => x.Pro_Id.ToString() == productId) == null ? false : true;
 
         }
@@ -429,6 +432,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                         product.TaxValue = CbIsTaxed.Checked ? ConvertToFloat(txtTaxValue.Text) : 0;
                         product.BuyPrice = ConvertToFloat(txtBuyPrice.Text);
                         product.Quentity = ConvertToFloat(txtTotalQty.Text);
+                        product.Weight = ConvertToFloat(txtWeights.Text);
                         product.WholesalePrice = ConvertToFloat(txtWholeSalePrice.Text);
                         product.SalePrice = ConvertToFloat(txtSalePrice.Text);
                         product.MaxDiscount = ConvertToFloat(txtDiscountAllowed.Text);
@@ -501,6 +505,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                             product.TaxValue = CbIsTaxed.Checked ? ConvertToFloat(txtTaxValue.Text) : 0;
                             product.BuyPrice = ConvertToFloat(txtBuyPrice.Text);
                             product.Quentity = ConvertToFloat(txtTotalQty.Text);
+                            product.Weight = ConvertToFloat(txtWeights.Text);
                             product.WholesalePrice = ConvertToFloat(txtWholeSalePrice.Text);
                             product.SalePrice = ConvertToFloat(txtSalePrice.Text);
                             product.MaxDiscount = ConvertToFloat(txtDiscountAllowed.Text);
@@ -613,6 +618,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                         product.TaxValue = CbIsTaxed.Checked ? ConvertToFloat(txtTaxValue.Text) : 0;
                         product.BuyPrice = ConvertToFloat(txtBuyPrice.Text);
                         product.Quentity = ConvertToFloat(txtTotalQty.Text);
+                        product.Weight = ConvertToFloat(txtWeights.Text);
                         product.WholesalePrice = ConvertToFloat(txtWholeSalePrice.Text);
                         product.SalePrice = ConvertToFloat(txtSalePrice.Text);
                         product.MaxDiscount = ConvertToFloat(txtDiscountAllowed.Text);
@@ -700,6 +706,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                         product.TaxValue = CbIsTaxed.Checked ? ConvertToFloat(txtTaxValue.Text) : 0;
                         product.BuyPrice = ConvertToFloat(txtBuyPrice.Text);
                         product.Quentity = ConvertToFloat(txtTotalQty.Text);
+                        product.Weight = ConvertToFloat(txtWeights.Text);
                         product.WholesalePrice = ConvertToFloat(txtWholeSalePrice.Text);
                         product.SalePrice = ConvertToFloat(txtSalePrice.Text);
                         product.MaxDiscount = ConvertToFloat(txtDiscountAllowed.Text);

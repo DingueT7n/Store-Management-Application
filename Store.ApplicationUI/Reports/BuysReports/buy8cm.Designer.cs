@@ -203,7 +203,7 @@
             this.xrTableCell3.StylePriority.UseBorders = false;
             this.xrTableCell3.StylePriority.UseFont = false;
             this.xrTableCell3.StylePriority.UseTextAlignment = false;
-            this.xrTableCell3.Text = "اسم المنتج";
+            this.xrTableCell3.Text = "المنتج";
             this.xrTableCell3.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             this.xrTableCell3.Weight = 2.1360513467793685D;
             // 
@@ -379,7 +379,7 @@
             // 
             this.xrLabel6.Dpi = 254F;
             this.xrLabel6.Font = new DevExpress.Drawing.DXFont("Arial", 9.75F, DevExpress.Drawing.DXFontStyle.Bold);
-            this.xrLabel6.LocationFloat = new DevExpress.Utils.PointFloat(539.6876F, 87.70573F);
+            this.xrLabel6.LocationFloat = new DevExpress.Utils.PointFloat(533.9163F, 84.47654F);
             this.xrLabel6.Multiline = true;
             this.xrLabel6.Name = "xrLabel6";
             this.xrLabel6.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
@@ -387,14 +387,14 @@
             this.xrLabel6.SizeF = new System.Drawing.SizeF(210.3124F, 58.42001F);
             this.xrLabel6.StylePriority.UseFont = false;
             this.xrLabel6.StylePriority.UseTextAlignment = false;
-            this.xrLabel6.Text = "رقم الهاتف :";
+            this.xrLabel6.Text = "الهاتف :";
             this.xrLabel6.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // xrLabel1
             // 
             this.xrLabel1.Dpi = 254F;
             this.xrLabel1.Font = new DevExpress.Drawing.DXFont("Arial", 9.75F, DevExpress.Drawing.DXFontStyle.Bold);
-            this.xrLabel1.LocationFloat = new DevExpress.Utils.PointFloat(539.6876F, 229.3256F);
+            this.xrLabel1.LocationFloat = new DevExpress.Utils.PointFloat(533.9163F, 226.0964F);
             this.xrLabel1.Multiline = true;
             this.xrLabel1.Name = "xrLabel1";
             this.xrLabel1.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
@@ -423,7 +423,7 @@
             // 
             this.xrLabel3.Dpi = 254F;
             this.xrLabel3.Font = new DevExpress.Drawing.DXFont("Arial", 9.75F, DevExpress.Drawing.DXFontStyle.Bold);
-            this.xrLabel3.LocationFloat = new DevExpress.Utils.PointFloat(539.6879F, 304.9966F);
+            this.xrLabel3.LocationFloat = new DevExpress.Utils.PointFloat(533.9166F, 301.7674F);
             this.xrLabel3.Multiline = true;
             this.xrLabel3.Name = "xrLabel3";
             this.xrLabel3.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
@@ -431,7 +431,7 @@
             this.xrLabel3.SizeF = new System.Drawing.SizeF(210.3123F, 58.41998F);
             this.xrLabel3.StylePriority.UseFont = false;
             this.xrLabel3.StylePriority.UseTextAlignment = false;
-            this.xrLabel3.Text = "تاريخ الفاتورة :";
+            this.xrLabel3.Text = "تاريخ :";
             this.xrLabel3.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // xrLabel4
@@ -495,7 +495,7 @@
             // 
             this.xrLabel7.Dpi = 254F;
             this.xrLabel7.Font = new DevExpress.Drawing.DXFont("Arial", 9.75F, DevExpress.Drawing.DXFontStyle.Bold);
-            this.xrLabel7.LocationFloat = new DevExpress.Utils.PointFloat(539.6879F, 156.7091F);
+            this.xrLabel7.LocationFloat = new DevExpress.Utils.PointFloat(533.9166F, 153.4799F);
             this.xrLabel7.Multiline = true;
             this.xrLabel7.Name = "xrLabel7";
             this.xrLabel7.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 0, 0, 254F);
@@ -503,7 +503,7 @@
             this.xrLabel7.SizeF = new System.Drawing.SizeF(210.3124F, 58.41998F);
             this.xrLabel7.StylePriority.UseFont = false;
             this.xrLabel7.StylePriority.UseTextAlignment = false;
-            this.xrLabel7.Text = "اسم المورد:";
+            this.xrLabel7.Text = "المورد:";
             this.xrLabel7.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // xrLabel8

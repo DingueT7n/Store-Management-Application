@@ -203,25 +203,29 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
         {
             try
             {
-                if (MsgHelper.ShowDeleteDialog())
+                if (DgvSales.Rows.Count > 0)
                 {
-                    _contex = new ApplicationDbContext();
-                    var deleteedRefund = _contex.ProductDiscounts.Where(x => x.Id ==
-                    Convert.ToInt32(DgvSales.CurrentRow.Cells[10].Value.ToString())).FirstOrDefault();
-                    if (deleteedRefund != null)
+                    if (MsgHelper.ShowDeleteDialog())
                     {
-                        _contex.Remove(deleteedRefund);
-                        _contex.SaveChanges();
-                        Code.Helper.ToasterHelper.ShowDeletedToast();
+                        _contex = new ApplicationDbContext();
+                        var deleteedRefund = _contex.ProductDiscounts.Where(x => x.Id ==
+                        Convert.ToInt32(DgvSales.CurrentRow.Cells[10].Value.ToString())).FirstOrDefault();
+                        if (deleteedRefund != null)
+                        {
+                            _contex.Remove(deleteedRefund);
+                            _contex.SaveChanges();
+                            Code.Helper.ToasterHelper.ShowDeletedToast();
 
+                        }
+
+                        DgvSales.DataSource = null;
+                        RefreshDgv();
                     }
-
-                    DgvSales.DataSource = null;
-                    RefreshDgv();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                ToasterHelper.ShowErrorHappened(ex.Message);
                 throw;
             }
         }

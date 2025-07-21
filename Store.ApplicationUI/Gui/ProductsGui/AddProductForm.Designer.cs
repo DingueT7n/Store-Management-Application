@@ -36,6 +36,9 @@
             tabcontrolProductInfo = new TabControl();
             tabPage1 = new TabPage();
             GbInfoProduct = new GroupBox();
+            label27 = new Label();
+            txtWeights = new TextBox();
+            label28 = new Label();
             label26 = new Label();
             label25 = new Label();
             label24 = new Label();
@@ -150,6 +153,9 @@
             // 
             // GbInfoProduct
             // 
+            GbInfoProduct.Controls.Add(label27);
+            GbInfoProduct.Controls.Add(txtWeights);
+            GbInfoProduct.Controls.Add(label28);
             GbInfoProduct.Controls.Add(label26);
             GbInfoProduct.Controls.Add(label25);
             GbInfoProduct.Controls.Add(label24);
@@ -191,6 +197,24 @@
             resources.ApplyResources(GbInfoProduct, "GbInfoProduct");
             GbInfoProduct.Name = "GbInfoProduct";
             GbInfoProduct.TabStop = false;
+            // 
+            // label27
+            // 
+            resources.ApplyResources(label27, "label27");
+            label27.BackColor = Color.Transparent;
+            label27.ForeColor = Color.Crimson;
+            label27.Name = "label27";
+            // 
+            // txtWeights
+            // 
+            resources.ApplyResources(txtWeights, "txtWeights");
+            txtWeights.Name = "txtWeights";
+            txtWeights.KeyPress += txtMinQty_KeyPress;
+            // 
+            // label28
+            // 
+            resources.ApplyResources(label28, "label28");
+            label28.Name = "label28";
             // 
             // label26
             // 
@@ -695,5 +719,8 @@
         private Label label25;
         private Label label24;
         private Label label26;
+        private Label label27;
+        private TextBox txtWeights;
+        private Label label28;
     }
 }
