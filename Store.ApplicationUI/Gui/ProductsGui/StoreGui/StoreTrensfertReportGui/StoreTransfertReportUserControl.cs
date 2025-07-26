@@ -1,40 +1,27 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Entities.Products;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreTrensfertReportGui
 {
     public partial class StoreTransfertReportUserControl : UserControl
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext _contex;
-        public static ProductTransferRepository? productTransferRepository;
-        private static StoreTransfertReportUserControl? _storeTransfertReportUserControl;
-        public StoreTransfertReportUserControl()
+
+
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+        private readonly IProductTransferRepository _repository;
+
+        public StoreTransfertReportUserControl(MainForm main, ApplicationDbContext context, IProductTransferRepository repository)
         {
             InitializeComponent();
-        }
-        public static bool CheckInstance()
-        {
-            return (_storeTransfertReportUserControl == null);
-        }
-        public static StoreTransfertReportUserControl Instance(MainForm main)
-        {
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _contex = new ApplicationDbContext();
-            if (CheckInstance())
-            {
-                productTransferRepository = new ProductTransferRepository(_contex);
+            _context = context;
 
-                _storeTransfertReportUserControl = new StoreTransfertReportUserControl();
-
-            }
-
-            // Return the singleton instance
-            _storeTransfertReportUserControl.LoadData();
-            return _storeTransfertReportUserControl;
+            _repository = repository;
         }
         public async void SetProductsToDgv(string t1, string t2, string barcode)
         {
@@ -42,7 +29,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreTrensfertReportGui
             //var CustomerMoneyList = MainForm.Context.CustomersReports.
             //    Include(x => x.Customer).Include(x => x.Sale)
             //    .ToList();
-            var data = productTransferRepository.GetAllTransfert(t1, t2, barcode);
+            DgvSales.DataSource = new List<ProductTransfer>();
+            var data = await _repository.GetAllTransfert(t1, t2, barcode);
             DgvSales.DataSource = data;
 
 
@@ -66,14 +54,14 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreTrensfertReportGui
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => productTransferRepository.IsConnected()))
+            if (await _repository.IsConnectedAsync())
             {
                 //Start Load Data
-                cmbStoresFrom.DataSource = _contex.Stores.ToList();
+                cmbStoresFrom.DataSource = await _context.Stores.ToListAsync();
                 cmbStoresFrom.DisplayMember = "StoreName";
                 cmbStoresFrom.ValueMember = "Id";
 
-                cmbStoresTo.DataSource = _contex.Stores.ToList();
+                cmbStoresTo.DataSource = await _context.Stores.ToListAsync();
                 cmbStoresTo.DisplayMember = "StoreName";
                 cmbStoresTo.ValueMember = "Id";
                 // if its an admin or Normal user 
@@ -156,7 +144,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreTrensfertReportGui
             RefreshDgv();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
             try
             {
@@ -165,11 +153,11 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreTrensfertReportGui
                 {
                     for (int i = 0; i <= DgvSales.Rows.Count - 1; i++)
                     {
-                        var deleteedRefund = _contex.ProductsTransfers.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i].Cells[11].Value.ToString())).FirstOrDefault();
+                        var deleteedRefund = await _context.ProductsTransfers.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i].Cells[11].Value.ToString())).FirstOrDefaultAsync();
                         if (deleteedRefund != null)
                         {
-                            _contex.Remove(deleteedRefund);
-                            _contex.SaveChanges();
+                            _context.Remove(deleteedRefund);
+                            await _context.SaveChangesAsync();
                         }
                     }
                     Code.Helper.ToasterHelper.ShowDeletedToast();
@@ -191,6 +179,12 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreTrensfertReportGui
             {
                 btnSearch_Click(sender, e);
             }
+        }
+
+        private void StoreTransfertReportUserControl_Load(object sender, EventArgs e)
+        {
+            LoadData();
+
         }
     }
 }

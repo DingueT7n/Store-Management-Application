@@ -5,7 +5,7 @@ using Store.Infrastructure.Data;
 
 namespace Store.Infrastructure.Repositories
 {
-    public class CaissesRepository : GenericRepository<Caisse>
+    public class CaissesRepository : GenericRepository<Caisse>, ICaissesRepository
     {
         public CaissesRepository(ApplicationDbContext context) : base(context)
         {
@@ -68,16 +68,16 @@ namespace Store.Infrastructure.Repositories
         {
         }
 
-        public List<CaisseBankTransfere> GetAll(DateTime value1, DateTime value2)
+        public async Task<List<CaisseBankTransfere>> GetAll(DateTime value1, DateTime value2)
         {
             try
             {
                 var allTransfers = _context.CaissesBankTransferes
-                      .AsEnumerable();
+                      .AsQueryable();
 
 
                 allTransfers = allTransfers.Where(x => x.Date >= value1 && x.Date <= value2);
-                return allTransfers.ToList();
+                return await allTransfers.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -86,20 +86,20 @@ namespace Store.Infrastructure.Repositories
             }
         }
 
-        public List<CaisseBankTransfere> GetAllBankToCaisse(string t1, string barcode,
+        public async Task<List<CaisseBankTransfere>> GetAllBankToCaisse(string t1, string barcode,
             DateTime value1, DateTime value2, bool @checked)
         {
             try
             {
                 var allTransfers = _context.CaissesBankTransferes
-                      .AsEnumerable();
+                      .AsQueryable();
                 if (barcode != string.Empty) allTransfers = allTransfers.Where(x => x.Name.Contains(barcode));
                 if (@checked && t1 != string.Empty)
                     allTransfers = allTransfers.Where(x => x.To_.ToString() == t1);
                 allTransfers = allTransfers.Where(x => x.From_ == "بنك");
 
                 allTransfers = allTransfers.Where(x => x.Date >= value1 && x.Date <= value2);
-                return allTransfers.ToList();
+                return await allTransfers.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -108,20 +108,20 @@ namespace Store.Infrastructure.Repositories
             }
         }
 
-        public List<CaisseBankTransfere> GetAllCaisseToBank(string t1, string barcode,
+        public async Task<List<CaisseBankTransfere>> GetAllCaisseToBank(string t1, string barcode,
             DateTime value1, DateTime value2, bool @checked)
         {
             try
             {
                 var allTransfers = _context.CaissesBankTransferes
-                      .AsEnumerable();
+                      .AsQueryable();
                 if (barcode != string.Empty) allTransfers = allTransfers.Where(x => x.Name.Contains(barcode));
                 if (@checked && t1 != string.Empty)
                     allTransfers = allTransfers.Where(x => x.From_.ToString() == t1);
                 allTransfers = allTransfers.Where(x => x.To_ == "بنك");
 
                 allTransfers = allTransfers.Where(x => x.Date >= value1 && x.Date <= value2);
-                return allTransfers.ToList();
+                return await allTransfers.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -132,14 +132,14 @@ namespace Store.Infrastructure.Repositories
     }
     public class CaisseTransfereRepository : GenericRepository<CaisseTransfere>, ICaisseTransfereRepository
     {
-        public List<CaisseTransfere> GetAllDepositToCaisse(string t1, string t2, string barcode, DateTime dtpFrom, DateTime dtpTo)
+        public async Task<List<CaisseTransfere>> GetAllDepositToCaisse(string t1, string t2, string barcode, DateTime dtpFrom, DateTime dtpTo)
         {
             try
             {
                 var allTransfers = _context.CaissesTransferes
                     .Include(x => x.CaisseFrom)
                     .Include(x => x.CaisseTo)
-                      .AsEnumerable();
+                      .AsQueryable();
                 if (barcode != string.Empty) allTransfers = allTransfers.Where(x => x.Name.Contains(barcode) || x.Reason.Contains(barcode));
                 if (t1 != string.Empty)
                     allTransfers = allTransfers.Where(x => x.Caisse_From.ToString() == t1);
@@ -147,7 +147,7 @@ namespace Store.Infrastructure.Repositories
                     allTransfers = allTransfers.Where(x => x.Caisse_To.ToString() == t2);
 
                 allTransfers = allTransfers.Where(x => x.Date >= dtpFrom && x.Date <= dtpTo);
-                return allTransfers.ToList();
+                return await allTransfers.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -201,7 +201,7 @@ namespace Store.Infrastructure.Repositories
 
     public class CaisseStatusDetailRepository : GenericRepository<CaisseStatusDetail>, ICaisseStatusDetailRepository
     {
-        public (List<CaisseStatusDetail> Deposits, int TotalCount) GetAllStatus(
+        public async Task<(List<CaisseStatusDetail> Deposits, int TotalCount)> GetAllStatus(
             string t1,
 
             string OperatorBy,
@@ -236,15 +236,15 @@ namespace Store.Infrastructure.Repositories
                 && ((x.ClosingTime != null ? (x.ClosingTime <= dtpTo) : true)));
 
                 // Calculate total count before applying pagination
-                int totalCount = query.Count();
+                int totalCount = await query.CountAsync();
 
                 // Apply pagination (skip and take)
-                var deposits = query
+                var deposits = await query
                     .OrderByDescending(x => x.Id)
                     // Ensure consistent ordering
                     .Skip(skip)
                     .Take(take)
-                    .ToList();
+                    .ToListAsync();
 
                 return (deposits, totalCount);
             }
@@ -253,7 +253,7 @@ namespace Store.Infrastructure.Repositories
                 throw new Exception("Error retrieving the deposits", ex);
             }
         }
-        public (List<CaisseOperation> Deposits, int TotalCount) GetAllStatusOperations(
+        public async Task<(List<CaisseOperation> Deposits, int TotalCount)> GetAllStatusOperations(
            string t1,
 
            string OperatorBy,
@@ -288,15 +288,15 @@ namespace Store.Infrastructure.Repositories
                 && (x.OperationDate.Date <= dtpTo.Date));
 
                 // Calculate total count before applying pagination
-                int totalCount = query.Count();
+                int totalCount = await query.CountAsync();
 
                 // Apply pagination (skip and take)
-                var deposits = query
+                var deposits = await query
                     .OrderByDescending(x => x.Id)
                     // Ensure consistent ordering
                     .Skip(skip)
                     .Take(take)
-                    .ToList();
+                    .ToListAsync();
 
                 return (deposits, totalCount);
             }
@@ -361,7 +361,7 @@ namespace Store.Infrastructure.Repositories
         public decimal BeforeOpening(int caisseId, decimal moneybefore
           )
         {
-            _context = new ApplicationDbContext();
+
 
             try
             {
@@ -400,7 +400,7 @@ namespace Store.Infrastructure.Repositories
         public decimal BeforeClosing(int caisseId, decimal moneyAfter
             )
         {
-            _context = new ApplicationDbContext();
+
 
             try
             {
@@ -464,7 +464,7 @@ namespace Store.Infrastructure.Repositories
             decimal DA2000, decimal DA1000, decimal DA500, decimal DA200, decimal DA100, decimal DA50,
             decimal DA20, decimal DA10, decimal DA5, decimal Default)
         {
-            _context = new ApplicationDbContext();
+
             using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try

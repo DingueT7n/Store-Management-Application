@@ -1,5 +1,13 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
+using Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankGui;
+using Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseGui;
+using Store.ApplicationUI.Gui.CaisseAndBankGui.TransferBetweenCaissesGui;
+using Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenBankAndCaisseGui;
+using Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBank;
+using Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseGui;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Caisses;
 using Store.Infrastructure.Data;
@@ -8,49 +16,29 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
 {
     public partial class CaisseDetailsForm : Form
     {
-        private ApplicationDbContext _context;
-        private static MainForm _main;
 
-        private static CaisseDetailsForm? _caisseDetailsForm;
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+        private readonly ControlManager _controlManager1;
 
-        public CaisseDetailsForm(MainForm main)
+        public CaisseDetailsForm(MainForm main, ApplicationDbContext context, ControlManager controlManager1)
         {
-            _context = new ApplicationDbContext();
+
             _main = main;
+
+            _context = context;
+            _controlManager1 = controlManager1;
             InitializeComponent();
             this.Owner = main;
             LoadData();
         }
-        public static void CheckInstance()
-        {
-            if (_caisseDetailsForm is not null)
-            {
-                _caisseDetailsForm.LoadData();
-            }
-        }
-        public static CaisseDetailsForm Instance(MainForm main)
-        {
-            if (_caisseDetailsForm == null || _caisseDetailsForm.IsDisposed)
-            {
-                _caisseDetailsForm = new CaisseDetailsForm(main);
-            }
-            else
-            {
-                // Bring the form to the front if it exists.
-                if (!_caisseDetailsForm.Visible)
-                {
-                    _caisseDetailsForm.Show();
-                }
-                _caisseDetailsForm.BringToFront();
-            }
-            return _caisseDetailsForm;
-        }
+
         public async void SetCategoryToDgv()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            _context = new ApplicationDbContext();
-            DgvCaisser.DataSource = _context.Caisses
-                .ToList();
+
+            DgvCaisser.DataSource = await _context.Caisses
+                .ToListAsync();
             lblidCaisse.Text = (_context.Caisses.Count() + 1).ToString();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvCaisser);
         }
@@ -58,7 +46,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
         {
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(async () => await _context.Database.CanConnectAsync()))
+            if (await _context.Database.CanConnectAsync())
             {
                 SetColumns();
                 SetCategoryToDgv();
@@ -101,7 +89,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
             txtNameِCategory.Text = string.Empty;
         }
 
-        private void btnAddCaisse_Click(object sender, EventArgs e)
+        private async void btnAddCaisse_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (txtNameِCategory.Text.IsNullOrEmpty())
@@ -114,15 +102,15 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
                 Store.Core.Entities.Caisses.Caisse caisse = new();
                 caisse.CaisseName = txtNameِCategory.Text;
                 caisse.MoneyinCaisse = 0;
-                _context.Caisses.Add(caisse);
-                _context.SaveChanges();
+                await _context.Caisses.AddAsync(caisse);
+                await _context.SaveChangesAsync();
                 Code.Helper.ToasterHelper.ShowAddToast();
 
             }
             RefreshDgv();
         }
 
-        private void btnEditCaisse_Click(object sender, EventArgs e)
+        private async void btnEditCaisse_Click(object sender, EventArgs e)
         {
             try
             {
@@ -131,14 +119,14 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
 
                 if (MsgHelper.ShowEditDialog())
                 {
-                    Store.Core.Entities.Caisses.Caisse caisse = _context.Caisses.FirstOrDefault(x => x.Id ==
+                    Store.Core.Entities.Caisses.Caisse caisse = await _context.Caisses.FirstOrDefaultAsync(x => x.Id ==
                     Convert.ToInt32(DgvCaisser.CurrentRow.Cells[5].Value.ToString())
                     );
                     if (caisse != null)
                     {
                         caisse.CaisseName = txtNameِCategory.Text;
                         _context.Update(caisse);
-                        _context.SaveChangesAsync();
+                        await _context.SaveChangesAsync();
                         Code.Helper.ToasterHelper.ShowEditToast();
 
                         vider();
@@ -152,7 +140,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
             }
         }
 
-        private void btnDeleteCaisse_Click(object sender, EventArgs e)
+        private async void btnDeleteCaisse_Click(object sender, EventArgs e)
         {
             try
             {
@@ -161,13 +149,13 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
 
                 if (MsgHelper.ShowDeleteDialog())
                 {
-                    Store.Core.Entities.Caisses.Caisse caisse = _context.Caisses.FirstOrDefault(x => x.Id ==
+                    Store.Core.Entities.Caisses.Caisse caisse = await _context.Caisses.FirstOrDefaultAsync(x => x.Id ==
                     Convert.ToInt32(DgvCaisser.CurrentRow.Cells[5].Value.ToString()) && x.Status == CaisseStatus.Closed
                     );
                     if (caisse != null)
                     {
                         _context.Remove(caisse);
-                        _context.SaveChanges();
+                        await _context.SaveChangesAsync();
                         Code.Helper.ToasterHelper.ShowDeletedToast();
                     }
                     if (_context.Caisses.Count() < 1)
@@ -177,8 +165,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
                             CaisseName = "الصندوق الاول",
                             MoneyinCaisse = 0
                         };
-                        _context.Add(val);
-                        _context.SaveChanges();
+                        await _context.AddAsync(val);
+                        await _context.SaveChangesAsync();
 
                         Properties.Settings.Default.DefaultCaisseId = val.Id;
                         Properties.Settings.Default.Save();
@@ -193,12 +181,12 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
             }
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
 
-            DgvCaisser.DataSource = _context.Caisses.Where(x => x.Id.ToString() == txtSearch.Text ||
-            x.CaisseName.Contains(txtSearch.Text)).ToList();
+            DgvCaisser.DataSource = await _context.Caisses.Where(x => x.Id.ToString() == txtSearch.Text ||
+            x.CaisseName.Contains(txtSearch.Text)).ToListAsync();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvCaisser);
             txtSearch.Text = string.Empty;
         }
@@ -238,37 +226,43 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
         private void btnDepositToCaisse_Click(object sender, EventArgs e)
         {
             this.Size = this.MaximumSize;
-            PageHelper.SetOperation(DepositToCaisseGui.DepositCaisseUserControl.Instance(_main, this), this);
+            PageHelper.SetOperation(_controlManager1.Get<DepositCaisseUserControl>(), this);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             this.Size = this.MaximumSize;
-            PageHelper.SetOperation(DepositToBankGui.DepositTobankUserControl.Instance(_main, this), this);
+
+            PageHelper.SetOperation(_controlManager1.Get<DepositTobankUserControl>(), this);
+
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             this.Size = this.MaximumSize;
-            PageHelper.SetOperation(WithdrawFromCaisseGui.WithdrawFromCaisseUserControl.Instance(_main, this), this);
+
+            PageHelper.SetOperation(_controlManager1.Get<WithdrawFromCaisseUserControl>(), this);
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             this.Size = this.MaximumSize;
-            PageHelper.SetOperation(WithdrawFromBank.WithdrawFromBankUserControl.Instance(_main, this), this);
+            PageHelper.SetOperation(_controlManager1.Get<WithdrawFromBankUserControl>(), this);
+
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             this.Size = this.MaximumSize;
-            PageHelper.SetOperation(TransferBetweenCaissesGui.TransferBetweenCaissesGuiUserControl.Instance(_main, this), this);
+            PageHelper.SetOperation(_controlManager1.Get<TransferBetweenCaissesGuiUserControl>(), this);
+
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
             this.Size = this.MaximumSize;
-            PageHelper.SetOperation(TransfertBetweenBankAndCaisseGui.TransfertBetweenBankAndCaisseUserControl.Instance(_main, this), this);
+            PageHelper.SetOperation(_controlManager1.Get<TransfertBetweenBankAndCaisseUserControl>(), this);
+
         }
 
         private void txtSearch_KeyDown(object sender, KeyEventArgs e)
@@ -277,6 +271,11 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
             {
                 btnSearch_Click(sender, e);
             }
+        }
+
+        private void CaisseDetailsForm_Load(object sender, EventArgs e)
+        {
+            LoadData();
         }
     }
 }

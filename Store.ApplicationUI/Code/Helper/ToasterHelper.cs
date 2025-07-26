@@ -1,12 +1,13 @@
 ﻿using System.IO;
-using System.Windows.Media;
+using System.Media;
 using Store.ApplicationUI.Gui.ToasterGui;
+
 
 namespace Store.ApplicationUI.Code.Helper
 {
     public static class ToasterHelper
     {
-        private static MediaPlayer _player = new();
+        // private static MediaPlayer _player = new();
         private static readonly object _lock = new();
         private static void PlaySound(string path)
         {
@@ -17,14 +18,14 @@ namespace Store.ApplicationUI.Code.Helper
                     if (!File.Exists(path))
                         return;
 
-                    _player.Open(new Uri(path));
-                    _player.MediaEnded += (s, e) => _player.Close();
-                    _player.Play();
+                    using (SoundPlayer player = new SoundPlayer(path))
+                    {
+                        player.Play();
+                    }
                 }
                 catch (Exception)
                 {
-                    throw;
-                    //Console.WriteLine($"Error playing sound: {ex.Message}");
+                    // Optional: Log error
                 }
             }
         }
@@ -108,7 +109,7 @@ namespace Store.ApplicationUI.Code.Helper
         }
         public static void ShowLoginFailed()
         {
-            ToastForm.Instance("فشل تسجيل الدخول", "اسم المستخدم او كلمة السر غير صحيحة , يرجى اعادة النظر", System.Drawing.Color.Red).Show();
+            ToastForm.Instance("فشل تسجيل الدخول", "اسم المستخدم او كلمة السر غير صحيحة , يرجى اعادة النظر", Color.Red).Show();
         }
         public static void ShowLoginSucceded()
         {
@@ -121,24 +122,24 @@ namespace Store.ApplicationUI.Code.Helper
         }
         public static void ShowConnectionIsNotEstablished()
         {
-            ToastForm.Instance("اتصال بالسيريفر", "لم يتم الاتصال بالسيرفر ", System.Drawing.Color.Red).Show();
+            ToastForm.Instance("اتصال بالسيريفر", "لم يتم الاتصال بالسيرفر ", Color.Red).Show();
         }
         public static void ShowConnectionIsNotEstablishedByError(string error)
         {
-            ToastForm.Instance("اتصال بالسيريفر", $"لم يتم الاتصال بالسيرفر بسبب :{error}", System.Drawing.Color.Red).Show();
+            ToastForm.Instance("اتصال بالسيريفر", $"لم يتم الاتصال بالسيرفر بسبب :{error}", Color.Red).Show();
         }
         public static void ShowErrorHappened(string error)
         {
-            ToastForm.Instance("للاسف فشلت العملية", $"لقد حدث خطأ :{error}", System.Drawing.Color.Red).Show();
+            ToastForm.Instance("للاسف فشلت العملية", $"لقد حدث خطأ :{error}", Color.Red).Show();
             MessageBox.Show($"لقد حدث خطأ :{error}");
         }
         public static void ShowSettingCaisse()
         {
-            ToastForm.Instance("خلل في الاعدادات", "هناك خلل في الاعدادات ,من فضلك راجع شاشة اعدادات البرنامج ", System.Drawing.Color.Red).Show();
+            ToastForm.Instance("خلل في الاعدادات", "هناك خلل في الاعدادات ,من فضلك راجع شاشة اعدادات البرنامج ", Color.Red).Show();
         }
         public static void ShowActivationCompleted()
         {
-            ToastForm.Instance("الاشتراك اكتمل", "انتهاء مدة التفعيل يرجى الاتصال بالمطور", System.Drawing.Color.Red).Show();
+            ToastForm.Instance("الاشتراك اكتمل", "انتهاء مدة التفعيل يرجى الاتصال بالمطور", Color.Red).Show();
         }
         public static void ShowRestore()
         {

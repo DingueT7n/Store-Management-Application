@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Store.Infrastructure.Data;
 
@@ -6,18 +7,19 @@ namespace Store.ApplicationUI.Reports.SalesReports
 {
     public partial class salesA4 : DevExpress.XtraReports.UI.XtraReport
     {
-        ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public salesA4()
+        public salesA4(ApplicationDbContext context)
         {
             InitializeComponent();
-            _context = new ApplicationDbContext();
+            _context = context;
             InitialElements();
+
         }
-        void InitialElements()
+        async void InitialElements()
         {
-            lblCaisse.Text = _context.Caisses
-                    .FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId)?.CaisseName
+            lblCaisse.Text = (await _context.Caisses
+                    .FirstOrDefaultAsync(x => x.Id == Properties.Settings.Default.DefaultCaisseId)).CaisseName
                     ?? "الصندوق الافتراضي";
             lblPhoneNumber.Text = Properties.Settings.Default.FacturePhoneNumber;
             lblStoreName.Text = Properties.Settings.Default.StoreNameFacture;

@@ -1,41 +1,25 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Entities.Caisses;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenCaisseAndBankReportGui
 {
     public partial class TransfertBetweenCaisseAndBankReportUserControl : UserControl
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext _contex;
-        public static CaisseBankTransfereRepository? repository;
-        private static TransfertBetweenCaisseAndBankReportUserControl? _UserControl;
+        private readonly MainForm _main;
 
-        public TransfertBetweenCaisseAndBankReportUserControl()
+        public readonly ICaisseBankTransfereRepository repository;
+        private readonly ApplicationDbContext _context;
+
+        public TransfertBetweenCaisseAndBankReportUserControl(ICaisseBankTransfereRepository repository, ApplicationDbContext context, MainForm main)
         {
             InitializeComponent();
-        }
-        public static bool CheckInstance()
-        {
-            return (_UserControl == null);
-        }
-        public static TransfertBetweenCaisseAndBankReportUserControl Instance(MainForm main)
-        {
+            this.repository = repository;
+            _context = context;
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _contex = new ApplicationDbContext();
-            if (CheckInstance())
-            {
-                repository = new CaisseBankTransfereRepository(_contex);
-
-                _UserControl = new TransfertBetweenCaisseAndBankReportUserControl();
-
-            }
-
-            // Return the singleton instance
-            _UserControl.LoadData();
-            return _UserControl;
         }
         public async void SetProductsToDgv(string t1, string barcode)
         {
@@ -46,17 +30,17 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenCaisseAndBank
 
             if (rbAll.Checked)
             {
-                var data = repository.GetAll(dtpFrom.Value, dtpTo.Value);
+                var data = await repository.GetAll(dtpFrom.Value, dtpTo.Value);
                 DgvSales.DataSource = data;
             }
             else if (rbBankToCaisse.Checked)
             {
-                var data = repository.GetAllBankToCaisse(t1, barcode, dtpFrom.Value, dtpTo.Value, cbCaisse.Checked);
+                var data = await repository.GetAllBankToCaisse(t1, barcode, dtpFrom.Value, dtpTo.Value, cbCaisse.Checked);
                 DgvSales.DataSource = data;
             }
             else if (rbCaisseToBank.Checked)
             {
-                var data = repository.GetAllCaisseToBank(t1, barcode, dtpFrom.Value, dtpTo.Value, cbCaisse.Checked);
+                var data = await repository.GetAllCaisseToBank(t1, barcode, dtpFrom.Value, dtpTo.Value, cbCaisse.Checked);
                 DgvSales.DataSource = data;
             }
 
@@ -66,8 +50,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenCaisseAndBank
             string t1 = cmbCaisse.Text;
 
 
-            SetProductsToDgv(t1, txtSearch.Text);
             SetColumns();
+            SetProductsToDgv(t1, txtSearch.Text);
 
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
         }
@@ -77,10 +61,10 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenCaisseAndBank
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => repository.IsConnected()))
+            if (await repository.IsConnectedAsync())
             {
                 //Start Load Data
-                cmbCaisse.DataSource = _contex.Caisses.ToList();
+                cmbCaisse.DataSource = await _context.Caisses.ToListAsync();
                 cmbCaisse.DisplayMember = "CaisseName";
                 cmbCaisse.ValueMember = "Id";
 
@@ -109,7 +93,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenCaisseAndBank
         {
             //DgvSales.Columns[0].HeaderCell.Value = "المعرف"; ""    
 
-
+            DgvSales.DataSource = new List<CaisseBankTransfere>();
             DgvSales.Columns[0].HeaderCell.Value = "قيمة التحويل";
             DgvSales.Columns[1].HeaderCell.Value = "تاريخ التحويل";
             DgvSales.Columns[2].HeaderCell.Value = "وقت التحويل";
@@ -162,7 +146,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenCaisseAndBank
             RefreshDgv();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
             try
             {
@@ -171,11 +155,12 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenCaisseAndBank
                 {
                     for (int i = 0; i <= DgvSales.Rows.Count - 1; i++)
                     {
-                        var deleteedRefund = _contex.CaissesBankTransferes.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i].Cells[6].Value.ToString())).FirstOrDefault();
+                        var deleteedRefund = await _context.CaissesBankTransferes.Where(x => x.Id ==
+                        Convert.ToInt32(DgvSales.Rows[i].Cells[6].Value.ToString())).FirstOrDefaultAsync();
                         if (deleteedRefund != null)
                         {
-                            _contex.Remove(deleteedRefund);
-                            _contex.SaveChanges();
+                            _context.Remove(deleteedRefund);
+                            await _context.SaveChangesAsync();
                         }
                     }
                     Code.Helper.ToasterHelper.ShowDeletedToast();

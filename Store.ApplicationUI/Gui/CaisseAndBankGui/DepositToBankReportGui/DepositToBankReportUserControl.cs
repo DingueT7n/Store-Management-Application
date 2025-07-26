@@ -1,4 +1,5 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Banks;
 using Store.Infrastructure.Data;
@@ -7,34 +8,15 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankReportGui
 {
     public partial class DepositToBankReportUserControl : UserControl
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext _contex;
-
-        private static DepositToBankReportUserControl? _UserControl;
-
-        public DepositToBankReportUserControl()
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+        public DepositToBankReportUserControl(MainForm main, ApplicationDbContext context)
         {
             InitializeComponent();
-        }
-        public static bool CheckInstance()
-        {
-            return (_UserControl == null);
-        }
-        public static DepositToBankReportUserControl Instance(MainForm main)
-        {
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _contex = new ApplicationDbContext();
-            if (CheckInstance())
-            {
-                _UserControl = new DepositToBankReportUserControl();
-
-            }
-
-            // Return the singleton instance
-            _UserControl.LoadData();
-            return _UserControl;
+            _context = context;
         }
+
         public async void SetProductsToDgv(string barcode)
         {
             ////DgvSales.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
@@ -42,21 +24,21 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankReportGui
             //    Include(x => x.Customer).Include(x => x.Sale)
             //    .ToList();
 
-            var data = GetAllDepositToCaisse(barcode, dtpFrom.Value, dtpTo.Value);
+            var data = await GetAllDepositToCaisse(barcode, dtpFrom.Value, dtpTo.Value);
             DgvSales.DataSource = data;
 
         }
 
-        private List<BankDeposit> GetAllDepositToCaisse(string barcode, DateTime value1, DateTime value2)
+        private async Task<List<BankDeposit>> GetAllDepositToCaisse(string barcode, DateTime value1, DateTime value2)
         {
             try
             {
-                var allTransfers = _contex.BankDeposits
-                      .AsEnumerable();
+                var allTransfers = _context.BankDeposits
+                      .AsQueryable();
                 if (barcode != string.Empty) allTransfers = allTransfers.Where(x => x.Reason == barcode || x.Name.Contains(barcode));
                 allTransfers = allTransfers.Where(x => x.Date >= value1 && x.Date <= value2)
                      ;
-                return allTransfers.ToList();
+                return await allTransfers.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -67,8 +49,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankReportGui
 
         void RefreshDgv()
         {
-            SetProductsToDgv(txtSearch.Text);
             SetColumns();
+            SetProductsToDgv(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
         }
         public async void LoadData()
@@ -77,7 +59,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankReportGui
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => _contex.Database.CanConnect()))
+            if (await _context.Database.CanConnectAsync())
             {
 
                 RefreshDgv();
@@ -102,7 +84,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankReportGui
             //DgvSales.Columns[0].HeaderCell.Value = "المعرف"; ""    
 
 
-
+            DgvSales.DataSource = new List<BankDeposit>();
             DgvSales.Columns[0].HeaderCell.Value = "قيمة الايداع";
             DgvSales.Columns[1].HeaderCell.Value = "تاريخ الايداع";
             DgvSales.Columns[2].HeaderCell.Value = "وقت الايداع";
@@ -126,7 +108,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankReportGui
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
             RefreshDgv();
         }
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
             try
             {
@@ -135,11 +117,12 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankReportGui
                 {
                     for (int i = 0; i <= DgvSales.Rows.Count - 1; i++)
                     {
-                        var deleteedRefund = _contex.BankDeposits.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i].Cells[6].Value.ToString())).FirstOrDefault();
+                        var deleteedRefund = await _context.BankDeposits.Where(x => x.Id ==
+                        Convert.ToInt32(DgvSales.Rows[i].Cells[6].Value.ToString())).FirstOrDefaultAsync();
                         if (deleteedRefund != null)
                         {
-                            _contex.Remove(deleteedRefund);
-                            _contex.SaveChanges();
+                            _context.Remove(deleteedRefund);
+                            await _context.SaveChangesAsync();
                         }
                     }
                     Code.Helper.ToasterHelper.ShowDeletedToast();

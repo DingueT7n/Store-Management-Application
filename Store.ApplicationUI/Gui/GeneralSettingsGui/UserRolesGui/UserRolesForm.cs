@@ -10,48 +10,19 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
 {
     public partial class UserRolesForm : Form
     {
-        private ApplicationDbContext _context;
-        private static MainForm _main;
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
 
-        private static UserRolesForm? _userRolesForm;
-
-        public UserRolesForm(MainForm main)
+        public UserRolesForm(MainForm main, ApplicationDbContext context)
         {
-            _context = new ApplicationDbContext();
             _main = main;
+            _context = context;
             InitializeComponent();
             this.Owner = main;
             LoadData();
+
         }
-        public static UserRolesForm Instance(MainForm main)
-        {
-            try
-            {
 
-
-                if (_userRolesForm == null || _userRolesForm.IsDisposed)
-                {
-                    _userRolesForm = new UserRolesForm(main);
-                }
-                else
-                {
-                    // Bring the form to the front if it exists.
-                    if (!_userRolesForm.Visible)
-                    {
-                        _userRolesForm.Show();
-                    }
-                    _userRolesForm.BringToFront();
-                }
-
-                return _userRolesForm;
-            }
-            catch (Exception ex)
-            {
-                ToasterHelper.ShowErrorHappened(ex.Message);
-
-                throw;
-            }
-        }
         private void PopulateComboBox(ComboBox comboBox, IEnumerable<object> dataSource, string displayMember, string valueMember)
         {
             comboBox.DataSource = dataSource;
@@ -59,11 +30,11 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             comboBox.ValueMember = valueMember;
         }
 
-        public void SetCategoryToDgv()
+        public async Task SetCategoryToDgv()
         {
             try
             {
-                var users = _context.Users.ToList();
+                var users = await _context.Users.ToListAsync();
                 PopulateComboBox(cmbSuppliers, users, "UserName", "Id");
                 PopulateComboBox(cmbUserGS, users, "UserName", "Id");
                 PopulateComboBox(cmbUserPs, users, "UserName", "Id");
@@ -75,7 +46,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                 PopulateComboBox(cmbRefund, users, "UserName", "Id");
                 PopulateComboBox(cmbEmployee, users, "UserName", "Id");
 
-                var caisses = _context.Caisses.ToList();
+                var caisses = await _context.Caisses.ToListAsync();
                 PopulateComboBox(cmbCaisse, caisses, "CaisseName", "Id");
 
                 Dgv.DataSource = users;
@@ -90,10 +61,10 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
         {
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => _context.Database.CanConnect()))
+            if (await _context.Database.CanConnectAsync())
             {
-                SetCategoryToDgv();
                 SetColumns();
+                await SetCategoryToDgv();
 
             }
             else
@@ -108,7 +79,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             // Show EmptyDAta
 
         }
-        void vider()
+        async Task vider()
         {
             txtUserName.Text = string.Empty;
             txtPassowrd.Text = string.Empty;
@@ -116,12 +87,13 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             btnAdd.Enabled = true;
 
             btnEdit.Enabled = false;
-            RefreshDgv();
+            await RefreshDgv();
         }
 
         private void SetColumns()
         {
             //DgvProducts.Columns[0].HeaderCell.Value = "المعرف";
+            Dgv.DataSource = new List<User>();
             Dgv.Columns[0].HeaderCell.Value = "اسم المستخدم";
             Dgv.Columns[1].HeaderCell.Value = "كلمة السر";
             Dgv.Columns[2].HeaderCell.Value = "نوع المستخدم";
@@ -146,16 +118,16 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                 }
             };
         }
-        private void RefreshDgv()
+        private async Task RefreshDgv()
         {
 
-            SetCategoryToDgv();
+            await SetCategoryToDgv();
             txtUserName.Text = string.Empty;
             txtPassowrd.Text = string.Empty;
             txtProfit.Text = string.Empty;
         }
 
-        private void btnAdd_Click(object sender, EventArgs e)
+        private async void btnAdd_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (txtUserName.Text.IsNullOrEmpty() || txtPassowrd.Text.IsNullOrEmpty())
@@ -164,7 +136,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                 return;
             }
 
-            using (var transaction = _context.Database.BeginTransaction())
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
@@ -177,8 +149,8 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                         Stock_Id = Convert.ToInt32(cmbCaisse.SelectedValue),
                         type = cmbType.Text
                     };
-                    _context.Users.Add(user);
-                    _context.SaveChanges(); // Save to generate UserId
+                    await _context.Users.AddAsync(user);
+                    await _context.SaveChangesAsync(); // Save to generate UserId
 
                     // Add related entities based on User type
                     if (cmbType.Text == "مدير")
@@ -205,7 +177,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                 }
             }
         }
-        private void AddUserRelatedEntities(User user, bool isAdmin)
+        private async void AddUserRelatedEntities(User user, bool isAdmin)
         {
             List<object> relatedEntities = new()
             {
@@ -230,17 +202,17 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             user.UserSale = (UserSale)relatedEntities[7];
             user.UserSetting = (UserSetting)relatedEntities[8];
             user.UserSupplier = (UserSupplier)relatedEntities[9];
-            _context.AddRange(relatedEntities);
-            _context.SaveChanges();
+            await _context.AddRangeAsync(relatedEntities);
+            await _context.SaveChangesAsync();
         }
-        private void btnEdit_Click(object sender, EventArgs e)
+        private async void btnEdit_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowEditDialog())
             {
                 if (Dgv.SelectedRows.Count > 0)
                 {
-                    User user = _context?.Users.FirstOrDefault(x => x.Id == Convert.ToInt32(Dgv.CurrentRow.Cells[15].Value.ToString())
+                    User user = await _context.Users.FirstOrDefaultAsync(x => x.Id == Convert.ToInt32(Dgv.CurrentRow.Cells[15].Value.ToString())
                     ); if (user != null)
                     {
                         user.UserName = txtUserName.Text;
@@ -249,22 +221,22 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                         user.Stock_Id = Convert.ToInt32(cmbCaisse.SelectedValue);
                         user.type = cmbType.Text;
                         _context.Update(user);
-                        _context.SaveChanges();
+                        await _context.SaveChangesAsync();
                         Code.Helper.ToasterHelper.ShowEditToast();
 
                     }
                 }
-                vider();
+                await vider();
             }
         }
-        private void btnDelete_Click(object sender, EventArgs e)
+        private async void btnDelete_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
                 if (Dgv.SelectedRows.Count > 0)
                 {
-                    var user = _context.Users
+                    var user = await _context.Users
                .Include(u => u.UserBuy)
               .Include(u => u.UserCaisseAndBank)
               .Include(u => u.UserCustomer)
@@ -274,7 +246,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
               .Include(u => u.UserRefund)
               .Include(u => u.UserSale)
               .Include(u => u.UserSetting)
-              .Include(u => u.UserSupplier).FirstOrDefault(x => x.Id == Convert.ToInt32(Dgv.CurrentRow.Cells[15].Value.ToString()));
+              .Include(u => u.UserSupplier).FirstOrDefaultAsync(x => x.Id == Convert.ToInt32(Dgv.CurrentRow.Cells[15].Value.ToString()));
                     if (user is not null)
                     {
                         _context.Remove(user.UserBuy);
@@ -287,15 +259,15 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                         _context.Remove(user.UserSale);
                         _context.Remove(user.UserSetting);
                         _context.Remove(user.UserSupplier);
-                        _context.SaveChanges();
+                        await _context.SaveChangesAsync();
                         _context.Remove(user);
-                        _context.SaveChanges();
+                        await _context.SaveChangesAsync();
 
                         Code.Helper.ToasterHelper.ShowDeletedToast();
 
                     }
                 }
-                RefreshDgv();
+                await RefreshDgv();
                 if (_context.Users.Count() < 1)
                 {
                     int caisse = Convert.ToInt32(cmbCaisse.SelectedValue);
@@ -306,8 +278,8 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                             CaisseName = "الصندوق الأول",
 
                         };
-                        _context.Add(Caisse);
-                        _context.SaveChanges();
+                        await _context.AddAsync(Caisse);
+                        await _context.SaveChangesAsync();
                         caisse = Caisse.Id;
                     }
                     // Create new User
@@ -319,8 +291,8 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                         Stock_Id = caisse,
                         type = "مدير"
                     };
-                    _context.Users.Add(user);
-                    _context.SaveChanges(); // Save to generate UserId
+                    await _context.Users.AddAsync(user);
+                    await _context.SaveChangesAsync(); // Save to generate UserId
 
                     // Add related entities based on User type
 
@@ -332,21 +304,21 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
         }
 
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
             ToasterHelper.PlayNotificationSound();
-            Dgv.DataSource = _context.Users.Where(x => x.Id.ToString() == txtSearch.Text ||
-           x.UserName == (txtSearch.Text)).ToList();
+            Dgv.DataSource = await _context.Users.Where(x => x.Id.ToString() == txtSearch.Text ||
+           x.UserName == (txtSearch.Text)).ToListAsync();
             lblEmptyData.Visible = dgvHelper.IsEmpty(Dgv);
             txtSearch.Text = string.Empty;
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private async void btnRefresh_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             btnAdd.Enabled = true;
-            vider();
+            await vider();
             btnEdit.Enabled = false;
         }
 
@@ -377,11 +349,11 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
 
         }
 
-        private void cmbUserGS_SelectionChangeCommitted(object sender, EventArgs e)
+        private async void cmbUserGS_SelectionChangeCommitted(object sender, EventArgs e)
         {
             try
             {
-                var user = _context.UserSettings.FirstOrDefault(x => x.User_Id.ToString() == cmbUserGS.SelectedValue.ToString());
+                var user = await _context.UserSettings.FirstOrDefaultAsync(x => x.User_Id.ToString() == cmbUserGS.SelectedValue.ToString());
                 if (user != null)
                 {
                     cbApplicationSettings.Checked = user.ApplicationSettings;
@@ -400,12 +372,12 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
             try
             {
                 ToasterHelper.PlayNotificationSound();
-                var user = _context.UserSettings.FirstOrDefault(x => x.User_Id.ToString() == cmbUserGS.SelectedValue.ToString());
+                var user = await _context.UserSettings.FirstOrDefaultAsync(x => x.User_Id.ToString() == cmbUserGS.SelectedValue.ToString());
                 if (user != null)
                 {
                     user.ApplicationSettings = cbApplicationSettings.Checked;
@@ -416,7 +388,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                     user.BackUp = cbBackup.Checked;
                     user.Restore = cbRestore.Checked;
                     _context.Update(user);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
 
             }
@@ -432,11 +404,11 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
 
         }
 
-        private void cmbUserPs_SelectionChangeCommitted(object sender, EventArgs e)
+        private async void cmbUserPs_SelectionChangeCommitted(object sender, EventArgs e)
         {
             try
             {
-                var user = _context.UserProductsAndStores.FirstOrDefault(x => x.User_Id.ToString() == cmbUserPs.SelectedValue.ToString());
+                var user = await _context.UserProductsAndStores.FirstOrDefaultAsync(x => x.User_Id.ToString() == cmbUserPs.SelectedValue.ToString());
                 if (user != null)
                 {
                     cbAllProducts.Checked = user.AllProducts;
@@ -460,12 +432,12 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
             try
             {
                 ToasterHelper.PlayNotificationSound();
-                var user = _context.UserProductsAndStores.FirstOrDefault(x => x.User_Id.ToString() == cmbUserPs.SelectedValue.ToString());
+                var user = await _context.UserProductsAndStores.FirstOrDefaultAsync(x => x.User_Id.ToString() == cmbUserPs.SelectedValue.ToString());
                 if (user != null)
                 {
                     user.AllProducts = cbAllProducts.Checked;
@@ -476,7 +448,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                     user.TransfertReport = cbTransfertReport.Checked;
                     user.allStores = cbAllStores.Checked;
                     _context.Update(user);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
 
             }
@@ -492,11 +464,11 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
 
         }
 
-        private void cmbUserCustomers_SelectionChangeCommitted(object sender, EventArgs e)
+        private async void cmbUserCustomers_SelectionChangeCommitted(object sender, EventArgs e)
         {
             try
             {
-                var user = _context.UserCustomers.FirstOrDefault(x => x.User_Id.ToString() == cmbUserCustomers.SelectedValue.ToString());
+                var user = await _context.UserCustomers.FirstOrDefaultAsync(x => x.User_Id.ToString() == cmbUserCustomers.SelectedValue.ToString());
                 if (user != null)
                 {
                     cbAllCustomer.Checked = user.AllCustomers;
@@ -513,12 +485,12 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private async void button3_Click(object sender, EventArgs e)
         {
             try
             {
                 ToasterHelper.PlayNotificationSound();
-                var user = _context.UserCustomers.FirstOrDefault(x => x.User_Id.ToString() == cmbUserCustomers.SelectedValue.ToString());
+                var user = await _context.UserCustomers.FirstOrDefaultAsync(x => x.User_Id.ToString() == cmbUserCustomers.SelectedValue.ToString());
                 if (user != null)
                 {
                     user.AllCustomers = cbAllCustomer.Checked;
@@ -526,7 +498,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                     user.CustomerAccount = cbCustomerAccount.Checked;
                     user.CustomerReport = cbCustomerReport.Checked;
                     _context.Update(user);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
 
             }
@@ -542,11 +514,11 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
 
         }
 
-        private void cmbSuppliers_SelectionChangeCommitted(object sender, EventArgs e)
+        private async void cmbSuppliers_SelectionChangeCommitted(object sender, EventArgs e)
         {
             try
             {
-                var user = _context.UserSuppliers.FirstOrDefault(x => x.User_Id.ToString() == cmbSuppliers.SelectedValue.ToString());
+                var user = await _context.UserSuppliers.FirstOrDefaultAsync(x => x.User_Id.ToString() == cmbSuppliers.SelectedValue.ToString());
                 if (user != null)
                 {
                     cbAllSupliers.Checked = user.AllSuppliers;
@@ -563,12 +535,12 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
 
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private async void button4_Click(object sender, EventArgs e)
         {
             try
             {
                 ToasterHelper.PlayNotificationSound();
-                var user = _context.UserSuppliers.FirstOrDefault(x => x.User_Id.ToString() == cmbSuppliers.SelectedValue.ToString());
+                var user = await _context.UserSuppliers.FirstOrDefaultAsync(x => x.User_Id.ToString() == cmbSuppliers.SelectedValue.ToString());
                 if (user != null)
                 {
                     user.AllSuppliers = cbAllSupliers.Checked;
@@ -576,7 +548,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                     user.SuppliersAccount = cbSupplierAccounts.Checked;
                     user.SuppliersReport = cbSupplierReports.Checked;
                     _context.Update(user);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
 
             }
@@ -587,11 +559,11 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             }
         }
 
-        private void cmbBuys_SelectionChangeCommitted(object sender, EventArgs e)
+        private async void cmbBuys_SelectionChangeCommitted(object sender, EventArgs e)
         {
             try
             {
-                var user = _context.UserBuys.FirstOrDefault(x => x.User_Id.ToString() == cmbBuys.SelectedValue.ToString());
+                var user = await _context.UserBuys.FirstOrDefaultAsync(x => x.User_Id.ToString() == cmbBuys.SelectedValue.ToString());
                 if (user != null)
                 {
                     cbNewBuy.Checked = user.NewBuy;
@@ -605,18 +577,18 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             }
 
         }
-        private void button5_Click(object sender, EventArgs e)
+        private async void button5_Click(object sender, EventArgs e)
         {
             try
             {
                 ToasterHelper.PlayNotificationSound();
-                var user = _context.UserBuys.FirstOrDefault(x => x.User_Id.ToString() == cmbBuys.SelectedValue.ToString());
+                var user = await _context.UserBuys.FirstOrDefaultAsync(x => x.User_Id.ToString() == cmbBuys.SelectedValue.ToString());
                 if (user != null)
                 {
                     user.NewBuy = cbNewBuy.Checked;
                     user.BuyReports = cbBuyReport.Checked;
                     _context.Update(user);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
 
             }
@@ -627,11 +599,11 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             }
         }
 
-        private void cmbSales_SelectionChangeCommitted(object sender, EventArgs e)
+        private async void cmbSales_SelectionChangeCommitted(object sender, EventArgs e)
         {
             try
             {
-                var user = _context.UserSales.FirstOrDefault(x => x.User_Id.ToString() == cmbSales.SelectedValue.ToString());
+                var user = await _context.UserSales.FirstOrDefaultAsync(x => x.User_Id.ToString() == cmbSales.SelectedValue.ToString());
                 if (user != null)
                 {
                     cbNewSale.Checked = user.NewSale;
@@ -645,19 +617,19 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             }
         }
 
-        private void button6_Click(object sender, EventArgs e)
+        private async void button6_Click(object sender, EventArgs e)
         {
             try
             {
                 ToasterHelper.PlayNotificationSound();
-                var user = _context.UserSales.FirstOrDefault(x => x.User_Id.ToString() == cmbSales.SelectedValue.ToString());
+                var user = await _context.UserSales.FirstOrDefaultAsync(x => x.User_Id.ToString() == cmbSales.SelectedValue.ToString());
                 if (user != null)
                 {
                     user.NewSale = cbNewSale.Checked;
                     user.SaleReports = cbSalesReport.Checked;
                     user.SaleProfits = cbSaleProfit.Checked;
                     _context.Update(user);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
 
             }
@@ -668,12 +640,12 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             }
         }
 
-        private void button7_Click(object sender, EventArgs e)
+        private async void button7_Click(object sender, EventArgs e)
         {
             try
             {
                 ToasterHelper.PlayNotificationSound();
-                var user = _context.UserCaissesAndBanks.FirstOrDefault(x => x.User_Id.ToString() == cmbCaisseAndBanks.SelectedValue.ToString());
+                var user = await _context.UserCaissesAndBanks.FirstOrDefaultAsync(x => x.User_Id.ToString() == cmbCaisseAndBanks.SelectedValue.ToString());
                 if (user != null)
                 {
                     user.CaissesAndBanks = cbCaisseAndBanks.Checked;
@@ -684,7 +656,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                     user.TransfertBetweenCaisseAndBank = cbTransfertBankCaisse.Checked;
                     user.TransfertBetweenCaisse = cbTransfertCaisse.Checked;
                     _context.Update(user);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
             }
             catch (Exception)
@@ -694,11 +666,11 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             }
         }
 
-        private void cmbCaisseAndBanks_SelectionChangeCommitted(object sender, EventArgs e)
+        private async void cmbCaisseAndBanks_SelectionChangeCommitted(object sender, EventArgs e)
         {
             try
             {
-                var user = _context.UserCaissesAndBanks.FirstOrDefault(x => x.User_Id.ToString() == cmbCaisseAndBanks.SelectedValue.ToString());
+                var user = await _context.UserCaissesAndBanks.FirstOrDefaultAsync(x => x.User_Id.ToString() == cmbCaisseAndBanks.SelectedValue.ToString());
                 if (user != null)
                 {
                     cbCaisseAndBanks.Checked = user.CaissesAndBanks;
@@ -716,11 +688,11 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             }
         }
 
-        private void cmbDeservedAndTax_SelectionChangeCommitted(object sender, EventArgs e)
+        private async void cmbDeservedAndTax_SelectionChangeCommitted(object sender, EventArgs e)
         {
             try
             {
-                var user = _context.UserDeservedAndTaxs.FirstOrDefault(x => x.User_Id.ToString() == cmbDeservedAndTax.SelectedValue.ToString());
+                var user = await _context.UserDeservedAndTaxs.FirstOrDefaultAsync(x => x.User_Id.ToString() == cmbDeservedAndTax.SelectedValue.ToString());
                 if (user != null)
                 {
                     cbDeserved.Checked = user.Deserved;
@@ -734,18 +706,18 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             }
         }
 
-        private void button8_Click(object sender, EventArgs e)
+        private async void button8_Click(object sender, EventArgs e)
         {
             try
             {
                 ToasterHelper.PlayNotificationSound();
-                var user = _context.UserDeservedAndTaxs.FirstOrDefault(x => x.User_Id.ToString() == cmbDeservedAndTax.SelectedValue.ToString());
+                var user = await _context.UserDeservedAndTaxs.FirstOrDefaultAsync(x => x.User_Id.ToString() == cmbDeservedAndTax.SelectedValue.ToString());
                 if (user != null)
                 {
                     user.Deserved = cbDeserved.Checked;
                     user.Vouchers = cbVouchers.Checked;
                     _context.Update(user);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
             }
             catch (Exception)
@@ -755,11 +727,11 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             }
         }
 
-        private void cmbRefund_SelectionChangeCommitted(object sender, EventArgs e)
+        private async void cmbRefund_SelectionChangeCommitted(object sender, EventArgs e)
         {
             try
             {
-                var user = _context.UserRefunds.FirstOrDefault(x => x.User_Id.ToString() == cmbRefund.SelectedValue.ToString());
+                var user = await _context.UserRefunds.FirstOrDefaultAsync(x => x.User_Id.ToString() == cmbRefund.SelectedValue.ToString());
                 if (user != null)
                 {
                     cbRefund.Checked = user.RefundProduct;
@@ -772,18 +744,18 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             }
         }
 
-        private void button9_Click(object sender, EventArgs e)
+        private async void button9_Click(object sender, EventArgs e)
         {
             try
             {
                 ToasterHelper.PlayNotificationSound();
-                var user = _context.UserRefunds.FirstOrDefault(x => x.User_Id.ToString() == cmbRefund.SelectedValue.ToString());
+                var user = await _context.UserRefunds.FirstOrDefaultAsync(x => x.User_Id.ToString() == cmbRefund.SelectedValue.ToString());
                 if (user != null)
                 {
                     user.RefundProduct = cbRefund.Checked;
                     user.RefundReport = cbRefundReport.Checked;
                     _context.Update(user);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
             }
             catch (Exception)
@@ -793,11 +765,11 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             }
         }
 
-        private void cmbEmployee_SelectionChangeCommitted(object sender, EventArgs e)
+        private async void cmbEmployee_SelectionChangeCommitted(object sender, EventArgs e)
         {
             try
             {
-                var user = _context.UserEmployees.FirstOrDefault(x => x.User_Id.ToString() == cmbEmployee.SelectedValue.ToString());
+                var user = await _context.UserEmployees.FirstOrDefaultAsync(x => x.User_Id.ToString() == cmbEmployee.SelectedValue.ToString());
                 if (user != null)
                 {
                     cbEmployeeBorrowItem.Checked = user.EmployeeBorrowItem;
@@ -816,12 +788,12 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             }
         }
 
-        private void button10_Click(object sender, EventArgs e)
+        private async void button10_Click(object sender, EventArgs e)
         {
             try
             {
                 ToasterHelper.PlayNotificationSound();
-                var user = _context.UserEmployees.FirstOrDefault(x => x.User_Id.ToString() == cmbEmployee.SelectedValue.ToString());
+                var user = await _context.UserEmployees.FirstOrDefaultAsync(x => x.User_Id.ToString() == cmbEmployee.SelectedValue.ToString());
                 if (user != null)
                 {
                     user.EmployeeBorrowItem = cbEmployeeBorrowItem.Checked;
@@ -833,7 +805,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                     user.EmployeeBorrowItemsReport = cbBorrowItemReport.Checked;
                     user.EmployeeBorrowMoneyReport = cbBorrowMoneyReports.Checked;
                     _context.Update(user);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
             }
             catch (Exception)

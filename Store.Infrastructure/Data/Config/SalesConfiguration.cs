@@ -42,6 +42,33 @@ namespace Store.Infrastructure.Data.Config
             builder.Property(p => p.TaxValue).HasColumnType("decimal(18,2)");
         }
     }
+    //public class ProformaInvoiceConfiguration : IEntityTypeConfiguration<ProformaInvoice>
+    //{
+    //    public void Configure(EntityTypeBuilder<ProformaInvoice> builder)
+    //    {
+    //        builder.HasKey(bd => bd.Id);
+
+    //        builder.HasMany(p => p.Details)
+    //            .WithOne(i => i.ProformaInvoice)
+    //            .HasForeignKey(i => i.ProformaId)
+    //            .OnDelete(DeleteBehavior.Cascade);
+    //        builder.HasOne(p => p.Customer)
+    //                .WithMany() // or .WithMany(c => c.ProformaInvoices) if you want
+    //                .HasForeignKey(p => p.CustomerId);
+
+    //        builder.HasOne(x => x.Customer)
+    //            .WithMany()
+    //            .HasForeignKey(x => x.Cust_ID).OnDelete(DeleteBehavior.Restrict);
+    //        builder.HasOne(x => x.Sale)
+    //            .WithMany()
+    //            .HasForeignKey(x => x.Order_ID).OnDelete(DeleteBehavior.Restrict);
+    //        builder.HasOne(x => x.Product)
+    //            .WithMany()
+    //            .HasForeignKey(x => x.Pro_ID).OnDelete(DeleteBehavior.Restrict);
+
+
+    //    }
+    //}
     public class SaleProfitConfiguration : IEntityTypeConfiguration<SaleProfit>
     {
         public void Configure(EntityTypeBuilder<SaleProfit> builder)

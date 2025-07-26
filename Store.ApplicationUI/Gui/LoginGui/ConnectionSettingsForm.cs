@@ -45,17 +45,10 @@ namespace Store.ApplicationUI.Gui.LoginGui
             Code.Helper.ToasterHelper.ShowAddToast();
 
         }
-
-        private void rbWide_CheckedChanged(object sender, EventArgs e)
-        {
-            txtUserCon.Enabled = txtUserpass.Enabled = rbWide.Checked;
-        }
-
-        private void rbLocal_CheckedChanged(object sender, EventArgs e)
-        {
-            txtUserCon.Enabled = txtUserpass.Enabled = rbWide.Checked;
-
-        }
+        private void UpdateConnectionInputs() =>
+               txtUserCon.Enabled = txtUserpass.Enabled = rbWide.Checked;
+        private void rbWide_CheckedChanged(object sender, EventArgs e) => UpdateConnectionInputs();
+        private void rbLocal_CheckedChanged(object sender, EventArgs e) => UpdateConnectionInputs();
 
         private async void button2_Click(object sender, EventArgs e)
         {

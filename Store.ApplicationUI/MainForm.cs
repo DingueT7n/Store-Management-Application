@@ -7,18 +7,49 @@ using Microsoft.SqlServer.Management.Smo;
 using Store.ApplicationUI.Code.GUIHelper;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.Models;
+using Store.ApplicationUI.Code.System;
+using Store.ApplicationUI.Gui.BuysGui;
+using Store.ApplicationUI.Gui.BuysGui.BuysReportsGui;
 using Store.ApplicationUI.Gui.CaisseAndBankGui;
+using Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankReportGui;
+using Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui;
 using Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui;
+using Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenCaisseAndBankReportGui;
+using Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenCaisseReportGui;
+using Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBankReportGui;
+using Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseReportsGui;
+using Store.ApplicationUI.Gui.CustomersGui;
+using Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui;
+using Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui;
+using Store.ApplicationUI.Gui.DeservedGui;
+using Store.ApplicationUI.Gui.DeservedGui.VouchersGui;
+using Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui;
 using Store.ApplicationUI.Gui.EmployeesGui;
 using Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowItemsGui;
 using Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowMoneyGui;
+using Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowMoneyReport;
+using Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowsItemReport;
 using Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryGui;
+using Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryReportGui;
 using Store.ApplicationUI.Gui.GeneralSettingsGui;
 using Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui;
+using Store.ApplicationUI.Gui.HomeGui;
 using Store.ApplicationUI.Gui.ProductsGui;
 using Store.ApplicationUI.Gui.ProductsGui.Category;
+using Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui;
 using Store.ApplicationUI.Gui.ProductsGui.StoreGui;
+using Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDamagedProductReportGui;
+using Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui;
+using Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreTrensfertReportGui;
+using Store.ApplicationUI.Gui.ReturnsGui;
+using Store.ApplicationUI.Gui.ReturnsGui.ReturnsReportsGui;
+using Store.ApplicationUI.Gui.SalesGui;
 using Store.ApplicationUI.Gui.SalesGui.PosGui;
+using Store.ApplicationUI.Gui.SalesGui.SaleProfitGui;
+using Store.ApplicationUI.Gui.SalesGui.SalesReportsGui;
+using Store.ApplicationUI.Gui.SupplierGui;
+using Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui;
+using Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui;
 using Store.Infrastructure.Data;
 
 
@@ -27,25 +58,28 @@ namespace Store.ApplicationUI
 {
     public partial class MainForm : Form
     {
-        private PageHelper pageHelper;
+        private readonly PageHelper pageHelper;
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static ApplicationDbContext? Context { get; set; }
-        public MainForm()
+        public readonly ApplicationDbContext Context;
+        private readonly ControlManager _controlManager;
+
+        public MainForm(ApplicationDbContext dbContext, ControlManager controlManager)
         {
             InitializeComponent();
             KeyPreview = true;
             try
             {
+                _controlManager = controlManager;
 
 
                 Code.Helper.ConStringHelper.SetConString();
 
                 pageHelper = new(this);
-                pageHelper.SetNewPage(Gui.HomeGui.HomeUserControl.Instance(this));
 
 
-                Context = new ApplicationDbContext();
+
+                Context = dbContext;
                 SetScreenState(Properties.Settings.Default.IsMaxScreen);
 
                 isPanelNull = true;
@@ -159,10 +193,7 @@ namespace Store.ApplicationUI
             }
 
         }
-        void TiltOptions()
-        {
 
-        }
 
         public void ShowSubPanel(FlowLayoutPanel flowLayoutPanel)
         {
@@ -200,13 +231,14 @@ namespace Store.ApplicationUI
 
             Properties.Settings.Default.IsMaxScreen = this.WindowState == FormWindowState.Maximized;
             Properties.Settings.Default.Save();
-            Application.Exit();
+            //  Application.Exit();
         }
 
         private void btnHomeSummary_Click(object sender, EventArgs e)
         {
 
-            pageHelper.SetNewPage(Gui.HomeGui.HomeUserControl.Instance(this));
+            pageHelper.SetNewPage(_controlManager.Get<HomeUserControl>());
+
         }
 
         private void BtnProducts_Click(object sender, EventArgs e)
@@ -221,7 +253,8 @@ namespace Store.ApplicationUI
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.ProductsGui.ProductsUserControl.Instance(this));
+            pageHelper.SetNewPage(_controlManager.Get<ProductsUserControl>());
+
         }
 
         private void animationTimer_Tick(object sender, EventArgs e)
@@ -258,23 +291,25 @@ namespace Store.ApplicationUI
                     isPanelAnimating = false;
                     generalFlowLayout.Hide();
                     animationTimer.Stop();
+
                 }
             }
+
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
 
-            AddProductForm addProductForm = AddProductForm.Instance(this);
-            addProductForm.Show();
+            AddProductForm addProductForm = _controlManager.GetF<AddProductForm>();
+            addProductForm.ShowDialog();
             CloseSubPanels();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            AddCategoryForm addCategoryForm = AddCategoryForm.Instance(this);
-            addCategoryForm.Show();
+            AddCategoryForm addCategoryForm = _controlManager.GetF<AddCategoryForm>();
+            addCategoryForm.ShowDialog();
             CloseSubPanels();
 
         }
@@ -288,26 +323,27 @@ namespace Store.ApplicationUI
 
         private void button2_Click_1(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.CustomersGui.CustomersUserControl.Instance(this));
+
+            pageHelper.SetNewPage(_controlManager.Get<CustomersUserControl>());
         }
 
         private void button3_Click_1(object sender, EventArgs e)
         {
-            AddCustomerForm addProductForm = AddCustomerForm.Instance(this);
+            AddCustomerForm form = _controlManager.GetF<AddCustomerForm>();
 
-            addProductForm.Show();
+            form.ShowDialog();
             CloseSubPanels();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.CustomersGui.CustomerAccountGui.CustomerAccountUserControl.Instance(this));
+            pageHelper.SetNewPage(_controlManager.Get<CustomerAccountUserControl>());
 
         }
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.CustomersGui.CustomerReportsGui.CustomerReportsUserControl.Instance(this));
+            pageHelper.SetNewPage(_controlManager.Get<CustomerReportsUserControl>());
 
         }
 
@@ -320,35 +356,34 @@ namespace Store.ApplicationUI
 
         private void btnAddSupplier_Click(object sender, EventArgs e)
         {
-            AddSupplierForm addSupplierForm = AddSupplierForm.Instance(this);
+            AddSupplierForm form = _controlManager.GetF<AddSupplierForm>();
 
-            addSupplierForm.Show();
+            form.ShowDialog();
             CloseSubPanels();
         }
 
         private void btnAllSuppliers_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.SupplierGui.SuppliersUserControl.Instance(this));
+            pageHelper.SetNewPage(_controlManager.Get<SuppliersUserControl>());
         }
 
         private void btnSupplierAccount_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.SupplierGui.SupplierAccountGui.SupplierAccountUserControl.Instance(this));
-
+            pageHelper.SetNewPage(_controlManager.Get<SupplierAccountUserControl>());
         }
 
         private void btnSupplierReports_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.SupplierGui.SupplierReportsGui.SupplierReportsUserControl.Instance(this));
-
+            pageHelper.SetNewPage(_controlManager.Get<SupplierReportsUserControl>());
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            AddStoreForm addStoreForm = AddStoreForm.Instance(this);
-            addStoreForm.Show();
+            var form = _controlManager.GetF<AddStoreForm>();
+            form.ShowDialog();
             CloseSubPanels();
+
 
         }
         public decimal ConvertToFloat(string value)
@@ -370,9 +405,10 @@ namespace Store.ApplicationUI
 
         private void btnNewBuy_Click(object sender, EventArgs e)
         {
-            Context = new ApplicationDbContext();
+
             if (Code.Helper.VerificationSettingsHelper.IsAllSettingsAreApplied(Context))
-                pageHelper.SetNewPage(Gui.BuysGui.BuysUserControl.Instance(this));
+                pageHelper.SetNewPage(_controlManager.Get<BuysUserControl>());
+
         }
 
         private void btnSalesPanel_Click(object sender, EventArgs e)
@@ -384,34 +420,42 @@ namespace Store.ApplicationUI
 
         private void button7_Click(object sender, EventArgs e)
         {
-            Context = new ApplicationDbContext();
+
             if (Code.Helper.VerificationSettingsHelper.IsAllSettingsAreApplied(Context))
-                pageHelper.SetNewPage(Gui.SalesGui.SalesUserControl.Instance(this));
+
+                pageHelper.SetNewPage(_controlManager.Get<SalesUserControl>());
+
         }
 
         private void btnBuysReports_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.BuysGui.BuysReportsGui.BuysReportsUserControl.Instance(this));
+            pageHelper.SetNewPage(_controlManager.Get<BuysReportsUserControl>());
         }
 
-        private void btnComptoire_Click(object sender, EventArgs e)
+        private async void btnComptoire_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            Context = new ApplicationDbContext();
+
             if (Code.Helper.VerificationSettingsHelper.IsAllSettingsAreApplied(Context))
             {
-                var caisse = Context.Caisses.FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
+                var caisse = await Context.Caisses.FirstOrDefaultAsync(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
                 if (caisse != null)
                 {
                     if (caisse.Status == Core.Entities.Caisses.CaisseStatus.Closed)
                     {
-                        OpenOrCloseCaisseForm Form = new OpenOrCloseCaisseForm(this);
+                        OpenOrCloseCaisseForm Form = _controlManager.CreateF<OpenOrCloseCaisseForm>();
+                        Form.SetMain(true);
+                        Form.SetPose(false);
+
                         Form.ShowDialog();
+
+
                     }
                     else if (caisse.Status == Core.Entities.Caisses.CaisseStatus.Open)
                     {
                         this.Hide();
-                        PosForm posForm = new PosForm(this);
+                        PosForm posForm = _controlManager.CreateF<PosForm>();
+
                         posForm.ShowDialog();
                         this.Show();
 
@@ -424,7 +468,9 @@ namespace Store.ApplicationUI
 
         private void button8_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.SalesGui.SalesReportsGui.SalesReportsUserControl.Instance(this));
+
+            pageHelper.SetNewPage(_controlManager.Get<SalesReportsUserControl>());
+
 
         }
 
@@ -439,13 +485,17 @@ namespace Store.ApplicationUI
 
         private void button9_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.SalesGui.SaleProfitGui.SalesProfitUserControl.Instance(this));
+
+            pageHelper.SetNewPage(_controlManager.Get<SalesProfitUserControl>());
+
 
         }
 
         private void button11_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.DeservedGui.DeservedUserControl.Instance(this));
+
+            pageHelper.SetNewPage(_controlManager.Get<DeservedUserControl>());
+
 
         }
 
@@ -458,7 +508,8 @@ namespace Store.ApplicationUI
 
         private void button12_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.DeservedGui.VouchersGui.VouchersUserControl.Instance(this));
+            pageHelper.SetNewPage(_controlManager.Get<VouchersUserControl>());
+
 
         }
 
@@ -472,31 +523,32 @@ namespace Store.ApplicationUI
 
         private void button15_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.ReturnsGui.ReturnUserControl.Instance(this));
+            pageHelper.SetNewPage(_controlManager.Get<ReturnUserControl>());
+
         }
 
         private void button16_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.ReturnsGui.ReturnsReportsGui.ReturnsReportsUserControl.Instance(this));
+            pageHelper.SetNewPage(_controlManager.Get<ReturnsReportsUserControl>());
+
 
         }
 
         private void button17_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.ProductsGui.StoreGui.StoreInventoryGui.StoreInventoryUserControl.Instance(this));
-
+            pageHelper.SetNewPage(_controlManager.Get<StoreInventoryUserControl>());
         }
 
         private void button18_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.ProductsGui.StoreGui.StoreTrensfertReportGui.StoreTransfertReportUserControl.Instance(this));
+            pageHelper.SetNewPage(_controlManager.Get<StoreTransfertReportUserControl>());
 
         }
 
         private void button19_Click(object sender, EventArgs e)
         {
 
-            pageHelper.SetNewPage(Gui.ProductsGui.StoreGui.StoreDamagedProductReportGui.StoreDamagedProductUserControl.Instance(this));
+            pageHelper.SetNewPage(_controlManager.Get<StoreDamagedProductUserControl>());
         }
 
         private void btnEmployeerPanel_Click(object sender, EventArgs e)
@@ -509,65 +561,77 @@ namespace Store.ApplicationUI
 
         private void btnAllEmployees_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.EmployeesGui.EmployeeUserControl.Instance(this));
+
+            pageHelper.SetNewPage(_controlManager.Get<EmployeeUserControl>());
 
         }
 
         private void btnNewEmployee_Click(object sender, EventArgs e)
         {
-            AddEmployeeForm addProductForm = AddEmployeeForm.Instance(this);
+            AddEmployeeForm addProductForm = _controlManager.GetF<AddEmployeeForm>();
 
-            addProductForm.Show();
+
+            addProductForm.ShowDialog();
             CloseSubPanels();
         }
 
         private void button20_Click(object sender, EventArgs e)
         {
-            EmployeeBorrowItemForm addProductForm = EmployeeBorrowItemForm.Instance(this);
 
-            addProductForm.Show();
+            EmployeeBorrowItemForm addProductForm = _controlManager.GetF<EmployeeBorrowItemForm>();
+
+            addProductForm.ShowDialog();
         }
 
         private void button21_Click(object sender, EventArgs e)
         {
-            EmployeeBorrowMoneyForm addProductForm = EmployeeBorrowMoneyForm.Instance(this);
 
-            addProductForm.Show();
+            EmployeeBorrowMoneyForm addProductForm = _controlManager.GetF<EmployeeBorrowMoneyForm>();
+
+            addProductForm.ShowDialog();
             CloseSubPanels();
 
         }
 
         private void button22_Click(object sender, EventArgs e)
         {
-            EmployeeSalaryForm addProductForm = EmployeeSalaryForm.Instance(this);
 
-            addProductForm.Show();
+            EmployeeSalaryForm addProductForm = _controlManager.GetF<EmployeeSalaryForm>();
+
+
+            addProductForm.ShowDialog();
             CloseSubPanels();
         }
 
         private void button23_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.EmployeesGui.EmployeeBorrowsItemReport.EmployeeBorrowItemReportUserControl.Instance(this));
+
+            pageHelper.SetNewPage(_controlManager.Get<EmployeeBorrowItemReportUserControl>());
+
 
         }
 
         private void button24_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.EmployeesGui.EmployeeBorrowMoneyReport.EmployeeBorrowMoneyReportUserControl.Instance(this));
+
+            pageHelper.SetNewPage(_controlManager.Get<EmployeeBorrowMoneyReportUserControl>());
+
 
         }
 
         private void button25_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.EmployeesGui.EmployeeSalaryReportGui.EmployeeSalaryReportUserControl.Instance(this));
+
+            pageHelper.SetNewPage(_controlManager.Get<EmployeeSalaryReportUserControl>());
+
 
         }
 
         private void button27_Click(object sender, EventArgs e)
         {
-            UserRolesForm userRolesForm = UserRolesForm.Instance(this);
+            UserRolesForm userRolesForm = _controlManager.GetF<UserRolesForm>();
 
-            userRolesForm.Show();
+            userRolesForm.ShowDialog();
             CloseSubPanels();
         }
 
@@ -579,50 +643,56 @@ namespace Store.ApplicationUI
 
         private void btnApplicationSettings_Click(object sender, EventArgs e)
         {
-            ApplicationSettingsForm ApplicationSettingsForm = ApplicationSettingsForm.Instance(this);
+            ApplicationSettingsForm ApplicationSettingsForm = _controlManager.GetF<ApplicationSettingsForm>();
 
-            ApplicationSettingsForm.Show();
+            ApplicationSettingsForm.ShowDialog();
             CloseSubPanels();
         }
 
         private void button1_Click_2(object sender, EventArgs e)
         {
-            CaisseDetailsForm caisseDetailsForm = CaisseDetailsForm.Instance(this);
-            caisseDetailsForm.Show();
+            CaisseDetailsForm caisseDetailsForm = _controlManager.GetF<CaisseDetailsForm>();
+            caisseDetailsForm.ShowDialog();
             CloseSubPanels();
         }
 
         private void button2_Click_2(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.CaisseAndBankGui.DepositToCaisseReportGui.DepositToCaisseReportUserControl.Instance(this));
+            pageHelper.SetNewPage(_controlManager.Get<DepositToCaisseReportUserControl>());
+
 
         }
         private void button3_Click_2(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.CaisseAndBankGui.DepositToBankReportGui.DepositToBankReportUserControl.Instance(this));
+            pageHelper.SetNewPage(_controlManager.Get<DepositToBankReportUserControl>());
+
 
         }
 
         private void button4_Click_1(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.CaisseAndBankGui.WithdrawFromCaisseReportsGui.WithdrawFromCaisseReportsUserControl.Instance(this));
+            pageHelper.SetNewPage(_controlManager.Get<WithdrawFromCaisseReportsUserControl>());
+
         }
 
         private void button6_Click_1(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.CaisseAndBankGui.TransfertBetweenCaisseReportGui.TransfertBetweenCaisseReportUserControl.Instance(this));
+            pageHelper.SetNewPage(_controlManager.Get<TransfertBetweenCaisseReportUserControl>());
+
 
         }
 
         private void button5_Click_1(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.CaisseAndBankGui.WithdrawFromBankReportGui.WIthdrawFromBankReportUserControl.Instance(this));
+            pageHelper.SetNewPage(_controlManager.Get<WIthdrawFromBankReportUserControl>());
+
 
         }
 
         private void button7_Click_1(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.CaisseAndBankGui.TransfertBetweenCaisseAndBankReportGui.TransfertBetweenCaisseAndBankReportUserControl.Instance(this));
+            pageHelper.SetNewPage(_controlManager.Get<TransfertBetweenCaisseAndBankReportUserControl>());
+
 
         }
 
@@ -678,7 +748,7 @@ namespace Store.ApplicationUI
                 // Create a connection to the master database
                 using (var masterConnection = new SqlConnection($"Server={serverName};Database=master;{builder.ConnectionString}"))
                 {
-                    masterConnection.Open();
+                    masterConnection.OpenAsync();
 
                     // Kill all processes connected to the target database
                     var killProcessesCommand = $@"
@@ -704,7 +774,7 @@ namespace Store.ApplicationUI
                 ToasterHelper.ShowErrorHappened(ex.Message);
             }
         }
-        private void button9_Click_1(object sender, EventArgs e)
+        private async void button9_Click_1(object sender, EventArgs e)
         {
             try
             {
@@ -744,7 +814,7 @@ namespace Store.ApplicationUI
 
                         restore.ReplaceDatabase = true;
                         restore.NoRecovery = false;
-                        restore.SqlRestore(server);
+                        restore.SqlRestoreAsync(server);
                         //// Use the SQL command for restoring the database
                         //string restoreQuery = $"RESTORE DATABASE YourDatabaseName FROM DISK = '{backupFilePath}' WITH REPLACE;";
 
@@ -766,51 +836,12 @@ namespace Store.ApplicationUI
             {
                 MessageBox.Show($"حدث خطأ أثناء استعادة قاعدة البيانات: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-
-
-
-            //try
-            //{
-
-            //    Server server = new Server($"{Properties.Settings.Default.Server}");
-            //    Database db = server.Databases[$"{Properties.Settings.Default.DataBase}"];
-            //    if (db != null)
-            //    {
-            //        server.KillAllProcesses(db.Name);
-            //    }
-            //    Restore restore = new Restore();
-            //    restore.Database = db.Name;
-            //    restore.Action = RestoreActionType.Database;
-            //    OpenFileDialog openFileDialog = new OpenFileDialog
-            //    {
-            //        Filter = "Backup Files (*.bak)|*.bak",
-            //        Title = "اختر ملف النسخة الاحتياطية"
-            //    };
-            //    if (openFileDialog.ShowDialog() == DialogResult.OK)
-            //    {
-
-            //        restore.Devices.AddDevice(openFileDialog.FileName, DeviceType.File);
-            //        restore.ReplaceDatabase = true;
-            //        restore.NoRecovery = false;
-            //        restore.SqlRestore(server);
-
-            //        MessageBox.Show("Restore Has Been Successfully", "Operation Finished");
-
-
-            //    }
-
-            //}
-            //catch (Exception)
-            //{
-
-            //}
-
         }
 
         private void button10_Click_1(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.DeservedGui.VouchersReportGui.VouchersReportsUserControl.Instance(this));
+            pageHelper.SetNewPage(_controlManager.Get<VouchersReportsUserControl>());
+
 
         }
 
@@ -823,26 +854,27 @@ namespace Store.ApplicationUI
 
         private void button11_Click_1(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.HomeGui.StatisticsUserControl.Instance(this));
+
+            pageHelper.SetNewPage(_controlManager.Get<StatisticsUserControl>());
 
         }
 
         private void btnProductDiscount_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.ProductsGui.ProductDiscountGui.ProductDiscountUserControl.Instance(this));
+            pageHelper.SetNewPage(_controlManager.Get<ProductDiscountUserControl>());
 
         }
 
         private void button1_Click_3(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.CaisseAndBankGui.FondCaisseGui.CaisseStatusAndOperationUserControl.Instance(this));
+            pageHelper.SetNewPage(_controlManager.Get<CaisseStatusAndOperationUserControl>());
+
 
         }
 
         private void btnAlerts_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(Gui.HomeGui.AlertsUserControl.Instance(this));
-
+            pageHelper.SetNewPage(_controlManager.Get<AlertsUserControl>());
         }
 
         private void barButtonItem1_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -890,7 +922,8 @@ namespace Store.ApplicationUI
             // Escape: Return to Home
             if (keyData == Keys.Escape)
             {
-                pageHelper.SetNewPage(Gui.HomeGui.HomeUserControl.Instance(this));
+                pageHelper.SetNewPage(_controlManager.Get<HomeUserControl>());
+
                 return true;
             }
 
@@ -902,6 +935,16 @@ namespace Store.ApplicationUI
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(_controlManager.Get<HomeUserControl>());
+        }
+        public UserControl GetUserControl()
+        {
+            return ContainerPanel.Controls.OfType<UserControl>().FirstOrDefault();
+
         }
     }
 }

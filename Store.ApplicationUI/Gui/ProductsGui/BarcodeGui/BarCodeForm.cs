@@ -5,36 +5,16 @@ namespace Store.ApplicationUI.Gui.ProductsGui.BarcodeGui
 {
     public partial class BarCodeForm : Form
     {
-        private static BarCodeForm? _Form;
-        private MainForm _main;
-        private ApplicationDbContext _context;
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
 
-        public BarCodeForm(MainForm main)
+        public BarCodeForm(MainForm main, ApplicationDbContext context)
         {
             InitializeComponent();
             _main = main;
-            this.Owner = _main;
-            _context = new ApplicationDbContext();
+            _context = context;
         }
-        public static BarCodeForm Instance(MainForm main)
-        {
-            if (_Form == null || _Form.IsDisposed)
-            {
-                _Form = new BarCodeForm(main);
-            }
-            else
-            {
-                // Bring the form to the front if it exists.
-                if (!_Form.Visible)
-                {
-                    _Form.Show();
-                }
-                _Form.BringToFront();
-            }
 
-            return _Form;
-
-        }
         private void btnReviewPrint_Click(object sender, EventArgs e)
         {
             try

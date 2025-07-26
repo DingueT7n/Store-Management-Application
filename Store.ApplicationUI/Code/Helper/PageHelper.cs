@@ -53,31 +53,39 @@ namespace Store.ApplicationUI.Code.Helper
         }
         public static void SetOperation(UserControl pageUserControl, CaisseDetailsForm detailsForm)
         {
-            if (Code.Models.LocalUser.User is null) return;
+            if (Code.Models.LocalUser.User is null)
+                return;
+
             ToasterHelper.PlayNotificationSound();
-            var oldPage = detailsForm.panelUserControls.Controls.OfType<UserControl>().FirstOrDefault();
 
-            // Remove and dispose of the old page
-            if (oldPage != null && oldPage != pageUserControl)
+            var existingControl = detailsForm.panelUserControls.Controls
+                .OfType<UserControl>()
+                .FirstOrDefault();
+
+            // Remove and dispose the old control if different from the new one
+            if (existingControl != null && existingControl != pageUserControl)
             {
-                detailsForm.panelUserControls.Controls.Remove(oldPage);
-
-                if (oldPage is IDisposable disposableOldPage)
-                {
-                    disposableOldPage.Dispose();
-                }
+                detailsForm.panelUserControls.Controls.Remove(existingControl);
             }
 
-            // Add the new page
-            if (pageUserControl != oldPage)
+            // If not already added, add and dock the new control
+            if (!detailsForm.panelUserControls.Controls.Contains(pageUserControl))
             {
                 pageUserControl.Dock = DockStyle.Fill;
                 detailsForm.panelUserControls.Controls.Add(pageUserControl);
-                detailsForm.Size = detailsForm.MaximumSize;
             }
 
+            // Resize the form to fit the new control (optional)
+            detailsForm.Size = detailsForm.MaximumSize;
+
+            // Automatically invoke LoadData method if exists
+            //var loadDataMethod = pageUserControl.GetType()
+            //    .GetMethod("LoadData", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+            //loadDataMethod?.Invoke(pageUserControl, null);
         }
-        public UserControl? CurrentUserControl(UserControl pageUserControl)
+
+        public UserControl CurrentUserControl()
         {
             return _main.ContainerPanel.Controls.OfType<UserControl>().FirstOrDefault();
         }

@@ -2,70 +2,60 @@
 using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.GUIHelper;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.ProductsGui.Category;
 using Store.ApplicationUI.Gui.ProductsGui.StoreGui;
+using Store.Core.Entities.Products;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.ProductsGui
 {
     public partial class ProductsUserControl : UserControl, IKeyAwareControl
     {
-        private static ProductsGui.ProductsUserControl? _productsUserControl;
-        private static MainForm? _main;
-        private AddProductForm addProductForm;
-        public AddCategoryForm addCategoryForm;
-        public AddStoreForm addStoreForm;
-        private static ApplicationDbContext? _context;
-        public static ProductsRepository? productsRepository;
-        public static CategorysRepository? categoryRepository;
-        public ProductsUserControl()
+        private readonly ApplicationDbContext _context;
+        private readonly IProductRepository _productsRepository;
+        private readonly ControlManager _controlManager;
+        private readonly MainForm _main;
+        public ProductsUserControl(
+       ApplicationDbContext context,
+       IProductRepository productsRepository,
+
+       MainForm main
+             , ControlManager controlManager)
+
         {
             InitializeComponent();
-        }
+            _controlManager = controlManager;
 
-        public static ProductsUserControl Instance(MainForm main)
-        {
+            _context = context;
+            _productsRepository = productsRepository;
+
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _context = new ApplicationDbContext();
-            if (_productsUserControl == null)
-            {
 
-                productsRepository = new ProductsRepository(_context);
-                categoryRepository = new CategorysRepository(_context);
-                _productsUserControl = new ProductsUserControl();
-
-            }
-
-            // Return the singleton instance
-            _productsUserControl.LoadData();
-            return _productsUserControl;
+            this.Load += ProductsUserControl_Load;
         }
-        public static bool CheckInstance()
+
+        private async void ProductsUserControl_Load(object sender, EventArgs e)
         {
-
-
-            return (_productsUserControl == null);
-
-
+            await LoadData();
         }
 
         private void btnAddProduct_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            if (addProductForm == null || addProductForm.IsDisposed)
+
+            var form = _controlManager.GetF<AddProductForm>();
+
+            if (!form.Visible)
             {
-                addProductForm = AddProductForm.Instance(_main);
-                addProductForm.Show();
+                form.ShowDialog();
             }
             else
             {
-                addProductForm.Focus();
+                form.Focus();
             }
-
-
         }
         void CalcStats()
         {
@@ -84,13 +74,14 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         public async void SetProductsToDgv(int skip)
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            DgvProducts.DataSource = _context.Products.
-                Include(x => x.Category).Skip(skip).Take(Properties.Settings.Default.NoOfDataInDgvs).AsNoTracking().ToList();
+            DgvProducts.DataSource = new List<Product>();
+            DgvProducts.DataSource = await _context.Products.
+                Include(x => x.Category).Skip(skip).Take(Properties.Settings.Default.NoOfDataInDgvs).AsNoTracking().ToListAsync();
             // Set data source
 
 
             // Calculate total pages
-            double value = _context.Products.AsNoTracking().Count() / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
+            double value = await _context.Products.AsNoTracking().CountAsync() / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
             int pageCount = Convert.ToInt32(Math.Ceiling(value));
 
             // Update pagination combo box
@@ -110,19 +101,14 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         }
 
-        public static void RefreshDgv()
-        {
-            //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAllProducts());
-            _productsUserControl.LoadData();
-        }
         // methodes 
-        public async void LoadData()
+        public async Task LoadData()
         {
 
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => productsRepository.IsConnected()))
+            if (await _productsRepository.IsConnectedAsync())
             {
                 //Start Load Data
 
@@ -229,58 +215,58 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         }
 
-        private void btnEditProduct_Click(object sender, EventArgs e)
+        private async void btnEditProduct_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (DgvProducts.Rows.Count > 0)
             {
-                if (addProductForm == null || addProductForm.IsDisposed)
+                var form = _controlManager.GetF<AddProductForm>();
+
+                if (!form.Visible)
                 {
-                    addProductForm = AddProductForm.Instance(_main);
 
-
-                    addProductForm.SetDataToEdit(
-                        DgvProducts.CurrentRow.Cells[1].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[0]?.Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[16].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[11].Value.ToString(),
-                        Convert.ToBoolean(DgvProducts.CurrentRow.Cells[9].Value),
-                        DgvProducts.CurrentRow.Cells[7].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[3].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[2].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[6].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[4].Value.ToString(),
-                       Convert.ToDateTime(DgvProducts.CurrentRow.Cells[10].Value),
-                        DgvProducts.CurrentRow.Cells[12].Value?.ToString(),
-                        DgvProducts.CurrentRow.Cells[8].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[20].Value.ToString(),
-                        (byte[])DgvProducts.CurrentRow.Cells[15].Value,
-                          DgvProducts.CurrentRow.Cells[16].Value.ToString()
-                          , DgvProducts.CurrentRow.Cells[5].Value.ToString()
-                          , DgvProducts.CurrentRow.Cells[13].Value.ToString()
-                          , DgvProducts.CurrentRow.Cells[14].Value.ToString()
-                          , DgvProducts.CurrentRow.Cells[19].Value.ToString()
-                        );
-
-                    addProductForm.Show();
+                    //form.SetDataToEdit(
+                    //        DgvProducts.CurrentRow.Cells[1].Value.ToString(),
+                    //        DgvProducts.CurrentRow.Cells[0]?.Value.ToString(),
+                    //        DgvProducts.CurrentRow.Cells[16].Value.ToString(),
+                    //        DgvProducts.CurrentRow.Cells[11].Value.ToString(),
+                    //        Convert.ToBoolean(DgvProducts.CurrentRow.Cells[9].Value),
+                    //        DgvProducts.CurrentRow.Cells[7].Value.ToString(),
+                    //        DgvProducts.CurrentRow.Cells[3].Value.ToString(),
+                    //        DgvProducts.CurrentRow.Cells[2].Value.ToString(),
+                    //        DgvProducts.CurrentRow.Cells[6].Value.ToString(),
+                    //        DgvProducts.CurrentRow.Cells[4].Value.ToString(),
+                    //       Convert.ToDateTime(DgvProducts.CurrentRow.Cells[10].Value),
+                    //        DgvProducts.CurrentRow.Cells[12].Value?.ToString(),
+                    //        DgvProducts.CurrentRow.Cells[8].Value.ToString(),
+                    //        DgvProducts.CurrentRow.Cells[20].Value.ToString(),
+                    //        (byte[])DgvProducts.CurrentRow.Cells[15].Value,
+                    //          DgvProducts.CurrentRow.Cells[16].Value.ToString()
+                    //          , DgvProducts.CurrentRow.Cells[5].Value.ToString()
+                    //          , DgvProducts.CurrentRow.Cells[13].Value.ToString()
+                    //          , DgvProducts.CurrentRow.Cells[14].Value.ToString()
+                    //          , DgvProducts.CurrentRow.Cells[19].Value.ToString()
+                    //        );
+                    await form.SetDataToEditFromId(Convert.ToInt32(DgvProducts.CurrentRow.Cells[20].Value.ToString()));
+                    form.ShowDialog();
                 }
                 else
                 {
-                    addProductForm.Focus();
+                    form.Focus();
                 }
             }
         }
 
-        private void btnDeleteProduct_Click(object sender, EventArgs e)
+        private async void btnDeleteProduct_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
-                productsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[20].Value.ToString());
+                _productsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[20].Value.ToString());
                 Code.Helper.ToasterHelper.ShowDeletedToast();
 
             }
-            RefreshDgv();
+            await LoadData();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -292,7 +278,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
 
 
-                DgvProducts.DataSource = productsRepository?.SearchAll(txtSearch.Text, Properties.Settings.Default.NoOfDataInDgvs,
+                DgvProducts.DataSource = _productsRepository?.SearchAll(txtSearch.Text, Properties.Settings.Default.NoOfDataInDgvs,
                     cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs);
                 lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
 
@@ -309,69 +295,73 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         private void btnAddCategory_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            if (addCategoryForm == null || addCategoryForm.IsDisposed)
+
+
+            var form = _controlManager.GetF<AddCategoryForm>();
+
+            if (!form.Visible)
             {
-                addCategoryForm = new AddCategoryForm(_main);
-                addCategoryForm.Show();
+                form.ShowDialog();
             }
             else
             {
-                addCategoryForm.Focus();
+                form.Focus();
             }
         }
 
         private void btnAddStore_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            if (addStoreForm == null || addStoreForm.IsDisposed)
+
+            var form = _controlManager.GetF<AddStoreForm>();
+
+            if (!form.Visible)
             {
-                addStoreForm = new(_main);
-                addStoreForm.Show();
+                form.ShowDialog();
             }
             else
             {
-                addStoreForm.Focus();
+                form.Focus();
             }
         }
 
-        private void btnAddSimilareProduct_Click(object sender, EventArgs e)
+        private async void btnAddSimilareProduct_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (DgvProducts.Rows.Count > 0)
             {
-                if (addProductForm == null || addProductForm.IsDisposed)
+                var form = _controlManager.GetF<AddProductForm>();
+                if (!form.Visible)
                 {
-                    addProductForm = AddProductForm.Instance(_main);
+                    //form.SetSimilaireDataToAdd(
+                    //     DgvProducts.CurrentRow.Cells[1].Value.ToString(),
+                    //   DgvProducts.CurrentRow.Cells[0].Value.ToString(),
+                    //   DgvProducts.CurrentRow.Cells[16].Value.ToString(),
+                    //   DgvProducts.CurrentRow.Cells[11].Value.ToString(),
+                    //   Convert.ToBoolean(DgvProducts.CurrentRow.Cells[9].Value),
+                    //   DgvProducts.CurrentRow.Cells[7].Value.ToString(),
+                    //   DgvProducts.CurrentRow.Cells[3].Value.ToString(),
+                    //   DgvProducts.CurrentRow.Cells[2].Value.ToString(),
+                    //   DgvProducts.CurrentRow.Cells[6].Value.ToString(),
+                    //   DgvProducts.CurrentRow.Cells[4].Value.ToString(),
+                    //  Convert.ToDateTime(DgvProducts.CurrentRow.Cells[10].Value),
+                    //   DgvProducts.CurrentRow.Cells[12].Value?.ToString(),
+                    //   DgvProducts.CurrentRow.Cells[8].Value.ToString(),
+                    //   DgvProducts.CurrentRow.Cells[20].Value.ToString(),
+                    //   (byte[])DgvProducts.CurrentRow.Cells[15].Value,
+                    //     DgvProducts.CurrentRow.Cells[16].Value.ToString()
+                    //     , DgvProducts.CurrentRow.Cells[5].Value.ToString()
+                    //     , DgvProducts.CurrentRow.Cells[13].Value.ToString()
+                    //     , DgvProducts.CurrentRow.Cells[14].Value.ToString()
+                    //     , DgvProducts.CurrentRow.Cells[19].Value.ToString()
+                    //   );
+                    await form.SetSimilaireDataToAddFromId(Convert.ToInt32(DgvProducts.CurrentRow.Cells[20].Value.ToString()));
 
-
-                    addProductForm.SetSimilaireDataToAdd(
-                          DgvProducts.CurrentRow.Cells[1].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[0].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[16].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[11].Value.ToString(),
-                        Convert.ToBoolean(DgvProducts.CurrentRow.Cells[9].Value),
-                        DgvProducts.CurrentRow.Cells[7].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[3].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[2].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[6].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[4].Value.ToString(),
-                       Convert.ToDateTime(DgvProducts.CurrentRow.Cells[10].Value),
-                        DgvProducts.CurrentRow.Cells[12].Value?.ToString(),
-                        DgvProducts.CurrentRow.Cells[8].Value.ToString(),
-                        DgvProducts.CurrentRow.Cells[20].Value.ToString(),
-                        (byte[])DgvProducts.CurrentRow.Cells[15].Value,
-                          DgvProducts.CurrentRow.Cells[16].Value.ToString()
-                          , DgvProducts.CurrentRow.Cells[5].Value.ToString()
-                          , DgvProducts.CurrentRow.Cells[13].Value.ToString()
-                          , DgvProducts.CurrentRow.Cells[14].Value.ToString()
-                          , DgvProducts.CurrentRow.Cells[19].Value.ToString()
-                        );
-
-                    addProductForm.Show();
+                    form.ShowDialog();
                 }
                 else
                 {
-                    addProductForm.Focus();
+                    form.Focus();
                 }
             }
         }

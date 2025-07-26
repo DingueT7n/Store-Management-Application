@@ -1,7 +1,8 @@
 ﻿using System.Data;
 using System.Globalization;
-using DevExpress.Xpo;
+using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.PaymentGui;
 using Store.ApplicationUI.Reports.ReportPerviwGui;
@@ -9,86 +10,56 @@ using Store.Core.Entities.Buys;
 using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Products;
 using Store.Core.Entities.Suppliers;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.BuysGui
 {
     public partial class BuysUserControl : UserControl
     {
 
-        private static BuysUserControl? _buysUserControl;
-        private static MainForm? _main;
-        private static ApplicationDbContext _context;
-        public static BuysRepository? buysRepository;
-        public static decimal PaidUp;
-        public static decimal Remain;
-
-
-        public BuysUserControl()
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+        private readonly IBuysRepository _buysRepository;
+        private readonly ControlManager _controlManager;
+        public decimal PaidUp;
+        public decimal Remain;
+        public BuysUserControl(MainForm main, ApplicationDbContext context, IBuysRepository buysRepository, ControlManager controlManager)
         {
             InitializeComponent();
-
-        }
-        public static BuysUserControl Instance(MainForm main)
-        {
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _context = new ApplicationDbContext();
-            if (_buysUserControl == null)
-            {
+            _context = context;
+            _buysRepository = buysRepository;
+            _controlManager = controlManager;
+            LoadData();
+        }
 
-                buysRepository = new BuysRepository(_context);
-                _buysUserControl = new BuysUserControl();
-            }
-            // Return the singleton instance
-            _buysUserControl.LoadData();
-            return _buysUserControl;
-        }
-        public static bool CheckInstance()
-        {
-            return (_buysUserControl == null);
-        }
-        private void setPrivateProductAndAdditTotable(Product product)
+
+        public void setPrivateProductAndAdditTotable(Product product)
         {
             txtSearchBarCode.Text = product.CodeBar;
             SetProductsToTable();
             AddNewRow();
         }
-        public static bool setProductFromSelector(Product product)
-        {
-            if (product is not null)
-            {
-                _buysUserControl.setPrivateProductAndAdditTotable(product);
-                return true;
-            }
-            return false;
-        }
-        public static void RefreshDgv()
-        {
-            //DgvِProducts.DataSource = await Task.Run(() => productsRepository.GetAllProducts());
-            _buysUserControl.LoadData();
-        }
-        // methodes 
         public async void LoadData()
         {
 
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => buysRepository.IsConnected()))
+            if (await _buysRepository.IsConnectedAsync())
             {
                 //Start Load Data
-                txtFactureNumber.Text = buysRepository.GetFactureNumber();
+                txtFactureNumber.Text = _buysRepository.GetFactureNumber();
                 // if its an admin or Normal user 
                 SetColumns();
-                SetProductsToDgv();
-                cmbSuppliers.DataSource = _context.Suppliers.ToList();
+
+                cmbSuppliers.DataSource = await _context.Suppliers.ToListAsync();
                 cmbSuppliers.DisplayMember = "SupplierName";
                 cmbSuppliers.ValueMember = "Id";
                 cmbSuppliers.Text = "اختر مورد";
 
-                cmbStores.DataSource = _context.Stores.ToList();
+                cmbStores.DataSource = await _context.Stores.ToListAsync();
                 cmbStores.DisplayMember = "StoreName";
                 cmbStores.ValueMember = "Id";
                 cmbStores.Text = "اختر مخزن";
@@ -97,7 +68,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 dtpReminderDate.Value = DateTime.Now.AddDays(Properties.Settings.Default.DaysAddDebt);
 
                 cmbStores.SelectedValue = Properties.Settings.Default.StoreIdDefault;
-                cmbStores.Text = _context.Stores.FirstOrDefault(x => x.Id == Properties.Settings.Default.StoreIdDefault).StoreName;
+                cmbStores.Text = (await _context.Stores.FirstOrDefaultAsync(x => x.Id == Properties.Settings.Default.StoreIdDefault)).StoreName;
 
 
 
@@ -182,7 +153,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
             dtpDateExpiration.Value = DateTime.Now.AddDays(20);
 
         }
-        public static void InitializeData(string paidUp, string remain)
+        public void InitializeData(string paidUp, string remain)
         {
             PaidUp = _main.ConvertToFloat(paidUp);
             Remain = _main.ConvertToFloat(remain);
@@ -238,14 +209,14 @@ namespace Store.ApplicationUI.Gui.BuysGui
             }
         }
         private Product _product;
-        public async void SetProductsToTable()
+        public async Task SetProductsToTable()
         {
             try
             {
 
 
                 //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-                _product = buysRepository.GetProductBarCode(txtSearchBarCode.Text);
+                _product = _buysRepository.GetProductBarCode(txtSearchBarCode.Text);
                 if (_product is not null)
                 {
                     InitializeTextBoxesAndLables(_product);
@@ -830,7 +801,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
                         }
                     }
                     var buy = SetBuy();
-                    _context.Add(buy);
+                    await _context.AddAsync(buy);
                     await _context.SaveChangesAsync();
 
                     for (int i = 0; i < DgvِProducts.Rows.Count; i++)
@@ -842,7 +813,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
 
                         // Update product and add quantity
                         _context.Update(SetProduct(i));
-                        _context.Add(SetProductQuentity(i));
+                        await _context.AddAsync(SetProductQuentity(i));
                     }
 
                     await HandleCaisseAndSupplierAsync(buy);
@@ -865,7 +836,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
 
                 if (Properties.Settings.Default.PrintSaleFactureType8cm)
                 {
-                    Reports.BuysReports.buy8cm buy8cm = new();
+                    Reports.BuysReports.buy8cm buy8cm = _controlManager.GetR<Reports.BuysReports.buy8cm>(); ;
                     buy8cm.DataSource = BuyDetailsTable;
 
                     if (rbPrinterDirectly.Checked)
@@ -886,7 +857,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 }
                 else
                 {
-                    Reports.BuysReports.buyA4 buyA4 = new();
+                    Reports.BuysReports.buyA4 buyA4 = _controlManager.GetR<Reports.BuysReports.buyA4>();
                     buyA4.DataSource = BuyDetailsTable;
                     printername = Properties.Settings.Default.PrinterA4;
 
@@ -953,7 +924,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 throw;
             }
         }
-        public static bool Process = false;
+        public bool Process = false;
         private async void btnPay_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
@@ -962,18 +933,19 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 return;
             if (ValidatePay())
             {
-                _context = new ApplicationDbContext();
-                AddPaymentForm addPaymentForm = new(_main, 0);
 
+                AddPaymentForm addPaymentForm = _controlManager.GetF<AddPaymentForm>();
+
+                addPaymentForm.setTypeForm(0);
                 // Determine payment type and show the payment form
                 if (rBPayCash.Checked)
                 {
-                    addPaymentForm.LoadData(TotalFacture.ToString(), TotalFacture.ToString(), "0");
+                    addPaymentForm.LoadData(TotalFacture.ToString(), TotalFacture.ToString(), "0", 0);
                     addPaymentForm.ShowDialog();
                 }
                 else if (rBPayDebt.Checked || rBPayPartial.Checked)
                 {
-                    addPaymentForm.LoadData(TotalFacture.ToString(), "0", TotalFacture.ToString());
+                    addPaymentForm.LoadData(TotalFacture.ToString(), "0", TotalFacture.ToString(), 0);
                     addPaymentForm.ShowDialog();
                 }
 
@@ -1341,7 +1313,8 @@ namespace Store.ApplicationUI.Gui.BuysGui
         private void btnSearchImage_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            SelectProductsForm selectProductsForm = SelectProductsForm.Instance(_main, true);
+            SelectProductsForm selectProductsForm = _controlManager.GetF<SelectProductsForm>();
+            selectProductsForm.SetBuy();
             selectProductsForm.ShowDialog();
         }
     }

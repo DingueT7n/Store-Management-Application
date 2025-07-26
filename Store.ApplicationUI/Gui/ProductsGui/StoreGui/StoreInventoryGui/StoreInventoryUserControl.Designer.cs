@@ -669,6 +669,7 @@
             Name = "StoreInventoryUserControl";
             RightToLeft = RightToLeft.Yes;
             Size = new Size(1034, 681);
+            Load += StoreInventoryUserControl_Load;
             OperationsflowLayoutPanel.ResumeLayout(false);
             gbPayChoiches.ResumeLayout(false);
             flowLayoutPanelreturnsoption.ResumeLayout(false);

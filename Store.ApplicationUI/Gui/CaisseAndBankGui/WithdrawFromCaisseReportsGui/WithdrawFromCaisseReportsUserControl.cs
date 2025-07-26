@@ -1,43 +1,28 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Entities.Caisses;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseReportsGui
 {
     public partial class WithdrawFromCaisseReportsUserControl : UserControl
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext? _contex;
-        public static CaisseWithdrawRepository? repository;
-        private static WithdrawFromCaisseReportsUserControl? _UserControl;
+        private readonly MainForm _mainForm;
+        private readonly ApplicationDbContext _context;
+        public readonly ICaisseWithdrawRepository repository;
 
-        public WithdrawFromCaisseReportsUserControl()
+
+        public WithdrawFromCaisseReportsUserControl(MainForm mainForm, ApplicationDbContext context, ICaisseWithdrawRepository repository)
         {
             InitializeComponent();
+            _mainForm = mainForm;
+            _context = context;
+            this.repository = repository;
         }
-        public static bool CheckInstance()
-        {
-            return (_UserControl == null);
-        }
-        public static WithdrawFromCaisseReportsUserControl Instance(MainForm main)
-        {
-            _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _contex = new ApplicationDbContext();
-            if (CheckInstance())
-            {
-                repository = new CaisseWithdrawRepository(_contex);
 
-                _UserControl = new WithdrawFromCaisseReportsUserControl();
-
-            }
-
-            // Return the singleton instance
-            _UserControl.LoadData();
-            return _UserControl;
-        }
-        public async void SetProductsToDgv(string t1, string barcode, int skip)
+        public void SetProductsToDgv(string t1, string barcode, int skip)
         {
             ////DgvSales.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             //var CustomerMoneyList = MainForm.Context.CustomersReports.
@@ -88,11 +73,11 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseReportsGui
             dtpTo.Value = DateTime.Now;
 
             //ShowLoading
-            LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => repository.IsConnected()))
+            LoadingForm.Instance(_mainForm).Show();
+            if (await repository.IsConnectedAsync())
             {
                 //Start Load Data
-                cmbCaisse.DataSource = _contex.Caisses.ToList();
+                cmbCaisse.DataSource = await _context.Caisses.ToListAsync();
                 cmbCaisse.DisplayMember = "CaisseName";
                 cmbCaisse.ValueMember = "Id";
 
@@ -104,19 +89,21 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseReportsGui
             else
             {
 
-                LoadingForm.Instance(_main).Hide();
+                LoadingForm.Instance(_mainForm).Hide();
                 //No Connection
                 MsgHelper.ShowServerError();
             }
             //Hideloading
 
-            LoadingForm.Instance(_main).Hide();
+            LoadingForm.Instance(_mainForm).Hide();
             // Show EmptyDAta
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
         }
 
         private void SetColumns()
         {
+            DgvSales
+                .DataSource = new List<CaisseWithdraw>();
             //DgvSales.Columns[0].HeaderCell.Value = "المعرف"; ""    
             DgvSales.Columns[0].HeaderCell.Value = "معرف الصندوق";
             DgvSales.Columns[1].HeaderCell.Value = "قيمة السحب";
@@ -164,7 +151,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseReportsGui
             RefreshDgv(0);
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
 
@@ -174,11 +161,11 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseReportsGui
                 {
                     for (int i = 0; i <= DgvSales.Rows.Count - 1; i++)
                     {
-                        var deleteedRefund = _contex.CaissesWithdraws.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i].Cells[8].Value.ToString())).FirstOrDefault();
+                        var deleteedRefund = await _context.CaissesWithdraws.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i].Cells[8].Value.ToString())).FirstOrDefaultAsync();
                         if (deleteedRefund != null)
                         {
-                            _contex.Remove(deleteedRefund);
-                            _contex.SaveChanges();
+                            _context.Remove(deleteedRefund);
+                            await _context.SaveChangesAsync();
                         }
                     }
                     Code.Helper.ToasterHelper.ShowDeletedToast();

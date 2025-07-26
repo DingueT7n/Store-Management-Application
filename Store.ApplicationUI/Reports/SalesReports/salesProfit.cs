@@ -5,13 +5,14 @@ namespace Store.ApplicationUI.Reports.SalesReports
 {
     public partial class salesProfit : DevExpress.XtraReports.UI.XtraReport
     {
-        ApplicationDbContext _context;
-        public salesProfit()
+        private readonly ApplicationDbContext _context;
+
+        public salesProfit(ApplicationDbContext context)
         {
             InitializeComponent();
-            _context = new ApplicationDbContext();
-
+            _context = context;
             InitialElements();
+
         }
         void InitialElements()
         {

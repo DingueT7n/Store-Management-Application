@@ -373,6 +373,7 @@
             Name = "StoreDamagedProductUserControl";
             RightToLeft = RightToLeft.Yes;
             Size = new Size(1034, 681);
+            Load += StoreDamagedProductUserControl_Load;
             OperationsflowLayoutPanel.ResumeLayout(false);
             gbPayChoiches.ResumeLayout(false);
             gbPayChoiches.PerformLayout();

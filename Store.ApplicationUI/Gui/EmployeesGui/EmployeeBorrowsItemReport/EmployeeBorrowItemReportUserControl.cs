@@ -1,42 +1,32 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Entities.Employees;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowsItemReport
 {
     public partial class EmployeeBorrowItemReportUserControl : UserControl
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext _contex;
-        public static EmployeeBorrowItemRepository? EmployeeBorrowItemRepository;
-        private static EmployeeBorrowItemReportUserControl? _storeDamagedProductUserControl;
 
-        public EmployeeBorrowItemReportUserControl()
+
+
+
+        private readonly MainForm _main;
+        private readonly IEmployeeBorrowItemRepository _employeeBorrowItemRepository;
+        private readonly ApplicationDbContext _context;
+
+        public EmployeeBorrowItemReportUserControl(MainForm main, IEmployeeBorrowItemRepository employeeBorrowItemRepository, ApplicationDbContext context
+            , IProductRepository productRepository)
         {
             InitializeComponent();
-        }
-        public static bool CheckInstance()
-        {
-            return (_storeDamagedProductUserControl == null);
-        }
-        public static EmployeeBorrowItemReportUserControl Instance(MainForm main)
-        {
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            if (CheckInstance())
-            {
-                _contex = new ApplicationDbContext();
-                EmployeeBorrowItemRepository = new EmployeeBorrowItemRepository(_contex);
-
-                _storeDamagedProductUserControl = new EmployeeBorrowItemReportUserControl();
-
-            }
-
-            // Return the singleton instance
-            _storeDamagedProductUserControl.LoadData();
-            return _storeDamagedProductUserControl;
+            _employeeBorrowItemRepository = employeeBorrowItemRepository;
+            _context = context;
         }
+
+
         public async void SetProductsToDgv(string t1, string barcode)
         {
             ////DgvSales.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
@@ -44,7 +34,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowsItemReport
             //    Include(x => x.Customer).Include(x => x.Sale)
             //    .ToList();
 
-            var data = EmployeeBorrowItemRepository.GetAllEmpBorrowsItem(t1, barcode, dtpFrom.Value, dtpTo.Value);
+            var data = _employeeBorrowItemRepository.GetAllEmpBorrowsItem(t1, barcode, dtpFrom.Value, dtpTo.Value);
             DgvSales.DataSource = data;
 
         }
@@ -54,8 +44,8 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowsItemReport
 
             if (rbStoresFrom.Checked) t1 = cmbEmployees.Text;
 
-            SetProductsToDgv(t1, txtSearch.Text);
             SetColumns();
+            SetProductsToDgv(t1, txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
         }
         public async void LoadData()
@@ -64,10 +54,10 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowsItemReport
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => EmployeeBorrowItemRepository.IsConnected()))
+            if (await _employeeBorrowItemRepository.IsConnectedAsync())
             {
                 //Start Load Data
-                cmbEmployees.DataSource = _contex.Employees.ToList();
+                cmbEmployees.DataSource = await _context.Employees.ToListAsync();
                 cmbEmployees.DisplayMember = "EmployeeName";
                 cmbEmployees.ValueMember = "Id";
 
@@ -94,7 +84,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowsItemReport
         {
             //DgvSales.Columns[0].HeaderCell.Value = "المعرف"; ""    
 
-
+            DgvSales.DataSource = new List<EmployeeBorrowItem>();
 
             DgvSales.Columns[0].HeaderCell.Value = "معرف المنتج";
             DgvSales.Columns[1].HeaderCell.Value = "اسم المنتج";
@@ -113,7 +103,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowsItemReport
 
 
         }
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
             try
             {
@@ -121,11 +111,12 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowsItemReport
                 {
                     for (int i = 0; i <= DgvSales.Rows.Count - 1; i++)
                     {
-                        var deleteedRefund = _contex.EmployeesBorrowItems.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i].Cells[8].Value.ToString())).FirstOrDefault();
+                        var deleteedRefund = await _context.EmployeesBorrowItems.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i]
+                            .Cells[8].Value.ToString())).FirstOrDefaultAsync();
                         if (deleteedRefund != null)
                         {
-                            _contex.Remove(deleteedRefund);
-                            _contex.SaveChanges();
+                            _context.Remove(deleteedRefund);
+                            await _context.SaveChangesAsync();
                         }
                     }
                     Code.Helper.ToasterHelper.ShowDeletedToast();

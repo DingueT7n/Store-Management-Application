@@ -277,6 +277,7 @@
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "اخراج المنتجات التالفة من المخزن";
+            Load += StoreDamagedProductForm_Load;
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
             gbProductInfo.ResumeLayout(false);

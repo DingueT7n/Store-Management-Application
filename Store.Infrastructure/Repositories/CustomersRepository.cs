@@ -16,7 +16,7 @@ namespace Store.Infrastructure.Repositories
 
             try
             {
-                _context = new ApplicationDbContext();
+
                 return _context.Customers.Where(x => x.Id.ToString() == searchIteam ||
                 x.CustomerName.ToString().Contains(searchIteam) ||
                 x.Address.Contains(searchIteam) ||
@@ -43,7 +43,7 @@ namespace Store.Infrastructure.Repositories
 
             try
             {
-                _context = new ApplicationDbContext();
+
                 return _context.CustomersMoneys.Where(x =>
                 x.Cust_Name.ToString().Contains(searchIteam) ||
                 x.Id.ToString() == (searchIteam)
@@ -89,7 +89,7 @@ namespace Store.Infrastructure.Repositories
         }
         public bool TransactionOfCustomerDebt(string order_Id, string cust_Id, string price, string Cust_Name, DateTime date)
         {
-            _context = new ApplicationDbContext();
+
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
@@ -142,7 +142,7 @@ namespace Store.Infrastructure.Repositories
         }
         public bool TransactionOfEditingCustomerDebt(string order_Id, string cust_Id, string price, string Cust_Name, string PayedValue, DateTime date)
         {
-            _context = new ApplicationDbContext();
+
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
@@ -188,25 +188,25 @@ namespace Store.Infrastructure.Repositories
         public CustomerReportRepository(ApplicationDbContext context) : base(context)
         {
         }
-        public CustomerReportDto GetAllData(int skip, int take)
+        public async Task<CustomerReportDto> GetAllData(int skip, int take)
         {
 
             try
             {
-                _context = new ApplicationDbContext();
+
                 var query = _context.CustomersReports.AsQueryable();
 
                 var result = query.Include(x => x.Sale).Include(x => x.Customer)
                     .OrderByDescending(x => x.Id).AsNoTracking()
                     ;
-                var totalCount = result.Count();
+                var totalCount = await result.CountAsync();
 
 
 
                 return new CustomerReportDto
                 {
-                    Result = result.Skip(skip)
-                    .Take(take).ToList(),
+                    Result = await result.Skip(skip)
+                    .Take(take).ToListAsync(),
                     count = totalCount
                 };
             }
@@ -217,24 +217,24 @@ namespace Store.Infrastructure.Repositories
 
         }
 
-        public CustomerReportDto SearchBoth(string searchItem, DateTime fromDate, DateTime toDate, int take, int skip)
+        public async Task<CustomerReportDto> SearchBoth(string searchItem, DateTime fromDate, DateTime toDate, int take, int skip)
         {
             try
             {
-                _context = new ApplicationDbContext();
+
                 var query = _context.CustomersReports
                     .Where(x =>
                         (EF.Functions.Like(x.Cust_Name, $"%{searchItem}%") ||
                         x.Order_ID.ToString() == searchItem) &&
                         fromDate <= x.Date && x.Date <= toDate);  // Filter by searchItem and date range
 
-                var result = query.Include(x => x.Sale).Include(x => x.Customer)
+                var result = await query.Include(x => x.Sale).Include(x => x.Customer)
                     .OrderByDescending(x => x.Id).AsNoTracking()
                     .Skip(skip)
                     .Take(take)
-                    .ToList();
+                    .ToListAsync();
 
-                var totalCount = query.Count();  // Get total count after filtering
+                var totalCount = await query.CountAsync();  // Get total count after filtering
 
                 return new CustomerReportDto
                 {
@@ -247,19 +247,19 @@ namespace Store.Infrastructure.Repositories
                 return new CustomerReportDto();
             }
         }
-        public CustomerReportDto SearchOnlyDate(DateTime fromDate, DateTime toDate, int take, int skip)
+        public async Task<CustomerReportDto> SearchOnlyDate(DateTime fromDate, DateTime toDate, int take, int skip)
         {
             try
             {
-                _context = new ApplicationDbContext();
+
                 var query = _context.CustomersReports.AsNoTracking().Include(x => x.Sale).Include(x => x.Customer)
                     .Where(x => fromDate <= x.Date && x.Date <= toDate)// Date range filter
                     .OrderByDescending(x => x.Id); // Order by descending date
 
                 return new CustomerReportDto
                 {
-                    Result = query.Skip(skip).Take(take).ToList(), // Pagination
-                    count = query.Count() // Count of the filtered data
+                    Result = await query.Skip(skip).Take(take).ToListAsync(), // Pagination
+                    count = await query.CountAsync() // Count of the filtered data
                 };
             }
             catch
@@ -267,23 +267,23 @@ namespace Store.Infrastructure.Repositories
                 return new CustomerReportDto();
             }
         }
-        public CustomerReportDto SearchOnlyCustomer(string searchItem, int take, int skip)
+        public async Task<CustomerReportDto> SearchOnlyCustomer(string searchItem, int take, int skip)
         {
             try
             {
-                _context = new ApplicationDbContext();
+
                 var query = _context.CustomersReports
                     .Where(x =>
                         EF.Functions.Like(x.Cust_Name, $"%{searchItem}%") ||
                         x.Order_ID.ToString() == searchItem);  // Filter by customer name or order ID
 
-                var result = query.Include(x => x.Sale).Include(x => x.Customer)
+                var result = await query.Include(x => x.Sale).Include(x => x.Customer)
                     .OrderByDescending(x => x.Id).AsNoTracking()  // Order by date in descending order
                     .Skip(skip)
                     .Take(take)
-                    .ToList();
+                    .ToListAsync();
 
-                var totalCount = query.Count();  // Get total count after filtering
+                var totalCount = await query.CountAsync();  // Get total count after filtering
 
                 return new CustomerReportDto
                 {

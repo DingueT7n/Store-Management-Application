@@ -442,6 +442,7 @@
             RightToLeftLayout = true;
             ShowIcon = false;
             Text = "شاشة الصناديق والبنك";
+            Load += CaisseDetailsForm_Load;
             panelMainDetails.ResumeLayout(false);
             panelMainDetails.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)DgvCaisser).EndInit();

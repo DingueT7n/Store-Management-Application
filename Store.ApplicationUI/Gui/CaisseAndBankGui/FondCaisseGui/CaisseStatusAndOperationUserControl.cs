@@ -1,49 +1,34 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
 {
     public partial class CaisseStatusAndOperationUserControl : UserControl
     {
 
-        private static MainForm? _main;
-        private static ApplicationDbContext _contex;
-        public static CaisseStatusDetailRepository? repository1;
-        public static CaisseOperationRepository? repository2;
-        private static CaisseStatusAndOperationUserControl? _UserControl;
-        public CaisseStatusAndOperationUserControl()
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+
+        public readonly ICaisseStatusDetailRepository repository1;
+        public readonly ICaisseOperationRepository repository2;
+
+        public CaisseStatusAndOperationUserControl(MainForm main, ApplicationDbContext context, ICaisseStatusDetailRepository repository1, ICaisseOperationRepository repository2)
         {
             InitializeComponent();
-        }
-        public static bool CheckInstance()
-        {
-            return (_UserControl == null);
-        }
-        public static CaisseStatusAndOperationUserControl Instance(MainForm main)
-        {
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _contex = new ApplicationDbContext();
-            if (CheckInstance())
-            {
-                repository1 = new CaisseStatusDetailRepository(_contex);
-                repository2 = new CaisseOperationRepository(_contex);
-
-                _UserControl = new CaisseStatusAndOperationUserControl();
-
-            }
-
-            // Return the singleton instance
-            _UserControl.LoadDataAsync();
-            return _UserControl;
+            _context = context;
+            this.repository1 = repository1;
+            this.repository2 = repository2;
         }
+
         public async Task SetProductsToDgvAsync1(string t1, string status, int skip)
         {
             try
             {
-                var data = repository1
+                var data = await repository1
                     .GetAllStatus(t1, status, dtpFrom.Value, dtpTo.Value, Properties.Settings.Default.NoOfDataInDgvs, skip);
 
                 // Set data source
@@ -76,7 +61,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
         {
             try
             {
-                var data = repository1
+                var data = await repository1
                     .GetAllStatusOperations(t1, status, dtpFrom2.Value, dtpTo2.Value, Properties.Settings.Default.NoOfDataInDgvs, skip);
 
                 // Set data source
@@ -149,7 +134,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
                 ToasterHelper.ShowErrorHappened(ex.Message);
             }
         }
-        public async Task LoadDataAsync()
+        public async void LoadData()
         {
             try
             {
@@ -159,13 +144,13 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
                 // Show loading indicator
                 LoadingForm.Instance(_main).Show();
 
-                if (await Task.Run(() => repository1.IsConnected()))
+                if (await repository1.IsConnectedAsync())
                 {
-                    cmbCaisse.DataSource = _contex.Caisses.ToList();
+                    cmbCaisse.DataSource = _context.Caisses.ToList();
                     cmbCaisse.DisplayMember = "CaisseName";
                     cmbCaisse.ValueMember = "Id";
 
-                    cmbCaisse2.DataSource = _contex.Caisses.ToList();
+                    cmbCaisse2.DataSource = _context.Caisses.ToList();
                     cmbCaisse2.DisplayMember = "CaisseName";
                     cmbCaisse2.ValueMember = "Id";
 
@@ -194,6 +179,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
 
         private void SetColumns()
         {
+            //Dgv1.DataSource = new List<CaisseStatusDetail>();
             string[] headers = { "معرف الصندوق", "اسم الصندوق", "تم الفتح بواسطة", "تم الغلق بواسطة", "الاموال في البرنامج قبل الفتح",
                 "الاموال المصرح بها قبل الفتح", "الاموال في البرنامج بعد الغلق",
                 "الاموال المصرح بها بعد الغلق", "وقت الفتح","وقت الغلق","الحالة الان",
@@ -217,6 +203,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
         }
         private void SetColumns2()
         {
+            //Dgv1.DataSource = new List<CaisseOperation>();
+
             string[] headers = { "حالة الصندوق", "الشخص الذي قام بها", "تاريخ العملية","عدد 2000DA","عدد 1000DA","عدد 500DA",
                 "عدد 200DA","عدد 100DA","عدد 50DA","عدد 20DA",
                 "عدد 10DA","عدد 5DA","الاموال التي تمت اضافتها",
@@ -248,8 +236,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
             cmbCaisse.Enabled = rbStoresFrom.Checked;
             await RefreshDgvAsync1(0);
         }
-        private void btnSearch_Click(object sender, EventArgs e) => RefreshDgvAsync1(0);
-        private void cmbCaisse_SelectionChangeCommitted(object sender, EventArgs e) => RefreshDgvAsync1(0);
+        private async void btnSearch_Click(object sender, EventArgs e) => await RefreshDgvAsync1(0);
+        private async void cmbCaisse_SelectionChangeCommitted(object sender, EventArgs e) => await RefreshDgvAsync1(0);
 
         private async void btnNext_Click(object sender, EventArgs e)
         {
@@ -351,13 +339,13 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
                     foreach (DataGridViewRow row in Dgv1.Rows)
                     {
                         int id = Convert.ToInt32(row.Cells[14].Value);
-                        var deposit = _contex.CaisseStatusDetails.FirstOrDefault(x => x.Id == id);
+                        var deposit = await _context.CaisseStatusDetails.FirstOrDefaultAsync(x => x.Id == id);
 
                         if (deposit != null && deposit.Status == Core.Entities.Caisses.CaisseStatus.Closed)
                         {
 
-                            _contex.CaisseStatusDetails.Remove(deposit);
-                            _contex.SaveChanges();
+                            _context.CaisseStatusDetails.Remove(deposit);
+                            await _context.SaveChangesAsync();
                         }
                     }
                     Code.Helper.ToasterHelper.ShowDeletedToast();
@@ -382,12 +370,12 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
                     foreach (DataGridViewRow row in Dgv2.Rows)
                     {
                         int id = Convert.ToInt32(row.Cells[16].Value);
-                        var deposit = _contex.CaisseOperations.FirstOrDefault(x => x.Id == id);
+                        var deposit = await _context.CaisseOperations.FirstOrDefaultAsync(x => x.Id == id);
 
                         if (deposit != null)
                         {
-                            _contex.CaisseOperations.Remove(deposit);
-                            _contex.SaveChanges();
+                            _context.CaisseOperations.Remove(deposit);
+                            await _context.SaveChangesAsync();
                         }
                     }
                     Code.Helper.ToasterHelper.ShowDeletedToast();

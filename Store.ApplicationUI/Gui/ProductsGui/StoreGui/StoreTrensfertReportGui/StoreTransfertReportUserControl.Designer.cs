@@ -392,6 +392,7 @@
             Name = "StoreTransfertReportUserControl";
             RightToLeft = RightToLeft.Yes;
             Size = new Size(1034, 681);
+            Load += StoreTransfertReportUserControl_Load;
             OperationsflowLayoutPanel.ResumeLayout(false);
             gbPayChoiches.ResumeLayout(false);
             flowLayoutPanel2.ResumeLayout(false);

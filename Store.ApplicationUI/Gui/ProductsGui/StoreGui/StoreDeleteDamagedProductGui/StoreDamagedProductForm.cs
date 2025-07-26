@@ -2,45 +2,30 @@
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Products;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDeleteDamagedProductGui
 {
     public partial class StoreDamagedProductForm : Form
     {
-        private static MainForm _main;
-        private ApplicationDbContext _context;
-        private ProductsRepository? productsRepository;
-        private static StoreDamagedProductForm _storeDamagedProductForm;
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+        private readonly IProductRepository productsRepository;
         private Product _product;
-        public StoreDamagedProductForm(MainForm main)
+        public StoreDamagedProductForm(MainForm main, IProductRepository productsRepository, ApplicationDbContext applicationDbContext)
         {
             InitializeComponent();
             _main = main;
+            this.productsRepository = productsRepository;
+            _context = applicationDbContext;
             this.Owner = _main;
-            _context = new ApplicationDbContext();
 
-            productsRepository = new ProductsRepository(_context);
 
-            LoadData();
             dateTimePicker1.Value = DateTime.Now;
         }
-        public static StoreDamagedProductForm Instance(MainForm main)
-        {
-            _main = main;
-            // If the instance is null, create a new one and assign it to the static field
 
-
-            _storeDamagedProductForm = new StoreDamagedProductForm(_main);
-
-
-
-            // Return the singleton instance
-
-            return _storeDamagedProductForm;
-        }
-        public void LoadData()
+        public async void LoadData()
         {
 
 
@@ -48,13 +33,13 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDeleteDamagedProduct
 
 
             LoadingForm.Instance(_main).Show();
-            if (/*await Task.Run(() =>*/ _context.Database.CanConnect())/*)*/
+            if (/*await Task.Run(() =>*/await _context.Database.CanConnectAsync())/*)*/
             {
                 //Start Load Data
 
                 // if its an admin or Normal user 
 
-                cmbStoresFrom.DataSource = _context.Stores.ToList();
+                cmbStoresFrom.DataSource = await _context.Stores.ToListAsync();
                 cmbStoresFrom.DisplayMember = "StoreName"; // Set the property to display
                 cmbStoresFrom.ValueMember = "Id"; // Set the property to use as the value
 
@@ -136,23 +121,23 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDeleteDamagedProduct
                 e.Handled = true;
             }
         }
-        bool SetProductQuentity(decimal quentity)
+        async Task<bool> SetProductQuentity(decimal quentity)
         {
             var proId = _product.Id;
-            decimal totalBuyPrice = 0;
-            int count = 0;
+            //decimal totalBuyPrice = 0;
+            //int count = 0;
 
             while (quentity > 0)
             {
-                var productQty = _context.ProductsQuantities
-                                 .FirstOrDefault(x => x.Qty > 0 && x.Pro_ID == proId && x.Store_ID == Convert.ToInt32(cmbStoresFrom.SelectedValue));
+                var productQty = await _context.ProductsQuantities
+                                 .FirstOrDefaultAsync(x => x.Qty > 0 && x.Pro_ID == proId && x.Store_ID == Convert.ToInt32(cmbStoresFrom.SelectedValue));
                 if (productQty != null)
                 {
                     if (productQty.Qty >= quentity)
                     {
                         productQty.Qty -= quentity;
                         _context.ProductsQuantities.Update(productQty);
-                        _context.SaveChanges();
+                        await _context.SaveChangesAsync();
 
                         ProductOutStore transfer = new ProductOutStore();
                         transfer.Quentity = quentity;
@@ -163,8 +148,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDeleteDamagedProduct
                         transfer.Time = DateTime.Now.ToString("HH-mm");
                         transfer.Name = txtMaker.Text + " Using (" + Properties.Settings.Default.UserName + ")";
                         transfer.Reason = txtReason.Text;
-                        _context.ProductsOutStore.Add(transfer);
-                        _context.SaveChanges();
+                        await _context.ProductsOutStore.AddAsync(transfer);
+                        await _context.SaveChangesAsync();
                         quentity = 0;
                     }
                     else if (productQty.Qty < quentity)
@@ -182,14 +167,14 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDeleteDamagedProduct
                         transfer.Time = DateTime.Now.ToString("HH-mm");
                         transfer.Name = txtMaker.Text + " Using (" + Properties.Settings.Default.UserName + ")";
                         transfer.Reason = txtReason.Text;
-                        _context.ProductsOutStore.Add(transfer);
-                        _context.SaveChanges();
+                        await _context.ProductsOutStore.AddAsync(transfer);
+                        await _context.SaveChangesAsync();
 
                         productQty.Qty = 0;
                         _context.ProductsQuantities.Update(productQty);
-                        _context.SaveChanges();
+                        await _context.SaveChangesAsync();
                         _context.Remove(productQty);
-                        _context.SaveChanges();
+                        await _context.SaveChangesAsync();
                     }
                 }
                 else
@@ -201,7 +186,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDeleteDamagedProduct
 
             return true;
         }
-        private void btnTransfert_Click(object sender, EventArgs e)
+        private async void btnTransfert_Click(object sender, EventArgs e)
         {
             try
             {
@@ -209,28 +194,28 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDeleteDamagedProduct
                 if (txtQtyTransfert.Text == string.Empty || txtProductName.Text == string.Empty)
                     return;
 
-                _context = new ApplicationDbContext();
+
                 if (Convert.ToDecimal(txtQtyTransfert.Text) <= 0 || Convert.ToDecimal(txtQtyTransfert.Text) > Convert.ToDecimal(txtTotalQty.Text))
                 { MsgHelper.ShowInvalidQuentityTotransfert(); return; }
 
-                using (var transaction = _context.Database.BeginTransaction())
+                using (var transaction = await _context.Database.BeginTransactionAsync())
                 {
                     try
                     {
-                        SetProductQuentity(Convert.ToInt32(txtQtyTransfert.Text));
+                        await SetProductQuentity(Convert.ToInt32(txtQtyTransfert.Text));
                         _context.ProductsQuantities.Where(x => x.Qty <= 0).ExecuteDelete();
-                        _context.SaveChanges();
+                        await _context.SaveChangesAsync();
                         _product.Quentity -= Convert.ToInt32(txtQtyTransfert.Text);
                         _context.Update(_product);
-                        _context.SaveChanges();
-                        transaction.Commit();
+                        await _context.SaveChangesAsync();
+                        await transaction.CommitAsync();
                         Code.Helper.ToasterHelper.ShowOutStockProduct();
 
                         ResetForm();
                     }
                     catch (Exception)
                     {
-                        transaction.Rollback();
+                        await transaction.RollbackAsync();
                         throw;
                     }
 
@@ -243,6 +228,12 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDeleteDamagedProduct
 
                 throw;
             }
+
+        }
+
+        private void StoreDamagedProductForm_Load(object sender, EventArgs e)
+        {
+            LoadData();
 
         }
     }

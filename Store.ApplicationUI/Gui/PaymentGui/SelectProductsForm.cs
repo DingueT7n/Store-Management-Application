@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.IO;
+using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.BuysGui;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.SalesGui;
@@ -12,76 +14,36 @@ namespace Store.ApplicationUI.Gui.PaymentGui
 {
     public partial class SelectProductsForm : Form
     {
-        private static MainForm _main;
+        private readonly MainForm _main;
         private static PosForm _PosForm;
         private static SelectProductsForm _selectProductsForm;
         private ApplicationDbContext _context;
 
-        public SelectProductsForm(MainForm main, bool buy)
+        public SelectProductsForm(MainForm main, ControlManager controlManager, PosForm posForm)
         {
             InitializeComponent();
             _context = new ApplicationDbContext();
-            this.Owner = _main;
-            this.buy = buy;
+
+
+            _main = main;
+
+            _controlManager = controlManager;
+            _posForm = posForm;
             pos = false;
-        }
-        public SelectProductsForm(PosForm main, bool pos)
-        {
-            _context = new ApplicationDbContext();
-            buy = false;
-            this.pos = pos;
-            InitializeComponent();
-            this.Owner = _PosForm;
+            LoadData();
+
         }
         bool buy = false;
+        bool sale = false;
         bool pos = false;
-        public static SelectProductsForm Instance(MainForm main, bool buy)
-        {
-            _main = main;
-            _selectProductsForm = new SelectProductsForm(_main, buy);
+        private readonly ControlManager _controlManager;
+        private readonly PosForm _posForm;
+
+        public void SetBuy() => buy = !buy;
+        public void SetPos() => pos = !pos;
+        public void SetSale() => sale = !sale;
 
 
-
-            _selectProductsForm.LoadData();
-            return _selectProductsForm;
-        }
-        public static SelectProductsForm Instance(PosForm main, bool pos)
-        {
-            _PosForm = main;
-            _selectProductsForm = new SelectProductsForm(_PosForm, pos);
-            _selectProductsForm._context = new ApplicationDbContext();
-
-
-            _selectProductsForm.LoadData();
-            return _selectProductsForm;
-        }
-        ////private void PictureBox_Click(object sender, EventArgs e)
-        ////{
-
-        ////    PictureBox clickedPictureBox = sender as PictureBox;
-
-
-        ////    foreach (Control control in flowLayoutPanel.Controls)
-        ////    {
-        ////        if (control is Panel productPanel)
-        ////        {
-        ////            foreach (Control innerControl in productPanel.Controls)
-        ////            {
-        ////                if (innerControl is PictureBox pictureBox)
-        ////                {
-        ////          
-
-        ////                   pictureBox.BorderStyle = BorderStyle.None;
-        ////                }
-        ////            }
-        ////        }
-        ////    }
-
-
-
-        ////   clickedPictureBox.BorderStyle = BorderStyle.FixedSingle;
-        ////    clickedPictureBox.BorderColor = Color.Green; // Custom border color (requires custom PictureBox)
-        ////}
         public Image SetImage(byte[] retrivedData)
         {
             try
@@ -104,7 +66,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         }
 
 
-        void AddProductToDgvIfNotExist(PictureBox pictureBox)
+        async void AddProductToDgvIfNotExist(PictureBox pictureBox)
         {
             ToasterHelper.PlayNotificationSound();
             int productId = 0;
@@ -115,40 +77,58 @@ namespace Store.ApplicationUI.Gui.PaymentGui
 
             }
 
-
-            if (!SalesUserControl.CheckInstance() && !buy && !pos)
-            {
-                if (SalesUserControl.setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == productId)))
-                {
-
-                }
-
-            }
-            if (!BuysUserControl.CheckInstance() && buy && !pos)
-            {
-                if (BuysUserControl.setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == productId)))
-                {
-
-                }
-
-            }
+            if (_controlManager.TryGet<SalesUserControl>(out var UCS) && null != UCS)
 
             {
-                var posUserControl = PosForm.GetPosUserControl();
-                if (posUserControl != null && pos)
+
+                if (sale && !pos && _main.GetUserControl() == UCS)
+
                 {
-                    posUserControl.setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == productId));
+
+                    await UCS.setPrivateProductAndAdditTotable(await _context.Products.FirstOrDefaultAsync(x => x.Id == productId));
+                }
+            }
+            if (_controlManager.TryGet<BuysUserControl>(out BuysUserControl? UCB) && null != UCB)
+
+            {
+                if (buy && !pos && _main.GetUserControl() == UCB)
+
+                {
+
+                    UCB.setPrivateProductAndAdditTotable(await _context.Products.FirstOrDefaultAsync(x => x.Id == productId));
+                }
+            }
+            //if (!BuysUserControl.CheckInstance() && buy && !pos)
+            //{
+            //    if (BuysUserControl.setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == productId)))
+            //    {
+
+            //    }
+
+            //}
+
+            if (_controlManager.TryGet<PosUserControl>(out var UCP))
+
+            {
+
+                if (UCP != null && pos)
+                {
+                    UCP.setProductFromSelector(await _context.Products.FirstOrDefaultAsync(x => x.Id == productId));
                 }
 
 
-                // Get the parent Panel of the clicked PictureBox
-                Panel parentPanel = pictureBox.Parent as Panel;
-
-
-
-                // Set the background color of the parent Panel to light green
-                parentPanel.BackColor = Color.LightGreen;
             }
+
+
+
+            // Get the parent Panel of the clicked PictureBox
+            Panel parentPanel = pictureBox.Parent as Panel;
+
+
+
+            // Set the background color of the parent Panel to light green
+            parentPanel.BackColor = Color.LightGreen;
+
             //else if (!BuysUserControl.CheckInstance())
             //{
             //    SalesUserControl.setProductFromSelector(MainForm.Context.Products.FirstOrDefault(x => x.Id == productId));
@@ -322,6 +302,15 @@ namespace Store.ApplicationUI.Gui.PaymentGui
                     }
                 }
             }
+        }
+
+        private void SelectProductsForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            flowLayoutPanel.Controls.Clear();
+            buy = false;
+            sale = false;
+            pos = false;
+            LoadData();
         }
     }
 

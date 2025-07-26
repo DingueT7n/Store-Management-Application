@@ -1,4 +1,5 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.Models;
 using Store.Core.Entities.Caisses;
 using Store.Infrastructure.Data;
@@ -7,30 +8,17 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseGui
 {
     public partial class WithdrawFromCaisseUserControl : UserControl
     {
-        static WithdrawFromCaisseUserControl _WithdrawFromCaisseUserControl;
-        private static CaisseDetailsForm _caisse;
-        private static MainForm _main;
-        private static ApplicationDbContext _contex;
-
-        public WithdrawFromCaisseUserControl()
+        private readonly MainForm _main;
+        private readonly CaisseDetailsForm _caisse;
+        private readonly ApplicationDbContext _context;
+        public WithdrawFromCaisseUserControl(MainForm main, CaisseDetailsForm caisse, ApplicationDbContext context)
         {
             InitializeComponent();
-        }
-        public static WithdrawFromCaisseUserControl Instance(MainForm main, CaisseDetailsForm caisse)
-        {
-            _caisse = caisse;
             _main = main;
-            _contex = new ApplicationDbContext();
-
-            // If the instance is null, create a new one and assign it to the static field
-            if (_WithdrawFromCaisseUserControl == null || _WithdrawFromCaisseUserControl.IsDisposed)
-            {
-                _WithdrawFromCaisseUserControl = new WithdrawFromCaisseUserControl();
-            }
-            _WithdrawFromCaisseUserControl.LoadData();
-
-            return _WithdrawFromCaisseUserControl;
+            _caisse = caisse;
+            _context = context;
         }
+
         void validate()
         {
 
@@ -44,9 +32,9 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseGui
             lblValue.Text = "0";
             dateTimePicker.Value = DateTime.Now;
 
-            if (await Task.Run(() => _contex.Database.CanConnect()))
+            if (await _context.Database.CanConnectAsync())
             {
-                cmbCaisse.DataSource = _contex.Caisses.ToList();
+                cmbCaisse.DataSource = await _context.Caisses.ToListAsync();
                 cmbCaisse.DisplayMember = "CaisseName";
                 cmbCaisse.ValueMember = "Id";
                 cmbCaisse.Text = "اختر صندوق";
@@ -80,12 +68,12 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseGui
             }
         }
 
-        private void cmbCaisse_SelectionChangeCommitted(object sender, EventArgs e)
+        private async void cmbCaisse_SelectionChangeCommitted(object sender, EventArgs e)
         {
             try
             {
                 validate();
-                var value = _contex.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisse.SelectedValue.ToString()).MoneyinCaisse;
+                var value = (await _context.Caisses.FirstOrDefaultAsync(x => x.Id.ToString() == cmbCaisse.SelectedValue.ToString())).MoneyinCaisse;
                 lblValue.Text = value.ToString();
             }
             catch (Exception)
@@ -98,11 +86,11 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseGui
         private async void btnDepositToCaisse_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            using (var transaction = await _contex.Database.BeginTransactionAsync())
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    var caisse = _contex.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisse.SelectedValue);
+                    var caisse = await _context.Caisses.FirstOrDefaultAsync(x => x.Id.ToString() == cmbCaisse.SelectedValue);
 
                     if (caisse is not null)
                     {
@@ -121,23 +109,23 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseGui
                                 Type = "سحب عادي (مال فائض )"
                             };
 
-                            _contex.Caisses.Update(caisse);
-                            await _contex.CaissesWithdraws.AddAsync(caisseDeposit);
+                            _context.Caisses.Update(caisse);
+                            await _context.CaissesWithdraws.AddAsync(caisseDeposit);
 
                             // Save all changes to the database
-                            await _contex.SaveChangesAsync();
+                            await _context.SaveChangesAsync();
 
                             // Commit the transaction
                             await transaction.CommitAsync();
                             Code.Helper.ToasterHelper.ShowWithdraw();
-                            CaisseDetailsForm.CheckInstance();
+                            _caisse.LoadData();
                         }
                     }
 
                     // Load data after successful transaction
                     LoadData();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
                     await transaction.RollbackAsync();

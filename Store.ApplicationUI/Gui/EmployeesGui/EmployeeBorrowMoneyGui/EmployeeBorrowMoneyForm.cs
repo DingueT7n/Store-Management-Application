@@ -1,50 +1,35 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Employees;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowMoneyGui
 {
     public partial class EmployeeBorrowMoneyForm : Form
     {
-        private static MainForm? _main;
-        private EmployeeBorrowMoneyRepository? _employeesRepository;
-        private static EmployeeBorrowMoneyForm? _addEmployeeForm;
-        private ApplicationDbContext _context;
 
+        private readonly IEmployeeBorrowMoneyRepository _employeeBorrowMoneyRepository;
+        private readonly MainForm _main;
 
-        public EmployeeBorrowMoneyForm(MainForm main)
+        private readonly ApplicationDbContext _context;
+        private readonly ControlManager _controlManager;
+
+        public EmployeeBorrowMoneyForm(MainForm main, IEmployeeBorrowMoneyRepository employeeBorrowMoneyRepository, ApplicationDbContext context
+          , ControlManager controlManager)
         {
             InitializeComponent();
             _main = main;
+            _employeeBorrowMoneyRepository = employeeBorrowMoneyRepository;
+            _context = context;
+            _controlManager = controlManager;
             this.Owner = _main;
-            _context = new ApplicationDbContext();
-            _employeesRepository = new EmployeeBorrowMoneyRepository(_context);
-
-
             LoadData();
         }
-        public static EmployeeBorrowMoneyForm Instance(MainForm main)
-        {
-            // If the instance is null or has been disposed, create a new one.
-            if (_addEmployeeForm == null || _addEmployeeForm.IsDisposed)
-            {
-                _addEmployeeForm = new EmployeeBorrowMoneyForm(main);
-            }
-            else
-            {
-                // Bring the form to the front if it exists.
-                if (!_addEmployeeForm.Visible)
-                {
-                    _addEmployeeForm.Show();
-                }
-                _addEmployeeForm.BringToFront();
-            }
 
-            return _addEmployeeForm;
-        }
         public async void LoadData()
         {
             dtpJoined.Value = DateTime.Now;
@@ -52,10 +37,10 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowMoneyGui
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => _employeesRepository.IsConnected()))
+            if (await _employeeBorrowMoneyRepository.IsConnectedAsync())
             {
 
-                cmbEmployees.DataSource = _context.Employees.ToList();
+                cmbEmployees.DataSource = await _context.Employees.ToListAsync();
                 cmbEmployees.DisplayMember = "EmployeeName"; // Set the property to display
                 cmbEmployees.ValueMember = "Id"; // Set the property to use as the value
 
@@ -85,7 +70,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowMoneyGui
         private void ResetForm()
         {
             // Clear all textboxes
-            foreach (Control ctrl in _addEmployeeForm.Controls)
+            foreach (Control ctrl in _controlManager.GetF<AddEmployeeForm>().Controls)
             {
                 if (ctrl is TextBox)
                 {
@@ -153,11 +138,11 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowMoneyGui
             ToasterHelper.PlayNotificationSound();
             if (txtPrice.Text == string.Empty) return;
             if (_main.ConvertToFloat(txtPrice.Text) > 0)
-                using (var transaction = _context.Database.BeginTransaction())
+                using (var transaction = await _context.Database.BeginTransactionAsync())
                 {
                     try
                     {
-                        var caisse = _context.Caisses.FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
+                        var caisse = await _context.Caisses.FirstOrDefaultAsync(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
                         if (caisse is not null && caisse.MoneyinCaisse < _main.ConvertToFloat(txtPrice.Text))
                         {
                             MsgHelper.ShowInvalidMoneyTrasfert();
@@ -173,8 +158,8 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowMoneyGui
                         employeeBorrowMoney.DateReminder = dtpReminderDate.Value;
                         employeeBorrowMoney.Value = _main.ConvertToFloat(txtPrice.Text);
                         employeeBorrowMoney.Notes = txtNotes.Text;
-                        _context.Add(employeeBorrowMoney);
-                        _context.SaveChanges();
+
+                        await _employeeBorrowMoneyRepository.AddAsync(employeeBorrowMoney);
 
                         if (caisse is not null)
                         {
@@ -193,9 +178,9 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowMoneyGui
                             };
 
                             _context.Caisses.Update(caisse);
-                            _context.SaveChanges();
-                            _context.CaissesWithdraws.Add(CaisseWithdraw);
-                            _context.SaveChanges();
+                            await _context.SaveChangesAsync();
+                            await _context.CaissesWithdraws.AddAsync(CaisseWithdraw);
+                            await _context.SaveChangesAsync();
 
                         }
                         if (rbEmployee.Checked)
@@ -208,19 +193,19 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowMoneyGui
                             employeeSalaryMinus.Time = DateTime.Now.ToString("HH:mm");
                             employeeSalaryMinus.Price = _main.ConvertToFloat(txtPrice.Text);
 
-                            _context.Add(employeeSalaryMinus);
-                            _context.SaveChanges();
+                            await _context.AddAsync(employeeSalaryMinus);
+                            await _context.SaveChangesAsync();
                         }
 
 
-                        transaction.Commit();
+                        await transaction.CommitAsync();
                         Code.Helper.ToasterHelper.ShowBorrowMoney();
 
                         ResetForm();
                     }
                     catch (Exception)
                     {
-                        transaction.Rollback();
+                        await transaction.RollbackAsync();
                         throw;
                     }
 

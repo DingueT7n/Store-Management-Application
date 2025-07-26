@@ -1,41 +1,26 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Entities.Products;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDamagedProductReportGui
 {
     public partial class StoreDamagedProductUserControl : UserControl
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext _contex;
-        public static ProductOutStoreRepository? productOutStoreRepository;
-        private static StoreDamagedProductUserControl? _storeDamagedProductUserControl;
 
-        public StoreDamagedProductUserControl()
+
+        public readonly IProductOutStoreRepository productOutStoreRepository;
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+
+        public StoreDamagedProductUserControl(IProductOutStoreRepository productOutStoreRepository, MainForm mainForm, ApplicationDbContext applicationDbContext)
         {
             InitializeComponent();
-        }
-        public static bool CheckInstance()
-        {
-            return (_storeDamagedProductUserControl == null);
-        }
-        public static StoreDamagedProductUserControl Instance(MainForm main)
-        {
-            _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _contex = new ApplicationDbContext();
-            if (CheckInstance())
-            {
-                productOutStoreRepository = new ProductOutStoreRepository(_contex);
-
-                _storeDamagedProductUserControl = new StoreDamagedProductUserControl();
-
-            }
-
-            // Return the singleton instance
-            _storeDamagedProductUserControl.LoadData();
-            return _storeDamagedProductUserControl;
+            this.productOutStoreRepository = productOutStoreRepository;
+            _main = mainForm;
+            _context = applicationDbContext;
         }
         public async void SetProductsToDgv(string t1, string barcode)
         {
@@ -43,7 +28,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDamagedProductReport
             //var CustomerMoneyList = MainForm.Context.CustomersReports.
             //    Include(x => x.Customer).Include(x => x.Sale)
             //    .ToList();
-            var data = productOutStoreRepository.GetAllOutStore(t1, barcode, dtpFrom.Value, dtpTo.Value);
+            var data = await productOutStoreRepository.GetAllOutStore(t1, barcode, dtpFrom.Value, dtpTo.Value);
             DgvSales.DataSource = data;
 
 
@@ -51,6 +36,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDamagedProductReport
         }
         void RefreshDgv()
         {
+            SetColumns();
             string t1 = string.Empty;
 
             if (rbStoresFrom.Checked) t1 = cmbStoresFrom.Text;
@@ -58,7 +44,6 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDamagedProductReport
 
 
             SetProductsToDgv(t1, txtSearch.Text);
-            SetColumns();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
         }
         public async void LoadData()
@@ -67,10 +52,10 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDamagedProductReport
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => productOutStoreRepository.IsConnected()))
+            if (await productOutStoreRepository.IsConnectedAsync())
             {
                 //Start Load Data
-                cmbStoresFrom.DataSource = _contex.Stores.ToList();
+                cmbStoresFrom.DataSource = await _context.Stores.ToListAsync();
                 cmbStoresFrom.DisplayMember = "StoreName";
                 cmbStoresFrom.ValueMember = "Id";
 
@@ -97,7 +82,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDamagedProductReport
         {
             //DgvSales.Columns[0].HeaderCell.Value = "المعرف"; ""    
 
-
+            DgvSales.DataSource = new List<ProductOutStore>();
 
             DgvSales.Columns[0].HeaderCell.Value = "معرف المنتج";
             DgvSales.Columns[1].HeaderCell.Value = "اسم المنتج";
@@ -122,7 +107,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDamagedProductReport
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
             try
             {
@@ -131,11 +116,11 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDamagedProductReport
                 {
                     for (int i = 0; i <= DgvSales.Rows.Count - 1; i++)
                     {
-                        var deleteedRefund = _contex.ProductsOutStore.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i].Cells[9].Value.ToString())).FirstOrDefault();
+                        var deleteedRefund = await _context.ProductsOutStore.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i].Cells[9].Value.ToString())).FirstOrDefaultAsync();
                         if (deleteedRefund != null)
                         {
-                            _contex.Remove(deleteedRefund);
-                            _contex.SaveChanges();
+                            _context.Remove(deleteedRefund);
+                            await _context.SaveChangesAsync();
                         }
                     }
                     DgvSales.DataSource = null;
@@ -179,6 +164,11 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDamagedProductReport
             {
                 btnSearch_Click(sender, e);
             }
+        }
+
+        private void StoreDamagedProductUserControl_Load(object sender, EventArgs e)
+        {
+            LoadData();
         }
     }
 }

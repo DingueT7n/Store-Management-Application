@@ -1,51 +1,27 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.AllDeserved;
 using Store.Core.Entities.Caisses;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.DeservedGui
 {
     public partial class AddDeservedForm : Form
     {
-        private static MainForm _main;
-        private ApplicationDbContext _context;
-        private DeservedsRepository? deservedsRepository;
-        private static AddDeservedForm _adddeservedForm;
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+        private readonly ControlManager _controlManager;
 
-        public AddDeservedForm(MainForm main)
+        public AddDeservedForm(MainForm main, ApplicationDbContext context, ControlManager controlManager)
         {
             InitializeComponent();
             _main = main;
+            _context = context;
+            _controlManager = controlManager;
             this.Owner = _main;
-            _context = new ApplicationDbContext();
-
-            deservedsRepository = new DeservedsRepository(_context);
             LoadData();
-            ConfigDate();
-        }
-
-
-        public static AddDeservedForm Instance(MainForm main)
-        {
-            _main = main;
-
-            if (_adddeservedForm == null || _adddeservedForm.IsDisposed)
-            {
-                _adddeservedForm = new AddDeservedForm(main);
-            }
-            else
-            {
-                // Bring the form to the front if it exists.
-                if (!_adddeservedForm.Visible)
-                {
-                    _adddeservedForm.Show();
-                }
-                _adddeservedForm.BringToFront();
-            }
-
-            return _adddeservedForm;
         }
         private void ConfigDate()
         {
@@ -53,7 +29,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
             DtpExperation.CustomFormat = DtpExperation.CustomFormat = "yyyy-MM-dd";
         }
-        public void LoadData()
+        public async void LoadData()
         {
 
 
@@ -61,21 +37,25 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
 
             LoadingForm.Instance(_main).Show();
-            if (/*await Task.Run(() =>*/ _context.Database.CanConnect())/*)*/
+            if (/*await Task.Run(() =>*/ await _context.Database.CanConnectAsync())/*)*/
             {
                 //Start Load Data
 
                 // if its an admin or Normal user 
 
-                CMBType.DataSource = _context.DeservedsTypes.ToList();
+                CMBType.DataSource = await _context.DeservedsTypes.ToListAsync();
 
 
 
                 CMBType.DisplayMember = "Description"; // Set the property to display
                 CMBType.ValueMember = "Id"; // Set the property to use as the value
                 CMBType.Text = "اختر نوع";
-
+                ConfigDate();
                 // Optionally select the first item if needed
+                btnAddDeserved.Visible = true;
+                btnEditDeserved.Visible = false;
+                lblDeservedID.Visible = false;
+                label13.Visible = false;
             }
             else
             {
@@ -134,11 +114,26 @@ namespace Store.ApplicationUI.Gui.DeservedGui
             lblDeservedID.Visible = true;
             label13.Visible = true;
         }
-        Caisse SetCaisse(decimal value)
+        public void SetDataToEditFromID(string username, string value, string notes, string typesId,
+         string deservedId, DateTime DateExpiration)
+        {
+            LoadData();
+            txtUserName.Text = username;
+            txtValueDeserved.Text = value;
+            CMBType.SelectedValue = Convert.ToInt32(typesId);
+            txtNotes.Text = notes;
+            DtpExperation.Value = DateExpiration;
+            lblDeservedID.Text = deservedId;
+            btnAddDeserved.Visible = false;
+            btnEditDeserved.Visible = true;
+            lblDeservedID.Visible = true;
+            label13.Visible = true;
+        }
+        async Task<Caisse> SetCaisse(decimal value)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
 
-            Caisse caisse = _context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefault();
+            Caisse caisse = await _context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefaultAsync();
             if (caisse is not null)
             {
                 caisse.MoneyinCaisse -= value;
@@ -146,11 +141,11 @@ namespace Store.ApplicationUI.Gui.DeservedGui
             return caisse is not null ? caisse : new Caisse { CaisseName = "CaisseNull", MoneyinCaisse = -value };
 
         }
-        Caisse SetCaissedepos(decimal value)
+        async Task<Caisse> SetCaissedepos(decimal value)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
 
-            Caisse caisse = _context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefault();
+            Caisse caisse = await _context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefaultAsync();
             if (caisse is not null)
             {
                 caisse.MoneyinCaisse += value;
@@ -196,7 +191,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
             return caisseWithdraw;
 
         }
-        private void btnAddDeserved_Click(object sender, EventArgs e)
+        private async void btnAddDeserved_Click(object sender, EventArgs e)
         {
             try
             {
@@ -205,7 +200,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
                 if (CMBType.Text != "اختر نوع")
                 {
-                    _context.Deserveds.Add(new Deserved
+                    await _context.Deserveds.AddAsync(new Deserved
                     {
                         TypeId = (int)CMBType.SelectedValue,
                         UserName = txtUserName.Text,
@@ -214,17 +209,18 @@ namespace Store.ApplicationUI.Gui.DeservedGui
                         Notes = txtNotes.Text,
                         Time = DateTime.Now.ToString("HH:mm:ss"),
                     });
-                    _context.SaveChanges();
-                    _context.Update(SetCaisse(Convert.ToDecimal(txtValueDeserved.Text)));
-                    _context.Add(SetCaisseWithdraw(Convert.ToDecimal(txtValueDeserved.Text)));
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
+                    _context.Update(await SetCaisse(Convert.ToDecimal(txtValueDeserved.Text)));
+                    await _context.AddAsync(SetCaisseWithdraw(Convert.ToDecimal(txtValueDeserved.Text)));
+                    await _context.SaveChangesAsync();
 
-                    Code.Helper.ToasterHelper.ShowAddToast();
 
-                    if (!DeservedUserControl.CheckInstance())
+
+                    if (_controlManager.TryGet<DeservedUserControl>(out var UC))
                     {
-                        DeservedUserControl.RefreshDgv();
+                        UC.LoadData();
                     }
+                    Code.Helper.ToasterHelper.ShowAddToast();
                 }
                 else
                     MsgHelper.ShowRequiredFields();
@@ -243,24 +239,24 @@ namespace Store.ApplicationUI.Gui.DeservedGui
                 decimal value = Convert.ToDecimal(txtValueDeserved.Text);
                 ToasterHelper.PlayNotificationSound();
 
-                Deserved deserved = _context.Deserveds.FirstOrDefault(x => x.Id.ToString() == lblDeservedID.Text);
+                Deserved deserved = await _context.Deserveds.FirstOrDefaultAsync(x => x.Id.ToString() == lblDeservedID.Text);
 
                 if (deserved != null)
                 {
                     if (deserved.Price > Convert.ToDecimal(txtValueDeserved.Text))
                     {
                         value = deserved.Price - Convert.ToDecimal(txtValueDeserved.Text);
-                        _context.Update(SetCaissedepos(value));
+                        _context.Update(await SetCaissedepos(value));
                         _context.Add(SetCaisseDeposit(value));
-                        _context.SaveChanges();
+                        await _context.SaveChangesAsync();
 
                     }
                     else if (deserved.Price < Convert.ToDecimal(txtValueDeserved.Text))
                     {
                         value = Convert.ToDecimal(txtValueDeserved.Text) - deserved.Price;
-                        _context.Update(SetCaisse(value));
+                        _context.Update(await SetCaisse(value));
                         _context.Add(SetCaisseWithdraw(value));
-                        _context.SaveChanges();
+                        await _context.SaveChangesAsync();
 
                     }
                     deserved.TypeId = Convert.ToInt32(CMBType.SelectedValue);
@@ -269,12 +265,13 @@ namespace Store.ApplicationUI.Gui.DeservedGui
                     deserved.Date = DtpExperation.Value;
                     deserved.Notes = txtNotes.Text;
                     _context.Update(deserved);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     Code.Helper.ToasterHelper.ShowEditToast();
 
-                    if (!DeservedUserControl.CheckInstance())
+
+                    if (_controlManager.TryGet<DeservedUserControl>(out var UC))
                     {
-                        DeservedUserControl.RefreshDgv();
+                        UC.LoadData();
                     }
                     deserved = null;
                 }
@@ -289,7 +286,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
         private void btnAddTypes_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            AddDeservedTypeForm addDeservedType = AddDeservedTypeForm.Instance(_main);
+            AddDeservedTypeForm addDeservedType = _controlManager.GetF<AddDeservedTypeForm>();
             this.Hide();
             addDeservedType.ShowDialog();
             this.Show();

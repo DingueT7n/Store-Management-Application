@@ -1,50 +1,38 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
-using Store.Core.Entities.Customers;
 using Store.Core.Entities.Suppliers;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
 {
     public partial class SupplierReportsUserControl : UserControl
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext _context;
-        public static SupplierReportRepository? supplierReportRepository;
-        private static SupplierReportsUserControl? _supplierReportsUserControl;  // _supplierReportsUserControl
-        public SupplierReportsUserControl()
+
+
+
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+        private readonly ISupplierReportRepository _supplierReportRepository;
+
+        public SupplierReportsUserControl(MainForm main, ApplicationDbContext context, ISupplierReportRepository supplierReportRepository
+          )
         {
             InitializeComponent();
-        }
-        public static bool CheckInstance()
-        {
-            return (_supplierReportsUserControl == null);
-
-        }
-        public static SupplierReportsUserControl Instance(MainForm main)
-        {
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            if (CheckInstance())
-            {
-                _context = new ApplicationDbContext();
+            _context = context;
+            _supplierReportRepository = supplierReportRepository;
+            LoadData();
 
-                supplierReportRepository = new SupplierReportRepository(_context);
-
-                _supplierReportsUserControl = new SupplierReportsUserControl();
-
-            }
-
-            // Return the singleton instance
-            _supplierReportsUserControl.LoadData();
-            return _supplierReportsUserControl;
         }
 
-        public async void SetProductsToDgv(int skip)
+
+
+        public async Task SetProductsToDgv(int skip)
         {
 
-            var SuppliersMoneyList = supplierReportRepository.GetAllData(skip, Properties.Settings.Default.NoOfDataInDgvs);
+            DgvِCustomer.DataSource = new List<SupplierReportDto>();
+            var SuppliersMoneyList = await _supplierReportRepository.GetAllData(skip, Properties.Settings.Default.NoOfDataInDgvs);
 
             var uniqueSupplierCount = SuppliersMoneyList.Result
                 .Select(x => x.Supplier.Id)
@@ -79,26 +67,19 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
                 }
             }
         }
-
-        public static void RefreshDgv()
-        {
-            //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAllProducts());
-            _supplierReportsUserControl.LoadData();
-        }
-        // methodes 
         public async void LoadData()
         {
 
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => supplierReportRepository.IsConnected()))
+            if (await _supplierReportRepository.IsConnectedAsync())
             {
                 //Start Load Data
 
                 // if its an admin or Normal user 
 
-                SetProductsToDgv(0);
+                await SetProductsToDgv(0);
                 SetColumns();
                 //_data.Clear();
             }
@@ -160,7 +141,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
             txtSearch.Enabled = true;
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
 
@@ -176,21 +157,21 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
             }
             int skip = selectedi * take;
             SupplierReportDto a = new SupplierReportDto();
-            DgvِCustomer.DataSource = new List<CustomerReport>();
+            DgvِCustomer.DataSource = new List<SupplierReportDto>();
             if (rbBoth.Checked)
             {
-                a = supplierReportRepository.SearchBoth(txtSearch.Text, dtpFrom.Value, dtpTo.Value, take, skip);
+                a = await _supplierReportRepository.SearchBoth(txtSearch.Text, dtpFrom.Value, dtpTo.Value, take, skip);
 
 
             }
             else if (rbSupplierAndOrder.Checked)
             {
-                a = supplierReportRepository.SearchOnlySupplier(txtSearch.Text, take, skip);
+                a = await _supplierReportRepository.SearchOnlySupplier(txtSearch.Text, take, skip);
 
             }
             else
             {
-                a = supplierReportRepository.SearchOnlyDate(dtpFrom.Value, dtpTo.Value, take, skip);
+                a = await _supplierReportRepository.SearchOnlyDate(dtpFrom.Value, dtpTo.Value, take, skip);
 
             }
             DgvِCustomer.DataSource = a.Result;

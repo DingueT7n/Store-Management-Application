@@ -1,42 +1,54 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿
+using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.Models;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.SalesGui.PosGui;
 using Store.Core.Entities.Helpers;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
 {
     public partial class OpenOrCloseCaisseForm : Form
     {
-        private static ApplicationDbContext _context;
-        private static MainForm _main;
-        private static PosForm _pos;
-        private static CaisseStatusDetailRepository _repository;
-        private static OpenOrCloseCaisseForm? _Form;
+        private readonly ApplicationDbContext _context;
+        private readonly ICaisseStatusDetailRepository _repository;
+        private MainForm _main;
+        private PosForm _pos;
+        private readonly ControlManager _controlManager;
 
-        public OpenOrCloseCaisseForm(MainForm main)
+        public OpenOrCloseCaisseForm(
+       ApplicationDbContext context,
+       ICaisseStatusDetailRepository repository, ControlManager controlManager
+       , MainForm main, PosForm pos)
         {
-            _context = new ApplicationDbContext();
-            _repository = new CaisseStatusDetailRepository(_context);
+            InitializeComponent();
 
+            _context = context;
+            _repository = repository;
+
+            _controlManager = controlManager;
             _main = main;
-            InitializeComponent();
-            this.Owner = main;
+            _pos = pos;
+
+            // Set Owner if provided
+
 
         }
-        public OpenOrCloseCaisseForm(PosForm _pos)
+        bool _poss;
+        bool _mainn;
+        public void SetPose(bool pos)
         {
-            _context = new ApplicationDbContext();
-            _repository = new CaisseStatusDetailRepository(_context);
-            _pos = _pos;
-            InitializeComponent();
-            this.Owner = _pos;
-
+            _poss = pos;
+            btnClose.Visible = _poss;
+            btnOpen.Visible = !_poss;
         }
-        public static void SetPose(PosForm _poss)
+        public void SetMain(bool mainn)
         {
-            _pos = _poss;
+            _mainn = mainn;
+            btnClose.Visible = !_mainn;
+            btnOpen.Visible = _mainn;
         }
         private async void btnOpen_Click(object sender, EventArgs e)
         {
@@ -84,10 +96,10 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
 
                     if (lblErrorMoney.Visible)
                     {
-                        string caissename = _context.Caisses.FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId).CaisseName;
+                        string caissename = (await _context.Caisses.FirstOrDefaultAsync(x => x.Id == Properties.Settings.Default.DefaultCaisseId)).CaisseName;
                         string alerttype = "فتح الصندوق بالسالب";
                         string Message = $"لقد تم فتح الصندوق {caissename} عن طريق {LocalUser.User.UserName} بنقص يقدر ب {amoutmis} يرجى مراجعة معلومات البرنامج والقيمة الحقيقة للصندوق";
-                        var alert = _context.AlertsTable.FirstOrDefault(x => x.AlertType == alerttype && x.Message == Message && !x.IsResolved);
+                        var alert = await _context.AlertsTable.FirstOrDefaultAsync(x => x.AlertType == alerttype && x.Message == Message && !x.IsResolved);
                         if (alert == null)
                         {
                             AlertTable alertTable = new AlertTable();
@@ -97,13 +109,14 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
                             alertTable.CreatedDate = DateTime.Now;
                             alertTable.IsResolved = false;
                             alertTable.Category = LocalUser.User.UserName;
-                            _context.Add(alertTable);
-                            _context.SaveChanges();
+                            await _context.AddAsync(alertTable);
+                            await _context.SaveChangesAsync();
                         }
                     }
-                    this.Hide();
                     _main.Hide();
-                    PosForm posForm = new PosForm(_main);
+                    PosForm posForm = _controlManager.GetF<PosForm>();
+
+                    this.Close();
                     posForm.ShowDialog();
                     _main.Show();
                 }
@@ -231,10 +244,10 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
 
                     if (lblErrorMoney.Visible)
                     {
-                        string caissename = _context.Caisses.FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId).CaisseName;
+                        string caissename = (await _context.Caisses.FirstOrDefaultAsync(x => x.Id == Properties.Settings.Default.DefaultCaisseId)).CaisseName;
                         string alerttype = "اغلاق الصندوق بالسالب";
                         string Message = $"لقد تم اغلاق الصندوق {caissename} عن طريق {LocalUser.User.UserName} بنقص يقدر ب {amoutmis} يرجى مراجعة معلومات البرنامج والقيمة الحقيقة للصندوق";
-                        var alert = _context.AlertsTable.FirstOrDefault(x => x.AlertType == alerttype && x.Message == Message && !x.IsResolved);
+                        var alert = await _context.AlertsTable.FirstOrDefaultAsync(x => x.AlertType == alerttype && x.Message == Message && !x.IsResolved);
                         if (alert == null)
                         {
                             AlertTable alertTable = new AlertTable();
@@ -244,13 +257,14 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
                             alertTable.CreatedDate = DateTime.Now;
                             alertTable.IsResolved = false;
                             alertTable.Category = LocalUser.User.UserName;
-                            _context.Add(alertTable);
-                            _context.SaveChanges();
+                            await _context.AddAsync(alertTable);
+                            await _context.SaveChangesAsync();
                         }
                     }
                     // Hide current form and close the POS
-                    this.Hide();
-                    _pos?.Close();
+                    _pos.Close();
+                    this.Close();
+                    _main.Show();
                 }
             }
             catch (Exception ex)

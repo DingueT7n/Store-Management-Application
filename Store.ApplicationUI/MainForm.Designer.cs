@@ -1372,6 +1372,7 @@
             Text = "ALG-D الواجهة الرئيسية";
             WindowState = FormWindowState.Maximized;
             FormClosing += MainForm_FormClosing;
+            Load += MainForm_Load;
             flowLayoutPanelNavBar.ResumeLayout(false);
             flowLayoutPanelStateAndDiscount.ResumeLayout(false);
             ProductsflowLayoutPanel.ResumeLayout(false);

@@ -1,55 +1,40 @@
 ﻿using System.Data;
 using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Caisses;
+using Store.Core.Entities.Suppliers;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
 {
     public partial class SupplierAccountUserControl : UserControl
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext _context;
-        public static SupplierMoneyRepository? suppliersRepository;
-        private static SupplierAccountUserControl? _supplierAccountUserControl;
-        public SupplierAccountUserControl()
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+        private readonly ISupplierMoneyRepository _supplierMoneyRepository;
+        private readonly ControlManager _controlManager;
+
+        public SupplierAccountUserControl(MainForm main, ApplicationDbContext context, ISupplierMoneyRepository supplierMoneyRepository
+          , ControlManager controlManager)
         {
             InitializeComponent();
-        }
-        public static bool CheckInstance()
-        {
-            return (_supplierAccountUserControl == null);
-
-        }
-        public static SupplierAccountUserControl Instance(MainForm main)
-        {
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _context = new ApplicationDbContext();
-            if (CheckInstance())
-            {
-
-                suppliersRepository = new SupplierMoneyRepository(_context);
-
-                _supplierAccountUserControl = new SupplierAccountUserControl();
-
-            }
-
-            // Return the singleton instance
-            _supplierAccountUserControl.LoadData();
-
-            return _supplierAccountUserControl;
+            _context = context;
+            _supplierMoneyRepository = supplierMoneyRepository;
+            _controlManager = controlManager;
+            LoadData();
         }
-
         public async void SetDataToDgv()
         {
 
             //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            var SuppliersMoneyList = _context.SuppliersMoneys.
+            DgvِCustomer.DataSource = new List<SupplierMoney>();
+            var SuppliersMoneyList = await _context.SuppliersMoneys.
                 Include(x => x.Supplier).Include(x => x.Buy)
-                .ToList();
+                .ToListAsync();
             var uniqueSupplierCount = SuppliersMoneyList
                 .Select(x => x.Supplier.Id) // Replace CustomerId with the actual unique identifier property
                 .Distinct()
@@ -68,19 +53,13 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
             }
         }
 
-        public static void RefreshDgv()
-        {
-            //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAllProducts());
-            _supplierAccountUserControl.LoadData();
-        }
-        // methodes 
         public async void LoadData()
         {
 
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => suppliersRepository.IsConnected()))
+            if (await _supplierMoneyRepository.IsConnectedAsync())
             {
                 //Start Load Data
 
@@ -134,18 +113,18 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
             LoadData();
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
-            DgvِCustomer.DataSource = suppliersRepository.SearchAll(txtSearch.Text);
+            DgvِCustomer.DataSource = await _supplierMoneyRepository.SearchAll(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
             txtSearch.Text = string.Empty;
         }
-        Caisse SetCaisse(decimal value)
+        async Task<Caisse> SetCaisse(decimal value)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
 
-            Caisse caisse = _context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefault();
+            Caisse caisse = await _context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefaultAsync();
             if (caisse is not null)
             {
                 caisse.MoneyinCaisse -= value;
@@ -164,14 +143,14 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                 Date = DateTime.Now,
                 Name = $"  {Properties.Settings.Default.UserName} دين للمورد {suppname} بحساب ",
                 Money = value,
-                Reason = "شراء بالفاتورة لعميل",
+                Reason = "شراء بالفاتورة لمورد",
                 Type = "سحب عن طريق شراء منتجات (مال مستثمر )"
             };
 
             return caisseWithdraw;
 
         }
-        private void btnPay_Click(object sender, EventArgs e)
+        private async void btnPay_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (DgvِCustomer.SelectedRows.Count > 0 && !dgvHelper.IsEmpty(DgvِCustomer))
@@ -200,77 +179,126 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                         decimal parsedPrice = _main.ConvertToFloat(price);
 
                         // Start a transaction
-                        using (var transaction = _context.Database.BeginTransaction())
+                        using (var transaction = await _context.Database.BeginTransactionAsync())
                         {
-                            // Perform supplier debt transaction
-                            suppliersRepository.TransactionOfSupplierDebt(orderId, supplierId, price, supplierName, DateTime.Now);
-
-                            // Update the caisse
-                            var updatedCaisse = SetCaisse(parsedPrice);
-                            _context.Update(updatedCaisse);
-                            _context.SaveChanges();
-
-                            // Add a caisse withdrawal if the price is greater than 0
-                            if (parsedPrice > 0)
+                            try
                             {
-                                var caisseWithdraw = SetCaisseWithdraw(parsedPrice, supplierName);
-                                _context.Add(caisseWithdraw);
-                                _context.SaveChanges();
-                            }
 
-                            // Commit the transaction
-                            transaction.Commit();
+
+                                // Perform supplier debt transaction
+                                var transactionCompleted = await _supplierMoneyRepository.TransactionOfSupplierDebt(orderId, supplierId, price, supplierName, DateTime.Now);
+
+                                // Update the caisse
+                                if (transactionCompleted)
+                                {
+                                    var updatedCaisse = await SetCaisse(parsedPrice);
+                                    _context.Update(updatedCaisse);
+                                    await _context.SaveChangesAsync();
+                                }
+                                else
+                                {
+                                    ToasterHelper.ShowErrorHappened("العملية لم تكتمل");
+                                }
+
+                                // Add a caisse withdrawal if the price is greater than 0
+                                if (parsedPrice > 0 && transactionCompleted)
+                                {
+                                    var caisseWithdraw = SetCaisseWithdraw(parsedPrice, supplierName);
+                                    await _context.AddAsync(caisseWithdraw);
+                                    await _context.SaveChangesAsync();
+                                }
+
+                                // Commit the transaction
+                                await transaction.CommitAsync();
+                            }
+                            catch (Exception)
+                            {
+                                await transaction.RollbackAsync();
+
+                                throw;
+                            }
                         }
                     }
                     catch (Exception ex)
                     {
                         // Log the exception for debugging
-                        Console.WriteLine($"Error: {ex.Message}");
+                        // Console.WriteLine($"Error: {ex.Message}");
+                        ToasterHelper.ShowErrorHappened(ex.Message);
+
                         throw; // Re-throw the exception for higher-level handling if necessary
                     }
                 }
                 else if (rbPayPartialFacture.Checked)
                 {
-                    suppliersRepository.TransactionOfEditingSupplierDebt(
-                        DgvِCustomer.CurrentRow.Cells[1].Value.ToString(),
-                        DgvِCustomer.CurrentRow.Cells[0].Value.ToString(),
-                        DgvِCustomer.CurrentRow.Cells[3].Value.ToString(),
-                        DgvِCustomer.CurrentRow.Cells[2].Value.ToString(),
-                       txtPayAmout.Text,
-                       DateTime.Now
-                       );
-                    _context.Update(SetCaisse(_main.ConvertToFloat(txtPayAmout.Text)));
-                    _context.SaveChanges();
-                    if (_main.ConvertToFloat(txtPayAmout.Text) > 0)
+                    using (var transaction = await _context.Database.BeginTransactionAsync())
                     {
-                        _context.Add(SetCaisseWithdraw(_main.ConvertToFloat(txtPayAmout.Text),
-                         DgvِCustomer.CurrentRow.Cells[2].Value.ToString()));
-                        _context.SaveChanges();
-                    }
+                        try
+                        {
+                            var trancomp = await _supplierMoneyRepository.TransactionOfEditingSupplierDebt(
+                           DgvِCustomer.CurrentRow.Cells[1].Value.ToString(),
+                           DgvِCustomer.CurrentRow.Cells[0].Value.ToString(),
+                           DgvِCustomer.CurrentRow.Cells[3].Value.ToString(),
+                           DgvِCustomer.CurrentRow.Cells[2].Value.ToString(),
+                          txtPayAmout.Text,
+                          DateTime.Now
+                          );
+                            var caisse = await SetCaisse(_main.ConvertToFloat(txtPayAmout.Text));
+                            _context.Update(caisse);
+                            await _context.SaveChangesAsync();
+                            if (_main.ConvertToFloat(txtPayAmout.Text) > 0)
+                            {
+                                await _context.AddAsync(SetCaisseWithdraw(_main.ConvertToFloat(txtPayAmout.Text),
+                                   DgvِCustomer.CurrentRow.Cells[2].Value.ToString()));
+                                await _context.SaveChangesAsync();
+                            }
+                            await transaction.CommitAsync();
 
+                        }
+                        catch (Exception)
+                        {
+                            await transaction.RollbackAsync();
+
+                            throw;
+                        }
+
+                    }
                 }
                 else
                 {
-                    for (int i = 0; i < DgvِCustomer.Rows.Count; i++)
+                    using (var transaction = await _context.Database.BeginTransactionAsync())
                     {
-                        var row = DgvِCustomer.Rows[i];
-                        suppliersRepository.TransactionOfSupplierDebt(
-                            row.Cells[1].Value?.ToString(),
-                            row.Cells[0].Value?.ToString(),
-                            row.Cells[3].Value?.ToString(),
-                            row.Cells[2].Value?.ToString(),
-                            DateTime.Now
-                        );
-                        _context.Update(SetCaisse(_main.ConvertToFloat(row.Cells[3].Value?.ToString())));
-                        _context.SaveChanges();
-                        if (_main.ConvertToFloat(row.Cells[3].Value?.ToString()) > 0)
+                        try
                         {
-                            _context.Add(SetCaisseWithdraw(
-                            _main.ConvertToFloat(row.Cells[3].Value?.ToString())
-                            , row.Cells[2].Value.ToString()));
-                            _context.SaveChanges();
-                        }
+                            for (int i = 0; i < DgvِCustomer.Rows.Count; i++)
+                            {
+                                var row = DgvِCustomer.Rows[i];
+                                await _supplierMoneyRepository.TransactionOfSupplierDebt(
+                                     row.Cells[1].Value?.ToString(),
+                                     row.Cells[0].Value?.ToString(),
+                                     row.Cells[3].Value?.ToString(),
+                                     row.Cells[2].Value?.ToString(),
+                                     DateTime.Now
+                                 );
+                                _context.Update(await SetCaisse(_main.ConvertToFloat(row.Cells[3].Value?.ToString())));
+                                await _context.SaveChangesAsync();
+                                if (_main.ConvertToFloat(row.Cells[3].Value?.ToString()) > 0)
+                                {
+                                    _context.Add(SetCaisseWithdraw(
+                                    _main.ConvertToFloat(row.Cells[3].Value?.ToString())
+                                    , row.Cells[2].Value.ToString()));
+                                    await _context.SaveChangesAsync();
+                                }
 
+                            }
+                            await transaction.CommitAsync();
+
+                        }
+                        catch (Exception)
+                        {
+                            await transaction.RollbackAsync();
+
+                            throw;
+                        }
                     }
                 }
                 ToasterHelper.ShowDebtAdded();
@@ -287,7 +315,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                 if (DgvِCustomer.SelectedRows.Count > 0)
                 {
                     DataTable suplierAccountDetailsTable = await FactureHelper.GetSupplierAccountDataTableAsync(Convert.ToInt32(DgvِCustomer.CurrentRow.Cells[0].Value.ToString()));
-                    Reports.SuppliersAccountsReports.SuppliersAccountsReports supAccount = new();
+                    Reports.SuppliersAccountsReports.SuppliersAccountsReports supAccount = _controlManager.GetR<Reports.SuppliersAccountsReports.SuppliersAccountsReports>();
                     supAccount.DataSource = suplierAccountDetailsTable;
                     var a = suplierAccountDetailsTable.Rows.Count.ToString();
                     supAccount.lblTotalFactures.Text = a;
@@ -343,7 +371,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                 if (DgvِCustomer.SelectedRows.Count > 0)
                 {
                     DataTable buyDetailsTable = await FactureHelper.GetBuyDetailsDataTableAsync(Convert.ToInt32(DgvِCustomer.CurrentRow.Cells[1].Value.ToString()));
-                    Reports.BuysReports.buyA4 buyA4 = new();
+                    Reports.BuysReports.buyA4 buyA4 = _controlManager.GetR<Reports.BuysReports.buyA4>();
                     buyA4.DataSource = buyDetailsTable;
                     Reports.ReportPerviwGui.PerviweForm perv = Reports.ReportPerviwGui.PerviweForm.Instance(buyA4);
                     perv.Show();
@@ -364,7 +392,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                 if (DgvِCustomer.SelectedRows.Count > 0)
                 {
                     DataTable buyDetailsTable = await FactureHelper.GetBuyDetailsDataTableAsync(Convert.ToInt32(DgvِCustomer.CurrentRow.Cells[0].Value.ToString()));
-                    Reports.BuysReports.buy8cm buy8cm = new();
+                    Reports.BuysReports.buy8cm buy8cm = _controlManager.GetR<Reports.BuysReports.buy8cm>();
                     buy8cm.DataSource = buyDetailsTable;
                     Reports.ReportPerviwGui.PerviweForm perv = Reports.ReportPerviwGui.PerviweForm.Instance(buy8cm);
                     perv.Show();

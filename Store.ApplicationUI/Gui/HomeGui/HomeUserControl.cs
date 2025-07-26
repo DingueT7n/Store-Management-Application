@@ -3,59 +3,44 @@ using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.GUIHelper;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.Models;
+using Store.ApplicationUI.Code.System;
+using Store.ApplicationUI.Gui.BuysGui;
 using Store.ApplicationUI.Gui.CaisseAndBankGui;
 using Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui;
+using Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui;
 using Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.ProductsGui;
+using Store.ApplicationUI.Gui.ReturnsGui;
+using Store.ApplicationUI.Gui.SalesGui;
 using Store.ApplicationUI.Gui.SalesGui.PosGui;
+using Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui;
 using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.HomeGui
 {
     public partial class HomeUserControl : UserControl, IKeyAwareControl
     {
-        private static HomeUserControl? _homeUserControl;
-        private static ApplicationDbContext? _context;
-        private static MainForm? _main;
 
-        public HomeUserControl()
+        private readonly ApplicationDbContext _context;
+        private readonly MainForm _main;
+        private readonly ControlManager _controlManager;
+
+        public HomeUserControl(ApplicationDbContext context, MainForm main, ControlManager controlManager)
         {
+            _context = context;
+            _main = main;
             InitializeComponent();
+            _controlManager = controlManager;
+
             animationTimer.Interval = 10; // Animation speed
             animationTimer.Tick += AnimationTimer_Tick;
 
             textAnimationTimer.Interval = 100; // Text fade effect speed
             textAnimationTimer.Tick += TextAnimationTimer_Tick;
 
-            // Set default size and handlers
-            //panelTimes.Width = panelWidth;
-            //panelTimes.MouseHover += PanelTimes_MouseHover;
-            //panelTimes.MouseLeave += PanelTimes_MouseLeave;
-            //panelTimes.Click += PanelTimes_Click;
-
-
-        }
-        private void PanelTimes_MouseHover(object sender, EventArgs e)
-        {
-            isExpanding = true; // Expand panel
-            animationTimer.Start();
         }
 
-        private void PanelTimes_MouseLeave(object sender, EventArgs e)
-        {
-            isExpanding = false; // Shrink panel
-            animationTimer.Start();
-        }
-
-        //private void PanelTimes_Click(object sender, EventArgs e)
-        //{
-        //    panelTimes.BackColor = Color.LightBlue; // Highlight on click
-        //    Task.Delay(200).ContinueWith(_ =>
-        //    {
-        //        this.Invoke(new Action(() => panelTimes.BackColor = SystemColors.Control)); // Reset after delay
-        //    });
-        //}
 
         private void AnimationTimer_Tick(object sender, EventArgs e)
         {
@@ -83,35 +68,11 @@ namespace Store.ApplicationUI.Gui.HomeGui
             }
         }
 
-        private void LblTimer_Hover(object sender, EventArgs e)
-        {
-            textFading = true;
-            textAnimationTimer.Start();
-        }
 
-        private void LblTimer_Leave(object sender, EventArgs e)
-        {
-            textFading = false;
-            textAnimationTimer.Start();
-        }
 
         private void TextAnimationTimer_Tick(object sender, EventArgs e)
         {
 
-        }
-        public static HomeUserControl Instance(MainForm main)
-        {
-            _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            if (_homeUserControl == null)
-            {
-                _homeUserControl = new HomeUserControl();
-                _context = new ApplicationDbContext();
-
-            }
-            _ = _homeUserControl.LoadData();
-            // Return the singleton instance
-            return _homeUserControl;
         }
 
         public async Task LoadData()
@@ -120,7 +81,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => _context.Database.CanConnect()))
+            if (await _context.Database.CanConnectAsync())
             {
                 //Start Load Data
 
@@ -201,13 +162,13 @@ namespace Store.ApplicationUI.Gui.HomeGui
         }
 
         // Animation-related variables
-        private int panelWidth = 200; // Default width of panel
-        private int expandedWidth = 400; // Maximum width when expanded
+        //private int panelWidth = 200; // Default width of panel
+        //private int expandedWidth = 400; // Maximum width when expanded
         private bool isExpanding = false; // Tracks panel animation direction
         private System.Windows.Forms.Timer animationTimer = new System.Windows.Forms.Timer(); // Timer for animations
         private System.Windows.Forms.Timer textAnimationTimer = new System.Windows.Forms.Timer(); // Timer for text effects
-        private Color originalColor = Color.Black; // Default label color
-        private bool textFading = false; // Tracks text fading animation
+        //private Color originalColor = Color.Black; // Default label color
+        //private bool textFading = false; // Tracks text fading animation
 
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -233,9 +194,9 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 if (LocalUser.User.UserSetting.UserPermession)
                 {
                     _main.CloseSubPanels();
-                    UserRolesForm userRolesForm = UserRolesForm.Instance(_main);
+                    UserRolesForm userRolesForm = _controlManager.GetF<UserRolesForm>();
 
-                    userRolesForm.Show();
+                    userRolesForm.ShowDialog();
                 }
 
         }
@@ -246,9 +207,9 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 if (LocalUser.User.UserProductAndStore.AddProduct)
                 {
                     _main.CloseSubPanels();
-                    AddProductForm addProductForm = AddProductForm.Instance(_main);
+                    AddProductForm addProductForm = _controlManager.GetF<AddProductForm>();
 
-                    addProductForm.Show();
+                    addProductForm.ShowDialog();
                 }
         }
 
@@ -258,7 +219,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 if (LocalUser.User.UserCustomer.CustomerAccount)
                 {
                     _main.CloseSubPanels();
-                    _main.SetBytilt(Gui.CustomersGui.CustomerAccountGui.CustomerAccountUserControl.Instance(_main));
+                    _main.SetBytilt(_controlManager.Get<CustomerAccountUserControl>());
                 }
         }
 
@@ -268,7 +229,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 if (LocalUser.User.UserSupplier.SuppliersAccount)
                 {
                     _main.CloseSubPanels();
-                    _main.SetBytilt(Gui.SupplierGui.SupplierAccountGui.SupplierAccountUserControl.Instance(_main));
+                    _main.SetBytilt(_controlManager.Get<SupplierAccountUserControl>());
                 }
         }
 
@@ -278,7 +239,9 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 if (LocalUser.User.UserBuy.NewBuy)
                 {
                     _main.CloseSubPanels();
-                    _main.SetBytilt(Gui.BuysGui.BuysUserControl.Instance(_main));
+                    //_main.SetBytilt(Gui.BuysGui.BuysUserControl.Instance(_main));
+                    _main.SetBytilt(_controlManager.Get<BuysUserControl>());
+
                 }
         }
 
@@ -288,7 +251,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 if (LocalUser.User.UserSale.NewSale)
                 {
                     _main.CloseSubPanels();
-                    _main.SetBytilt(Gui.SalesGui.SalesUserControl.Instance(_main));
+                    _main.SetBytilt(_controlManager.Get<SalesUserControl>());
                 }
         }
 
@@ -297,8 +260,9 @@ namespace Store.ApplicationUI.Gui.HomeGui
             if (LocalUser.User is not null)
                 if (LocalUser.User.UserCaisseAndBank.CaissesAndBanks)
                 {
-                    CaisseDetailsForm caisseDetailsForm = CaisseDetailsForm.Instance(_main);
-                    caisseDetailsForm.Show();
+                    CaisseDetailsForm caisseDetailsForm = _controlManager.GetF<CaisseDetailsForm>();
+
+                    caisseDetailsForm.ShowDialog();
                     _main.CloseSubPanels();
                 }
         }
@@ -310,7 +274,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 {
                     _main.CloseSubPanels();
 
-                    _main.SetBytilt(Gui.HomeGui.StatisticsUserControl.Instance(_main));
+                    _main.SetBytilt(_controlManager.Get<StatisticsUserControl>());
                 }
         }
 
@@ -321,30 +285,33 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 {
                     _main.CloseSubPanels();
 
-                    _main.SetBytilt(Gui.ReturnsGui.ReturnUserControl.Instance(_main));
+
+                    _main.SetBytilt(_controlManager.Get<ReturnUserControl>());
+
                 }
         }
 
-        private void tiltPos_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
+        private async void tiltPos_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
             if (LocalUser.User is not null)
                 if (LocalUser.User.UserSale.NewSale)
                 {
                     if (Code.Helper.VerificationSettingsHelper.IsAllSettingsAreApplied(_context))
                     {
-                        _context = new ApplicationDbContext();
-                        var caisse = _context.Caisses.FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
+
+                        var caisse = await _context.Caisses.FirstOrDefaultAsync(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
                         if (caisse != null)
                         {
                             if (caisse.Status == Core.Entities.Caisses.CaisseStatus.Closed)
                             {
-                                OpenOrCloseCaisseForm Form = new OpenOrCloseCaisseForm(_main);
+                                OpenOrCloseCaisseForm Form = _controlManager.GetF<OpenOrCloseCaisseForm>();
                                 Form.ShowDialog();
                             }
                             else if (caisse.Status == Core.Entities.Caisses.CaisseStatus.Open)
                             {
                                 this.Hide();
-                                PosForm posForm = new PosForm(_main);
+                                PosForm posForm = _controlManager.GetF<PosForm>();
+
                                 posForm.ShowDialog();
                                 this.Show();
 
@@ -393,6 +360,12 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 tiltSales_ItemClick(null, null);
 
             }
+        }
+
+        private async void HomeUserControl_Load(object sender, EventArgs e)
+        {
+            await LoadData();
+
         }
     }
 }

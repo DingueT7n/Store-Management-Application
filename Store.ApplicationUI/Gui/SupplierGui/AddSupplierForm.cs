@@ -1,72 +1,24 @@
 ﻿using Store.ApplicationUI.Code.Helper;
-using Store.ApplicationUI.Gui.LoadingGui;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.SupplierGui;
 using Store.Core.Entities.Suppliers;
-using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
+using Store.Core.Interfaces;
 
 namespace Store.ApplicationUI.Gui.ProductsGui
 {
     public partial class AddSupplierForm : Form
     {
-        private readonly MainForm _main;
-        private ApplicationDbContext _context;
-        private SuppliersRepository? _suppliersRepository;
-        private static AddSupplierForm? _addSupplierForm;
 
-        public AddSupplierForm(MainForm main)
+
+        private readonly ISuppliersRepository _suppliersRepository;
+        private readonly ControlManager _controlManager;
+
+        public AddSupplierForm(ISuppliersRepository suppliersRepository, ControlManager controlManager)
         {
             InitializeComponent();
-            _main = main;
-            this.Owner = _main;
-            _context = new ApplicationDbContext();
 
-            _suppliersRepository = new SuppliersRepository(_context);
-
-            LoadData();
-
-        }
-        public static AddSupplierForm Instance(MainForm main)
-        {
-            // If the instance is null or has been disposed, create a new one.
-            if (_addSupplierForm == null || _addSupplierForm.IsDisposed)
-            {
-                _addSupplierForm = new AddSupplierForm(main);
-            }
-            else
-            {
-                // Bring the form to the front if it exists.
-                if (!_addSupplierForm.Visible)
-                {
-                    _addSupplierForm.Show();
-                }
-                _addSupplierForm.BringToFront();
-            }
-
-            return _addSupplierForm;
-        }
-        public async void LoadData()
-        {
-
-
-            //ShowLoading
-            LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => MainForm.Context.Database.CanConnect()))
-            {
-
-
-            }
-            else
-            {
-
-                LoadingForm.Instance(_main).Hide();
-                //No Connection
-                MsgHelper.ShowServerError();
-            }
-            //Hideloading
-            LoadingForm.Instance(_main).Hide();
-            // Show EmptyDAta
-
+            _suppliersRepository = suppliersRepository;
+            _controlManager = controlManager;
         }
         void vider()
         {
@@ -75,7 +27,11 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             txtPhoneNumber.Text = "";
             txtMaxDebtAllowed.Text = $"0{Properties.Settings.Default.DecimalSEP}00";
             txtNotes.Text = "";
-
+            lblِSupplierId.Text = "";
+            btnAddSupplier.Visible = true;
+            btnEditSupplier.Visible = false;
+            lblِSupplierId.Visible = false;
+            label13.Visible = false;
         }
 
         private void txtBarCode_KeyPress(object sender, KeyPressEventArgs e)
@@ -147,23 +103,25 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
 
 
-        public void SetDataToEdit(string NameSupplier, string Address, string PhoneNumber
-            , string MaxdebtAllowed, string Notes, string SupplierId)
+        public async Task SetDataToEdit(string SupplierId)
         {
-            txtNameSupplier.Text = NameSupplier;
-            txtAddress.Text = Address;
+            var objet = await _suppliersRepository.GetAsync(Convert.ToInt32(SupplierId));
 
-            txtPhoneNumber.Text = PhoneNumber;
+            txtNameSupplier.Text = objet.SupplierName;
+            txtAddress.Text = objet.Address;
 
-            txtMaxDebtAllowed.Text = MaxdebtAllowed;
-            txtNotes.Text = Notes;
-            lblِSupplierId.Text = SupplierId;
+            txtPhoneNumber.Text = objet.PhoneNumber;
+
+            txtMaxDebtAllowed.Text = objet.MaxDebtAllowed.ToString(); ;
+            txtNotes.Text = objet.Notes;
+            lblِSupplierId.Text = objet.Id.ToString();
             btnAddSupplier.Visible = false;
             btnEditSupplier.Visible = true;
             lblِSupplierId.Visible = true;
             label13.Visible = true;
         }
-        private void btnAddProduct_Click(object sender, EventArgs e)
+
+        private async void btnAddProduct_Click(object sender, EventArgs e)
         {
             try
             {
@@ -178,12 +136,13 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 customer.MaxDebtAllowed = ConvertToFloat(txtMaxDebtAllowed.Text);
 
 
-                var result = _suppliersRepository.AddAsync(customer);
+                var result = await _suppliersRepository.AddAsync(customer);
                 vider();
-                if (!SuppliersUserControl.CheckInstance())
-                {
-                    SuppliersUserControl.RefreshDgv();
 
+                if (_controlManager.TryGet<SuppliersUserControl>(out var UC))
+
+                {
+                    UC.LoadData();
                 }
                 Code.Helper.ToasterHelper.ShowAddToast();
 
@@ -205,7 +164,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             return Convert.ToDecimal(value);
         }
 
-        private void btnEditProduct_Click(object sender, EventArgs e)
+        private async void btnEditProduct_Click(object sender, EventArgs e)
         {
             try
             {
@@ -220,11 +179,13 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                     customer.PhoneNumber = txtPhoneNumber.Text;
                     customer.Notes = txtNotes.Text;
                     customer.MaxDebtAllowed = ConvertToFloat(txtMaxDebtAllowed.Text);
-                    var result = _suppliersRepository.UpdateAsync(lblِSupplierId.Text, customer);
+                    var result = await _suppliersRepository.UpdateAsync(lblِSupplierId.Text, customer);
 
-                    if (!SuppliersUserControl.CheckInstance())
+
+                    if (_controlManager.TryGet<SuppliersUserControl>(out var UC))
+
                     {
-                        SuppliersUserControl.RefreshDgv();
+                        UC.LoadData();
                     }
                     customer = null;
                     Code.Helper.ToasterHelper.ShowEditToast();
@@ -241,6 +202,16 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         {
             ToasterHelper.PlayNotificationSound();
             this.Close();
+        }
+
+        private void AddSupplierForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void AddSupplierForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            vider();
         }
     }
 }

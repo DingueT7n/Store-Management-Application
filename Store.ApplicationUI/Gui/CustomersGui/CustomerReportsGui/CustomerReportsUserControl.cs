@@ -2,49 +2,36 @@
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Customers;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
 {
     public partial class CustomerReportsUserControl : UserControl
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext _context;
-        public static CustomerReportRepository? customerReportRepository;
-        private static CustomerReportsUserControl? _customerReportsUserControl;  // _customerReportsUserControl
-
-        public CustomerReportsUserControl()
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+        private readonly ICustomerReportRepository _customerReportRepository;
+        public CustomerReportsUserControl(
+        MainForm main,
+        ApplicationDbContext context,
+        ICustomerReportRepository customerReportRepository)
         {
             InitializeComponent();
-        }
-        public static bool CheckInstance()
-        {
-            return (_customerReportsUserControl == null);
-
-        }
-        public static CustomerReportsUserControl Instance(MainForm main)
-        {
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _context = new ApplicationDbContext();
-            if (CheckInstance())
-            {
+            _context = context;
+            _customerReportRepository = customerReportRepository;
 
-                customerReportRepository = new CustomerReportRepository(_context);
-
-                _customerReportsUserControl = new CustomerReportsUserControl();
-
-            }
-
-            // Return the singleton instance
-            _customerReportsUserControl.LoadData();
-            return _customerReportsUserControl;
+            LoadData();
         }
+
+
+
 
         public async void SetProductsToDgv(int skip)
         {
-            var CustomerMoneyList = customerReportRepository.GetAllData(skip, Properties.Settings.Default.NoOfDataInDgvs);
+            DgvِCustomer.DataSource = new List<CustomerReport>();
+            var CustomerMoneyList = await _customerReportRepository.GetAllData(skip, Properties.Settings.Default.NoOfDataInDgvs);
             var uniqueCustomerCount = CustomerMoneyList.Result
                 .Select(x => x.Customer.Id) // Replace CustomerId with the actual unique identifier property
                 .Distinct()
@@ -76,11 +63,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
             }
         }
 
-        public static void RefreshDgv()
-        {
-            //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAllProducts());
-            _customerReportsUserControl.LoadData();
-        }
+
         // methodes 
         public async void LoadData()
         {
@@ -88,7 +71,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => customerReportRepository.IsConnected()))
+            if (await _customerReportRepository.IsConnectedAsync())
             {
                 //Start Load Data
 
@@ -140,7 +123,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
         {
             LoadData();
         }
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             try
             {
@@ -162,18 +145,18 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
                 DgvِCustomer.DataSource = new List<CustomerReport>();
                 if (rbBoth.Checked)
                 {
-                    a = customerReportRepository.SearchBoth(txtSearch.Text, dtpFrom.Value, dtpTo.Value, take, skip);
+                    a = await _customerReportRepository.SearchBoth(txtSearch.Text, dtpFrom.Value, dtpTo.Value, take, skip);
 
 
                 }
                 else if (rbCustomerAndOrder.Checked)
                 {
-                    a = customerReportRepository.SearchOnlyCustomer(txtSearch.Text, take, skip);
+                    a = await _customerReportRepository.SearchOnlyCustomer(txtSearch.Text, take, skip);
 
                 }
                 else
                 {
-                    a = customerReportRepository.SearchOnlyDate(dtpFrom.Value, dtpTo.Value, take, skip);
+                    a = await _customerReportRepository.SearchOnlyDate(dtpFrom.Value, dtpTo.Value, take, skip);
                 }
                 DgvِCustomer.DataSource = a.Result;
 
@@ -315,7 +298,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
             {
                 for (int i = 0; i < DgvِCustomer.Rows.Count; i++)
                 {
-                    customerReportRepository.DeleteAsync(DgvِCustomer.Rows[i].Cells[8].Value.ToString());
+                    _customerReportRepository.DeleteAsync(DgvِCustomer.Rows[i].Cells[8].Value.ToString());
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
                 }

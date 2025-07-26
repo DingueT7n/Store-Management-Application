@@ -237,6 +237,7 @@
             Name = "SuppliersUserControl";
             RightToLeft = RightToLeft.Yes;
             Size = new Size(1034, 681);
+            Load += SuppliersUserControl_Load;
             OperationsflowLayoutPanel.ResumeLayout(false);
             SearchPanel.ResumeLayout(false);
             SearchPanel.PerformLayout();

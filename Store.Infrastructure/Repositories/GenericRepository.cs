@@ -28,31 +28,29 @@ namespace Store.Infrastructure.Repositories
                 return new List<T>();
             }
         }
-        public string AddAsync(T entity)
+        public async Task<string> AddAsync(T entity)
         {
             try
             {
-                _context.Set<T>().Add(entity);
-                _context.SaveChanges();
+                await _context.Set<T>().AddAsync(entity);
+                await _context.SaveChangesAsync();
+                return "1";
             }
             catch (Exception ex)
             {
-
                 return ex.Message;
             }
-
-            return "1";
         }
 
-        public string DeleteAsync(string id)
+        public async Task<string> DeleteAsync(string id)
         {
             try
             {
-                var entity = _context.Set<T>().Find(Convert.ToInt32(id));
+                var entity = await _context.Set<T>().FindAsync(Convert.ToInt32(id));
                 if (entity is not null)
                 {
                     _context.Set<T>().Remove(entity);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
             }
             catch (Exception ex)
@@ -81,10 +79,17 @@ namespace Store.Infrastructure.Repositories
 
         public T Get(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return _context.Set<T>().Find(id);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
-        public List<T> GetAll() => _context.Set<T>().AsNoTracking().ToList();
+        public async Task<List<T>> GetAll() => await _context.Set<T>().AsNoTracking().ToListAsync();
 
 
         public IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includes)
@@ -197,21 +202,27 @@ namespace Store.Infrastructure.Repositories
             }
         }
 
-        public string UpdateAsync(string id, T entity)
+        public async Task<string> UpdateAsync(string id, T entity)
         {
             try
             {
-                var existingEntity = _context.Set<T>().Find(Convert.ToInt32(id));
-                _context.Entry(existingEntity).CurrentValues.SetValues(entity);
-                _context.SaveChanges();
+                var existingEntity = await _context.Set<T>().FindAsync(Convert.ToInt32(id));
+                if (existingEntity is null)
+                    return "Entity not found";
 
+                _context.Entry(existingEntity).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+                return "1";
             }
             catch (Exception ex)
             {
-
                 return ex.Message;
             }
-            return "1";
+        }
+
+        public async Task<bool> IsConnectedAsync()
+        {
+            return await _context.Database.CanConnectAsync();
         }
     }
 }

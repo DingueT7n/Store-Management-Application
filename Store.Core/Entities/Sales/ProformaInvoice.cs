@@ -9,12 +9,11 @@ namespace Store.Core.Entities.Sales
         public string UserName { get; set; }
         public string CustomerName { get; set; }
         public DateTime Date { get; set; }
-        public decimal TotalOrder { get; set; }
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
-        public List<ProformaInvoiceItem> Items { get; set; }
+        public List<ProformaInvoiceDetails> Details { get; set; }
     }
-    public class ProformaInvoiceItem : BaseEntity<int>
+    public class ProformaInvoiceDetails : BaseEntity<int>
     {
         public int ProformaId { get; set; }
         public int ProductId { get; set; }

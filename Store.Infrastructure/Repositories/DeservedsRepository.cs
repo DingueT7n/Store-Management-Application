@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Store.Core.Entities.AllDeserved;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
 
 namespace Store.Infrastructure.Repositories
 {
-    public class DeservedsRepository : GenericRepository<Deserved>
+    public class DeservedsRepository : GenericRepository<Deserved>, IDeservedsRepository
     {
         public DeservedsRepository(ApplicationDbContext context) : base(context)
         {
@@ -24,7 +25,7 @@ namespace Store.Infrastructure.Repositories
                 return new();
             }
         }
-        public List<Deserved> SearchBoth(string searchItem, DateTime fromDate, DateTime toDate)
+        public async Task<List<Deserved>> SearchBoth(string searchItem, DateTime fromDate, DateTime toDate)
         {
             try
             {
@@ -37,9 +38,9 @@ namespace Store.Infrastructure.Repositories
                         .Contains(searchItem.ToLower())) &&
                         fromDate <= x.Date && x.Date <= toDate);
 
-                var result = query
+                var result = await query
                     .OrderByDescending(x => x.Date).AsNoTracking()
-                    .ToList();
+                    .ToListAsync();
 
                 return result;
             }
@@ -48,7 +49,7 @@ namespace Store.Infrastructure.Repositories
                 return new();
             }
         }
-        public List<Deserved> SearchOnlyDate(DateTime fromDate, DateTime toDate)
+        public async Task<List<Deserved>> SearchOnlyDate(DateTime fromDate, DateTime toDate)
         {
             try
             {
@@ -56,14 +57,14 @@ namespace Store.Infrastructure.Repositories
                     .Where(x => fromDate <= x.Date && x.Date <= toDate)
                     .OrderByDescending(x => x.Date);
 
-                return query.ToList();
+                return await query.ToListAsync();
             }
             catch
             {
                 return new();
             }
         }
-        public List<Deserved> SearchOnlyCustomer(string searchItem)
+        public async Task<List<Deserved>> SearchOnlyDeserved(string searchItem)
         {
             try
             {
@@ -71,9 +72,9 @@ namespace Store.Infrastructure.Repositories
                     .Where(x =>
                        (x.UserName.ToLower().Contains(searchItem.ToLower()) ||
                         x.Id.ToString() == searchItem || x.Price.ToString() == searchItem || x.Notes.Contains(searchItem) || x.DeservedType.Description.ToLower().Contains(searchItem.ToLower())));
-                var result = query
+                var result = await query
                     .OrderByDescending(x => x.Date).AsNoTracking()
-                    .ToList();
+                    .ToListAsync();
 
 
 
@@ -84,6 +85,13 @@ namespace Store.Infrastructure.Repositories
                 return new();
             }
         }
+        public class DeservedTypesRepository : GenericRepository<DeservedType>, IDeservedTypesRepository
+        {
+            public DeservedTypesRepository(ApplicationDbContext context) : base(context)
+            {
+            }
+        }
+
 
     }
 }

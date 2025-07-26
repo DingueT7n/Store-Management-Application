@@ -102,6 +102,7 @@
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "المنتجات السريعة";
+            FormClosing += SelectProductsForm_FormClosing;
             tableLayoutPanel.ResumeLayout(false);
             panelTitle.ResumeLayout(false);
             panelTitle.PerformLayout();

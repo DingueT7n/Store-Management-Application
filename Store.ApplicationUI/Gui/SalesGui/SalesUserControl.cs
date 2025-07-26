@@ -1,8 +1,11 @@
 ﻿using System.Data;
+
 using DevExpress.XtraReports.UI;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.Models;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.PaymentGui;
 using Store.Core.Entities.Caisses;
@@ -10,69 +13,43 @@ using Store.Core.Entities.Customers;
 using Store.Core.Entities.Helpers;
 using Store.Core.Entities.Products;
 using Store.Core.Entities.Sales;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.SalesGui
 {
     public partial class SalesUserControl : UserControl
     {
-        private static SalesUserControl? _salesUserControl;
-        private static MainForm? _main;
-        public static SalesRepository? salesRepository;
-        public static decimal PaidUp;
-        public static decimal Remain;
-        private static ApplicationDbContext _context;
 
-        public SalesUserControl()
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+        private readonly ISalesRepository _salesRepository;
+        private readonly ControlManager _controlManager;
+        public decimal PaidUp;
+        public decimal Remain;
+
+
+        public SalesUserControl(MainForm main, ApplicationDbContext context, ISalesRepository salesRepository, ControlManager controlManager)
         {
             InitializeComponent();
-        }
-        public static SalesUserControl Instance(MainForm main)
-        {
+
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _context = new ApplicationDbContext();
-            if (_salesUserControl == null)
-            {
-                salesRepository = new SalesRepository(_context);
-                _salesUserControl = new SalesUserControl();
-            }
-            // Return the singleton instance
-            _salesUserControl.LoadData();
-
-            _salesUserControl.ResetFormBegin();
-            return _salesUserControl;
+            _context = context;
+            _salesRepository = salesRepository;
+            _controlManager = controlManager;
+            LoadData();
+            ResetFormBegin();
         }
 
-        public static bool CheckInstance()
-        {
-            return (_salesUserControl == null);
-        }
-        public static bool CheckIfitsOnFront()
-        {
-            return (_salesUserControl == null);
-        }
-        private void setPrivateProductAndAdditTotable(Product product)
+
+
+        public async Task setPrivateProductAndAdditTotable(Product product)
         {
             txtSearchBarCode.Text = product.CodeBar;
-            SetProductsToTable(product.CodeBar);
+            await SetProductsToTable(product.CodeBar);
             AddNewRow();
         }
-        public static bool setProductFromSelector(Product product)
-        {
-            if (product is not null)
-            {
-                _salesUserControl.setPrivateProductAndAdditTotable(product);
-                return true;
-            }
-            return false;
-        }
-        public static void RefreshDgv()
-        {
-            //DgvِProducts.DataSource = await Task.Run(() => productsRepository.GetAllProducts());
-            _salesUserControl.LoadData();
-        }
+
         // methodes 
         public async void LoadData()
         {
@@ -80,20 +57,20 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => salesRepository.IsConnected()))
+            if (await _salesRepository.IsConnectedAsync())
             {
                 ResetFormBegin();
                 //Start Load Data
-                txtFactureNumber.Text = salesRepository.GetFactureNumber();
+                txtFactureNumber.Text = _salesRepository.GetFactureNumber();
                 // if its an admin or Normal user 
                 SetColumns();
 
-                cmbCustomers.DataSource = _context.Customers.ToList();
+                cmbCustomers.DataSource = await _context.Customers.ToListAsync();
                 cmbCustomers.DisplayMember = "CustomerName";
                 cmbCustomers.ValueMember = "Id";
                 cmbCustomers.Text = "اختر العميل";
 
-                cmbStores.DataSource = _context.Stores.ToList();
+                cmbStores.DataSource = await _context.Stores.ToListAsync();
                 cmbStores.DisplayMember = "StoreName";
                 cmbStores.ValueMember = "Id";
                 cmbStores.Text = "اختر مخزن";
@@ -102,7 +79,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 dtpReminderDate.Value = DateTime.Now.AddDays(Properties.Settings.Default.DaysAddDebt);
 
                 cmbStores.SelectedValue = Properties.Settings.Default.StoreIdDefault;
-                cmbStores.Text = _context.Stores.FirstOrDefault(x => x.Id == Properties.Settings.Default.StoreIdDefault).StoreName;
+                cmbStores.Text = (await _context.Stores.FirstOrDefaultAsync(x => x.Id == Properties.Settings.Default.StoreIdDefault)).StoreName;
 
 
 
@@ -147,7 +124,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
             //DgvProducts.Columns[13].Visible = false;
             //DgvProducts.Columns[15].Visible = false;
         }
-        public void InitializeTextBoxesAndLables(Product product)
+        public async Task InitializeTextBoxesAndLables(Product product)
         {
             try
             {
@@ -159,8 +136,8 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 txtProductName.Text = product.ProductName;
                 labelError1.Visible = product.Quentity <= 0;
 
-                ProductsQuantitie productQty = _context.ProductsQuantities
-                    .FirstOrDefault(x => x.Pro_ID == product.Id && x.Qty > 0 && x.Store_ID == storeId);
+                ProductsQuantitie productQty = await _context.ProductsQuantities
+                    .FirstOrDefaultAsync(x => x.Pro_ID == product.Id && x.Qty > 0 && x.Store_ID == storeId);
 
                 lblError2.Visible = productQty is null;
 
@@ -176,8 +153,8 @@ namespace Store.ApplicationUI.Gui.SalesGui
                     txtQty.Text = "1";
                 }
                 decimal qty = !txtQty.Text.IsNullOrEmpty() ? Convert.ToDecimal(txtQty.Text) : 0;
-                ProductDiscount productDiscount = _context.ProductDiscounts
-                                 .FirstOrDefault(x => x.Pro_Id == product.Id && x.Quentity >= qty && x.Store_Id == storeId
+                ProductDiscount productDiscount = await _context.ProductDiscounts
+                                 .FirstOrDefaultAsync(x => x.Pro_Id == product.Id && x.Quentity >= qty && x.Store_Id == storeId
                                      && x.DateStart <= now && x.DateEnd > now);
                 if (productDiscount != null)
                 {
@@ -197,7 +174,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 throw;
             }
         }
-        public void InitializeTextBoxesAndLablesFromWeight(Product product, decimal weight)
+        public async Task InitializeTextBoxesAndLablesFromWeight(Product product, decimal weight)
         {
             try
             {
@@ -207,8 +184,8 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 txtProductName.Text = product.ProductName;
                 labelError1.Visible = product.Quentity <= 0;
 
-                ProductsQuantitie productQty = _context.ProductsQuantities
-                    .FirstOrDefault(x => x.Pro_ID == product.Id && weight > 0 && x.Store_ID == storeId);
+                ProductsQuantitie productQty = await _context.ProductsQuantities
+                    .FirstOrDefaultAsync(x => x.Pro_ID == product.Id && weight > 0 && x.Store_ID == storeId);
 
                 lblError2.Visible = productQty is null;
 
@@ -216,8 +193,8 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
 
 
-                ProductDiscount productDiscount = _context.ProductDiscounts
-                                 .FirstOrDefault(x => x.Pro_Id == product.Id && x.Quentity >= weight && x.Store_Id == storeId
+                ProductDiscount productDiscount = await _context.ProductDiscounts
+                                 .FirstOrDefaultAsync(x => x.Pro_Id == product.Id && x.Quentity >= weight && x.Store_Id == storeId
                                      && x.DateStart <= now && x.DateEnd > now);
                 if (productDiscount != null)
                 {
@@ -238,7 +215,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
             }
         }
 
-        public static void InitializeData(string paidUp, string remain)
+        public void InitializeData(string paidUp, string remain)
         {
             PaidUp = _main.ConvertToFloat(paidUp);
             Remain = _main.ConvertToFloat(remain);
@@ -277,13 +254,13 @@ namespace Store.ApplicationUI.Gui.SalesGui
         private Product _product;
         private ProductDiscount _productDiscount;
         private ProductsQuantitie _productQuantitie;
-        public async void SetProductsToTable(string barcode)
+        public async Task SetProductsToTable(string barcode)
         {
-            _product = salesRepository.GetProductBarCode(barcode);
+            _product = _salesRepository.GetProductBarCode(barcode);
 
             if (_product != null)
             {
-                InitializeTextBoxesAndLables(_product);
+                await InitializeTextBoxesAndLables(_product);
                 txtQty.Focus();
                 txtQty.SelectAll();
                 CalculateAmount();
@@ -305,7 +282,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
             DgvِProducts.Rows.Clear();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِProducts);
         }
-        public void ParseScaleBarcode(string barcodeWeight)
+        public async Task ParseScaleBarcode(string barcodeWeight)
         {
             if (string.IsNullOrWhiteSpace(barcodeWeight) || barcodeWeight.Length < 12)
                 throw new ArgumentException("Invalid barcode length.");
@@ -329,10 +306,10 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 throw new FormatException("Invalid weight format.");
             // Extract product code dynamically
             string productBarCode = barcodeWeight.Substring(2, productCodeLength);
-            _product = salesRepository.GetProductBarCode(productBarCode);
+            _product = _salesRepository.GetProductBarCode(productBarCode);
             if (_product != null)
             {
-                InitializeTextBoxesAndLablesFromWeight(_product, weight);
+                await InitializeTextBoxesAndLablesFromWeight(_product, weight);
                 txtQty.Focus();
                 txtQty.SelectAll();
                 CalculateAmount();
@@ -348,7 +325,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
 
         }
-        private void txtSearchBarCode_KeyDown(object sender, KeyEventArgs e)
+        private async void txtSearchBarCode_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
@@ -359,16 +336,16 @@ namespace Store.ApplicationUI.Gui.SalesGui
                     string prefix = input.Substring(0, 2);
                     if (prefix == "21")
                     {
-                        ParseScaleBarcode(input);
+                        await ParseScaleBarcode(input);
                     }
                     else
                     {
-                        SetProductsToTable(input);
+                        await SetProductsToTable(input);
                     }
                 }
                 else if (input.Length > 0)
                 {
-                    SetProductsToTable(input); // fallback if it's short but not empty
+                    await SetProductsToTable(input); // fallback if it's short but not empty
                 }
 
                 txtSearchBarCode.Clear();
@@ -486,13 +463,13 @@ namespace Store.ApplicationUI.Gui.SalesGui
             }
         }
 
-        private void txtQty_KeyUp(object sender, KeyEventArgs e)
+        private async void txtQty_KeyUp(object sender, KeyEventArgs e)
         {
             try
             {
                 if (txtQty.Text.IsNullOrEmpty()) { return; }
                 if (cmbStores.Text == "اختر مخزن") { MessageBox.Show("يرجى اختيار مخزن , راجع البيانات من فضلك", "بيانات غير كاملة"); cmbStores.Focus(); return; }
-                InitializeTextBoxesAndLables(_product);
+                await InitializeTextBoxesAndLables(_product);
                 CalculateAmount();
 
             }
@@ -780,11 +757,11 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
 
         }
-        Product SetProduct(int i)
+        async Task<Product> SetProduct(int i)
         {
 
             var proId = DgvِProducts.Rows[i].Cells[6].Value.ToString();
-            var product = _context.Products.FirstOrDefault(x => x.Id.ToString() == proId);
+            var product = await _context.Products.FirstOrDefaultAsync(x => x.Id.ToString() == proId);
 
             if (product != null)
             {
@@ -792,12 +769,12 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 if (product.Quentity < 0)
                     product.Quentity = 0;
 
-                ProductDiscount productDiscount = _context.ProductDiscounts.
+                ProductDiscount productDiscount = await _context.ProductDiscounts.
                  Where(x => x.Pro_Id.ToString() == product.Id.ToString() && x.Quentity > 0
 
                  && x.Store_Id == Properties.Settings.Default.FastSaleStore
                  && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
-                 ).FirstOrDefault();
+                 ).FirstOrDefaultAsync();
                 if (productDiscount != null)
                 {
 
@@ -808,7 +785,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
                         string alerttype = "انتهاء التخفيض";
                         string Message = $"انتهاء التخفيض الخاص بالمنتج {product.ProductName} الذي كان بسعر {productDiscount.DiscountValue}";
-                        var alert = _context.AlertsTable.FirstOrDefault(x => x.AlertType == alerttype && x.Message == Message && !x.IsResolved);
+                        var alert = await _context.AlertsTable.FirstOrDefaultAsync(x => x.AlertType == alerttype && x.Message == Message && !x.IsResolved);
                         if (alert == null)
                         {
                             AlertTable alertTable = new AlertTable();
@@ -818,17 +795,17 @@ namespace Store.ApplicationUI.Gui.SalesGui
                             alertTable.CreatedDate = DateTime.Now;
                             alertTable.IsResolved = false;
                             alertTable.Category = LocalUser.User.UserName;
-                            _context.Add(alertTable);
-                            _context.SaveChanges();
+                            await _context.AddAsync(alertTable);
+                            await _context.SaveChangesAsync();
                         }
                     }
                     _context.Update(productDiscount);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
             }
             return product;
         }
-        decimal SetProductQuentity(decimal quentity, int i, int sale_Id)
+        async Task<decimal> SetProductQuentity(decimal quentity, int i, int sale_Id)
         {
             var proId = DgvِProducts.Rows[i].Cells[6].Value.ToString();
             decimal totalBuyPrice = 0;
@@ -836,8 +813,8 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
             while (quentity > 0)
             {
-                var productQty = _context.ProductsQuantities
-                                 .FirstOrDefault(x => x.Qty > 0 && x.Pro_ID.ToString() == proId);
+                var productQty = await _context.ProductsQuantities
+                                 .FirstOrDefaultAsync(x => x.Qty > 0 && x.Pro_ID.ToString() == proId);
 
                 if (productQty != null)
                 {
@@ -848,39 +825,39 @@ namespace Store.ApplicationUI.Gui.SalesGui
                     {
                         var profit = SetSaleProfit(i, productQty.Buy_Price, quentity);
                         profit.Order_ID = sale_Id;
-                        _context.SalesProfits.Add(profit);
-                        _context.SaveChanges();
+                        await _context.SalesProfits.AddAsync(profit);
+
                         productQty.Qty -= quentity;
                         quentity = 0;
                         _context.ProductsQuantities.Update(productQty);
-                        _context.SaveChanges();
+                        await _context.SaveChangesAsync();
 
                     }
                     else
                     {
                         var profit = SetSaleProfit(i, productQty.Buy_Price, productQty.Qty);
                         profit.Order_ID = sale_Id;
-                        _context.SalesProfits.Add(profit);
-                        _context.SaveChanges();
+                        await _context.SalesProfits.AddAsync(profit);
+
 
                         quentity -= productQty.Qty;
                         productQty.Qty = 0;
                         _context.ProductsQuantities.Update(productQty);
-                        _context.SaveChanges();
+                        await _context.SaveChangesAsync();
 
                     }
 
                 }
                 else
                 {
-                    var product = _context.Products.FirstOrDefault(x => x.Id.ToString() == proId);
+                    var product = await _context.Products.FirstOrDefaultAsync(x => x.Id.ToString() == proId);
                     if (product != null)
                     {
                         totalBuyPrice = product.BuyPrice;
                         var profit = SetSaleProfit(i, totalBuyPrice, quentity);
                         profit.Order_ID = sale_Id;
-                        _context.SalesProfits.Add(profit);
-                        _context.SaveChanges();
+                        await _context.SalesProfits.AddAsync(profit);
+                        await _context.SaveChangesAsync();
 
                         quentity = 0;
                         return count > 0 ? totalBuyPrice / count : totalBuyPrice;
@@ -890,19 +867,19 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
             return count > 0 ? totalBuyPrice / count : totalBuyPrice;
         }
-        Customer SetCustomer()
+        async Task<Customer> SetCustomer()
         {
             var custId = Convert.ToInt32(cmbCustomers.SelectedValue);
-            var customer = _context.Customers.FirstOrDefault(x => x.Id == custId);
+            var customer = await _context.Customers.FirstOrDefaultAsync(x => x.Id == custId);
             if (customer != null)
             {
                 customer.TotalDebts += Remain;
             }
             return customer;
         }
-        Caisse SetCaisse(decimal value)
+        async Task<Caisse> SetCaisse(decimal value)
         {
-            var caisse = _context.Caisses.FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
+            var caisse = await _context.Caisses.FirstOrDefaultAsync(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
             if (caisse != null)
             {
                 caisse.MoneyinCaisse += value;
@@ -928,40 +905,40 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
         }
 
-        private async void ProcessTransaction(decimal paymentAmount, bool isDebt)
+        private async Task ProcessTransaction(decimal paymentAmount, bool isDebt)
         {
-            _context = new ApplicationDbContext();
+
             int id = 0;
-            using (var transaction = _context.Database.BeginTransaction())
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
                     var sale = SetSale();
-                    _context.Add(sale);
-                    _context.SaveChanges();
+                    await _context.AddAsync(sale);
+                    await _context.SaveChangesAsync();
 
                     for (int i = 0; i <= DgvِProducts.Rows.Count - 1; i++)
                     {
                         var saleDetail = SetSaleDetail(i);
                         saleDetail.Order_ID = sale.Id; // Set foreign key reference to Sale
-                        _context.SalesDetails.Add(saleDetail);
+                        await _context.SalesDetails.AddAsync(saleDetail);
 
-                        _context.Update(SetProduct(i));
-                        var buyPrice = SetProductQuentity(Convert.ToDecimal(DgvِProducts.Rows[i].Cells[2].Value.ToString()), i, sale.Id);
+                        _context.Update(await SetProduct(i));
+                        var buyPrice = await SetProductQuentity(Convert.ToDecimal(DgvِProducts.Rows[i].Cells[2].Value.ToString()), i, sale.Id);
 
                     }
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
 
                     // Handle Caisse and Customer updates
-                    HandleFinancialUpdates(paymentAmount, isDebt, sale.Id);
-                    transaction.Commit();
+                    await HandleFinancialUpdates(paymentAmount, isDebt, sale.Id);
+                    await transaction.CommitAsync();
                     id = sale.Id;
                     Code.Helper.ToasterHelper.ShowNewSaleAdd();
                     ResetForm();
                 }
                 catch (Exception ex)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     MessageBox.Show(ex.Message);
                 }
             }
@@ -974,7 +951,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
                 if (Properties.Settings.Default.PrintSaleFactureType8cm)
                 {
-                    Reports.sale8cm sale8Cm = new();
+                    Reports.sale8cm sale8Cm = _controlManager.GetR<Reports.sale8cm>();
                     sale8Cm.DataSource = saleDetailsTable;
 
                     if (rbPrinterDirectly.Checked && !printername.IsNullOrEmpty())
@@ -983,7 +960,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                         {
                             var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(sale8Cm);
                             printTool.PrinterSettings.PrinterName = printername;
-                            printTool.Print(printername);
+                            await printTool.PrintAsync(printername);
                         }
                     }
                     else if (rbAnalysis.Checked)
@@ -994,7 +971,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 }
                 else
                 {
-                    Reports.SalesReports.salesA4 salesA4 = new();
+                    Reports.SalesReports.salesA4 salesA4 = _controlManager.GetR<Reports.SalesReports.salesA4>();
                     salesA4.DataSource = saleDetailsTable;
                     printername = Properties.Settings.Default.PrinterA4;
 
@@ -1004,7 +981,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                         {
                             var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(salesA4);
                             printTool.PrinterSettings.PrinterName = printername;
-                            printTool.Print(printername);
+                            await printTool.PrintAsync(printername);
                         }
 
                     }
@@ -1026,27 +1003,27 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
         }
 
-        private void HandleFinancialUpdates(decimal paymentAmount, bool isDebt, int saleId)
+        private async Task HandleFinancialUpdates(decimal paymentAmount, bool isDebt, int saleId)
         {
             if (paymentAmount <= TotalFacture)
             {
-                _context.Update(SetCaisse(paymentAmount));
-                _context.SaveChanges();
+                _context.Update(await SetCaisse(paymentAmount));
+                await _context.SaveChangesAsync();
                 if (paymentAmount > 0)
                 {
-                    _context.Add(SetCaisseDeposit(paymentAmount));
-                    _context.SaveChanges();
+                    await _context.AddAsync(SetCaisseDeposit(paymentAmount));
+                    await _context.SaveChangesAsync();
                 }
             }
             else
             {
-                _context.Update(SetCaisse(TotalFacture));
-                _context.SaveChanges();
+                _context.Update(await SetCaisse(TotalFacture));
+                await _context.SaveChangesAsync();
                 if (TotalFacture > 0)
                 {
 
-                    _context.Add(SetCaisseDeposit(TotalFacture));
-                    _context.SaveChanges();
+                    await _context.AddAsync(SetCaisseDeposit(TotalFacture));
+                    await _context.SaveChangesAsync();
                 }
 
             }
@@ -1055,68 +1032,68 @@ namespace Store.ApplicationUI.Gui.SalesGui
             {
                 var custReport = SetCustReport();
                 custReport.Order_ID = saleId;
-                _context.Add(custReport);
-                _context.SaveChanges();
+                await _context.AddAsync(custReport);
+                await _context.SaveChangesAsync();
             }
 
             if (Remain > 0)
             {
                 var custMoney = SetCustMoney();
                 custMoney.Order_ID = saleId;
-                _context.Add(custMoney);
-                _context.SaveChanges();
+                await _context.AddAsync(custMoney);
+                await _context.SaveChangesAsync();
 
-                _context.Update(SetCustomer());
-                _context.SaveChanges();
+                _context.Update(await SetCustomer());
+                await _context.SaveChangesAsync();
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
-        public static bool Process = false;
+        public bool Process = false;
 
-        private void btnPay_Click(object sender, EventArgs e)
+        private async void btnPay_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (!(DgvِProducts.Rows.Count > 0))
                 return;
             if (ValidatePay())
             {
-                AddPaymentForm addPaymentForm = new(_main, 1);
+                AddPaymentForm addPaymentForm = _controlManager.GetF<AddPaymentForm>();
                 if (rBPayPartial.Checked || rBPayDebt.Checked)
                 {
 
-                    addPaymentForm.LoadData(TotalFacture.ToString(), "0", TotalFacture.ToString());
+                    addPaymentForm.LoadData(TotalFacture.ToString(), "1", TotalFacture.ToString(), 1);
                     addPaymentForm.ShowDialog();
                     if (Process)
                     {
                         if (cmbCustomers.SelectedValue.ToString() != Properties.Settings.Default.IdCustomerSale)
                         {
-                            var customer = _context.Customers.FirstOrDefault(x => x.Id.ToString() == cmbCustomers.SelectedValue.ToString());
+                            var customer = await _context.Customers.FirstOrDefaultAsync(x => x.Id.ToString() == cmbCustomers.SelectedValue.ToString());
                             if (customer.MaxDebtAllowed <= customer.TotalDebts + Remain && Remain > 0)
                             {
                                 MsgHelper.ShowMaxDebtAllowedExceeded();
                                 return;
                             }
                         }
-                        ProcessTransaction(PaidUp, rBPayPartial.Checked || rBPayDebt.Checked || Remain > 0);
+                        await ProcessTransaction(PaidUp, rBPayPartial.Checked || rBPayDebt.Checked || Remain > 0);
                     }
                 }
                 else if (rBPayCash.Checked)
                 {
-                    addPaymentForm.LoadData(TotalFacture.ToString(), TotalFacture.ToString(), "0");
+                    addPaymentForm.LoadData(TotalFacture.ToString(), TotalFacture.ToString(), "0", 1);
                     addPaymentForm.ShowDialog();
                     if (Process)
                     {
                         if (cmbCustomers.SelectedValue.ToString() != Properties.Settings.Default.IdCustomerSale)
                         {
-                            var customer = _context.Customers.FirstOrDefault(x => x.Id.ToString() == cmbCustomers.SelectedValue.ToString());
+                            var customer = await _context.Customers.FirstOrDefaultAsync(x => x.Id.ToString() == cmbCustomers.SelectedValue.ToString());
                             if (customer.MaxDebtAllowed <= customer.TotalDebts + Remain && Remain > 0)
                             {
                                 MsgHelper.ShowMaxDebtAllowedExceeded();
                                 return;
                             }
                         }
-                        ProcessTransaction(PaidUp, false || Remain > 0);
+                        await ProcessTransaction(PaidUp, false || Remain > 0);
                     }
                 }
 
@@ -1182,14 +1159,14 @@ namespace Store.ApplicationUI.Gui.SalesGui
             //    throw;
             //}
         }
-        void EditFromTable(int q)
+        async Task EditFromTable(int q)
         {
             try
             {
                 if (dgvHelper.IsEmpty(DgvِProducts)) { MsgHelper.ShowEmptyDataGridView(); }
                 if (!dgvHelper.IsEmpty(DgvِProducts))
                 {
-                    _product = salesRepository.GetProductBarCode(DgvِProducts.CurrentRow.Cells[7].Value.ToString());
+                    _product = _salesRepository.GetProductBarCode(DgvِProducts.CurrentRow.Cells[7].Value.ToString());
                     txtProductName.Text = this.DgvِProducts.CurrentRow.Cells[0].Value.ToString();
                     txtSaleDiscount.Text = this.DgvِProducts.CurrentRow.Cells[3].Value.ToString();
                     txtQty.Text = (_main.ConvertToFloat(DgvِProducts.CurrentRow.Cells[2].Value.ToString()) + q).ToString();
@@ -1197,12 +1174,12 @@ namespace Store.ApplicationUI.Gui.SalesGui
                     txtSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[1].Value.ToString();
                     txtWholeSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[4].Value.ToString();
 
-                    ProductDiscount productDiscount = _context.ProductDiscounts.
+                    ProductDiscount productDiscount = await _context.ProductDiscounts.
                    Where(x => x.Pro_Id == _product.Id && x.Quentity > 0
 
                    && x.Store_Id == Properties.Settings.Default.FastSaleStore
                    && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
-                   ).FirstOrDefault();
+                   ).FirstOrDefaultAsync();
 
                     if (productDiscount != null && !cbWholsale.Checked && _main.ConvertToFloat(txtQty.Text) <= productDiscount.Quentity)
                     {
@@ -1217,9 +1194,9 @@ namespace Store.ApplicationUI.Gui.SalesGui
                     CalculateAmount();
                     CalculateStatistics();
                     labelError1.Visible = _product.Quentity <= _main.ConvertToFloat(txtQty.Text);
-                    ProductsQuantitie productQty = _context.ProductsQuantities.
+                    ProductsQuantitie productQty = await _context.ProductsQuantities.
                               Where(x => x.Pro_ID == _product.Id && x.Qty >= _main.ConvertToFloat(txtQty.Text)
-                              && x.Store_ID.ToString() == cmbStores.SelectedValue).FirstOrDefault();
+                              && x.Store_ID.ToString() == cmbStores.SelectedValue).FirstOrDefaultAsync();
 
                     lblError2.Visible = productQty is null;
 
@@ -1231,24 +1208,24 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
         }
 
-        private void btnEditSelected_Click(object sender, EventArgs e)
+        private async void btnEditSelected_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            EditFromTable(0);
+            await EditFromTable(0);
         }
 
 
-        void EditUsingPlusMinus(object sender, KeyEventArgs e)
+        async void EditUsingPlusMinus(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Oemplus)
             {
-                EditFromTable(1);
+                await EditFromTable(1);
                 CalculateAmount();
                 AddNewRow();
             }
             else if (e.KeyCode == Keys.OemMinus)
             {
-                EditFromTable(-1);
+                await EditFromTable(-1);
                 CalculateAmount();
                 AddNewRow();
             }
@@ -1268,13 +1245,14 @@ namespace Store.ApplicationUI.Gui.SalesGui
         private void btnSearchImage_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            SelectProductsForm selectProductsForm = SelectProductsForm.Instance(_main, false);
+            SelectProductsForm selectProductsForm = _controlManager.GetF<SelectProductsForm>();
+            selectProductsForm.SetSale();
             selectProductsForm.ShowDialog();
         }
 
-        private void DgvِProducts_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private async void DgvِProducts_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            EditFromTable(0);
+            await EditFromTable(0);
 
         }
 

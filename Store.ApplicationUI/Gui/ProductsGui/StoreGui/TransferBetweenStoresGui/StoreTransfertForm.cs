@@ -297,5 +297,11 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.TransferBetweenStoresGui
 
 
         }
+
+        private void StoreTransfertForm_Load(object sender, EventArgs e)
+        {
+            LoadData();
+
+        }
     }
 }

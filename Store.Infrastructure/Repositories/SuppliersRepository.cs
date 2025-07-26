@@ -11,20 +11,20 @@ namespace Store.Infrastructure.Repositories
         {
         }
 
-        public List<Supplier> SearchAll(string searchIteam)
+        public async Task<List<Supplier>> SearchAll(string searchIteam)
         {
 
             try
             {
-                _context = new ApplicationDbContext();
-                return _context.Suppliers.Where(x => x.Id.ToString() == searchIteam ||
+
+                return await _context.Suppliers.Where(x => x.Id.ToString() == searchIteam ||
                 x.SupplierName.ToString().Contains(searchIteam) ||
                 x.Address.Contains(searchIteam) ||
                 x.TotalDebts.ToString() == (searchIteam) ||
                 x.Notes.Contains(searchIteam)
 
                 )
-                    .OrderBy(x => x.SupplierName).ToList();
+                    .OrderBy(x => x.SupplierName).ToListAsync();
 
             }
             catch
@@ -42,16 +42,16 @@ namespace Store.Infrastructure.Repositories
         {
         }
 
-        public List<SupplierMoney> SearchAll(string searchIteam)
+        public async Task<List<SupplierMoney>> SearchAll(string searchIteam)
         {
             try
             {
-                _context = new ApplicationDbContext();
-                return _context.SuppliersMoneys.Where(x =>
+
+                return await _context.SuppliersMoneys.Where(x =>
                 x.SupplierName.ToString().Contains(searchIteam) ||
                 x.Id.ToString() == (searchIteam)
                 )
-                    .OrderBy(x => x.Id).ToList();
+                    .OrderBy(x => x.Id).ToListAsync();
 
             }
             catch
@@ -60,18 +60,18 @@ namespace Store.Infrastructure.Repositories
             }
         }
 
-        public bool DeleteFacture(string order_Id, string sup_id, string price)
+        public async Task<bool> DeleteFacture(string order_Id, string sup_id, string price)
         {
 
             try
             {
-                _context = new ApplicationDbContext();
-                var supplierMoney = _context.SuppliersMoneys.FirstOrDefault(x =>
+
+                var supplierMoney = await _context.SuppliersMoneys.FirstOrDefaultAsync(x =>
                   x.Sup_ID.ToString() == sup_id && x.Order_ID.ToString() == order_Id &&
                   x.Price.ToString() == (price)
                   );
                 _context.Remove(supplierMoney);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return true;
 
             }
@@ -90,74 +90,72 @@ namespace Store.Infrastructure.Repositories
             //}
             return Convert.ToDecimal(value);
         }
-        public bool TransactionOfSupplierDebt(string order_Id, string sup_Id, string price, string sup_Name, DateTime date)
+        public async Task<bool> TransactionOfSupplierDebt(string order_Id, string sup_Id, string price, string sup_Name, DateTime date)
         {
             try
             {
-                using (var context = new ApplicationDbContext())
+
+
+                try
                 {
-                    using (var transaction = context.Database.BeginTransaction())
+                    // Validate inputs
+                    if (!decimal.TryParse(price, out decimal parsedPrice))
                     {
-                        try
-                        {
-                            // Validate inputs
-                            if (!decimal.TryParse(price, out decimal parsedPrice))
-                            {
-                                throw new ArgumentException("Invalid price format.");
-                            }
-                            if (!int.TryParse(sup_Id, out int supplierId))
-                            {
-                                throw new ArgumentException("Invalid supplier ID format.");
-                            }
-                            if (!int.TryParse(order_Id, out int orderId))
-                            {
-                                throw new ArgumentException("Invalid order ID format.");
-                            }
-
-                            // Fetch supplier
-                            Supplier supplier = context.Suppliers.FirstOrDefault(x => x.Id == supplierId);
-                            if (supplier == null)
-                            {
-                                throw new InvalidOperationException("Supplier not found.");
-                            }
-
-                            // Update supplier debts
-                            supplier.TotalDebts -= parsedPrice;
-                            context.Update(supplier);
-                            context.SaveChanges();
-
-
-                            // Delete facture
-                            if (!DeleteFacture(order_Id, sup_Id, price))
-                            {
-                                throw new InvalidOperationException("Failed to delete facture.");
-                            }
-
-                            // Add supplier report
-                            var supplierReport = new SupplierReport
-                            {
-                                Sup_ID = supplierId,
-                                SupplierName = sup_Name,
-                                Date = date,
-                                Order_ID = orderId,
-                                Price = parsedPrice,
-                                Time = DateTime.Now.ToString("HH:mm")
-                            };
-                            context.SuppliersReports.Add(supplierReport);
-                            context.SaveChanges();
-
-                            transaction.Commit();
-                            return true;
-                        }
-                        catch (Exception ex)
-                        {
-                            // Log exception details
-                            transaction.Rollback();
-                            Console.WriteLine($"Error: {ex.Message}");
-                            return false;
-                        }
+                        throw new ArgumentException("Invalid price format.");
                     }
+                    if (!int.TryParse(sup_Id, out int supplierId))
+                    {
+                        throw new ArgumentException("Invalid supplier ID format.");
+                    }
+                    if (!int.TryParse(order_Id, out int orderId))
+                    {
+                        throw new ArgumentException("Invalid order ID format.");
+                    }
+
+                    // Fetch supplier
+                    Supplier supplier = await _context.Suppliers.FirstOrDefaultAsync(x => x.Id == supplierId);
+                    if (supplier == null)
+                    {
+                        throw new InvalidOperationException("Supplier not found.");
+                    }
+
+                    // Update supplier debts
+                    supplier.TotalDebts -= parsedPrice;
+                    _context.Update(supplier);
+                    await _context.SaveChangesAsync();
+
+
+                    // Delete facture
+                    if (!await DeleteFacture(order_Id, sup_Id, price))
+                    {
+                        throw new InvalidOperationException("Failed to delete facture.");
+                    }
+
+                    // Add supplier report
+                    var supplierReport = new SupplierReport
+                    {
+                        Sup_ID = supplierId,
+                        SupplierName = sup_Name,
+                        Date = date,
+                        Order_ID = orderId,
+                        Price = parsedPrice,
+                        Time = DateTime.Now.ToString("HH:mm")
+                    };
+                    await _context.SuppliersReports.AddAsync(supplierReport);
+                    await _context.SaveChangesAsync();
+
+
+                    return true;
                 }
+                catch (Exception ex)
+                {
+                    // Log exception details
+
+                    Console.WriteLine($"Error: {ex.Message}");
+                    return false;
+                }
+
+
             }
             catch (Exception ex)
             {
@@ -166,17 +164,17 @@ namespace Store.Infrastructure.Repositories
                 return false;
             }
         }
-        public bool UpdateFacture(string order_Id, string sup_Id, string price, string PayedValue)
+        public async Task<bool> UpdateFacture(string order_Id, string sup_Id, string price, string PayedValue)
         {
             try
             {
-                _context = new ApplicationDbContext();
-                var suppliersMoneys = _context.SuppliersMoneys.FirstOrDefault(x =>
+
+                var suppliersMoneys = await _context.SuppliersMoneys.FirstOrDefaultAsync(x =>
                   x.Sup_ID.ToString() == sup_Id && x.Order_ID.ToString() == order_Id
                   );
                 suppliersMoneys.Price = suppliersMoneys.Price - ConvertToFloat(PayedValue);
                 _context.Update(suppliersMoneys);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return true;
             }
             catch
@@ -184,48 +182,47 @@ namespace Store.Infrastructure.Repositories
                 return false;
             }
         }
-        public bool TransactionOfEditingSupplierDebt(string order_Id, string sup_Id, string price, string sup_Name, string PayedValue, DateTime date
+        public async Task<bool> TransactionOfEditingSupplierDebt(string order_Id, string sup_Id, string price, string sup_Name, string PayedValue, DateTime date
             )
         {
-            using (var transaction = _context.Database.BeginTransaction())
+
+            try
             {
-                try
-                {
-                    _context = new ApplicationDbContext();
-                    double diffrence = Convert.ToDouble(PayedValue);
-                    if (Convert.ToDouble(price) - diffrence <= 0)
-                    {
-                        DeleteFacture(order_Id, sup_Id, price);
-                        diffrence = Convert.ToDouble(price);
-                    }
-                    else
-                        UpdateFacture(order_Id, sup_Id, price, PayedValue);
 
-                    Supplier supplier = _context.Suppliers.Where(x => x.Id.ToString() == sup_Id).FirstOrDefault();
-                    if (supplier is not null)
-                    {
-                        supplier.TotalDebts = supplier.TotalDebts - ConvertToFloat(PayedValue.ToString());
-                    }
+                double diffrence = Convert.ToDouble(PayedValue);
+                if (Convert.ToDouble(price) - diffrence <= 0)
+                {
+                    DeleteFacture(order_Id, sup_Id, price);
+                    diffrence = Convert.ToDouble(price);
+                }
+                else
+                    await UpdateFacture(order_Id, sup_Id, price, PayedValue);
+
+                Supplier supplier = await _context.Suppliers.Where(x => x.Id.ToString() == sup_Id).FirstOrDefaultAsync();
+                if (supplier is not null)
+                {
+                    supplier.TotalDebts = supplier.TotalDebts - ConvertToFloat(PayedValue.ToString());
                     _context.Update(supplier);
-                    _context.SaveChanges();
 
-                    SupplierReport supplierReport = new SupplierReport();
-                    supplierReport.Sup_ID = Convert.ToInt32(sup_Id);
-                    supplierReport.SupplierName = sup_Name;
-                    supplierReport.Date = date;
-                    supplierReport.Order_ID = Convert.ToInt32(order_Id);
-                    supplierReport.Price = ConvertToFloat(PayedValue);
-                    supplierReport.Time = DateTime.Now.ToString("HH:mm");
-                    _context.Add(supplierReport);
-                    _context.SaveChanges();
-                    transaction.CommitAsync();
-                    return true;
+
                 }
-                catch
-                {
-                    transaction.Rollback();
-                    return false;
-                }
+                SupplierReport supplierReport = new SupplierReport();
+                supplierReport.Sup_ID = Convert.ToInt32(sup_Id);
+                supplierReport.SupplierName = sup_Name;
+                supplierReport.Date = date;
+                supplierReport.Order_ID = Convert.ToInt32(order_Id);
+                supplierReport.Price = ConvertToFloat(PayedValue);
+                supplierReport.Time = DateTime.Now.ToString("HH:mm");
+                await _context.AddAsync(supplierReport);
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch
+            {
+
+                return false;
+
             }
         }
 
@@ -235,20 +232,20 @@ namespace Store.Infrastructure.Repositories
         public SupplierReportRepository(ApplicationDbContext context) : base(context)
         {
         }
-        public SupplierReportDto GetAllData(int skip, int take)
+        public async Task<SupplierReportDto> GetAllData(int skip, int take)
         {
 
             try
             {
-                _context = new ApplicationDbContext();
+
                 var query = _context.SuppliersReports.AsQueryable();
                 // Filter by searchItem and date range
-                var totalCount = query.Count();
-                var result = query.Include(x => x.Buy).Include(x => x.Supplier)
+                var totalCount = await query.CountAsync();
+                var result = await query.Include(x => x.Buy).Include(x => x.Supplier)
                     .OrderByDescending(x => x.Id)
                     .Skip(skip)
                     .Take(take)
-                    .ToList();
+                    .ToListAsync();
 
 
 
@@ -264,25 +261,25 @@ namespace Store.Infrastructure.Repositories
             }
 
         }
-        public SupplierReportDto SearchBoth(string searchItem, DateTime fromDate, DateTime toDate, int take, int skip)
+        public async Task<SupplierReportDto> SearchBoth(string searchItem, DateTime fromDate, DateTime toDate, int take, int skip)
         {
 
             try
             {
-                _context = new ApplicationDbContext();
+
                 var query = _context.SuppliersReports
                     .Where(x =>
                         (EF.Functions.Like(x.SupplierName, $"%{searchItem}%") ||
                         x.Order_ID.ToString() == searchItem) &&
                         fromDate <= x.Date && x.Date <= toDate);  // Filter by searchItem and date range
 
-                var result = query.Include(x => x.Buy).Include(x => x.Supplier)
+                var result = await query.Include(x => x.Buy).Include(x => x.Supplier)
                     .OrderByDescending(x => x.Id)
                     .Skip(skip)
                     .Take(take)
-                    .ToList();
+                    .ToListAsync();
 
-                var totalCount = query.Count();  // Get total count after filtering
+                var totalCount = await query.CountAsync();  // Get total count after filtering
 
                 return new SupplierReportDto
                 {
@@ -295,20 +292,20 @@ namespace Store.Infrastructure.Repositories
                 return new SupplierReportDto();
             }
         }
-        public SupplierReportDto SearchOnlyDate(DateTime fromDate, DateTime toDate, int take, int skip)
+        public async Task<SupplierReportDto> SearchOnlyDate(DateTime fromDate, DateTime toDate, int take, int skip)
         {
 
             try
             {
-                _context = new ApplicationDbContext();
+
                 var query = _context.SuppliersReports.Include(x => x.Buy).Include(x => x.Supplier)
                     .Where(x => fromDate <= x.Date && x.Date <= toDate)
                     .OrderByDescending(x => x.Id);
 
                 return new SupplierReportDto
                 {
-                    Result = query.Skip(skip).Take(take).ToList(),
-                    count = query.Count()
+                    Result = await query.Skip(skip).Take(take).ToListAsync(),
+                    count = await query.CountAsync()
                 };
             }
             catch
@@ -316,24 +313,24 @@ namespace Store.Infrastructure.Repositories
                 return new SupplierReportDto();
             }
         }
-        public SupplierReportDto SearchOnlySupplier(string searchItem, int take, int skip)
+        public async Task<SupplierReportDto> SearchOnlySupplier(string searchItem, int take, int skip)
         {
 
             try
             {
-                _context = new ApplicationDbContext();
+
                 var query = _context.SuppliersReports
                     .Where(x =>
                         EF.Functions.Like(x.SupplierName, $"%{searchItem}%") ||
                         x.Order_ID.ToString() == searchItem);
 
-                var result = query.Include(x => x.Buy).Include(x => x.Supplier)
+                var result = await query.Include(x => x.Buy).Include(x => x.Supplier)
                     .OrderByDescending(x => x.Id)
                     .Skip(skip)
                     .Take(take)
-                    .ToList();
+                    .ToListAsync();
 
-                var totalCount = query.Count();
+                var totalCount = await query.CountAsync();
 
                 return new SupplierReportDto
                 {

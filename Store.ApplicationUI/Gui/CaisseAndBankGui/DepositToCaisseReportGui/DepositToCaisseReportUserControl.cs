@@ -1,43 +1,27 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Entities.Caisses;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui
 {
     public partial class DepositToCaisseReportUserControl : UserControl
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext _contex;
-        public static CaisseDepositRepository? repository;
-        private static DepositToCaisseReportUserControl? _UserControl;
 
-        public DepositToCaisseReportUserControl()
+        public readonly ICaisseDepositRepository repository;
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+
+        public DepositToCaisseReportUserControl(MainForm main, ApplicationDbContext context, ICaisseDepositRepository repository)
         {
             InitializeComponent();
-        }
-        public static bool CheckInstance()
-        {
-            return (_UserControl == null);
-        }
-        public static DepositToCaisseReportUserControl Instance(MainForm main)
-        {
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _contex = new ApplicationDbContext();
-            if (CheckInstance())
-            {
-                repository = new CaisseDepositRepository(_contex);
-
-                _UserControl = new DepositToCaisseReportUserControl();
-
-            }
-
-            // Return the singleton instance
-            _UserControl.LoadDataAsync();
-            return _UserControl;
+            _context = context;
+            this.repository = repository;
         }
-        public async Task SetProductsToDgvAsync(string t1, string barcode, int skip)
+        public void SetProductsToDgvAsync(string t1, string barcode, int skip)
         {
             try
             {
@@ -70,14 +54,14 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui
             }
         }
 
-        private async Task RefreshDgvAsync(int skip)
+        private void RefreshDgvAsync(int skip)
         {
             try
             {
+                SetColumns();
                 string t1 = rbStoresFrom.Checked ? cmbCaisse.Text : string.Empty;
 
-                await SetProductsToDgvAsync(t1, txtSearch.Text, skip);
-                SetColumns();
+                SetProductsToDgvAsync(t1, txtSearch.Text, skip);
                 lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
             }
             catch (Exception ex)
@@ -85,7 +69,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui
                 ToasterHelper.ShowErrorHappened(ex.Message);
             }
         }
-        public async Task LoadDataAsync()
+        public async void LoadData()
         {
             try
             {
@@ -94,14 +78,14 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui
                 // Show loading indicator
                 LoadingForm.Instance(_main).Show();
 
-                if (await Task.Run(() => repository.IsConnected()))
+                if (await repository.IsConnectedAsync())
                 {
-                    cmbCaisse.DataSource = _contex.Caisses.ToList();
+                    cmbCaisse.DataSource = await _context.Caisses.ToListAsync();
                     cmbCaisse.DisplayMember = "CaisseName";
                     cmbCaisse.ValueMember = "Id";
 
                     // Load initial data
-                    await RefreshDgvAsync(0);
+                    RefreshDgvAsync(0);
                 }
                 else
                 {
@@ -122,6 +106,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui
 
         private void SetColumns()
         {
+            DgvSales.DataSource = new List<CaisseDeposit>();
             string[] headers = { "معرف الصندوق", "قيمة الايداع", "تاريخ الايداع", "وقت الايداع", "اسم المودع", "نوع الايداع", "السبب", "الصندوق", "معرف العملية" };
             int[] widths = { 105, 0, 100, 95, 0, 0, 150, 110, 100 };
 
@@ -158,12 +143,12 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui
                     foreach (DataGridViewRow row in DgvSales.Rows)
                     {
                         int id = Convert.ToInt32(row.Cells[8].Value);
-                        var deposit = _contex.CaissesDeposits.FirstOrDefault(x => x.Id == id);
+                        var deposit = _context.CaissesDeposits.FirstOrDefault(x => x.Id == id);
 
                         if (deposit != null)
                         {
-                            _contex.CaissesDeposits.Remove(deposit);
-                            _contex.SaveChanges();
+                            _context.CaissesDeposits.Remove(deposit);
+                            _context.SaveChanges();
                         }
                     }
                     Code.Helper.ToasterHelper.ShowDeletedToast();
@@ -184,7 +169,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui
             btnPrev.Enabled = cmbpagination.SelectedIndex > 0 && !dgvHelper.IsEmpty(DgvSales);
             cmbpagination.Enabled = !dgvHelper.IsEmpty(DgvSales);
         }
-        private void btnNext_Click(object sender, EventArgs e)
+        private async void btnNext_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1)

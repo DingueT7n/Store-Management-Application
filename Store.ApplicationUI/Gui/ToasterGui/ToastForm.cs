@@ -1,17 +1,17 @@
 ﻿using System.IO;
-using System.Windows.Media;
+using System.Media;
 
 namespace Store.ApplicationUI.Gui.ToasterGui
 {
     public partial class ToastForm : Form
     {
         private static ToastForm? _Form;
-        private MediaPlayer _player; // Field to keep MediaPlayer alive
+        private SoundPlayer _player;
 
         public ToastForm()
         {
             InitializeComponent();
-            _player = new MediaPlayer(); // Initialize MediaPlayer
+            _player = new SoundPlayer(); // initialize for later use
         }
 
         public static ToastForm Instance(string title, string description, System.Drawing.Color? color)
@@ -52,18 +52,14 @@ namespace Store.ApplicationUI.Gui.ToasterGui
             {
                 string soundFilePath = Path.Combine(Application.StartupPath, "successaudio.wav");
                 if (!File.Exists(soundFilePath))
-                {
-                    //MessageBox.Show($"Sound file not found: {soundFilePath}");
                     return;
-                }
 
-                _player.Open(new Uri(soundFilePath));
-                _player.MediaEnded += (s, e) => _player.Close(); // Cleanup after playback
+                _player = new SoundPlayer(soundFilePath);
                 _player.Play();
             }
             catch (Exception)
             {
-                //MessageBox.Show($"Error playing sound: {ex.Message}");
+                // Optionally log or handle the error
             }
         }
 

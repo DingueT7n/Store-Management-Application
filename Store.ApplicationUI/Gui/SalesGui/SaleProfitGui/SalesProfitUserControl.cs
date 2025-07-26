@@ -2,55 +2,45 @@
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Sales;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
 {
     public partial class SalesProfitUserControl : UserControl
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext _context;
-        public static SaleProfitRepository? SaleProfitRepository;
-        private static SalesProfitUserControl? _salesProfitUserControl;
-        public SalesProfitUserControl()
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+        private readonly ISaleProfitRepository _saleProfitRepository;
+        private readonly ControlManager _controlManager;
+
+        public SalesProfitUserControl(MainForm main, ApplicationDbContext context, ISaleProfitRepository saleProfitRepository, ControlManager controlManager)
         {
             InitializeComponent();
 
-        }
-        public static bool CheckInstance()
-        {
-            return (_salesProfitUserControl == null);
-        }
-        public static SalesProfitUserControl Instance(MainForm main)
-        {
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _context = new ApplicationDbContext();
-            if (CheckInstance())
-            {
-                SaleProfitRepository = new(_context);
+            _context = context;
+            _saleProfitRepository = saleProfitRepository;
+            _controlManager = controlManager;
+            dtpTo.Value = DateTime.Now;
 
-                _salesProfitUserControl = new SalesProfitUserControl();
-                _salesProfitUserControl.dtpTo.Value = DateTime.Now;
-
-            }
-
-            // Return the singleton instance
-            _salesProfitUserControl.LoadData();
-            return _salesProfitUserControl;
+            LoadData();
         }
+
         public async void SetProductsToDgv(int skip)
         {
             ////DgvSalesProfit.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             //var CustomerMoneyList = MainForm.Context.CustomersReports.
             //    Include(x => x.Customer).Include(x => x.Sale)
             //    .ToList();
-            var saleProfitDtoReturned = SaleProfitRepository.GetAllProfit(Properties.Settings.Default.NoOfDataInDgvs, skip);
+            DgvSalesProfit.DataSource = new List<SaleProfitDto>();
 
+            var saleProfitDtoReturned = await _saleProfitRepository.GetAllProfit(Properties.Settings.Default.NoOfDataInDgvs, skip);
             DgvSalesProfit.DataSource = saleProfitDtoReturned.Result;
+
 
             double value = saleProfitDtoReturned.Count / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
             int PageValue = Convert.ToInt32(Math.Ceiling(value));
@@ -83,11 +73,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
             //}
         }
 
-        public static void RefreshDgv()
-        {
-            //DgvSalesProfit.DataSource = await Task.Run(() => productsRepository.GetAllProducts());
-            _salesProfitUserControl.LoadData();
-        }
+
         // methodes 
         public async void LoadData()
         {
@@ -95,7 +81,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => SaleProfitRepository.IsConnected()))
+            if (await _saleProfitRepository.IsConnectedAsync())
             {
                 //Start Load Data
 
@@ -159,7 +145,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
 
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             try
             {
@@ -178,18 +164,18 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
                 DgvSalesProfit.DataSource = new List<SaleProfitDto>();
                 if (rbBoth.Checked)
                 {
-                    a = SaleProfitRepository.SearchBoth(txtSearch.Text, dtpFrom.Value, dtpTo.Value, take, skip);
+                    a = await _saleProfitRepository.SearchBoth(txtSearch.Text, dtpFrom.Value, dtpTo.Value, take, skip);
 
 
                 }
                 else if (rbCustomerAndOrder.Checked)
                 {
-                    a = SaleProfitRepository.SearchOnlyNames(txtSearch.Text, take, skip);
+                    a = await _saleProfitRepository.SearchOnlyNames(txtSearch.Text, take, skip);
 
                 }
                 else
                 {
-                    a = SaleProfitRepository.SearchSalesByDate(dtpFrom.Value, dtpTo.Value, take, skip);
+                    a = await _saleProfitRepository.SearchSalesByDate(dtpFrom.Value, dtpTo.Value, take, skip);
 
                 }
 
@@ -353,7 +339,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
             {
                 for (int i = 0; i < DgvSalesProfit.Rows.Count; i++)
                 {
-                    SaleProfit saleProfit = _context.SalesProfits.FirstOrDefault(x => x.Order_ID.ToString() == DgvSalesProfit.Rows[i].Cells[0].Value.ToString());
+                    SaleProfit saleProfit = await _context.SalesProfits.FirstOrDefaultAsync(x => x.Order_ID.ToString() == DgvSalesProfit.Rows[i].Cells[0].Value.ToString());
                     _context.SalesProfits.Remove(saleProfit);
                     await _context.SaveChangesAsync();
                 }
@@ -371,9 +357,9 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
             {
                 try
                 {
-                    var query = _context.SalesProfits
+                    var query = await _context.SalesProfits
                         .Where(x => dtpFrom.Value <= x.Sale.Date && x.Sale.Date <= dtpTo.Value)
-                        .ToList();
+                        .ToListAsync();
 
                     if (query.Any())
                     {
@@ -397,14 +383,14 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
             }
         }
 
-        private void btnDeleteAllReports_Click(object sender, EventArgs e)
+        private async void btnDeleteAllReports_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
                 try
                 {
-                    _context.Database.ExecuteSqlRaw($"DELETE FROM [SalesProfits]");
+                    await _context.Database.ExecuteSqlRawAsync($"DELETE FROM [SalesProfits]");
                     LoadData();
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
@@ -425,7 +411,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
                 if (DgvSalesProfit.SelectedRows.Count > 0)
                 {
                     DataTable ProfitDetailsTable = await FactureHelper.GetProfitReportDataTableAsync(dtpFrom.Value, dtpTo.Value);
-                    Reports.SalesReports.salesProfit saleReportsInPeriod = new();
+                    Reports.SalesReports.salesProfit saleReportsInPeriod = _controlManager.GetR<Reports.SalesReports.salesProfit>();
                     saleReportsInPeriod.DataSource = ProfitDetailsTable;
                     saleReportsInPeriod.lbldateFrom.Text = dtpFrom.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                     saleReportsInPeriod.lblDateTo.Text = dtpTo.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
@@ -447,7 +433,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
                 if (DgvSalesProfit.SelectedRows.Count > 0)
                 {
                     DataTable ProfitDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(Convert.ToInt32(DgvSalesProfit.CurrentRow.Cells[0].Value.ToString()));
-                    Reports.SalesReports.salesA4 salesA4 = new();
+                    Reports.SalesReports.salesA4 salesA4 = _controlManager.GetR<Reports.SalesReports.salesA4>();
                     salesA4.DataSource = ProfitDetailsTable;
                     Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(salesA4);
                     xtraForm1.Show();
@@ -465,10 +451,10 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
         {
             var result =
 
-                  _context.SalesProfits
+                 await _context.SalesProfits
                    .Include(bd => bd.Sale)
                    .Include(bd => bd.Product)
-                   .AsEnumerable()
+
                    //.Where(bd =>
                    //    bd.Customer.CustomerName.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
                    //    bd.Order_ID.ToString() == searchItem)
@@ -494,7 +480,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
                        date = bd.Sale.Date,
                        Sallesman = bd.Sale.User_Name,
                    })
-                   .ToList();
+                   .ToListAsync();
 
 
 

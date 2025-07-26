@@ -1,4 +1,5 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.Models;
 using Store.Core.Entities.Caisses;
 using Store.Infrastructure.Data;
@@ -7,31 +8,19 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransferBetweenCaissesGui
 {
     public partial class TransferBetweenCaissesGuiUserControl : UserControl
     {
-        private static ApplicationDbContext _context;
-        static TransferBetweenCaissesGuiUserControl _TransferBetweenCaissesGuiUserControl;
-        private static CaisseDetailsForm _caisse;
-        private static MainForm _main;
+        private readonly MainForm _main;
+        private readonly CaisseDetailsForm _caisse;
+        private readonly ApplicationDbContext _context;
 
-        public TransferBetweenCaissesGuiUserControl()
+        public TransferBetweenCaissesGuiUserControl(MainForm main, CaisseDetailsForm caisse, ApplicationDbContext context)
         {
             InitializeComponent();
-        }
-
-        public static TransferBetweenCaissesGuiUserControl Instance(MainForm main, CaisseDetailsForm caisse)
-        {
-            _caisse = caisse;
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _context = new ApplicationDbContext();
-            if (_TransferBetweenCaissesGuiUserControl == null || _TransferBetweenCaissesGuiUserControl.IsDisposed)
-            {
-
-                _TransferBetweenCaissesGuiUserControl = new TransferBetweenCaissesGuiUserControl();
-            }
-            _TransferBetweenCaissesGuiUserControl.LoadData();
-
-            return _TransferBetweenCaissesGuiUserControl;
+            _caisse = caisse;
+            _context = context;
         }
+
+
         void validate()
         {
 
@@ -47,15 +36,15 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransferBetweenCaissesGui
             lblValue.Text = "0";
             dateTimePicker.Value = DateTime.Now;
 
-            if (await Task.Run(() => _context.Database.CanConnect()))
+            if (await _context.Database.CanConnectAsync())
             {
-                cmbCaisseFrom.DataSource = _context.Caisses.ToList();
+                cmbCaisseFrom.DataSource = await _context.Caisses.ToListAsync();
 
                 cmbCaisseFrom.DisplayMember = "CaisseName";
                 cmbCaisseFrom.ValueMember = "Id";
                 cmbCaisseFrom.Text = "اختر صندوق";
 
-                cmbCaisseTo.DataSource = _context.Caisses.ToList();
+                cmbCaisseTo.DataSource = await _context.Caisses.ToListAsync();
                 cmbCaisseTo.DisplayMember = "CaisseName";
                 cmbCaisseTo.ValueMember = "Id";
                 cmbCaisseTo.Text = "اختر صندوق";
@@ -89,12 +78,12 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransferBetweenCaissesGui
             }
         }
 
-        private void cmbCaisseFrom_SelectionChangeCommitted(object sender, EventArgs e)
+        private async void cmbCaisseFrom_SelectionChangeCommitted(object sender, EventArgs e)
         {
             try
             {
                 validate();
-                var value = _context.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisseFrom.SelectedValue.ToString()).MoneyinCaisse;
+                var value = (await _context.Caisses.FirstOrDefaultAsync(x => x.Id.ToString() == cmbCaisseFrom.SelectedValue.ToString())).MoneyinCaisse;
                 lblValue.Text = value.ToString();
             }
             catch (Exception)
@@ -104,12 +93,12 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransferBetweenCaissesGui
             }
         }
 
-        private void cmbCaisseTo_SelectionChangeCommitted(object sender, EventArgs e)
+        private async void cmbCaisseTo_SelectionChangeCommitted(object sender, EventArgs e)
         {
             try
             {
                 validate();
-                var value = _context.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisseTo.SelectedValue.ToString()).MoneyinCaisse;
+                var value = (await _context.Caisses.FirstOrDefaultAsync(x => x.Id.ToString() == cmbCaisseTo.SelectedValue.ToString())).MoneyinCaisse;
                 lblValueTo.Text = value.ToString();
             }
             catch (Exception)
@@ -131,8 +120,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransferBetweenCaissesGui
             {
                 try
                 {
-                    var caisseFrom = _context.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisseFrom.SelectedValue);
-                    var caisseTo = _context.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisseTo.SelectedValue);
+                    var caisseFrom = await _context.Caisses.FirstOrDefaultAsync(x => x.Id.ToString() == cmbCaisseFrom.SelectedValue);
+                    var caisseTo = await _context.Caisses.FirstOrDefaultAsync(x => x.Id.ToString() == cmbCaisseTo.SelectedValue);
                     if (caisseFrom is not null && caisseTo is not null)
                     {
                         if (_main.ConvertToFloat(txtValue.Text) > 0)
@@ -180,7 +169,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransferBetweenCaissesGui
                             // Commit the transaction
                             await transaction.CommitAsync();
                             Code.Helper.ToasterHelper.ShowTransfert();
-                            CaisseDetailsForm.CheckInstance();
+                            _caisse.LoadData();
 
                         }
                     }
@@ -188,7 +177,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransferBetweenCaissesGui
                     // Load data after successful transaction
                     LoadData();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
                     await transaction.RollbackAsync();

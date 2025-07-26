@@ -1,21 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Store.Core.Entities.Vouchers;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
 
 namespace Store.Infrastructure.Repositories
 {
-    public class ReceiptVoucherRepository : GenericRepository<ReceiptVoucher>
+    public class ReceiptVoucherRepository : GenericRepository<ReceiptVoucher>, IReceiptVoucherRepository
     {
         public ReceiptVoucherRepository(ApplicationDbContext context) : base(context)
         {
         }
-        public List<ReceiptVoucher> GetAllReciptVouchers()
+        public async Task<List<ReceiptVoucher>> GetAllReciptVouchers()
         {
 
             try
             {
-                var result = _context.ReceiptVouchers.AsNoTracking()
-                    .ToList();
+                var result = await _context.ReceiptVouchers.AsNoTracking()
+                    .ToListAsync();
                 return result;
 
             }
@@ -25,14 +26,14 @@ namespace Store.Infrastructure.Repositories
             }
 
         }
-        public List<SendVoucher> GetAllSentVouchers()
+        public async Task<List<SendVoucher>> GetAllSentVouchers()
         {
 
             try
             {
                 var result = _context.SendVouchers.AsNoTracking()
-                    .ToList();
-                return result;
+                    .ToListAsync();
+                return await result;
 
             }
             catch (Exception)
@@ -41,9 +42,16 @@ namespace Store.Infrastructure.Repositories
             }
 
         }
+    }
+    public class SendVoucherRepository : GenericRepository<SendVoucher>, ISendVoucherRepository
+    {
+        public SendVoucherRepository(ApplicationDbContext context) : base(context)
+        {
+        }
+
+
 
     }
-
 }
 
 

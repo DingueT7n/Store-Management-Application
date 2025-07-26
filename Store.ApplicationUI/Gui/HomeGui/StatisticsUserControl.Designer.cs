@@ -1076,6 +1076,7 @@
             Name = "StatisticsUserControl";
             RightToLeft = RightToLeft.Yes;
             Size = new Size(1034, 681);
+            Load += StatisticsUserControl_Load;
             OperationsflowLayoutPanel.ResumeLayout(false);
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();

@@ -265,6 +265,8 @@
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "اضافة/تعديل مورد ";
+            FormClosing += AddSupplierForm_FormClosing;
+            Load += AddSupplierForm_Load;
             GbInfoProduct.ResumeLayout(false);
             GbInfoProduct.PerformLayout();
             OperationsflowLayoutPanel.ResumeLayout(false);

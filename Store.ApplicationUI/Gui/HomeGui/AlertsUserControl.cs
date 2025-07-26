@@ -5,43 +5,33 @@ using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Helpers;
 using Store.Core.Entities.Products;
 using Store.Core.Entities.Suppliers;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.HomeGui
 {
     public partial class AlertsUserControl : UserControl
     {
-        private static AlertsUserControl? _homeUserControl;
-        private static ApplicationDbContext _context;
-        private static MainForm? _main;
-        private static ProductsRepository _repository;
-        public AlertsUserControl()
+
+
+
+        private readonly ApplicationDbContext _context;
+        private readonly MainForm _main;
+        private readonly IProductRepository _repository;
+
+        public AlertsUserControl(ApplicationDbContext context, MainForm main, IProductRepository productRepository)
         {
             InitializeComponent();
+            _repository = productRepository;
+            _context = context;
         }
-        public static AlertsUserControl Instance(MainForm main)
-        {
-            _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            if (_homeUserControl == null)
-            {
-                _homeUserControl = new AlertsUserControl();
-                _context = new ApplicationDbContext();
-                _repository = new ProductsRepository(_context);
-            }
-            _ = _homeUserControl.LoadData();
-            // Return the singleton instance
-            return _homeUserControl;
-        }
-
         public async Task LoadData()
         {
 
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => _context.Database.CanConnect()))
+            if (await _context.Database.CanConnectAsync())
             {
                 //Start Load Data
                 flowLayoutPanel1.Controls.Clear();
@@ -421,6 +411,11 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
                 await SetProductsToDgv(skip);
             }
+        }
+
+        private async void AlertsUserControl_Load(object sender, EventArgs e)
+        {
+            await LoadData();
         }
     }
 }

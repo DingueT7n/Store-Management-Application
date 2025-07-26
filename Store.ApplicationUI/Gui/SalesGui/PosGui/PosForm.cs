@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui;
 using Store.ApplicationUI.Gui.PaymentGui;
 using Store.Infrastructure.Data;
@@ -8,84 +10,43 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 {
     public partial class PosForm : Form
     {
-        private bool dragging = false;
-        private int draggedTabIndex;
-        private MainForm _main;
-        private static PosForm posForm;
-        private ApplicationDbContext _contex;
-        public PosForm()
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+        private readonly ControlManager _controlManager;
+
+        private int count = 1;
+
+        public PosForm(MainForm main, ApplicationDbContext context, ControlManager controlManager)
         {
             InitializeComponent();
-            InitializeTabs();
-            posForm = this;
-            _contex = new ApplicationDbContext();
-            if (Properties.Settings.Default.PrintSaleOnOrOff)
-            {
-                btnTurnOffPrinter.Text = "اطفاء الطابعة";
-            }
-            else
-                btnTurnOffPrinter.Text = "اشعال الطابعة";
-
-
-        }
-        public PosForm(MainForm main)
-        {
-            InitializeComponent();
-            InitializeTabs();
             _main = main;
-            posForm = this;
-            _contex = new ApplicationDbContext();
-            if (Properties.Settings.Default.PrintSaleOnOrOff)
-            {
-                btnTurnOffPrinter.Text = "اطفاء الطابعة";
-            }
-            else
-                btnTurnOffPrinter.Text = "اشعال الطابعة";
+            _context = context;
+            _controlManager = controlManager;
 
 
+
+            btnTurnOffPrinter.Text = Properties.Settings.Default.PrintSaleOnOrOff
+                ? "اطفاء الطابعة"
+                : "اشعال الطابعة";
         }
+
         private void InitializeTabs()
         {
             // Add initial tab for client 1
             AddNewClientTab();
 
         }
-        //private void SetColumns()
-        //{
-
-        //    DgvِProducts.Columns[0].HeaderCell.Value = "معرف المنتوج";
-        //    DgvِProducts.Columns[1].HeaderCell.Value = "باركود";
-        //    DgvِProducts.Columns[2].HeaderCell.Value = "اسم المنتج";
-        //    DgvِProducts.Columns[3].HeaderCell.Value = "صورة المنتج";
-        //    DgvِProducts.Columns[4].HeaderCell.Value = "المنتج";
-
-        //    DgvِProducts.Columns[5].HeaderCell.Value = "معرف السرعة";
-        //    DgvِProducts.Columns[3].Visible = false;
-        //    DgvِProducts.Columns[4].Visible = false;
-        //    DgvِProducts.Columns[5].Visible = false;
-        //    DgvِProducts.Columns[0].Visible = false;
-        //}
-        private int count = 1;
-        private async void AddNewClientTab()
+        private void AddNewClientTab()
         {
-            //if (tabControl.TabCount < 1)
-            //{
-
-            //    DgvِProducts.DataSource = MainForm.Context.ProductQuickAccess.ToList();
-
-            //    lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِProducts);
-            //    SetColumns();
-            //}
-            if (tabControl.TabCount < 3)
+            if (tabControl.TabCount < 5)
             {
-                var clientPage = new PosUserControl(this);
+                var clientPage = _controlManager.Create<PosUserControl>();
 
                 var newTab = new TabPage
                 {
                     Text = $"العميل رقم : {count++}",
                     ForeColor = Color.Black,
                     BackColor = Color.White,
-
                     Padding = new Padding(25, 5, 25, 5)
                 };
 
@@ -95,24 +56,9 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             }
             else
             {
-                MessageBox.Show("الحد الأقصى للنوافذ هو 3");
-
+                MessageBox.Show("الحد الأقصى للنوافذ هو 5");
             }
         }
-
-        private void RemoveClientTab(int index)
-        {
-            if (index >= 0 && index < tabControl.TabCount)
-            {
-                tabControl.TabPages.RemoveAt(index);
-            }
-        }
-
-        private void btnAddComptoire_Click(object sender, EventArgs e)
-        {
-            InitializeTabs();
-        }
-
         private void tabControl_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete && tabControl.SelectedTab != null && tabControl.TabCount > 1)
@@ -132,8 +78,6 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
             if (e.Control && e.KeyCode == Keys.E)
             {
-                // Handle Ctrl + E combination
-
 
                 if (selectedTab != null)
                 {
@@ -141,10 +85,6 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                     {
                         if (control is PosUserControl posUserControl)
                         {
-                            // Perform actions with posUserControl
-
-
-                            // Example: Call a method on PosUserControl
                             posUserControl.BringTofront(true);
                             break;
                         }
@@ -188,10 +128,10 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             }
         }
 
-        public static PosUserControl GetPosUserControl()
+        public PosUserControl GetPosUserControl()
         {
-            if (posForm == null) return null;
-            TabPage selectedTab = posForm.tabControl.SelectedTab;
+
+            TabPage selectedTab = _controlManager.GetF<PosForm>().tabControl.SelectedTab;
             if (selectedTab != null)
             {
                 foreach (Control control in selectedTab.Controls)
@@ -208,7 +148,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         }
         private void PosForm_Load(object sender, EventArgs e)
         {
-            posForm = this;
+            InitializeTabs();
+
         }
 
         private void btnDeleteProduct_Click(object sender, EventArgs e)
@@ -226,7 +167,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         private void btnEditProduct_Click(object sender, EventArgs e)
         {
             Code.Helper.ToasterHelper.PlayNotificationSound();
-            LockUnlockForm lockUnlockForm = new LockUnlockForm();
+            LockUnlockForm lockUnlockForm = _controlManager.GetF<LockUnlockForm>();
             lockUnlockForm.ShowDialog();
 
 
@@ -258,66 +199,6 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 Properties.Settings.Default.Save();
             }
         }
-
-        private void btnPrintLastFacture_Click(object sender, EventArgs e)
-        {
-            Code.Helper.ToasterHelper.PlayNotificationSound();
-            var control = GetPosUserControl();
-            if (control != null)
-            {
-                control.PrintLastFacture(false);
-            }
-        }
-
-        private void btnLastFactureA4_Click(object sender, EventArgs e)
-        {
-            Code.Helper.ToasterHelper.PlayNotificationSound();
-            var control = GetPosUserControl();
-            if (control != null)
-            {
-                control.PrintLastFacture(true);
-            }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // Start the calculator process
-                Code.Helper.ToasterHelper.PlayNotificationSound();
-                Process.Start("calc.exe");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error launching calculator: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Code.Helper.ToasterHelper.PlayNotificationSound();
-                // Create a new process for the on-screen keyboard
-                Process process = new Process
-                {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        FileName = "osk.exe",
-                        UseShellExecute = true,
-                        Verb = "runas" // Request administrative privileges
-                    }
-                };
-
-                process.Start();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error launching keyboard: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void btnCalc_Click(object sender, EventArgs e)
         {
             try
@@ -354,7 +235,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         private void btnLockComptoire_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            LockUnlockForm lockUnlockForm = new LockUnlockForm();
+            LockUnlockForm lockUnlockForm = _controlManager.GetF<LockUnlockForm>();
             lockUnlockForm.ShowDialog();
         }
 
@@ -404,12 +285,10 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 control.PrintLastFacture(true);
             }
         }
-
         private void btnkeyboard_Click(object sender, EventArgs e)
         {
             try
             {
-                // Create a new process for the on-screen keyboard
                 ToasterHelper.PlayNotificationSound();
                 Process process = new Process
                 {
@@ -417,7 +296,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                     {
                         FileName = "osk.exe",
                         UseShellExecute = true,
-                        Verb = "runas" // Request administrative privileges
+                        Verb = "runas"
                     }
                 };
 
@@ -429,21 +308,33 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             }
         }
 
-        private void btnCaisse_Click(object sender, EventArgs e)
+        private async void btnCaisse_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
 
-            var caisse = _contex.Caisses.FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
+            var caisse = await _context.Caisses.FirstOrDefaultAsync(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
             if (caisse != null)
             {
                 if (caisse.Status == Core.Entities.Caisses.CaisseStatus.Open)
                 {
-                    OpenOrCloseCaisseForm Form = new OpenOrCloseCaisseForm(this);
-                    Form.btnClose.Visible = true;
-                    Form.btnOpen.Visible = false;
+                    OpenOrCloseCaisseForm form = _controlManager.CreateF<OpenOrCloseCaisseForm>();
 
-                    OpenOrCloseCaisseForm.SetPose(this);
-                    Form.ShowDialog();
+
+                    //Form.btnClose.Visible = true;
+                    //Form.btnOpen.Visible = false;
+
+                    form.SetPose(true);
+                    form.SetMain(false);
+                    if (!form.Visible)
+                    {
+                        form.ShowDialog();
+                    }
+                    else
+                    {
+                        form.Show(); // optional: bring it to front if already shown
+                    }
+
+
                 }
             }
 

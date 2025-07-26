@@ -1,61 +1,46 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Employees;
 using Store.Core.Entities.Products;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowItemsGui
 {
     public partial class EmployeeBorrowItemForm : Form
     {
-        private static MainForm? _main;
-        private EmployeeBorrowItemRepository? _employeesRepository;
-        private static EmployeeBorrowItemForm? _addEmployeeForm;
-        private ApplicationDbContext _context;
-        private ProductsRepository productsRepository;
+        private readonly MainForm _main;
+        private readonly IEmployeeBorrowItemRepository _employeeBorrowItemRepository;
+        private readonly ApplicationDbContext _context;
+        private readonly IProductRepository _productRepository;
+
         private Product _product;
 
-        public EmployeeBorrowItemForm(MainForm main)
+        public EmployeeBorrowItemForm(MainForm main, IEmployeeBorrowItemRepository employeeBorrowItemRepository, ApplicationDbContext context
+            , IProductRepository productRepository)
         {
             InitializeComponent();
             _main = main;
+            _employeeBorrowItemRepository = employeeBorrowItemRepository;
+            _context = context;
+            _productRepository = productRepository;
             this.Owner = _main;
-            _context = new ApplicationDbContext();
-            _employeesRepository = new EmployeeBorrowItemRepository(_context);
-            productsRepository = new ProductsRepository(_context);
+
 
             LoadData();
         }
-        public static EmployeeBorrowItemForm Instance(MainForm main)
-        {
-            // If the instance is null or has been disposed, create a new one.
-            if (_addEmployeeForm == null || _addEmployeeForm.IsDisposed)
-            {
-                _addEmployeeForm = new EmployeeBorrowItemForm(main);
-            }
-            else
-            {
-                // Bring the form to the front if it exists.
-                if (!_addEmployeeForm.Visible)
-                {
-                    _addEmployeeForm.Show();
-                }
-                _addEmployeeForm.BringToFront();
-            }
 
-            return _addEmployeeForm;
-        }
         public async void LoadData()
         {
             dtpJoined.Value = DateTime.Now;
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => _employeesRepository.IsConnected()))
+            if (await _employeeBorrowItemRepository.IsConnectedAsync())
             {
 
-                cmbEmployees.DataSource = _context.Employees.ToList();
+                cmbEmployees.DataSource = await _context.Employees.ToListAsync();
                 cmbEmployees.DisplayMember = "EmployeeName"; // Set the property to display
                 cmbEmployees.ValueMember = "Id"; // Set the property to use as the value
 
@@ -127,7 +112,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowItemsGui
         public async void SetProductsToTable()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            _product = productsRepository.GetProductBarCode(txtBareCode.Text);
+            _product = _productRepository.GetProductBarCode(txtBareCode.Text);
             if (_product is not null)
             {
                 txtProductName.Text = _product.ProductName;
@@ -148,18 +133,18 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowItemsGui
             }
         }
 
-        private void btnAdd_Click(object sender, EventArgs e)
+        private async void btnAdd_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (_product is null) return;
             if (txtQty.Text == string.Empty) return;
-            using (var transaction = _context.Database.BeginTransaction())
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
                     _product.Quentity -= _main.ConvertToFloat(txtQty.Text);
                     _context.Update(_product);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
 
                     EmployeeBorrowItem employeeBorrowItem = new EmployeeBorrowItem();
                     employeeBorrowItem.Quentity = _main.ConvertToFloat(txtQty.Text);
@@ -168,8 +153,8 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowItemsGui
                     employeeBorrowItem.Item_Id = _product.Id;
                     employeeBorrowItem.Time = dtpJoined.Value.ToString("HH:mm");
                     employeeBorrowItem.ProductName = _product.ProductName;
-                    _context.Add(employeeBorrowItem);
-                    _context.SaveChanges();
+
+                    await _employeeBorrowItemRepository.AddAsync(employeeBorrowItem);
 
                     EmployeeSalaryMinus employeeSalaryMinus = new EmployeeSalaryMinus();
                     employeeSalaryMinus.Pay = "No";
@@ -178,16 +163,16 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowItemsGui
                     employeeSalaryMinus.EmployeeName = cmbEmployees.Text;
                     employeeSalaryMinus.Time = dtpJoined.Value.ToString("HH:mm");
                     employeeSalaryMinus.Price = _main.ConvertToFloat(txtQty.Text) * _product.SalePriceTax;
-                    _context.Add(employeeSalaryMinus);
-                    _context.SaveChanges();
-                    transaction.Commit();
+                    await _context.AddAsync(employeeSalaryMinus);
+                    await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
                     Code.Helper.ToasterHelper.ShowBorrowItem();
 
                     ResetForm();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
 

@@ -1,55 +1,37 @@
 ﻿using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Entities.Employees;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.EmployeesGui
 {
     public partial class EmployeeUserControl : UserControl
     {
-        private static EmployeeUserControl? _employeeUserControl;
-        private static MainForm? _main;
-        private AddEmployeeForm addEmployeeForm;
-        public static EmployeesRepository? employeesRepository;
-        private static ApplicationDbContext _context;
-        public EmployeeUserControl()
+        private readonly MainForm _main;
+        private readonly IEmployeesRepository employeesRepository;
+        private readonly ControlManager _controlManager;
+        private readonly ApplicationDbContext _context;
+
+        public EmployeeUserControl(MainForm main, IEmployeesRepository employeesRepository, ControlManager controlManager, ApplicationDbContext context)
         {
             InitializeComponent();
-        }
-        public static bool CheckInstance()
-        {
-            return (_employeeUserControl == null);
-
-        }
-
-        public static EmployeeUserControl Instance(MainForm main)
-        {
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _context = new ApplicationDbContext();
-            if (CheckInstance())
-            {
-                employeesRepository = new EmployeesRepository(_context);
-
-                _employeeUserControl = new EmployeeUserControl();
-
-            }
-
-            // Return the singleton instance
-            _employeeUserControl.LoadData();
-            return _employeeUserControl;
+            this.employeesRepository = employeesRepository;
+            _controlManager = controlManager;
+            _context = context;
         }
+
+
+
         public async void SetProductsToDgv()
         {
             //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             DgvِCustomer.DataSource = employeesRepository.GetAllData();
         }
 
-        public static void RefreshDgv()
-        {
-            //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAllProducts());
-            _employeeUserControl.LoadData();
-        }
+
         // methodes 
         public async void LoadData()
         {
@@ -57,14 +39,14 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => employeesRepository.IsConnected()))
+            if (await employeesRepository.IsConnectedAsync())
             {
                 //Start Load Data
 
                 // if its an admin or Normal user 
 
-                SetProductsToDgv();
                 SetColumns();
+                SetProductsToDgv();
                 //_data.Clear();
             }
             else
@@ -82,6 +64,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
 
         private void SetColumns()
         {
+            DgvِCustomer.DataSource = new List<Employee>();
             //DgvِCustomer.Columns[0].HeaderCell.Value = "المعرف";
             DgvِCustomer.Columns[0].HeaderCell.Value = "اسم الموظف";
             DgvِCustomer.Columns[1].HeaderCell.Value = "راتب الموظف";
@@ -101,15 +84,11 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
         private void btnAdd_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            if (addEmployeeForm == null || addEmployeeForm.IsDisposed)
-            {
-                addEmployeeForm = AddEmployeeForm.Instance(_main);
-                addEmployeeForm.Show();
-            }
-            else
-            {
-                addEmployeeForm.Focus();
-            }
+
+            var addEmployeeForm = _controlManager.GetF<AddEmployeeForm>();
+            addEmployeeForm.ShowDialog();
+
+
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
@@ -117,12 +96,9 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
             ToasterHelper.PlayNotificationSound();
             if (DgvِCustomer.Rows.Count > 0)
             {
-                if (addEmployeeForm == null || addEmployeeForm.IsDisposed)
-                {
-                    addEmployeeForm = AddEmployeeForm.Instance(_main);
+                var addEmployeeForm = _controlManager.GetF<AddEmployeeForm>();
 
-
-                    addEmployeeForm.SetDataToEdit(
+                addEmployeeForm.SetDataToEdit(
                         DgvِCustomer.CurrentRow.Cells[0].Value.ToString(),
                         DgvِCustomer.CurrentRow.Cells[5].Value.ToString(),
                         DgvِCustomer.CurrentRow.Cells[6].Value.ToString(),
@@ -133,28 +109,25 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
                         Convert.ToDateTime(DgvِCustomer.CurrentRow.Cells[2].Value.ToString())
                         );
 
-                    addEmployeeForm.Show();
-                }
-                else
-                {
-                    addEmployeeForm.Focus();
-                }
+                addEmployeeForm.ShowDialog();
+
+
             }
         }
 
-        private void btnDelete_Click(object sender, EventArgs e)
+        private async void btnDelete_Click(object sender, EventArgs e)
         {
             try
             {
                 ToasterHelper.PlayNotificationSound();
                 if (MsgHelper.ShowDeleteDialog())
                 {
-                    var customer = employeesRepository.DeleteAsync(DgvِCustomer.CurrentRow.Cells[7].Value.ToString());
+                    var customer = await employeesRepository.DeleteAsync(DgvِCustomer.CurrentRow.Cells[7].Value.ToString());
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
 
                 }
-                RefreshDgv();
+                LoadData();
             }
             catch (Exception ex)
             {

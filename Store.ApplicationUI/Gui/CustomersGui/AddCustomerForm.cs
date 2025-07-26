@@ -1,68 +1,30 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.CustomersGui;
-using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Customers;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.ProductsGui
 {
     public partial class AddCustomerForm : Form
     {
         private readonly MainForm _main;
-        private CustomersRepository? _customersRepository;
+        private readonly ApplicationDbContext _context;
+        private readonly ControlManager _controlManager;
+        private ICustomersRepository? _customersRepository;
         private static AddCustomerForm? _addCustomerForm;
 
-        public AddCustomerForm(MainForm main)
+        public AddCustomerForm(MainForm main,
+             ApplicationDbContext context, ControlManager controlManager, ICustomersRepository customersRepository)
         {
             InitializeComponent();
             _main = main;
-            this.Owner = _main;
-            _customersRepository = new CustomersRepository(new ApplicationDbContext());
+            _context = context;
+            _controlManager = controlManager;
 
-            LoadData();
-
-        }
-        public static AddCustomerForm Instance(MainForm main)
-        {
-            // If the instance is null or has been disposed, create a new one.
-            if (_addCustomerForm == null || _addCustomerForm.IsDisposed)
-            {
-                _addCustomerForm = new AddCustomerForm(main);
-            }
-            else
-            {
-                // Bring the form to the front if it exists.
-                if (!_addCustomerForm.Visible)
-                {
-                    _addCustomerForm.Show();
-                }
-                _addCustomerForm.BringToFront();
-            }
-
-            return _addCustomerForm;
-        }
-        public async void LoadData()
-        {
+            _customersRepository = customersRepository;
 
 
-            //ShowLoading
-            LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => MainForm.Context.Database.CanConnect()))
-            {
-
-
-            }
-            else
-            {
-
-                LoadingForm.Instance(_main).Hide();
-                //No Connection
-                MsgHelper.ShowServerError();
-            }
-            //Hideloading
-            LoadingForm.Instance(_main).Hide();
-            // Show EmptyDAta
 
         }
         void vider()
@@ -109,7 +71,23 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             lblِCustomerId.Visible = true;
             label13.Visible = true;
         }
-        private void btnAddProduct_Click(object sender, EventArgs e)
+        public void SetDataToEditFromId(string CustomerId)
+        {
+            Customer customer = _customersRepository.Get(Convert.ToInt32(CustomerId));
+            txtNameCustomer.Text = customer.CustomerName;
+            txtAddress.Text = customer.Address;
+
+            txtPhoneNumber.Text = customer.PhoneNumber;
+
+            txtMaxDebtAllowed.Text = customer.MaxDebtAllowed.ToString(); ;
+            txtNotes.Text = customer.Notes;
+            lblِCustomerId.Text = CustomerId;
+            btnAddCustomer.Visible = false;
+            btnEditCustomer.Visible = true;
+            lblِCustomerId.Visible = true;
+            label13.Visible = true;
+        }
+        private async void btnAddProduct_Click(object sender, EventArgs e)
         {
             try
             {
@@ -123,12 +101,14 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 customer.MaxDebtAllowed = ConvertToFloat(txtMaxDebtAllowed.Text);
 
 
-                var result = _customersRepository.AddAsync(customer);
+                var result = await _customersRepository.AddAsync(customer);
                 vider();
-                if (!CustomersUserControl.CheckInstance())
+                if (_controlManager.TryGet<CustomersUserControl>(out var UC))
+
                 {
-                    CustomersUserControl.RefreshDgv();
+                    UC.LoadData();
                 }
+
                 Code.Helper.ToasterHelper.ShowAddToast();
 
             }
@@ -149,7 +129,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             return Convert.ToDecimal(value);
         }
 
-        private void btnEditProduct_Click(object sender, EventArgs e)
+        private async void btnEditProduct_Click(object sender, EventArgs e)
         {
             try
             {
@@ -163,11 +143,12 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                     customer.PhoneNumber = txtPhoneNumber.Text;
                     customer.Notes = txtNotes.Text;
                     customer.MaxDebtAllowed = ConvertToFloat(txtMaxDebtAllowed.Text);
-                    var result = _customersRepository.UpdateAsync(lblِCustomerId.Text, customer);
+                    var result = await _customersRepository.UpdateAsync(lblِCustomerId.Text, customer);
 
-                    if (!CustomersUserControl.CheckInstance())
+                    if (_controlManager.TryGet<CustomersUserControl>(out var UC))
+
                     {
-                        CustomersUserControl.RefreshDgv();
+                        UC.LoadData();
                     }
                     customer = null;
                     Code.Helper.ToasterHelper.ShowEditToast();

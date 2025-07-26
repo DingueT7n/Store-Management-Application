@@ -1,46 +1,49 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using DevExpress.Xpo;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.ProductsGui.Category
 {
     public partial class AddCategoryForm : Form
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext _context;
-        private static AddCategoryForm _addCategoryForm;
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public AddCategoryForm(MainForm main)
+        public AddCategoryForm(MainForm main, ApplicationDbContext context, ICategoryRepository categoryRepository)
         {
             InitializeComponent();
             _main = main;
-            _context = new ApplicationDbContext();
+            _context = context;
+            _categoryRepository = categoryRepository;
             this.Owner = _main;
             LoadData();
         }
-        public static AddCategoryForm Instance(MainForm main)
+
+        //public static AddCategoryForm Instance(MainForm main)
+        //{
+        //    if (_addCategoryForm == null || _addCategoryForm.IsDisposed)
+        //    {
+        //        _context = new ApplicationDbContext();
+        //        _addCategoryForm = new AddCategoryForm(main);
+        //    }
+        //    else
+        //    {
+        //        if (!_addCategoryForm.Visible)
+        //        {
+        //            _addCategoryForm.Show();
+        //        }
+        //        _addCategoryForm.BringToFront();
+        //    }
+        //    return _addCategoryForm;
+        //}
+        public async void SetCategoryToDgv()
         {
-            if (_addCategoryForm == null || _addCategoryForm.IsDisposed)
-            {
-                _context = new ApplicationDbContext();
-                _addCategoryForm = new AddCategoryForm(main);
-            }
-            else
-            {
-                if (!_addCategoryForm.Visible)
-                {
-                    _addCategoryForm.Show();
-                }
-                _addCategoryForm.BringToFront();
-            }
-            return _addCategoryForm;
-        }
-        public void SetCategoryToDgv()
-        {
-            //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            DgvCategory.DataSource = _context.Categories
-                .ToList();
+            DgvCategory.DataSource = new List<Store.Core.Entities.Products.Category>();
+
+            DgvCategory.DataSource = await _categoryRepository.GetAllAsync();
             lblCategoryId.Text = (_context.Categories.Count() + 1).ToString();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvCategory);
         }
@@ -48,7 +51,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
         {
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => _context.Database.CanConnect()))
+            if (await _context.Database.CanConnectAsync())
             {
                 SetCategoryToDgv();
                 SetColumns();
@@ -69,36 +72,51 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
         void vider()
         {
             txtNameِCategory.Text = "";
-            RefreshDgv();
+            SetCategoryToDgv();
         }
 
         private void SetColumns()
         {
             //DgvProducts.Columns[0].HeaderCell.Value = "المعرف";
+
             DgvCategory.Columns[1].HeaderCell.Value = "معرف الصنف";
             DgvCategory.Columns[0].HeaderCell.Value = "اسم الصنف";
 
 
 
         }
-        private void btnAddCategory_Click(object sender, EventArgs e)
+        private async void btnAddCategory_Click(object sender, EventArgs e)
         {
-            if (txtNameِCategory.Text.IsNullOrEmpty())
+            if (string.IsNullOrWhiteSpace(txtNameِCategory.Text))
             {
                 MsgHelper.ShowRequiredFields();
-
+                return;
             }
-            else
+
+            try
             {
-                Store.Core.Entities.Products.Category category = new();
-                category.CategoryName = txtNameِCategory.Text;
-                _context.Categories.Add(category);
-                _context.SaveChanges();
-                Code.Helper.ToasterHelper.ShowAddToast();
+                var category = new Store.Core.Entities.Products.Category
+                {
+                    CategoryName = txtNameِCategory.Text.Trim()
+                };
 
+                var result = await _categoryRepository.AddAsync(category);
 
+                if (result == "1")
+                {
+                    Code.Helper.ToasterHelper.ShowAddToast();
+                    vider(); // Clear the form after success
+                    SetCategoryToDgv(); // Refresh the DataGridView
+                }
+                else
+                {
+                    ToasterHelper.ShowErrorHappened("حدث خطأ أثناء الإضافة:\n" + result);
+                }
             }
-            RefreshDgv();
+            catch (Exception ex)
+            {
+                Code.Helper.ToasterHelper.ShowErrorHappened(ex.Message);
+            }
 
         }
 
@@ -115,55 +133,90 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
-        private void btnEditCategory_Click(object sender, EventArgs e)
+        private async void btnEditCategory_Click(object sender, EventArgs e)
         {
-            try
+            if (DgvCategory.CurrentRow == null || DgvCategory.CurrentRow.Cells[1].Value == null)
             {
+                MessageBox.Show("الرجاء تحديد صنف للتعديل.");
+                return;
+            }
 
+            if (string.IsNullOrWhiteSpace(txtNameِCategory.Text))
+            {
+                MessageBox.Show("الرجاء إدخال اسم الصنف الجديد.");
+                return;
+            }
 
-                if (MsgHelper.ShowEditDialog())
+            if (MsgHelper.ShowEditDialog())
+            {
+                try
                 {
-                    Store.Core.Entities.Products.Category category = _context.Categories.FirstOrDefault(x => x.Id ==
-                    Convert.ToInt32(DgvCategory.CurrentRow.Cells[1].Value.ToString())
-                    );
-                    if (category != null)
+                    int categoryId = Convert.ToInt32(DgvCategory.CurrentRow.Cells[1].Value);
+
+                    var existingCategory = await _categoryRepository.GetAsync(categoryId);
+
+                    if (existingCategory == null)
                     {
-                        category.CategoryName = txtNameِCategory.Text;
-                        _context.Update(category);
-                        _context.SaveChanges();
-                        Code.Helper.ToasterHelper.ShowEditToast();
-                        vider();
+                        ToasterHelper.ShowErrorHappened("لم يتم العثور على الصنف.");
+                        return;
                     }
 
-                }
-            }
-            catch (Exception)
-            {
+                    existingCategory.CategoryName = txtNameِCategory.Text;
 
-                throw;
+                    var result = await _categoryRepository.UpdateAsync(categoryId.ToString(), existingCategory);
+
+                    if (result == "1")
+                    {
+                        Code.Helper.ToasterHelper.ShowEditToast();
+                        vider();
+                        SetCategoryToDgv(); // await if method is async
+                    }
+                    else
+                    {
+                        ToasterHelper.ShowErrorHappened("حدث خطأ أثناء التعديل:\n" + result);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Code.Helper.ToasterHelper.ShowErrorHappened(ex.Message);
+                }
             }
         }
 
         private async void btnDeleteCategory_Click(object sender, EventArgs e)
         {
+            if (DgvCategory.CurrentRow == null || DgvCategory.CurrentRow.Cells[1].Value == null)
+            {
+                MessageBox.Show("الرجاء تحديد صنف للحذف.");
+                return;
+            }
+
             if (MsgHelper.ShowDeleteDialog())
             {
-                var cate = _context.Categories.FirstOrDefault
-                    (x => x.Id == Convert.ToInt32(DgvCategory.CurrentRow.Cells[1].Value.ToString()));
-                _context.Categories.Remove(cate);
-                await _context.SaveChangesAsync();
-                Code.Helper.ToasterHelper.ShowDeletedToast();
+                try
+                {
+                    int categoryId = Convert.ToInt32(DgvCategory.CurrentRow.Cells[1].Value);
 
+                    var cate = await _categoryRepository.DeleteAsync(categoryId.ToString());
+
+                    if (cate is null)
+                    {
+                        MessageBox.Show("هذا الصنف غير موجود.");
+                        return;
+                    }
+
+
+                    if (cate == "1")
+                        Code.Helper.ToasterHelper.ShowDeletedToast();
+
+                    SetCategoryToDgv(); // Await this to update the UI properly
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("حدث خطأ أثناء الحذف:\n" + ex.Message);
+                }
             }
-            RefreshDgv();
         }
-
-        private void RefreshDgv()
-        {
-
-            SetCategoryToDgv();
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             btnAddCategory.Enabled = true;
@@ -173,12 +226,12 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
 
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
 
-            DgvCategory.DataSource = _context.Categories.Where(x => x.Id.ToString() == txtSearch.Text ||
-            x.CategoryName.Contains(txtSearch.Text)).ToList();
+            DgvCategory.DataSource = await _context.Categories.Where(x => x.Id.ToString() == txtSearch.Text ||
+            x.CategoryName.Contains(txtSearch.Text)).ToListAsync();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvCategory);
             txtSearch.Text = string.Empty;
         }

@@ -1,45 +1,31 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDeleteDamagedProductGui;
 using Store.ApplicationUI.Gui.ProductsGui.StoreGui.TransferBetweenStoresGui;
+using Store.Core.Entities.Products;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
 {
     public partial class StoreInventoryUserControl : UserControl
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext _contex;
-        private static StoreTransfertForm storeTransfertForm;
-        private static StoreDamagedProductForm storeDamagedProductForm;
-        public static ProductsQuantitieRepository? productQtyRepository;
-        private static StoreInventoryUserControl? _storeInventoryUserControl;
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+        private readonly ControlManager _controlManager;
+        private readonly IProductsQuantitieRepository _productsQuantitieRepository;
 
-        public StoreInventoryUserControl()
+        public StoreInventoryUserControl(MainForm main, ApplicationDbContext applicationDbContext,
+            ControlManager controlManager, IProductsQuantitieRepository productsQuantitieRepository
+            )
         {
             InitializeComponent();
-        }
-        public static bool CheckInstance()
-        {
-            return (_storeInventoryUserControl == null);
-        }
-        public static StoreInventoryUserControl Instance(MainForm main)
-        {
             _main = main;
-            _contex = new ApplicationDbContext();
-            // If the instance is null, create a new one and assign it to the static field
-            if (CheckInstance())
-            {
-                productQtyRepository = new ProductsQuantitieRepository(_contex);
-
-                _storeInventoryUserControl = new StoreInventoryUserControl();
-
-            }
-
-            // Return the singleton instance
-            _storeInventoryUserControl.LoadData();
-            return _storeInventoryUserControl;
+            _context = applicationDbContext;
+            _controlManager = controlManager;
+            _productsQuantitieRepository = productsQuantitieRepository;
         }
         void CalcStats()
         {
@@ -126,16 +112,16 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
 
 
 
-                txtAllProducts.Text = _contex.ProductsQuantities.Where(x => x.Qty > 0)
+                txtAllProducts.Text = _context.ProductsQuantities.Where(x => x.Qty > 0)
                     .Select(x => x.Pro_ID).Distinct().Count().ToString("f2");
-                txtProductSum.Text = _contex.Products.Count().ToString("f2");
-                txtAllQty.Text = _contex.ProductsQuantities.Sum(x => x.Qty).ToString("f2");
-                txttotalBuy.Text = _contex.ProductsQuantities.Sum(x => x.Buy_Price * x.Qty).ToString("f2");
-                txttotalSell.Text = _contex.ProductsQuantities.Sum(x => x.Sale_PriceTax * x.Qty).ToString("f2");
-                txtTotalProfitExpected.Text = _contex.ProductsQuantities
+                txtProductSum.Text = _context.Products.Count().ToString("f2");
+                txtAllQty.Text = _context.ProductsQuantities.Sum(x => x.Qty).ToString("f2");
+                txttotalBuy.Text = _context.ProductsQuantities.Sum(x => x.Buy_Price * x.Qty).ToString("f2");
+                txttotalSell.Text = _context.ProductsQuantities.Sum(x => x.Sale_PriceTax * x.Qty).ToString("f2");
+                txtTotalProfitExpected.Text = _context.ProductsQuantities
                     .Sum(x => (x.Sale_PriceTax - x.Buy_Price) * x.Qty).ToString("f2");
-                txtCapital.Text = (Convert.ToDecimal(txttotalBuy.Text) + _contex.Banks.Sum(x => x.Money) +
-                    _contex.Caisses.Sum(x => x.MoneyinCaisse)).ToString("f2");
+                txtCapital.Text = (Convert.ToDecimal(txttotalBuy.Text) + _context.Banks.Sum(x => x.Money) +
+                    _context.Caisses.Sum(x => x.MoneyinCaisse)).ToString("f2");
             }
             catch (Exception ex)
             {
@@ -153,12 +139,12 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
             string searchitem = txtSearch.Text == string.Empty ? "" : txtSearch.Text;
             if (type == 0)
             {
-                var data = productQtyRepository.GetAllProductQty(searchitem);
+                var data = await _productsQuantitieRepository.GetAllProductQty(searchitem);
                 DgvSales.DataSource = data.result;
             }
             else
             {
-                var data = productQtyRepository.GetProductQty(Convert.ToInt32(cmbStores.SelectedValue), searchitem);
+                var data = await _productsQuantitieRepository.GetProductQty(Convert.ToInt32(cmbStores.SelectedValue), searchitem);
                 DgvSales.DataSource = data.result;
             }
 
@@ -184,16 +170,16 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => productQtyRepository.IsConnected()))
+            if (await _context.Database.CanConnectAsync())
             {
                 //Start Load Data
 
+                SetColumns();
                 // if its an admin or Normal user 
-                cmbStores.DataSource = _contex.Stores.ToList();
+                cmbStores.DataSource = await _context.Stores.ToListAsync();
                 cmbStores.DisplayMember = "StoreName";
                 cmbStores.ValueMember = "Id";
                 RefreshDgv();
-                SetColumns();
 
                 //_data.Clear();
             }
@@ -216,7 +202,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
             //DgvSales.Columns[0].HeaderCell.Value = "المعرف"; ""    
 
 
-
+            DgvSales.DataSource = new List<ProductQtyDto>();
             DgvSales.Columns[0].HeaderCell.Value = "معرف المنتج";
             DgvSales.Columns[1].HeaderCell.Value = "اسم المنتج";
             DgvSales.Columns[2].HeaderCell.Value = "اسم المخزن الموجود فيه";
@@ -285,29 +271,19 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
         private void button2_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            if (storeTransfertForm == null || storeTransfertForm.IsDisposed)
-            {
-                storeTransfertForm = StoreTransfertForm.Instance(_main);
-                storeTransfertForm.Show();
-            }
-            else
-            {
-                storeTransfertForm.Focus();
-            }
+            var form = _controlManager.GetF<StoreTransfertForm>();
+
+
+            form.ShowDialog();
+
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            if (storeDamagedProductForm == null || storeDamagedProductForm.IsDisposed)
-            {
-                storeDamagedProductForm = StoreDamagedProductForm.Instance(_main);
-                storeDamagedProductForm.Show();
-            }
-            else
-            {
-                storeDamagedProductForm.Focus();
-            }
+            var form = _controlManager.GetF<StoreDamagedProductForm>();
+            form.ShowDialog();
+
         }
 
         private void txtSearch_KeyDown(object sender, KeyEventArgs e)
@@ -316,6 +292,12 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
             {
                 btnSearch_Click(sender, e);
             }
+        }
+
+        private void StoreInventoryUserControl_Load(object sender, EventArgs e)
+        {
+            LoadData();
+
         }
     }
 }

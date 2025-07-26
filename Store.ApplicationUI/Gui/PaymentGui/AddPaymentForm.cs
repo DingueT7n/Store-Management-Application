@@ -1,4 +1,5 @@
 ﻿using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.BuysGui;
 using Store.ApplicationUI.Gui.SalesGui;
 using Store.ApplicationUI.Gui.SalesGui.PosGui;
@@ -8,18 +9,29 @@ namespace Store.ApplicationUI.Gui.PaymentGui
     public partial class AddPaymentForm : Form
     {
 
-        private static MainForm _main;
+        private readonly MainForm _main;
         private static PosForm _PosForm;
-        private readonly int _form;
-        private AddPaymentForm? _addPaymentForm;
+        public int _form;
+        private readonly ControlManager _controlManager;
 
-        public AddPaymentForm(MainForm userControl, int form)
+
+        public AddPaymentForm(MainForm userControl, ControlManager controlManager)
         {
             InitializeComponent();
             _main = userControl;
-            _form = form;
+
+            _controlManager = controlManager;
             this.Owner = _main;
         }
+        public AddPaymentForm(MainForm userControl, int f)
+        {
+            InitializeComponent();
+            _main = userControl;
+
+
+            this.Owner = _main;
+        }
+        public void setTypeForm(int form) { _form = form; }
         public AddPaymentForm(PosForm userControl, int form)
         {
             InitializeComponent();
@@ -27,11 +39,13 @@ namespace Store.ApplicationUI.Gui.PaymentGui
             _form = form;
             this.Owner = _main;
         }
-        public async void LoadData(string Total, string paidUp, string remaining)
+        public async void LoadData(string Total, string paidUp, string remaining, int form)
         {
             txtFacturePrice.Text = Total;
             txtpaidUp.Text = paidUp;
             txtRemain.Text = remaining;
+            _form = form;
+
             txtpaidUp.Focus();
             txtpaidUp.SelectAll();
 
@@ -56,17 +70,35 @@ namespace Store.ApplicationUI.Gui.PaymentGui
             {
                 if (this._form == 1)
                 {
-                    SalesGui.SalesUserControl.InitializeData(txtpaidUp.Text, txtRemain.Text);
-                    SalesUserControl.Process = true;
+
+                    if (_controlManager.TryGet<SalesUserControl>(out var UCS))
+
+                    {
+
+                        UCS.InitializeData(txtpaidUp.Text, txtRemain.Text);
+
+                        UCS.Process = true;
+                    }
                 }
                 else if (_form == 0)
                 {
-                    BuysUserControl.InitializeData(txtpaidUp.Text, txtRemain.Text);
-                    BuysUserControl.Process = true;
+                    if (_controlManager.TryGet<BuysUserControl>(out var UCB))
+
+                    {
+
+                        UCB.InitializeData(txtpaidUp.Text, txtRemain.Text);
+
+                        UCB.Process = true;
+                    }
+
                 }
-                else if (PosForm.GetPosUserControl() is not null)
+                else if (_controlManager.TryGet<PosUserControl>(out var UCP))
+
                 {
-                    PosForm.GetPosUserControl().InitializeData(txtpaidUp.Text, txtRemain.Text);
+
+                    UCP.InitializeData(txtpaidUp.Text, txtRemain.Text);
+
+
                 }
                 this.Close();
             }

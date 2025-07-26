@@ -1,4 +1,5 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.Core.Entities.Banks;
 using Store.Infrastructure.Data;
 
@@ -6,30 +7,17 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankGui
 {
     public partial class DepositTobankUserControl : UserControl
     {
-        static DepositTobankUserControl _depositTobankUserControl;
-        private static CaisseDetailsForm _caisse;
-        private static MainForm _main;
-        private static ApplicationDbContext _context;
+        private readonly MainForm _main;
+        private readonly CaisseDetailsForm _caisse;
+        private readonly ApplicationDbContext _context;
 
-        public DepositTobankUserControl()
+        public DepositTobankUserControl(MainForm main, CaisseDetailsForm caisse, ApplicationDbContext context)
         {
             InitializeComponent();
-        }
-        public static DepositTobankUserControl Instance(MainForm main, CaisseDetailsForm caisse)
-        {
-            _caisse = caisse;
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _context = new ApplicationDbContext();
-            if (_depositTobankUserControl == null || _depositTobankUserControl.IsDisposed)
-            {
-                _depositTobankUserControl = new DepositTobankUserControl();
-            }
-            _depositTobankUserControl.LoadData();
-
-            return _depositTobankUserControl;
+            _caisse = caisse;
+            _context = context;
         }
-
         public async void LoadData()
         {
             txtDepositorName.Text = string.Empty;
@@ -37,9 +25,9 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankGui
             lblValue.Text = "0";
             dateTimePicker.Value = DateTime.Now;
 
-            if (await Task.Run(() => _context.Database.CanConnect()))
+            if (await _context.Database.CanConnectAsync())
             {
-                lblValue.Text = _context.Banks.FirstOrDefault().Money.ToString();
+                lblValue.Text = (await _context.Banks.FirstOrDefaultAsync()).Money.ToString();
 
             }
             else
@@ -76,7 +64,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankGui
             {
                 try
                 {
-                    var Bank = _context.Banks.FirstOrDefault();
+                    var Bank = await _context.Banks.FirstOrDefaultAsync();
 
                     if (Bank is not null)
                     {
@@ -103,6 +91,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankGui
                             // Commit the transaction
                             await transaction.CommitAsync();
                             Code.Helper.ToasterHelper.ShowDeposit();
+                            _caisse.LoadData();
 
                         }
                     }
@@ -110,7 +99,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankGui
                     // Load data after successful transaction
                     LoadData();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
                     await transaction.RollbackAsync();

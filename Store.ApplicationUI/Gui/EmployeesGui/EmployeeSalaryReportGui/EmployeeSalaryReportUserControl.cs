@@ -1,43 +1,29 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Entities.Employees;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryReportGui
 {
     public partial class EmployeeSalaryReportUserControl : UserControl
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext _contex;
-        public static EmployeeSalaryRepository? EmployeeBorrowItemRepository;
-        private static EmployeeSalaryReportUserControl? _storeDamagedProductUserControl;
+        private readonly MainForm _main;
+        private readonly IEmployeeSalaryRepository _employeeSalaryRepository;
+        private readonly ApplicationDbContext _context;
 
-        public EmployeeSalaryReportUserControl()
+        public EmployeeSalaryReportUserControl(MainForm main, IEmployeeSalaryRepository employeeSalaryRepository, ApplicationDbContext context
+           , ControlManager controlManager)
         {
             InitializeComponent();
-        }
-
-        public static bool CheckInstance()
-        {
-            return (_storeDamagedProductUserControl == null);
-        }
-        public static EmployeeSalaryReportUserControl Instance(MainForm main)
-        {
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            if (CheckInstance())
-            {
-                _contex = new ApplicationDbContext();
-                EmployeeBorrowItemRepository = new EmployeeSalaryRepository(_contex);
-
-                _storeDamagedProductUserControl = new EmployeeSalaryReportUserControl();
-
-            }
-
-            // Return the singleton instance
-            _storeDamagedProductUserControl.LoadData();
-            return _storeDamagedProductUserControl;
+            _employeeSalaryRepository = employeeSalaryRepository;
+            _context = context;
         }
+
+
         public async void SetProductsToDgv(string t1, string barcode)
         {
             ////DgvSales.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
@@ -45,7 +31,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryReportGui
             //    Include(x => x.Customer).Include(x => x.Sale)
             //    .ToList();
 
-            var data = EmployeeBorrowItemRepository.GetAllEmpBorrowsItem(t1, barcode, dtpFrom.Value, dtpTo.Value);
+            var data = _employeeSalaryRepository.GetAllEmpBorrowsItem(t1, barcode, dtpFrom.Value, dtpTo.Value);
             DgvSales.DataSource = data;
 
         }
@@ -55,8 +41,8 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryReportGui
 
             if (rbStoresFrom.Checked) t1 = cmbEmployees.Text;
 
-            SetProductsToDgv(t1, txtSearch.Text);
             SetColumns();
+            SetProductsToDgv(t1, txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
         }
         public async void LoadData()
@@ -65,10 +51,10 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryReportGui
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => EmployeeBorrowItemRepository.IsConnected()))
+            if (await _employeeSalaryRepository.IsConnectedAsync())
             {
                 //Start Load Data
-                cmbEmployees.DataSource = _contex.Employees.ToList();
+                cmbEmployees.DataSource = await _context.Employees.ToListAsync();
                 cmbEmployees.DisplayMember = "EmployeeName";
                 cmbEmployees.ValueMember = "Id";
 
@@ -95,7 +81,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryReportGui
         {
             //DgvSales.Columns[0].HeaderCell.Value = "المعرف"; ""    
 
-
+            DgvSales.DataSource = new List<EmployeeSalary>();
 
             DgvSales.Columns[0].HeaderCell.Value = "معرف الموظف";
             DgvSales.Columns[1].HeaderCell.Value = "الراتب الكامل";
@@ -116,7 +102,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryReportGui
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
             try
             {
@@ -125,11 +111,12 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryReportGui
                 {
                     for (int i = 0; i <= DgvSales.Rows.Count - 1; i++)
                     {
-                        var deleteedRefund = _contex.EmployeesSalaries.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i].Cells[9].Value.ToString())).FirstOrDefault();
+                        var deleteedRefund = await _context.EmployeesSalaries.Where(x => x.Id ==
+                        Convert.ToInt32(DgvSales.Rows[i].Cells[9].Value.ToString())).FirstOrDefaultAsync();
                         if (deleteedRefund != null)
                         {
-                            _contex.Remove(deleteedRefund);
-                            _contex.SaveChanges();
+                            _context.Remove(deleteedRefund);
+                            _context.SaveChanges();
                         }
                     }
                     Code.Helper.ToasterHelper.ShowDeletedToast();

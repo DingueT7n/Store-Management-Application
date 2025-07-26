@@ -1,50 +1,38 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Employees;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryGui
 {
     public partial class EmployeeSalaryForm : Form
     {
-        private static MainForm? _main;
-        private EmployeeSalaryRepository? _employeesRepository;
-        private static EmployeeSalaryForm? _addEmployeeForm;
-        private ApplicationDbContext _context;
+        private readonly MainForm _main;
+        private readonly IEmployeeSalaryRepository _employeeSalaryRepository;
+        private readonly ApplicationDbContext _context;
+        private readonly ControlManager _controlManager;
 
-        public EmployeeSalaryForm(MainForm main)
+        public EmployeeSalaryForm(MainForm main, IEmployeeSalaryRepository employeeSalaryRepository, ApplicationDbContext context
+           , ControlManager controlManager)
         {
             InitializeComponent();
             _main = main;
+            _employeeSalaryRepository = employeeSalaryRepository;
+            _context = context;
+            _controlManager = controlManager;
             this.Owner = _main;
-            _context = new ApplicationDbContext();
-            _employeesRepository = new EmployeeSalaryRepository(_context);
+
+
 
 
             LoadData();
+            _main = main;
         }
-        public static EmployeeSalaryForm Instance(MainForm main)
-        {
-            // If the instance is null or has been disposed, create a new one.
-            if (_addEmployeeForm == null || _addEmployeeForm.IsDisposed)
-            {
-                _addEmployeeForm = new EmployeeSalaryForm(main);
-            }
-            else
-            {
-                // Bring the form to the front if it exists.
-                if (!_addEmployeeForm.Visible)
-                {
-                    _addEmployeeForm.Show();
-                }
-                _addEmployeeForm.BringToFront();
-            }
 
-            return _addEmployeeForm;
-        }
         public async void LoadData()
         {
             dtpJoined.Value = DateTime.Now;
@@ -52,10 +40,10 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryGui
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => _employeesRepository.IsConnected()))
+            if (await _employeeSalaryRepository.IsConnectedAsync())
             {
 
-                cmbEmployees.DataSource = _context.Employees.ToList();
+                cmbEmployees.DataSource = await _context.Employees.ToListAsync();
                 cmbEmployees.DisplayMember = "EmployeeName"; // Set the property to display
                 cmbEmployees.ValueMember = "Id"; // Set the property to use as the value
                 cmbEmployees.Text = "اختر موظف";
@@ -85,7 +73,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryGui
         private void ResetForm()
         {
             // Clear all textboxes
-            foreach (Control ctrl in _addEmployeeForm.Controls)
+            foreach (Control ctrl in _controlManager.GetF<AddEmployeeForm>().Controls)
             {
                 if (ctrl is TextBox)
                 {
@@ -133,19 +121,19 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryGui
             }
         }
 
-        private void cmbEmployees_SelectionChangeCommitted(object sender, EventArgs e)
+        private async void cmbEmployees_SelectionChangeCommitted(object sender, EventArgs e)
         {
             try
             {
-                var emp = _context.Employees.FirstOrDefault(
+                var emp = await _context.Employees.FirstOrDefaultAsync(
                     x => x.Id == Convert.ToInt32(cmbEmployees.SelectedValue));
                 if (emp != null)
                 {
                     txtAllSalary.Text = emp.Salary.ToString();
 
                 }
-                var empMinusBorrows = _context.EmployeesSalaryMinus.Where(x =>
-                x.Emp_ID == Convert.ToInt32(cmbEmployees.SelectedValue) && x.Pay == "No").Sum(x => x.Price);
+                var empMinusBorrows = await _context.EmployeesSalaryMinus.Where(x =>
+                x.Emp_ID == Convert.ToInt32(cmbEmployees.SelectedValue) && x.Pay == "No").SumAsync(x => x.Price);
                 txtBorrows.Text = empMinusBorrows.ToString();
 
                 txtNetSalary.Text = (emp?.Salary - empMinusBorrows).ToString();
@@ -158,7 +146,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryGui
             }
         }
 
-        private void btnAdd_Click(object sender, EventArgs e)
+        private async void btnAdd_Click(object sender, EventArgs e)
         {
 
             ToasterHelper.PlayNotificationSound();
@@ -167,12 +155,12 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryGui
             {
                 if (!MsgHelper.ShowSalaryMinusIsNegative(cmbEmployees.Text, txtNetSalary.Text)) return;
             }
-            using (var transaction = _context.Database.BeginTransaction())
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    var caisse = _context.Caisses
-                        .FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
+                    var caisse = await _context.Caisses
+                        .FirstOrDefaultAsync(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
 
                     if (caisse is not null && caisse.MoneyinCaisse < _main.ConvertToFloat(txtNetSalary.Text))
                     {
@@ -189,8 +177,8 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryGui
                     employeeSalary.Time = DateTime.Now.ToString("HH:mm");
                     employeeSalary.DateReminder = dtpReminderDate.Value;
                     employeeSalary.Notes = txtNotes.Text;
-                    _context.Add(employeeSalary);
-                    _context.SaveChanges();
+                    await _context.AddAsync(employeeSalary);
+                    await _context.SaveChangesAsync();
 
                     if (caisse is not null)
                     {
@@ -210,25 +198,25 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryGui
                         };
 
                         _context.Caisses.Update(caisse);
-                        _context.SaveChanges();
-                        _context.CaissesWithdraws.Add(CaisseWithdraw);
-                        _context.SaveChanges();
+                        await _context.SaveChangesAsync();
+                        await _context.CaissesWithdraws.AddAsync(CaisseWithdraw);
+                        await _context.SaveChangesAsync();
 
                     }
-                    _context.Database.ExecuteSqlRaw($"UPDATE EmployeesSalaryMinus SET Pay = 'Yes' where Emp_ID ={Convert.ToInt32(cmbEmployees.SelectedValue)}");
+                    await _context.Database.ExecuteSqlRawAsync($"UPDATE EmployeesSalaryMinus SET Pay = 'Yes' where Emp_ID ={Convert.ToInt32(cmbEmployees.SelectedValue)}");
 
 
 
 
 
-                    transaction.Commit();
+                    await transaction.CommitAsync();
                     Code.Helper.ToasterHelper.ShowSalarie();
 
                     ResetForm();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
 

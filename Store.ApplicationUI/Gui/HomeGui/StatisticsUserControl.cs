@@ -9,36 +9,20 @@ namespace Store.ApplicationUI.Gui.HomeGui
 {
     public partial class StatisticsUserControl : UserControl
     {
-        private static StatisticsUserControl? _UserControl;
-        private static MainForm? _main;
-        private static ApplicationDbContext? _context;
-        public StatisticsUserControl()
+        private readonly ApplicationDbContext _context;
+        private readonly MainForm _main;
+        public StatisticsUserControl(ApplicationDbContext context, MainForm main)
         {
             InitializeComponent();
-        }
-        public static bool CheckInstance()
-        {
-            return (_UserControl == null);
-        }
-        public static StatisticsUserControl? Instance(MainForm main)
-        {
+            _context = context;
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _context = new ApplicationDbContext();
-            if (CheckInstance())
-            {
-                _UserControl = new StatisticsUserControl();
-            }
-            // Return the singleton instance
-            _UserControl?.LoadData();
-            return _UserControl;
         }
         public async void LoadData()
         {
             dtpTo.Value = DateTime.Now.AddDays(30);
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => _context.Database.CanConnect()))
+            if (await _context.Database.CanConnectAsync())
             {
                 //Start Load Data
 
@@ -117,43 +101,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
                     d => selectedUserId == null || d.UserName.Contains(selectedUserId)
                 );
 
-                //  var selectedCaisseId = cmbCaisse.SelectedValue as int?;
-                //  var selectedCustomerId = cmbCustomers.Text == "اختر العميل" ? null : cmbCustomers.SelectedValue.ToString();
-                //  var selectedUserId = cmbUser.Text == "اختر البائع" ? null : cmbUser.Text;
 
-                //  // Step 1: Retrieve Data for Sales and Buys
-
-                //  var salesData = GetChartData(
-                //    _context.Sales,
-                //    s => s.Date.Date,
-                //    s => (s.TotalOrder),
-                //    s => (s.Date.Date >= dtpFrom.Value.Date && s.Date.Date <= dtpTo.Value.Date),
-                //   // Apply filters dynamically
-                //   //s => selectedCaisseId == null || s. == selectedCaisseId,
-                //   s => selectedCustomerId == null || s.CustomerId.ToString() == selectedCustomerId,
-                //     s => selectedUserId == null || s.User_Name.Contains(selectedUserId)
-
-                //);
-
-                //  // Buys data filtered by the selected values
-                //  var buysData = GetChartData(
-                //      _context.Buys,
-                //      b => b.Date.Date,
-                //      b => b.Total, s => (s.Date.Date >= dtpFrom.Value.Date && s.Date.Date <= dtpTo.Value.Date),
-                //      //b => selectedCaisseId == null || b.CaisseId == selectedCaisseId,
-                //      //b => selectedCustomerId == null || b.CustomerId == selectedCustomerId,
-                //      b => selectedUserId == null || b.User_Name.Contains(selectedUserId)
-                //  );
-
-                //  // Deserved data filtered by the selected values
-                //  var deservedData = GetChartData(
-                //      _context.Deserveds,
-                //      d => d.Date.Date,
-                //      d => d.Price, s => (s.Date.Date >= dtpFrom.Value.Date && s.Date.Date <= dtpTo.Value.Date),
-                //      //d => selectedCaisseId == null || d.CaisseId == selectedCaisseId,
-                //      //d => selectedCustomerId == null || d.CustomerId == selectedCustomerId,
-                //      d => selectedUserId == null || d.UserName.Contains(selectedUserId)
-                //  );
                 // Step 2: Clear existing series and add new series to chartControl1
                 chartControl1.Series.Clear(); // Clear previous data
 
@@ -845,37 +793,37 @@ namespace Store.ApplicationUI.Gui.HomeGui
             LoadChartData();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             //flowLayoutPanel6.Size = new Size(1034, 463);
             flowLayoutPanel6.AutoSize = true;
-            calcZakat();
+            await calcZakat();
             panelZakat.Visible = true;
 
         }
 
-        private void calcZakat()
+        private async Task calcZakat()
         {
             try
             {
-                _context = new();
+
                 decimal totalbuySales = 0.00m;
                 if (rbBuy.Checked)
                 {
-                    totalbuySales = _context.Products.Sum(x => x.Quentity * x.BuyPrice);
+                    totalbuySales = await _context.Products.SumAsync(x => x.Quentity * x.BuyPrice);
                 }
                 else if (rbSale.Checked)
                 {
-                    totalbuySales = _context.Products.Sum(x => x.Quentity * x.SalePriceTax);
+                    totalbuySales = await _context.Products.SumAsync(x => x.Quentity * x.SalePriceTax);
                 }
                 txtBuySale.Text = totalbuySales.ToString("f2");
-                var customerDebts = _context.Customers.Sum(x => x.TotalDebts);
+                var customerDebts = await _context.Customers.SumAsync(x => x.TotalDebts);
                 txtDebtCustomer.Text = customerDebts.ToString("f2");
 
-                var caisseAndBank = _context.Caisses.Sum(x => x.MoneyinCaisse) + _context.Banks.Sum(x => x.Money);
+                var caisseAndBank = (await _context.Caisses.SumAsync(x => x.MoneyinCaisse)) + (await _context.Banks.SumAsync(x => x.Money));
                 txtCaisseValue.Text = caisseAndBank.ToString("f2");
-                var SupplierDebts = _context.Suppliers.Sum(x => x.TotalDebts);
+                var SupplierDebts = await _context.Suppliers.SumAsync(x => x.TotalDebts);
                 txtDebtSupplier.Text = SupplierDebts.ToString("f2");
                 txtTotal.Text = ((totalbuySales + customerDebts + caisseAndBank) - SupplierDebts).ToString("f2");
                 txtZakat.Text = ((Convert.ToDecimal(txtTotal.Text) * 2.5m) / 100).ToString("f2");
@@ -914,14 +862,19 @@ namespace Store.ApplicationUI.Gui.HomeGui
             await VisualizeTopProductsByProfitAsync();
         }
 
-        private void rbSale_CheckedChanged(object sender, EventArgs e)
+        private async void rbSale_CheckedChanged(object sender, EventArgs e)
         {
-            calcZakat();
+            await calcZakat();
         }
 
-        private void rbBuy_CheckedChanged(object sender, EventArgs e)
+        private async void rbBuy_CheckedChanged(object sender, EventArgs e)
         {
-            calcZakat();
+            await calcZakat();
+        }
+
+        private void StatisticsUserControl_Load(object sender, EventArgs e)
+        {
+            LoadData();
         }
     }
 }

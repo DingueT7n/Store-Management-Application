@@ -3,38 +3,36 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.PaymentGui;
 using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Customers;
 using Store.Core.Entities.Products;
 using Store.Core.Entities.Returns;
 using Store.Core.Entities.Sales;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 {
     public partial class PosUserControl : UserControl
     {
-        private static PosUserControl? _PosUserControl;
-        private static PosForm? _posForm;
-        public static SalesRepository? salesRepository;
-        public static decimal PaidUp;
-        public static decimal Remain;
-        private ApplicationDbContext _context;
-        public PosUserControl(PosForm main)
+        private readonly ApplicationDbContext _context;
+        private readonly PosForm _posForm;
+        private readonly ISalesRepository _salesRepository;
+        private readonly ControlManager _controlManager;
+        public decimal PaidUp;
+        public decimal Remain;
+
+        public PosUserControl(ApplicationDbContext context, PosForm posForm, ISalesRepository salesRepository, ControlManager controlManager)
         {
             InitializeComponent();
-            _posForm = main;
-            _context = new ApplicationDbContext();
-
-
+            _context = context;
+            _posForm = posForm;
+            _salesRepository = salesRepository;
+            _controlManager = controlManager;
         }
-        public static bool CheckInstance()
-        {
-            return (_PosUserControl == null);
-        }
-        private void setPrivateProductAndAdditTotable(Product product)
+        private async void setPrivateProductAndAdditTotable(Product product)
         {
             txtSearchBarCode.Text = product.CodeBar;
             SetProductsToTable();
@@ -64,11 +62,11 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             //ShowLoading
             //LoadingForm.Instance(_main).Show();
 
-            if (await Task.Run(() => salesRepository.IsConnected()))
+            if (await _salesRepository.IsConnectedAsync())
             {
 
                 //Start Load Data
-                //txtFactureNumber.Text = salesRepository.GetFactureNumber();
+                //txtFactureNumber.Text = _salesRepository.GetFactureNumber();
                 //// if its an admin or Normal user 
                 //SetColumns();
 
@@ -169,7 +167,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             lblHour.Text = DateTime.Now.ToString("hh:mm:ss");
             lblDatetime.Text = DateTime.Now.ToShortDateString();
         }
-        public void BringTofront(bool b)
+        public async void BringTofront(bool b)
         {
             if (b)
             {
@@ -208,7 +206,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             }
         }
 
-        private void txtQty_KeyUp(object sender, KeyEventArgs e)
+        private async void txtQty_KeyUp(object sender, KeyEventArgs e)
         {
             CalculateAmount();
 
@@ -226,27 +224,27 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         async void OnLoad()
         {
             txtSearchBarCode.Focus();
-            salesRepository = new SalesRepository(_context);
-            _PosUserControl = this;
+
+
             SetColumns();
-            if (await Task.Run(() => _context.Database.CanConnect()))
+            if (await _context.Database.CanConnectAsync())
                 DgvQuickProducts.DataSource = _context.ProductQuickAccess.Select(x => new { x.CodeBar, x.ProductName }).ToList();
             SetQuickColumns();
-            lblFactureNumber.Text = salesRepository.GetFactureNumber();
+            lblFactureNumber.Text = _salesRepository.GetFactureNumber();
             lblUserName.Text = Properties.Settings.Default.UserName;
 
             lblCustomerName.Text = Properties.Settings.Default.DefaultCustomerSale;
             IdCustomer.Text = Properties.Settings.Default.IdCustomerSale;
             CalculateStatistics();
         }
-        private async void PosUserControl_Load(object sender, EventArgs e)
+        private void PosUserControl_Load(object sender, EventArgs e)
         {
 
             OnLoad();
             //Add Roles
 
         }
-        public void ParseScaleBarcode(string barcodeWeight)
+        public async void ParseScaleBarcode(string barcodeWeight)
         {
             if (string.IsNullOrWhiteSpace(barcodeWeight) || barcodeWeight.Length < 12)
                 throw new ArgumentException("Invalid barcode length.");
@@ -270,7 +268,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 throw new FormatException("Invalid weight format.");
             // Extract product code dynamically
             string productBarCode = barcodeWeight.Substring(2, productCodeLength);
-            _product = salesRepository.GetProductBarCode(productBarCode);
+            _product = _salesRepository.GetProductBarCode(productBarCode);
             if (_product != null)
             {
                 InitializeTextBoxesAndLablesFromWeight(_product, weight);
@@ -296,7 +294,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
                 var now = DateTime.Now;
 
-                ProductDiscount productDiscount = _context.ProductDiscounts.
+                ProductDiscount productDiscount = _context?.ProductDiscounts.
                       Where(x => x.Pro_Id.ToString() == product.Id.ToString() && x.Quentity > weight
                       && x.Store_Id == idstore
                       && x.DateStart <= DateTime.Now && x.DateEnd > DateTime.Now
@@ -397,10 +395,10 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         private Product _product;
         private ProductDiscount _productDiscount;
         private ProductsQuantitie _productQuantitie;
-        public async void SetProductsToTable()
+        public void SetProductsToTable()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            _product = salesRepository.GetProductBarCode(txtSearchBarCode.Text.Replace("\r\n", ""));
+            _product = _salesRepository.GetProductBarCode(txtSearchBarCode.Text.Replace("\r\n", ""));
             if (_product is not null)
             {
 
@@ -430,7 +428,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             //}
             return Convert.ToDecimal(value);
         }
-        public void InitializeTextBoxesAndLables(Product product)
+        public async void InitializeTextBoxesAndLables(Product product)
         {
             var idstore = Properties.Settings.Default.FastSaleStore;
             ProductDiscount productDiscount = _context.ProductDiscounts.
@@ -496,7 +494,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             txtTotalSaleProduct.Text = string.Empty;
             txtSalePrice.Text = string.Empty;
         }
-        void CalculateAmount()
+        async void CalculateAmount()
         {
             try
             {
@@ -660,7 +658,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             }
 
         }
-        public void EditUsingPlusMinus(object sender, KeyEventArgs e)
+        public async void EditUsingPlusMinus(object sender, KeyEventArgs e)
         {
 
             if (e.KeyCode == Keys.Oemplus)
@@ -709,7 +707,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         }
         public void GetTheEventAndSender(object sender, KeyEventArgs e)
         {
-            this.EditUsingPlusMinus(sender, e);
+            EditUsingPlusMinus(sender, e);
             this.DeleteSenderEvent(sender, e);
             this.Arrows(sender, e);
             this.PayNowEvent(sender, e);
@@ -809,7 +807,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             {
 
 
-                var facture = _context.Sales.OrderByDescending(s => s.Id).FirstOrDefault();
+                var facture = await _context.Sales.OrderByDescending(s => s.Id).FirstOrDefaultAsync();
                 int LastFactureId = 0;
                 if (facture is not null)
                 {
@@ -819,10 +817,10 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                         try
                         {
                             DataTable saleDetailsTable = await GetSellDetailsDataTableAsync(LastFactureId);
-                            Reports.sale8cm sale8Cm = new();
+                            Reports.sale8cm sale8Cm = _controlManager.GetR<Reports.sale8cm>();
                             sale8Cm.DataSource = saleDetailsTable;
                             var xtraForm11 = Reports.ReportPerviwGui.PerviweForm.Instance(sale8Cm);
-                            xtraForm11.Show();
+                            xtraForm11.ShowDialog();
                         }
                         catch (Exception)
                         {
@@ -835,10 +833,10 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                         {
 
                             DataTable ProfitDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(LastFactureId);
-                            Reports.SalesReports.salesA4 salesA4 = new();
+                            Reports.SalesReports.salesA4 salesA4 = _controlManager.GetR<Reports.SalesReports.salesA4>();
                             salesA4.DataSource = ProfitDetailsTable;
                             Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(salesA4);
-                            xtraForm1.Show();
+                            xtraForm1.ShowDialog();
 
                         }
                         catch (Exception ex)
@@ -855,7 +853,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 throw;
             }
         }
-        void EditFromTable(int q)
+        async void EditFromTable(int q)
         {
             try
             {
@@ -865,7 +863,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                     BringTofront(false);
                     return;
                 }
-                _product = salesRepository.GetProductBarCode(DgvِProducts.CurrentRow.Cells[6].Value.ToString());
+                _product = _salesRepository.GetProductBarCode(DgvِProducts.CurrentRow.Cells[6].Value.ToString());
                 txtProductName.Text = this.DgvِProducts.CurrentRow.Cells[0].Value.ToString();
                 if (ConvertToFloat(DgvِProducts.CurrentRow.Cells[2].Value.ToString()) + q > 1)
                     txtQty.Text = (ConvertToFloat(DgvِProducts.CurrentRow.Cells[2].Value.ToString()) + q).ToString();
@@ -1023,8 +1021,10 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         private void btnSearchImage_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            SelectProductsForm selectProductsForm = SelectProductsForm.Instance(_posForm, true);
-            selectProductsForm.Show();
+
+            SelectProductsForm selectProductsForm = _controlManager.GetF<SelectProductsForm>();
+            selectProductsForm.SetPos();
+            selectProductsForm.ShowDialog();
         }
         Sale SetSale()
         {
@@ -1249,18 +1249,18 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             var amountToDeposit = Math.Min(paidAmount, totalAmount);
             _context.Update(SetCaisse(amountToDeposit));
             if (amountToDeposit > 0)
-                await _context.AddAsync(SetCaisseDeposit(amountToDeposit));
+                _context.Add(SetCaisseDeposit(amountToDeposit));
         }
         private int saleID;
         async Task PayNowAsync(bool facture)
         {
-            _context = new ApplicationDbContext();
+
             if (DgvِProducts.Rows.Count > 0 && rbSale.Checked)
             {
                 if (IdCustomer.Text != Properties.Settings.Default.IdCustomerSale)
                 {
-                    AddPaymentForm addPaymentForm = new(_posForm, 3);
-                    addPaymentForm.LoadData(TotalFacture.ToString(), TotalFacture.ToString(), "0");
+                    AddPaymentForm addPaymentForm = _controlManager.GetF<AddPaymentForm>();
+                    addPaymentForm.LoadData(TotalFacture.ToString(), TotalFacture.ToString(), "0", 3);
                     addPaymentForm.ShowDialog();
                     var customer = _context.Customers.FirstOrDefault(x => x.Id.ToString() == IdCustomer.Text);
                     if (customer.MaxDebtAllowed <= customer.TotalDebts + Remain && Remain > 0)
@@ -1342,24 +1342,24 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                                 {
                                     if (Properties.Settings.Default.PrintSaleFactureType8cm)
                                     {
-                                        Reports.sale8cm sale8Cm = new();
+                                        Reports.sale8cm sale8Cm = _controlManager.GetR<Reports.sale8cm>();
                                         sale8Cm.DataSource = saleDetailsTable;
 
                                         // Force print to the specified printer
                                         var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(sale8Cm);
                                         printTool.PrinterSettings.PrinterName = printername;
-                                        printTool.Print(printername);
+                                        await printTool.PrintAsync(printername);
                                     }
                                     else
                                     {
-                                        Reports.SalesReports.salesA4 salesA4 = new();
+                                        Reports.SalesReports.salesA4 salesA4 = _controlManager.GetR<Reports.SalesReports.salesA4>();
                                         salesA4.DataSource = saleDetailsTable;
                                         printername = Properties.Settings.Default.PrinterA4;
 
                                         // Force print to the specified printer
                                         var printTool = new DevExpress.XtraReports.UI.ReportPrintTool(salesA4);
                                         printTool.PrinterSettings.PrinterName = printername;
-                                        printTool.Print(printername);
+                                        await printTool.PrintAsync(printername);
                                     }
                                 }
                             //XtraForm1 xtraForm11 = new(sale8Cm);
@@ -1385,24 +1385,24 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                     {
                         var refund = SetRefundSale();
                         _context.Add(refund);
-                        await _context.SaveChangesAsync();
+                        _context.SaveChanges();
 
                         for (int i = 0; i < DgvِProducts.Rows.Count; i++)
                         {
                             var refundSaleDetail = SetRefundSaleDetail(i);
                             refundSaleDetail.Order_ID = refund.Id;
-                            _context.ReturnsDetails.Add(refundSaleDetail);
+                            await _context.ReturnsDetails.AddAsync(refundSaleDetail);
 
-                            var product = await SetProductRefund(i, DgvِProducts.Rows[i].Cells[5].Value.ToString(), _context);
+                            var product = SetProductRefund(i, DgvِProducts.Rows[i].Cells[5].Value.ToString(), _context);
                             _context.Update(product);
 
                             //_context.Update(SetProductRefund(i, DgvِProducts.Rows[i].Cells[5].Value.ToString()));
-                            await SetProductQuantityAsync(i, _context);
+                            SetProductQuantityAsync(i, _context);
                         }
                         await _context.SaveChangesAsync();
 
 
-                        await SetCaisseSaleRefund(TotalFacture, _context);
+                        SetCaisseSaleRefund(TotalFacture, _context);
                         _context.CaissesWithdraws.Add(SetCaisseWithdraw(TotalFacture, _context));
                         await _context.SaveChangesAsync();
 
@@ -1440,16 +1440,16 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         //    }
         //    await context.SaveChangesAsync();
         //}
-        async Task<Caisse> SetCaisseSaleRefund(decimal value, ApplicationDbContext context)
+        Caisse SetCaisseSaleRefund(decimal value, ApplicationDbContext context)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
 
-            Caisse caisse = await context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefaultAsync();
+            Caisse caisse = context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefault();
             if (caisse is not null)
             {
                 caisse.MoneyinCaisse -= value;
                 context.Caisses.Update(caisse);
-                await context.SaveChangesAsync();
+                context.SaveChanges();
             }
             return caisse;
 
@@ -1466,14 +1466,14 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 Date = DateTime.Now,
                 Name = $" ({Properties.Settings.Default.UserName})  العميل ({lblCustomerName.Text}) بحساب ",
                 Money = value,
-                Reason = $"ارجاع المنتوجات للمخزن ({context.Stores.FirstOrDefault(x => x.Id == Properties.Settings.Default.FastSaleStore).StoreName}) واعادة الاموال للعميل",
+                Reason = $"ارجاع المنتوجات للمخزن ({(context.Stores.FirstOrDefault(x => x.Id == Properties.Settings.Default.FastSaleStore)).StoreName}) واعادة الاموال للعميل",
                 Type = "سحب عن طريق ارجاع المنتوجات للمخزن وارجاع الاموال لصاحبها"
             };
 
             return caisseWithdraw;
 
         }
-        private async Task SetProductQuantityAsync(int rowIndex, ApplicationDbContext context)
+        private void SetProductQuantityAsync(int rowIndex, ApplicationDbContext context)
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
@@ -1494,15 +1494,15 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                     throw new InvalidOperationException("Invalid quantity value.");
                 ProductsQuantitie productQuantity = new();
 
-                var productQty = await
+                var productQty =
                      context.ProductsQuantities.Where(x => x.Pro_ID == Convert.ToInt32(productId)).OrderBy(x => x.Id)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefault();
                 if (productQty is not null)
                 {
 
                     productQty.Qty += quantity;
                     context.Update(productQty);
-                    await context.SaveChangesAsync();
+                    context.SaveChanges();
 
 
                 }
@@ -1550,48 +1550,12 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 throw; // Re-throw the exception to propagate it up the call stack
             }
         }
-        ProductsQuantitie SetProductQuentityRefund(int i, ApplicationDbContext context)
-        {
-            //dgvProducts.Rows[i].Cells[0].Value.ToString()
-            ProductsQuantitie productQty = new();
 
-            var lis = context.ProductsQuantities.Where(x => x.Id == Convert.ToInt32(DgvِProducts.Rows[i].Cells[5].Value.ToString())).ToList();
-            decimal removeQty = ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
-            if (lis.Count > 0)
-            {
-                productQty = lis.Last();
-
-                if (productQty is not null)
-                {
-                    productQty.Qty += removeQty;
-                    context.Update(productQty);
-                    context.SaveChanges();
-                }
-            }
-            else
-            {
-                ProductsQuantitie productsQuantitie = new();
-                productsQuantitie.Store_ID = Properties.Settings.Default.FastSaleStore;
-                productsQuantitie.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[5].Value.ToString());
-                productsQuantitie.StoreName = context.Stores.FirstOrDefault(x => x.Id == Properties.Settings.Default.FastSaleStore).StoreName;
-                productsQuantitie.Qty = removeQty;
-                productsQuantitie.Buy_Price = context.Products.FirstOrDefault(x => x.Id == Convert.ToInt32(DgvِProducts.Rows[i].Cells[5].Value.ToString())).BuyPrice;
-                productsQuantitie.Sale_PriceTax = ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
-                productsQuantitie.DateExpiration = context.Products.FirstOrDefault(x => x.Id == Convert.ToInt32(DgvِProducts.Rows[i].Cells[5].Value.ToString())).DateExperation;
-                context.Add(productQty);
-                context.SaveChanges();
-
-                return productQty;
-
-            }
-
-            return productQty;
-        }
-        async Task<Product> SetProductRefund(int i, string idprod, ApplicationDbContext context)
+        Product SetProductRefund(int i, string idprod, ApplicationDbContext context)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
 
-            Product product = await context.Products.FirstOrDefaultAsync(x => x.Id.ToString() == idprod);
+            Product product = context.Products.FirstOrDefault(x => x.Id.ToString() == idprod);
             if (product is not null)
             {
                 var qty = ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
@@ -1667,8 +1631,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         private void btnChoseCustomer_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            SelectCustomerForm SelectCustomerForm = SelectCustomerForm.Instance(_posForm);
-            SelectCustomerForm.Show();
+            SelectCustomerForm SelectCustomerForm = _controlManager.GetF<SelectCustomerForm>();
+            SelectCustomerForm.ShowDialog();
         }
 
         private async void button1_Click(object sender, EventArgs e)
@@ -1727,7 +1691,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             }
         }
 
-        private void txtTotalSaleProduct_KeyDown(object sender, KeyEventArgs e)
+        private async void txtTotalSaleProduct_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {

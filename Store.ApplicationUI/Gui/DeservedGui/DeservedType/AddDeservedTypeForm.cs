@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.AllDeserved;
@@ -8,38 +9,26 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 {
     public partial class AddDeservedTypeForm : Form
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext _context;
-        private static AddDeservedTypeForm _addDeservedTypeForm;
-        public AddDeservedTypeForm(MainForm main)
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+
+
+        public AddDeservedTypeForm(MainForm main, ApplicationDbContext context)
         {
             InitializeComponent();
+
             _main = main;
-            _context = new ApplicationDbContext();
             this.Owner = _main;
+            _context = context;
             LoadData();
+
         }
-        public static AddDeservedTypeForm Instance(MainForm main)
-        {
-            _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            if (_addDeservedTypeForm == null)
-            {
-                _context = new ApplicationDbContext();
 
-                _addDeservedTypeForm = new AddDeservedTypeForm(_main);
-
-            }
-
-            // Return the singleton instance
-
-            return _addDeservedTypeForm;
-        }
-        public void SetCategoryToDgv()
+        public async void SetCategoryToDgv()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            DgvTypes.DataSource = _context.DeservedsTypes
-                .ToList();
+            DgvTypes.DataSource = await _context.DeservedsTypes
+                .ToListAsync();
             lblCategoryId.Text = (_context.DeservedsTypes.Count() + 1).ToString();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvTypes);
         }
@@ -47,10 +36,10 @@ namespace Store.ApplicationUI.Gui.DeservedGui
         {
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => _context.Database.CanConnect()))
+            if (await _context.Database.CanConnectAsync())
             {
-                SetCategoryToDgv();
                 SetColumns();
+                SetCategoryToDgv();
 
             }
             else
@@ -74,6 +63,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
         private void SetColumns()
         {
             //DgvProducts.Columns[0].HeaderCell.Value = "المعرف";
+            DgvTypes.DataSource = new List<DeservedType>();
             DgvTypes.Columns[1].HeaderCell.Value = "معرف النوع";
             DgvTypes.Columns[0].HeaderCell.Value = "اسم النوع";
 
@@ -115,7 +105,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
                 if (MsgHelper.ShowEditDialog())
                 {
-                    DeservedType DeservedType = _context.DeservedsTypes.FirstOrDefault(x => x.Id ==
+                    DeservedType DeservedType = await _context.DeservedsTypes.FirstOrDefaultAsync(x => x.Id ==
                     Convert.ToInt32(DgvTypes.CurrentRow.Cells[1].Value.ToString())
                     );
                     if (DeservedType != null)
@@ -145,7 +135,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
                 ToasterHelper.PlayNotificationSound();
                 if (MsgHelper.ShowDeleteDialog())
                 {
-                    var type = _context.DeservedsTypes.FirstOrDefault
+                    var type = await _context.DeservedsTypes.FirstOrDefaultAsync
                         (x => x.Id == Convert.ToInt32(DgvTypes.CurrentRow.Cells[1].Value.ToString()));
                     _context.DeservedsTypes.Remove(type);
                     await _context.SaveChangesAsync();
@@ -161,12 +151,12 @@ namespace Store.ApplicationUI.Gui.DeservedGui
             RefreshDgv();
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
 
-            DgvTypes.DataSource = _context.DeservedsTypes.Where(x => x.Id.ToString() == txtSearch.Text ||
-           x.Description.Contains(txtSearch.Text)).ToList();
+            DgvTypes.DataSource = await _context.DeservedsTypes.Where(x => x.Id.ToString() == txtSearch.Text ||
+           x.Description.Contains(txtSearch.Text)).ToListAsync();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvTypes);
             txtSearch.Text = string.Empty;
         }

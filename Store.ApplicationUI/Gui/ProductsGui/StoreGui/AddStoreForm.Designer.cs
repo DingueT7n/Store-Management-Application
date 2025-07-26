@@ -314,6 +314,7 @@
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "اضافة/تعديل مخزن ";
+            Load += AddStoreForm_Load;
             OperationsflowLayoutPanel.ResumeLayout(false);
             OperationsflowLayoutPanel.PerformLayout();
             GbInfoCategory.ResumeLayout(false);

@@ -1,56 +1,35 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿
+using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Entities.Products;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
 {
     public partial class ProductDiscountUserControl : UserControl
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext _contex;
-        private static AddProductDiscountForm _Form;
-        public static ProductDiscountRepository? _Repository;
+        private readonly MainForm _main;
 
 
-        private static ProductDiscountUserControl? _UserControl;
+        private readonly ApplicationDbContext _context;
+        public readonly IProductDiscountRepository _Repository;
+        private readonly ControlManager _controlManager;
 
-        public ProductDiscountUserControl()
+        public ProductDiscountUserControl(MainForm main, IProductDiscountRepository productDiscountRepository, ControlManager controlManager, ApplicationDbContext context)
         {
             InitializeComponent();
-        }
-        public static bool CheckInstance()
-        {
-            return _UserControl == null;
-        }
-        public static bool RefreshInstance()
-        {
-            if (_UserControl == null)
-                return _UserControl == null;
-            else
-            {
-                _UserControl.LoadData();
-                return _UserControl == null;
 
-            }
 
-        }
-        public static ProductDiscountUserControl Instance(MainForm main)
-        {
             _main = main;
-            _contex = new ApplicationDbContext();
-            // If the instance is null, create a new one and assign it to the static field
-            if (CheckInstance())
-            {
-                _Repository = new ProductDiscountRepository(_contex);
-                _UserControl = new ProductDiscountUserControl();
-
-            }
-
-            // Return the singleton instance
-            _UserControl.LoadData();
-            return _UserControl;
+            _Repository = productDiscountRepository;
+            _controlManager = controlManager;
+            _context = context;
         }
+
+
         public async void SetProductsToDgv(int type)
         {
             ////DgvSales.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
@@ -61,12 +40,12 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
 
             if (type == 0)
             {
-                var data = _Repository.GetAllData(dtpFrom.Value, dtpTo.Value, searchitem, cmbStores.Text);
+                var data = await _Repository.GetAllData(dtpFrom.Value, dtpTo.Value, searchitem, cmbStores.Text);
                 DgvSales.DataSource = data;
             }
             else
             {
-                var data = _Repository.GetAllData(dtpFrom.Value, dtpTo.Value, searchitem, "");
+                var data = await _Repository.GetAllData(dtpFrom.Value, dtpTo.Value, searchitem, "");
                 DgvSales.DataSource = data;
             }
 
@@ -75,6 +54,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
         }
         void RefreshDgv()
         {
+            SetColumns();
             if (rbStoreAll.Checked)
             {
                 SetProductsToDgv(0);
@@ -83,7 +63,6 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
             {
                 SetProductsToDgv(1);
             }
-            SetColumns();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
         }
         public async void LoadData()
@@ -92,12 +71,12 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => _Repository.IsConnected()))
+            if (await _Repository.IsConnectedAsync())
             {
                 //Start Load Data
 
                 // if its an admin or Normal user 
-                cmbStores.DataSource = _contex.Stores.ToList();
+                cmbStores.DataSource = await _context.Stores.ToListAsync();
                 cmbStores.DisplayMember = "StoreName";
                 cmbStores.ValueMember = "Id";
                 RefreshDgv();
@@ -123,7 +102,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
         {
             //DgvSales.Columns[0].HeaderCell.Value = "المعرف"; ""    
 
-
+            DgvSales.DataSource = new List<ProductDiscount>();
 
             DgvSales.Columns[0].HeaderCell.Value = "معرف المنتج";
             DgvSales.Columns[1].HeaderCell.Value = "معرف المخزن";
@@ -169,15 +148,14 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
 
         private void btnAddDiscount_Click(object sender, EventArgs e)
         {
-            if (_Form == null || _Form.IsDisposed)
-            {
-                _Form = AddProductDiscountForm.Instance(_main);
-                _Form.Show();
-            }
-            else
-            {
-                _Form.Focus();
-            }
+
+            //_Form =_contr AddProductDiscountForm.Instance(_main);
+            //_Form.ShowDialog();
+
+            var form = _controlManager.GetF<AddProductDiscountForm>();
+            form.ShowDialog();
+
+
         }
 
         private void rbSelectedStore_CheckedChanged(object sender, EventArgs e)
@@ -199,7 +177,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
             RefreshDgv();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
             try
             {
@@ -207,13 +185,13 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
                 {
                     if (MsgHelper.ShowDeleteDialog())
                     {
-                        _contex = new ApplicationDbContext();
-                        var deleteedRefund = _contex.ProductDiscounts.Where(x => x.Id ==
-                        Convert.ToInt32(DgvSales.CurrentRow.Cells[10].Value.ToString())).FirstOrDefault();
+
+                        var deleteedRefund = await _context.ProductDiscounts.Where(x => x.Id ==
+                        Convert.ToInt32(DgvSales.CurrentRow.Cells[10].Value.ToString())).FirstOrDefaultAsync();
                         if (deleteedRefund != null)
                         {
-                            _contex.Remove(deleteedRefund);
-                            _contex.SaveChanges();
+                            _context.Remove(deleteedRefund);
+                            await _context.SaveChangesAsync();
                             Code.Helper.ToasterHelper.ShowDeletedToast();
 
                         }

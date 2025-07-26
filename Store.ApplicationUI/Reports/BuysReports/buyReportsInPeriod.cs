@@ -5,12 +5,13 @@ namespace Store.ApplicationUI.Reports.BuysReports
 {
     public partial class buyReportsInPeriod : DevExpress.XtraReports.UI.XtraReport
     {
-        ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public buyReportsInPeriod()
+        public buyReportsInPeriod(ApplicationDbContext context)
         {
-            InitializeComponent(); _context = new ApplicationDbContext();
+            InitializeComponent();
 
+            _context = context;
             InitialElements();
         }
         void InitialElements()

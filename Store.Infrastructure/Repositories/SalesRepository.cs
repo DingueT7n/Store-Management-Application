@@ -59,12 +59,12 @@ namespace Store.Infrastructure.Repositories
             }
 
         }
-        public ResultSaleDetailDto GetAllSalesWithDetails(int take, int skip)
+        public async Task<ResultSaleDetailDto> GetAllSalesWithDetails(int take, int skip)
         {
 
             try
             {
-                var lastBuy = _context.SalesDetails
+                var lastBuy = await _context.SalesDetails
                     .OrderByDescending(x => x.Sale.Id)
                     .Include(x => x.Sale)
                     .Include(x => x.Product)
@@ -87,13 +87,13 @@ namespace Store.Infrastructure.Repositories
                         TotalPrice = bd.Total,
                         Discount = bd.Discount,
                     })
-                    .ToList();
+                    .ToListAsync();
                 return new ResultSaleDetailDto
                 {
                     result = lastBuy,
-                    count = _context.SalesDetails.Include(x => x.Sale)
+                    count = await _context.SalesDetails.Include(x => x.Sale)
                     .Include(x => x.Product)
-                    .Include(x => x.Customer).Count()
+                    .Include(x => x.Customer).CountAsync()
                 };
             }
             catch (Exception ex)
@@ -103,7 +103,7 @@ namespace Store.Infrastructure.Repositories
             }
 
         }
-        public ResultSaleDetailDto SearchBoth(string searchItem, DateTime fromDate, DateTime toDate, int take, int skip)
+        public async Task<ResultSaleDetailDto> SearchBoth(string searchItem, DateTime fromDate, DateTime toDate, int take, int skip)
         {
             try
             {
@@ -122,7 +122,7 @@ namespace Store.Infrastructure.Repositories
                         bd.Order_ID.ToString() == searchItem);
 
                 // Get the result list with pagination
-                var saleDetails = query
+                var saleDetails = await query
                     .OrderByDescending(bd => bd.Sale.Id)
                     .Skip(skip)
                     .Take(take)
@@ -142,10 +142,10 @@ namespace Store.Infrastructure.Repositories
                         TotalPrice = bd.Total,
                         Discount = bd.Discount,
                     })
-                    .ToList();
+                    .ToListAsync();
 
                 // Get the total count of matching records (without pagination)
-                var totalCount = query.Count();
+                var totalCount = await query.CountAsync();
 
                 return new ResultSaleDetailDto
                 {
@@ -159,7 +159,7 @@ namespace Store.Infrastructure.Repositories
                 throw new Exception("Error retrieving the buy details", ex);
             }
         }
-        public ResultSaleDetailDto SearchSalesByDate(DateTime fromDate, DateTime toDate, int take, int skip)
+        public async Task<ResultSaleDetailDto> SearchSalesByDate(DateTime fromDate, DateTime toDate, int take, int skip)
         {
             try
             {
@@ -177,7 +177,7 @@ namespace Store.Infrastructure.Repositories
                     .Take(take);
 
                 // Project the result to DTO
-                var saleDetails = salesDetailsQuery
+                var saleDetails = await salesDetailsQuery
                     .Select(bd => new SaleDetailDto
                     {
                         Order_ID = bd.Order_ID,
@@ -194,12 +194,12 @@ namespace Store.Infrastructure.Repositories
                         TotalPrice = bd.Total,
                         Discount = bd.Discount,
                     })
-                    .ToList();
+                    .ToListAsync();
 
                 // Get total count of records for the date range (without pagination)
-                var totalCount = _context.SalesDetails
+                var totalCount = await _context.SalesDetails
                     .Where(bd => fromDate <= bd.Sale.Date && bd.Sale.Date <= toDate)
-                    .Count();
+                    .CountAsync();
 
                 return new ResultSaleDetailDto
                 {
@@ -218,7 +218,7 @@ namespace Store.Infrastructure.Repositories
                 throw new Exception("Error retrieving the Sale details", ex);
             }
         }
-        public ResultSaleDetailDto SearchOnlySupplier(string searchItem, int take, int skip)
+        public async Task<ResultSaleDetailDto> SearchOnlySupplier(string searchItem, int take, int skip)
         {
             try
             {
@@ -235,7 +235,7 @@ namespace Store.Infrastructure.Repositories
                         bd.Order_ID.ToString() == searchItem);
 
                 // Get the result list with pagination
-                var saleDetails = query
+                var saleDetails = await query
                     .OrderByDescending(bd => bd.Sale.Id)
                     .Skip(skip)
                     .Take(take)
@@ -255,10 +255,10 @@ namespace Store.Infrastructure.Repositories
                         TotalPrice = bd.Total,
                         Discount = bd.Discount,
                     })
-                    .ToList();
+                    .ToListAsync();
 
                 // Get the total count of matching records (without pagination)
-                var totalCount = query.Count();
+                var totalCount = await query.CountAsync();
 
                 return new ResultSaleDetailDto
                 {
@@ -284,16 +284,16 @@ namespace Store.Infrastructure.Repositories
         public SaleProfitRepository(ApplicationDbContext context) : base(context)
         {
         }
-        public SaleProfitDtoReturned GetAllProfit(int take, int skip)
+        public async Task<SaleProfitDtoReturned> GetAllProfit(int take, int skip)
         {
             try
             {
                 return new SaleProfitDtoReturned
                 {
-                    Result = _context.SalesProfits
+                    Result = await _context.SalesProfits
                     .Include(bd => bd.Sale)
                     .Include(bd => bd.Product)
-                    .AsEnumerable()
+
                     //.Where(bd =>
                     //    bd.Customer.CustomerName.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
                     //    bd.Order_ID.ToString() == searchItem)
@@ -320,9 +320,9 @@ namespace Store.Infrastructure.Repositories
                         date = bd.Sale.Date,
                         Sallesman = bd.Sale.User_Name,
                     })
-                    .ToList(),
-                    Count = _context.SalesProfits.Include(bd => bd.Sale)
-                    .Include(bd => bd.Product).Count()
+                    .ToListAsync(),
+                    Count = await _context.SalesProfits.Include(bd => bd.Sale)
+                    .Include(bd => bd.Product).CountAsync()
                 };
             }
             catch (Exception ex)
@@ -331,7 +331,7 @@ namespace Store.Infrastructure.Repositories
                 throw new Exception("Error retrieving the saleProfit", ex);
             }
         }
-        public SaleProfitDtoReturned SearchBoth(string searchItem, DateTime fromDate, DateTime toDate, int take, int skip)
+        public async Task<SaleProfitDtoReturned> SearchBoth(string searchItem, DateTime fromDate, DateTime toDate, int take, int skip)
         {
             try
             {
@@ -342,7 +342,7 @@ namespace Store.Infrastructure.Repositories
                     .Include(bd => bd.Product)
 
                     .Where(bd => fromDate <= bd.Sale.Date && bd.Sale.Date <= toDate)
-                    .AsEnumerable()
+
                     .Where(bd =>
                         bd.Sale.Customer.CustomerName.ToLower().Contains(searchItem.ToLower()) ||
                         bd.Product.ProductName.ToLower().Contains(searchItem.ToLower()) ||
@@ -350,7 +350,7 @@ namespace Store.Infrastructure.Repositories
                         bd.Order_ID.ToString() == searchItem)
                     .OrderByDescending(bd => bd.Sale.Id);
 
-                var result = query
+                var result = await query
                       .Skip(skip)
                     .Take(take)
                     .Select(bd => new SaleProfitDto
@@ -374,14 +374,14 @@ namespace Store.Infrastructure.Repositories
                         date = bd.Sale.Date,
                         Sallesman = bd.Sale.User_Name,
                     })
-                .ToList();
+                .ToListAsync();
 
                 return new SaleProfitDtoReturned
                 {
 
                     Result = result
                 ,
-                    Count = query.Count()
+                    Count = await query.CountAsync()
                 };
             }
             catch (Exception ex)
@@ -389,13 +389,13 @@ namespace Store.Infrastructure.Repositories
                 throw new Exception("Error retrieving the buy details", ex);
             }
         }
-        public SaleProfitDtoReturned SearchSalesByDate(DateTime fromDate, DateTime toDate, int take, int skip)
+        public async Task<SaleProfitDtoReturned> SearchSalesByDate(DateTime fromDate, DateTime toDate, int take, int skip)
         {
             try
             {
                 return new SaleProfitDtoReturned
                 {
-                    Result = _context.SalesProfits
+                    Result = await _context.SalesProfits
                     .Include(x => x.Sale)
                     .Include(x => x.Product)
 
@@ -424,11 +424,11 @@ namespace Store.Infrastructure.Repositories
                         date = bd.Sale.Date,
                         Sallesman = bd.Sale.User_Name,
                     })
-                    .ToList(),
-                    Count = _context.SalesProfits.Include(x => x.Sale)
+                    .ToListAsync(),
+                    Count = await _context.SalesProfits.Include(x => x.Sale)
                     .Include(x => x.Product)
 
-                    .Where(bd => fromDate <= bd.Sale.Date && bd.Sale.Date <= toDate).Count()
+                    .Where(bd => fromDate <= bd.Sale.Date && bd.Sale.Date <= toDate).CountAsync()
                 };
             }
             catch (Exception ex)
@@ -437,16 +437,16 @@ namespace Store.Infrastructure.Repositories
                 throw new Exception("Error retrieving the Sale details", ex);
             }
         }
-        public SaleProfitDtoReturned SearchOnlyNames(string searchItem, int take, int skip)
+        public async Task<SaleProfitDtoReturned> SearchOnlyNames(string searchItem, int take, int skip)
         {
             try
             {
                 return new SaleProfitDtoReturned
                 {
-                    Result = _context.SalesProfits
+                    Result = await _context.SalesProfits
                     .Include(bd => bd.Sale)
                     .Include(bd => bd.Product)
-                    .AsEnumerable()  // Forces client-side evaluation for case-insensitive search
+                    // Forces client-side evaluation for case-insensitive search
                     .Where(bd =>
                          bd.Sale.Customer.CustomerName.ToLower().Contains(searchItem.ToLower()) ||
                         bd.Product.ProductName.ToLower().Contains(searchItem.ToLower()) ||  // Client-side case-insensitive search
@@ -475,12 +475,12 @@ namespace Store.Infrastructure.Repositories
                         date = bd.Sale.Date,
                         Sallesman = bd.Sale.User_Name,
                     })
-                    .ToList(),
-                    Count = _context.SalesProfits
+                    .ToListAsync(),
+                    Count = await _context.SalesProfits
                     .Where(bd =>
                          bd.Sale.Customer.CustomerName.ToLower().Contains(searchItem.ToLower()) ||
                         bd.Product.ProductName.ToLower().Contains(searchItem.ToLower()) ||  // Client-side case-insensitive search
-                        bd.Order_ID.ToString() == searchItem).Count()
+                        bd.Order_ID.ToString() == searchItem).CountAsync()
                 };
             }
             catch (Exception ex)

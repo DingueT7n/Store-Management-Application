@@ -712,6 +712,7 @@
             tiltUsersManagment.BackgroundImage = (Image)resources.GetObject("tiltUsersManagment.BackgroundImage");
             tiltUsersManagment.BackgroundImageAlignment = DevExpress.XtraEditors.TileItemContentAlignment.TopCenter;
             tiltUsersManagment.BackgroundImageScaleMode = DevExpress.XtraEditors.TileItemImageScaleMode.NoScale;
+            tiltUsersManagment.CurrentFrameIndex = 1;
             tileItemElement1.Text = "صلاحيات المستخدمين F4";
             tileItemElement1.TextAlignment = DevExpress.XtraEditors.TileItemContentAlignment.BottomCenter;
             tiltUsersManagment.Elements.Add(tileItemElement1);
@@ -792,6 +793,7 @@
             tiltSuppAccount.BackgroundImage = (Image)resources.GetObject("tiltSuppAccount.BackgroundImage");
             tiltSuppAccount.BackgroundImageAlignment = DevExpress.XtraEditors.TileItemContentAlignment.TopCenter;
             tiltSuppAccount.BackgroundImageScaleMode = DevExpress.XtraEditors.TileItemImageScaleMode.NoScale;
+            tiltSuppAccount.CurrentFrameIndex = 1;
             tileItemElement5.Text = "حسابات الموردين";
             tileItemElement5.TextAlignment = DevExpress.XtraEditors.TileItemContentAlignment.BottomCenter;
             tiltSuppAccount.Elements.Add(tileItemElement5);
@@ -856,6 +858,7 @@
             tiltAddProduct.BackgroundImage = (Image)resources.GetObject("tiltAddProduct.BackgroundImage");
             tiltAddProduct.BackgroundImageAlignment = DevExpress.XtraEditors.TileItemContentAlignment.TopCenter;
             tiltAddProduct.BackgroundImageScaleMode = DevExpress.XtraEditors.TileItemImageScaleMode.StretchHorizontal;
+            tiltAddProduct.CurrentFrameIndex = 1;
             tileItemElement9.Text = "اضافة المنتجات F5";
             tileItemElement9.TextAlignment = DevExpress.XtraEditors.TileItemContentAlignment.BottomCenter;
             tiltAddProduct.Elements.Add(tileItemElement9);
@@ -938,6 +941,7 @@
             tiltCustomersAccount.BackgroundImage = (Image)resources.GetObject("tiltCustomersAccount.BackgroundImage");
             tiltCustomersAccount.BackgroundImageAlignment = DevExpress.XtraEditors.TileItemContentAlignment.TopCenter;
             tiltCustomersAccount.BackgroundImageScaleMode = DevExpress.XtraEditors.TileItemImageScaleMode.NoScale;
+            tiltCustomersAccount.CurrentFrameIndex = 1;
             tileItemElement13.Text = "حسابات العملاء";
             tileItemElement13.TextAlignment = DevExpress.XtraEditors.TileItemContentAlignment.BottomCenter;
             tiltCustomersAccount.Elements.Add(tileItemElement13);
@@ -1028,6 +1032,7 @@
             tiltBuys.BackgroundImage = (Image)resources.GetObject("tiltBuys.BackgroundImage");
             tiltBuys.BackgroundImageAlignment = DevExpress.XtraEditors.TileItemContentAlignment.TopCenter;
             tiltBuys.BackgroundImageScaleMode = DevExpress.XtraEditors.TileItemImageScaleMode.NoScale;
+            tiltBuys.CurrentFrameIndex = 1;
             tileItemElement17.Text = "ادارة المشتريات F1";
             tileItemElement17.TextAlignment = DevExpress.XtraEditors.TileItemContentAlignment.BottomCenter;
             tiltBuys.Elements.Add(tileItemElement17);
@@ -1112,6 +1117,7 @@
             tiltSales.BackgroundImage = (Image)resources.GetObject("tiltSales.BackgroundImage");
             tiltSales.BackgroundImageAlignment = DevExpress.XtraEditors.TileItemContentAlignment.TopCenter;
             tiltSales.BackgroundImageScaleMode = DevExpress.XtraEditors.TileItemImageScaleMode.NoScale;
+            tiltSales.CurrentFrameIndex = 1;
             tileItemElement21.Text = "ادارة المبيعات F2";
             tileItemElement21.TextAlignment = DevExpress.XtraEditors.TileItemContentAlignment.BottomCenter;
             tiltSales.Elements.Add(tileItemElement21);
@@ -1203,6 +1209,7 @@
             tiltCaisse.AppearanceItem.Selected.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
             tiltCaisse.BackgroundImage = (Image)resources.GetObject("tiltCaisse.BackgroundImage");
             tiltCaisse.BackgroundImageAlignment = DevExpress.XtraEditors.TileItemContentAlignment.TopCenter;
+            tiltCaisse.CurrentFrameIndex = 1;
             tileItemElement25.Text = "رصيد الصناديق";
             tileItemElement25.TextAlignment = DevExpress.XtraEditors.TileItemContentAlignment.BottomCenter;
             tiltCaisse.Elements.Add(tileItemElement25);
@@ -1287,6 +1294,7 @@
             tiltStatistiocs.BackgroundImage = (Image)resources.GetObject("tiltStatistiocs.BackgroundImage");
             tiltStatistiocs.BackgroundImageAlignment = DevExpress.XtraEditors.TileItemContentAlignment.TopCenter;
             tiltStatistiocs.BackgroundImageScaleMode = DevExpress.XtraEditors.TileItemImageScaleMode.NoScale;
+            tiltStatistiocs.CurrentFrameIndex = 1;
             tileItemElement29.Text = "الاحصائيات F10";
             tileItemElement29.TextAlignment = DevExpress.XtraEditors.TileItemContentAlignment.BottomCenter;
             tiltStatistiocs.Elements.Add(tileItemElement29);
@@ -1370,6 +1378,7 @@
             tiltReturns.AppearanceItem.Selected.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
             tiltReturns.BackgroundImage = (Image)resources.GetObject("tiltReturns.BackgroundImage");
             tiltReturns.BackgroundImageAlignment = DevExpress.XtraEditors.TileItemContentAlignment.TopCenter;
+            tiltReturns.CurrentFrameIndex = 1;
             tileItemElement33.Text = "المرتجعات";
             tileItemElement33.TextAlignment = DevExpress.XtraEditors.TileItemContentAlignment.BottomCenter;
             tiltReturns.Elements.Add(tileItemElement33);
@@ -1453,6 +1462,7 @@
             tiltPos.AppearanceItem.Selected.TextOptions.WordWrap = DevExpress.Utils.WordWrap.NoWrap;
             tiltPos.BackgroundImage = (Image)resources.GetObject("tiltPos.BackgroundImage");
             tiltPos.BackgroundImageAlignment = DevExpress.XtraEditors.TileItemContentAlignment.TopCenter;
+            tiltPos.CurrentFrameIndex = 1;
             tileItemElement37.Text = "شاشة البيع السريع F12";
             tileItemElement37.TextAlignment = DevExpress.XtraEditors.TileItemContentAlignment.BottomCenter;
             tiltPos.Elements.Add(tileItemElement37);
@@ -1512,6 +1522,7 @@
             Name = "HomeUserControl";
             RightToLeft = RightToLeft.Yes;
             Size = new Size(1034, 681);
+            Load += HomeUserControl_Load;
             KeyDown += HomeUserControl_KeyDown;
             SummrayPanel1.ResumeLayout(false);
             SummrayPanel1.PerformLayout();

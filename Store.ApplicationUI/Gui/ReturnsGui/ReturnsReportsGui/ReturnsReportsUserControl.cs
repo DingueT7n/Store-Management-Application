@@ -1,41 +1,25 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.ReturnsGui.ReturnsReportsGui
 {
     public partial class ReturnsReportsUserControl : UserControl
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext _contex;
-        public static ReturnsRepository? returnRepository;
-        private static ReturnsReportsUserControl? _returnReportsUserControl;
-        public ReturnsReportsUserControl()
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+        public readonly IReturnsRepository returnRepository;
+
+        public ReturnsReportsUserControl(MainForm main, ApplicationDbContext context, IBuysRepository buysRepository, IReturnsRepository returnsRepository)
         {
             InitializeComponent();
-        }
-        public static bool CheckInstance()
-        {
-            return (_returnReportsUserControl == null);
-        }
-        public static ReturnsReportsUserControl Instance(MainForm main)
-        {
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            if (CheckInstance())
-            {
-                _contex = new ApplicationDbContext();
-                returnRepository = new ReturnsRepository(_contex);
-
-                _returnReportsUserControl = new ReturnsReportsUserControl();
-
-            }
-
-            // Return the singleton instance
-            _returnReportsUserControl.LoadData();
-            return _returnReportsUserControl;
+            _context = context;
+            returnRepository = returnsRepository;
         }
+
         public async void SetProductsToDgv(int type)
         {
             ////DgvSales.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
@@ -73,7 +57,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui.ReturnsReportsGui
             dtpTo.Value = DateTime.Now;
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => returnRepository.IsConnected()))
+            if (returnRepository.IsConnected())
             {
                 //Start Load Data
 
@@ -176,7 +160,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui.ReturnsReportsGui
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
             try
             {
@@ -185,11 +169,12 @@ namespace Store.ApplicationUI.Gui.ReturnsGui.ReturnsReportsGui
                 {
                     for (int i = 0; i < DgvSales.Rows.Count - 1; i++)
                     {
-                        var deleteedRefund = _contex.Returns.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i].Cells[0].Value.ToString())).FirstOrDefault();
+                        var deleteedRefund = await _context.Returns.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i].Cells[0].Value.ToString())).
+                            FirstOrDefaultAsync();
                         if (deleteedRefund != null)
                         {
-                            _contex.Remove(deleteedRefund);
-                            _contex.SaveChanges();
+                            _context.Remove(deleteedRefund);
+                            await _context.SaveChangesAsync();
                         }
                     }
                     Code.Helper.ToasterHelper.ShowDeletedToast();

@@ -1,58 +1,44 @@
 ﻿using System.Data;
+using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Reports.VouchersReports;
 using Store.Core.Entities.Vouchers;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
 {
     public partial class VouchersUserControl : UserControl
     {
-        private static VouchersUserControl? _vouchersUserControl;
-        private static MainForm? _main;
-        private AddVoucherForm AddVoucherForm;
+        private readonly ApplicationDbContext _context;
+        private readonly MainForm _main;
+        public IReceiptVoucherRepository _receiptVoucherRepository;
+        private readonly ControlManager _controlManager;
 
-        private static ApplicationDbContext _context;
-        public static Infrastructure.Repositories.ReceiptVoucherRepository? _receiptVoucherRepository;
-        public VouchersUserControl()
+        public VouchersUserControl(ApplicationDbContext context, MainForm main, IReceiptVoucherRepository receiptVoucherRepository, ControlManager controlManager)
         {
             InitializeComponent();
-        }
-        public static VouchersUserControl Instance(MainForm main)
-        {
+            _context = context;
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            if (_vouchersUserControl == null)
-            {
-                _context = new ApplicationDbContext();
-
-                _receiptVoucherRepository = new Infrastructure.Repositories.ReceiptVoucherRepository(_context);
-                //categoryRepository = new CategorysRepository(_context);
-                _vouchersUserControl = new VouchersUserControl();
-
-            }
-
-            // Return the singleton instance
-            _vouchersUserControl.LoadData();
-            return _vouchersUserControl;
+            _receiptVoucherRepository = receiptVoucherRepository;
+            _controlManager = controlManager;
         }
-        public static bool CheckInstance()
-        {
-            return (_vouchersUserControl == null);
-        }
+
+
         public async void SetProductsToDgv()
         {
 
-            if (rbReciptVoucher.Checked)
-                DgvProducts.DataSource = _receiptVoucherRepository.GetAllReciptVouchers();
-            else
-                DgvProducts.DataSource = _receiptVoucherRepository.GetAllSentVouchers();
             if (rbReciptVoucher.Checked)
                 SetColumnsForRecipent();
             else
                 SetColumnsForSender();
 
+            if (rbReciptVoucher.Checked)
+                DgvProducts.DataSource = await _receiptVoucherRepository.GetAllReciptVouchers();
+            else
+                DgvProducts.DataSource = await _receiptVoucherRepository.GetAllSentVouchers();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
 
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
@@ -61,11 +47,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
             //DgvProducts.DataSource = data;
         }
 
-        public static void RefreshDgv()
-        {
-            //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAllProducts());
-            _vouchersUserControl.LoadData();
-        }
+
         // methodes 
         public async void LoadData()
         {
@@ -73,7 +55,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
             dtpTo.Value = DateTime.Now;
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => _context.Database.CanConnect()))
+            if (await _context.Database.CanConnectAsync())
             {
                 //Start Load Data
 
@@ -99,6 +81,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
 
         private void SetColumnsForRecipent()
         {
+            DgvProducts.DataSource = new List<RecieptVoucher>();
             DgvProducts.Columns[0].HeaderCell.Value = "اسم المستقبل";
             DgvProducts.Columns[1].HeaderCell.Value = "المبلغ المستقبل";
             DgvProducts.Columns[2].HeaderCell.Value = "تاريخ السند";
@@ -109,6 +92,8 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
         }
         private void SetColumnsForSender()
         {
+            DgvProducts.DataSource = new List<Core.Entities.Vouchers.SendVoucher>();
+
             DgvProducts.Columns[0].HeaderCell.Value = "اسم المرسل";
             DgvProducts.Columns[1].HeaderCell.Value = "المبلغ المرسل";
             DgvProducts.Columns[2].HeaderCell.Value = "تاريخ السند";
@@ -121,7 +106,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
         private void btnAddDeserved_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            AddVoucherForm AddVoucherForm = AddVoucherForm.Instance(_main);
+            AddVoucherForm AddVoucherForm = _controlManager.GetF<AddVoucherForm>();
             AddVoucherForm.ShowDialog();
         }
 
@@ -141,7 +126,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
             {
                 if (rbReciptVoucher.Checked)
                 {
-                    ReceiptVoucher receipt = _context.ReceiptVouchers.FirstOrDefault(x => x.Id.ToString() == DgvProducts.CurrentRow.Cells[6].Value.ToString());
+                    ReceiptVoucher receipt = await _context.ReceiptVouchers.FirstOrDefaultAsync(x => x.Id.ToString() == DgvProducts.CurrentRow.Cells[6].Value.ToString());
 
                     if (receipt != null)
                         _context.Remove(receipt);
@@ -149,7 +134,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                 }
                 else
                 {
-                    Core.Entities.Vouchers.SendVoucher send = _context.SendVouchers.FirstOrDefault(x => x.Id.ToString() == DgvProducts.CurrentRow.Cells[7].Value.ToString());
+                    Core.Entities.Vouchers.SendVoucher send = await _context.SendVouchers.FirstOrDefaultAsync(x => x.Id.ToString() == DgvProducts.CurrentRow.Cells[7].Value.ToString());
 
                     if (send != null)
                         _context.Remove(send);
@@ -167,12 +152,9 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
             ToasterHelper.PlayNotificationSound();
             if (DgvProducts.Rows.Count > 0)
             {
-                if (AddVoucherForm == null || AddVoucherForm.IsDisposed)
-                {
-                    AddVoucherForm = DeservedGui.VouchersGui.AddVoucherForm.Instance(_main);
+                AddVoucherForm AddVoucherForm = _controlManager.GetF<AddVoucherForm>();
 
-
-                    AddVoucherForm.SetDataToEdit(
+                AddVoucherForm.SetDataToEdit(
                         DgvProducts.CurrentRow.Cells[0].Value.ToString(),
                         DgvProducts.CurrentRow.Cells[1].Value.ToString(),
                         DgvProducts.CurrentRow.Cells[5].Value.ToString(),
@@ -182,12 +164,9 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                         DgvProducts.CurrentRow.Cells[4].Value.ToString()
                     );
 
-                    AddVoucherForm.Show();
-                }
-                else
-                {
-                    AddVoucherForm.Focus();
-                }
+                AddVoucherForm.ShowDialog();
+
+
             }
         }
 
@@ -200,17 +179,19 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                 {
                     if (rbReciptVoucher.Checked)
                     {
-                        ReceiptVoucher receipt = _context.ReceiptVouchers.FirstOrDefault(x => x.Id.ToString() == DgvProducts.CurrentRow.Cells[6].Value.ToString());
+                        ReceiptVoucher receipt = await _context.ReceiptVouchers.FirstOrDefaultAsync(x => x.Id.ToString() == DgvProducts.CurrentRow.Cells[6].Value.ToString());
 
+                        if (receipt != null)
 
-                        _context.Remove(receipt);
+                            _context.Remove(receipt);
                     }
                     else
                     {
-                        Core.Entities.Vouchers.SendVoucher send = _context.SendVouchers.FirstOrDefault(x => x.Id.ToString() == DgvProducts.CurrentRow.Cells[7].Value.ToString());
+                        Core.Entities.Vouchers.SendVoucher send = await _context.SendVouchers.FirstOrDefaultAsync(x => x.Id.ToString() == DgvProducts.CurrentRow.Cells[7].Value.ToString());
 
+                        if (send != null)
 
-                        _context.Remove(send);
+                            _context.Remove(send);
                     }
                     await _context.SaveChangesAsync();
                     SetProductsToDgv();
@@ -271,17 +252,17 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
             }
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
             if (rbReciptVoucher.Checked)
-                DgvProducts.DataSource = _context.ReceiptVouchers.Where
+                DgvProducts.DataSource = await _context.ReceiptVouchers.Where
                     (x => x.From == txtSearch.Text || x.ReciverName == txtSearch.Text
-                    || (x.Date >= dtpFrom.Value && x.Date <= dtpTo.Value)).ToList();
+                    || (x.Date >= dtpFrom.Value && x.Date <= dtpTo.Value)).ToListAsync();
             else
-                DgvProducts.DataSource = _context.SendVouchers.Where
+                DgvProducts.DataSource = await _context.SendVouchers.Where
                     (x => x.To == txtSearch.Text || x.SenderName == txtSearch.Text
-                    || (x.Date >= dtpFrom.Value && x.Date <= dtpTo.Value)).ToList();
+                    || (x.Date >= dtpFrom.Value && x.Date <= dtpTo.Value)).ToListAsync();
             if (rbReciptVoucher.Checked)
                 SetColumnsForRecipent();
             else

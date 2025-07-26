@@ -2,52 +2,42 @@
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Buys;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
 {
     public partial class BuysReportsUserControl : UserControl
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext _context;
-        public static BuysRepository? buysRepository;
-        private static BuysReportsUserControl? _buyReportsUserControl;
-        public BuysReportsUserControl()
+
+        private readonly ApplicationDbContext _context;
+        private readonly ControlManager _controlManager;
+        public readonly IBuysRepository? buysRepository;
+        private readonly MainForm _main;
+
+        public BuysReportsUserControl(MainForm mainForm, ApplicationDbContext context, ControlManager controlManager, IBuysRepository buysRepository)
         {
             InitializeComponent();
+            _main = mainForm;
+            _context = context;
+            _controlManager = controlManager;
+            this.buysRepository = buysRepository;
+            LoadData();
+
         }
-        public static bool CheckInstance()
-        {
-            return (_buyReportsUserControl == null);
-        }
-        public static BuysReportsUserControl Instance(MainForm main)
-        {
-            _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _context = new ApplicationDbContext();
-            if (CheckInstance())
-            {
 
-                buysRepository = new BuysRepository(_context);
-
-                _buyReportsUserControl = new BuysReportsUserControl();
-
-            }
-
-            // Return the singleton instance
-            _buyReportsUserControl.LoadData();
-            return _buyReportsUserControl;
-        }
         public async void SetProductsToDgv(int skip)
         {
             ////DgvBuys.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             //var CustomerMoneyList = _context.CustomersReports.
             //    Include(x => x.Customer).Include(x => x.Sale)
             //    .ToList();
-            var data = buysRepository.GetAllBuysWithDetails(Properties.Settings.Default.NoOfDataInDgvs, skip);
+
+            DgvBuys.DataSource = new List<BuyDetailDto>();
+            var data = await buysRepository.GetAllBuysWithDetails(Properties.Settings.Default.NoOfDataInDgvs, skip);
             DgvBuys.DataSource = data.result;
             double value = data.Count / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
             int PageValue = Convert.ToInt32(Math.Ceiling(value));
@@ -63,30 +53,10 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
             }
             PaginationHide();
 
-            //var uniqueCustomerCount = CustomerMoneyList
-            //    .Select(x => x.Customer.Id) // Replace CustomerId with the actual unique identifier property
-            //    .Distinct()
-            //    .Count();
-            //DgvBuys.DataSource = CustomerMoneyList;
-            //if (DgvBuys.Rows.Count > 0)
-            //{
-            //    if (DgvBuys.SelectedRows.Count > 0)
-            //    {
-            //        //lblPayFacture.Text = $" فاتورة رقم {DgvBuys.Columns[7].HeaderCell.Value} الدين : {DgvBuys.Columns[1].HeaderCell.Value} دج";
-            //        //lblPayAllDebts.Text = $"دج {CustomerMoneyList.Sum(x => x.Price)}";
-            //        lblTotalDebt.Text = $"مجموع مدفوعات الموردين في الجدول:{CustomerMoneyList.Sum(x => x.Price)}";
-            //        lblTotalCustomers.Text = $"مجموع الموردين:{uniqueCustomerCount}";
 
-            //    }
-            //}
         }
 
-        public static void RefreshDgv()
-        {
-            //DgvBuys.DataSource = await Task.Run(() => productsRepository.GetAllProducts());
-            _buyReportsUserControl.LoadData();
-        }
-        // methodes 
+
         public async void LoadData()
         {
 
@@ -94,7 +64,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => buysRepository.IsConnected()))
+            if (await buysRepository.IsConnectedAsync())
             {
                 //Start Load Data
 
@@ -111,6 +81,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
                 //No Connection
                 MsgHelper.ShowServerError();
             }
+
             //Hideloading
 
             LoadingForm.Instance(_main).Hide();
@@ -148,7 +119,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
 
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
@@ -166,15 +137,15 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
             DgvBuys.DataSource = new List<BuyDetailDto>();
             if (rbBoth.Checked)
             {
-                a = buysRepository.SearchBoth(txtSearch.Text, dtpFrom.Value, dtpTo.Value, take, skip);
+                a = await buysRepository.SearchBoth(txtSearch.Text, dtpFrom.Value, dtpTo.Value, take, skip);
             }
             else if (rbSupplierAndOrder.Checked)
             {
-                a = buysRepository.SearchOnlySupplier(txtSearch.Text, take, skip);
+                a = await buysRepository.SearchOnlySupplier(txtSearch.Text, take, skip);
             }
             else
             {
-                a = buysRepository.SearchBuysByDate(dtpFrom.Value, dtpTo.Value, take, skip);
+                a = await buysRepository.SearchBuysByDate(dtpFrom.Value, dtpTo.Value, take, skip);
             }
 
             DgvBuys.DataSource = a.result;
@@ -258,7 +229,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
                 if (DgvBuys.SelectedRows.Count > 0)
                 {
                     DataTable buyDetailsTable = await FactureHelper.GetBuyDetailsDataTableAsync(Convert.ToInt32(DgvBuys.CurrentRow.Cells[0].Value.ToString()));
-                    Reports.BuysReports.buy8cm buy8cm = new();
+                    Reports.BuysReports.buy8cm buy8cm = _controlManager.GetR<Reports.BuysReports.buy8cm>();
                     buy8cm.DataSource = buyDetailsTable;
                     Reports.ReportPerviwGui.PerviweForm perv = Reports.ReportPerviwGui.PerviweForm.Instance(buy8cm);
                     perv.Show();
@@ -279,7 +250,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
                 if (DgvBuys.SelectedRows.Count > 0)
                 {
                     DataTable buyDetailsTable = await FactureHelper.GetBuyReportDataTableAsync(dtpFrom.Value, dtpTo.Value);
-                    Reports.BuysReports.buyReportsInPeriod buyReportsInPeriod = new();
+                    Reports.BuysReports.buyReportsInPeriod buyReportsInPeriod = _controlManager.GetR<Reports.BuysReports.buyReportsInPeriod>();
                     buyReportsInPeriod.DataSource = buyDetailsTable;
                     buyReportsInPeriod.lbldateFrom.Text = dtpFrom.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                     buyReportsInPeriod.lblDateTo.Text = dtpTo.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
@@ -303,7 +274,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
                 if (DgvBuys.SelectedRows.Count > 0)
                 {
                     DataTable buyDetailsTable = await FactureHelper.GetBuyDetailsDataTableAsync(Convert.ToInt32(DgvBuys.CurrentRow.Cells[0].Value.ToString()));
-                    Reports.BuysReports.buyA4 buyA4 = new();
+                    Reports.BuysReports.buyA4 buyA4 = _controlManager.GetR<Reports.BuysReports.buyA4>();
                     buyA4.DataSource = buyDetailsTable;
                     Reports.ReportPerviwGui.PerviweForm perv = Reports.ReportPerviwGui.PerviweForm.Instance(buyA4);
                     perv.Show();
@@ -329,19 +300,14 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
             {
                 for (int i = 0; i < DgvBuys.Rows.Count; i++)
                 {
-
-                    Buy buy = _context.Buys.FirstOrDefault(x => x.Id.ToString() == DgvBuys.Rows[i].Cells[0].Value.ToString());
-                    if (buy != null)
-                    {
-                        _context.Remove(buy);
-                        await _context.SaveChangesAsync();
-                    }
+                    await buysRepository.DeleteAsync(DgvBuys.Rows[i].Cells[0].Value.ToString());
                 }
-                Code.Helper.ToasterHelper.ShowDeletedToast();
-
-                LoadData();
-
             }
+            Code.Helper.ToasterHelper.ShowDeletedToast();
+
+            LoadData();
+
+
         }
 
         private async void btnDeleteReportsInPeriod_Click(object sender, EventArgs e)
@@ -351,9 +317,9 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
             {
                 try
                 {
-                    var query = _context.Buys
+                    var query = await _context.Buys
                         .Where(x => dtpFrom.Value <= x.Date && x.Date <= dtpTo.Value)
-                        .ToList();
+                        .ToListAsync();
 
                     if (query.Any())
                     {
@@ -377,14 +343,14 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
             }
         }
 
-        private void btnDeleteAllReports_Click(object sender, EventArgs e)
+        private async void btnDeleteAllReports_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
                 try
                 {
-                    _context.Database.ExecuteSqlRaw($"DELETE FROM [Buys]");
+                    await _context.Database.ExecuteSqlRawAsync($"DELETE FROM [Buys]");
                     LoadData();
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 

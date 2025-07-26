@@ -316,6 +316,7 @@
             ShowIcon = false;
             ShowInTaskbar = false;
             Text = "نقل المنتجات بين المخازن";
+            Load += StoreTransfertForm_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);

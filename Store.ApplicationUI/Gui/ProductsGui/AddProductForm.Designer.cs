@@ -639,6 +639,7 @@
             MinimizeBox = false;
             Name = "AddProductForm";
             ShowIcon = false;
+            FormClosing += AddProductForm_FormClosing;
             OperationsflowLayoutPanel.ResumeLayout(false);
             tabcontrolProductInfo.ResumeLayout(false);
             tabPage1.ResumeLayout(false);

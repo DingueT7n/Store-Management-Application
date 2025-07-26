@@ -1,5 +1,6 @@
 ﻿using System.Drawing.Printing;
 using System.IO;
+using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Helpers;
@@ -9,41 +10,25 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
 {
     public partial class ApplicationSettingsForm : Form
     {
-        private ApplicationDbContext _context;
-        private static MainForm _main;
-        private static ApplicationSettingsForm? _userRolesForm;
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
 
-        public ApplicationSettingsForm(MainForm main)
+        public ApplicationSettingsForm(MainForm main, ApplicationDbContext context)
         {
-            _context = new ApplicationDbContext();
-            _main = main;
+
             InitializeComponent();
+            _main = main;
+            _context = context;
             this.Owner = main;
             LoadData();
         }
-        public static ApplicationSettingsForm Instance(MainForm main)
-        {
-            if (_userRolesForm == null || _userRolesForm.IsDisposed)
-            {
-                _userRolesForm = new ApplicationSettingsForm(main);
-            }
-            else
-            {
-                if (!_userRolesForm.Visible)
-                {
-                    _userRolesForm.Show();
-                }
-                _userRolesForm.BringToFront();
-            }
 
-            return _userRolesForm;
-        }
 
         public async void LoadData()
         {
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => _context.Database.CanConnect()))
+            if (await _context.Database.CanConnectAsync())
             {
                 List<string> printer = new List<string>();
                 for (int i = 0; i < PrinterSettings.InstalledPrinters.Count; i++)
@@ -77,7 +62,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
 
 
 
-                cmbCustomers.DataSource = _context.Customers.ToList();
+                cmbCustomers.DataSource = await _context.Customers.ToListAsync();
                 cmbCustomers.DisplayMember = "CustomerName";
                 cmbCustomers.ValueMember = "Id";
 
@@ -109,14 +94,14 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
                 txtSaleCopy.Text = Properties.Settings.Default.NbrCopyOfSaleFacture.ToString();
                 txtBuyCopy.Text = Properties.Settings.Default.NbrCopyOfBuyFacture.ToString();
 
-                cmbFastCaisse.DataSource = _context.Caisses.ToList();
+                cmbFastCaisse.DataSource = await _context.Caisses.ToListAsync();
                 cmbFastCaisse.DisplayMember = "CaisseName";
                 cmbFastCaisse.ValueMember = "Id";
 
                 int a = Properties.Settings.Default.DefaultCaisseId;
                 cmbFastCaisse.SelectedValue = a;
 
-                cmbFastStores.DataSource = _context.Stores.ToList();
+                cmbFastStores.DataSource = await _context.Stores.ToListAsync();
                 cmbFastStores.DisplayMember = "StoreName";
                 cmbFastStores.ValueMember = "Id";
 
@@ -131,7 +116,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
                 txtSentenceUnderFacture.Text = Properties.Settings.Default.SentenceUnderFacture;
                 txtPhoneNumber.Text = Properties.Settings.Default.FacturePhoneNumber;
                 txtAddress.Text = Properties.Settings.Default.AddressStore;
-                var data = _context.OrderPrintData.FirstOrDefault();
+                var data = await _context.OrderPrintData.FirstOrDefaultAsync();
                 if (data != null)
                 {
                     if (!string.IsNullOrEmpty(data.Logo))
@@ -218,11 +203,11 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
 
             ToasterHelper.PlayNotificationSound();
-            var data = _context.OrderPrintData.FirstOrDefault();
+            var data = await _context.OrderPrintData.FirstOrDefaultAsync();
             if (data is null)
             {
 
@@ -240,8 +225,8 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
                     IDFiscal = txtIdFiscale.Text,
                     NIS = txtNIS.Text,
                 };
-                _context.Add(orderPrintData);
-                _context.SaveChanges();
+                await _context.AddAsync(orderPrintData);
+                await _context.SaveChangesAsync();
             }
             else
             {
@@ -258,7 +243,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
                 data.IDFiscal = txtIdFiscale.Text;
                 data.NIS = txtNIS.Text;
                 _context.Update(data);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
             }
             if (cblogoStore.Checked)

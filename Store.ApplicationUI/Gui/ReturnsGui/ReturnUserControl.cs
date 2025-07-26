@@ -7,24 +7,25 @@ using Store.Core.Entities.Customers;
 using Store.Core.Entities.Products;
 using Store.Core.Entities.Returns;
 using Store.Core.Entities.Suppliers;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.ReturnsGui
 {
     public partial class ReturnUserControl : UserControl
     {
-        public static BuysRepository? buysRepository;
+        public readonly IBuysRepository buysRepository;
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+        public readonly IReturnsRepository ReturnsRepository;
 
-
-        private static ReturnUserControl? _ReturnUserControl;
-        private static MainForm? _main;
-        private static ApplicationDbContext _context;
-        public static ReturnsRepository? ReturnsRepository;
-
-        public ReturnUserControl()
+        public ReturnUserControl(MainForm main, ApplicationDbContext context, IBuysRepository buysRepository, IReturnsRepository ReturnsRepository)
         {
             InitializeComponent();
+            this._main = main;
+            _context = context;
+            this.buysRepository = buysRepository;
+            this.ReturnsRepository = ReturnsRepository;
         }
 
         private void lblCustomer_Click(object sender, EventArgs e)
@@ -137,27 +138,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
         decimal paidUp = 0m;
         decimal remain = 0m;
 
-        public static ReturnUserControl Instance(MainForm main)
-        {
-            _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _context = new ApplicationDbContext();
-            if (_ReturnUserControl == null)
-            {
 
-                buysRepository = new BuysRepository(_context);
-                ReturnsRepository = new ReturnsRepository(_context);
-                _ReturnUserControl = new ReturnUserControl();
-            }
-            // Return the singleton instance
-            _ReturnUserControl.LoadData();
-            return _ReturnUserControl;
-        }
-        public static void RefreshDgv()
-        {
-            //DgvِProducts.DataSource = await Task.Run(() => productsRepository.GetAllProducts());
-            _ReturnUserControl.LoadData();
-        }
         // methodes 
         public async void LoadData()
         {
@@ -166,7 +147,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => ReturnsRepository.IsConnected()))
+            if (ReturnsRepository.IsConnected())
             {
                 cmbSuppliers.DataSource = null;
 
@@ -303,12 +284,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
             //DgvProducts.Columns[13].Visible = false;
             //DgvProducts.Columns[15].Visible = false;
         }
-        public async void SetProductsToDgv()
-        {
-            //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            //DgvِProducts.DataSource = _context.Products.
-            //    Include(x => x.Category).ToList();
-        }
+
 
 
 
@@ -957,7 +933,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
 
                     // Add Refund and RefundDetails
                     var refund = SetRefundBuy();
-                    context.Add(refund);
+                    await context.AddAsync(refund);
                     await context.SaveChangesAsync();
 
                     await ProcessRefundDetailsAsync(context, refund.Id, true);
@@ -1000,7 +976,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                     // Add Refund and RefundDetails
                     var refund = SetRefundSale();
 
-                    context.Add(refund);
+                    await context.AddAsync(refund);
                     await context.SaveChangesAsync();
 
                     await ProcessRefundDetailsAsync(context, refund.Id, false);
@@ -1064,7 +1040,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                 {
                     await SetCaisseBuyRefund(totalOrder, context);
                     if (totalOrder > 0)
-                        context.CaissesDeposits.Add(SetCaisseDeposit(totalOrder));
+                        await context.CaissesDeposits.AddAsync(SetCaisseDeposit(totalOrder));
                     await context.SaveChangesAsync();
                 }
                 else if (remain > 0)
@@ -1074,7 +1050,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                     if (supplier != null)
                         context.Update(supplier);
                     await SetCaisseBuyRefund(paidUp, context);
-                    context.CaissesDeposits.Add(SetCaisseDeposit(paidUp));
+                    await context.CaissesDeposits.AddAsync(SetCaisseDeposit(paidUp));
                     await context.SaveChangesAsync();
                 }
             }
@@ -1101,7 +1077,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                     }
 
                     await SetCaisseSaleRefund(totalOrder, context);
-                    context.CaissesWithdraws.Add(SetCaisseWithdraw(totalOrder));
+                    await context.CaissesWithdraws.AddAsync(SetCaisseWithdraw(totalOrder));
                     await context.SaveChangesAsync();
                 }
                 else if (remain > 0)
@@ -1117,7 +1093,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                     if (customer != null)
                         context.Update(customer);
                     await SetCaisseSaleRefund(paidUp, context);
-                    context.CaissesWithdraws.Add(SetCaisseWithdraw(paidUp));
+                    await context.CaissesWithdraws.AddAsync(SetCaisseWithdraw(paidUp));
                     await context.SaveChangesAsync();
                 }
             }
@@ -1245,7 +1221,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                                 productQty.Qty = 0;
                                 context.Update(productQty);
                                 await context.SaveChangesAsync();
-                                productQty = context.ProductsQuantities.FirstOrDefault(x => x.Pro_ID == Convert.ToInt32(productId));
+                                productQty = await context.ProductsQuantities.FirstOrDefaultAsync(x => x.Pro_ID == Convert.ToInt32(productId));
                                 quantity = (productQty == null || productQty.Qty == 0) ? 0 : quantity;
 
                             }

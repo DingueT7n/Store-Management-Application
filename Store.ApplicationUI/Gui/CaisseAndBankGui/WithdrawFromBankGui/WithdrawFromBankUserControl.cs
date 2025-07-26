@@ -1,4 +1,5 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.Models;
 using Store.Core.Entities.Banks;
 using Store.Infrastructure.Data;
@@ -7,30 +8,18 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBank
 {
     public partial class WithdrawFromBankUserControl : UserControl
     {
-        static WithdrawFromBankUserControl _WithdrawFromBankUserControl;
-        private static CaisseDetailsForm _caisse;
-        private static MainForm _main;
-        private static ApplicationDbContext _contex;
+        private readonly MainForm _main;
+        private readonly CaisseDetailsForm _caisse;
+        private readonly ApplicationDbContext _context;
 
-        public WithdrawFromBankUserControl()
+        public WithdrawFromBankUserControl(MainForm main, CaisseDetailsForm caisse, ApplicationDbContext context)
         {
             InitializeComponent();
-        }
-        public static WithdrawFromBankUserControl Instance(MainForm main, CaisseDetailsForm caisse)
-        {
-            _caisse = caisse;
             _main = main;
-            _contex = new ApplicationDbContext();
-
-            // If the instance is null, create a new one and assign it to the static field
-            if (_WithdrawFromBankUserControl == null || _WithdrawFromBankUserControl.IsDisposed)
-            {
-                _WithdrawFromBankUserControl = new WithdrawFromBankUserControl();
-            }
-            _WithdrawFromBankUserControl.LoadData();
-
-            return _WithdrawFromBankUserControl;
+            _caisse = caisse;
+            _context = context;
         }
+
         public async void LoadData()
         {
             txtDepositorName.Text = string.Empty;
@@ -38,9 +27,9 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBank
             lblValue.Text = "0";
             dateTimePicker.Value = DateTime.Now;
 
-            if (await Task.Run(() => _contex.Database.CanConnect()))
+            if (await _context.Database.CanConnectAsync())
             {
-                lblValue.Text = _contex.Banks.FirstOrDefault().Money.ToString();
+                lblValue.Text = (await _context.Banks.FirstOrDefaultAsync()).Money.ToString();
 
             }
             else
@@ -75,11 +64,11 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBank
         private async void btnWithdraw_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            using (var transaction = await _contex.Database.BeginTransactionAsync())
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    var bank = _contex.Banks.FirstOrDefault();
+                    var bank = await _context.Banks.FirstOrDefaultAsync();
 
                     if (bank is not null)
                     {
@@ -98,23 +87,23 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBank
                                 Type = "سحب عادي (مال فائض )"
                             };
 
-                            _contex.Banks.Update(bank);
-                            await _contex.BankWithdraws.AddAsync(bankDeposit);
+                            _context.Banks.Update(bank);
+                            await _context.BankWithdraws.AddAsync(bankDeposit);
 
                             // Save all changes to the database
-                            await _contex.SaveChangesAsync();
+                            await _context.SaveChangesAsync();
 
                             // Commit the transaction
                             await transaction.CommitAsync();
                             Code.Helper.ToasterHelper.ShowWithdraw();
-                            CaisseDetailsForm.CheckInstance();
+                            _caisse.LoadData();
                         }
                     }
 
                     // Load data after successful transaction
                     LoadData();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
                     await transaction.RollbackAsync();

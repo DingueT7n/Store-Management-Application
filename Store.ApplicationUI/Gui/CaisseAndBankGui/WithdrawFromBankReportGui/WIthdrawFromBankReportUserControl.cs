@@ -1,4 +1,5 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Banks;
 using Store.Infrastructure.Data;
@@ -7,58 +8,39 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBankReportGui
 {
     public partial class WIthdrawFromBankReportUserControl : UserControl
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext _contex;
+        private readonly MainForm _mainForm;
+        private readonly ApplicationDbContext _context;
 
-        private static WIthdrawFromBankReportUserControl? _UserControl;
 
-        public WIthdrawFromBankReportUserControl()
+        public WIthdrawFromBankReportUserControl(MainForm mainForm, ApplicationDbContext context)
         {
             InitializeComponent();
+            _mainForm = mainForm;
+            _context = context;
         }
-        public static bool CheckInstance()
-        {
-            return (_UserControl == null);
-        }
-        public static WIthdrawFromBankReportUserControl Instance(MainForm main)
-        {
-            _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _contex = new ApplicationDbContext();
-            if (CheckInstance())
-            {
 
-
-                _UserControl = new WIthdrawFromBankReportUserControl();
-
-            }
-
-            // Return the singleton instance
-            _UserControl.LoadData();
-            return _UserControl;
-        }
-        public async void SetProductsToDgv(string barcode)
+        public async Task SetProductsToDgv(string barcode)
         {
             ////DgvSales.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             //var CustomerMoneyList = MainForm.Context.CustomersReports.
             //    Include(x => x.Customer).Include(x => x.Sale)
             //    .ToList();
 
-            var data = GetAllDepositToCaisse(barcode, dtpFrom.Value, dtpTo.Value);
+            var data = await GetAllDepositToCaisse(barcode, dtpFrom.Value, dtpTo.Value);
             DgvSales.DataSource = data;
 
         }
 
-        private List<BankWithdraw> GetAllDepositToCaisse(string barcode, DateTime value1, DateTime value2)
+        private async Task<List<BankWithdraw>> GetAllDepositToCaisse(string barcode, DateTime value1, DateTime value2)
         {
             try
             {
-                var allTransfers = _contex.BankWithdraws
-                      .AsEnumerable();
+                var allTransfers = _context.BankWithdraws
+                      .AsQueryable();
                 if (barcode != string.Empty) allTransfers = allTransfers.Where(x => x.Reason == barcode || x.Name.Contains(barcode));
                 allTransfers = allTransfers.Where(x => x.Date >= value1 && x.Date <= value2)
                      ;
-                return allTransfers.ToList();
+                return await allTransfers.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -67,14 +49,14 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBankReportGui
             }
         }
 
-        void RefreshDgv()
+        async Task RefreshDgv()
         {
 
 
 
 
-            SetProductsToDgv(txtSearch.Text);
             SetColumns();
+            await SetProductsToDgv(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
         }
         public async void LoadData()
@@ -82,32 +64,33 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBankReportGui
             dtpTo.Value = DateTime.Now;
 
             //ShowLoading
-            LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => _contex.Database.CanConnect()))
+            LoadingForm.Instance(_mainForm).Show();
+            if (await _context.Database.CanConnectAsync())
             {
                 //Start Load Data
 
 
                 // if its an admin or Normal user 
-                RefreshDgv();
+                await RefreshDgv();
                 //_data.Clear();
             }
             else
             {
 
-                LoadingForm.Instance(_main).Hide();
+                LoadingForm.Instance(_mainForm).Hide();
                 //No Connection
                 MsgHelper.ShowServerError();
             }
             //Hideloading
 
-            LoadingForm.Instance(_main).Hide();
+            LoadingForm.Instance(_mainForm).Hide();
             // Show EmptyDAta
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
         }
 
         private void SetColumns()
         {
+            DgvSales.DataSource = new List<BankWithdraw>();
             //DgvSales.Columns[0].HeaderCell.Value = "المعرف"; ""    
             DgvSales.Columns[0].HeaderCell.Value = "قيمة السحب";
             DgvSales.Columns[1].HeaderCell.Value = "تاريخ السحب";
@@ -124,13 +107,13 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBankReportGui
 
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
-            RefreshDgv();
+            await RefreshDgv();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
 
@@ -140,17 +123,18 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromBankReportGui
                 {
                     for (int i = 0; i <= DgvSales.Rows.Count - 1; i++)
                     {
-                        var deleteedRefund = _contex.BankWithdraws.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i].Cells[6].Value.ToString())).FirstOrDefault();
+                        var deleteedRefund = await _context.BankWithdraws.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i].Cells[6].Value.
+                            ToString())).FirstOrDefaultAsync();
                         if (deleteedRefund != null)
                         {
-                            _contex.Remove(deleteedRefund);
-                            _contex.SaveChanges();
+                            _context.Remove(deleteedRefund);
+                            _context.SaveChanges();
                         }
                     }
 
                     Code.Helper.ToasterHelper.ShowDeletedToast();
                     DgvSales.DataSource = null;
-                    RefreshDgv();
+                    await RefreshDgv();
                 }
             }
             catch (Exception)

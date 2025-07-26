@@ -1,6 +1,10 @@
-﻿using Store.ApplicationUI.Code.Helper;
-using Store.ApplicationUI.Gui.LoadingGui;
+﻿
+using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.SalesGui.PosGui;
+using Store.Core.Entities.Customers;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.PaymentGui
@@ -8,45 +12,29 @@ namespace Store.ApplicationUI.Gui.PaymentGui
 
     public partial class SelectCustomerForm : Form
     {
-        private static MainForm _main;
-        private static PosForm _PosForm;
-        private static SelectCustomerForm _selectCustomerForm;
-        private ApplicationDbContext _context;
 
-        public SelectCustomerForm(MainForm main)
+        private readonly ApplicationDbContext _context;
+        private readonly ControlManager _controlManager;
+        private readonly ICustomersRepository _customersRepository;
+
+
+        public SelectCustomerForm(
+            ApplicationDbContext context, ControlManager controlManager, ICustomersRepository customersRepository
+            )
         {
             InitializeComponent();
-            _context = new ApplicationDbContext();
+            _context = context;
+            _controlManager = controlManager;
+            _customersRepository = customersRepository;
 
-            this.Owner = _main;
+
+
         }
-        public SelectCustomerForm(PosForm main)
-        {
-            InitializeComponent();
-            _context = new ApplicationDbContext();
 
-            this.Owner = _PosForm;
-        }
-        public static SelectCustomerForm Instance(MainForm main)
-        {
-            _main = main;
-
-            _selectCustomerForm = new SelectCustomerForm(_main);
-
-            _selectCustomerForm.LoadData();
-            return _selectCustomerForm;
-        }
-        public static SelectCustomerForm Instance(PosForm main)
-        {
-            _PosForm = main;
-
-            _selectCustomerForm = new SelectCustomerForm(_PosForm);
-
-            _selectCustomerForm.LoadData();
-            return _selectCustomerForm;
-        }
         private void SetColumns()
         {
+            DgvProducts.DataSource = new List<Customer>();
+
             DgvProducts.Columns[0].HeaderCell.Value = "اسم العميل";
             DgvProducts.Columns[1].HeaderCell.Value = "العنوان";
             DgvProducts.Columns[2].HeaderCell.Value = "رقم الهاتف";
@@ -63,29 +51,17 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         }
         public async void LoadData()
         {
-            LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => _context.Database.CanConnect()))
+
+            if (await _context.Database.CanConnectAsync())
             {
 
-                DgvProducts.DataSource = _context.Customers.ToList();
                 SetColumns();
-
-
-
-
-
-
+                DgvProducts.DataSource = await _context.Customers.ToListAsync();
 
             }
-            else
-            {
 
-                LoadingForm.Instance(_main).Hide();
-                //No Connection
-                MsgHelper.ShowServerError();
-            }
             //Hideloading
-            LoadingForm.Instance(_main).Hide();
+
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
             // Show EmptyDAta
 
@@ -94,9 +70,13 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         private void DgvProducts_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (!dgvHelper.IsEmpty(DgvProducts))
-                if (PosForm.GetPosUserControl() is not null)
+                //if (PosForm.GetPosUserControl() is not null)
+                //{
+                //    PosForm.GetPosUserControl().setCustomerFromSelector(DgvProducts.CurrentRow.Cells[6].Value.ToString(), DgvProducts.CurrentRow.Cells[0].Value.ToString());
+                //}
+                if (_controlManager.TryGet<PosUserControl>(out var UCP))
                 {
-                    PosForm.GetPosUserControl().setCustomerFromSelector(DgvProducts.CurrentRow.Cells[6].Value.ToString(), DgvProducts.CurrentRow.Cells[0].Value.ToString());
+                    UCP.setCustomerFromSelector(DgvProducts.CurrentRow.Cells[6].Value.ToString(), DgvProducts.CurrentRow.Cells[0].Value.ToString());
                 }
         }
 
@@ -104,14 +84,32 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         {
             ToasterHelper.PlayNotificationSound();
             if (!dgvHelper.IsEmpty(DgvProducts))
-                if (PosForm.GetPosUserControl() is not null)
+                //if (PosForm.GetPosUserControl() is not null)
+                //{
+                //    PosForm.GetPosUserControl().setCustomerFromSelector(DgvProducts.CurrentRow.Cells[6].Value.ToString(), DgvProducts.CurrentRow.Cells[0].Value.ToString());
+                //}
+                if (_controlManager.TryGet<PosUserControl>(out var UCP))
                 {
-                    PosForm.GetPosUserControl().setCustomerFromSelector(DgvProducts.CurrentRow.Cells[6].Value.ToString(), DgvProducts.CurrentRow.Cells[0].Value.ToString());
+                    UCP.setCustomerFromSelector(DgvProducts.CurrentRow.Cells[6].Value.ToString(), DgvProducts.CurrentRow.Cells[0].Value.ToString());
                 }
         }
 
         private void SelectCustomerForm_KeyDown(object sender, KeyEventArgs e)
         {
+
+        }
+
+        private void SelectCustomerForm_Load(object sender, EventArgs e)
+        {
+            LoadData();
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            DgvProducts.DataSource = _customersRepository.SearchAll(txtSearch.Text);
+            lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
+            txtSearch.Text = string.Empty;
+
 
         }
     }

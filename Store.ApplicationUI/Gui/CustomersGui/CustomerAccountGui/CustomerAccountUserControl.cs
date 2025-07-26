@@ -1,54 +1,42 @@
 ﻿using System.Data;
 using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Caisses;
+using Store.Core.Entities.Customers;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
 {
     public partial class CustomerAccountUserControl : UserControl
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext _context;
-        public static CustomerMoneyRepository? customersRepository;
-        private static CustomerAccountUserControl? _customerAccountUserControl;
-        public CustomerAccountUserControl()
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+        private readonly ICustomerMoneyRepository _customerMoneyRepository;
+        private readonly ControlManager _controlManager;
+
+        public CustomerAccountUserControl(
+       MainForm main,
+       ApplicationDbContext context,
+       ICustomerMoneyRepository customerMoneyRepository, ControlManager controlManager)
         {
             InitializeComponent();
-        }
-        public static bool CheckInstance()
-        {
-            return (_customerAccountUserControl == null);
 
-        }
-        public static CustomerAccountUserControl Instance(MainForm main)
-        {
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _context = new ApplicationDbContext();
-            if (CheckInstance())
-            {
-
-                customersRepository = new CustomerMoneyRepository(_context);
-
-                _customerAccountUserControl = new CustomerAccountUserControl();
-
-            }
-
-            // Return the singleton instance
-            _customerAccountUserControl.LoadData();
-
-            return _customerAccountUserControl;
+            _context = context;
+            _customerMoneyRepository = customerMoneyRepository;
+            _controlManager = controlManager;
+            LoadData();
         }
-
         public async void SetDataToDgv()
         {
             //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            var CustomerMoneyList = _context.CustomersMoneys.
+            DgvِCustomer.DataSource = new List<CustomerMoney>();
+            var CustomerMoneyList = await _context.CustomersMoneys.
                 Include(x => x.Customer).Include(x => x.Sale)
-                .ToList();
+                .ToListAsync();
             var uniqueCustomerCount = CustomerMoneyList
                 .Select(x => x.Customer.Id) // Replace CustomerId with the actual unique identifier property
                 .Distinct()
@@ -67,11 +55,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
             }
         }
 
-        public static void RefreshDgv()
-        {
-            //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAllProducts());
-            _customerAccountUserControl.LoadData();
-        }
+
         // methodes 
         public async void LoadData()
         {
@@ -79,7 +63,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => customersRepository.IsConnected()))
+            if (await _customerMoneyRepository.IsConnectedAsync())
             {
                 //Start Load Data
 
@@ -127,11 +111,11 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
 
 
         }
-        Caisse SetCaisse(decimal value)
+        async Task<Caisse> SetCaisse(decimal value)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
 
-            Caisse caisse = _context.Caisses.FirstOrDefault((x => x.Id == Properties.Settings.Default.DefaultCaisseId));
+            Caisse caisse = await _context.Caisses.FirstOrDefaultAsync((x => x.Id == Properties.Settings.Default.DefaultCaisseId));
             if (caisse is not null)
             {
                 caisse.MoneyinCaisse += value;
@@ -167,37 +151,37 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
         {
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
 
-            DgvِCustomer.DataSource = customersRepository.SearchAll(txtSearch.Text);
+            DgvِCustomer.DataSource = _customerMoneyRepository.SearchAll(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
             txtSearch.Text = string.Empty;
         }
 
-        private void btnPay_Click(object sender, EventArgs e)
+        private async void btnPay_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (DgvِCustomer.SelectedRows.Count > 0 && !dgvHelper.IsEmpty(DgvِCustomer))
             {
-                _context = new ApplicationDbContext();
+
                 if (rbPayFacture.Checked)
                 {
                     var v1 = DgvِCustomer.CurrentRow.Cells[1].Value?.ToString();
                     var v2 = DgvِCustomer.CurrentRow.Cells[0].Value?.ToString();
                     var v3 = DgvِCustomer.CurrentRow.Cells[3].Value?.ToString();
                     var v4 = DgvِCustomer.CurrentRow.Cells[2].Value?.ToString();
-                    customersRepository.TransactionOfCustomerDebt(
+                    _customerMoneyRepository.TransactionOfCustomerDebt(
                         v1,
                         v2,
                         v3,
                         v4,
                         DateTime.Now
                         );
-                    _context.Update(SetCaisse(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString())));
-                    _context.SaveChanges();
+                    _context.Update(await SetCaisse(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString())));
+                    await _context.SaveChangesAsync();
 
                     if (_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString()) > 0)
                     {
                         _context.Add(SetCaisseDeposit(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString())));
-                        _context.SaveChanges();
+                        await _context.SaveChangesAsync();
                     }
                     Code.Helper.ToasterHelper.ShowDebtAdded();
 
@@ -208,7 +192,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                     var v2 = DgvِCustomer.CurrentRow.Cells[0].Value?.ToString();
                     var v3 = DgvِCustomer.CurrentRow.Cells[3].Value?.ToString();
                     var v4 = DgvِCustomer.CurrentRow.Cells[2].Value?.ToString();
-                    customersRepository.TransactionOfEditingCustomerDebt(
+                    _customerMoneyRepository.TransactionOfEditingCustomerDebt(
                         v1,
                         v2,
                         v3,
@@ -216,13 +200,13 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                        txtPayAmout.Text,
                        DateTime.Now
                        );
-                    _context.Update(SetCaisse(_main.ConvertToFloat(txtPayAmout.Text)));
-                    _context.SaveChanges();
+                    _context.Update(await SetCaisse(_main.ConvertToFloat(txtPayAmout.Text)));
+                    await _context.SaveChangesAsync();
 
                     if (_main.ConvertToFloat(txtPayAmout.Text) > 0)
                     {
                         _context.Add(SetCaisseDeposit(_main.ConvertToFloat(txtPayAmout.Text)));
-                        _context.SaveChanges();
+                        await _context.SaveChangesAsync();
                     }
                     Code.Helper.ToasterHelper.ShowDebtAdded();
 
@@ -232,20 +216,20 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                     for (int i = 0; i < DgvِCustomer.Rows.Count; i++)
                     {
                         var row = DgvِCustomer.Rows[i];
-                        customersRepository.TransactionOfCustomerDebt(
+                        _customerMoneyRepository.TransactionOfCustomerDebt(
                             row.Cells[1].Value?.ToString(),
                             row.Cells[0].Value?.ToString(),
                             row.Cells[3].Value?.ToString(),
                             row.Cells[2].Value?.ToString(),
                             DateTime.Now
                         );
-                        _context.Update(SetCaisse(_main.ConvertToFloat(row.Cells[3].Value?.ToString())));
-                        _context.SaveChanges();
+                        _context.Update(await SetCaisse(_main.ConvertToFloat(row.Cells[3].Value?.ToString())));
+                        await _context.SaveChangesAsync();
 
                         if (_main.ConvertToFloat(row.Cells[3].Value?.ToString()) > 0)
                         {
                             _context.Add(SetCaisseDeposit(_main.ConvertToFloat(row.Cells[3].Value?.ToString())));
-                            _context.SaveChanges();
+                            await _context.SaveChangesAsync();
                         }
 
                     }
@@ -326,7 +310,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                 if (DgvِCustomer.SelectedRows.Count > 0)
                 {
                     DataTable saleDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(Convert.ToInt32(DgvِCustomer.CurrentRow.Cells[1].Value.ToString()));
-                    Reports.sale8cm sale8Cm = new();
+                    Reports.sale8cm sale8Cm = _controlManager.GetR<Reports.sale8cm>();
                     sale8Cm.DataSource = saleDetailsTable;
                     var xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(sale8Cm);
                     xtraForm1.Show();
@@ -347,7 +331,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                 if (DgvِCustomer.SelectedRows.Count > 0)
                 {
                     DataTable ProfitDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(Convert.ToInt32(DgvِCustomer.CurrentRow.Cells[1].Value.ToString()));
-                    Reports.SalesReports.salesA4 salesA4 = new();
+                    Reports.SalesReports.salesA4 salesA4 = _controlManager.GetR<Reports.SalesReports.salesA4>();
                     salesA4.DataSource = ProfitDetailsTable;
                     Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(salesA4);
                     xtraForm1.Show();

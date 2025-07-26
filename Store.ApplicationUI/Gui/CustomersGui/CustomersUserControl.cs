@@ -1,91 +1,67 @@
 ﻿using System.Data;
 using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.ProductsGui;
 using Store.Core.Entities.Customers;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.CustomersGui
 {
     public partial class CustomersUserControl : UserControl
     {
-        private static CustomersGui.CustomersUserControl? _customersUserControl;
-        private static MainForm? _main;
-        private AddCustomerForm addCustomerForm;
-        public static CustomersRepository? customersRepository;
-        private static ApplicationDbContext _context;
+        private readonly MainForm _main;
+        private readonly ICustomersRepository _customersRepository;
+        private readonly ApplicationDbContext _context;
+        private readonly ControlManager _controlManager;
 
-
-        public CustomersUserControl()
+        public CustomersUserControl(
+             MainForm main,
+             ICustomersRepository customersRepository,
+             ApplicationDbContext context
+             , ControlManager controlManager)
         {
             InitializeComponent();
-        }
-        public static bool CheckInstance()
-        {
-            return (_customersUserControl == null);
 
-        }
-
-        public static CustomersUserControl Instance(MainForm main)
-        {
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _context = new ApplicationDbContext();
-            if (CheckInstance())
-            {
-                customersRepository = new CustomersRepository(_context);
-
-                _customersUserControl = new CustomersUserControl();
-
-            }
-
-            // Return the singleton instance
-            _customersUserControl.LoadData();
-            return _customersUserControl;
+            _customersRepository = customersRepository;
+            _context = context;
+            _controlManager = controlManager;
+            LoadData(); // Optional if you want it loaded on create
         }
+
+
+
         public async void SetProductsToDgv()
         {
             //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            DgvِCustomer.DataSource = customersRepository.GetAllData();
+
+            DgvِCustomer.DataSource = new List<Customer>();
+            DgvِCustomer.DataSource = await _customersRepository.GetAllAsync();
 
         }
 
-        public static void RefreshDgv()
-        {
-            //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAllProducts());
-            _customersUserControl.LoadData();
-        }
-        // methodes 
         public async void LoadData()
         {
-
-
-            //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => customersRepository.IsConnected()))
+
+            if (await _customersRepository.IsConnectedAsync())
             {
-                //Start Load Data
-
-                // if its an admin or Normal user 
-
                 SetProductsToDgv();
                 SetColumns();
-                //_data.Clear();
             }
             else
             {
-
                 LoadingForm.Instance(_main).Hide();
-                //No Connection
                 MsgHelper.ShowServerError();
             }
-            //Hideloading
+
             LoadingForm.Instance(_main).Hide();
-            // Show EmptyDAta
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
         }
+
 
         private void SetColumns()
         {
@@ -109,8 +85,8 @@ namespace Store.ApplicationUI.Gui.CustomersGui
         {
             ToasterHelper.PlayNotificationSound();
 
-            addCustomerForm = AddCustomerForm.Instance(_main);
-            addCustomerForm.Show();
+            var addCustomerForm = _controlManager.GetF<AddCustomerForm>();
+            addCustomerForm.ShowDialog();
 
         }
 
@@ -119,36 +95,31 @@ namespace Store.ApplicationUI.Gui.CustomersGui
             ToasterHelper.PlayNotificationSound();
             if (DgvِCustomer.Rows.Count > 0)
             {
-                if (addCustomerForm == null || addCustomerForm.IsDisposed)
-                {
-                    addCustomerForm = AddCustomerForm.Instance(_main);
+                var form = _controlManager.GetF<AddCustomerForm>();
 
 
-                    addCustomerForm.SetDataToEdit(
-                        DgvِCustomer.CurrentRow.Cells[0].Value.ToString(),
-                        DgvِCustomer.CurrentRow.Cells[1].Value.ToString(),
-                        DgvِCustomer.CurrentRow.Cells[2].Value.ToString(),
-                        DgvِCustomer.CurrentRow.Cells[4].Value.ToString(),
-                        DgvِCustomer.CurrentRow.Cells[3].Value.ToString(),
-                        DgvِCustomer.CurrentRow.Cells[6].Value.ToString());
+                //form.SetDataToEdit(
+                //    DgvِCustomer.CurrentRow.Cells[0].Value.ToString(),
+                //    DgvِCustomer.CurrentRow.Cells[1].Value.ToString(),
+                //    DgvِCustomer.CurrentRow.Cells[2].Value.ToString(),
+                //    DgvِCustomer.CurrentRow.Cells[4].Value.ToString(),
+                //    DgvِCustomer.CurrentRow.Cells[3].Value.ToString(),
+                //    DgvِCustomer.CurrentRow.Cells[6].Value.ToString());
+                form.SetDataToEditFromId(
+                 DgvِCustomer.CurrentRow.Cells[6].Value.ToString());
+                form.ShowDialog();
 
-                    addCustomerForm.Show();
-                }
-                else
-                {
-                    addCustomerForm.Focus();
-                }
             }
         }
 
-        private void btnDeleteCustomer_Click(object sender, EventArgs e)
+        private async void btnDeleteCustomer_Click(object sender, EventArgs e)
         {
             try
             {
                 ToasterHelper.PlayNotificationSound();
                 if (MsgHelper.ShowDeleteDialog())
                 {
-                    var customer = customersRepository.DeleteAsync(DgvِCustomer.CurrentRow.Cells[6].Value.ToString());
+                    var customer = await _customersRepository.DeleteAsync(DgvِCustomer.CurrentRow.Cells[6].Value.ToString());
 
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
@@ -162,14 +133,14 @@ namespace Store.ApplicationUI.Gui.CustomersGui
                         TotalDebts = 0,
 
                     };
-                    _context.Add(cust);
-                    _context.SaveChanges();
+                    await _context.AddAsync(cust);
+                    await _context.SaveChangesAsync();
 
                     Properties.Settings.Default.DefaultCustomerSale = Properties.Settings.Default.IdCustomerSale = cust.Id.ToString();
 
                     Properties.Settings.Default.Save();
                 }
-                RefreshDgv();
+                LoadData();
             }
             catch (Exception ex)
             {
@@ -184,7 +155,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui
         {
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
 
-            DgvِCustomer.DataSource = customersRepository.SearchAll(txtSearch.Text);
+            DgvِCustomer.DataSource = _customersRepository.SearchAll(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
             txtSearch.Text = string.Empty;
         }

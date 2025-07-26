@@ -1,4 +1,6 @@
-using System.Globalization;
+﻿using System.Globalization;
+using Microsoft.Extensions.DependencyInjection;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoginGui;
 
 namespace Store.ApplicationUI
@@ -15,6 +17,18 @@ namespace Store.ApplicationUI
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 
+            Application.ThreadException += GlobalExceptionHandler;
+            AppDomain.CurrentDomain.UnhandledException += GlobalFatalErrorHandler;
+
+            var services = new ServiceCollection();
+            services.AddApplicationServices();
+
+            var serviceProvider = services.BuildServiceProvider(); // ✅ FIX: moved up
+            AppContainer.Services = serviceProvider;               // ✅ FIX: after building
+
+            SetCultureInfo();
+
+            // Optional: Persist decimal separator
             NumberFormatInfo numberFormat = CultureInfo.CurrentCulture.NumberFormat;
             Properties.Settings.Default.DecimalSEP = numberFormat.NumberDecimalSeparator;
             Properties.Settings.Default.Save();
@@ -22,23 +36,35 @@ namespace Store.ApplicationUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            LoginForm loginForm = new LoginForm();
-            if (loginForm.ShowDialog() == DialogResult.OK)
-            {
+            var loginForm = serviceProvider.GetRequiredService<LoginForm>();
+            var mainForm = serviceProvider.GetRequiredService<MainForm>();
+            Application.Run(mainForm);
+            //if (loginForm.ShowDialog() == DialogResult.OK)
+            //{
+            //    loginForm.Dispose();
+            //}
+            //else
+            //{
+            //    Application.Exit();
+            //}
 
-                MainForm mainForm = new MainForm();
 
-                loginForm.Dispose();
-                loginForm = null;
-                Application.Run(mainForm);
-            }
-            else
-            {
+        }
+        private static void GlobalExceptionHandler(object sender, ThreadExceptionEventArgs e)
+        {
+            MessageBox.Show($"Unhandled exception: {e.Exception.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
 
-                Application.Exit();
-            }
-
-            //Application.Run(new MainForm());
+        private static void GlobalFatalErrorHandler(object sender, UnhandledExceptionEventArgs e)
+        {
+            var ex = e.ExceptionObject as Exception;
+            MessageBox.Show($"Fatal error: {ex?.Message}", "Critical Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        private static void SetCultureInfo()
+        {
+            CultureInfo culture = new("en-US"); // or "fr-FR", "ar-DZ", etc.
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Vouchers;
@@ -8,17 +10,21 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
 {
     public partial class AddVoucherForm : Form
     {
-        private static MainForm _main;
-        private ApplicationDbContext _context;
-        private static AddVoucherForm _addVoucherForm;
-        public AddVoucherForm(MainForm main)
+        private readonly ApplicationDbContext _context;
+        private readonly MainForm _main;
+        private readonly ControlManager _controlManager;
+
+        public AddVoucherForm(ApplicationDbContext context, MainForm main, ControlManager controlManager)
         {
             InitializeComponent();
             _main = main;
+
+            _controlManager = controlManager;
             this.Owner = _main;
-            _context = new ApplicationDbContext();
-            LoadData();
-            ConfigDate();
+
+
+            _context = context;
+
         }
         void DataChanges()
         {
@@ -38,27 +44,14 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
             vider();
 
         }
-        public static AddVoucherForm Instance(MainForm main)
-        {
-            _main = main;
-            // If the instance is null, create a new one and assign it to the static field
 
-
-            _addVoucherForm = new AddVoucherForm(_main);
-
-
-
-            // Return the singleton instance
-
-            return _addVoucherForm;
-        }
         private void ConfigDate()
         {
             Dtp.Value = DateTime.Now;
 
             Dtp.CustomFormat = Dtp.CustomFormat = "yyyy-MM-dd";
         }
-        public void LoadData()
+        public async void LoadData()
         {
 
 
@@ -66,7 +59,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
 
 
             LoadingForm.Instance(_main).Show();
-            if (/*await Task.Run(() =>*/ _context.Database.CanConnect())/*)*/
+            if (/*await Task.Run(() =>*/await _context.Database.CanConnectAsync())/*)*/
             {
                 //Start Load Data
 
@@ -75,6 +68,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
 
                 DataChanges();
 
+                ConfigDate();
 
 
 
@@ -141,13 +135,13 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
             btnAddDeserved.Visible = false;
             btnEditDeserved.Visible = true;
         }
-        private void btnAddDeserved_Click(object sender, EventArgs e)
+        private async void btnAddDeserved_Click(object sender, EventArgs e)
         {
             try
             {
                 if (rbReciptVoucher.Checked)
                 {
-                    _context.ReceiptVouchers.Add(new ReceiptVoucher
+                    await _context.ReceiptVouchers.AddAsync(new ReceiptVoucher
                     {
                         From = txtPerson.Text,
                         ReciverName = txtUserName.Text,
@@ -156,13 +150,13 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                         Reason = txtNotes.Text,
                         Time = DateTime.Now.ToString("HH:mm:ss"),
                     });
-                    _context.Update(AddCaisse(Convert.ToDecimal(txtValue.Text)));
-                    _context.Add(SetCaisseDeposit(Convert.ToDecimal(txtValue.Text)));
-                    _context.SaveChanges();
+                    _context.Update(await AddCaisse(Convert.ToDecimal(txtValue.Text)));
+                    await _context.AddAsync(SetCaisseDeposit(Convert.ToDecimal(txtValue.Text)));
+                    await _context.SaveChangesAsync();
                 }
                 else
                 {
-                    _context.SendVouchers.Add(new SendVoucher
+                    await _context.SendVouchers.AddAsync(new SendVoucher
                     {
                         To = txtPerson.Text,
                         SenderName = txtUserName.Text,
@@ -171,13 +165,15 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                         Reason = txtNotes.Text,
                         Time = DateTime.Now.ToString("HH:mm:ss"),
                     });
-                    _context.Update(MinusCaisse(Convert.ToDecimal(txtValue.Text)));
-                    _context.Add(SetCaisseWithdraw(Convert.ToDecimal(txtValue.Text)));
-                    _context.SaveChanges();
+                    _context.Update(await MinusCaisse(Convert.ToDecimal(txtValue.Text)));
+                    await _context.AddAsync(SetCaisseWithdraw(Convert.ToDecimal(txtValue.Text)));
+                    await _context.SaveChangesAsync();
                 }
-                if (!VouchersUserControl.CheckInstance())
+
+
+                if (_controlManager.TryGet<VouchersUserControl>(out var UC))
                 {
-                    VouchersUserControl.RefreshDgv();
+                    UC.LoadData();
                 }
                 ToasterHelper.ShowAddToast();
             }
@@ -186,9 +182,9 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                 throw;
             }
         }
-        Caisse AddCaisse(decimal value)
+        async Task<Caisse> AddCaisse(decimal value)
         {
-            var caisse = _context.Caisses.FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
+            var caisse = await _context.Caisses.FirstOrDefaultAsync(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
             if (caisse != null)
             {
                 caisse.MoneyinCaisse += value;
@@ -196,9 +192,9 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
             return caisse;
 
         }
-        Caisse MinusCaisse(decimal value)
+        async Task<Caisse> MinusCaisse(decimal value)
         {
-            var caisse = _context.Caisses.FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
+            var caisse = await _context.Caisses.FirstOrDefaultAsync(x => x.Id == Properties.Settings.Default.DefaultCaisseId);
             if (caisse != null)
             {
                 caisse.MoneyinCaisse -= value;
@@ -245,7 +241,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
 
                 if (rbReciptVoucher.Checked)
                 {
-                    ReceiptVoucher receipt = _context.ReceiptVouchers.FirstOrDefault(x => x.Id.ToString() == lblNumberD.Text);
+                    ReceiptVoucher receipt = await _context.ReceiptVouchers.FirstOrDefaultAsync(x => x.Id.ToString() == lblNumberD.Text);
                     if (receipt != null)
                     {
                         receipt.From = txtPerson.Text;
@@ -261,7 +257,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                 }
                 else
                 {
-                    SendVoucher receipt = _context.SendVouchers.FirstOrDefault(x => x.Id.ToString() == lblNumberD.Text);
+                    SendVoucher receipt = await _context.SendVouchers.FirstOrDefaultAsync(x => x.Id.ToString() == lblNumberD.Text);
                     if (receipt != null)
                     {
                         receipt.To = txtPerson.Text;
@@ -275,9 +271,9 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                     }
                 }
 
-                if (!VouchersUserControl.CheckInstance())
+                if (_controlManager.TryGet<VouchersUserControl>(out var UC))
                 {
-                    VouchersUserControl.RefreshDgv();
+                    UC.LoadData();
                 }
             }
             catch (Exception)

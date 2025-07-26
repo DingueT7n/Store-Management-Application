@@ -8,10 +8,10 @@ namespace Store.ApplicationUI.Reports.SuppliersAccountsReports
     public partial class SuppliersAccountsReports : DevExpress.XtraReports.UI.XtraReport
     {
         ApplicationDbContext _context;
-        public SuppliersAccountsReports()
+        public SuppliersAccountsReports(ApplicationDbContext context)
         {
             InitializeComponent();
-            _context = new ApplicationDbContext();
+            _context = context;
             InitialElements();
         }
         void InitialElements()

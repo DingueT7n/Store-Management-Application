@@ -1,44 +1,28 @@
 ﻿using System.Data;
+using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.ApplicationUI.Reports.VouchersReports;
 using Store.Core.Entities.Vouchers;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui
 {
     public partial class VouchersReportsUserControl : UserControl
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext _contex;
-        public static ReceiptVoucherRepository? repository;
-        private static VouchersReportsUserControl? _UserControl;
+        private readonly ApplicationDbContext _context;
+        private readonly MainForm _main;
+        private readonly IReceiptVoucherRepository _receiptVoucherRepository;
 
-        public VouchersReportsUserControl()
+        public VouchersReportsUserControl(ApplicationDbContext context, MainForm main, IReceiptVoucherRepository receiptVoucherRepository)
         {
             InitializeComponent();
-        }
-        public static bool CheckInstance()
-        {
-            return (_UserControl == null);
-        }
-        public static VouchersReportsUserControl Instance(MainForm main)
-        {
+            _context = context;
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            if (CheckInstance())
-            {
-                _contex = new ApplicationDbContext();
-                repository = new ReceiptVoucherRepository(_contex);
-
-                _UserControl = new VouchersReportsUserControl();
-
-            }
-
-            // Return the singleton instance
-            _UserControl.LoadData();
-            return _UserControl;
+            _receiptVoucherRepository = receiptVoucherRepository;
         }
+
         public async void SetProductsToDgv(string barcode)
         {
             ////DgvSales.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
@@ -47,29 +31,29 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui
             //    .ToList();
             if (rbSendVoucher.Checked)
             {
-                var data = GetAllSendVouchers(barcode, dtpFrom.Value, dtpTo.Value);
+                var data = await GetAllSendVouchers(barcode, dtpFrom.Value, dtpTo.Value);
                 DgvSales.DataSource = data;
             }
             else
             {
-                var data = GetAllRecieptVouchers(barcode, dtpFrom.Value, dtpTo.Value);
+                var data = await GetAllRecieptVouchers(barcode, dtpFrom.Value, dtpTo.Value);
                 DgvSales.DataSource = data;
             }
 
         }
 
-        private List<ReceiptVoucher> GetAllRecieptVouchers(string barcode, DateTime value1, DateTime value2)
+        private async Task<List<ReceiptVoucher>> GetAllRecieptVouchers(string barcode, DateTime value1, DateTime value2)
         {
             try
             {
-                var allTransfers = _contex.ReceiptVouchers
-                      .AsEnumerable();
+                var allTransfers = _context.ReceiptVouchers
+                      .AsQueryable();
                 if (barcode != string.Empty) allTransfers = allTransfers.Where(x => x.ReciverName == barcode || x.From.Contains(barcode));
 
                 allTransfers = allTransfers.Where(x => x.Date >= value1 && x.Date <= value2)
                      ;
 
-                return allTransfers.ToList();
+                return await allTransfers.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -78,18 +62,18 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui
             }
         }
 
-        private List<SendVoucher> GetAllSendVouchers(string barcode, DateTime value1, DateTime value2)
+        private async Task<List<Core.Entities.Vouchers.SendVoucher>> GetAllSendVouchers(string barcode, DateTime value1, DateTime value2)
         {
             try
             {
-                var allTransfers = _contex.SendVouchers
-                      .AsEnumerable();
+                var allTransfers = _context.SendVouchers
+                      .AsQueryable();
                 if (barcode != string.Empty) allTransfers = allTransfers.Where(x => x.SenderName == barcode || x.To.Contains(barcode));
 
                 allTransfers = allTransfers.Where(x => x.Date >= value1 && x.Date <= value2)
                      ;
 
-                return allTransfers.ToList();
+                return await allTransfers.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -102,8 +86,8 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui
         {
             ;
 
-            SetProductsToDgv(txtSearch.Text);
             SetColumns();
+            SetProductsToDgv(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
         }
         public async void LoadData()
@@ -112,7 +96,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => repository.IsConnected()))
+            if (await _receiptVoucherRepository.IsConnectedAsync())
             {
 
 
@@ -139,6 +123,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui
         {
             if (rbSendVoucher.Checked)
             {
+                DgvSales.DataSource = new List<Core.Entities.Vouchers.SendVoucher>();
                 //DgvSales.Columns[0].HeaderCell.Value = "المعرف"; ""    
                 DgvSales.Columns[0].HeaderCell.Value = "اسم المسؤول عن الصرف";
                 DgvSales.Columns[1].HeaderCell.Value = "قيمة السند";
@@ -151,6 +136,8 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui
             }
             else
             {
+                DgvSales.DataSource = new List<RecieptVoucher>();
+
                 DgvSales.Columns[0].HeaderCell.Value = "اسم المسؤول عن القبض";
                 DgvSales.Columns[1].HeaderCell.Value = "قيمة السند";
                 DgvSales.Columns[2].HeaderCell.Value = "تاريخ العملية";
@@ -181,7 +168,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui
             RefreshDgv();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             try
@@ -190,24 +177,24 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui
                 {
                     for (int i = 0; i <= DgvSales.Rows.Count - 1; i++)
                     {
-                        var deleteedsend = new SendVoucher();
+                        var deleteedsend = new Core.Entities.Vouchers.SendVoucher();
                         var deleteedRefund = new ReceiptVoucher();
                         if (rbRecieptVoucher.Checked)
                         {
-                            deleteedRefund = _contex.ReceiptVouchers.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i].Cells[6].Value.ToString())).FirstOrDefault();
+                            deleteedRefund = await _context.ReceiptVouchers.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i].Cells[6].Value.ToString())).FirstOrDefaultAsync();
                             if (deleteedRefund != null)
                             {
-                                _contex.Remove(deleteedRefund);
-                                _contex.SaveChanges();
+                                _context.Remove(deleteedRefund);
+                                await _context.SaveChangesAsync();
                             }
                         }
                         else
                         {
-                            deleteedsend = _contex.SendVouchers.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i].Cells[6].Value.ToString())).FirstOrDefault();
+                            deleteedsend = await _context.SendVouchers.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i].Cells[6].Value.ToString())).FirstOrDefaultAsync();
                             if (deleteedsend != null)
                             {
-                                _contex.Remove(deleteedsend);
-                                _contex.SaveChanges();
+                                _context.Remove(deleteedsend);
+                                await _context.SaveChangesAsync();
                             }
 
                         }

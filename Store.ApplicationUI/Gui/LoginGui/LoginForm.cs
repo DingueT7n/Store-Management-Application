@@ -12,32 +12,17 @@ namespace Store.ApplicationUI.Gui.LoginGui
     public partial class LoginForm : Form
     {
         private ApplicationDbContext _context;
-        public static LoginForm _oginForm;
-        Thread Thread;
-        public LoginForm()
+        public readonly LoginForm _oginForm;
+
+        public LoginForm(ApplicationDbContext context)
         {
             try
             {
                 Code.Helper.ConStringHelper.SetConString();
-                this._context = new ApplicationDbContext();
+                _context = context;
                 InitializeComponent();
                 _oginForm = this;
-                try
-                {
-                    Thread = new Thread(new ThreadStart(StartSplash));
-                    Thread.Start();
 
-                    Thread.Sleep(5000);
-                    _splashScreen?.Dispose();
-
-
-                }
-                catch (Exception ex)
-                {
-
-                    ToasterHelper.ShowConnectionIsNotEstablishedByError(ex.Message);
-
-                }
             }
             catch (Exception ex)
             {
@@ -63,24 +48,8 @@ namespace Store.ApplicationUI.Gui.LoginGui
             }
 
         }
-        private SplashScreen? _splashScreen;
-        private async void StartSplash()
-        {
-            try
-            {
-                if (!await _context.Database.CanConnectAsync())
-                {
-                    lblCon.Visible = true;
-                }
-                _splashScreen = new SplashScreen();
-                _splashScreen.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                ToasterHelper.ShowConnectionIsNotEstablishedByError(ex.Message);
 
-            }
-        }
+
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -313,7 +282,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
                 ToasterHelper.ShowConnectionIsNotEstablished();
                 return false;
             }
-            if (_context.Users.AsNoTracking().Count() > 0)
+            if (await _context.Users.AsNoTracking().CountAsync() > 0)
             {
                 var user = await _context.Users
                 .Include(u => u.UserBuy)
@@ -338,7 +307,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
                 {
                     string alerttype = "الاشتراك على وشك الانتهاء";
                     string Message = $"الاشتراك السنوي للبرنامج سوف ينتهي بعد {Properties.Settings.Default.Days_left} يرجي الاتصال بالمطور واخذ نسخة احتياطية من البرنامج";
-                    var alert = _context.AlertsTable.AsNoTracking().FirstOrDefault(x => x.AlertType == alerttype && x.Message == Message && !x.IsResolved);
+                    var alert = await _context.AlertsTable.AsNoTracking().FirstOrDefaultAsync(x => x.AlertType == alerttype && x.Message == Message && !x.IsResolved);
                     if (alert == null)
                     {
                         AlertTable alertTable = new AlertTable();
@@ -348,8 +317,8 @@ namespace Store.ApplicationUI.Gui.LoginGui
                         alertTable.CreatedDate = DateTime.Now;
                         alertTable.IsResolved = false;
                         alertTable.Category = LocalUser.User.UserName;
-                        _context.Add(alertTable);
-                        _context.SaveChanges();
+                        await _context.AddAsync(alertTable);
+                        await _context.SaveChangesAsync();
                     }
                 }
                 Properties.Settings.Default.UserName = user.UserName;
@@ -371,7 +340,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
                     };
                     if (_context.Caisses.Count() > 0)
                     {
-                        if (_context.Caisses.AsNoTracking().FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId) is not null)
+                        if (await _context.Caisses.AsNoTracking().FirstOrDefaultAsync(x => x.Id == Properties.Settings.Default.DefaultCaisseId) is not null)
                             user.Stock_Id = Properties.Settings.Default.DefaultCaisseId;
                         else
                         {
@@ -381,13 +350,13 @@ namespace Store.ApplicationUI.Gui.LoginGui
                                 MoneyinCaisse = 0
 
                             };
-                            _context.Add(caisse);
-                            _context.SaveChanges();
+                            await _context.AddAsync(caisse);
+                            await _context.SaveChangesAsync();
                             user.Stock_Id = caisse.Id;
                         }
                     }
-                    _context.Add(user);
-                    _context.SaveChanges();
+                    await _context.AddAsync(user);
+                    await _context.SaveChangesAsync();
                     AddUserRelatedEntities(user, true);
 
 
@@ -413,7 +382,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
             txtUsername.Text = string.Empty;
             txtPassowrd.Text = string.Empty;
         }
-        private void AddUserRelatedEntities(User user, bool isAdmin)
+        private async Task AddUserRelatedEntities(User user, bool isAdmin)
         {
             try
             {
@@ -441,7 +410,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
                 user.UserSetting = (UserSetting)relatedEntities[8];
                 user.UserSupplier = (UserSupplier)relatedEntities[9];
                 _context.AddRange(relatedEntities);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {

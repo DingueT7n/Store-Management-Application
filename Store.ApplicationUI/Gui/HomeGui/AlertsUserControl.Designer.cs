@@ -28,22 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle13 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle14 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle15 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle16 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle17 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle18 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle19 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle20 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle21 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle22 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle23 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle24 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AlertsUserControl));
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
             flowLayoutPanelRight = new FlowLayoutPanel();
             groupBox2 = new GroupBox();
             paneldgvandlbl = new Panel();
+            PanelPagination = new Panel();
+            cmbpagination = new ComboBox();
+            btnPrev = new Button();
+            btnNext = new Button();
             lblEmptyData = new Label();
             DgvProducts = new DataGridView();
             gbOutDatedData = new GroupBox();
@@ -60,12 +64,9 @@
             dataCustomerDebts = new DataGridView();
             flowLayoutPanel1 = new FlowLayoutPanel();
             lblEmptyAlerts = new Label();
-            PanelPagination = new Panel();
-            cmbpagination = new ComboBox();
-            btnPrev = new Button();
-            btnNext = new Button();
             flowLayoutPanelRight.SuspendLayout();
             paneldgvandlbl.SuspendLayout();
+            PanelPagination.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DgvProducts).BeginInit();
             panelProductsOutDated.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDataOutdated).BeginInit();
@@ -73,7 +74,6 @@
             ((System.ComponentModel.ISupportInitialize)dataDebtSuppliers).BeginInit();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataCustomerDebts).BeginInit();
-            PanelPagination.SuspendLayout();
             SuspendLayout();
             // 
             // flowLayoutPanelRight
@@ -115,6 +115,53 @@
             paneldgvandlbl.Size = new Size(526, 303);
             paneldgvandlbl.TabIndex = 12;
             // 
+            // PanelPagination
+            // 
+            PanelPagination.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            PanelPagination.Controls.Add(cmbpagination);
+            PanelPagination.Controls.Add(btnPrev);
+            PanelPagination.Controls.Add(btnNext);
+            PanelPagination.Location = new Point(3, 268);
+            PanelPagination.Name = "PanelPagination";
+            PanelPagination.Size = new Size(169, 32);
+            PanelPagination.TabIndex = 31;
+            // 
+            // cmbpagination
+            // 
+            cmbpagination.Dock = DockStyle.Top;
+            cmbpagination.Font = new Font("Calibri", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            cmbpagination.FormattingEnabled = true;
+            cmbpagination.Location = new Point(50, 0);
+            cmbpagination.Name = "cmbpagination";
+            cmbpagination.Size = new Size(69, 31);
+            cmbpagination.TabIndex = 28;
+            cmbpagination.SelectionChangeCommitted += cmbpagination_SelectionChangeCommitted;
+            // 
+            // btnPrev
+            // 
+            btnPrev.Dock = DockStyle.Left;
+            btnPrev.Image = (Image)resources.GetObject("btnPrev.Image");
+            btnPrev.ImeMode = ImeMode.NoControl;
+            btnPrev.Location = new Point(0, 0);
+            btnPrev.Name = "btnPrev";
+            btnPrev.Size = new Size(50, 32);
+            btnPrev.TabIndex = 26;
+            btnPrev.UseVisualStyleBackColor = true;
+            btnPrev.Click += btnPrev_Click;
+            // 
+            // btnNext
+            // 
+            btnNext.Dock = DockStyle.Right;
+            btnNext.Font = new Font("Calibri", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnNext.Image = (Image)resources.GetObject("btnNext.Image");
+            btnNext.ImeMode = ImeMode.NoControl;
+            btnNext.Location = new Point(119, 0);
+            btnNext.Name = "btnNext";
+            btnNext.Size = new Size(50, 32);
+            btnNext.TabIndex = 25;
+            btnNext.UseVisualStyleBackColor = true;
+            btnNext.Click += btnNext_Click;
+            // 
             // lblEmptyData
             // 
             lblEmptyData.Anchor = AnchorStyles.None;
@@ -143,37 +190,37 @@
             DgvProducts.BackgroundColor = Color.White;
             DgvProducts.CellBorderStyle = DataGridViewCellBorderStyle.None;
             DgvProducts.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle13.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle13.BackColor = Color.FromArgb(64, 64, 64);
-            dataGridViewCellStyle13.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle13.ForeColor = Color.White;
-            dataGridViewCellStyle13.SelectionBackColor = Color.OrangeRed;
-            dataGridViewCellStyle13.SelectionForeColor = Color.White;
-            dataGridViewCellStyle13.WrapMode = DataGridViewTriState.True;
-            DgvProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(64, 64, 64);
+            dataGridViewCellStyle1.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle1.ForeColor = Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = Color.OrangeRed;
+            dataGridViewCellStyle1.SelectionForeColor = Color.White;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            DgvProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             DgvProducts.ColumnHeadersHeight = 43;
             DgvProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle14.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle14.BackColor = Color.White;
-            dataGridViewCellStyle14.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle14.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle14.SelectionBackColor = Color.FromArgb(0, 122, 204);
-            dataGridViewCellStyle14.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle14.WrapMode = DataGridViewTriState.False;
-            DgvProducts.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.White;
+            dataGridViewCellStyle2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(0, 122, 204);
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            DgvProducts.DefaultCellStyle = dataGridViewCellStyle2;
             DgvProducts.EnableHeadersVisualStyles = false;
             DgvProducts.GridColor = Color.FromArgb(64, 64, 64);
             DgvProducts.Location = new Point(0, 0);
             DgvProducts.Name = "DgvProducts";
             DgvProducts.ReadOnly = true;
-            dataGridViewCellStyle15.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle15.BackColor = Color.White;
-            dataGridViewCellStyle15.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle15.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle15.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle15.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle15.WrapMode = DataGridViewTriState.True;
-            DgvProducts.RowHeadersDefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = Color.White;
+            dataGridViewCellStyle3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            DgvProducts.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             DgvProducts.RowHeadersVisible = false;
             DgvProducts.RowTemplate.Height = 22;
             DgvProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -228,37 +275,37 @@
             dgvDataOutdated.BackgroundColor = Color.White;
             dgvDataOutdated.CellBorderStyle = DataGridViewCellBorderStyle.None;
             dgvDataOutdated.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle16.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle16.BackColor = Color.FromArgb(64, 64, 64);
-            dataGridViewCellStyle16.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle16.ForeColor = Color.White;
-            dataGridViewCellStyle16.SelectionBackColor = Color.OrangeRed;
-            dataGridViewCellStyle16.SelectionForeColor = Color.White;
-            dataGridViewCellStyle16.WrapMode = DataGridViewTriState.True;
-            dgvDataOutdated.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = Color.FromArgb(64, 64, 64);
+            dataGridViewCellStyle4.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle4.ForeColor = Color.White;
+            dataGridViewCellStyle4.SelectionBackColor = Color.OrangeRed;
+            dataGridViewCellStyle4.SelectionForeColor = Color.White;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            dgvDataOutdated.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             dgvDataOutdated.ColumnHeadersHeight = 43;
             dgvDataOutdated.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle17.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle17.BackColor = Color.White;
-            dataGridViewCellStyle17.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle17.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle17.SelectionBackColor = Color.FromArgb(0, 122, 204);
-            dataGridViewCellStyle17.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle17.WrapMode = DataGridViewTriState.False;
-            dgvDataOutdated.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = Color.White;
+            dataGridViewCellStyle5.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle5.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = Color.FromArgb(0, 122, 204);
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
+            dgvDataOutdated.DefaultCellStyle = dataGridViewCellStyle5;
             dgvDataOutdated.EnableHeadersVisualStyles = false;
             dgvDataOutdated.GridColor = Color.FromArgb(64, 64, 64);
             dgvDataOutdated.Location = new Point(0, 0);
             dgvDataOutdated.Name = "dgvDataOutdated";
             dgvDataOutdated.ReadOnly = true;
-            dataGridViewCellStyle18.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle18.BackColor = Color.White;
-            dataGridViewCellStyle18.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle18.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle18.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle18.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle18.WrapMode = DataGridViewTriState.True;
-            dgvDataOutdated.RowHeadersDefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = Color.White;
+            dataGridViewCellStyle6.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            dgvDataOutdated.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             dgvDataOutdated.RowHeadersVisible = false;
             dgvDataOutdated.RowTemplate.Height = 22;
             dgvDataOutdated.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -313,37 +360,37 @@
             dataDebtSuppliers.BackgroundColor = Color.White;
             dataDebtSuppliers.CellBorderStyle = DataGridViewCellBorderStyle.None;
             dataDebtSuppliers.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle19.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle19.BackColor = Color.FromArgb(64, 64, 64);
-            dataGridViewCellStyle19.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle19.ForeColor = Color.White;
-            dataGridViewCellStyle19.SelectionBackColor = Color.OrangeRed;
-            dataGridViewCellStyle19.SelectionForeColor = Color.White;
-            dataGridViewCellStyle19.WrapMode = DataGridViewTriState.True;
-            dataDebtSuppliers.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.BackColor = Color.FromArgb(64, 64, 64);
+            dataGridViewCellStyle7.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle7.ForeColor = Color.White;
+            dataGridViewCellStyle7.SelectionBackColor = Color.OrangeRed;
+            dataGridViewCellStyle7.SelectionForeColor = Color.White;
+            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
+            dataDebtSuppliers.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
             dataDebtSuppliers.ColumnHeadersHeight = 43;
             dataDebtSuppliers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle20.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle20.BackColor = Color.White;
-            dataGridViewCellStyle20.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle20.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle20.SelectionBackColor = Color.FromArgb(0, 122, 204);
-            dataGridViewCellStyle20.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle20.WrapMode = DataGridViewTriState.False;
-            dataDebtSuppliers.DefaultCellStyle = dataGridViewCellStyle20;
+            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = Color.White;
+            dataGridViewCellStyle8.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle8.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = Color.FromArgb(0, 122, 204);
+            dataGridViewCellStyle8.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = DataGridViewTriState.False;
+            dataDebtSuppliers.DefaultCellStyle = dataGridViewCellStyle8;
             dataDebtSuppliers.EnableHeadersVisualStyles = false;
             dataDebtSuppliers.GridColor = Color.FromArgb(64, 64, 64);
             dataDebtSuppliers.Location = new Point(0, 0);
             dataDebtSuppliers.Name = "dataDebtSuppliers";
             dataDebtSuppliers.ReadOnly = true;
-            dataGridViewCellStyle21.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle21.BackColor = Color.White;
-            dataGridViewCellStyle21.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle21.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle21.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle21.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle21.WrapMode = DataGridViewTriState.True;
-            dataDebtSuppliers.RowHeadersDefaultCellStyle = dataGridViewCellStyle21;
+            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = Color.White;
+            dataGridViewCellStyle9.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle9.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
+            dataDebtSuppliers.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
             dataDebtSuppliers.RowHeadersVisible = false;
             dataDebtSuppliers.RowTemplate.Height = 22;
             dataDebtSuppliers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -398,37 +445,37 @@
             dataCustomerDebts.BackgroundColor = Color.White;
             dataCustomerDebts.CellBorderStyle = DataGridViewCellBorderStyle.None;
             dataCustomerDebts.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle22.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle22.BackColor = Color.FromArgb(64, 64, 64);
-            dataGridViewCellStyle22.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle22.ForeColor = Color.White;
-            dataGridViewCellStyle22.SelectionBackColor = Color.OrangeRed;
-            dataGridViewCellStyle22.SelectionForeColor = Color.White;
-            dataGridViewCellStyle22.WrapMode = DataGridViewTriState.True;
-            dataCustomerDebts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle22;
+            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle10.BackColor = Color.FromArgb(64, 64, 64);
+            dataGridViewCellStyle10.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle10.ForeColor = Color.White;
+            dataGridViewCellStyle10.SelectionBackColor = Color.OrangeRed;
+            dataGridViewCellStyle10.SelectionForeColor = Color.White;
+            dataGridViewCellStyle10.WrapMode = DataGridViewTriState.True;
+            dataCustomerDebts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
             dataCustomerDebts.ColumnHeadersHeight = 43;
             dataCustomerDebts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle23.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle23.BackColor = Color.White;
-            dataGridViewCellStyle23.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle23.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle23.SelectionBackColor = Color.FromArgb(0, 122, 204);
-            dataGridViewCellStyle23.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle23.WrapMode = DataGridViewTriState.False;
-            dataCustomerDebts.DefaultCellStyle = dataGridViewCellStyle23;
+            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle11.BackColor = Color.White;
+            dataGridViewCellStyle11.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle11.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle11.SelectionBackColor = Color.FromArgb(0, 122, 204);
+            dataGridViewCellStyle11.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = DataGridViewTriState.False;
+            dataCustomerDebts.DefaultCellStyle = dataGridViewCellStyle11;
             dataCustomerDebts.EnableHeadersVisualStyles = false;
             dataCustomerDebts.GridColor = Color.FromArgb(64, 64, 64);
             dataCustomerDebts.Location = new Point(0, 0);
             dataCustomerDebts.Name = "dataCustomerDebts";
             dataCustomerDebts.ReadOnly = true;
-            dataGridViewCellStyle24.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle24.BackColor = Color.White;
-            dataGridViewCellStyle24.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle24.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle24.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle24.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle24.WrapMode = DataGridViewTriState.True;
-            dataCustomerDebts.RowHeadersDefaultCellStyle = dataGridViewCellStyle24;
+            dataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.BackColor = Color.White;
+            dataGridViewCellStyle12.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle12.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle12.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle12.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle12.WrapMode = DataGridViewTriState.True;
+            dataCustomerDebts.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
             dataCustomerDebts.RowHeadersVisible = false;
             dataCustomerDebts.RowTemplate.Height = 22;
             dataCustomerDebts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -461,53 +508,6 @@
             lblEmptyAlerts.TextAlign = ContentAlignment.MiddleCenter;
             lblEmptyAlerts.Visible = false;
             // 
-            // PanelPagination
-            // 
-            PanelPagination.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            PanelPagination.Controls.Add(cmbpagination);
-            PanelPagination.Controls.Add(btnPrev);
-            PanelPagination.Controls.Add(btnNext);
-            PanelPagination.Location = new Point(3, 268);
-            PanelPagination.Name = "PanelPagination";
-            PanelPagination.Size = new Size(169, 32);
-            PanelPagination.TabIndex = 31;
-            // 
-            // cmbpagination
-            // 
-            cmbpagination.Dock = DockStyle.Top;
-            cmbpagination.Font = new Font("Calibri", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            cmbpagination.FormattingEnabled = true;
-            cmbpagination.Location = new Point(50, 0);
-            cmbpagination.Name = "cmbpagination";
-            cmbpagination.Size = new Size(69, 31);
-            cmbpagination.TabIndex = 28;
-            cmbpagination.SelectionChangeCommitted += cmbpagination_SelectionChangeCommitted;
-            // 
-            // btnPrev
-            // 
-            btnPrev.Dock = DockStyle.Left;
-            btnPrev.Image = (Image)resources.GetObject("btnPrev.Image");
-            btnPrev.ImeMode = ImeMode.NoControl;
-            btnPrev.Location = new Point(0, 0);
-            btnPrev.Name = "btnPrev";
-            btnPrev.Size = new Size(50, 32);
-            btnPrev.TabIndex = 26;
-            btnPrev.UseVisualStyleBackColor = true;
-            btnPrev.Click += btnPrev_Click;
-            // 
-            // btnNext
-            // 
-            btnNext.Dock = DockStyle.Right;
-            btnNext.Font = new Font("Calibri", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnNext.Image = (Image)resources.GetObject("btnNext.Image");
-            btnNext.ImeMode = ImeMode.NoControl;
-            btnNext.Location = new Point(119, 0);
-            btnNext.Name = "btnNext";
-            btnNext.Size = new Size(50, 32);
-            btnNext.TabIndex = 25;
-            btnNext.UseVisualStyleBackColor = true;
-            btnNext.Click += btnNext_Click;
-            // 
             // AlertsUserControl
             // 
             AutoScaleDimensions = new SizeF(8F, 19F);
@@ -521,9 +521,11 @@
             Name = "AlertsUserControl";
             RightToLeft = RightToLeft.Yes;
             Size = new Size(1034, 681);
+            Load += AlertsUserControl_Load;
             flowLayoutPanelRight.ResumeLayout(false);
             paneldgvandlbl.ResumeLayout(false);
             paneldgvandlbl.PerformLayout();
+            PanelPagination.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)DgvProducts).EndInit();
             panelProductsOutDated.ResumeLayout(false);
             panelProductsOutDated.PerformLayout();
@@ -534,7 +536,6 @@
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataCustomerDebts).EndInit();
-            PanelPagination.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }

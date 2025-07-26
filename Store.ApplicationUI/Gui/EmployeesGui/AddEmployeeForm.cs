@@ -1,52 +1,39 @@
 ﻿using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Employees;
-using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
+using Store.Core.Interfaces;
 
 namespace Store.ApplicationUI.Gui.EmployeesGui
 {
     public partial class AddEmployeeForm : Form
     {
-        private static MainForm? _main;
-        private EmployeesRepository? _employeesRepository;
-        private static AddEmployeeForm? _addEmployeeForm;
+        private readonly MainForm _main;
 
-        public AddEmployeeForm(MainForm main)
+        private IEmployeesRepository _employeesRepository;
+        private readonly ControlManager _controlManager;
+
+        public AddEmployeeForm(MainForm main, IEmployeesRepository employeesRepository, ControlManager controlManager)
         {
+
             InitializeComponent();
             _main = main;
+
+            _employeesRepository = employeesRepository;
+            _controlManager = controlManager;
             this.Owner = _main;
-            _employeesRepository = new EmployeesRepository(new ApplicationDbContext());
+
 
             LoadData();
         }
-        public static AddEmployeeForm Instance(MainForm main)
-        {
-            // If the instance is null or has been disposed, create a new one.
-            if (_addEmployeeForm == null || _addEmployeeForm.IsDisposed)
-            {
-                _addEmployeeForm = new AddEmployeeForm(main);
-            }
-            else
-            {
-                // Bring the form to the front if it exists.
-                if (!_addEmployeeForm.Visible)
-                {
-                    _addEmployeeForm.Show();
-                }
-                _addEmployeeForm.BringToFront();
-            }
 
-            return _addEmployeeForm;
-        }
         public async void LoadData()
         {
 
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => _employeesRepository.IsConnected()))
+            if (await _employeesRepository.IsConnectedAsync())
             {
 
 
@@ -122,7 +109,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
             }
         }
 
-        private void btnAdd_Click(object sender, EventArgs e)
+        private async void btnAdd_Click(object sender, EventArgs e)
         {
             try
             {
@@ -137,13 +124,14 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
                 Employee.Salary = _main.ConvertToFloat(txtSalary.Text);
                 Employee.National_ID = txtNbrCartId.Text;
                 Employee.DateJoined = dtpJoined.Value;
-                var result = _employeesRepository.AddAsync(Employee);
+                var result = await _employeesRepository.AddAsync(Employee);
                 Code.Helper.ToasterHelper.ShowAddToast();
 
                 vider();
-                if (!EmployeeUserControl.CheckInstance())
+
+                if (_controlManager.TryGet<EmployeeUserControl>(out var UD))
                 {
-                    EmployeeUserControl.RefreshDgv();
+                    UD.LoadData();
                 }
             }
             catch (Exception)
@@ -153,7 +141,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
             }
         }
 
-        private void btnEdit_Click(object sender, EventArgs e)
+        private async void btnEdit_Click(object sender, EventArgs e)
         {
             try
             {
@@ -170,12 +158,13 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
                     Employee.Salary = _main.ConvertToFloat(txtSalary.Text);
                     Employee.National_ID = txtNbrCartId.Text;
                     Employee.DateJoined = dtpJoined.Value;
-                    var result = _employeesRepository.UpdateAsync(lblِCustomerId.Text, Employee);
+                    var result = await _employeesRepository.UpdateAsync(lblِCustomerId.Text, Employee);
                     Code.Helper.ToasterHelper.ShowEditToast();
 
-                    if (!EmployeeUserControl.CheckInstance())
+
+                    if (_controlManager.TryGet<EmployeeUserControl>(out var UD))
                     {
-                        EmployeeUserControl.RefreshDgv();
+                        UD.LoadData();
                     }
                     Employee = null;
                 }

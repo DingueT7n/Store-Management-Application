@@ -7,30 +7,26 @@ using Store.Infrastructure.Data;
 
 namespace Store.Infrastructure.Repositories
 {
-    public class BuysRepository : GenericRepository<Buy>
+    public class BuysRepository : GenericRepository<Buy>, IBuysRepository
     {
         public BuysRepository(ApplicationDbContext context) : base(context)
         {
         }
-        public BuyDetailDtoResult SearchBoth(string searchItem, DateTime fromDate, DateTime toDate, int take, int skip)
+        public async Task<BuyDetailDtoResult> SearchBoth(string searchItem, DateTime fromDate, DateTime toDate, int take, int skip)
         {
             try
             {
-                var buyDetailsQuery = _context.BuyDetails
+                var buyDetailsQuery = await _context.BuyDetails
 
                     .Include(bd => bd.Buy)
                     .Include(bd => bd.Product)
                     .Include(bd => bd.Supplier)
                     .Where(bd => fromDate <= bd.Buy.Date && bd.Buy.Date <= toDate) // Filter by date range
-                    .AsEnumerable()  // Switch to client-side evaluation for further filtering
+                                                                                   // Switch to client-side evaluation for further filtering
                     .Where(bd =>
                         bd.Supplier.SupplierName.ToLower().Contains(searchItem.ToLower()) ||
                         bd.Order_ID.ToString() == searchItem) // Client-side case-insensitive search
-                    .OrderByDescending(bd => bd.Buy.Id);
-
-                var buyDetailDtos = buyDetailsQuery
-
-                     .Skip(skip)
+                    .OrderByDescending(bd => bd.Buy.Id).Skip(skip)
                     .Take(take)
                     .Select(bd => new BuyDetailDto
                     {
@@ -48,11 +44,16 @@ namespace Store.Infrastructure.Repositories
                         TotalPrice = bd.Total,
                         Discount = bd.Discount,
                     })
-                .ToList();
+                .ToListAsync();
+
+                //var buyDetailDtos = buyDetailsQuery
+
+
+
 
                 return new BuyDetailDtoResult
                 {
-                    result = buyDetailDtos,
+                    result = buyDetailsQuery,
                     Count = buyDetailsQuery.Count()
                 };
             }
@@ -61,13 +62,13 @@ namespace Store.Infrastructure.Repositories
                 throw new Exception("Error retrieving the buy details", ex);
             }
         }
-        public BuyDetailDtoResult SearchBuysByDate(DateTime fromDate, DateTime toDate, int take, int skip)
+        public async Task<BuyDetailDtoResult> SearchBuysByDate(DateTime fromDate, DateTime toDate, int take, int skip)
         {
             try
             {
                 return new BuyDetailDtoResult
                 {
-                    result = _context.BuyDetails
+                    result = await _context.BuyDetails
 
                     .Include(x => x.Buy)
                     .Include(x => x.Product)
@@ -92,8 +93,8 @@ namespace Store.Infrastructure.Repositories
                         TotalPrice = bd.Total,
                         Discount = bd.Discount,
                     })
-                    .ToList(),
-                    Count = _context.BuyDetails.Where(bd => fromDate <= bd.Buy.Date && bd.Buy.Date <= toDate).Count()
+                    .ToListAsync(),
+                    Count = await _context.BuyDetails.Where(bd => fromDate <= bd.Buy.Date && bd.Buy.Date <= toDate).CountAsync()
                 };
             }
             catch (Exception ex)
@@ -102,13 +103,13 @@ namespace Store.Infrastructure.Repositories
                 throw new Exception("Error retrieving the buy details", ex);
             }
         }
-        public BuyDetailDtoResult SearchOnlySupplier(string searchItem, int take, int skip)
+        public async Task<BuyDetailDtoResult> SearchOnlySupplier(string searchItem, int take, int skip)
         {
             try
             {
                 var searchLower = searchItem.ToLower();
 
-                var query = _context.BuyDetails
+                var query = await _context.BuyDetails
                     .Include(bd => bd.Buy)
                     .Include(bd => bd.Product)
                     .Include(bd => bd.Supplier)
@@ -133,13 +134,13 @@ namespace Store.Infrastructure.Repositories
                         TotalPrice = bd.Total,
                         Discount = bd.Discount,
                     })
-                    .ToList();
+                    .ToListAsync();
 
                 // Get the total count
-                var totalCount = _context.BuyDetails
+                var totalCount = await _context.BuyDetails
                     .Where(bd => bd.Supplier.SupplierName.ToLower().Contains(searchLower) ||
                                  bd.Order_ID.ToString() == searchItem)
-                    .Count();
+                    .CountAsync();
 
                 return new BuyDetailDtoResult
                 {
@@ -199,12 +200,12 @@ namespace Store.Infrastructure.Repositories
             }
 
         }
-        public BuyDetailDtoResult GetAllBuysWithDetails(int take, int skip)
+        public async Task<BuyDetailDtoResult> GetAllBuysWithDetails(int take, int skip)
         {
 
             try
             {
-                var lastBuy = _context.BuyDetails
+                var lastBuy = await _context.BuyDetails
 
                     .Include(x => x.Buy)
                     .Include(x => x.Product)
@@ -228,11 +229,11 @@ namespace Store.Infrastructure.Repositories
                         TotalPrice = bd.Total,
                         Discount = bd.Discount,
                     })
-                    .ToList();
+                    .ToListAsync();
                 return new BuyDetailDtoResult
                 {
                     result = lastBuy,
-                    Count = _context.BuyDetails.Count()
+                    Count = await _context.BuyDetails.CountAsync()
                 };
             }
             catch (Exception ex)

@@ -1,4 +1,5 @@
-﻿using Store.ApplicationUI.Code.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.Models;
 using Store.Core.Entities.Caisses;
 using Store.Infrastructure.Data;
@@ -7,30 +8,18 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseGui
 {
     public partial class DepositCaisseUserControl : UserControl
     {
-        private static ApplicationDbContext _context;
-        static DepositCaisseUserControl _depositCaisseUserControl;
-        private static CaisseDetailsForm _caisse;
-        private static MainForm _main;
+        private readonly MainForm _main;
+        private readonly CaisseDetailsForm _caisse;
+        private readonly ApplicationDbContext _context;
 
-        public DepositCaisseUserControl()
+        public DepositCaisseUserControl(MainForm main, CaisseDetailsForm caisse, ApplicationDbContext context)
         {
             InitializeComponent();
-        }
-        public static DepositCaisseUserControl Instance(MainForm main, CaisseDetailsForm caisse)
-        {
-            _caisse = caisse;
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _context = new ApplicationDbContext();
-            if (_depositCaisseUserControl == null || _depositCaisseUserControl.IsDisposed)
-            {
-
-                _depositCaisseUserControl = new DepositCaisseUserControl();
-            }
-            _depositCaisseUserControl.LoadData();
-
-            return _depositCaisseUserControl;
+            _caisse = caisse;
+            _context = context;
         }
+
         void validate()
         {
 
@@ -44,9 +33,9 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseGui
             lblValue.Text = "0";
             dateTimePicker.Value = DateTime.Now;
 
-            if (await Task.Run(() => _context.Database.CanConnect()))
+            if (await _context.Database.CanConnectAsync())
             {
-                cmbCaisse.DataSource = _context.Caisses.ToList();
+                cmbCaisse.DataSource = await _context.Caisses.ToListAsync();
                 cmbCaisse.DisplayMember = "CaisseName";
                 cmbCaisse.ValueMember = "Id";
                 cmbCaisse.Text = "اختر صندوق";
@@ -80,12 +69,12 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseGui
             }
         }
 
-        private void cmbCaisse_SelectionChangeCommitted(object sender, EventArgs e)
+        private async void cmbCaisse_SelectionChangeCommitted(object sender, EventArgs e)
         {
             try
             {
                 validate();
-                var value = _context.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisse.SelectedValue.ToString()).MoneyinCaisse;
+                var value = (await _context.Caisses.FirstOrDefaultAsync(x => x.Id.ToString() == cmbCaisse.SelectedValue.ToString())).MoneyinCaisse;
                 lblValue.Text = value.ToString();
             }
             catch (Exception)
@@ -102,7 +91,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseGui
             {
                 try
                 {
-                    var caisse = _context.Caisses.FirstOrDefault(x => x.Id.ToString() == cmbCaisse.SelectedValue);
+                    var caisse = await _context.Caisses.FirstOrDefaultAsync(x => x.Id.ToString() == cmbCaisse.SelectedValue);
                     if (caisse is not null)
                     {
                         if (_main.ConvertToFloat(txtValue.Text) > 0)
@@ -127,7 +116,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseGui
                             // Commit the transaction
                             await transaction.CommitAsync();
                             Code.Helper.ToasterHelper.ShowDeposit();
-                            CaisseDetailsForm.CheckInstance();
+                            _caisse.LoadData();
 
                         }
                     }
@@ -135,7 +124,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseGui
 
                     LoadData();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
                     await transaction.RollbackAsync();

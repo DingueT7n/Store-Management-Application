@@ -1,51 +1,40 @@
 ﻿using System.Data;
 using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Sales;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
 {
     public partial class SalesReportsUserControl : UserControl
     {
-        private static MainForm? _main;
-        private static ApplicationDbContext _contex;
-        public static SalesRepository? salesRepository;
-        private static SalesReportsUserControl? _salesReportsUserControl;
-        public SalesReportsUserControl()
+        private readonly MainForm _main;
+        private readonly ApplicationDbContext _context;
+        private readonly ISalesRepository _salesRepository;
+        private readonly ControlManager _controlManager;
+
+        public SalesReportsUserControl(MainForm main, ApplicationDbContext context, ISalesRepository salesRepository, ControlManager controlManager)
         {
             InitializeComponent();
-        }
-        public static bool CheckInstance()
-        {
-            return (_salesReportsUserControl == null);
-        }
-        public static SalesReportsUserControl Instance(MainForm main)
-        {
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-            _contex = new ApplicationDbContext();
-            if (CheckInstance())
-            {
-                salesRepository = new SalesRepository(_contex);
-
-                _salesReportsUserControl = new SalesReportsUserControl();
-
-            }
-
-            // Return the singleton instance
-            _salesReportsUserControl.LoadData();
-            return _salesReportsUserControl;
+            _context = context;
+            _salesRepository = salesRepository;
+            _controlManager = controlManager;
+            LoadData();
         }
+
+
         public async void SetProductsToDgv(int skip)
         {
             ////DgvSales.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             //var CustomerMoneyList = MainForm.Context.CustomersReports.
             //    Include(x => x.Customer).Include(x => x.Sale)
             //    .ToList();
-            var data = salesRepository.GetAllSalesWithDetails(Properties.Settings.Default.NoOfDataInDgvs, skip);
+            DgvSales.DataSource = new List<SaleDetailDto>();
+            var data = await _salesRepository.GetAllSalesWithDetails(Properties.Settings.Default.NoOfDataInDgvs, skip);
             DgvSales.DataSource = data.result;
             double value = data.count / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
             int PageValue = Convert.ToInt32(Math.Ceiling(value));
@@ -60,30 +49,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
                 cmbpagination.SelectedIndex = 0;
             }
             PaginationHide();
-
-            //var uniqueCustomerCount = CustomerMoneyList
-            //    .Select(x => x.Customer.Id) // Replace CustomerId with the actual unique identifier property
-            //    .Distinct()
-            //    .Count();
-            //DgvSales.DataSource = CustomerMoneyList;
-            //if (DgvSales.Rows.Count > 0)
-            //{
-            //    if (DgvSales.SelectedRows.Count > 0)
-            //    {
-            //        //lblPayFacture.Text = $" فاتورة رقم {DgvSales.Columns[7].HeaderCell.Value} الدين : {DgvSales.Columns[1].HeaderCell.Value} دج";
-            //        //lblPayAllDebts.Text = $"دج {CustomerMoneyList.Sum(x => x.Price)}";
-            //        lblTotalDebt.Text = $"مجموع مدفوعات الموردين في الجدول:{CustomerMoneyList.Sum(x => x.Price)}";
-            //        lblTotalCustomers.Text = $"مجموع الموردين:{uniqueCustomerCount}";
-
-            //    }
-            //}
         }
 
-        public static void RefreshDgv()
-        {
-            //DgvSales.DataSource = await Task.Run(() => productsRepository.GetAllProducts());
-            _salesReportsUserControl.LoadData();
-        }
         // methodes 
         public async void LoadData()
         {
@@ -91,7 +58,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
             dtpTo.Value = DateTime.Now;
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (await Task.Run(() => salesRepository.IsConnected()))
+            if (await _salesRepository.IsConnectedAsync())
             {
                 //Start Load Data
 
@@ -146,7 +113,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
 
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
 
@@ -163,17 +130,17 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
             DgvSales.DataSource = new List<SaleDetailDto>();
             if (rbBoth.Checked)
             {
-                a = salesRepository.SearchBoth(txtSearch.Text, dtpFrom.Value, dtpTo.Value, take, skip);
+                a = await _salesRepository.SearchBoth(txtSearch.Text, dtpFrom.Value, dtpTo.Value, take, skip);
 
             }
             else if (rbCustomerAndOrder.Checked)
             {
-                a = salesRepository.SearchOnlySupplier(txtSearch.Text, take, skip);
+                a = await _salesRepository.SearchOnlySupplier(txtSearch.Text, take, skip);
 
             }
             else
             {
-                a = salesRepository.SearchSalesByDate(dtpFrom.Value, dtpTo.Value, take, skip);
+                a = await _salesRepository.SearchSalesByDate(dtpFrom.Value, dtpTo.Value, take, skip);
 
             }
             DgvSales.DataSource = a.result;
@@ -348,7 +315,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
                 if (DgvSales.SelectedRows.Count > 0)
                 {
                     DataTable saleDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(Convert.ToInt32(DgvSales.CurrentRow.Cells[0].Value.ToString()));
-                    Reports.sale8cm sale8Cm = new();
+                    Reports.sale8cm sale8Cm = _controlManager.GetR<Reports.sale8cm>();
                     sale8Cm.DataSource = saleDetailsTable;
                     var xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(sale8Cm);
                     xtraForm1.Show();
@@ -369,7 +336,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
 
         private async void button1_Click(object sender, EventArgs e)
         {
-            var sales = await _contex.SalesDetails
+            var sales = await _context.SalesDetails
                    .OrderByDescending(x => x.Sale.Id)
                    .Include(x => x.Sale)
                    .Include(x => x.Product)
@@ -485,11 +452,11 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
                     //_contex.Sales.Remove(_contex.Sales.FirstOrDefault(x => x.Id.ToString() == idfacture));
                     //_contex.SaveChanges();
 
-                    Sale sale = _contex.Sales.FirstOrDefault(x => x.Id.ToString() == DgvSales.Rows[i].Cells[0].Value.ToString());
+                    Sale sale = await _context.Sales.FirstOrDefaultAsync(x => x.Id.ToString() == DgvSales.Rows[i].Cells[0].Value.ToString());
                     if (sale != null)
                     {
-                        _contex.Sales.Remove(sale);
-                        await _contex.SaveChangesAsync();
+                        _context.Sales.Remove(sale);
+                        await _context.SaveChangesAsync();
                     }
                 }
                 Code.Helper.ToasterHelper.ShowDeletedToast();
@@ -506,14 +473,14 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
             {
                 try
                 {
-                    var query = _contex.Sales
+                    var query = await _context.Sales
                         .Where(x => dtpFrom.Value <= x.Date && x.Date <= dtpTo.Value)
-                        .ToList();
+                        .ToListAsync();
 
                     if (query.Any())
                     {
-                        _contex.Sales.RemoveRange(query);
-                        await _contex.SaveChangesAsync();
+                        _context.Sales.RemoveRange(query);
+                        await _context.SaveChangesAsync();
                     }
                     else
                     {
@@ -532,14 +499,14 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
             }
         }
 
-        private void btnDeleteAllReports_Click(object sender, EventArgs e)
+        private async void btnDeleteAllReports_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
                 try
                 {
-                    _contex.Database.ExecuteSqlRaw($"DELETE FROM [Sales]");
+                    await _context.Database.ExecuteSqlRawAsync($"DELETE FROM [Sales]");
                     LoadData();
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 

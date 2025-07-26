@@ -1,47 +1,40 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Products;
+using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
-using Store.Infrastructure.Repositories;
 
 namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
 {
     public partial class AddProductDiscountForm : Form
     {
-        private static MainForm _main;
-        private ApplicationDbContext _context;
-        private ProductsRepository? productsRepository;
 
-        private static AddProductDiscountForm _Form;
 
-        public AddProductDiscountForm(MainForm main)
+
+        private Product _product;
+        private readonly MainForm _main;
+        private readonly IProductRepository _productRepository;
+        private readonly ControlManager _controlManager;
+        private readonly ApplicationDbContext _context;
+
+        public AddProductDiscountForm(MainForm main, IProductRepository productRepository, ControlManager controlManager, ApplicationDbContext context)
         {
             InitializeComponent();
-            _main = main;
-            this.Owner = _main;
-            _context = new ApplicationDbContext();
-            productsRepository = new ProductsRepository(_context);
 
-            LoadData();
             dtpFrom.Value = DateTime.Now;
             dtpTo.Value = DateTime.Now.AddDays(10);
-        }
-        public static AddProductDiscountForm Instance(MainForm main)
-        {
             _main = main;
-            // If the instance is null, create a new one and assign it to the static field
-
-
-            _Form = new AddProductDiscountForm(_main);
-
-
-
-            // Return the singleton instance
-
-            return _Form;
+            _productRepository = productRepository;
+            _controlManager = controlManager;
+            _context = context;
+            LoadData();
         }
-        public void LoadData()
+
+        public async void LoadData()
         {
 
 
@@ -49,13 +42,14 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
 
 
             LoadingForm.Instance(_main).Show();
-            if (/*await Task.Run(() =>*/ _context.Database.CanConnect())/*)*/
+            if (/*await Task.Run(() =>*/await _context.Database.CanConnectAsync())/*)*/
             {
                 //Start Load Data
 
                 // if its an admin or Normal user 
+                ResetForm();
 
-                cmbStoresFrom.DataSource = _context.Stores.ToList();
+                cmbStoresFrom.DataSource = await _context.Stores.ToListAsync();
                 cmbStoresFrom.DisplayMember = "StoreName"; // Set the property to display
                 cmbStoresFrom.ValueMember = "Id"; // Set the property to use as the value
 
@@ -103,7 +97,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
                 e.Handled = true;
             }
         }
-        private Product _product;
+
 
         private void txtBareCode_KeyDown(object sender, KeyEventArgs e)
         {
@@ -112,10 +106,10 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
                 SetProductsToTable();
             }
         }
-        public async void SetProductsToTable()
+        public void SetProductsToTable()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            _product = productsRepository.GetProductBarCode(txtBareCode.Text);
+            _product = _productRepository.GetProductBarCode(txtBareCode.Text);
             if (_product is not null)
             {
                 txtProductName.Text = _product.ProductName;
@@ -140,7 +134,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
             }
         }
 
-        private void btnTransfert_Click(object sender, EventArgs e)
+        private async void btnTransfert_Click(object sender, EventArgs e)
         {
             try
             {
@@ -155,14 +149,16 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
                     productDiscount.DateEnd = dtpTo.Value;
                     productDiscount.TimeEnd = DateTime.Now.ToString("HH:mm");
                     productDiscount.DiscountValue = Convert.ToDecimal(txtDiscountValue.Text);
-                    _context.Add(productDiscount);
-                    _context.SaveChanges();
+                    await _context.AddAsync(productDiscount);
+                    await _context.SaveChangesAsync();
                     Code.Helper.ToasterHelper.ShowProductDiscountAdded();
 
                     ResetForm();
-                    if (!ProductDiscountUserControl.CheckInstance())
-                        ProductDiscountUserControl.RefreshInstance();
 
+                    if (_controlManager.TryGet<ProductDiscountUserControl>(out var UC))
+                    {
+                        UC.LoadData();
+                    }
 
                 }
             }

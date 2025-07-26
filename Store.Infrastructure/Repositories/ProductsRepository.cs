@@ -5,7 +5,7 @@ using Store.Infrastructure.Data;
 
 namespace Store.Infrastructure.Repositories
 {
-    public class ProductsRepository : GenericRepository<Product>
+    public class ProductsRepository : GenericRepository<Product>, IProductRepository
     {
         public ProductsRepository(ApplicationDbContext context) : base(context)
         {
@@ -15,7 +15,7 @@ namespace Store.Infrastructure.Repositories
 
             try
             {
-                _context = new ApplicationDbContext();
+
 
                 var product = _context.Products.FirstOrDefault(x => x.CodeBar == barCode);
 
@@ -72,7 +72,7 @@ namespace Store.Infrastructure.Repositories
         {
             try
             {
-                _context = new ApplicationDbContext();
+
 
                 var products = await _context.ProductsQuantities.AsNoTracking()
                     .Include(x => x.Product)
@@ -98,7 +98,7 @@ namespace Store.Infrastructure.Repositories
         {
             try
             {
-                _context = new ApplicationDbContext();
+
 
                 var products = await _context.Products.AsNoTracking()
                                 .Where(x => x.Quentity <= x.MinQty)
@@ -124,7 +124,7 @@ namespace Store.Infrastructure.Repositories
 
             try
             {
-                _context = new ApplicationDbContext();
+
                 IQueryable<Product> query = _context.Products.AsNoTracking();
 
 
@@ -172,7 +172,7 @@ namespace Store.Infrastructure.Repositories
         {
             try
             {
-                _context = new ApplicationDbContext();
+
 
                 return _context.Products.Where(x => x.Id.ToString() == userId).Where(x => x.Id.ToString() == searchIteam ||
                 x.Quentity.ToString() == searchIteam ||
@@ -191,15 +191,15 @@ namespace Store.Infrastructure.Repositories
     }
     public class ProductOutStoreRepository : GenericRepository<ProductOutStore>, IProductOutStoreRepository
     {
-        public List<ProductOutStore> GetAllOutStore(string t1, string barcode, DateTime dtpFrom, DateTime dtpTo)
+        public async Task<List<ProductOutStore>> GetAllOutStore(string t1, string barcode, DateTime dtpFrom, DateTime dtpTo)
         {
             try
             {
-                _context = new ApplicationDbContext();
+
 
                 var allTransfers = _context.ProductsOutStore.AsNoTracking()
                       .Include(x => x.Product)
-                      .AsEnumerable();
+                      .AsQueryable();
                 if (barcode != string.Empty) allTransfers = allTransfers.Where(x => x.Product.CodeBar == barcode);
                 if (t1 != string.Empty)
                     allTransfers = allTransfers.Where(x => x.StoreName == t1);
@@ -207,7 +207,7 @@ namespace Store.Infrastructure.Repositories
                 allTransfers = allTransfers.Where(x => x.Date >= dtpFrom && x.Date <= dtpTo)
                      ;
 
-                return allTransfers.ToList();
+                return await allTransfers.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -222,13 +222,13 @@ namespace Store.Infrastructure.Repositories
     }
     public class ProductsQuantitieRepository : GenericRepository<ProductsQuantitie>, IProductsQuantitieRepository
     {
-        public ResultProductQtyDto GetAllProductQty(string barcode)
+        public async Task<ResultProductQtyDto> GetAllProductQty(string barcode)
         {
             try
             {
-                _context = new ApplicationDbContext();
 
-                var lastRefund = _context.ProductsQuantities.AsNoTracking()
+
+                var lastRefund = await _context.ProductsQuantities.AsNoTracking()
                     .Include(x => x.Product)
                                 .Where(x => (barcode != string.Empty ? barcode == x.Product.CodeBar : true))
 
@@ -244,11 +244,11 @@ namespace Store.Infrastructure.Repositories
                         Sale_PriceTax = bd.Sale_PriceTax,
                         BarCode = bd.Product.CodeBar,
                     })
-                    .ToList();
+                    .ToListAsync();
                 return new ResultProductQtyDto
                 {
                     result = lastRefund,
-                    count = _context.ReturnsDetails.Count()
+                    count = await _context.ReturnsDetails.CountAsync()
                 };
             }
             catch (Exception ex)
@@ -257,13 +257,13 @@ namespace Store.Infrastructure.Repositories
                 throw new Exception("Error retrieving the buyFactures", ex);
             }
         }
-        public ResultProductQtyDto GetProductQty(int storeId, string barcode)
+        public async Task<ResultProductQtyDto> GetProductQty(int storeId, string barcode)
         {
             try
             {
-                _context = new ApplicationDbContext();
 
-                var lastRefund = _context.ProductsQuantities.AsNoTracking()
+
+                var lastRefund = await _context.ProductsQuantities.AsNoTracking()
                     .Include(x => x.Product)
                     .Where(x => x.Store_ID == storeId)
                     .Where(x => (barcode != string.Empty ? barcode == x.Product.CodeBar : true))
@@ -278,11 +278,11 @@ namespace Store.Infrastructure.Repositories
                         Sale_PriceTax = bd.Sale_PriceTax,
                         BarCode = bd.Product.CodeBar,
                     })
-                    .ToList();
+                    .ToListAsync();
                 return new ResultProductQtyDto
                 {
                     result = lastRefund,
-                    count = _context.ReturnsDetails.Count()
+                    count = await _context.ReturnsDetails.CountAsync()
                 };
             }
             catch (Exception ex)
@@ -298,16 +298,16 @@ namespace Store.Infrastructure.Repositories
     }
     public class ProductTransferRepository : GenericRepository<ProductTransfer>, IProductTransferRepository
     {
-        public List<ProductTransfer> GetAllTransfert(string t1, string t2, string barcode)
+        public async Task<List<ProductTransfer>> GetAllTransfert(string t1, string t2, string barcode)
         {
 
             try
             {
-                _context = new ApplicationDbContext();
+
 
                 var allTransfers = _context.ProductsTransfers.AsNoTracking()
                       .Include(x => x.Product)
-                      .AsEnumerable();
+                      .AsQueryable();
                 if (barcode != string.Empty) allTransfers = allTransfers.Where(x => x.Product.CodeBar == barcode);
                 if (t1 != string.Empty)
                     allTransfers = allTransfers.Where(x => x.StoreFrom == t1);
@@ -319,7 +319,7 @@ namespace Store.Infrastructure.Repositories
                 //allTransfers = allTransfers.Where(x => DateTime.TryParse(x.Date, out var date) && date >= dtpFrom && date <= dtpTo)
                 //     ;
 
-                return allTransfers.ToList();
+                return await allTransfers.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -334,17 +334,17 @@ namespace Store.Infrastructure.Repositories
     }
     public class ProductDiscountRepository : GenericRepository<ProductDiscount>, IProductDiscountRepository
     {
-        public List<ProductDiscount> GetAllData(DateTime dateStart, DateTime dateEnd, string barcode, string store)
+        public async Task<List<ProductDiscount>> GetAllData(DateTime dateStart, DateTime dateEnd, string barcode, string store)
         {
 
             try
             {
-                _context = new ApplicationDbContext();
+
 
                 var allTransfers = _context.ProductDiscounts.AsNoTracking()
                       .Include(x => x.Product)
                       .Include(x => x.Store)
-                      .AsEnumerable();
+                      .AsQueryable();
                 if (barcode != string.Empty) allTransfers = allTransfers.Where(x => x.Product.CodeBar == barcode);
                 allTransfers = allTransfers.Where(x => x.DateStart >= dateStart && x.DateEnd >= dateEnd);
 
@@ -358,7 +358,7 @@ namespace Store.Infrastructure.Repositories
                 //allTransfers = allTransfers.Where(x => DateTime.TryParse(x.Date, out var date) && date >= dtpFrom && date <= dtpTo)
                 //     ;
 
-                return allTransfers.ToList();
+                return await allTransfers.ToListAsync();
             }
             catch (Exception ex)
             {
