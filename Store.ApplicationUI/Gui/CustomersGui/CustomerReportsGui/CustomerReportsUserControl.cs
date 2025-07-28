@@ -22,13 +22,13 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
             _context = context;
             _customerReportRepository = customerReportRepository;
 
-            LoadData();
+
         }
 
 
 
 
-        public async void SetProductsToDgv(int skip)
+        public async Task SetProductsToDgv(int skip)
         {
             DgvِCustomer.DataSource = new List<CustomerReport>();
             var CustomerMoneyList = await _customerReportRepository.GetAllData(skip, Properties.Settings.Default.NoOfDataInDgvs);
@@ -65,7 +65,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
 
 
         // methodes 
-        public async void LoadData()
+        public async Task LoadData()
         {
 
 
@@ -77,7 +77,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
 
                 // if its an admin or Normal user 
 
-                SetProductsToDgv(0);
+                await SetProductsToDgv(0);
                 SetColumns();
                 //_data.Clear();
             }
@@ -119,9 +119,9 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
 
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private async void btnRefresh_Click(object sender, EventArgs e)
         {
-            LoadData();
+            await LoadData();
         }
         private async void btnSearch_Click(object sender, EventArgs e)
         {
@@ -250,7 +250,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
             btnPrev.Enabled = cmbpagination.SelectedIndex > 0 && !dgvHelper.IsEmpty(DgvِCustomer);
             cmbpagination.Enabled = !dgvHelper.IsEmpty(DgvِCustomer);
         }
-        private void btnPrev_Click(object sender, EventArgs e)
+        private async void btnPrev_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             //if (cmbpagination.SelectedIndex == -1)
@@ -269,7 +269,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
                 cmbpagination.SelectedIndex--;
                 int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
                 btnSearch_Click(sender, e);
-                SetProductsToDgv(skip);
+                await SetProductsToDgv(skip);
             }
         }
 
@@ -291,18 +291,18 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
             }
         }
 
-        private void btnDeleteCurrentPage_Click(object sender, EventArgs e)
+        private async void btnDeleteCurrentPage_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
                 for (int i = 0; i < DgvِCustomer.Rows.Count; i++)
                 {
-                    _customerReportRepository.DeleteAsync(DgvِCustomer.Rows[i].Cells[8].Value.ToString());
+                    await _customerReportRepository.DeleteAsync(DgvِCustomer.Rows[i].Cells[8].Value.ToString());
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
                 }
-                LoadData();
+                await LoadData();
 
             }
         }
@@ -330,7 +330,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
 
                         MessageBox.Show("لا توجد بيانات في الفترة المحددة", "معلومة", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                    LoadData();
+                    await LoadData();
                 }
                 catch (Exception ex)
                 {
@@ -340,18 +340,18 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
             }
         }
 
-        private void btnDeleteAllReports_Click(object sender, EventArgs e)
+        private async void btnDeleteAllReports_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
                 try
                 {
-                    _context.Database.ExecuteSqlRaw($"DELETE FROM [CustomersReports]");
+                    await _context.Database.ExecuteSqlRawAsync($"DELETE FROM [CustomersReports]");
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
 
-                    LoadData();
+                    await LoadData();
                 }
                 catch (Exception ex)
                 {

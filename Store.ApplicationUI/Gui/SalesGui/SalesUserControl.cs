@@ -1,5 +1,4 @@
 ﻿using System.Data;
-
 using DevExpress.XtraReports.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -37,8 +36,8 @@ namespace Store.ApplicationUI.Gui.SalesGui
             _context = context;
             _salesRepository = salesRepository;
             _controlManager = controlManager;
-            LoadData();
-            ResetFormBegin();
+
+
         }
 
 
@@ -51,7 +50,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
         }
 
         // methodes 
-        public async void LoadData()
+        public async Task LoadData()
         {
 
 
@@ -584,7 +583,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
             }
 
         }
-        private void ResetForm()
+        private async Task ResetForm()
         {
             if (Process)
             {
@@ -612,7 +611,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 CalculateStatistics();
 
                 // Reinitialize form data (e.g., reload initial data)
-                LoadData(); // This is a method where you load initial data
+                await LoadData(); // This is a method where you load initial data
 
                 // Optionally reset focus to the first control
                 // Set focus to the first control
@@ -934,7 +933,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                     await transaction.CommitAsync();
                     id = sale.Id;
                     Code.Helper.ToasterHelper.ShowNewSaleAdd();
-                    ResetForm();
+                    await ResetForm();
                 }
                 catch (Exception ex)
                 {
@@ -965,8 +964,11 @@ namespace Store.ApplicationUI.Gui.SalesGui
                     }
                     else if (rbAnalysis.Checked)
                     {
-                        var xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(sale8Cm);
-                        xtraForm1.Show();
+
+
+                        Reports.ReportPerviwGui.PerviweForm xtraForm1 = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                        xtraForm1.LoadReport(sale8Cm);
+                        xtraForm1.ShowDialog();
                     }
                 }
                 else
@@ -987,8 +989,11 @@ namespace Store.ApplicationUI.Gui.SalesGui
                     }
                     else if (rbAnalysis.Checked)
                     {
-                        var xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(salesA4);
-                        xtraForm1.Show();
+
+
+                        Reports.ReportPerviwGui.PerviweForm xtraForm1 = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                        xtraForm1.LoadReport(salesA4);
+                        xtraForm1.ShowDialog();
                     }
 
                 }

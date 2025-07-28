@@ -19,7 +19,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
             _context = context;
             _categoryRepository = categoryRepository;
             this.Owner = _main;
-            LoadData();
+
         }
 
         //public static AddCategoryForm Instance(MainForm main)
@@ -47,9 +47,11 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
             lblCategoryId.Text = (_context.Categories.Count() + 1).ToString();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvCategory);
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
             //ShowLoading
+            dgvHelper.ResetForm(this);
+            vider();
             LoadingForm.Instance(_main).Show();
             if (await _context.Database.CanConnectAsync())
             {

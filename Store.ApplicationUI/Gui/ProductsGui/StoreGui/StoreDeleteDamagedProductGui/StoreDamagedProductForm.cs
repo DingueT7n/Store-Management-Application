@@ -25,13 +25,13 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDeleteDamagedProduct
             dateTimePicker1.Value = DateTime.Now;
         }
 
-        public async void LoadData()
+        public async Task LoadData()
         {
 
 
-            //ShowLoading
 
 
+            dgvHelper.ResetForm(this);
             LoadingForm.Instance(_main).Show();
             if (/*await Task.Run(() =>*/await _context.Database.CanConnectAsync())/*)*/
             {
@@ -58,7 +58,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDeleteDamagedProduct
             // Show EmptyDAta
 
         }
-        public async void SetProductsToTable()
+        public void SetProductsToTable()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             _product = productsRepository.GetProductBarCode(txtBareCode.Text);
@@ -66,6 +66,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDeleteDamagedProduct
             {
                 txtProductName.Text = _product.ProductName;
                 txtTotalQty.Text = _product.Quentity.ToString();
+                cmbStoresFrom_SelectionChangeCommitted(null, null);
+
             }
             else
             {
@@ -75,36 +77,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDeleteDamagedProduct
             txtBareCode.Clear();
         }
 
-        private void ResetForm()
-        {
-            // Clear all textboxes
-            foreach (Control ctrl in this.Controls)
-            {
-                if (ctrl is TextBox)
-                {
-                    ((TextBox)ctrl).Clear();
-                }
-                else if (ctrl is ComboBox)
-                {
-                    ((ComboBox)ctrl).SelectedIndex = -1; // Deselect ComboBox
-                }
-                else if (ctrl is CheckBox)
-                {
-                    ((CheckBox)ctrl).Checked = false; // Uncheck CheckBox
-                }
-                // Add more control types if needed
-            }
 
-            // Reset any DataGridView
-
-
-
-            // Reinitialize form data (e.g., reload initial data)
-            LoadData(); // This is a method where you load initial data
-
-            // Optionally reset focus to the first control
-            // Set focus to the first control
-        }
 
         private void txtBareCode_KeyDown(object sender, KeyEventArgs e)
         {
@@ -203,7 +176,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDeleteDamagedProduct
                     try
                     {
                         await SetProductQuentity(Convert.ToInt32(txtQtyTransfert.Text));
-                        _context.ProductsQuantities.Where(x => x.Qty <= 0).ExecuteDelete();
+                        await _context.ProductsQuantities.Where(x => x.Qty <= 0).ExecuteDeleteAsync();
                         await _context.SaveChangesAsync();
                         _product.Quentity -= Convert.ToInt32(txtQtyTransfert.Text);
                         _context.Update(_product);
@@ -211,7 +184,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDeleteDamagedProduct
                         await transaction.CommitAsync();
                         Code.Helper.ToasterHelper.ShowOutStockProduct();
 
-                        ResetForm();
+
                     }
                     catch (Exception)
                     {
@@ -233,8 +206,24 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDeleteDamagedProduct
 
         private void StoreDamagedProductForm_Load(object sender, EventArgs e)
         {
-            LoadData();
 
+
+        }
+
+        private void cmbStoresFrom_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            if (_product is not null)
+            {
+                string selectedStoreName = cmbStoresFrom.SelectedValue?.ToString(); // safer
+                if (!string.IsNullOrWhiteSpace(selectedStoreName))
+                {
+                    var productQty = _context.ProductsQuantities
+                        .Where(x => x.Store_ID.ToString() == selectedStoreName && x.Pro_ID == _product.Id)
+                        .Sum(x => x.Qty);
+
+                    txtQtyInFrom.Text = productQty.ToString();
+                }
+            }
         }
     }
 }

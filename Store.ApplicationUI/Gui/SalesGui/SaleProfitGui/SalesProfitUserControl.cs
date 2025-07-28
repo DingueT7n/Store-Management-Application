@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.ApplicationUI.Reports.SalesReports;
 using Store.Core.Entities.Sales;
 using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
@@ -27,10 +28,10 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
             _controlManager = controlManager;
             dtpTo.Value = DateTime.Now;
 
-            LoadData();
+
         }
 
-        public async void SetProductsToDgv(int skip)
+        public async Task SetProductsToDgv(int skip)
         {
             ////DgvSalesProfit.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             //var CustomerMoneyList = MainForm.Context.CustomersReports.
@@ -75,7 +76,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
 
 
         // methodes 
-        public async void LoadData()
+        public async Task LoadData()
         {
 
 
@@ -87,7 +88,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
 
                 // if its an admin or Normal user 
 
-                SetProductsToDgv(0);
+                await SetProductsToDgv(0);
                 SetColumns();
                 //_data.Clear();
                 CalculateStatistics();
@@ -345,7 +346,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
                 }
                 Code.Helper.ToasterHelper.ShowDeletedToast();
 
-                LoadData();
+                await LoadData();
 
             }
         }
@@ -371,7 +372,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
 
                         MessageBox.Show("لا توجد بيانات في الفترة المحددة", "معلومة", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                    LoadData();
+                    await LoadData();
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
                 }
@@ -391,7 +392,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
                 try
                 {
                     await _context.Database.ExecuteSqlRawAsync($"DELETE FROM [SalesProfits]");
-                    LoadData();
+                    await LoadData();
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
                 }
@@ -415,8 +416,12 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
                     saleReportsInPeriod.DataSource = ProfitDetailsTable;
                     saleReportsInPeriod.lbldateFrom.Text = dtpFrom.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                     saleReportsInPeriod.lblDateTo.Text = dtpTo.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-                    Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(saleReportsInPeriod);
-                    xtraForm1.Show();
+
+
+
+                    Reports.ReportPerviwGui.PerviweForm xtraForm1 = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                    xtraForm1.LoadReport(saleReportsInPeriod);
+                    xtraForm1.ShowDialog();
                 }
             }
             catch (Exception)
@@ -435,8 +440,11 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
                     DataTable ProfitDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(Convert.ToInt32(DgvSalesProfit.CurrentRow.Cells[0].Value.ToString()));
                     Reports.SalesReports.salesA4 salesA4 = _controlManager.GetR<Reports.SalesReports.salesA4>();
                     salesA4.DataSource = ProfitDetailsTable;
-                    Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(salesA4);
-                    xtraForm1.Show();
+
+
+                    Reports.ReportPerviwGui.PerviweForm xtraForm1 = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                    xtraForm1.LoadReport(salesA4);
+                    xtraForm1.ShowDialog();
                 }
             }
             catch (Exception)

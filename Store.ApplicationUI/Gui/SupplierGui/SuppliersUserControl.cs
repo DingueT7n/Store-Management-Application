@@ -29,7 +29,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui
         }
 
 
-        public async void SetProductsToDgv()
+        public async Task SetProductsToDgv()
         {
             //DgvِSupplier.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
 
@@ -39,9 +39,10 @@ namespace Store.ApplicationUI.Gui.SupplierGui
 
 
         // methodes 
-        public async void LoadData()
+        public async Task LoadData()
         {
 
+            dgvHelper.ResetForm(this);
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
@@ -52,7 +53,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui
                 // if its an admin or Normal user 
 
                 SetColumns();
-                SetProductsToDgv();
+                await SetProductsToDgv();
                 //_data.Clear();
             }
             else
@@ -97,7 +98,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui
             ToasterHelper.PlayNotificationSound();
             if (DgvِSupplier.Rows.Count > 0)
             {
-                AddSupplierForm form = _controlManager.GetF<AddSupplierForm>();
+                AddSupplierForm form = await _controlManager.GetFAsync<AddSupplierForm>();
 
 
                 await form.SetDataToEdit(DgvِSupplier.CurrentRow.Cells[6].Value.ToString());
@@ -114,7 +115,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui
                 await _suppliersRepository.DeleteAsync(DgvِSupplier.CurrentRow.Cells[6].Value.ToString());
                 Code.Helper.ToasterHelper.ShowDeletedToast();
 
-                SetProductsToDgv();
+                await SetProductsToDgv();
             }
         }
         private List<Core.Entities.Suppliers.Supplier> data;
@@ -129,10 +130,10 @@ namespace Store.ApplicationUI.Gui.SupplierGui
             txtSearch.Text = string.Empty;
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private async void btnRefresh_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            LoadData();
+            await LoadData();
         }
 
         private async void btnExportSupplier_Click(object sender, EventArgs e)
@@ -198,9 +199,9 @@ namespace Store.ApplicationUI.Gui.SupplierGui
             }
         }
 
-        private void SuppliersUserControl_Load(object sender, EventArgs e)
+        private async void SuppliersUserControl_Load(object sender, EventArgs e)
         {
-            LoadData();
+            await LoadData();
         }
     }
 }

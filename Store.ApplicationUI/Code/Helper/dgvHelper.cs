@@ -9,5 +9,32 @@
 
 
         }
+        public static void ResetForm(Control parent)
+        {
+            foreach (Control ctrl in parent.Controls)
+            {
+                switch (ctrl)
+                {
+                    case TextBox tb:
+                        tb.Clear();
+                        break;
+                    case ComboBox cb:
+                        cb.SelectedIndex = -1;
+                        break;
+                    case CheckBox chk:
+                        chk.Checked = false;
+                        break;
+
+                        // Add more control types as needed
+                }
+
+                // 🔁 Recursively call for nested controls
+                if (ctrl.HasChildren)
+                {
+                    ResetForm(ctrl);
+                }
+            }
+        }
+
     }
 }

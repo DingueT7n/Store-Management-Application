@@ -31,10 +31,10 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
             _productRepository = productRepository;
             _controlManager = controlManager;
             _context = context;
-            LoadData();
+
         }
 
-        public async void LoadData()
+        public async Task LoadData()
         {
 
 
@@ -128,9 +128,15 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
         {
             if (_product is not null)
             {
-                var productQty = _context.ProductsQuantities.Where(x => x.StoreName == cmbStoresFrom.SelectedText.ToString()
-                && x.Pro_ID == _product.Id).Sum(x => x.Qty);
-                txtQtyInFrom.Text = productQty.ToString();
+                string selectedStoreName = cmbStoresFrom.SelectedValue?.ToString(); // safer
+                if (!string.IsNullOrWhiteSpace(selectedStoreName))
+                {
+                    var productQty = _context.ProductsQuantities
+                        .Where(x => x.Store_ID.ToString() == selectedStoreName && x.Pro_ID == _product.Id)
+                        .Sum(x => x.Qty);
+
+                    txtQtyInFrom.Text = productQty.ToString();
+                }
             }
         }
 
@@ -170,6 +176,14 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
         }
         private void ResetForm()
         {
+            _product = null;
+            txtDiscountValue.Text = 0.ToString();
+            txtQtyTransfert.Text = 0.ToString();
+            txtBareCode.Clear();
+            txtProductName.Clear();
+            txtQtyInFrom.Text = 0.ToString();
+            txtTotalQty.Text = 0.ToString();
+            txtSalePrice.Text = 0.ToString();
             // Clear all textboxes
             foreach (Control ctrl in this.Controls)
             {
@@ -190,15 +204,9 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
 
             // Reset any DataGridView
 
-            _product = null;
-            txtDiscountValue.Text = 0.ToString();
-            txtQtyTransfert.Text = 0.ToString();
-            txtBareCode.Clear();
-            txtQtyInFrom.Text = 0.ToString();
-            txtTotalQty.Text = 0.ToString();
-            txtSalePrice.Text = 0.ToString();
+
             // Reinitialize form data (e.g., reload initial data)
-            LoadData(); // This is a method where you load initial data
+
 
             // Optionally reset focus to the first control
             // Set focus to the first control

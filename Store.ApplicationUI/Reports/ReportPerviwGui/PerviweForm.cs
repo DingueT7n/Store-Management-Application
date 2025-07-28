@@ -8,32 +8,15 @@ namespace Store.ApplicationUI.Reports.ReportPerviwGui
         {
             InitializeComponent();
         }
-        private static PerviweForm? _Form;
 
-        public static PerviweForm Instance(XtraReport report)
+
+
+        public async void LoadReport(XtraReport report)
         {
-            if (_Form == null || _Form.IsDisposed)
-            {
-                _Form = new PerviweForm();
-            }
-            else
-            {
-                // Bring the form to the front if it exists.
-                if (!_Form.Visible)
-                {
-                    _Form.Show();
-                }
-                _Form.BringToFront();
-            }
-            if (_Form != null && report is not null)
-            {
 
-                _Form.documentViewer1.LookAndFeel.SetSkinStyle(DevExpress.LookAndFeel.SkinStyle.WXI);
-                _Form.documentViewer1.DocumentSource = report;
-                report.CreateDocument();
-            }
-
-            return _Form;
+            documentViewer1.LookAndFeel.SetSkinStyle(DevExpress.LookAndFeel.SkinStyle.WXI);
+            documentViewer1.DocumentSource = report;
+            await report.CreateDocumentAsync();
         }
 
         private void PerviweForm_Load(object sender, EventArgs e)

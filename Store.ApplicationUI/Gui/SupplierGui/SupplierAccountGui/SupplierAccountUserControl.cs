@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.ApplicationUI.Reports.BuysReports;
 using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Suppliers;
 using Store.Core.Interfaces;
@@ -25,9 +26,9 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
             _context = context;
             _supplierMoneyRepository = supplierMoneyRepository;
             _controlManager = controlManager;
-            LoadData();
+
         }
-        public async void SetDataToDgv()
+        public async Task SetDataToDgv()
         {
 
             //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
@@ -53,10 +54,10 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
             }
         }
 
-        public async void LoadData()
+        public async Task LoadData()
         {
 
-
+            dgvHelper.ResetForm(this);
             //ShowLoading
             LoadingForm.Instance(_main).Show();
             if (await _supplierMoneyRepository.IsConnectedAsync())
@@ -65,7 +66,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
 
                 // if its an admin or Normal user 
 
-                SetDataToDgv();
+                await SetDataToDgv();
                 SetColumns();
                 //_data.Clear();
             }
@@ -108,9 +109,9 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
 
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private async void btnRefresh_Click(object sender, EventArgs e)
         {
-            LoadData();
+            await LoadData();
         }
 
         private async void btnSearch_Click(object sender, EventArgs e)
@@ -303,7 +304,8 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                 }
                 ToasterHelper.ShowDebtAdded();
 
-                SetDataToDgv();
+                await LoadData();
+
             }
         }
 
@@ -319,8 +321,11 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                     supAccount.DataSource = suplierAccountDetailsTable;
                     var a = suplierAccountDetailsTable.Rows.Count.ToString();
                     supAccount.lblTotalFactures.Text = a;
-                    Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(supAccount);
-                    xtraForm1.Show();
+
+
+                    Reports.ReportPerviwGui.PerviweForm xtraForm1 = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                    xtraForm1.LoadReport(supAccount);
+                    xtraForm1.ShowDialog();
                 }
             }
             catch (Exception)
@@ -373,8 +378,12 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                     DataTable buyDetailsTable = await FactureHelper.GetBuyDetailsDataTableAsync(Convert.ToInt32(DgvِCustomer.CurrentRow.Cells[1].Value.ToString()));
                     Reports.BuysReports.buyA4 buyA4 = _controlManager.GetR<Reports.BuysReports.buyA4>();
                     buyA4.DataSource = buyDetailsTable;
-                    Reports.ReportPerviwGui.PerviweForm perv = Reports.ReportPerviwGui.PerviweForm.Instance(buyA4);
-                    perv.Show();
+
+
+
+                    Reports.ReportPerviwGui.PerviweForm xtraForm1 = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                    xtraForm1.LoadReport(buyA4);
+                    xtraForm1.ShowDialog();
                 }
             }
             catch (Exception)
@@ -394,8 +403,11 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                     DataTable buyDetailsTable = await FactureHelper.GetBuyDetailsDataTableAsync(Convert.ToInt32(DgvِCustomer.CurrentRow.Cells[0].Value.ToString()));
                     Reports.BuysReports.buy8cm buy8cm = _controlManager.GetR<Reports.BuysReports.buy8cm>();
                     buy8cm.DataSource = buyDetailsTable;
-                    Reports.ReportPerviwGui.PerviweForm perv = Reports.ReportPerviwGui.PerviweForm.Instance(buy8cm);
-                    perv.Show();
+
+
+                    Reports.ReportPerviwGui.PerviweForm xtraForm1 = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                    xtraForm1.LoadReport(buy8cm);
+                    xtraForm1.ShowDialog();
                 }
             }
             catch (Exception)

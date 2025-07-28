@@ -17,7 +17,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
             _context = context;
             _main = main;
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
             dtpTo.Value = DateTime.Now.AddDays(30);
             //ShowLoading
@@ -45,7 +45,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
                     cmbUser.ValueMember = "Id";
                     cmbUser.Text = "اختر البائع";
 
-                    LoadChartData();
+                    await LoadChartData();
                 }
                 catch (Exception ex)
                 {
@@ -68,7 +68,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
 
 
         }
-        private async void LoadChartData()
+        private async Task LoadChartData()
         {
             try
             {
@@ -787,23 +787,23 @@ namespace Store.ApplicationUI.Gui.HomeGui
 
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            LoadChartData();
+            await LoadChartData();
         }
 
-        private async void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             //flowLayoutPanel6.Size = new Size(1034, 463);
             flowLayoutPanel6.AutoSize = true;
-            await calcZakat();
+            calcZakat();
             panelZakat.Visible = true;
 
         }
 
-        private async Task calcZakat()
+        private void calcZakat()
         {
             try
             {
@@ -811,19 +811,19 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 decimal totalbuySales = 0.00m;
                 if (rbBuy.Checked)
                 {
-                    totalbuySales = await _context.Products.SumAsync(x => x.Quentity * x.BuyPrice);
+                    totalbuySales = _context.Products.Sum(x => x.Quentity * x.BuyPrice);
                 }
                 else if (rbSale.Checked)
                 {
-                    totalbuySales = await _context.Products.SumAsync(x => x.Quentity * x.SalePriceTax);
+                    totalbuySales = _context.Products.Sum(x => x.Quentity * x.SalePriceTax);
                 }
                 txtBuySale.Text = totalbuySales.ToString("f2");
-                var customerDebts = await _context.Customers.SumAsync(x => x.TotalDebts);
+                var customerDebts = _context.Customers.Sum(x => x.TotalDebts);
                 txtDebtCustomer.Text = customerDebts.ToString("f2");
 
-                var caisseAndBank = (await _context.Caisses.SumAsync(x => x.MoneyinCaisse)) + (await _context.Banks.SumAsync(x => x.Money));
+                var caisseAndBank = (_context.Caisses.Sum(x => x.MoneyinCaisse)) + (_context.Banks.Sum(x => x.Money));
                 txtCaisseValue.Text = caisseAndBank.ToString("f2");
-                var SupplierDebts = await _context.Suppliers.SumAsync(x => x.TotalDebts);
+                var SupplierDebts = _context.Suppliers.Sum(x => x.TotalDebts);
                 txtDebtSupplier.Text = SupplierDebts.ToString("f2");
                 txtTotal.Text = ((totalbuySales + customerDebts + caisseAndBank) - SupplierDebts).ToString("f2");
                 txtZakat.Text = ((Convert.ToDecimal(txtTotal.Text) * 2.5m) / 100).ToString("f2");
@@ -862,19 +862,19 @@ namespace Store.ApplicationUI.Gui.HomeGui
             await VisualizeTopProductsByProfitAsync();
         }
 
-        private async void rbSale_CheckedChanged(object sender, EventArgs e)
+        private void rbSale_CheckedChanged(object sender, EventArgs e)
         {
-            await calcZakat();
+            calcZakat();
         }
 
-        private async void rbBuy_CheckedChanged(object sender, EventArgs e)
+        private void rbBuy_CheckedChanged(object sender, EventArgs e)
         {
-            await calcZakat();
+            calcZakat();
         }
 
         private void StatisticsUserControl_Load(object sender, EventArgs e)
         {
-            LoadData();
+
         }
     }
 }

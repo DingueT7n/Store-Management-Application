@@ -29,9 +29,11 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
             lblCategoryId.Text = (_context.Stores.Count() + 1).ToString();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvStore);
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
             //ShowLoading
+            dgvHelper.ResetForm(this);
+            vider();
             LoadingForm.Instance(_main).Show();
             if (await _context.Database.CanConnectAsync())
             {
@@ -54,7 +56,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
         void vider()
         {
             txtNameِCategory.Text = "";
-            RefreshDgv();
+
         }
 
         private void SetColumns()
@@ -185,7 +187,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
 
         private void AddStoreForm_Load(object sender, EventArgs e)
         {
-            LoadData();
+
 
         }
     }

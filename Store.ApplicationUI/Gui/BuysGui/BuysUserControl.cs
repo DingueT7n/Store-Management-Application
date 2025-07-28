@@ -5,7 +5,7 @@ using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.PaymentGui;
-using Store.ApplicationUI.Reports.ReportPerviwGui;
+using Store.ApplicationUI.Reports.BuysReports;
 using Store.Core.Entities.Buys;
 using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Products;
@@ -31,7 +31,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
             _context = context;
             _buysRepository = buysRepository;
             _controlManager = controlManager;
-            LoadData();
+
         }
 
 
@@ -41,9 +41,10 @@ namespace Store.ApplicationUI.Gui.BuysGui
             SetProductsToTable();
             AddNewRow();
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
 
+            ResetForm();
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
@@ -209,7 +210,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
             }
         }
         private Product _product;
-        public async Task SetProductsToTable()
+        public void SetProductsToTable()
         {
             try
             {
@@ -533,7 +534,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
                     CalculateStatistics();
 
                     // Reinitialize form data (e.g., reload initial data)
-                    LoadData(); // This is a method where you load initial data
+
                 }
             }
             catch (Exception ex)
@@ -851,8 +852,10 @@ namespace Store.ApplicationUI.Gui.BuysGui
                     }
                     else if (rbAnalysis.Checked)
                     {
-                        var perv = Reports.ReportPerviwGui.PerviweForm.Instance(buy8cm);
-                        perv.Show();
+
+                        Reports.ReportPerviwGui.PerviweForm perv = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                        perv.LoadReport(buy8cm);
+                        perv.ShowDialog();
                     }
                 }
                 else
@@ -872,8 +875,10 @@ namespace Store.ApplicationUI.Gui.BuysGui
                     }
                     else if (rbAnalysis.Checked)
                     {
-                        PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(buyA4);
-                        xtraForm1.Show();
+
+                        Reports.ReportPerviwGui.PerviweForm xtraForm1 = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                        xtraForm1.LoadReport(buyA4);
+                        xtraForm1.ShowDialog();
                     }
 
                 }

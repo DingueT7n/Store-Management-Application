@@ -132,6 +132,7 @@
             cmbStoresFrom.Name = "cmbStoresFrom";
             cmbStoresFrom.Size = new Size(263, 27);
             cmbStoresFrom.TabIndex = 9;
+            cmbStoresFrom.SelectionChangeCommitted += cmbStoresFrom_SelectionChangeCommitted;
             // 
             // txtTotalQty
             // 

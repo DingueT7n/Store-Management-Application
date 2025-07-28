@@ -27,13 +27,9 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
         }
 
 
-        public async void SetProductsToDgv()
+        public async Task SetProductsToDgv()
         {
 
-            if (rbReciptVoucher.Checked)
-                SetColumnsForRecipent();
-            else
-                SetColumnsForSender();
 
             if (rbReciptVoucher.Checked)
                 DgvProducts.DataSource = await _receiptVoucherRepository.GetAllReciptVouchers();
@@ -41,6 +37,10 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                 DgvProducts.DataSource = await _receiptVoucherRepository.GetAllSentVouchers();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
 
+            if (rbReciptVoucher.Checked)
+                SetColumnsForRecipent();
+            else
+                SetColumnsForSender();
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             //_context.SaveChanges();
             //var data = deservedsRepository.GetAll(x => x.DeservedType);
@@ -49,7 +49,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
 
 
         // methodes 
-        public async void LoadData()
+        public async Task LoadData()
         {
             DgvProducts.DataSource = null;
             dtpTo.Value = DateTime.Now;
@@ -61,7 +61,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
 
                 // if its an admin or Normal user 
 
-                SetProductsToDgv();
+                await SetProductsToDgv();
 
 
                 //_data.Clear();
@@ -81,7 +81,9 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
 
         private void SetColumnsForRecipent()
         {
-            DgvProducts.DataSource = new List<RecieptVoucher>();
+            //DgvProducts.DataSource = null; // Clear the DataGridView first
+
+            //DgvProducts.DataSource = new List<RecieptVoucher>();
             DgvProducts.Columns[0].HeaderCell.Value = "اسم المستقبل";
             DgvProducts.Columns[1].HeaderCell.Value = "المبلغ المستقبل";
             DgvProducts.Columns[2].HeaderCell.Value = "تاريخ السند";
@@ -92,7 +94,9 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
         }
         private void SetColumnsForSender()
         {
-            DgvProducts.DataSource = new List<Core.Entities.Vouchers.SendVoucher>();
+            //DgvProducts.DataSource = null; // Clear the DataGridView first
+
+            //DgvProducts.DataSource = new List<Core.Entities.Vouchers.SendVoucher>();
 
             DgvProducts.Columns[0].HeaderCell.Value = "اسم المرسل";
             DgvProducts.Columns[1].HeaderCell.Value = "المبلغ المرسل";
@@ -103,20 +107,22 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
             DgvProducts.Columns[6].HeaderCell.Value = "معرف السند";
         }
 
-        private void btnAddDeserved_Click(object sender, EventArgs e)
+        private async void btnAddDeserved_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            AddVoucherForm AddVoucherForm = _controlManager.GetF<AddVoucherForm>();
+            AddVoucherForm AddVoucherForm = await _controlManager.GetFAsync<AddVoucherForm>();
             AddVoucherForm.ShowDialog();
         }
 
-        private void rbReciptVoucher_CheckedChanged(object sender, EventArgs e)
+        private async void rbReciptVoucher_CheckedChanged(object sender, EventArgs e)
         {
-            SetProductsToDgv();
+            if (rbReciptVoucher.Checked)
+                await SetProductsToDgv();
         }
-        private void rbSendVoucher_CheckedChanged(object sender, EventArgs e)
+        private async void rbSendVoucher_CheckedChanged(object sender, EventArgs e)
         {
-            SetProductsToDgv();
+            if (rbSendVoucher.Checked)
+                await SetProductsToDgv();
         }
 
         private async void btnDeleteDeserved_Click(object sender, EventArgs e)
@@ -142,19 +148,19 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                 await _context.SaveChangesAsync();
                 Code.Helper.ToasterHelper.ShowDeletedToast();
 
-                SetProductsToDgv();
+                await SetProductsToDgv();
 
             }
         }
 
-        private void btnEditDeserved_Click(object sender, EventArgs e)
+        private async void btnEditDeserved_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (DgvProducts.Rows.Count > 0)
             {
-                AddVoucherForm AddVoucherForm = _controlManager.GetF<AddVoucherForm>();
+                AddVoucherForm AddVoucherForm = await _controlManager.GetFAsync<AddVoucherForm>();
 
-                AddVoucherForm.SetDataToEdit(
+                await AddVoucherForm.SetDataToEdit(
                         DgvProducts.CurrentRow.Cells[0].Value.ToString(),
                         DgvProducts.CurrentRow.Cells[1].Value.ToString(),
                         DgvProducts.CurrentRow.Cells[5].Value.ToString(),
@@ -194,7 +200,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                             _context.Remove(send);
                     }
                     await _context.SaveChangesAsync();
-                    SetProductsToDgv();
+                    await SetProductsToDgv();
 
                 }
             }
@@ -210,10 +216,13 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                     if (DgvProducts.SelectedRows.Count > 0)
                     {
                         DataTable DetailsTable = await FactureHelper.GetVoucherRecieptDataTableAsync(Convert.ToInt32(DgvProducts.CurrentRow.Cells[6].Value.ToString()));
-                        Reports.VouchersReports.RecieptVoucher RecieptVoucher = new();
+                        Reports.VouchersReports.RecieptVoucher RecieptVoucher = _controlManager.GetR<RecieptVoucher>();
                         RecieptVoucher.DataSource = DetailsTable;
-                        Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(RecieptVoucher);
-                        xtraForm1.Show();
+
+
+                        Reports.ReportPerviwGui.PerviweForm xtraForm1 = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                        xtraForm1.LoadReport(RecieptVoucher);
+                        xtraForm1.ShowDialog();
                     }
                 }
                 catch (Exception)
@@ -230,10 +239,14 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                     if (DgvProducts.SelectedRows.Count > 0)
                     {
                         DataTable DetailsTable = await FactureHelper.GetVoucherSenderDataTableAsync(Convert.ToInt32(DgvProducts.CurrentRow.Cells[6].Value.ToString()));
-                        Reports.VouchersReports.SendVoucher SendVoucher = new();
+                        Reports.VouchersReports.SendVoucher SendVoucher = _controlManager.GetR<Reports.VouchersReports.SendVoucher>();
                         SendVoucher.DataSource = DetailsTable;
-                        Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(SendVoucher);
-                        xtraForm1.Show();
+
+
+
+                        Reports.ReportPerviwGui.PerviweForm xtraForm1 = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                        xtraForm1.LoadReport(SendVoucher);
+                        xtraForm1.ShowDialog();
                     }
                 }
                 catch (Exception)
@@ -263,12 +276,12 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                 DgvProducts.DataSource = await _context.SendVouchers.Where
                     (x => x.To == txtSearch.Text || x.SenderName == txtSearch.Text
                     || (x.Date >= dtpFrom.Value && x.Date <= dtpTo.Value)).ToListAsync();
+
+            lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
             if (rbReciptVoucher.Checked)
                 SetColumnsForRecipent();
             else
                 SetColumnsForSender();
-
-            lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
         }
     }
 }

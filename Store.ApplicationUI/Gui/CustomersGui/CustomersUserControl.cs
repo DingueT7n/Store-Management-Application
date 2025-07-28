@@ -29,12 +29,12 @@ namespace Store.ApplicationUI.Gui.CustomersGui
             _customersRepository = customersRepository;
             _context = context;
             _controlManager = controlManager;
-            LoadData(); // Optional if you want it loaded on create
+
         }
 
 
 
-        public async void SetProductsToDgv()
+        public async Task SetProductsToDgv()
         {
             //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
 
@@ -43,13 +43,13 @@ namespace Store.ApplicationUI.Gui.CustomersGui
 
         }
 
-        public async void LoadData()
+        public async Task LoadData()
         {
             LoadingForm.Instance(_main).Show();
 
             if (await _customersRepository.IsConnectedAsync())
             {
-                SetProductsToDgv();
+                await SetProductsToDgv();
                 SetColumns();
             }
             else
@@ -75,27 +75,27 @@ namespace Store.ApplicationUI.Gui.CustomersGui
             DgvِCustomer.Columns[6].HeaderCell.Value = "معرف العميل";
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private async void btnRefresh_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            LoadData();
+            await LoadData();
         }
 
-        private void btnAddCustomer_Click(object sender, EventArgs e)
+        private async void btnAddCustomer_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
 
-            var addCustomerForm = _controlManager.GetF<AddCustomerForm>();
+            var addCustomerForm = await _controlManager.GetFAsync<AddCustomerForm>();
             addCustomerForm.ShowDialog();
 
         }
 
-        private void btnEditCustomer_Click(object sender, EventArgs e)
+        private async void btnEditCustomer_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (DgvِCustomer.Rows.Count > 0)
             {
-                var form = _controlManager.GetF<AddCustomerForm>();
+                var form = await _controlManager.GetFAsync<AddCustomerForm>();
 
 
                 //form.SetDataToEdit(
@@ -140,7 +140,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui
 
                     Properties.Settings.Default.Save();
                 }
-                LoadData();
+                await LoadData();
             }
             catch (Exception ex)
             {

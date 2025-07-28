@@ -113,12 +113,14 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
                             await _context.SaveChangesAsync();
                         }
                     }
-                    _main.Hide();
-                    PosForm posForm = _controlManager.GetF<PosForm>();
+                    //_main.Hide();
+                    //PosForm posForm = _controlManager.GetF<PosForm>();
 
+                    //this.Close();
+                    //posForm.ShowDialog();
+                    //_main.Show();
+                    this.DialogResult = DialogResult.OK;
                     this.Close();
-                    posForm.ShowDialog();
-                    _main.Show();
                 }
             }
             catch (Exception ex)

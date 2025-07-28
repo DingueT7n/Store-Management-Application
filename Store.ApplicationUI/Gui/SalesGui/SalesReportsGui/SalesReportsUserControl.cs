@@ -23,11 +23,11 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
             _context = context;
             _salesRepository = salesRepository;
             _controlManager = controlManager;
-            LoadData();
+
         }
 
 
-        public async void SetProductsToDgv(int skip)
+        public async Task SetProductsToDgv(int skip)
         {
             ////DgvSales.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             //var CustomerMoneyList = MainForm.Context.CustomersReports.
@@ -52,8 +52,9 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
         }
 
         // methodes 
-        public async void LoadData()
+        public async Task LoadData()
         {
+            dgvHelper.ResetForm(this);
 
             dtpTo.Value = DateTime.Now;
             //ShowLoading
@@ -64,7 +65,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
 
                 // if its an admin or Normal user 
 
-                SetProductsToDgv(0);
+                await SetProductsToDgv(0);
                 SetColumns();
                 //_data.Clear();
                 CalculateStatistics();
@@ -317,8 +318,12 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
                     DataTable saleDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(Convert.ToInt32(DgvSales.CurrentRow.Cells[0].Value.ToString()));
                     Reports.sale8cm sale8Cm = _controlManager.GetR<Reports.sale8cm>();
                     sale8Cm.DataSource = saleDetailsTable;
-                    var xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(sale8Cm);
-                    xtraForm1.Show();
+
+
+
+                    Reports.ReportPerviwGui.PerviweForm xtraForm1 = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                    xtraForm1.LoadReport(sale8Cm);
+                    xtraForm1.ShowDialog();
                 }
             }
             catch (Exception)
@@ -430,10 +435,12 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
             dataTable.Columns["Remain"].ColumnName = "الباقي";
             return dataTable;
         }
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private async void btnRefresh_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            LoadData();
+            await LoadData();
+
+
         }
 
         private async void btnDeleteCurrentPage_Click(object sender, EventArgs e)
@@ -461,7 +468,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
                 }
                 Code.Helper.ToasterHelper.ShowDeletedToast();
 
-                LoadData();
+                await LoadData();
 
             }
         }
@@ -487,7 +494,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
 
                         MessageBox.Show("لا توجد بيانات في الفترة المحددة", "معلومة", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                    LoadData();
+                    await LoadData();
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
                 }
@@ -507,7 +514,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
                 try
                 {
                     await _context.Database.ExecuteSqlRawAsync($"DELETE FROM [Sales]");
-                    LoadData();
+                    await LoadData();
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
                 }

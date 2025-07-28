@@ -18,9 +18,9 @@ namespace Store.ApplicationUI.Gui.LoginGui
         {
             try
             {
+                InitializeComponent();
                 Code.Helper.ConStringHelper.SetConString();
                 _context = context;
-                InitializeComponent();
                 _oginForm = this;
 
             }
@@ -357,7 +357,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
                     }
                     await _context.AddAsync(user);
                     await _context.SaveChangesAsync();
-                    AddUserRelatedEntities(user, true);
+                    await AddUserRelatedEntities(user, true);
 
 
                 }

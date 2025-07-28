@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Reports.VouchersReports;
 using Store.Core.Entities.Vouchers;
@@ -14,16 +15,18 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui
         private readonly ApplicationDbContext _context;
         private readonly MainForm _main;
         private readonly IReceiptVoucherRepository _receiptVoucherRepository;
+        private readonly ControlManager _controlManager;
 
-        public VouchersReportsUserControl(ApplicationDbContext context, MainForm main, IReceiptVoucherRepository receiptVoucherRepository)
+        public VouchersReportsUserControl(ApplicationDbContext context, MainForm main, IReceiptVoucherRepository receiptVoucherRepository, ControlManager controlManager)
         {
             InitializeComponent();
             _context = context;
             _main = main;
             _receiptVoucherRepository = receiptVoucherRepository;
+            _controlManager = controlManager;
         }
 
-        public async void SetProductsToDgv(string barcode)
+        public async Task SetProductsToDgv(string barcode)
         {
             ////DgvSales.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             //var CustomerMoneyList = MainForm.Context.CustomersReports.
@@ -82,16 +85,17 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui
             }
         }
 
-        void RefreshDgv()
+        async Task RefreshDgv()
         {
-            ;
+
 
             SetColumns();
-            SetProductsToDgv(txtSearch.Text);
+            await SetProductsToDgv(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
+            dgvHelper.ResetForm(this);
             dtpTo.Value = DateTime.Now;
 
             //ShowLoading
@@ -102,7 +106,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui
 
 
                 // if its an admin or Normal user 
-                RefreshDgv();
+                await RefreshDgv();
                 //_data.Clear();
             }
             else
@@ -152,20 +156,20 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui
 
         }
 
-        private void rbRecieptVoucher_CheckedChanged(object sender, EventArgs e)
+        private async void rbRecieptVoucher_CheckedChanged(object sender, EventArgs e)
         {
-            RefreshDgv();
+            await RefreshDgv();
         }
 
-        private void rbSendVoucher_CheckedChanged(object sender, EventArgs e)
+        private async void rbSendVoucher_CheckedChanged(object sender, EventArgs e)
         {
-            RefreshDgv();
+            await RefreshDgv();
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
-            RefreshDgv();
+            await RefreshDgv();
         }
 
         private async void button2_Click(object sender, EventArgs e)
@@ -203,7 +207,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
                     DgvSales.DataSource = null;
-                    RefreshDgv();
+                    await RefreshDgv();
                 }
             }
             catch (Exception)
@@ -223,8 +227,11 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui
                         DataTable DetailsTable = await FactureHelper.GetVoucherRecieptDataTableAsync(Convert.ToInt32(DgvSales.CurrentRow.Cells[6].Value.ToString()));
                         Reports.VouchersReports.RecieptVoucher RecieptVoucher = new();
                         RecieptVoucher.DataSource = DetailsTable;
-                        Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(RecieptVoucher);
-                        xtraForm1.Show();
+
+
+                        Reports.ReportPerviwGui.PerviweForm xtraForm1 = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                        xtraForm1.LoadReport(RecieptVoucher);
+                        xtraForm1.ShowDialog();
                     }
                 }
                 catch (Exception)
@@ -243,8 +250,11 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersReportGui
                         DataTable DetailsTable = await FactureHelper.GetVoucherSenderDataTableAsync(Convert.ToInt32(DgvSales.CurrentRow.Cells[6].Value.ToString()));
                         Reports.VouchersReports.SendVoucher SendVoucher = new();
                         SendVoucher.DataSource = DetailsTable;
-                        Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(SendVoucher);
-                        xtraForm1.Show();
+
+
+                        Reports.ReportPerviwGui.PerviweForm xtraForm1 = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                        xtraForm1.LoadReport(SendVoucher);
+                        xtraForm1.ShowDialog();
                     }
                 }
                 catch (Exception)

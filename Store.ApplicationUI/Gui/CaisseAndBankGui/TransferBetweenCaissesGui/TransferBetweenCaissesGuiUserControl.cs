@@ -29,8 +29,10 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransferBetweenCaissesGui
             if (cmbCaisseTo.Items.Count <= 0) { MessageBox.Show("لا يوجد صناديق راجع بياناتك"); return; }
             if (cmbCaisseTo.Text == "اختر صندوق") return;
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
+            dgvHelper.ResetForm(this);
+
             txtDepositorName.Text = string.Empty;
             txtValue.Text = string.Empty;
             lblValue.Text = "0";
@@ -169,13 +171,13 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransferBetweenCaissesGui
                             // Commit the transaction
                             await transaction.CommitAsync();
                             Code.Helper.ToasterHelper.ShowTransfert();
-                            _caisse.LoadData();
+                            await _caisse.LoadData();
 
                         }
                     }
 
                     // Load data after successful transaction
-                    LoadData();
+                    await LoadData();
                 }
                 catch (Exception)
                 {

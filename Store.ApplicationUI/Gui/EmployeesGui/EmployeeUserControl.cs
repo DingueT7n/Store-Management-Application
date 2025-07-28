@@ -22,10 +22,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
             _controlManager = controlManager;
             _context = context;
         }
-
-
-
-        public async void SetProductsToDgv()
+        public void SetProductsToDgv()
         {
             //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             DgvِCustomer.DataSource = employeesRepository.GetAllData();
@@ -33,7 +30,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
 
 
         // methodes 
-        public async void LoadData()
+        public async Task LoadData()
         {
 
 
@@ -76,27 +73,27 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
             DgvِCustomer.Columns[7].HeaderCell.Value = "معرف الموظف";
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private async void btnRefresh_Click(object sender, EventArgs e)
         {
-            LoadData();
+            await LoadData();
         }
 
-        private void btnAdd_Click(object sender, EventArgs e)
+        private async void btnAdd_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
 
-            var addEmployeeForm = _controlManager.GetF<AddEmployeeForm>();
+            var addEmployeeForm = await _controlManager.GetFAsync<AddEmployeeForm>();
             addEmployeeForm.ShowDialog();
 
 
         }
 
-        private void btnEdit_Click(object sender, EventArgs e)
+        private async void btnEdit_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (DgvِCustomer.Rows.Count > 0)
             {
-                var addEmployeeForm = _controlManager.GetF<AddEmployeeForm>();
+                var addEmployeeForm = await _controlManager.GetFAsync<AddEmployeeForm>();
 
                 addEmployeeForm.SetDataToEdit(
                         DgvِCustomer.CurrentRow.Cells[0].Value.ToString(),
@@ -122,12 +119,12 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
                 ToasterHelper.PlayNotificationSound();
                 if (MsgHelper.ShowDeleteDialog())
                 {
-                    var customer = await employeesRepository.DeleteAsync(DgvِCustomer.CurrentRow.Cells[7].Value.ToString());
+                    await employeesRepository.DeleteAsync(DgvِCustomer.CurrentRow.Cells[7].Value.ToString());
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
 
                 }
-                LoadData();
+                await LoadData();
             }
             catch (Exception ex)
             {

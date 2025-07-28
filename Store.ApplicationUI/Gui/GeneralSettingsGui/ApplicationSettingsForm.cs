@@ -20,13 +20,14 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
             _main = main;
             _context = context;
             this.Owner = main;
-            LoadData();
+
         }
 
 
-        public async void LoadData()
+        public async Task LoadData()
         {
             //ShowLoading
+            dgvHelper.ResetForm(this);
             LoadingForm.Instance(_main).Show();
             if (await _context.Database.CanConnectAsync())
             {

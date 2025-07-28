@@ -30,10 +30,10 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
             _controlManager1 = controlManager1;
             InitializeComponent();
             this.Owner = main;
-            LoadData();
+
         }
 
-        public async void SetCategoryToDgv()
+        public async Task SetCategoryToDgv()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
 
@@ -42,14 +42,14 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
             lblidCaisse.Text = (_context.Caisses.Count() + 1).ToString();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvCaisser);
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
             //ShowLoading
             LoadingForm.Instance(_main).Show();
             if (await _context.Database.CanConnectAsync())
             {
                 SetColumns();
-                SetCategoryToDgv();
+                await SetCategoryToDgv();
 
             }
             else
@@ -64,11 +64,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
             // Show EmptyDAta
 
         }
-        void vider()
-        {
-            txtNameِCategory.Text = "";
-            RefreshDgv();
-        }
+
         private void SetColumns()
         {
             //DgvProducts.Columns[0].HeaderCell.Value = "المعرف";
@@ -81,12 +77,6 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
             DgvCaisser.Columns[4].Visible = false;
             //DgvCaisser.Columns[3].Visible = false;
 
-        }
-        private void RefreshDgv()
-        {
-
-            SetCategoryToDgv();
-            txtNameِCategory.Text = string.Empty;
         }
 
         private async void btnAddCaisse_Click(object sender, EventArgs e)
@@ -107,7 +97,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
                 Code.Helper.ToasterHelper.ShowAddToast();
 
             }
-            RefreshDgv();
+            await LoadData();
+
         }
 
         private async void btnEditCaisse_Click(object sender, EventArgs e)
@@ -129,7 +120,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
                         await _context.SaveChangesAsync();
                         Code.Helper.ToasterHelper.ShowEditToast();
 
-                        vider();
+                        await LoadData();
                     }
                 }
             }
@@ -172,7 +163,8 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
                         Properties.Settings.Default.Save();
                     }
                 }
-                RefreshDgv();
+                await LoadData();
+
             }
             catch (Exception)
             {
@@ -196,12 +188,12 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
             this.Close();
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private async void btnRefresh_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
 
             btnAddCaisse.Enabled = true;
-            vider();
+            await LoadData();
             btnEditCaisse.Enabled = false;
         }
 
@@ -223,45 +215,45 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
             }
         }
 
-        private void btnDepositToCaisse_Click(object sender, EventArgs e)
+        private async void btnDepositToCaisse_Click(object sender, EventArgs e)
         {
             this.Size = this.MaximumSize;
-            PageHelper.SetOperation(_controlManager1.Get<DepositCaisseUserControl>(), this);
+            PageHelper.SetOperation(await _controlManager1.GetAsync<DepositCaisseUserControl>(), this);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
             this.Size = this.MaximumSize;
 
-            PageHelper.SetOperation(_controlManager1.Get<DepositTobankUserControl>(), this);
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            this.Size = this.MaximumSize;
-
-            PageHelper.SetOperation(_controlManager1.Get<WithdrawFromCaisseUserControl>(), this);
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            this.Size = this.MaximumSize;
-            PageHelper.SetOperation(_controlManager1.Get<WithdrawFromBankUserControl>(), this);
+            PageHelper.SetOperation(await _controlManager1.GetAsync<DepositTobankUserControl>(), this);
 
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
             this.Size = this.MaximumSize;
-            PageHelper.SetOperation(_controlManager1.Get<TransferBetweenCaissesGuiUserControl>(), this);
+
+            PageHelper.SetOperation(await _controlManager1.GetAsync<WithdrawFromCaisseUserControl>(), this);
+        }
+
+        private async void button3_Click(object sender, EventArgs e)
+        {
+            this.Size = this.MaximumSize;
+            PageHelper.SetOperation(await _controlManager1.GetAsync<WithdrawFromBankUserControl>(), this);
 
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private async void button4_Click(object sender, EventArgs e)
         {
             this.Size = this.MaximumSize;
-            PageHelper.SetOperation(_controlManager1.Get<TransfertBetweenBankAndCaisseUserControl>(), this);
+            PageHelper.SetOperation(await _controlManager1.GetAsync<TransferBetweenCaissesGuiUserControl>(), this);
+
+        }
+
+        private async void button5_Click(object sender, EventArgs e)
+        {
+            this.Size = this.MaximumSize;
+            PageHelper.SetOperation(await _controlManager1.GetAsync<TransfertBetweenBankAndCaisseUserControl>(), this);
 
         }
 
@@ -275,7 +267,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
 
         private void CaisseDetailsForm_Load(object sender, EventArgs e)
         {
-            LoadData();
+
         }
     }
 }

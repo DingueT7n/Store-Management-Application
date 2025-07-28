@@ -18,19 +18,16 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
 
             InitializeComponent();
             _main = main;
-
             _employeesRepository = employeesRepository;
             _controlManager = controlManager;
             this.Owner = _main;
 
-
-            LoadData();
         }
 
-        public async void LoadData()
+        public async Task LoadData()
         {
-
-
+            dgvHelper.ResetForm(this);
+            vider();
             //ShowLoading
             LoadingForm.Instance(_main).Show();
             if (await _employeesRepository.IsConnectedAsync())
@@ -58,6 +55,10 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
             txtSalary.Text = $"0{Properties.Settings.Default.DecimalSEP}00";
             txtEmail.Text = "";
             txtNbrCartId.Text = "";
+            btnAdd.Visible = true;
+            btnEdit.Visible = false;
+            lblِCustomerId.Visible = false;
+            label13.Visible = false;
 
 
         }
@@ -127,11 +128,11 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
                 var result = await _employeesRepository.AddAsync(Employee);
                 Code.Helper.ToasterHelper.ShowAddToast();
 
-                vider();
+                await LoadData();
 
                 if (_controlManager.TryGet<EmployeeUserControl>(out var UD))
                 {
-                    UD.LoadData();
+                    await UD.LoadData();
                 }
             }
             catch (Exception)
@@ -161,10 +162,11 @@ namespace Store.ApplicationUI.Gui.EmployeesGui
                     var result = await _employeesRepository.UpdateAsync(lblِCustomerId.Text, Employee);
                     Code.Helper.ToasterHelper.ShowEditToast();
 
+                    await LoadData();
 
                     if (_controlManager.TryGet<EmployeeUserControl>(out var UD))
                     {
-                        UD.LoadData();
+                        await UD.LoadData();
                     }
                     Employee = null;
                 }

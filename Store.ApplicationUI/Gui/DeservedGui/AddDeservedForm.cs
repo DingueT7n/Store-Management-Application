@@ -21,7 +21,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
             _context = context;
             _controlManager = controlManager;
             this.Owner = _main;
-            LoadData();
+
         }
         private void ConfigDate()
         {
@@ -29,10 +29,11 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
             DtpExperation.CustomFormat = DtpExperation.CustomFormat = "yyyy-MM-dd";
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
 
-
+            dgvHelper.ResetForm(this);
+            vider();
             //ShowLoading
 
 
@@ -71,9 +72,9 @@ namespace Store.ApplicationUI.Gui.DeservedGui
         }
         void vider()
         {
-            txtValueDeserved.Text = "";
+            txtValueDeserved.Text = "0";
             txtUserName.Text = Properties.Settings.Default.UserName;
-            txtNotes.Text = "";
+
 
         }
         private void button1_Click(object sender, EventArgs e)
@@ -99,10 +100,10 @@ namespace Store.ApplicationUI.Gui.DeservedGui
                 e.Handled = true;
             }
         }
-        public void SetDataToEdit(string username, string value, string notes, string typesId,
+        public async Task SetDataToEdit(string username, string value, string notes, string typesId,
              string deservedId, DateTime DateExpiration)
         {
-            LoadData();
+            await LoadData();
             txtUserName.Text = username;
             txtValueDeserved.Text = value;
             CMBType.SelectedValue = Convert.ToInt32(typesId);
@@ -117,7 +118,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
         public void SetDataToEditFromID(string username, string value, string notes, string typesId,
          string deservedId, DateTime DateExpiration)
         {
-            LoadData();
+
             txtUserName.Text = username;
             txtValueDeserved.Text = value;
             CMBType.SelectedValue = Convert.ToInt32(typesId);
@@ -218,7 +219,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
                     if (_controlManager.TryGet<DeservedUserControl>(out var UC))
                     {
-                        UC.LoadData();
+                        await UC.LoadData();
                     }
                     Code.Helper.ToasterHelper.ShowAddToast();
                 }
@@ -271,7 +272,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
                     if (_controlManager.TryGet<DeservedUserControl>(out var UC))
                     {
-                        UC.LoadData();
+                        await UC.LoadData();
                     }
                     deserved = null;
                 }
@@ -283,10 +284,10 @@ namespace Store.ApplicationUI.Gui.DeservedGui
             }
         }
 
-        private void btnAddTypes_Click(object sender, EventArgs e)
+        private async void btnAddTypes_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            AddDeservedTypeForm addDeservedType = _controlManager.GetF<AddDeservedTypeForm>();
+            AddDeservedTypeForm addDeservedType = await _controlManager.GetFAsync<AddDeservedTypeForm>();
             this.Hide();
             addDeservedType.ShowDialog();
             this.Show();

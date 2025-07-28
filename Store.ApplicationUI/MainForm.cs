@@ -234,10 +234,10 @@ namespace Store.ApplicationUI
             //  Application.Exit();
         }
 
-        private void btnHomeSummary_Click(object sender, EventArgs e)
+        private async void btnHomeSummary_Click(object sender, EventArgs e)
         {
 
-            pageHelper.SetNewPage(_controlManager.Get<HomeUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<HomeUserControl>());
 
         }
 
@@ -251,9 +251,9 @@ namespace Store.ApplicationUI
         {
             pageHelper.SetNewPage(userControl);
         }
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(_controlManager.Get<ProductsUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<ProductsUserControl>());
 
         }
 
@@ -297,18 +297,18 @@ namespace Store.ApplicationUI
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
 
-            AddProductForm addProductForm = _controlManager.GetF<AddProductForm>();
+            AddProductForm addProductForm = await _controlManager.GetFAsync<AddProductForm>();
             addProductForm.ShowDialog();
             CloseSubPanels();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private async void button3_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            AddCategoryForm addCategoryForm = _controlManager.GetF<AddCategoryForm>();
+            AddCategoryForm addCategoryForm = await _controlManager.GetFAsync<AddCategoryForm>();
             addCategoryForm.ShowDialog();
             CloseSubPanels();
 
@@ -321,29 +321,29 @@ namespace Store.ApplicationUI
             ShowSubPanel(CustomersflowLayoutPaneel);
         }
 
-        private void button2_Click_1(object sender, EventArgs e)
+        private async void button2_Click_1(object sender, EventArgs e)
         {
 
-            pageHelper.SetNewPage(_controlManager.Get<CustomersUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<CustomersUserControl>());
         }
 
-        private void button3_Click_1(object sender, EventArgs e)
+        private async void button3_Click_1(object sender, EventArgs e)
         {
-            AddCustomerForm form = _controlManager.GetF<AddCustomerForm>();
+            AddCustomerForm form = await _controlManager.GetFAsync<AddCustomerForm>();
 
             form.ShowDialog();
             CloseSubPanels();
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private async void button4_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(_controlManager.Get<CustomerAccountUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<CustomerAccountUserControl>());
 
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private async void button1_Click_1(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(_controlManager.Get<CustomerReportsUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<CustomerReportsUserControl>());
 
         }
 
@@ -354,33 +354,33 @@ namespace Store.ApplicationUI
             ShowSubPanel(SuppliersflowLayoutPanel);
         }
 
-        private void btnAddSupplier_Click(object sender, EventArgs e)
+        private async void btnAddSupplier_Click(object sender, EventArgs e)
         {
-            AddSupplierForm form = _controlManager.GetF<AddSupplierForm>();
+            AddSupplierForm form = await _controlManager.GetFAsync<AddSupplierForm>();
 
             form.ShowDialog();
             CloseSubPanels();
         }
 
-        private void btnAllSuppliers_Click(object sender, EventArgs e)
+        private async void btnAllSuppliers_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(_controlManager.Get<SuppliersUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<SuppliersUserControl>());
         }
 
-        private void btnSupplierAccount_Click(object sender, EventArgs e)
+        private async void btnSupplierAccount_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(_controlManager.Get<SupplierAccountUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<SupplierAccountUserControl>());
         }
 
-        private void btnSupplierReports_Click(object sender, EventArgs e)
+        private async void btnSupplierReports_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(_controlManager.Get<SupplierReportsUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<SupplierReportsUserControl>());
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private async void button5_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            var form = _controlManager.GetF<AddStoreForm>();
+            var form = await _controlManager.GetFAsync<AddStoreForm>();
             form.ShowDialog();
             CloseSubPanels();
 
@@ -403,11 +403,11 @@ namespace Store.ApplicationUI
             ShowSubPanel(BuysflowLayoutPanel);
         }
 
-        private void btnNewBuy_Click(object sender, EventArgs e)
+        private async void btnNewBuy_Click(object sender, EventArgs e)
         {
 
             if (Code.Helper.VerificationSettingsHelper.IsAllSettingsAreApplied(Context))
-                pageHelper.SetNewPage(_controlManager.Get<BuysUserControl>());
+                pageHelper.SetNewPage(await _controlManager.GetAsync<BuysUserControl>());
 
         }
 
@@ -418,18 +418,18 @@ namespace Store.ApplicationUI
             ShowSubPanel(SalesflowLayoutPanel);
         }
 
-        private void button7_Click(object sender, EventArgs e)
+        private async void button7_Click(object sender, EventArgs e)
         {
 
             if (Code.Helper.VerificationSettingsHelper.IsAllSettingsAreApplied(Context))
 
-                pageHelper.SetNewPage(_controlManager.Get<SalesUserControl>());
+                pageHelper.SetNewPage(await _controlManager.GetAsync<SalesUserControl>());
 
         }
 
-        private void btnBuysReports_Click(object sender, EventArgs e)
+        private async void btnBuysReports_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(_controlManager.Get<BuysReportsUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<BuysReportsUserControl>());
         }
 
         private async void btnComptoire_Click(object sender, EventArgs e)
@@ -448,6 +448,13 @@ namespace Store.ApplicationUI
                         Form.SetPose(false);
 
                         Form.ShowDialog();
+                        if (Form.DialogResult == DialogResult.OK)
+                        {
+                            this.Hide();
+                            PosForm posForm = _controlManager.CreateF<PosForm>();
+                            posForm.ShowDialog();
+                            this.Show();
+                        }
 
 
                     }
@@ -455,7 +462,6 @@ namespace Store.ApplicationUI
                     {
                         this.Hide();
                         PosForm posForm = _controlManager.CreateF<PosForm>();
-
                         posForm.ShowDialog();
                         this.Show();
 
@@ -466,10 +472,10 @@ namespace Store.ApplicationUI
             }
         }
 
-        private void button8_Click(object sender, EventArgs e)
+        private async void button8_Click(object sender, EventArgs e)
         {
 
-            pageHelper.SetNewPage(_controlManager.Get<SalesReportsUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<SalesReportsUserControl>());
 
 
         }
@@ -483,18 +489,18 @@ namespace Store.ApplicationUI
 
         }
 
-        private void button9_Click(object sender, EventArgs e)
+        private async void button9_Click(object sender, EventArgs e)
         {
 
-            pageHelper.SetNewPage(_controlManager.Get<SalesProfitUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<SalesProfitUserControl>());
 
 
         }
 
-        private void button11_Click(object sender, EventArgs e)
+        private async void button11_Click(object sender, EventArgs e)
         {
 
-            pageHelper.SetNewPage(_controlManager.Get<DeservedUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<DeservedUserControl>());
 
 
         }
@@ -506,9 +512,9 @@ namespace Store.ApplicationUI
             ShowSubPanel(DeservedflowLayoutPanel);
         }
 
-        private void button12_Click(object sender, EventArgs e)
+        private async void button12_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(_controlManager.Get<VouchersUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<VouchersUserControl>());
 
 
         }
@@ -521,34 +527,34 @@ namespace Store.ApplicationUI
 
         }
 
-        private void button15_Click(object sender, EventArgs e)
+        private async void button15_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(_controlManager.Get<ReturnUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<ReturnUserControl>());
 
         }
 
-        private void button16_Click(object sender, EventArgs e)
+        private async void button16_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(_controlManager.Get<ReturnsReportsUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<ReturnsReportsUserControl>());
 
 
         }
 
-        private void button17_Click(object sender, EventArgs e)
+        private async void button17_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(_controlManager.Get<StoreInventoryUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<StoreInventoryUserControl>());
         }
 
-        private void button18_Click(object sender, EventArgs e)
+        private async void button18_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(_controlManager.Get<StoreTransfertReportUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<StoreTransfertReportUserControl>());
 
         }
 
-        private void button19_Click(object sender, EventArgs e)
+        private async void button19_Click(object sender, EventArgs e)
         {
 
-            pageHelper.SetNewPage(_controlManager.Get<StoreDamagedProductUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<StoreDamagedProductUserControl>());
         }
 
         private void btnEmployeerPanel_Click(object sender, EventArgs e)
@@ -559,77 +565,77 @@ namespace Store.ApplicationUI
 
         }
 
-        private void btnAllEmployees_Click(object sender, EventArgs e)
+        private async void btnAllEmployees_Click(object sender, EventArgs e)
         {
 
-            pageHelper.SetNewPage(_controlManager.Get<EmployeeUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<EmployeeUserControl>());
 
         }
 
-        private void btnNewEmployee_Click(object sender, EventArgs e)
+        private async void btnNewEmployee_Click(object sender, EventArgs e)
         {
-            AddEmployeeForm addProductForm = _controlManager.GetF<AddEmployeeForm>();
+            AddEmployeeForm addProductForm = await _controlManager.GetFAsync<AddEmployeeForm>();
 
 
             addProductForm.ShowDialog();
             CloseSubPanels();
         }
 
-        private void button20_Click(object sender, EventArgs e)
+        private async void button20_Click(object sender, EventArgs e)
         {
 
-            EmployeeBorrowItemForm addProductForm = _controlManager.GetF<EmployeeBorrowItemForm>();
+            EmployeeBorrowItemForm addProductForm = await _controlManager.GetFAsync<EmployeeBorrowItemForm>();
 
             addProductForm.ShowDialog();
         }
 
-        private void button21_Click(object sender, EventArgs e)
+        private async void button21_Click(object sender, EventArgs e)
         {
 
-            EmployeeBorrowMoneyForm addProductForm = _controlManager.GetF<EmployeeBorrowMoneyForm>();
-
-            addProductForm.ShowDialog();
-            CloseSubPanels();
-
-        }
-
-        private void button22_Click(object sender, EventArgs e)
-        {
-
-            EmployeeSalaryForm addProductForm = _controlManager.GetF<EmployeeSalaryForm>();
-
+            EmployeeBorrowMoneyForm addProductForm = await _controlManager.GetFAsync<EmployeeBorrowMoneyForm>();
 
             addProductForm.ShowDialog();
             CloseSubPanels();
-        }
-
-        private void button23_Click(object sender, EventArgs e)
-        {
-
-            pageHelper.SetNewPage(_controlManager.Get<EmployeeBorrowItemReportUserControl>());
-
 
         }
 
-        private void button24_Click(object sender, EventArgs e)
+        private async void button22_Click(object sender, EventArgs e)
         {
 
-            pageHelper.SetNewPage(_controlManager.Get<EmployeeBorrowMoneyReportUserControl>());
+            EmployeeSalaryForm addProductForm = await _controlManager.GetFAsync<EmployeeSalaryForm>();
 
 
+            addProductForm.ShowDialog();
+            CloseSubPanels();
         }
 
-        private void button25_Click(object sender, EventArgs e)
+        private async void button23_Click(object sender, EventArgs e)
         {
 
-            pageHelper.SetNewPage(_controlManager.Get<EmployeeSalaryReportUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<EmployeeBorrowItemReportUserControl>());
 
 
         }
 
-        private void button27_Click(object sender, EventArgs e)
+        private async void button24_Click(object sender, EventArgs e)
         {
-            UserRolesForm userRolesForm = _controlManager.GetF<UserRolesForm>();
+
+            pageHelper.SetNewPage(await _controlManager.GetAsync<EmployeeBorrowMoneyReportUserControl>());
+
+
+        }
+
+        private async void button25_Click(object sender, EventArgs e)
+        {
+
+            pageHelper.SetNewPage(await _controlManager.GetAsync<EmployeeSalaryReportUserControl>());
+
+
+        }
+
+        private async void button27_Click(object sender, EventArgs e)
+        {
+            UserRolesForm userRolesForm = await _controlManager.GetFAsync<UserRolesForm>();
 
             userRolesForm.ShowDialog();
             CloseSubPanels();
@@ -641,57 +647,57 @@ namespace Store.ApplicationUI
             ShowSubPanel(flowLayoutPanelSettings);
         }
 
-        private void btnApplicationSettings_Click(object sender, EventArgs e)
+        private async void btnApplicationSettings_Click(object sender, EventArgs e)
         {
-            ApplicationSettingsForm ApplicationSettingsForm = _controlManager.GetF<ApplicationSettingsForm>();
+            ApplicationSettingsForm ApplicationSettingsForm = await _controlManager.GetFAsync<ApplicationSettingsForm>();
 
             ApplicationSettingsForm.ShowDialog();
             CloseSubPanels();
         }
 
-        private void button1_Click_2(object sender, EventArgs e)
+        private async void button1_Click_2(object sender, EventArgs e)
         {
-            CaisseDetailsForm caisseDetailsForm = _controlManager.GetF<CaisseDetailsForm>();
+            CaisseDetailsForm caisseDetailsForm = await _controlManager.GetFAsync<CaisseDetailsForm>();
             caisseDetailsForm.ShowDialog();
             CloseSubPanels();
         }
 
-        private void button2_Click_2(object sender, EventArgs e)
+        private async void button2_Click_2(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(_controlManager.Get<DepositToCaisseReportUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<DepositToCaisseReportUserControl>());
 
 
         }
-        private void button3_Click_2(object sender, EventArgs e)
+        private async void button3_Click_2(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(_controlManager.Get<DepositToBankReportUserControl>());
-
-
-        }
-
-        private void button4_Click_1(object sender, EventArgs e)
-        {
-            pageHelper.SetNewPage(_controlManager.Get<WithdrawFromCaisseReportsUserControl>());
-
-        }
-
-        private void button6_Click_1(object sender, EventArgs e)
-        {
-            pageHelper.SetNewPage(_controlManager.Get<TransfertBetweenCaisseReportUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<DepositToBankReportUserControl>());
 
 
         }
 
-        private void button5_Click_1(object sender, EventArgs e)
+        private async void button4_Click_1(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(_controlManager.Get<WIthdrawFromBankReportUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<WithdrawFromCaisseReportsUserControl>());
+
+        }
+
+        private async void button6_Click_1(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(await _controlManager.GetAsync<TransfertBetweenCaisseReportUserControl>());
 
 
         }
 
-        private void button7_Click_1(object sender, EventArgs e)
+        private async void button5_Click_1(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(_controlManager.Get<TransfertBetweenCaisseAndBankReportUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<WIthdrawFromBankReportUserControl>());
+
+
+        }
+
+        private async void button7_Click_1(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(await _controlManager.GetAsync<TransfertBetweenCaisseAndBankReportUserControl>());
 
 
         }
@@ -774,7 +780,7 @@ namespace Store.ApplicationUI
                 ToasterHelper.ShowErrorHappened(ex.Message);
             }
         }
-        private async void button9_Click_1(object sender, EventArgs e)
+        private void button9_Click_1(object sender, EventArgs e)
         {
             try
             {
@@ -838,9 +844,9 @@ namespace Store.ApplicationUI
             }
         }
 
-        private void button10_Click_1(object sender, EventArgs e)
+        private async void button10_Click_1(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(_controlManager.Get<VouchersReportsUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<VouchersReportsUserControl>());
 
 
         }
@@ -852,29 +858,27 @@ namespace Store.ApplicationUI
 
         }
 
-        private void button11_Click_1(object sender, EventArgs e)
+        private async void button11_Click_1(object sender, EventArgs e)
         {
 
-            pageHelper.SetNewPage(_controlManager.Get<StatisticsUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<StatisticsUserControl>());
 
         }
 
-        private void btnProductDiscount_Click(object sender, EventArgs e)
+        private async void btnProductDiscount_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(_controlManager.Get<ProductDiscountUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<ProductDiscountUserControl>());
 
         }
 
-        private void button1_Click_3(object sender, EventArgs e)
+        private async void button1_Click_3(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(_controlManager.Get<CaisseStatusAndOperationUserControl>());
-
-
+            pageHelper.SetNewPage(await _controlManager.GetAsync<CaisseStatusAndOperationUserControl>());
         }
 
-        private void btnAlerts_Click(object sender, EventArgs e)
+        private async void btnAlerts_Click(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(_controlManager.Get<AlertsUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<AlertsUserControl>());
         }
 
         private void barButtonItem1_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -937,9 +941,10 @@ namespace Store.ApplicationUI
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
+        private async void MainForm_Load(object sender, EventArgs e)
         {
-            pageHelper.SetNewPage(_controlManager.Get<HomeUserControl>());
+            pageHelper.SetNewPage(await _controlManager.GetAsync<HomeUserControl>());
+
         }
         public UserControl GetUserControl()
         {

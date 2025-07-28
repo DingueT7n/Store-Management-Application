@@ -35,6 +35,94 @@ namespace Store.ApplicationUI.Code.System
             }
 
         }
+        public async Task<T> GetAsync<T>() where T : UserControl
+        {
+            if (!_cache.TryGetValue(typeof(T), out var ctrl))
+            {
+                ctrl = _provider.GetRequiredService<T>();
+                _cache[typeof(T)] = ctrl;
+            }
+
+            // Ensure the handle is created before calling LoadData
+            if (!ctrl.IsHandleCreated)
+            {
+                var handleCreatedTcs = new TaskCompletionSource<bool>();
+
+                void handler(object? sender, EventArgs e)
+                {
+                    handleCreatedTcs.TrySetResult(true);
+                    ctrl.HandleCreated -= handler;
+                }
+
+                ctrl.HandleCreated += handler;
+
+                // Trigger handle creation if necessary
+                var _ = ctrl.Handle;
+
+                await handleCreatedTcs.Task;
+            }
+
+            // Find LoadData method
+            var method = ctrl.GetType().GetMethod("LoadData", Type.EmptyTypes);
+            if (method != null)
+            {
+                if (method.ReturnType == typeof(Task))
+                {
+                    var task = (Task)method.Invoke(ctrl, null)!;
+                    await task;
+                }
+                else if (method.ReturnType == typeof(void))
+                {
+                    method.Invoke(ctrl, null);
+                }
+            }
+
+            return (T)ctrl;
+        }
+        public async Task<T> GetFAsync<T>() where T : Form
+        {
+            if (!_cacheF.TryGetValue(typeof(T), out var ctrl))
+            {
+                ctrl = _provider.GetRequiredService<T>();
+                _cacheF[typeof(T)] = ctrl;
+            }
+
+            // Ensure the handle is created before calling LoadData
+            if (!ctrl.IsHandleCreated)
+            {
+                var handleCreatedTcs = new TaskCompletionSource<bool>();
+
+                void handler(object? sender, EventArgs e)
+                {
+                    handleCreatedTcs.TrySetResult(true);
+                    ctrl.HandleCreated -= handler;
+                }
+
+                ctrl.HandleCreated += handler;
+
+                // Trigger handle creation if necessary
+                var _ = ctrl.Handle;
+
+                await handleCreatedTcs.Task;
+            }
+
+            // Find LoadData method
+            var method = ctrl.GetType().GetMethod("LoadData", Type.EmptyTypes);
+            if (method != null)
+            {
+                if (method.ReturnType == typeof(Task))
+                {
+                    var task = (Task)method.Invoke(ctrl, null)!;
+                    await task;
+                }
+                else if (method.ReturnType == typeof(void))
+                {
+                    method.Invoke(ctrl, null);
+                }
+            }
+
+            return (T)ctrl;
+        }
         public T GetR<T>() where T : DevExpress.XtraReports.UI.XtraReport
         {
             if (!_cacheR.TryGetValue(typeof(T), out var ctrl))

@@ -26,15 +26,12 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryGui
             _controlManager = controlManager;
             this.Owner = _main;
 
-
-
-
-            LoadData();
-            _main = main;
         }
 
-        public async void LoadData()
+        public async Task LoadData()
         {
+            dgvHelper.ResetForm(this);
+            Vider();
             dtpJoined.Value = DateTime.Now;
             dtpReminderDate.Value = DateTime.Now.AddDays(30);
 
@@ -93,10 +90,6 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryGui
 
             // Reset any DataGridView
 
-            Vider();
-
-            // Reinitialize form data (e.g., reload initial data)
-            LoadData(); // This is a method where you load initial data
 
             // Optionally reset focus to the first control
             // Set focus to the first control
@@ -212,7 +205,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryGui
                     await transaction.CommitAsync();
                     Code.Helper.ToasterHelper.ShowSalarie();
 
-                    ResetForm();
+                    await LoadData();
                 }
                 catch (Exception)
                 {

@@ -27,12 +27,12 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowItemsGui
             _productRepository = productRepository;
             this.Owner = _main;
 
-
-            LoadData();
         }
 
-        public async void LoadData()
+        public async Task LoadData()
         {
+            dgvHelper.ResetForm(this);
+
             dtpJoined.Value = DateTime.Now;
 
             //ShowLoading
@@ -84,8 +84,6 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowItemsGui
 
 
 
-            // Reinitialize form data (e.g., reload initial data)
-            LoadData(); // This is a method where you load initial data
 
             // Optionally reset focus to the first control
             // Set focus to the first control
@@ -168,7 +166,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowItemsGui
                     await transaction.CommitAsync();
                     Code.Helper.ToasterHelper.ShowBorrowItem();
 
-                    ResetForm();
+                    await LoadData();
                 }
                 catch (Exception)
                 {

@@ -28,9 +28,9 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
             _context = context;
             _customerMoneyRepository = customerMoneyRepository;
             _controlManager = controlManager;
-            LoadData();
+
         }
-        public async void SetDataToDgv()
+        public async Task SetDataToDgv()
         {
             //DgvِCustomer.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             DgvِCustomer.DataSource = new List<CustomerMoney>();
@@ -57,7 +57,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
 
 
         // methodes 
-        public async void LoadData()
+        public async Task LoadData()
         {
 
 
@@ -69,7 +69,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
 
                 // if its an admin or Normal user 
 
-                SetDataToDgv();
+                await SetDataToDgv();
                 SetColumns();
                 //_data.Clear();
             }
@@ -142,10 +142,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
             return caisseDeposit;
 
         }
-        private void btnRefresh_Click(object sender, EventArgs e)
-        {
-            LoadData();
-        }
+
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
@@ -237,14 +234,14 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
 
                 }
 
-                LoadData();
+                await LoadData();
             }
 
         }
 
-        private void btnRefresh_Click_1(object sender, EventArgs e)
+        private async void btnRefresh_Click_1(object sender, EventArgs e)
         {
-            LoadData();
+            await LoadData();
         }
 
         private async void btnExportCustomer_Click(object sender, EventArgs e)
@@ -255,12 +252,15 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                 if (DgvِCustomer.SelectedRows.Count > 0)
                 {
                     DataTable CustomerAccountAccountDetailsTable = await FactureHelper.GetCustomerAccountDataTableAsync(Convert.ToInt32(DgvِCustomer.CurrentRow.Cells[0].Value.ToString()));
-                    Reports.CustomersAccountReports.CustomersAccountReport custAccount = new();
+                    Reports.CustomersAccountReports.CustomersAccountReport custAccount = _controlManager.GetR<Reports.CustomersAccountReports.CustomersAccountReport>();
                     custAccount.DataSource = CustomerAccountAccountDetailsTable;
                     var a = CustomerAccountAccountDetailsTable.Rows.Count.ToString();
                     custAccount.lblTotalFactures.Text = a;
-                    Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(custAccount);
-                    xtraForm1.Show();
+
+
+                    Reports.ReportPerviwGui.PerviweForm xtraForm1 = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                    xtraForm1.LoadReport(custAccount);
+                    xtraForm1.ShowDialog();
                 }
             }
             catch (Exception)
@@ -312,8 +312,11 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                     DataTable saleDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(Convert.ToInt32(DgvِCustomer.CurrentRow.Cells[1].Value.ToString()));
                     Reports.sale8cm sale8Cm = _controlManager.GetR<Reports.sale8cm>();
                     sale8Cm.DataSource = saleDetailsTable;
-                    var xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(sale8Cm);
-                    xtraForm1.Show();
+
+
+                    Reports.ReportPerviwGui.PerviweForm xtraForm1 = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                    xtraForm1.LoadReport(sale8Cm);
+                    xtraForm1.ShowDialog();
                 }
             }
             catch (Exception)
@@ -333,8 +336,11 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                     DataTable ProfitDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(Convert.ToInt32(DgvِCustomer.CurrentRow.Cells[1].Value.ToString()));
                     Reports.SalesReports.salesA4 salesA4 = _controlManager.GetR<Reports.SalesReports.salesA4>();
                     salesA4.DataSource = ProfitDetailsTable;
-                    Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(salesA4);
-                    xtraForm1.Show();
+
+
+                    Reports.ReportPerviwGui.PerviweForm xtraForm1 = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                    xtraForm1.LoadReport(salesA4);
+                    xtraForm1.ShowDialog();
                 }
             }
             catch (Exception)

@@ -35,7 +35,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
             this.Owner = _main;
 
-            LoadData(); // Optional to call here
+
             ConfigDate();
         }
 
@@ -47,12 +47,13 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
             DtpExperation.CustomFormat = DtpExperation.CustomFormat = "yyyy-MM-dd";
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
             try
             {
+                dgvHelper.ResetForm(this);
+                vider();
                 LoadingForm.Instance(_main).Show();
-
                 if (await _context.Database.CanConnectAsync())
                 {
                     var categories = await _categoryRepository.GetAllAsync();
@@ -72,12 +73,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 LoadingForm.Instance(_main).Hide();
             }
         }
-        public void ReloadCategories()
-        {
-            var current = CMBCategory.SelectedValue;
-            LoadData();
-            CMBCategory.SelectedValue = current;
-        }
+
         void vider()
         {
             txtBarCode.Text = "";
@@ -91,6 +87,15 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             txtTotalQty.Text = "0.00";
             txtWholeSalePrice.Text = "0.00";
             txtWeights.Text = "0.00";
+            txtSalePrice2.Text = "0.00";
+            txtColisageBareCode.Clear();
+            txtNbrIncolis.Text = "0.00";
+            btnAddProduct.Visible = true;
+            btnEditProduct.Visible = false;
+            lblProductId.Visible = false;
+            label13.Visible = false;
+
+
         }
 
         private void txtBarCode_KeyPress(object sender, KeyPressEventArgs e)
@@ -259,7 +264,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             , string SalePrice, DateTime DateExpiration, string MaxDiscount, string SaleAfterTax, string productId, byte[] image
             , string catName, string SalePrice2, string NbrProductInColis, string ColisageBareCode, string weights)
         {
-            LoadData();
+            //EC  LoadData();
             txtNameProduct.Text = NameProduct;
             txtBarCode.Text = BarCode;
             CMBCategory.SelectedValue = Convert.ToInt32(categoryId);
@@ -316,7 +321,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         }
         public async Task SetDataToEditFromId(int ProductId)
         {
-            LoadData();
+
             Product product = _productsRepository.Get(ProductId);
             txtNameProduct.Text = product.ProductName;
             txtBarCode.Text = product.CodeBar;
@@ -374,7 +379,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         }
         public async Task SetSimilaireDataToAddFromId(int ProductId)
         {
-            LoadData();
+
             Product product = await _productsRepository.GetAsync(ProductId);
             txtNameProduct.Text = product.ProductName;
             txtBarCode.Text = "";

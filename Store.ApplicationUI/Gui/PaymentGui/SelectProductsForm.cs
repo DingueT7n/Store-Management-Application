@@ -15,9 +15,8 @@ namespace Store.ApplicationUI.Gui.PaymentGui
     public partial class SelectProductsForm : Form
     {
         private readonly MainForm _main;
-        private static PosForm _PosForm;
-        private static SelectProductsForm _selectProductsForm;
-        private ApplicationDbContext _context;
+
+        private readonly ApplicationDbContext _context;
 
         public SelectProductsForm(MainForm main, ControlManager controlManager, PosForm posForm)
         {
@@ -30,7 +29,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
             _controlManager = controlManager;
             _posForm = posForm;
             pos = false;
-            LoadData();
+
 
         }
         bool buy = false;
@@ -158,7 +157,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
 
 
         //}
-        public async void LoadData()
+        public async Task LoadData()
         {
             // Show loading form
             LoadingForm.Instance(_main).Show();
@@ -304,13 +303,13 @@ namespace Store.ApplicationUI.Gui.PaymentGui
             }
         }
 
-        private void SelectProductsForm_FormClosing(object sender, FormClosingEventArgs e)
+        private async void SelectProductsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             flowLayoutPanel.Controls.Clear();
             buy = false;
             sale = false;
             pos = false;
-            LoadData();
+            await LoadData();
         }
     }
 

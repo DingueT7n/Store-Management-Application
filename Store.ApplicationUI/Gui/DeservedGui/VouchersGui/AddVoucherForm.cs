@@ -51,10 +51,10 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
 
             Dtp.CustomFormat = Dtp.CustomFormat = "yyyy-MM-dd";
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
 
-
+            dgvHelper.ResetForm(this);
             //ShowLoading
 
 
@@ -114,10 +114,10 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
                 e.Handled = true;
             }
         }
-        public void SetDataToEdit(string username, string value, string notes, bool ReciptVoucher,
+        public async Task SetDataToEdit(string username, string value, string notes, bool ReciptVoucher,
             string VoucherId, DateTime DateExpiration, string toPerson)
         {
-            LoadData();
+            await LoadData();
             txtUserName.Text = username;
             txtValue.Text = value;
             if (ReciptVoucher)
@@ -173,7 +173,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
 
                 if (_controlManager.TryGet<VouchersUserControl>(out var UC))
                 {
-                    UC.LoadData();
+                    await UC.LoadData();
                 }
                 ToasterHelper.ShowAddToast();
             }
@@ -273,7 +273,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui.VouchersGui
 
                 if (_controlManager.TryGet<VouchersUserControl>(out var UC))
                 {
-                    UC.LoadData();
+                    await UC.LoadData();
                 }
             }
             catch (Exception)

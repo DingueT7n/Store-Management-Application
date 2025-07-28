@@ -134,10 +134,11 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
                 ToasterHelper.ShowErrorHappened(ex.Message);
             }
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
             try
             {
+                dgvHelper.ResetForm(this);
                 dtpTo2.Value = DateTime.Now;
                 dtpTo.Value = DateTime.Now;
 
@@ -146,11 +147,11 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
 
                 if (await repository1.IsConnectedAsync())
                 {
-                    cmbCaisse.DataSource = _context.Caisses.ToList();
+                    cmbCaisse.DataSource = await _context.Caisses.ToListAsync();
                     cmbCaisse.DisplayMember = "CaisseName";
                     cmbCaisse.ValueMember = "Id";
 
-                    cmbCaisse2.DataSource = _context.Caisses.ToList();
+                    cmbCaisse2.DataSource = await _context.Caisses.ToListAsync();
                     cmbCaisse2.DisplayMember = "CaisseName";
                     cmbCaisse2.ValueMember = "Id";
 

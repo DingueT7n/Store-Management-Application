@@ -19,7 +19,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
             _context = context;
             InitializeComponent();
             this.Owner = main;
-            LoadData();
+
 
         }
 
@@ -57,8 +57,9 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
                 ToasterHelper.ShowErrorHappened(ex.Message);
             }
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
+            dgvHelper.ResetForm(this);
             //ShowLoading
             LoadingForm.Instance(_main).Show();
             if (await _context.Database.CanConnectAsync())

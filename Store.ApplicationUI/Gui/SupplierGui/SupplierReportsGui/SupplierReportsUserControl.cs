@@ -22,7 +22,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
             _main = main;
             _context = context;
             _supplierReportRepository = supplierReportRepository;
-            LoadData();
+
 
         }
 
@@ -67,10 +67,10 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
                 }
             }
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
 
-
+            dgvHelper.ResetForm(this);
             //ShowLoading
             LoadingForm.Instance(_main).Show();
             if (await _supplierReportRepository.IsConnectedAsync())
@@ -114,10 +114,10 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
             DgvِCustomer.Columns[0].Visible = false;
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private async void btnRefresh_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            LoadData();
+            await LoadData();
         }
 
         private void rbDateSearch_CheckedChanged(object sender, EventArgs e)

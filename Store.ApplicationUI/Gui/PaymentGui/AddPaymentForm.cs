@@ -39,7 +39,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
             _form = form;
             this.Owner = _main;
         }
-        public async void LoadData(string Total, string paidUp, string remaining, int form)
+        public void LoadData(string Total, string paidUp, string remaining, int form)
         {
             txtFacturePrice.Text = Total;
             txtpaidUp.Text = paidUp;

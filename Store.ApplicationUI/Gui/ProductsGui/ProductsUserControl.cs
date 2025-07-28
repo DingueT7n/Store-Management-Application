@@ -34,19 +34,14 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
             _main = main;
 
-            this.Load += ProductsUserControl_Load;
+
         }
 
-        private async void ProductsUserControl_Load(object sender, EventArgs e)
-        {
-            await LoadData();
-        }
-
-        private void btnAddProduct_Click(object sender, EventArgs e)
+        private async void btnAddProduct_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
 
-            var form = _controlManager.GetF<AddProductForm>();
+            var form = await _controlManager.GetFAsync<AddProductForm>();
 
             if (!form.Visible)
             {
@@ -71,7 +66,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             txtTotalProfitExpected.Text = _context.Products.AsNoTracking().Sum(x => (x.SalePriceTax - x.BuyPrice) * x.Quentity)
                 .ToString("f2");
         }
-        public async void SetProductsToDgv(int skip)
+        public async Task SetProductsToDgv(int skip)
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             DgvProducts.DataSource = new List<Product>();
@@ -114,7 +109,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
                 // if its an admin or Normal user 
 
-                SetProductsToDgv(0);
+                await SetProductsToDgv(0);
                 SetColumns();
                 //_data.Clear();
                 // Create ContextMenuStrip
@@ -208,10 +203,10 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             //DgvProducts.Columns[15].Visible = false;
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private async void btnRefresh_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            LoadData();
+            await LoadData();
 
         }
 
@@ -220,40 +215,34 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             ToasterHelper.PlayNotificationSound();
             if (DgvProducts.Rows.Count > 0)
             {
-                var form = _controlManager.GetF<AddProductForm>();
+                var form = await _controlManager.GetFAsync<AddProductForm>();
 
-                if (!form.Visible)
-                {
 
-                    //form.SetDataToEdit(
-                    //        DgvProducts.CurrentRow.Cells[1].Value.ToString(),
-                    //        DgvProducts.CurrentRow.Cells[0]?.Value.ToString(),
-                    //        DgvProducts.CurrentRow.Cells[16].Value.ToString(),
-                    //        DgvProducts.CurrentRow.Cells[11].Value.ToString(),
-                    //        Convert.ToBoolean(DgvProducts.CurrentRow.Cells[9].Value),
-                    //        DgvProducts.CurrentRow.Cells[7].Value.ToString(),
-                    //        DgvProducts.CurrentRow.Cells[3].Value.ToString(),
-                    //        DgvProducts.CurrentRow.Cells[2].Value.ToString(),
-                    //        DgvProducts.CurrentRow.Cells[6].Value.ToString(),
-                    //        DgvProducts.CurrentRow.Cells[4].Value.ToString(),
-                    //       Convert.ToDateTime(DgvProducts.CurrentRow.Cells[10].Value),
-                    //        DgvProducts.CurrentRow.Cells[12].Value?.ToString(),
-                    //        DgvProducts.CurrentRow.Cells[8].Value.ToString(),
-                    //        DgvProducts.CurrentRow.Cells[20].Value.ToString(),
-                    //        (byte[])DgvProducts.CurrentRow.Cells[15].Value,
-                    //          DgvProducts.CurrentRow.Cells[16].Value.ToString()
-                    //          , DgvProducts.CurrentRow.Cells[5].Value.ToString()
-                    //          , DgvProducts.CurrentRow.Cells[13].Value.ToString()
-                    //          , DgvProducts.CurrentRow.Cells[14].Value.ToString()
-                    //          , DgvProducts.CurrentRow.Cells[19].Value.ToString()
-                    //        );
-                    await form.SetDataToEditFromId(Convert.ToInt32(DgvProducts.CurrentRow.Cells[20].Value.ToString()));
-                    form.ShowDialog();
-                }
-                else
-                {
-                    form.Focus();
-                }
+                //form.SetDataToEdit(
+                //        DgvProducts.CurrentRow.Cells[1].Value.ToString(),
+                //        DgvProducts.CurrentRow.Cells[0]?.Value.ToString(),
+                //        DgvProducts.CurrentRow.Cells[16].Value.ToString(),
+                //        DgvProducts.CurrentRow.Cells[11].Value.ToString(),
+                //        Convert.ToBoolean(DgvProducts.CurrentRow.Cells[9].Value),
+                //        DgvProducts.CurrentRow.Cells[7].Value.ToString(),
+                //        DgvProducts.CurrentRow.Cells[3].Value.ToString(),
+                //        DgvProducts.CurrentRow.Cells[2].Value.ToString(),
+                //        DgvProducts.CurrentRow.Cells[6].Value.ToString(),
+                //        DgvProducts.CurrentRow.Cells[4].Value.ToString(),
+                //       Convert.ToDateTime(DgvProducts.CurrentRow.Cells[10].Value),
+                //        DgvProducts.CurrentRow.Cells[12].Value?.ToString(),
+                //        DgvProducts.CurrentRow.Cells[8].Value.ToString(),
+                //        DgvProducts.CurrentRow.Cells[20].Value.ToString(),
+                //        (byte[])DgvProducts.CurrentRow.Cells[15].Value,
+                //          DgvProducts.CurrentRow.Cells[16].Value.ToString()
+                //          , DgvProducts.CurrentRow.Cells[5].Value.ToString()
+                //          , DgvProducts.CurrentRow.Cells[13].Value.ToString()
+                //          , DgvProducts.CurrentRow.Cells[14].Value.ToString()
+                //          , DgvProducts.CurrentRow.Cells[19].Value.ToString()
+                //        );
+                await form.SetDataToEditFromId(Convert.ToInt32(DgvProducts.CurrentRow.Cells[20].Value.ToString()));
+                form.ShowDialog();
+
             }
         }
 
@@ -262,7 +251,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
-                _productsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[20].Value.ToString());
+                await _productsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[20].Value.ToString());
                 Code.Helper.ToasterHelper.ShowDeletedToast();
 
             }
@@ -330,7 +319,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             ToasterHelper.PlayNotificationSound();
             if (DgvProducts.Rows.Count > 0)
             {
-                var form = _controlManager.GetF<AddProductForm>();
+                var form = await _controlManager.GetFAsync<AddProductForm>();
                 if (!form.Visible)
                 {
                     //form.SetSimilaireDataToAdd(
@@ -371,19 +360,19 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             btnPrev.Enabled = cmbpagination.SelectedIndex > 0 && !dgvHelper.IsEmpty(DgvProducts);
             cmbpagination.Enabled = !dgvHelper.IsEmpty(DgvProducts);
         }
-        private void btnNext_Click(object sender, EventArgs e)
+        private async void btnNext_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1)
             {
                 cmbpagination.SelectedIndex++;
                 int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
-                SetProductsToDgv(skip);
+                await SetProductsToDgv(skip);
 
             }
         }
 
-        private void btnPrev_Click(object sender, EventArgs e)
+        private async void btnPrev_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex > 0)
@@ -391,17 +380,17 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 cmbpagination.SelectedIndex--;
                 int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
 
-                SetProductsToDgv(skip);
+                await SetProductsToDgv(skip);
             }
         }
 
-        private void cmbpagination_SelectionChangeCommitted(object sender, EventArgs e)
+        private async void cmbpagination_SelectionChangeCommitted(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (cmbpagination.SelectedIndex != -1)
             {
                 int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
-                SetProductsToDgv(skip);
+                await SetProductsToDgv(skip);
             }
         }
 

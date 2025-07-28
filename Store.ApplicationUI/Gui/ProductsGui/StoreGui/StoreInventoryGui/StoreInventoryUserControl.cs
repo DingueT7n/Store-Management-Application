@@ -164,10 +164,10 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
 
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
 
-
+            dgvHelper.ResetForm(this);
             //ShowLoading
             LoadingForm.Instance(_main).Show();
             if (await _context.Database.CanConnectAsync())
@@ -268,20 +268,20 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
             RefreshDgv();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            var form = _controlManager.GetF<StoreTransfertForm>();
+            var form = await _controlManager.GetFAsync<StoreTransfertForm>();
 
 
             form.ShowDialog();
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            var form = _controlManager.GetF<StoreDamagedProductForm>();
+            var form = await _controlManager.GetFAsync<StoreDamagedProductForm>();
             form.ShowDialog();
 
         }
@@ -296,7 +296,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
 
         private void StoreInventoryUserControl_Load(object sender, EventArgs e)
         {
-            LoadData();
+
 
         }
     }

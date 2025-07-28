@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using DevExpress.XtraReports.UI;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -18,21 +19,21 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
     public partial class PosUserControl : UserControl
     {
         private readonly ApplicationDbContext _context;
-        private readonly PosForm _posForm;
+
         private readonly ISalesRepository _salesRepository;
         private readonly ControlManager _controlManager;
         public decimal PaidUp;
         public decimal Remain;
 
-        public PosUserControl(ApplicationDbContext context, PosForm posForm, ISalesRepository salesRepository, ControlManager controlManager)
+        public PosUserControl(ApplicationDbContext context, ISalesRepository salesRepository, ControlManager controlManager)
         {
             InitializeComponent();
             _context = context;
-            _posForm = posForm;
+
             _salesRepository = salesRepository;
             _controlManager = controlManager;
         }
-        private async void setPrivateProductAndAdditTotable(Product product)
+        private void setPrivateProductAndAdditTotable(Product product)
         {
             txtSearchBarCode.Text = product.CodeBar;
             SetProductsToTable();
@@ -819,8 +820,12 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                             DataTable saleDetailsTable = await GetSellDetailsDataTableAsync(LastFactureId);
                             Reports.sale8cm sale8Cm = _controlManager.GetR<Reports.sale8cm>();
                             sale8Cm.DataSource = saleDetailsTable;
-                            var xtraForm11 = Reports.ReportPerviwGui.PerviweForm.Instance(sale8Cm);
-                            xtraForm11.ShowDialog();
+
+
+
+                            Reports.ReportPerviwGui.PerviweForm xtraForm1 = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                            xtraForm1.LoadReport(sale8Cm);
+                            xtraForm1.ShowDialog();
                         }
                         catch (Exception)
                         {
@@ -835,7 +840,10 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                             DataTable ProfitDetailsTable = await FactureHelper.GetSellDetailsDataTableAsync(LastFactureId);
                             Reports.SalesReports.salesA4 salesA4 = _controlManager.GetR<Reports.SalesReports.salesA4>();
                             salesA4.DataSource = ProfitDetailsTable;
-                            Reports.ReportPerviwGui.PerviweForm xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(salesA4);
+
+
+                            Reports.ReportPerviwGui.PerviweForm xtraForm1 = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                            xtraForm1.LoadReport(salesA4);
                             xtraForm1.ShowDialog();
 
                         }
@@ -853,7 +861,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 throw;
             }
         }
-        async void EditFromTable(int q)
+        void EditFromTable(int q)
         {
             try
             {
@@ -1566,36 +1574,35 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         private async Task<DataTable> GetSellDetailsDataTableAsync(int orderId)
         {
 
-            using (var context = new ApplicationDbContext())
+
+            var orderIdParam = new SqlParameter("@orderID", orderId);
+            var connection = _context.Database.GetDbConnection();
+
+            try
             {
-                var orderIdParam = new SqlParameter("@orderID", orderId);
-                var connection = context.Database.GetDbConnection();
+                await connection.OpenAsync();
 
-                try
+
+                using (var command = connection.CreateCommand())
                 {
-                    await connection.OpenAsync();
+                    command.CommandText = "EXEC [dbo].[get_all_sell_details] @orderID";
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.Add(orderIdParam);
 
 
-                    using (var command = connection.CreateCommand())
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
-                        command.CommandText = "EXEC [dbo].[get_all_sell_details] @orderID";
-                        command.CommandType = CommandType.Text;
-                        command.Parameters.Add(orderIdParam);
-
-
-                        using (var reader = await command.ExecuteReaderAsync())
-                        {
-                            DataTable sellDetailsTable = new DataTable();
-                            sellDetailsTable.Load(reader);
-                            return sellDetailsTable;
-                        }
+                        DataTable sellDetailsTable = new DataTable();
+                        sellDetailsTable.Load(reader);
+                        return sellDetailsTable;
                     }
                 }
-                finally
-                {
-                    await connection.CloseAsync();
-                }
             }
+            finally
+            {
+                await connection.CloseAsync();
+            }
+
         }
         Return SetRefundSale()
         {
@@ -1691,7 +1698,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             }
         }
 
-        private async void txtTotalSaleProduct_KeyDown(object sender, KeyEventArgs e)
+        private void txtTotalSaleProduct_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {

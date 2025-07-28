@@ -1,4 +1,5 @@
 ﻿using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.Infrastructure.Data;
 
 namespace Store.ApplicationUI.Gui.ProductsGui.BarcodeGui
@@ -7,12 +8,14 @@ namespace Store.ApplicationUI.Gui.ProductsGui.BarcodeGui
     {
         private readonly MainForm _main;
         private readonly ApplicationDbContext _context;
+        private readonly ControlManager _controlManager;
 
-        public BarCodeForm(MainForm main, ApplicationDbContext context)
+        public BarCodeForm(MainForm main, ApplicationDbContext context, ControlManager controlManager)
         {
             InitializeComponent();
             _main = main;
             _context = context;
+            _controlManager = controlManager;
         }
 
         private void btnReviewPrint_Click(object sender, EventArgs e)
@@ -55,8 +58,10 @@ namespace Store.ApplicationUI.Gui.ProductsGui.BarcodeGui
                         //barCode.DataSource = new DataTable();
 
                         // Use the report in a form viewer
-                        var xtraForm1 = Reports.ReportPerviwGui.PerviweForm.Instance(barCode);
-                        xtraForm1.Show();
+
+                        Reports.ReportPerviwGui.PerviweForm xtraForm1 = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                        xtraForm1.LoadReport(barCode);
+                        xtraForm1.ShowDialog();
 
                         //xtraForm1.documentViewer1.DocumentSource = barCode;
                         //xtraForm1.Show();

@@ -413,9 +413,9 @@ namespace Store.ApplicationUI.Gui.HomeGui
             }
         }
 
-        private async void AlertsUserControl_Load(object sender, EventArgs e)
+        private void AlertsUserControl_Load(object sender, EventArgs e)
         {
-            await LoadData();
+
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenCaisseReportG
             this.repository = repository;
         }
 
-        public async void SetProductsToDgv(string t1, string t2, string barcode)
+        public async Task SetProductsToDgv(string t1, string t2, string barcode)
         {
             ////DgvSales.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             //var CustomerMoneyList = MainForm.Context.CustomersReports.
@@ -33,18 +33,19 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenCaisseReportG
             DgvSales.DataSource = data;
 
         }
-        void RefreshDgv()
+        async Task RefreshDgv()
         {
             string t1 = cmbcaisseFrom.SelectedValue.ToString();
             string t2 = cmbCaisse.SelectedValue.ToString();
 
             SetColumns();
-            SetProductsToDgv(t1, t2, txtSearch.Text);
+            await SetProductsToDgv(t1, t2, txtSearch.Text);
 
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
+            dgvHelper.ResetForm(this);
             dtpTo.Value = DateTime.Now;
 
             //ShowLoading
@@ -62,7 +63,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenCaisseReportG
 
 
                 // if its an admin or Normal user 
-                RefreshDgv();
+                await RefreshDgv();
                 //_data.Clear();
             }
             else
@@ -102,20 +103,20 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenCaisseReportG
 
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
-            RefreshDgv();
+            await RefreshDgv();
         }
 
-        private void cmbcaisseFrom_SelectionChangeCommitted(object sender, EventArgs e)
+        private async void cmbcaisseFrom_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            RefreshDgv();
+            await RefreshDgv();
         }
 
-        private void cmbCaisse_SelectionChangeCommitted(object sender, EventArgs e)
+        private async void cmbCaisse_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            RefreshDgv();
+            await RefreshDgv();
         }
 
         private async void button2_Click(object sender, EventArgs e)
@@ -138,7 +139,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenCaisseReportG
 
                     Code.Helper.ToasterHelper.ShowDeletedToast();
                     DgvSales.DataSource = null;
-                    RefreshDgv();
+                    await RefreshDgv();
                 }
             }
             catch (Exception)

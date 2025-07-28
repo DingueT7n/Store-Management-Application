@@ -20,11 +20,11 @@ namespace Store.ApplicationUI.Gui.DeservedGui
             _main = main;
             this.Owner = _main;
             _context = context;
-            LoadData();
+
 
         }
 
-        public async void SetCategoryToDgv()
+        public async Task SetCategoryToDgv()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             DgvTypes.DataSource = await _context.DeservedsTypes
@@ -32,14 +32,14 @@ namespace Store.ApplicationUI.Gui.DeservedGui
             lblCategoryId.Text = (_context.DeservedsTypes.Count() + 1).ToString();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvTypes);
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
             //ShowLoading
             LoadingForm.Instance(_main).Show();
             if (await _context.Database.CanConnectAsync())
             {
                 SetColumns();
-                SetCategoryToDgv();
+                await SetCategoryToDgv();
 
             }
             else
@@ -54,11 +54,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
             // Show EmptyDAta
 
         }
-        void vider()
-        {
-            txtNameِCategory.Text = "";
-            RefreshDgv();
-        }
+
 
         private void SetColumns()
         {
@@ -88,13 +84,9 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
 
             }
-            RefreshDgv();
+            await LoadData();
         }
-        private void RefreshDgv()
-        {
 
-            SetCategoryToDgv();
-        }
 
         private async void btnEditTypes_Click(object sender, EventArgs e)
         {
@@ -115,7 +107,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
                         await _context.SaveChangesAsync();
                         Code.Helper.ToasterHelper.ShowEditToast();
 
-                        vider();
+                        await LoadData();
                     }
                 }
             }
@@ -148,7 +140,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
                 throw;
             }
-            RefreshDgv();
+            await LoadData();
         }
 
         private async void btnSearch_Click(object sender, EventArgs e)
@@ -166,10 +158,10 @@ namespace Store.ApplicationUI.Gui.DeservedGui
             Close();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
             btnAddTypes.Enabled = true;
-            vider();
+            await LoadData();
             btnEditTypes.Enabled = false;
         }
 

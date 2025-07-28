@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
@@ -146,13 +145,13 @@ namespace Store.ApplicationUI.Gui.ProductsGui.ProductDiscountGui
 
         }
 
-        private void btnAddDiscount_Click(object sender, EventArgs e)
+        private async void btnAddDiscount_Click(object sender, EventArgs e)
         {
 
             //_Form =_contr AddProductDiscountForm.Instance(_main);
             //_Form.ShowDialog();
 
-            var form = _controlManager.GetF<AddProductDiscountForm>();
+            var form = await _controlManager.GetFAsync<AddProductDiscountForm>();
             form.ShowDialog();
 
 

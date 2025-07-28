@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
+using Store.ApplicationUI.Reports.BuysReports;
 using Store.Core.Entities.Buys;
 using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
@@ -15,7 +16,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
 
         private readonly ApplicationDbContext _context;
         private readonly ControlManager _controlManager;
-        public readonly IBuysRepository? buysRepository;
+        public readonly IBuysRepository buysRepository;
         private readonly MainForm _main;
 
         public BuysReportsUserControl(MainForm mainForm, ApplicationDbContext context, ControlManager controlManager, IBuysRepository buysRepository)
@@ -25,11 +26,11 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
             _context = context;
             _controlManager = controlManager;
             this.buysRepository = buysRepository;
-            LoadData();
+
 
         }
 
-        public async void SetProductsToDgv(int skip)
+        public async Task SetProductsToDgv(int skip)
         {
             ////DgvBuys.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             //var CustomerMoneyList = _context.CustomersReports.
@@ -57,11 +58,11 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
         }
 
 
-        public async void LoadData()
+        public async Task LoadData()
         {
 
             dtpTo.Value = DateTime.Now;
-
+            dgvHelper.ResetForm(this);
             //ShowLoading
             LoadingForm.Instance(_main).Show();
             if (await buysRepository.IsConnectedAsync())
@@ -70,7 +71,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
 
                 // if its an admin or Normal user 
 
-                SetProductsToDgv(0);
+                await SetProductsToDgv(0);
                 SetColumns();
                 //_data.Clear();
             }
@@ -231,8 +232,9 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
                     DataTable buyDetailsTable = await FactureHelper.GetBuyDetailsDataTableAsync(Convert.ToInt32(DgvBuys.CurrentRow.Cells[0].Value.ToString()));
                     Reports.BuysReports.buy8cm buy8cm = _controlManager.GetR<Reports.BuysReports.buy8cm>();
                     buy8cm.DataSource = buyDetailsTable;
-                    Reports.ReportPerviwGui.PerviweForm perv = Reports.ReportPerviwGui.PerviweForm.Instance(buy8cm);
-                    perv.Show();
+                    Reports.ReportPerviwGui.PerviweForm perv = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                    perv.LoadReport(buy8cm);
+                    perv.ShowDialog();
                 }
             }
             catch (Exception)
@@ -254,9 +256,9 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
                     buyReportsInPeriod.DataSource = buyDetailsTable;
                     buyReportsInPeriod.lbldateFrom.Text = dtpFrom.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                     buyReportsInPeriod.lblDateTo.Text = dtpTo.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-                    Reports.ReportPerviwGui.PerviweForm perv = Reports.ReportPerviwGui.PerviweForm.Instance(buyReportsInPeriod);
-
-                    perv.Show();
+                    Reports.ReportPerviwGui.PerviweForm perv = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                    perv.LoadReport(buyReportsInPeriod);
+                    perv.ShowDialog();
                 }
             }
             catch (Exception)
@@ -276,8 +278,9 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
                     DataTable buyDetailsTable = await FactureHelper.GetBuyDetailsDataTableAsync(Convert.ToInt32(DgvBuys.CurrentRow.Cells[0].Value.ToString()));
                     Reports.BuysReports.buyA4 buyA4 = _controlManager.GetR<Reports.BuysReports.buyA4>();
                     buyA4.DataSource = buyDetailsTable;
-                    Reports.ReportPerviwGui.PerviweForm perv = Reports.ReportPerviwGui.PerviweForm.Instance(buyA4);
-                    perv.Show();
+                    Reports.ReportPerviwGui.PerviweForm perv = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
+                    perv.LoadReport(buyA4);
+                    perv.ShowDialog();
                 }
             }
             catch (Exception)
@@ -287,10 +290,10 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
             }
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private async void btnRefresh_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            LoadData();
+            await LoadData();
         }
 
         private async void btnDeleteCurrentPage_Click(object sender, EventArgs e)
@@ -305,7 +308,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
             }
             Code.Helper.ToasterHelper.ShowDeletedToast();
 
-            LoadData();
+            await LoadData();
 
 
         }
@@ -331,7 +334,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
 
                         MessageBox.Show("لا توجد بيانات في الفترة المحددة", "معلومة", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                    LoadData();
+                    await LoadData();
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
                 }
@@ -351,7 +354,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
                 try
                 {
                     await _context.Database.ExecuteSqlRawAsync($"DELETE FROM [Buys]");
-                    LoadData();
+                    await LoadData();
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
                 }

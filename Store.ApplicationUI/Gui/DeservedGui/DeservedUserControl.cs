@@ -31,7 +31,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
             var data = await deservedsRepository.GetAllAsync(x => x.DeservedType);
             DgvProducts.DataSource = data;
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
 
 
@@ -73,29 +73,29 @@ namespace Store.ApplicationUI.Gui.DeservedGui
             DgvProducts.Columns[7].HeaderCell.Value = "معرف المصروفة";
         }
 
-        private void btnAddDeserved_Click(object sender, EventArgs e)
+        private async void btnAddDeserved_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            AddDeservedForm addDeservedForm = _controlManager.GetF<AddDeservedForm>();
+            AddDeservedForm addDeservedForm = await _controlManager.GetFAsync<AddDeservedForm>();
             addDeservedForm.ShowDialog();
         }
 
-        private void btnEditDeserved_Click(object sender, EventArgs e)
+        private async void btnEditDeserved_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
             if (DgvProducts.Rows.Count > 0)
             {
-                AddDeservedForm addDeservedForm = _controlManager.GetF<AddDeservedForm>();
+                AddDeservedForm addDeservedForm = await _controlManager.GetFAsync<AddDeservedForm>();
 
 
-                addDeservedForm.SetDataToEdit(
-                    DgvProducts.CurrentRow.Cells[0].Value.ToString(),
-                    DgvProducts.CurrentRow.Cells[1].Value.ToString(),
-                    DgvProducts.CurrentRow.Cells[4].Value.ToString(),
-                    DgvProducts.CurrentRow.Cells[5].Value.ToString(),
-                    DgvProducts.CurrentRow.Cells[7].Value.ToString(),
-                    Convert.ToDateTime(DgvProducts.CurrentRow.Cells[2].Value)
-                );
+                await addDeservedForm.SetDataToEdit(
+                      DgvProducts.CurrentRow.Cells[0].Value.ToString(),
+                      DgvProducts.CurrentRow.Cells[1].Value.ToString(),
+                      DgvProducts.CurrentRow.Cells[4].Value.ToString(),
+                      DgvProducts.CurrentRow.Cells[5].Value.ToString(),
+                      DgvProducts.CurrentRow.Cells[7].Value.ToString(),
+                      Convert.ToDateTime(DgvProducts.CurrentRow.Cells[2].Value)
+                  );
 
                 addDeservedForm.ShowDialog();
 
@@ -111,10 +111,10 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private async void btnRefresh_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            LoadData();
+            await LoadData();
         }
 
         private async void btnDeleteDeserved_Click(object sender, EventArgs e)
@@ -126,7 +126,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
                 Code.Helper.ToasterHelper.ShowDeletedToast();
 
             }
-            LoadData();
+            await LoadData();
         }
 
         private async void btnSearch_Click(object sender, EventArgs e)
@@ -159,13 +159,13 @@ namespace Store.ApplicationUI.Gui.DeservedGui
                 for (int i = 0; i < DgvProducts.Rows.Count; i++)
                 {
 
-                    var dsa = await deservedsRepository.DeleteAsync(DgvProducts.Rows[i].Cells[7].Value.ToString());
+                    await deservedsRepository.DeleteAsync(DgvProducts.Rows[i].Cells[7].Value.ToString());
 
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
                 }
             }
-            LoadData();
+            await LoadData();
         }
 
         private void txtSearch_KeyDown(object sender, KeyEventArgs e)

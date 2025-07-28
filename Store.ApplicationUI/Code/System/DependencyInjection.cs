@@ -55,6 +55,7 @@ using Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui;
 using Store.ApplicationUI.Reports.BuysReports;
 using Store.ApplicationUI.Reports.CustomersAccountReports;
 using Store.ApplicationUI.Reports.ProductsReports;
+using Store.ApplicationUI.Reports.ReportPerviwGui;
 using Store.ApplicationUI.Reports.SalesReports;
 using Store.ApplicationUI.Reports.SuppliersAccountsReports;
 using Store.ApplicationUI.Reports.VouchersReports;
@@ -224,6 +225,7 @@ namespace Store.ApplicationUI.Code.System
             services.AddScoped<AddSupplierForm>();
             services.AddScoped<SuppliersUserControl>();
 
+            services.AddScoped<PerviweForm>();
             services.AddScoped<buy8cm>();
             services.AddScoped<buyA4>();
             services.AddScoped<buyReportsInPeriod>();

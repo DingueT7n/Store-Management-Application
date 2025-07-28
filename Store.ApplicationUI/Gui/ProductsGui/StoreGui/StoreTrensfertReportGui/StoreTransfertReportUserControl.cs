@@ -23,7 +23,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreTrensfertReportGui
 
             _repository = repository;
         }
-        public async void SetProductsToDgv(string t1, string t2, string barcode)
+        public async Task SetProductsToDgv(string t1, string t2, string barcode)
         {
             ////DgvSales.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             //var CustomerMoneyList = MainForm.Context.CustomersReports.
@@ -36,7 +36,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreTrensfertReportGui
 
 
         }
-        void RefreshDgv()
+        async void RefreshDgv()
         {
             string t1 = string.Empty;
             string t2 = string.Empty;
@@ -44,13 +44,14 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreTrensfertReportGui
 
             if (rbStoresTo.Checked) t2 = cmbStoresTo.Text;
 
-            SetProductsToDgv(t1, t2, txtSearch.Text);
+            await SetProductsToDgv(t1, t2, txtSearch.Text);
             SetColumns();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
 
+            dgvHelper.ResetForm(this);
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
@@ -172,7 +173,6 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreTrensfertReportGui
                 throw;
             }
         }
-
         private void txtSearch_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -180,11 +180,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreTrensfertReportGui
                 btnSearch_Click(sender, e);
             }
         }
-
         private void StoreTransfertReportUserControl_Load(object sender, EventArgs e)
         {
-            LoadData();
-
         }
     }
 }

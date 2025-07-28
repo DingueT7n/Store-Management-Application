@@ -27,8 +27,10 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenBankAndCaisse
             if (cmbCaisseFrom.Text == "اختر صندوق") return;
 
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
+            dgvHelper.ResetForm(this);
+
             txtDepositorName.Text = string.Empty;
             txtValue.Text = string.Empty;
             lblValue.Text = "0";
@@ -144,12 +146,12 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenBankAndCaisse
                                 // Commit the transaction
                                 await transaction.CommitAsync();
                                 Code.Helper.ToasterHelper.ShowTransfert();
-                                _caisse.LoadData();
+                                await _caisse.LoadData();
                             }
                         }
 
                         // Load data after successful transaction
-                        LoadData();
+                        await LoadData();
                     }
                     catch (Exception ex)
                     {
@@ -219,12 +221,12 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenBankAndCaisse
                                 // Commit the transaction
                                 await transaction.CommitAsync();
                                 Code.Helper.ToasterHelper.ShowTransfert();
-                                _caisse.LoadData();
+                                await _caisse.LoadData();
                             }
                         }
 
                         // Load data after successful transaction
-                        LoadData();
+                        await LoadData();
                     }
                     catch (Exception ex)
                     {

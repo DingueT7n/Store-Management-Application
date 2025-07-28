@@ -27,11 +27,13 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowMoneyGui
             _context = context;
             _controlManager = controlManager;
             this.Owner = _main;
-            LoadData();
+
         }
 
-        public async void LoadData()
+        public async Task LoadData()
         {
+            dgvHelper.ResetForm(this);
+            Vider();
             dtpJoined.Value = DateTime.Now;
             dtpReminderDate.Value = DateTime.Now.AddDays(30);
 
@@ -67,37 +69,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowMoneyGui
 
 
         }
-        private void ResetForm()
-        {
-            // Clear all textboxes
-            foreach (Control ctrl in _controlManager.GetF<AddEmployeeForm>().Controls)
-            {
-                if (ctrl is TextBox)
-                {
-                    ((TextBox)ctrl).Clear();
-                    ((TextBox)ctrl).Text = string.Empty;
-                }
-                else if (ctrl is ComboBox)
-                {
-                    ((ComboBox)ctrl).SelectedIndex = -1; // Deselect ComboBox
-                }
-                else if (ctrl is CheckBox)
-                {
-                    ((CheckBox)ctrl).Checked = false; // Uncheck CheckBox
-                }
-                // Add more control types if needed
-            }
 
-            // Reset any DataGridView
-
-            Vider();
-
-            // Reinitialize form data (e.g., reload initial data)
-            LoadData(); // This is a method where you load initial data
-
-            // Optionally reset focus to the first control
-            // Set focus to the first control
-        }
 
         private void rbEmployee_CheckedChanged(object sender, EventArgs e)
         {
@@ -201,7 +173,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowMoneyGui
                         await transaction.CommitAsync();
                         Code.Helper.ToasterHelper.ShowBorrowMoney();
 
-                        ResetForm();
+                        await LoadData();
                     }
                     catch (Exception)
                     {

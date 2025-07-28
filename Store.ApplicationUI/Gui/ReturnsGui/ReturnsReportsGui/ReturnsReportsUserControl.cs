@@ -51,13 +51,13 @@ namespace Store.ApplicationUI.Gui.ReturnsGui.ReturnsReportsGui
             }
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
 
             dtpTo.Value = DateTime.Now;
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (returnRepository.IsConnected())
+            if (await returnRepository.IsConnectedAsync())
             {
                 //Start Load Data
 

@@ -1,5 +1,6 @@
 ﻿using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.System;
+using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.SupplierGui;
 using Store.Core.Entities.Suppliers;
 using Store.Core.Interfaces;
@@ -12,13 +13,34 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private readonly ISuppliersRepository _suppliersRepository;
         private readonly ControlManager _controlManager;
+        private readonly MainForm _main;
 
-        public AddSupplierForm(ISuppliersRepository suppliersRepository, ControlManager controlManager)
+        public AddSupplierForm(ISuppliersRepository suppliersRepository, ControlManager controlManager, MainForm main)
         {
             InitializeComponent();
 
             _suppliersRepository = suppliersRepository;
             _controlManager = controlManager;
+            _main = main;
+        }
+        public async Task LoadData()
+        {
+            dgvHelper.ResetForm(this);
+            vider();
+            LoadingForm.Instance(_main).Show();
+
+            if (await _suppliersRepository.IsConnectedAsync())
+            {
+
+            }
+            else
+            {
+                LoadingForm.Instance(_main).Hide();
+                MsgHelper.ShowServerError();
+            }
+
+            LoadingForm.Instance(_main).Hide();
+
         }
         void vider()
         {
@@ -137,12 +159,12 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
 
                 var result = await _suppliersRepository.AddAsync(customer);
-                vider();
+                await LoadData();
 
                 if (_controlManager.TryGet<SuppliersUserControl>(out var UC))
 
                 {
-                    UC.LoadData();
+                    await UC.LoadData();
                 }
                 Code.Helper.ToasterHelper.ShowAddToast();
 
@@ -180,12 +202,10 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                     customer.Notes = txtNotes.Text;
                     customer.MaxDebtAllowed = ConvertToFloat(txtMaxDebtAllowed.Text);
                     var result = await _suppliersRepository.UpdateAsync(lblِSupplierId.Text, customer);
-
-
                     if (_controlManager.TryGet<SuppliersUserControl>(out var UC))
 
                     {
-                        UC.LoadData();
+                        await UC.LoadData();
                     }
                     customer = null;
                     Code.Helper.ToasterHelper.ShowEditToast();
@@ -209,9 +229,9 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         }
 
-        private void AddSupplierForm_FormClosing(object sender, FormClosingEventArgs e)
+        private async void AddSupplierForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            vider();
+            await LoadData();
         }
     }
 }

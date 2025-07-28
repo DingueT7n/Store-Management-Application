@@ -69,10 +69,11 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui
                 ToasterHelper.ShowErrorHappened(ex.Message);
             }
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
             try
             {
+                dgvHelper.ResetForm(this);
                 dtpTo.Value = DateTime.Now;
 
                 // Show loading indicator

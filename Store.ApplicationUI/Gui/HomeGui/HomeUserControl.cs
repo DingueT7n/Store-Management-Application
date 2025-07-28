@@ -78,6 +78,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
         public async Task LoadData()
         {
 
+            dgvHelper.ResetForm(this);
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
@@ -188,97 +189,97 @@ namespace Store.ApplicationUI.Gui.HomeGui
             //lblFecha.Text = $"التاريخ الميلادي: {gregorianDate} \nالتاريخ الهجري: {hijriDate}";
         }
 
-        private void tiltUsersManagment_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
+        private async void tiltUsersManagment_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
             if (LocalUser.User is not null)
                 if (LocalUser.User.UserSetting.UserPermession)
                 {
                     _main.CloseSubPanels();
-                    UserRolesForm userRolesForm = _controlManager.GetF<UserRolesForm>();
+                    UserRolesForm userRolesForm = await _controlManager.GetFAsync<UserRolesForm>();
 
                     userRolesForm.ShowDialog();
                 }
 
         }
 
-        private void tiltAddProduct_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
+        private async void tiltAddProduct_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
             if (LocalUser.User is not null)
                 if (LocalUser.User.UserProductAndStore.AddProduct)
                 {
                     _main.CloseSubPanels();
-                    AddProductForm addProductForm = _controlManager.GetF<AddProductForm>();
+                    AddProductForm addProductForm = await _controlManager.GetFAsync<AddProductForm>();
 
                     addProductForm.ShowDialog();
                 }
         }
 
-        private void tiltSuppAccount_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
+        private async void tiltSuppAccount_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
             if (LocalUser.User is not null)
                 if (LocalUser.User.UserCustomer.CustomerAccount)
                 {
                     _main.CloseSubPanels();
-                    _main.SetBytilt(_controlManager.Get<CustomerAccountUserControl>());
+                    _main.SetBytilt(await _controlManager.GetAsync<CustomerAccountUserControl>());
                 }
         }
 
-        private void tiltCustomersAccount_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
+        private async void tiltCustomersAccount_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
             if (LocalUser.User is not null)
                 if (LocalUser.User.UserSupplier.SuppliersAccount)
                 {
                     _main.CloseSubPanels();
-                    _main.SetBytilt(_controlManager.Get<SupplierAccountUserControl>());
+                    _main.SetBytilt(await _controlManager.GetAsync<SupplierAccountUserControl>());
                 }
         }
 
-        private void tiltBuys_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
+        private async void tiltBuys_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
             if (LocalUser.User is not null)
                 if (LocalUser.User.UserBuy.NewBuy)
                 {
                     _main.CloseSubPanels();
                     //_main.SetBytilt(Gui.BuysGui.BuysUserControl.Instance(_main));
-                    _main.SetBytilt(_controlManager.Get<BuysUserControl>());
+                    _main.SetBytilt(await _controlManager.GetAsync<BuysUserControl>());
 
                 }
         }
 
-        private void tiltSales_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
+        private async void tiltSales_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
             if (LocalUser.User is not null)
                 if (LocalUser.User.UserSale.NewSale)
                 {
                     _main.CloseSubPanels();
-                    _main.SetBytilt(_controlManager.Get<SalesUserControl>());
+                    _main.SetBytilt(await _controlManager.GetAsync<SalesUserControl>());
                 }
         }
 
-        private void tiltCaisse_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
+        private async void tiltCaisse_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
             if (LocalUser.User is not null)
                 if (LocalUser.User.UserCaisseAndBank.CaissesAndBanks)
                 {
-                    CaisseDetailsForm caisseDetailsForm = _controlManager.GetF<CaisseDetailsForm>();
+                    CaisseDetailsForm caisseDetailsForm = await _controlManager.GetFAsync<CaisseDetailsForm>();
 
                     caisseDetailsForm.ShowDialog();
                     _main.CloseSubPanels();
                 }
         }
 
-        private void tiltStatistiocs_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
+        private async void tiltStatistiocs_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
             if (LocalUser.User is not null)
                 if (LocalUser.User.UserSetting.Statistics)
                 {
                     _main.CloseSubPanels();
 
-                    _main.SetBytilt(_controlManager.Get<StatisticsUserControl>());
+                    _main.SetBytilt(await _controlManager.GetAsync<StatisticsUserControl>());
                 }
         }
 
-        private void tiltReturns_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
+        private async void tiltReturns_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
             if (LocalUser.User is not null)
                 if (LocalUser.User.UserRefund.RefundProduct)
@@ -286,7 +287,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
                     _main.CloseSubPanels();
 
 
-                    _main.SetBytilt(_controlManager.Get<ReturnUserControl>());
+                    _main.SetBytilt(await _controlManager.GetAsync<ReturnUserControl>());
 
                 }
         }
@@ -364,7 +365,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
 
         private async void HomeUserControl_Load(object sender, EventArgs e)
         {
-            await LoadData();
+
 
         }
     }

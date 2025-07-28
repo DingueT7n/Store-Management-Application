@@ -140,14 +140,15 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
 
 
         // methodes 
-        public async void LoadData()
+        public async Task LoadData()
         {
-
+            dgvHelper.ResetForm(this);
             DgvِProducts.Columns.Clear();
+            ResetForm();
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
-            if (ReturnsRepository.IsConnected())
+            if (await ReturnsRepository.IsConnectedAsync())
             {
                 cmbSuppliers.DataSource = null;
 
@@ -157,7 +158,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                     SetColumnsSales();
                     if (cmbCustomers.Text != string.Empty)
                         cmbCustomers.Text = "اختر العميل";
-                    cmbCustomers.DataSource = _context.Customers.ToList();
+                    cmbCustomers.DataSource = await _context.Customers.ToListAsync();
                     cmbCustomers.DisplayMember = "CustomerName";
                     cmbCustomers.ValueMember = "Id";
 
@@ -168,7 +169,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                     SetColumnsbuys();
 
                     cmbSuppliers.Text = "اختر مورد";
-                    cmbSuppliers.DataSource = _context.Suppliers.ToList();
+                    cmbSuppliers.DataSource = await _context.Suppliers.ToListAsync();
                     cmbSuppliers.DisplayMember = "SupplierName";
                     cmbSuppliers.ValueMember = "Id";
 
@@ -177,7 +178,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                 }
                 if (cmbStores.Text != string.Empty)
                     cmbStores.Text = "اختر مخزن";
-                cmbStores.DataSource = _context.Stores.ToList();
+                cmbStores.DataSource = await _context.Stores.ToListAsync();
                 cmbStores.DisplayMember = "StoreName";
                 cmbStores.ValueMember = "Id";
 
@@ -321,7 +322,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
             CalculateStatistics();
 
             // Reinitialize form data (e.g., reload initial data)
-            LoadData(); // This is a method where you load initial data
+            // This is a method where you load initial data
 
             // Optionally reset focus to the first control
             // Set focus to the first control
@@ -387,9 +388,9 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
             }
         }
 
-        private void rbBuy_CheckedChanged(object sender, EventArgs e)
+        private async void rbBuy_CheckedChanged(object sender, EventArgs e)
         {
-            LoadData();
+            await LoadData();
 
         }
         Return SetRefundBuy()
@@ -898,7 +899,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                         await ProcessSaleRefundAsync(context);
                     }
 
-                    ResetForm();
+                    await LoadData();
                     ToasterHelper.ShowAddedRefund();
                 }
                 //}

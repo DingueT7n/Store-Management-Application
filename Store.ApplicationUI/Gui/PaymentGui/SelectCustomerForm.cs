@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.SalesGui.PosGui;
@@ -49,7 +48,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
 
 
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
 
             if (await _context.Database.CanConnectAsync())
@@ -99,9 +98,9 @@ namespace Store.ApplicationUI.Gui.PaymentGui
 
         }
 
-        private void SelectCustomerForm_Load(object sender, EventArgs e)
+        private async void SelectCustomerForm_Load(object sender, EventArgs e)
         {
-            LoadData();
+            await LoadData();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)

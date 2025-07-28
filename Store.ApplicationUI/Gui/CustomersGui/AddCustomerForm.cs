@@ -1,5 +1,7 @@
-﻿using Store.ApplicationUI.Code.System;
+﻿using Store.ApplicationUI.Code.Helper;
+using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.CustomersGui;
+using Store.ApplicationUI.Gui.LoadingGui;
 using Store.Core.Entities.Customers;
 using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
@@ -27,6 +29,25 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
 
         }
+        public async Task LoadData()
+        {
+            dgvHelper.ResetForm(this);
+            vider();
+            LoadingForm.Instance(_main).Show();
+
+            if (await _customersRepository.IsConnectedAsync())
+            {
+
+            }
+            else
+            {
+                LoadingForm.Instance(_main).Hide();
+                MsgHelper.ShowServerError();
+            }
+
+            LoadingForm.Instance(_main).Hide();
+
+        }
         void vider()
         {
             txtAddress.Text = "";
@@ -34,6 +55,10 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             txtPhoneNumber.Text = "";
             txtMaxDebtAllowed.Text = $"0{Properties.Settings.Default.DecimalSEP}00";
             txtNotes.Text = "";
+            btnAddCustomer.Visible = true;
+            btnEditCustomer.Visible = false;
+            lblِCustomerId.Visible = false;
+            label13.Visible = false;
 
         }
         private void txtTaxValue_KeyPress(object sender, KeyPressEventArgs e)
@@ -106,7 +131,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 if (_controlManager.TryGet<CustomersUserControl>(out var UC))
 
                 {
-                    UC.LoadData();
+                    await UC.LoadData();
                 }
 
                 Code.Helper.ToasterHelper.ShowAddToast();
@@ -148,7 +173,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                     if (_controlManager.TryGet<CustomersUserControl>(out var UC))
 
                     {
-                        UC.LoadData();
+                        await UC.LoadData();
                     }
                     customer = null;
                     Code.Helper.ToasterHelper.ShowEditToast();

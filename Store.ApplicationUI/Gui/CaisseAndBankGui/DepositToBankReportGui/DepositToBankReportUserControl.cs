@@ -17,7 +17,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankReportGui
             _context = context;
         }
 
-        public async void SetProductsToDgv(string barcode)
+        public async Task SetProductsToDgv(string barcode)
         {
             ////DgvSales.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             //var CustomerMoneyList = MainForm.Context.CustomersReports.
@@ -47,22 +47,25 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankReportGui
             }
         }
 
-        void RefreshDgv()
+        async Task RefreshDgv()
         {
             SetColumns();
-            SetProductsToDgv(txtSearch.Text);
+            await SetProductsToDgv(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
+            dgvHelper.ResetForm(this);
+
             dtpTo.Value = DateTime.Now;
+
 
             //ShowLoading
             LoadingForm.Instance(_main).Show();
             if (await _context.Database.CanConnectAsync())
             {
 
-                RefreshDgv();
+                await RefreshDgv();
                 //_data.Clear();
             }
             else
@@ -103,10 +106,10 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankReportGui
 
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
-            RefreshDgv();
+            await RefreshDgv();
         }
         private async void button2_Click(object sender, EventArgs e)
         {
@@ -128,7 +131,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankReportGui
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
                     DgvSales.DataSource = null;
-                    RefreshDgv();
+                    await RefreshDgv();
                 }
             }
             catch (Exception)

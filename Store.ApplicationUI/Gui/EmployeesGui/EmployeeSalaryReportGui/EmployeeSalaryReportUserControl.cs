@@ -45,7 +45,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeSalaryReportGui
             SetProductsToDgv(t1, txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
         }
-        public async void LoadData()
+        public async Task LoadData()
         {
             dtpTo.Value = DateTime.Now;
 
