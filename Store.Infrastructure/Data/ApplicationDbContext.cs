@@ -145,9 +145,13 @@ namespace Store.Infrastructure.Data
 
         public DbSet<Return> Returns { get; set; }
         public DbSet<ReturnDetail> ReturnsDetails { get; set; }
+
         public DbSet<Sale> Sales { get; set; }
         public DbSet<SaleDetail> SalesDetails { get; set; }
         public DbSet<SaleProfit> SalesProfits { get; set; }
+        public DbSet<ProformaInvoice> ProformaInvoices { get; set; }
+        public DbSet<ProformaInvoiceDetails> ProformaInvoiceDetails { get; set; }
+
         public DbSet<Core.Entities.Stores.Store> Stores { get; set; }
         public DbSet<Caisse> Caisses { get; set; }
         public DbSet<CaisseOperation> CaisseOperations { get; set; }

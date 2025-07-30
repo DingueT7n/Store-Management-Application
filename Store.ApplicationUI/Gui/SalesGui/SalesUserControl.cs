@@ -251,8 +251,6 @@ namespace Store.ApplicationUI.Gui.SalesGui
             }
         }
         private Product _product;
-        private ProductDiscount _productDiscount;
-        private ProductsQuantitie _productQuantitie;
         public async Task SetProductsToTable(string barcode)
         {
             _product = _salesRepository.GetProductBarCode(barcode);
@@ -333,7 +331,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 if (input.Length >= 2)
                 {
                     string prefix = input.Substring(0, 2);
-                    if (prefix == "21")
+                    if (prefix == "21" && input.Length >= 4)
                     {
                         await ParseScaleBarcode(input);
                     }
@@ -1063,11 +1061,11 @@ namespace Store.ApplicationUI.Gui.SalesGui
                 return;
             if (ValidatePay())
             {
-                AddPaymentForm addPaymentForm = _controlManager.GetF<AddPaymentForm>();
+                AddPaymentForm addPaymentForm = await _controlManager.GetFAsync<AddPaymentForm>();
                 if (rBPayPartial.Checked || rBPayDebt.Checked)
                 {
 
-                    addPaymentForm.LoadData(TotalFacture.ToString(), "1", TotalFacture.ToString(), 1);
+                    addPaymentForm.LoadData(TotalFacture.ToString(), "0", TotalFacture.ToString(), 1);
                     addPaymentForm.ShowDialog();
                     if (Process)
                     {
@@ -1105,29 +1103,7 @@ namespace Store.ApplicationUI.Gui.SalesGui
             }
         }
 
-        private void txtTotalBuyProduct_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
-            {
-                e.Handled = true;
-            }
-        }
 
-        private void txtSalePrice_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void txtWholeSalePrice_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
-            {
-                e.Handled = true;
-            }
-        }
 
         private void txtSalePrice_KeyDown(object sender, KeyEventArgs e)
         {
@@ -1247,23 +1223,18 @@ namespace Store.ApplicationUI.Gui.SalesGui
             EditUsingPlusMinus(sender, e);
         }
 
-        private void btnSearchImage_Click(object sender, EventArgs e)
+        private async void btnSearchImage_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            SelectProductsForm selectProductsForm = _controlManager.GetF<SelectProductsForm>();
+            SelectProductsForm selectProductsForm = await _controlManager.GetFAsync<SelectProductsForm>();
             selectProductsForm.SetSale();
             selectProductsForm.ShowDialog();
         }
-
         private async void DgvِProducts_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             await EditFromTable(0);
 
         }
 
-        private void lblQuentity_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

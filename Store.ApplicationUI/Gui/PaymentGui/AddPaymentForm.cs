@@ -92,11 +92,11 @@ namespace Store.ApplicationUI.Gui.PaymentGui
                     }
 
                 }
-                else if (_controlManager.TryGet<PosUserControl>(out var UCP))
+                else if (_controlManager.GetF<PosForm>() != null)
 
                 {
 
-                    UCP.InitializeData(txtpaidUp.Text, txtRemain.Text);
+                    _controlManager.GetF<PosForm>().GetPosUserControl().InitializeData(txtpaidUp.Text, txtRemain.Text);
 
 
                 }

@@ -260,6 +260,20 @@ namespace Store.ApplicationUI.Code.Helper
                 return false;
             }
         }
+        public static bool ShowClearDebtDialog(string name)
+        {
+            var result = MessageBox.Show($"هل انت متأكد من تصفية دين العميل {name} ؟ لا يمكن استرجاع البيانات ",
+                   "اجراء حذف"
+                   , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public static bool ShowResolveDialog()
         {
             var result = MessageBox.Show("هل انت متأكد من هذا الاجراء؟ ",

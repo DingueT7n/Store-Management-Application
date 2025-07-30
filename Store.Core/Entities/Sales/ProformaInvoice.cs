@@ -8,6 +8,7 @@ namespace Store.Core.Entities.Sales
         public string InvoiceNumber { get; set; }
         public string UserName { get; set; }
         public string CustomerName { get; set; }
+        public decimal TotalFaacture { get; set; }
         public DateTime Date { get; set; }
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
@@ -26,5 +27,23 @@ namespace Store.Core.Entities.Sales
         public Product Product { get; set; }
 
     }
+    public class ProformaInvoiceDTO
+    {
+        public int ProformaId { get; set; }
+        public string UserName { get; set; }
+        public string CustomerName { get; set; }
+        public DateTime Date { get; set; }
+        public decimal TotalFaacture { get; set; }
+        public int NbrProducts { get; set; }
+
+    }
+    public class ListProformaInvoice
+    {
+        public List<ProformaInvoiceDTO> Data { get; set; }
+        public int Count { get; set; }
+
+    }
+
+
 
 }

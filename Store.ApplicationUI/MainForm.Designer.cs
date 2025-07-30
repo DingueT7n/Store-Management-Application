@@ -120,6 +120,7 @@
             barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             barDockControlRight = new DevExpress.XtraBars.BarDockControl();
             animationTimer = new System.Windows.Forms.Timer(components);
+            button2 = new Button();
             bar3 = new DevExpress.XtraBars.Bar();
             flowLayoutPanelNavBar.SuspendLayout();
             flowLayoutPanelStateAndDiscount.SuspendLayout();
@@ -765,11 +766,12 @@
             SalesflowLayoutPanel.BackColor = Color.LavenderBlush;
             SalesflowLayoutPanel.Controls.Add(btnNewSale);
             SalesflowLayoutPanel.Controls.Add(btnSalesReport);
+            SalesflowLayoutPanel.Controls.Add(button2);
             SalesflowLayoutPanel.Controls.Add(btnProfitReport);
             SalesflowLayoutPanel.Location = new Point(6, 1354);
-            SalesflowLayoutPanel.MaximumSize = new Size(209, 143);
+            SalesflowLayoutPanel.MaximumSize = new Size(205, 188);
             SalesflowLayoutPanel.Name = "SalesflowLayoutPanel";
-            SalesflowLayoutPanel.Size = new Size(205, 143);
+            SalesflowLayoutPanel.Size = new Size(205, 188);
             SalesflowLayoutPanel.TabIndex = 12;
             SalesflowLayoutPanel.Visible = false;
             // 
@@ -803,7 +805,7 @@
             // 
             btnProfitReport.Image = (Image)resources.GetObject("btnProfitReport.Image");
             btnProfitReport.ImageAlign = ContentAlignment.MiddleLeft;
-            btnProfitReport.Location = new Point(18, 99);
+            btnProfitReport.Location = new Point(18, 146);
             btnProfitReport.Margin = new Padding(4, 5, 4, 5);
             btnProfitReport.Name = "btnProfitReport";
             btnProfitReport.Size = new Size(183, 37);
@@ -817,7 +819,7 @@
             btnCaisseAndBank.FlatAppearance.BorderSize = 4;
             btnCaisseAndBank.Image = (Image)resources.GetObject("btnCaisseAndBank.Image");
             btnCaisseAndBank.ImageAlign = ContentAlignment.MiddleLeft;
-            btnCaisseAndBank.Location = new Point(6, 1505);
+            btnCaisseAndBank.Location = new Point(6, 1550);
             btnCaisseAndBank.Margin = new Padding(4, 5, 4, 5);
             btnCaisseAndBank.Name = "btnCaisseAndBank";
             btnCaisseAndBank.Size = new Size(204, 37);
@@ -837,7 +839,7 @@
             flowLayoutPanelCaissesAndBank.Controls.Add(btnWithdrawBankReport);
             flowLayoutPanelCaissesAndBank.Controls.Add(btnTransfertCaisse);
             flowLayoutPanelCaissesAndBank.Controls.Add(btnTreansfertBankCaisse);
-            flowLayoutPanelCaissesAndBank.Location = new Point(6, 1550);
+            flowLayoutPanelCaissesAndBank.Location = new Point(6, 1595);
             flowLayoutPanelCaissesAndBank.MaximumSize = new Size(205, 390);
             flowLayoutPanelCaissesAndBank.Name = "flowLayoutPanelCaissesAndBank";
             flowLayoutPanelCaissesAndBank.Size = new Size(205, 390);
@@ -959,7 +961,7 @@
             btnDeservedPanel.FlatAppearance.BorderSize = 4;
             btnDeservedPanel.Image = (Image)resources.GetObject("btnDeservedPanel.Image");
             btnDeservedPanel.ImageAlign = ContentAlignment.MiddleLeft;
-            btnDeservedPanel.Location = new Point(6, 1948);
+            btnDeservedPanel.Location = new Point(6, 1993);
             btnDeservedPanel.Margin = new Padding(4, 5, 4, 5);
             btnDeservedPanel.Name = "btnDeservedPanel";
             btnDeservedPanel.Size = new Size(204, 37);
@@ -974,7 +976,7 @@
             DeservedflowLayoutPanel.Controls.Add(btnAllDeserved);
             DeservedflowLayoutPanel.Controls.Add(btnVouchers);
             DeservedflowLayoutPanel.Controls.Add(btnVouchersReport);
-            DeservedflowLayoutPanel.Location = new Point(6, 1993);
+            DeservedflowLayoutPanel.Location = new Point(6, 2038);
             DeservedflowLayoutPanel.MaximumSize = new Size(205, 145);
             DeservedflowLayoutPanel.Name = "DeservedflowLayoutPanel";
             DeservedflowLayoutPanel.Size = new Size(205, 145);
@@ -1025,7 +1027,7 @@
             btnRefundPanel.FlatAppearance.BorderSize = 4;
             btnRefundPanel.Image = (Image)resources.GetObject("btnRefundPanel.Image");
             btnRefundPanel.ImageAlign = ContentAlignment.MiddleLeft;
-            btnRefundPanel.Location = new Point(6, 2146);
+            btnRefundPanel.Location = new Point(6, 2191);
             btnRefundPanel.Margin = new Padding(4, 5, 4, 5);
             btnRefundPanel.Name = "btnRefundPanel";
             btnRefundPanel.Size = new Size(204, 37);
@@ -1039,7 +1041,7 @@
             flowLayoutPaneReturns.BackColor = Color.LavenderBlush;
             flowLayoutPaneReturns.Controls.Add(btnAddRefund);
             flowLayoutPaneReturns.Controls.Add(btnRefundReport);
-            flowLayoutPaneReturns.Location = new Point(6, 2191);
+            flowLayoutPaneReturns.Location = new Point(6, 2236);
             flowLayoutPaneReturns.MaximumSize = new Size(205, 98);
             flowLayoutPaneReturns.Name = "flowLayoutPaneReturns";
             flowLayoutPaneReturns.Size = new Size(205, 98);
@@ -1077,7 +1079,7 @@
             btnEmployeerPanel.FlatAppearance.BorderSize = 4;
             btnEmployeerPanel.Image = (Image)resources.GetObject("btnEmployeerPanel.Image");
             btnEmployeerPanel.ImageAlign = ContentAlignment.MiddleLeft;
-            btnEmployeerPanel.Location = new Point(6, 2297);
+            btnEmployeerPanel.Location = new Point(6, 2342);
             btnEmployeerPanel.Margin = new Padding(4, 5, 4, 5);
             btnEmployeerPanel.Name = "btnEmployeerPanel";
             btnEmployeerPanel.Size = new Size(204, 37);
@@ -1097,7 +1099,7 @@
             flowLayoutPanelEmployees.Controls.Add(btnBorrowItemsReport);
             flowLayoutPanelEmployees.Controls.Add(btnBorrowMoniesReport);
             flowLayoutPanelEmployees.Controls.Add(btnSalariesReport);
-            flowLayoutPanelEmployees.Location = new Point(6, 2342);
+            flowLayoutPanelEmployees.Location = new Point(6, 2387);
             flowLayoutPanelEmployees.MaximumSize = new Size(205, 371);
             flowLayoutPanelEmployees.Name = "flowLayoutPanelEmployees";
             flowLayoutPanelEmployees.Size = new Size(205, 371);
@@ -1214,7 +1216,7 @@
             btnGneralSettingsPanel.FlatAppearance.BorderSize = 4;
             btnGneralSettingsPanel.Image = (Image)resources.GetObject("btnGneralSettingsPanel.Image");
             btnGneralSettingsPanel.ImageAlign = ContentAlignment.MiddleLeft;
-            btnGneralSettingsPanel.Location = new Point(6, 2721);
+            btnGneralSettingsPanel.Location = new Point(6, 2766);
             btnGneralSettingsPanel.Margin = new Padding(4, 5, 4, 5);
             btnGneralSettingsPanel.Name = "btnGneralSettingsPanel";
             btnGneralSettingsPanel.Size = new Size(204, 37);
@@ -1230,7 +1232,7 @@
             flowLayoutPanelSettings.Controls.Add(btnUsersRoles);
             flowLayoutPanelSettings.Controls.Add(btnBackUp);
             flowLayoutPanelSettings.Controls.Add(btnRestore);
-            flowLayoutPanelSettings.Location = new Point(6, 2766);
+            flowLayoutPanelSettings.Location = new Point(6, 2811);
             flowLayoutPanelSettings.MaximumSize = new Size(205, 187);
             flowLayoutPanelSettings.Name = "flowLayoutPanelSettings";
             flowLayoutPanelSettings.Size = new Size(205, 187);
@@ -1352,6 +1354,19 @@
             animationTimer.Enabled = true;
             animationTimer.Interval = 2;
             animationTimer.Tick += animationTimer_Tick;
+            // 
+            // button2
+            // 
+            button2.Image = (Image)resources.GetObject("button2.Image");
+            button2.ImageAlign = ContentAlignment.MiddleLeft;
+            button2.Location = new Point(18, 99);
+            button2.Margin = new Padding(4, 5, 4, 5);
+            button2.Name = "button2";
+            button2.Size = new Size(183, 37);
+            button2.TabIndex = 5;
+            button2.Text = "اضافة النماذج";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click_3;
             // 
             // MainForm
             // 
@@ -1482,5 +1497,6 @@
         public DevExpress.XtraBars.BarStaticItem lblUserName;
         protected DevExpress.XtraBars.BarStaticItem barStaticItem2;
         public DevExpress.XtraBars.BarButtonItem btnStatusAlert;
+        private Button button2;
     }
 }

@@ -28,6 +28,7 @@ namespace Store.Core.Interfaces
     public interface IProformaInvoiceRepository : IGenericRepository<ProformaInvoice>
     {
         //Task<Category> GetAsync(int id);
+        public Task<ListProformaInvoice> GetProformaInvoices(DateTime fromDate, DateTime toDate, string searchItem, int take, int skip);
     }
     public interface IProformaInvoiceDetailsRepository : IGenericRepository<ProformaInvoiceDetails>
     {

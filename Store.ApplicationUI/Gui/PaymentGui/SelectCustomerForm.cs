@@ -15,19 +15,17 @@ namespace Store.ApplicationUI.Gui.PaymentGui
         private readonly ApplicationDbContext _context;
         private readonly ControlManager _controlManager;
         private readonly ICustomersRepository _customersRepository;
-
+        private readonly PosForm _posForm;
 
         public SelectCustomerForm(
             ApplicationDbContext context, ControlManager controlManager, ICustomersRepository customersRepository
-            )
+           , PosForm posForm)
         {
             InitializeComponent();
             _context = context;
             _controlManager = controlManager;
             _customersRepository = customersRepository;
-
-
-
+            _posForm = posForm;
         }
 
         private void SetColumns()
@@ -73,24 +71,35 @@ namespace Store.ApplicationUI.Gui.PaymentGui
                 //{
                 //    PosForm.GetPosUserControl().setCustomerFromSelector(DgvProducts.CurrentRow.Cells[6].Value.ToString(), DgvProducts.CurrentRow.Cells[0].Value.ToString());
                 //}
-                if (_controlManager.TryGet<PosUserControl>(out var UCP))
+                if (_posForm != null)
                 {
-                    UCP.setCustomerFromSelector(DgvProducts.CurrentRow.Cells[6].Value.ToString(), DgvProducts.CurrentRow.Cells[0].Value.ToString());
+                    _posForm.GetPosUserControl().setCustomerFromSelector(DgvProducts.CurrentRow.Cells[6].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[0].Value.ToString());
                 }
         }
 
         private void btnChooseCustomer_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
+            //if (!dgvHelper.IsEmpty(DgvProducts))
+            //    //if (PosForm.GetPosUserControl() is not null)
+            //    //{
+            //    //    PosForm.GetPosUserControl().setCustomerFromSelector(DgvProducts.CurrentRow.Cells[6].Value.ToString(), DgvProducts.CurrentRow.Cells[0].Value.ToString());
+            //    //}
+            //    if (_controlManager.TryGet<PosUserControl>(out var UCP))
+            //    {
+            //        UCP.setCustomerFromSelector(DgvProducts.CurrentRow.Cells[6].Value.ToString(), DgvProducts.CurrentRow.Cells[0].Value.ToString());
+            //    }
             if (!dgvHelper.IsEmpty(DgvProducts))
-                //if (PosForm.GetPosUserControl() is not null)
-                //{
-                //    PosForm.GetPosUserControl().setCustomerFromSelector(DgvProducts.CurrentRow.Cells[6].Value.ToString(), DgvProducts.CurrentRow.Cells[0].Value.ToString());
-                //}
-                if (_controlManager.TryGet<PosUserControl>(out var UCP))
+            {
+
+                if (_posForm != null)
                 {
-                    UCP.setCustomerFromSelector(DgvProducts.CurrentRow.Cells[6].Value.ToString(), DgvProducts.CurrentRow.Cells[0].Value.ToString());
+                    _posForm.GetPosUserControl().setCustomerFromSelector(DgvProducts.CurrentRow.Cells[6].Value.ToString(),
+                        DgvProducts.CurrentRow.Cells[0].Value.ToString());
                 }
+            }
+
         }
 
         private void SelectCustomerForm_KeyDown(object sender, KeyEventArgs e)

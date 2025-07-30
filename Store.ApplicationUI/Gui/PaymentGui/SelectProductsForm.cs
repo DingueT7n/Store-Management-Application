@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.IO;
+﻿using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.System;
@@ -29,7 +28,9 @@ namespace Store.ApplicationUI.Gui.PaymentGui
             _controlManager = controlManager;
             _posForm = posForm;
             pos = false;
-
+            // Add these lines:
+            this.KeyPreview = true; // Allow form to see key events first
+            flowLayoutPanel.TabStop = true; // Make sure it can receive focus
 
         }
         bool buy = false;
@@ -81,9 +82,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
             {
 
                 if (sale && !pos && _main.GetUserControl() == UCS)
-
                 {
-
                     await UCS.setPrivateProductAndAdditTotable(await _context.Products.FirstOrDefaultAsync(x => x.Id == productId));
                 }
             }
@@ -97,26 +96,15 @@ namespace Store.ApplicationUI.Gui.PaymentGui
                     UCB.setPrivateProductAndAdditTotable(await _context.Products.FirstOrDefaultAsync(x => x.Id == productId));
                 }
             }
-            //if (!BuysUserControl.CheckInstance() && buy && !pos)
-            //{
-            //    if (BuysUserControl.setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == productId)))
-            //    {
 
-            //    }
 
-            //}
 
-            if (_controlManager.TryGet<PosUserControl>(out var UCP))
-
+            if (_posForm != null && pos)
             {
-
-                if (UCP != null && pos)
-                {
-                    UCP.setProductFromSelector(await _context.Products.FirstOrDefaultAsync(x => x.Id == productId));
-                }
-
-
+                _posForm.GetPosUserControl().setProductFromSelector(await _context.Products.FirstOrDefaultAsync(x => x.Id == productId));
             }
+
+
 
 
 
@@ -128,10 +116,7 @@ namespace Store.ApplicationUI.Gui.PaymentGui
             // Set the background color of the parent Panel to light green
             parentPanel.BackColor = Color.LightGreen;
 
-            //else if (!BuysUserControl.CheckInstance())
-            //{
-            //    SalesUserControl.setProductFromSelector(MainForm.Context.Products.FirstOrDefault(x => x.Id == productId));
-            //}
+
 
         }
         private void PictureBox_Click(object sender, EventArgs e)
@@ -140,35 +125,42 @@ namespace Store.ApplicationUI.Gui.PaymentGui
             ToasterHelper.PlayNotificationSound();
             PictureBox pictureBox = sender as PictureBox;
             AddProductToDgvIfNotExist(pictureBox);
+            // Update selection
+            if (pictureBox != null && pictureBox.Parent is Panel panel)
+            {
+                // Clear previous selection
+                foreach (var p in _productPanels)
+                {
+                    if (p.BackColor == Color.LightSkyBlue)
+                        p.BackColor = Color.White;
+                }
+
+                // Set new selection
+                panel.BackColor = Color.LightGreen;
+                _currentSelectedIndex = _productPanels.IndexOf(panel);
+            }
 
         }
-        //private void SetColumns()
-        //{
-
-        //    DgvProducts.Columns[0].HeaderCell.Value = "معرف المنتوج";
-        //    DgvProducts.Columns[1].HeaderCell.Value = "باركود";
-        //    DgvProducts.Columns[2].HeaderCell.Value = "اسم المنتج";
-        //    DgvProducts.Columns[3].HeaderCell.Value = "صورة المنتج";
-        //    DgvProducts.Columns[4].HeaderCell.Value = "المنتج";
-
-        //    DgvProducts.Columns[5].HeaderCell.Value = "معرف السرعة";
-        //    DgvProducts.Columns[3].Visible = false;
-        //    DgvProducts.Columns[4].Visible = false;
-
-
-        //}
+        private int _currentSelectedIndex = 0;
+        private List<Panel> _productPanels = new List<Panel>();
         public async Task LoadData()
         {
             // Show loading form
             LoadingForm.Instance(_main).Show();
 
-            if (await Task.Run(() => _context.Database.CanConnect()))
+            if (await _context.Database.CanConnectAsync())
             {
                 // Fetch data from the database
-                List<ProductQuickAccess> productQuicks = await Task.Run(() => _context.ProductQuickAccess.ToList());
+                List<ProductQuickAccess> productQuicks = await _context.ProductQuickAccess.ToListAsync();
 
                 // Clear existing controls in the FlowLayoutPanel
                 flowLayoutPanel.Controls.Clear();
+                _productPanels.Clear();
+
+                // Calculate panel size based on container width to fit at least 15 items
+                int panelsPerRow = Math.Max(5, flowLayoutPanel.Width / 150); // Adjust 150 as needed
+                int panelWidth = flowLayoutPanel.Width / panelsPerRow - 10;
+                // Set up keyboard navigation
 
                 foreach (var productImage in productQuicks)
                 {
@@ -176,11 +168,12 @@ namespace Store.ApplicationUI.Gui.PaymentGui
                     Panel productPanel = new Panel
                     {
                         BackColor = Color.White,
-                        Width = flowLayoutPanel.Width / 4 - 10, // Adjust based on FlowLayoutPanel width
-                        Height = 150,
-                        Margin = new Padding(7),
+                        Width = panelWidth,
+                        Height = 120, // Reduced height
+                        Margin = new Padding(5),
                         Padding = new Padding(2),
-                        BorderStyle = BorderStyle.FixedSingle
+                        BorderStyle = BorderStyle.FixedSingle,
+                        Tag = productImage.Pro_Id
                     };
 
                     // Add rounded corners and shadow effect
@@ -199,27 +192,27 @@ namespace Store.ApplicationUI.Gui.PaymentGui
                         Image = SetImage(productImage.ProductImage),
                         SizeMode = PictureBoxSizeMode.Zoom,
                         Width = productPanel.Width - 10,
-                        Height = 75,
-                        Dock = DockStyle.Top,
+                        Height = 60, // Reduced height
+                        Top = 5,
+                        Left = (productPanel.Width - (productPanel.Width - 10)) / 2,
                         Cursor = Cursors.Hand
                     };
 
-                    // Handle click event
                     pictureBox.Click += PictureBox_Click;
                     pictureBox.Tag = productImage.Pro_Id;
-
                     productPanel.Controls.Add(pictureBox);
 
                     // Create a label for the product name
                     Label labelName = new Label
                     {
                         Text = productImage.ProductName,
-                        Font = new Font("Arial", 10, FontStyle.Bold),
+                        Font = new Font("Arial", 9, FontStyle.Bold), // Smaller font
                         ForeColor = Color.Black,
                         TextAlign = ContentAlignment.MiddleCenter,
-                        Dock = DockStyle.Top,
-                        AutoSize = false,
-                        Height = 30
+                        Top = pictureBox.Bottom + 2,
+                        Width = productPanel.Width - 10,
+                        Height = 20, // Reduced height
+                        Left = (productPanel.Width - (productPanel.Width - 10)) / 2
                     };
 
                     productPanel.Controls.Add(labelName);
@@ -228,88 +221,221 @@ namespace Store.ApplicationUI.Gui.PaymentGui
                     Label labelId = new Label
                     {
                         Text = $"ID: {productImage.Pro_Id}",
-                        Font = new Font("Arial", 8, FontStyle.Italic),
+                        Font = new Font("Arial", 7, FontStyle.Italic), // Smaller font
                         ForeColor = Color.Gray,
                         TextAlign = ContentAlignment.MiddleCenter,
-                        Dock = DockStyle.Top,
-                        AutoSize = false,
-                        Height = 20
+                        Top = labelName.Bottom,
+                        Width = productPanel.Width - 10,
+                        Height = 15, // Reduced height
+                        Left = (productPanel.Width - (productPanel.Width - 10)) / 2
                     };
 
                     productPanel.Controls.Add(labelId);
 
-                    // Add the product panel to the FlowLayoutPanel
+                    // Add click handler to the entire panel
+                    productPanel.Click += (s, e) =>
+                    {
+                        PictureBox_Click(pictureBox, e);
+                    };
+                    productPanel.Cursor = Cursors.Hand;
+
                     flowLayoutPanel.Controls.Add(productPanel);
+                    _productPanels.Add(productPanel);
+                }
+
+                // Set up keyboard navigation
+                if (_productPanels.Count > 0)
+                {
+                    _productPanels[0].BackColor = Color.LightSkyBlue; // Initial selection
+                    flowLayoutPanel.PreviewKeyDown += FlowLayoutPanel_PreviewKeyDown;
+                    flowLayoutPanel.KeyDown += FlowLayoutPanel_KeyDown;
+                    flowLayoutPanel.Focus();
+                }
+                if (_productPanels.Count > 0)
+                {
+                    _productPanels[0].BackColor = Color.LightSkyBlue; // Initial selection
+                    this.KeyDown += SelectProductsForm_KeyDown; // Changed to form-level handler
+                    flowLayoutPanel.Focus();
                 }
             }
             else
             {
-                // Hide loading form and show error message
                 LoadingForm.Instance(_main).Hide();
                 MsgHelper.ShowServerError();
             }
 
-            // Hide loading form
             LoadingForm.Instance(_main).Hide();
-        }
-
-        private void DgvProducts_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
 
         }
-
-        //private void DgvProducts_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
-        //{
-        //    if (!dgvHelper.IsEmpty(DgvProducts))
-        //    {
-        //        int Id = Convert.ToInt32(DgvProducts.CurrentRow.Cells[0].Value.ToString());
-        //        if (!SalesUserControl.CheckInstance())
-        //        {
-        //            if (SalesUserControl.setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == Id))) { }
-        //        }
-
-        //        {
-
-        //            if (PosForm.GetPosUserControl() is not null)
-        //            {
-        //                PosForm.GetPosUserControl().setProductFromSelector(_context.Products.FirstOrDefault(x => x.Id == Id));
-        //            }
-
-        //        }
-        //    }
-        //}
-
-        private void btnSearch_Click(object sender, EventArgs e)
+        private void FlowLayoutPanel_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-
-        }
-        public class CustomPictureBox : PictureBox
-        {
-            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            public Color BorderColor { get; set; } = Color.Green;
-            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            public int BorderWidth { get; set; } = 2;
-
-            protected override void OnPaint(PaintEventArgs pe)
+            // Mark arrow keys as input keys so KeyDown event will fire
+            switch (e.KeyCode)
             {
-                base.OnPaint(pe);
-                if (BorderStyle == BorderStyle.FixedSingle)
-                {
-                    using (Pen pen = new Pen(BorderColor, BorderWidth))
+                case Keys.Up:
+                case Keys.Down:
+                case Keys.Left:
+                case Keys.Right:
+                    e.IsInputKey = true;
+                    break;
+            }
+        }
+        private void SelectProductsForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (_productPanels.Count == 0) return;
+
+            int columns = flowLayoutPanel.Width / _productPanels[0].Width;
+            if (columns == 0) columns = 1;
+
+            switch (e.KeyCode)
+            {
+                case Keys.Right:
+                    // Move right
+                    if (_currentSelectedIndex < _productPanels.Count - 1)
                     {
-                        pe.Graphics.DrawRectangle(pen, 0, 0, Width - 1, Height - 1);
+                        _productPanels[_currentSelectedIndex].BackColor = Color.White;
+                        _currentSelectedIndex++;
+                        _productPanels[_currentSelectedIndex].BackColor = Color.LightSkyBlue;
+                        EnsurePanelVisible(_productPanels[_currentSelectedIndex]);
                     }
-                }
+                    e.Handled = true;
+                    break;
+
+                case Keys.Left:
+                    // Move left
+                    if (_currentSelectedIndex > 0)
+                    {
+                        _productPanels[_currentSelectedIndex].BackColor = Color.White;
+                        _currentSelectedIndex--;
+                        _productPanels[_currentSelectedIndex].BackColor = Color.LightSkyBlue;
+                        EnsurePanelVisible(_productPanels[_currentSelectedIndex]);
+                    }
+                    e.Handled = true;
+                    break;
+
+                case Keys.Down:
+                    // Move down
+                    if (_currentSelectedIndex + columns < _productPanels.Count)
+                    {
+                        _productPanels[_currentSelectedIndex].BackColor = Color.White;
+                        _currentSelectedIndex += columns;
+                        _productPanels[_currentSelectedIndex].BackColor = Color.LightSkyBlue;
+                        EnsurePanelVisible(_productPanels[_currentSelectedIndex]);
+                    }
+                    e.Handled = true;
+                    break;
+
+                case Keys.Up:
+                    // Move up
+                    if (_currentSelectedIndex - columns >= 0)
+                    {
+                        _productPanels[_currentSelectedIndex].BackColor = Color.White;
+                        _currentSelectedIndex -= columns;
+                        _productPanels[_currentSelectedIndex].BackColor = Color.LightSkyBlue;
+                        EnsurePanelVisible(_productPanels[_currentSelectedIndex]);
+                    }
+                    e.Handled = true;
+                    break;
+
+                case Keys.Enter:
+                    // Trigger add to table function
+                    if (_currentSelectedIndex >= 0 && _currentSelectedIndex < _productPanels.Count)
+                    {
+                        PictureBox pictureBox = _productPanels[_currentSelectedIndex].Controls.OfType<PictureBox>().FirstOrDefault();
+                        if (pictureBox != null)
+                        {
+                            AddProductToDgvIfNotExist(pictureBox);
+                            _productPanels[_currentSelectedIndex].BackColor = Color.LightGreen;
+                        }
+                    }
+                    e.Handled = true;
+                    break;
+            }
+        }
+        private void FlowLayoutPanel_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (_productPanels.Count == 0) return;
+
+            int columns = flowLayoutPanel.Width / _productPanels[0].Width;
+            if (columns == 0) columns = 1;
+
+            switch (e.KeyCode)
+            {
+                case Keys.Right:
+                    // Move right
+                    if (_currentSelectedIndex < _productPanels.Count - 1)
+                    {
+                        _productPanels[_currentSelectedIndex].BackColor = Color.White;
+                        _currentSelectedIndex++;
+                        _productPanels[_currentSelectedIndex].BackColor = Color.LightSkyBlue;
+                        EnsurePanelVisible(_productPanels[_currentSelectedIndex]);
+                    }
+                    break;
+
+                case Keys.Left:
+                    // Move left
+                    if (_currentSelectedIndex > 0)
+                    {
+                        _productPanels[_currentSelectedIndex].BackColor = Color.White;
+                        _currentSelectedIndex--;
+                        _productPanels[_currentSelectedIndex].BackColor = Color.LightSkyBlue;
+                        EnsurePanelVisible(_productPanels[_currentSelectedIndex]);
+                    }
+                    break;
+
+                case Keys.Down:
+                    // Move down
+                    if (_currentSelectedIndex + columns < _productPanels.Count)
+                    {
+                        _productPanels[_currentSelectedIndex].BackColor = Color.White;
+                        _currentSelectedIndex += columns;
+                        _productPanels[_currentSelectedIndex].BackColor = Color.LightSkyBlue;
+                        EnsurePanelVisible(_productPanels[_currentSelectedIndex]);
+                    }
+                    break;
+
+                case Keys.Up:
+                    // Move up
+                    if (_currentSelectedIndex - columns >= 0)
+                    {
+                        _productPanels[_currentSelectedIndex].BackColor = Color.White;
+                        _currentSelectedIndex -= columns;
+                        _productPanels[_currentSelectedIndex].BackColor = Color.LightSkyBlue;
+                        EnsurePanelVisible(_productPanels[_currentSelectedIndex]);
+                    }
+                    break;
+
+                case Keys.Enter:
+                    // Trigger add to table function
+                    if (_currentSelectedIndex >= 0 && _currentSelectedIndex < _productPanels.Count)
+                    {
+                        PictureBox pictureBox = _productPanels[_currentSelectedIndex].Controls.OfType<PictureBox>().FirstOrDefault();
+                        if (pictureBox != null)
+                        {
+                            AddProductToDgvIfNotExist(pictureBox);
+                            _productPanels[_currentSelectedIndex].BackColor = Color.LightGreen;
+                        }
+                    }
+                    break;
             }
         }
 
-        private async void SelectProductsForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void EnsurePanelVisible(Panel panel)
+        {
+            // Scroll the flowLayoutPanel to make the selected panel visible
+            flowLayoutPanel.ScrollControlIntoView(panel);
+        }
+
+
+
+
+        private void SelectProductsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             flowLayoutPanel.Controls.Clear();
             buy = false;
             sale = false;
             pos = false;
-            await LoadData();
+
         }
     }
 

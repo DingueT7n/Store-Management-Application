@@ -365,7 +365,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 if (txtSearchBarCode.Text.Replace("\r\n", "").Length > 2)
                 {
                     string prefix = txtSearchBarCode.Text.Substring(0, 2);
-                    if (prefix == "21" && txtSearchBarCode.Text.Length >= 12)
+                    if (prefix == "21" && txtSearchBarCode.Text.Length >= 5)
                     {
                         ParseScaleBarcode(txtSearchBarCode.Text);
                         AddNewRow();
@@ -712,9 +712,13 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             this.DeleteSenderEvent(sender, e);
             this.Arrows(sender, e);
             this.PayNowEvent(sender, e);
-            if (e.KeyCode == Keys.F5)
+            if (e.KeyCode == Keys.F7)
             {
                 btnPrices_Click(sender, e);
+            }
+            else if ((e.KeyCode == Keys.F9))
+            {
+                btnSearchImage_Click(sender, e);
             }
 
         }
@@ -1026,11 +1030,11 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             UpArrow();
         }
 
-        private void btnSearchImage_Click(object sender, EventArgs e)
+        private async void btnSearchImage_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
 
-            SelectProductsForm selectProductsForm = _controlManager.GetF<SelectProductsForm>();
+            SelectProductsForm selectProductsForm = await _controlManager.GetFAsync<SelectProductsForm>();
             selectProductsForm.SetPos();
             selectProductsForm.ShowDialog();
         }

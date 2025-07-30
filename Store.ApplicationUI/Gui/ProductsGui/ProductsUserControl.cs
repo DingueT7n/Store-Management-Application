@@ -28,10 +28,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         {
             InitializeComponent();
             _controlManager = controlManager;
-
             _context = context;
             _productsRepository = productsRepository;
-
             _main = main;
 
 
@@ -100,7 +98,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         public async Task LoadData()
         {
 
-
+            dgvHelper.ResetForm(this);
             //ShowLoading
             LoadingForm.Instance(_main).Show();
             if (await _productsRepository.IsConnectedAsync())
@@ -118,15 +116,17 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 // Add menu items
                 ToolStripMenuItem editItem = new ToolStripMenuItem("التعديل");
                 ToolStripMenuItem deleteItem = new ToolStripMenuItem("الحذف");
+                ToolStripMenuItem similarItem = new ToolStripMenuItem("اضافة منتج مماثل");
 
 
                 // Add click events
                 editItem.Click += EditItem_Click;
                 deleteItem.Click += DeleteItem_Click;
+                similarItem.Click += similarItem_Click;
 
 
                 // Add items to the menu
-                contextMenu.Items.AddRange(new ToolStripItem[] { editItem, deleteItem });
+                contextMenu.Items.AddRange(new ToolStripItem[] { editItem, deleteItem, similarItem });
 
                 // Assign context menu to DataGridView
                 DgvProducts.ContextMenuStrip = contextMenu;
@@ -146,14 +146,21 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         // Sample event handlers for menu items
         private void EditItem_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show("Edit option clicked");
+            btnEditProduct_Click(sender, e);
         }
 
         private void DeleteItem_Click(object sender, EventArgs e)
         {
             //MessageBox.Show("Delete option clicked");
-        }
+            btnDeleteProduct_Click(sender, e);
 
+        }
+        private void similarItem_Click(object sender, EventArgs e)
+        {
+            //MessageBox.Show("Delete option clicked");
+            btnAddSimilareProduct_Click(sender, e);
+
+        }
 
         private void SetColumns()
         {

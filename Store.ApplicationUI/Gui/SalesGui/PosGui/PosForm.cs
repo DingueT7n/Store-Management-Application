@@ -24,7 +24,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             _controlManager = controlManager;
 
 
-
+            InitializeTabs();
             btnTurnOffPrinter.Text = Properties.Settings.Default.PrintSaleOnOrOff
                 ? "اطفاء الطابعة"
                 : "اشعال الطابعة";
@@ -131,7 +131,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         public PosUserControl GetPosUserControl()
         {
 
-            TabPage selectedTab = _controlManager.GetF<PosForm>().tabControl.SelectedTab;
+            TabPage selectedTab = this.tabControl.SelectedTab;
             if (selectedTab != null)
             {
                 foreach (Control control in selectedTab.Controls)
@@ -148,7 +148,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         }
         private void PosForm_Load(object sender, EventArgs e)
         {
-            InitializeTabs();
+
 
         }
 

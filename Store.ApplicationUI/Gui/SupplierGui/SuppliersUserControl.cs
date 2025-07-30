@@ -54,6 +54,24 @@ namespace Store.ApplicationUI.Gui.SupplierGui
 
                 SetColumns();
                 await SetProductsToDgv();
+
+                ContextMenuStrip contextMenu = new ContextMenuStrip();
+
+                // Add menu items
+                ToolStripMenuItem editItem = new ToolStripMenuItem("التعديل");
+                ToolStripMenuItem deleteItem = new ToolStripMenuItem("الحذف");
+                ToolStripMenuItem similarItem = new ToolStripMenuItem("تصفية جميع ديون المورد المحدد");
+                // Add click events
+                editItem.Click += EditItem_Click;
+                deleteItem.Click += DeleteItem_Click;
+                similarItem.Click += similarItem_Click;
+
+
+                // Add items to the menu
+                contextMenu.Items.AddRange(new ToolStripItem[] { editItem, deleteItem, similarItem });
+
+                // Assign context menu to DataGridView
+                DgvِSupplier.ContextMenuStrip = contextMenu;
                 //_data.Clear();
             }
             else
@@ -68,7 +86,53 @@ namespace Store.ApplicationUI.Gui.SupplierGui
             // Show EmptyDAta
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِSupplier);
         }
+        private void EditItem_Click(object sender, EventArgs e)
+        {
+            btnEditSupplier_Click(sender, e);
+        }
 
+        private void DeleteItem_Click(object sender, EventArgs e)
+        {
+            //MessageBox.Show("Delete option clicked");
+            btnDeleteSupplier_Click(sender, e);
+
+        }
+        private void similarItem_Click(object sender, EventArgs e)
+        {
+            //MessageBox.Show("Delete option clicked");
+            clearAlldebt();
+
+        }
+
+        private async void clearAlldebt()
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (MsgHelper.ShowClearDebtDialog(DgvِSupplier.CurrentRow.Cells[0].Value.ToString()))
+            {
+                if (DgvِSupplier.SelectedRows.Count > 0)
+                {
+                    var query2 = await _context.SuppliersMoneys.
+                    Where(x => x.Sup_ID.ToString() == DgvِSupplier.CurrentRow.Cells[6].Value.ToString()).ToListAsync();
+                    if (query2.Any())
+                    {
+                        _context.SuppliersMoneys.RemoveRange(query2);
+                    }
+                    var sup = await _context.Suppliers
+                        .FirstOrDefaultAsync(x => x.Id.ToString() == DgvِSupplier.CurrentRow.Cells[6].Value.ToString());
+                    if (sup != null)
+                    {
+                        sup.TotalDebts = 0;
+
+                        await _suppliersRepository.UpdateAsync(sup.Id.ToString(), sup);
+                    }
+                    await _context.SaveChangesAsync();
+
+                }
+            }
+            Code.Helper.ToasterHelper.ShowDeletedToast();
+
+            await LoadData();
+        }
         private void SetColumns()
         {
             DgvِSupplier.DataSource = new List<Supplier>();

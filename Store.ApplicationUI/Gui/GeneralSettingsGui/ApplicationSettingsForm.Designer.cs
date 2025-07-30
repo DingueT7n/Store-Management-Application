@@ -92,6 +92,7 @@
             label9 = new Label();
             label8 = new Label();
             cmbCustomers = new ComboBox();
+            cbStockNegative = new CheckBox();
             tabControl.SuspendLayout();
             tabPagePrintersSettings.SuspendLayout();
             tabPageFacturesSettings.SuspendLayout();
@@ -482,6 +483,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(cbStockNegative);
             groupBox1.Controls.Add(button3);
             groupBox1.Controls.Add(cbSalePrinterState);
             groupBox1.Controls.Add(cbBuyPrinterState);
@@ -802,6 +804,16 @@
             cmbCustomers.Size = new Size(151, 27);
             cmbCustomers.TabIndex = 6;
             // 
+            // cbStockNegative
+            // 
+            cbStockNegative.AutoSize = true;
+            cbStockNegative.Location = new Point(228, 309);
+            cbStockNegative.Name = "cbStockNegative";
+            cbStockNegative.Size = new Size(178, 23);
+            cbStockNegative.TabIndex = 23;
+            cbStockNegative.Text = "الكمية بالسالب في المنتجات";
+            cbStockNegative.UseVisualStyleBackColor = true;
+            // 
             // ApplicationSettingsForm
             // 
             AutoScaleDimensions = new SizeF(8F, 19F);
@@ -907,5 +919,6 @@
         private CheckBox cbEditWholeSaleprice;
         private CheckBox cbEditSalePrice;
         private CheckBox cbEditBuyPrice;
+        private CheckBox cbStockNegative;
     }
 }

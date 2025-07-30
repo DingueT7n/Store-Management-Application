@@ -17,7 +17,7 @@ namespace Store.Infrastructure.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("ProductVersion", "9.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -419,6 +419,9 @@ namespace Store.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CaisseId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CaisseStatusDetailId")
                         .HasColumnType("int");
 
@@ -476,6 +479,8 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CaisseId");
+
                     b.HasIndex("CaisseStatusDetailId");
 
                     b.ToTable("CaisseOperations");
@@ -490,6 +495,9 @@ namespace Store.Infrastructure.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CaisseId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CaisseId1")
                         .HasColumnType("int");
 
                     b.Property<string>("CaisseName")
@@ -535,6 +543,8 @@ namespace Store.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CaisseId");
+
+                    b.HasIndex("CaisseId1");
 
                     b.ToTable("CaisseStatusDetails");
                 });
@@ -1540,6 +1550,87 @@ namespace Store.Infrastructure.Data.Migrations
                     b.ToTable("ReturnsDetails");
                 });
 
+            modelBuilder.Entity("Store.Core.Entities.Sales.ProformaInvoice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CustomerName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("InvoiceNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("TotalFaacture")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("ProformaInvoices");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Sales.ProformaInvoiceDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Discount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProductName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProformaId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProformaInvoiceId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Quentity")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Total")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ProformaId");
+
+                    b.HasIndex("ProformaInvoiceId");
+
+                    b.ToTable("ProformaInvoiceDetails");
+                });
+
             modelBuilder.Entity("Store.Core.Entities.Sales.Sale", b =>
                 {
                     b.Property<int>("Id")
@@ -2430,6 +2521,10 @@ namespace Store.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Store.Core.Entities.Caisses.CaisseOperation", b =>
                 {
+                    b.HasOne("Store.Core.Entities.Caisses.Caisse", null)
+                        .WithMany("Operations")
+                        .HasForeignKey("CaisseId");
+
                     b.HasOne("Store.Core.Entities.Caisses.CaisseStatusDetail", "CaisseStatusDetail")
                         .WithMany()
                         .HasForeignKey("CaisseStatusDetailId")
@@ -2446,6 +2541,10 @@ namespace Store.Infrastructure.Data.Migrations
                         .HasForeignKey("CaisseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Store.Core.Entities.Caisses.Caisse", null)
+                        .WithMany("StatusDetails")
+                        .HasForeignKey("CaisseId1");
 
                     b.Navigation("Caisse");
                 });
@@ -2682,6 +2781,40 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Returns");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Sales.ProformaInvoice", b =>
+                {
+                    b.HasOne("Store.Core.Entities.Customers.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Sales.ProformaInvoiceDetails", b =>
+                {
+                    b.HasOne("Store.Core.Entities.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Store.Core.Entities.Sales.ProformaInvoice", "ProformaInvoice")
+                        .WithMany()
+                        .HasForeignKey("ProformaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Store.Core.Entities.Sales.ProformaInvoice", null)
+                        .WithMany("Details")
+                        .HasForeignKey("ProformaInvoiceId");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("ProformaInvoice");
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Sales.Sale", b =>
@@ -2952,9 +3085,21 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Store.Core.Entities.Caisses.Caisse", b =>
+                {
+                    b.Navigation("Operations");
+
+                    b.Navigation("StatusDetails");
+                });
+
             modelBuilder.Entity("Store.Core.Entities.Products.Product", b =>
                 {
                     b.Navigation("ProductFamilies");
+                });
+
+            modelBuilder.Entity("Store.Core.Entities.Sales.ProformaInvoice", b =>
+                {
+                    b.Navigation("Details");
                 });
 #pragma warning restore 612, 618
         }

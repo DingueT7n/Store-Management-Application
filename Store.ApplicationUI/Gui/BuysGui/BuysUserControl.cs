@@ -901,17 +901,23 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 {
                     _context.Update(SetCaisse(_main.ConvertToFloat(PaidUp.ToString())));
                     await _context.AddAsync(SetCaisseWithdraw(_main.ConvertToFloat(PaidUp.ToString())));
+                    await _context.SaveChangesAsync();
+
                 }
                 else
                 {
                     _context.Update(SetCaisse(_main.ConvertToFloat(TotalFacture.ToString())));
                     await _context.AddAsync(SetCaisseWithdraw(_main.ConvertToFloat(TotalFacture.ToString())));
+                    await _context.SaveChangesAsync();
+
                 }
                 if (PaidUp > 0)
                 {
                     var supplierReport = SetSupReport();
                     supplierReport.Order_ID = buy.Id;
                     await _context.AddAsync(supplierReport);
+                    await _context.SaveChangesAsync();
+
                 }
                 if (Remain > 0)
                 {
@@ -920,6 +926,8 @@ namespace Store.ApplicationUI.Gui.BuysGui
                     await _context.AddAsync(supplierMoney);
 
                     _context.Update(SetSupplier());
+                    await _context.SaveChangesAsync();
+
                 }
                 await _context.SaveChangesAsync();
             }
@@ -1315,10 +1323,11 @@ namespace Store.ApplicationUI.Gui.BuysGui
 
         }
 
-        private void btnSearchImage_Click(object sender, EventArgs e)
+        private async void btnSearchImage_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            SelectProductsForm selectProductsForm = _controlManager.GetF<SelectProductsForm>();
+            SelectProductsForm selectProductsForm = await _controlManager.GetFAsync<SelectProductsForm>();
+
             selectProductsForm.SetBuy();
             selectProductsForm.ShowDialog();
         }

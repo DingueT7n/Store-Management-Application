@@ -88,6 +88,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
                 {
                     LoginGui.KeyActivationForm.KeyActivationForm activationForm = new();
                     activationForm.ShowDialog();
+                    activationForm.Dispose();
                     return;
                 }
 

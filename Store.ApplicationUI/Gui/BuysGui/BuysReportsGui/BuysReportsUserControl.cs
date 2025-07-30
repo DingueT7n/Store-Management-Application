@@ -309,8 +309,6 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
             Code.Helper.ToasterHelper.ShowDeletedToast();
 
             await LoadData();
-
-
         }
 
         private async void btnDeleteReportsInPeriod_Click(object sender, EventArgs e)
@@ -323,7 +321,14 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
                     var query = await _context.Buys
                         .Where(x => dtpFrom.Value <= x.Date && x.Date <= dtpTo.Value)
                         .ToListAsync();
-
+                    var query2 = await _context.BuyDetails
+                     .Where(x => dtpFrom.Value <= x.Buy.Date && x.Buy.Date <= dtpTo.Value)
+                     .ToListAsync();
+                    if (query2.Any())
+                    {
+                        _context.BuyDetails.RemoveRange(query2);
+                        await _context.SaveChangesAsync();
+                    }
                     if (query.Any())
                     {
                         _context.Buys.RemoveRange(query);
@@ -353,6 +358,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
             {
                 try
                 {
+                    await _context.Database.ExecuteSqlRawAsync($"DELETE FROM [BuyDetail]");
                     await _context.Database.ExecuteSqlRawAsync($"DELETE FROM [Buys]");
                     await LoadData();
                     Code.Helper.ToasterHelper.ShowDeletedToast();

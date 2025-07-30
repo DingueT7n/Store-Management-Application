@@ -462,7 +462,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
                     Sale sale = await _context.Sales.FirstOrDefaultAsync(x => x.Id.ToString() == DgvSales.Rows[i].Cells[0].Value.ToString());
                     if (sale != null)
                     {
-                        _context.Sales.Remove(sale);
+                        await _context.SalesDetails.Where(x => x.Order_ID == sale.Id).ExecuteDeleteAsync();
+                        await _context.Sales.Where(x => x.Id == sale.Id).ExecuteDeleteAsync();
                         await _context.SaveChangesAsync();
                     }
                 }
@@ -483,6 +484,14 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
                     var query = await _context.Sales
                         .Where(x => dtpFrom.Value <= x.Date && x.Date <= dtpTo.Value)
                         .ToListAsync();
+                    var query2 = await _context.SalesDetails
+                      .Where(x => dtpFrom.Value <= x.Sale.Date && x.Sale.Date <= dtpTo.Value)
+                      .ToListAsync();
+                    if (query2.Any())
+                    {
+                        _context.SalesDetails.RemoveRange(query2);
+                        await _context.SaveChangesAsync();
+                    }
 
                     if (query.Any())
                     {
@@ -513,6 +522,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SalesReportsGui
             {
                 try
                 {
+                    await _context.Database.ExecuteSqlRawAsync($"DELETE FROM [SaleDetail]");
                     await _context.Database.ExecuteSqlRawAsync($"DELETE FROM [Sales]");
                     await LoadData();
                     Code.Helper.ToasterHelper.ShowDeletedToast();

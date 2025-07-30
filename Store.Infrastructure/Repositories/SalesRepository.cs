@@ -489,5 +489,48 @@ namespace Store.Infrastructure.Repositories
                 throw new Exception("Error retrieving the buy details by supplier", ex);
             }
         }
+        public class ProformaInvoiceRepository : GenericRepository<ProformaInvoice>, IProformaInvoiceRepository
+        {
+            public ProformaInvoiceRepository(ApplicationDbContext context) : base(context)
+            {
+            }
+            public async Task<ListProformaInvoice> GetProformaInvoices(DateTime fromDate, DateTime toDate, string searchItem, int take, int skip)
+            {
+                try
+                {
+                    return new ListProformaInvoice
+                    {
+                        Data = await _context.ProformaInvoices
+                        .Include(x => x.Details)
+                        .Include(x => x.Customer)
+
+                        .Where(bd => fromDate.Date.Date <= bd.Date.Date && bd.Date.Date <= toDate.Date.Date) // Date range filter
+                        .OrderByDescending(bd => bd.Id)
+                        .Skip(skip)
+                        .Take(take)
+                        .Select(bd => new ProformaInvoiceDTO
+                        {
+                            ProformaId = bd.Id,
+                            UserName = bd.UserName,
+                            CustomerName = bd.Customer.CustomerName, // Assuming `CustomerName` is the property for the customer's name
+                            Date = bd.Date,
+                            TotalFaacture = bd.TotalFaacture,
+                            NbrProducts = bd.Details.Count // Assuming you want to count the number of products in the invoice
+                        })
+
+                        .ToListAsync(),
+                        Count = await _context.ProformaInvoices.Include(x => x.Details)
+                        .Include(x => x.Customer)
+
+                        .Where(bd => fromDate <= bd.Date.Date && bd.Date.Date <= toDate).CountAsync()
+                    };
+                }
+                catch (Exception ex)
+                {
+                    // Log or handle the exception as needed
+                    throw new Exception("Error retrieving the Sale details", ex);
+                }
+            }
+        }
     }
 }

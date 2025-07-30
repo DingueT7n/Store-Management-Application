@@ -45,6 +45,7 @@ using Store.ApplicationUI.Gui.ReturnsGui;
 using Store.ApplicationUI.Gui.ReturnsGui.ReturnsReportsGui;
 using Store.ApplicationUI.Gui.SalesGui;
 using Store.ApplicationUI.Gui.SalesGui.PosGui;
+using Store.ApplicationUI.Gui.SalesGui.ProformaGui;
 using Store.ApplicationUI.Gui.SalesGui.SaleProfitGui;
 using Store.ApplicationUI.Gui.SalesGui.SalesReportsGui;
 using Store.ApplicationUI.Gui.SupplierGui;
@@ -949,6 +950,11 @@ namespace Store.ApplicationUI
         public UserControl GetUserControl()
         {
             return ContainerPanel.Controls.OfType<UserControl>().FirstOrDefault();
+
+        }
+        private async void button2_Click_3(object sender, EventArgs e)
+        {
+            pageHelper.SetNewPage(await _controlManager.GetAsync<ProformaUserControl>());
 
         }
     }

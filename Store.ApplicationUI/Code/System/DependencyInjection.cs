@@ -47,6 +47,7 @@ using Store.ApplicationUI.Gui.ReturnsGui;
 using Store.ApplicationUI.Gui.ReturnsGui.ReturnsReportsGui;
 using Store.ApplicationUI.Gui.SalesGui;
 using Store.ApplicationUI.Gui.SalesGui.PosGui;
+using Store.ApplicationUI.Gui.SalesGui.ProformaGui;
 using Store.ApplicationUI.Gui.SalesGui.SaleProfitGui;
 using Store.ApplicationUI.Gui.SalesGui.SalesReportsGui;
 using Store.ApplicationUI.Gui.SupplierGui;
@@ -55,6 +56,7 @@ using Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui;
 using Store.ApplicationUI.Reports.BuysReports;
 using Store.ApplicationUI.Reports.CustomersAccountReports;
 using Store.ApplicationUI.Reports.ProductsReports;
+using Store.ApplicationUI.Reports.ProformaReports;
 using Store.ApplicationUI.Reports.ReportPerviwGui;
 using Store.ApplicationUI.Reports.SalesReports;
 using Store.ApplicationUI.Reports.SuppliersAccountsReports;
@@ -64,6 +66,7 @@ using Store.Core.Interfaces;
 using Store.Infrastructure.Data;
 using Store.Infrastructure.Repositories;
 using static Store.Infrastructure.Repositories.DeservedsRepository;
+using static Store.Infrastructure.Repositories.SaleProfitRepository;
 using sale8cm = Store.ApplicationUI.Reports.sale8cm;
 
 namespace Store.ApplicationUI.Code.System
@@ -118,6 +121,7 @@ namespace Store.ApplicationUI.Code.System
             services.AddScoped<ISalesRepository, SalesRepository>();
             services.AddScoped<ISaleDetailRepository, SaleDetailRepository>();
             services.AddScoped<ISaleProfitRepository, SaleProfitRepository>();
+            services.AddScoped<IProformaInvoiceRepository, ProformaInvoiceRepository>();
 
 
             services.AddScoped<IStoresRepository, StoresRepository>();
@@ -219,6 +223,7 @@ namespace Store.ApplicationUI.Code.System
             services.AddScoped<SalesProfitUserControl>();
             services.AddScoped<SalesReportsUserControl>();
             services.AddScoped<SalesUserControl>();
+            services.AddScoped<ProformaUserControl>();
 
             services.AddScoped<SupplierReportsUserControl>();
             services.AddScoped<SupplierAccountUserControl>();
@@ -232,6 +237,8 @@ namespace Store.ApplicationUI.Code.System
 
             services.AddScoped<CustomersAccountReport>();
             services.AddScoped<ProductBarCode>();
+
+            services.AddScoped<ProformaReports>();
 
             services.AddScoped<salesA4>();
             services.AddScoped<sale8cm>();

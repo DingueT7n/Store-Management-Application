@@ -62,10 +62,10 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseReportsGui
         {
             string t1 = string.Empty;
 
+            SetColumns();
             if (rbStoresFrom.Checked) t1 = cmbCaisse.Text;
 
             SetProductsToDgv(t1, txtSearch.Text, skip);
-            SetColumns();
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
         }
         public async Task LoadData()
