@@ -78,6 +78,10 @@
             panel3 = new Panel();
             txtCapital = new TextBox();
             label3 = new Label();
+            PanelPagination = new Panel();
+            cmbpagination = new ComboBox();
+            btnPrev = new Button();
+            btnNext = new Button();
             OperationsflowLayoutPanel.SuspendLayout();
             gbPayChoiches.SuspendLayout();
             flowLayoutPanelreturnsoption.SuspendLayout();
@@ -94,6 +98,7 @@
             panel5.SuspendLayout();
             panel6.SuspendLayout();
             panel3.SuspendLayout();
+            PanelPagination.SuspendLayout();
             SuspendLayout();
             // 
             // OperationsflowLayoutPanel
@@ -655,11 +660,58 @@
             label3.TabIndex = 0;
             label3.Text = "رأس المال";
             // 
+            // PanelPagination
+            // 
+            PanelPagination.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            PanelPagination.Controls.Add(cmbpagination);
+            PanelPagination.Controls.Add(btnPrev);
+            PanelPagination.Controls.Add(btnNext);
+            PanelPagination.Location = new Point(3, 558);
+            PanelPagination.Name = "PanelPagination";
+            PanelPagination.Size = new Size(169, 40);
+            PanelPagination.TabIndex = 33;
+            // 
+            // cmbpagination
+            // 
+            cmbpagination.Dock = DockStyle.Fill;
+            cmbpagination.Font = new Font("Calibri", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            cmbpagination.FormattingEnabled = true;
+            cmbpagination.Location = new Point(50, 0);
+            cmbpagination.Name = "cmbpagination";
+            cmbpagination.Size = new Size(69, 37);
+            cmbpagination.TabIndex = 28;
+            cmbpagination.SelectionChangeCommitted += cmbpagination_SelectionChangeCommitted;
+            // 
+            // btnPrev
+            // 
+            btnPrev.Dock = DockStyle.Left;
+            btnPrev.Image = (Image)resources.GetObject("btnPrev.Image");
+            btnPrev.ImeMode = ImeMode.NoControl;
+            btnPrev.Location = new Point(0, 0);
+            btnPrev.Name = "btnPrev";
+            btnPrev.Size = new Size(50, 40);
+            btnPrev.TabIndex = 26;
+            btnPrev.UseVisualStyleBackColor = true;
+            btnPrev.Click += btnPrev_Click;
+            // 
+            // btnNext
+            // 
+            btnNext.Dock = DockStyle.Right;
+            btnNext.Image = (Image)resources.GetObject("btnNext.Image");
+            btnNext.ImeMode = ImeMode.NoControl;
+            btnNext.Location = new Point(119, 0);
+            btnNext.Name = "btnNext";
+            btnNext.Size = new Size(50, 40);
+            btnNext.TabIndex = 25;
+            btnNext.UseVisualStyleBackColor = true;
+            btnNext.Click += btnNext_Click;
+            // 
             // StoreInventoryUserControl
             // 
             AutoScaleDimensions = new SizeF(8F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
+            Controls.Add(PanelPagination);
             Controls.Add(lblEmptyData);
             Controls.Add(DgvSales);
             Controls.Add(OperationsflowLayoutPanel);
@@ -697,6 +749,7 @@
             panel6.PerformLayout();
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
+            PanelPagination.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -748,5 +801,9 @@
         private Panel panel3;
         private TextBox txtCapital;
         private Label label3;
+        private Panel PanelPagination;
+        private ComboBox cmbpagination;
+        private Button btnPrev;
+        private Button btnNext;
     }
 }

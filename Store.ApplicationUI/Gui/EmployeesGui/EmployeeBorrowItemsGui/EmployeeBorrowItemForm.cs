@@ -141,6 +141,8 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowItemsGui
                 try
                 {
                     _product.Quentity -= _main.ConvertToFloat(txtQty.Text);
+                    if (_product.Quentity < 0 && !Properties.Settings.Default.StockNeg)
+                        _product.Quentity = 0;
                     _context.Update(_product);
                     await _context.SaveChangesAsync();
 

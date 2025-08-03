@@ -11,20 +11,20 @@ namespace Store.Infrastructure.Repositories
         public CustomersRepository(ApplicationDbContext context) : base(context)
         {
         }
-        public List<Customer> SearchAll(string searchIteam)
+        public async Task<List<Customer>> SearchAll(string searchIteam)
         {
 
             try
             {
 
-                return _context.Customers.Where(x => x.Id.ToString() == searchIteam ||
+                return await _context.Customers.Where(x => x.Id.ToString() == searchIteam ||
                 x.CustomerName.ToString().Contains(searchIteam) ||
                 x.Address.Contains(searchIteam) ||
                 x.TotalDebts.ToString() == (searchIteam) ||
                 x.Notes.Contains(searchIteam)
 
                 )
-                    .OrderBy(x => x.CustomerName).ToList();
+                    .OrderByDescending(x => x.Id).ToListAsync();
 
             }
             catch
@@ -38,17 +38,17 @@ namespace Store.Infrastructure.Repositories
         public CustomerMoneyRepository(ApplicationDbContext context) : base(context)
         {
         }
-        public List<CustomerMoney> SearchAll(string searchIteam)
+        public async Task<List<CustomerMoney>> SearchAll(string searchIteam)
         {
 
             try
             {
 
-                return _context.CustomersMoneys.Where(x =>
+                return await _context.CustomersMoneys.Where(x =>
                 x.Cust_Name.ToString().Contains(searchIteam) ||
                 x.Id.ToString() == (searchIteam)
                 )
-                    .OrderByDescending(x => x.Id).ToList();
+                    .OrderByDescending(x => x.Id).ToListAsync();
 
             }
             catch
@@ -57,18 +57,18 @@ namespace Store.Infrastructure.Repositories
             }
         }
 
-        public bool DeleteFacture(string order_Id, string cust_Id, string price)
+        public async Task<bool> DeleteFacture(string order_Id, string cust_Id, string price)
         {
 
             try
             {
 
-                var customerMoney = _context.CustomersMoneys.FirstOrDefault(x =>
+                var customerMoney = await _context.CustomersMoneys.FirstOrDefaultAsync(x =>
                   x.Cust_ID.ToString() == cust_Id && x.Order_ID.ToString() == order_Id &&
                   x.Price.ToString() == (price)
                   );
                 _context.Remove(customerMoney);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return true;
 
             }
@@ -87,22 +87,22 @@ namespace Store.Infrastructure.Repositories
             //}
             return Convert.ToDecimal(value);
         }
-        public bool TransactionOfCustomerDebt(string order_Id, string cust_Id, string price, string Cust_Name, DateTime date)
+        public async Task<bool> TransactionOfCustomerDebt(string order_Id, string cust_Id, string price, string Cust_Name, DateTime date)
         {
 
-            using (var transaction = _context.Database.BeginTransaction())
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    Customer customer = _context.Customers.Where(x => x.Id.ToString() == cust_Id).FirstOrDefault();
+                    Customer customer = await _context.Customers.Where(x => x.Id.ToString() == cust_Id).FirstOrDefaultAsync();
                     if (customer is not null)
                     {
                         customer.TotalDebts = customer.TotalDebts - ConvertToFloat(price);
                         _context.Update(customer);
-                        _context.SaveChanges();
+                        await _context.SaveChangesAsync();
 
                     }
-                    DeleteFacture(order_Id, cust_Id, price);
+                    await DeleteFacture(order_Id, cust_Id, price);
                     CustomerReport customerReport = new CustomerReport();
                     customerReport.Cust_ID = Convert.ToInt32(cust_Id);
                     customerReport.Cust_Name = Cust_Name;
@@ -110,29 +110,31 @@ namespace Store.Infrastructure.Repositories
                     customerReport.Order_ID = Convert.ToInt32(order_Id);
                     customerReport.Price = ConvertToFloat(price);
                     customerReport.Time = DateTime.Now.ToString("HH:mm");
-                    _context.Add(customerReport);
-                    _context.SaveChanges();
-                    transaction.Commit();
+                    await _context.AddAsync(customerReport);
+                    await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
                     return true;
                 }
                 catch
                 {
+                    await transaction.RollbackAsync();
+
                     return false;
                 }
             }
         }
-        public bool UpdateFacture(string order_Id, string cust_Id, string price, string PayedValue)
+        public async Task<bool> UpdateFacture(string order_Id, string cust_Id, string price, string PayedValue)
         {
             try
 
             {
 
-                var customerMoney = _context.CustomersMoneys.FirstOrDefault(x =>
+                var customerMoney = await _context.CustomersMoneys.FirstOrDefaultAsync(x =>
                   x.Cust_ID.ToString() == cust_Id && x.Order_ID.ToString() == order_Id
                   );
                 customerMoney.Price = customerMoney.Price - ConvertToFloat(PayedValue);
                 _context.Update(customerMoney);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return true;
             }
             catch
@@ -140,22 +142,22 @@ namespace Store.Infrastructure.Repositories
                 return false;
             }
         }
-        public bool TransactionOfEditingCustomerDebt(string order_Id, string cust_Id, string price, string Cust_Name, string PayedValue, DateTime date)
+        public async Task<bool> TransactionOfEditingCustomerDebt(string order_Id, string cust_Id, string price, string Cust_Name, string PayedValue, DateTime date)
         {
 
-            using (var transaction = _context.Database.BeginTransaction())
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
                     double diffrence = Convert.ToDouble(PayedValue);
                     if (Convert.ToDouble(price) - diffrence <= 0)
                     {
-                        DeleteFacture(order_Id, cust_Id, price);
+                        await DeleteFacture(order_Id, cust_Id, price);
                         diffrence = Convert.ToDouble(price);
                     }
                     else
-                        UpdateFacture(order_Id, cust_Id, price, PayedValue);
-                    Customer customer = _context.Customers.Where(x => x.Id.ToString() == cust_Id).FirstOrDefault();
+                        await UpdateFacture(order_Id, cust_Id, price, PayedValue);
+                    Customer customer = await _context.Customers.Where(x => x.Id.ToString() == cust_Id).FirstOrDefaultAsync();
                     if (customer is not null)
                     {
                         customer.TotalDebts = customer.TotalDebts - ConvertToFloat(PayedValue.ToString());
@@ -168,14 +170,14 @@ namespace Store.Infrastructure.Repositories
                     customerReport.Order_ID = Convert.ToInt32(order_Id);
                     customerReport.Price = ConvertToFloat(PayedValue);
                     customerReport.Time = DateTime.Now.ToString("HH:mm");
-                    _context.Add(customerReport);
-                    _context.SaveChanges();
-                    transaction.CommitAsync();
+                    await _context.AddAsync(customerReport);
+                    await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
                     return true;
                 }
                 catch
                 {
-                    transaction.RollbackAsync();
+                    await transaction.RollbackAsync();
                     return false;
                 }
             }

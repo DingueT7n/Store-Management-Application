@@ -4,16 +4,16 @@ namespace Store.Core.Interfaces
 {
     public interface ICustomersRepository : IGenericRepository<Customer>
     {
-        public List<Customer> SearchAll(string searchIteam);
+        public Task<List<Customer>> SearchAll(string searchIteam);
 
     }
     public interface ICustomerMoneyRepository : IGenericRepository<CustomerMoney>
     {
-        public List<CustomerMoney> SearchAll(string searchIteam);
-        public bool DeleteFacture(string order_Id, string cust_Id, string price);
-        public bool TransactionOfCustomerDebt(string order_Id, string cust_Id, string price, string Cust_Name, DateTime date);
-        public bool UpdateFacture(string order_Id, string cust_Id, string price, string PayedValue);
-        public bool TransactionOfEditingCustomerDebt(string order_Id, string cust_Id, string price, string Cust_Name, string PayedValue, DateTime date);
+        public Task<List<CustomerMoney>> SearchAll(string searchIteam);
+        public Task<bool> DeleteFacture(string order_Id, string cust_Id, string price);
+        public Task<bool> TransactionOfCustomerDebt(string order_Id, string cust_Id, string price, string Cust_Name, DateTime date);
+        public Task<bool> UpdateFacture(string order_Id, string cust_Id, string price, string PayedValue);
+        public Task<bool> TransactionOfEditingCustomerDebt(string order_Id, string cust_Id, string price, string Cust_Name, string PayedValue, DateTime date);
 
     }
     public interface ICustomerReportRepository : IGenericRepository<CustomerReport>

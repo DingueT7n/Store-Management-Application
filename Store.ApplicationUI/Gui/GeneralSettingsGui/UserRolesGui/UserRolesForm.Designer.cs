@@ -363,7 +363,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label7.Location = new Point(474, 120);
+            label7.Location = new Point(480, 120);
             label7.Name = "label7";
             label7.Size = new Size(71, 19);
             label7.TabIndex = 38;
@@ -423,9 +423,9 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label4.Location = new Point(474, 74);
+            label4.Location = new Point(477, 74);
             label4.Name = "label4";
-            label4.Size = new Size(65, 19);
+            label4.Size = new Size(64, 19);
             label4.TabIndex = 32;
             label4.Text = "كلمة السر:";
             // 

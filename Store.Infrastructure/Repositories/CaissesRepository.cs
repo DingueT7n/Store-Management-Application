@@ -26,7 +26,7 @@ namespace Store.Infrastructure.Repositories
                 // Query base
                 var query = _context.CaissesDeposits
                     .Include(x => x.Caisse)
-                    .OrderBy(x => x.Date)
+                    .OrderByDescending(x => x.Date)
                     .AsQueryable();
 
                 // Filter by barcode if provided
@@ -45,7 +45,7 @@ namespace Store.Infrastructure.Repositories
 
                 // Apply pagination (skip and take)
                 var deposits = query
-                    .OrderBy(x => x.Date) // Ensure consistent ordering
+                    .OrderByDescending(x => x.Date) // Ensure consistent ordering
                     .Skip(skip)
                     .Take(take)
                     .ToList();
@@ -180,7 +180,7 @@ namespace Store.Infrastructure.Repositories
 
                 // Apply pagination (skip and take)
                 var deposits = allTransfers
-                    .OrderBy(x => x.Date) // Ensure consistent ordering
+                    .OrderByDescending(x => x.Date) // Ensure consistent ordering
                     .Skip(skip)
                     .Take(take)
                     .ToList();
@@ -267,7 +267,7 @@ namespace Store.Infrastructure.Repositories
                 // Query base
                 var query = _context.CaisseOperations
                     .Include(x => x.CaisseStatusDetail)
-                    .OrderBy(x => x.Id)
+                    .OrderByDescending(x => x.Id)
                     .AsQueryable();
 
                 // Filter by barcode if provided
@@ -313,7 +313,7 @@ namespace Store.Infrastructure.Repositories
      decimal DA2000, decimal DA1000, decimal DA500, decimal DA200, decimal DA100, decimal DA50,
      decimal DA20, decimal DA10, decimal DA5, decimal Default)
         {
-            var caisse = _context.Caisses.FirstOrDefault(x => x.Id == caisseId);
+            var caisse = await _context.Caisses.FirstOrDefaultAsync(x => x.Id == caisseId);
             if (caisse == null)
                 throw new ArgumentException("Caisse not found.");
 
@@ -334,7 +334,7 @@ namespace Store.Infrastructure.Repositories
                 OpeningTime = DateTime.Now,
                 OpenedBy = userName
             };
-            _context.CaisseStatusDetails.Add(caisseStatusDetail);
+            await _context.CaisseStatusDetails.AddAsync(caisseStatusDetail);
             await _context.SaveChangesAsync();
 
             var caisseOperation = new CaisseOperation
@@ -355,7 +355,7 @@ namespace Store.Infrastructure.Repositories
                 Time = DateTime.Now.ToString("HH:mm:ss"),
                 PerformedBy = userName
             };
-            _context.CaisseOperations.Add(caisseOperation);
+            await _context.CaisseOperations.AddAsync(caisseOperation);
             await _context.SaveChangesAsync();
         }
         public decimal BeforeOpening(int caisseId, decimal moneybefore
@@ -471,17 +471,17 @@ namespace Store.Infrastructure.Repositories
                 {
 
 
-                    var caisse = _context.Caisses.FirstOrDefault(x => x.Id == caisseId);
+                    var caisse = await _context.Caisses.FirstOrDefaultAsync(x => x.Id == caisseId);
                     if (caisse == null)
                         throw new ArgumentException("Caisse not found.");
 
                     if (caisse.Status == CaisseStatus.Closed)
                         throw new InvalidOperationException("Caisse is already closed.");
 
-                    var lastStatus = _context.CaisseStatusDetails
+                    var lastStatus = await _context.CaisseStatusDetails
                         .Where(x => x.CaisseId == caisseId && x.Status == CaisseStatus.Open)
                         .OrderByDescending(x => x.Id)
-                        .FirstOrDefault();
+                        .FirstOrDefaultAsync();
 
                     if (lastStatus == null)
                         throw new InvalidOperationException("No open session found for this caisse.");
@@ -491,8 +491,8 @@ namespace Store.Infrastructure.Repositories
                     await _context.SaveChangesAsync();
                     lastStatus.ClosingTime = DateTime.Now;
 
-                    var caisseDepositslist = _context.CaissesDeposits.Where(x => x.Caisse_ID ==
-                    caisse.Id && (x.Date >= lastStatus.OpeningTime && x.Date <= DateTime.Now)).ToList();
+                    var caisseDepositslist = await _context.CaissesDeposits.Where(x => x.Caisse_ID ==
+                    caisse.Id && (x.Date >= lastStatus.OpeningTime && x.Date <= DateTime.Now)).ToListAsync();
                     var caisseDeposits = caisseDepositslist.Sum(x => x.Money);
 
                     var caisseWithdraw = _context.CaissesWithdraws.Where(x => x.Caisse_ID ==
@@ -530,7 +530,7 @@ namespace Store.Infrastructure.Repositories
                         Time = DateTime.Now.ToString("HH:mm:ss"),
                         PerformedBy = userName
                     };
-                    _context.CaisseOperations.Add(caisseOperation);
+                    await _context.CaisseOperations.AddAsync(caisseOperation);
                     await _context.SaveChangesAsync();
                     await transaction.CommitAsync();
                 }
@@ -538,7 +538,7 @@ namespace Store.Infrastructure.Repositories
                 {
                     await transaction.RollbackAsync();
 
-                    throw ex;
+
                 }
             }
 

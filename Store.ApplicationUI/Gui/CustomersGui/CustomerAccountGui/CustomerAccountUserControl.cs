@@ -144,11 +144,11 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
         }
 
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
 
-            DgvِCustomer.DataSource = _customerMoneyRepository.SearchAll(txtSearch.Text);
+            DgvِCustomer.DataSource = await _customerMoneyRepository.SearchAll(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
             txtSearch.Text = string.Empty;
         }
@@ -165,13 +165,13 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                     var v2 = DgvِCustomer.CurrentRow.Cells[0].Value?.ToString();
                     var v3 = DgvِCustomer.CurrentRow.Cells[3].Value?.ToString();
                     var v4 = DgvِCustomer.CurrentRow.Cells[2].Value?.ToString();
-                    _customerMoneyRepository.TransactionOfCustomerDebt(
-                        v1,
-                        v2,
-                        v3,
-                        v4,
-                        DateTime.Now
-                        );
+                    await _customerMoneyRepository.TransactionOfCustomerDebt(
+                           v1,
+                           v2,
+                           v3,
+                           v4,
+                           DateTime.Now
+                           );
                     _context.Update(await SetCaisse(_main.ConvertToFloat(DgvِCustomer.CurrentRow.Cells[3].Value?.ToString())));
                     await _context.SaveChangesAsync();
 
@@ -189,14 +189,14 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                     var v2 = DgvِCustomer.CurrentRow.Cells[0].Value?.ToString();
                     var v3 = DgvِCustomer.CurrentRow.Cells[3].Value?.ToString();
                     var v4 = DgvِCustomer.CurrentRow.Cells[2].Value?.ToString();
-                    _customerMoneyRepository.TransactionOfEditingCustomerDebt(
-                        v1,
-                        v2,
-                        v3,
-                        v4,
-                       txtPayAmout.Text,
-                       DateTime.Now
-                       );
+                    await _customerMoneyRepository.TransactionOfEditingCustomerDebt(
+                           v1,
+                           v2,
+                           v3,
+                           v4,
+                          txtPayAmout.Text,
+                          DateTime.Now
+                          );
                     _context.Update(await SetCaisse(_main.ConvertToFloat(txtPayAmout.Text)));
                     await _context.SaveChangesAsync();
 
@@ -213,13 +213,13 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
                     for (int i = 0; i < DgvِCustomer.Rows.Count; i++)
                     {
                         var row = DgvِCustomer.Rows[i];
-                        _customerMoneyRepository.TransactionOfCustomerDebt(
-                            row.Cells[1].Value?.ToString(),
-                            row.Cells[0].Value?.ToString(),
-                            row.Cells[3].Value?.ToString(),
-                            row.Cells[2].Value?.ToString(),
-                            DateTime.Now
-                        );
+                        await _customerMoneyRepository.TransactionOfCustomerDebt(
+                                 row.Cells[1].Value?.ToString(),
+                                 row.Cells[0].Value?.ToString(),
+                                 row.Cells[3].Value?.ToString(),
+                                 row.Cells[2].Value?.ToString(),
+                                 DateTime.Now
+                             );
                         _context.Update(await SetCaisse(_main.ConvertToFloat(row.Cells[3].Value?.ToString())));
                         await _context.SaveChangesAsync();
 

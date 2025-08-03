@@ -12,7 +12,7 @@ namespace Store.Core.Interfaces
         public Product GetProductBarCode(string barCode);
         public Task<List<ProductOutdated>> GetAllProductOutdated();
         public Task<List<ProductMinQty>> GetAllProductMinQty(int skip, int take);
-        public List<Product> SearchAll(string searchItem, int pageSize, int skip);
+        public Task<List<Product>> SearchAll(string searchItem, int pageSize, int skip);
         public List<Product> SearchByUser(string userId, string searchIteam);
 
 
@@ -23,8 +23,8 @@ namespace Store.Core.Interfaces
     }
     public interface IProductsQuantitieRepository : IGenericRepository<ProductsQuantitie>
     {
-        public Task<ResultProductQtyDto> GetAllProductQty(string barcode);
-        public Task<ResultProductQtyDto> GetProductQty(int storeId, string barcode);
+        public Task<ResultProductQtyDto> GetAllProductQty(string barcode, int skip, int take);
+        public Task<ResultProductQtyDto> GetProductQty(int storeId, string barcode, int skip, int take);
     }
     public interface IProductTransferRepository : IGenericRepository<ProductTransfer>
     {

@@ -215,11 +215,11 @@ namespace Store.ApplicationUI.Gui.CustomersGui
         }
         private List<Core.Entities.Customers.Customer> data;
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
 
-            DgvِCustomer.DataSource = _customersRepository.SearchAll(txtSearch.Text);
+            DgvِCustomer.DataSource = await _customersRepository.SearchAll(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
             txtSearch.Text = string.Empty;
         }

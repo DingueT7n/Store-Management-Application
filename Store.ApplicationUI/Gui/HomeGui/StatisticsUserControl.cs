@@ -208,6 +208,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 await VisualizeTopProductsByQuantityAsync();
                 await VisualizeNetProfitAsync();
                 await VisualizeProfitAsync();
+
             }
             catch (Exception ex)
             {
@@ -876,5 +877,6 @@ namespace Store.ApplicationUI.Gui.HomeGui
         {
 
         }
+
     }
 }

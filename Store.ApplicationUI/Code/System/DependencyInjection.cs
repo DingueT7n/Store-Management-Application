@@ -32,6 +32,7 @@ using Store.ApplicationUI.Gui.GeneralSettingsGui;
 using Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui;
 using Store.ApplicationUI.Gui.HomeGui;
 using Store.ApplicationUI.Gui.LoginGui;
+using Store.ApplicationUI.Gui.LoginGui.KeyActivationForm;
 using Store.ApplicationUI.Gui.PaymentGui;
 using Store.ApplicationUI.Gui.ProductsGui;
 using Store.ApplicationUI.Gui.ProductsGui.BarcodeGui;
@@ -201,6 +202,8 @@ namespace Store.ApplicationUI.Code.System
             services.AddScoped<LockUnlockForm>();
             services.AddScoped<SelectCustomerForm>();
             services.AddScoped<SelectProductsForm>();
+            services.AddScoped<ConnectionSettingsForm>();
+            services.AddScoped<KeyActivationForm>();
 
             services.AddScoped<BarCodeForm>();
             services.AddScoped<AddCategoryForm>();

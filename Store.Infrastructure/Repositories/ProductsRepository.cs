@@ -119,7 +119,7 @@ namespace Store.Infrastructure.Repositories
                 throw new Exception("Error retrieving the buyFactures", ex);
             }
         }
-        public List<Product> SearchAll(string searchItem, int pageSize, int skip)
+        public async Task<List<Product>> SearchAll(string searchItem, int pageSize, int skip)
         {
 
             try
@@ -141,19 +141,19 @@ namespace Store.Infrastructure.Repositories
                 }
 
                 // Apply pagination
-                var result = query.OrderBy(x => x.Id)
+                var result = await query.OrderBy(x => x.Id)
                                   .Skip(skip)
                                   .Take(pageSize)
                                    .Include(x => x.Category)
                                     .Include(x => x.ProductFamilies)
-                                  .ToList();
+                                  .ToListAsync();
 
                 // Add product family search result if applicable
                 if (!string.IsNullOrEmpty(searchItem))
                 {
-                    var pf = _context.ProductFamilies
+                    var pf = await _context.ProductFamilies
                         .Include(x => x.Product)
-                        .FirstOrDefault(x => x.CodeBar == searchItem);
+                        .FirstOrDefaultAsync(x => x.CodeBar == searchItem);
                     if (pf != null && !result.Contains(pf.Product))
                     {
                         result.Add(pf.Product);
@@ -222,13 +222,13 @@ namespace Store.Infrastructure.Repositories
     }
     public class ProductsQuantitieRepository : GenericRepository<ProductsQuantitie>, IProductsQuantitieRepository
     {
-        public async Task<ResultProductQtyDto> GetAllProductQty(string barcode)
+        public async Task<ResultProductQtyDto> GetAllProductQty(string barcode, int skip, int take)
         {
             try
             {
 
 
-                var lastRefund = await _context.ProductsQuantities.AsNoTracking()
+                var lastRefund = await _context.ProductsQuantities.Skip(skip).Take(take).AsNoTracking()
                     .Include(x => x.Product)
                                 .Where(x => (barcode != string.Empty ? barcode == x.Product.CodeBar : true))
 
@@ -257,13 +257,13 @@ namespace Store.Infrastructure.Repositories
                 throw new Exception("Error retrieving the buyFactures", ex);
             }
         }
-        public async Task<ResultProductQtyDto> GetProductQty(int storeId, string barcode)
+        public async Task<ResultProductQtyDto> GetProductQty(int storeId, string barcode, int skip, int take)
         {
             try
             {
 
 
-                var lastRefund = await _context.ProductsQuantities.AsNoTracking()
+                var lastRefund = await _context.ProductsQuantities.Skip(skip).Take(take).AsNoTracking()
                     .Include(x => x.Product)
                     .Where(x => x.Store_ID == storeId)
                     .Where(x => (barcode != string.Empty ? barcode == x.Product.CodeBar : true))

@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.Models;
+using Store.ApplicationUI.Code.System;
 using Store.Core.Entities.Caisses;
 using Store.Core.Entities.Helpers;
 using Store.Core.Entities.Users;
@@ -13,8 +14,9 @@ namespace Store.ApplicationUI.Gui.LoginGui
     {
         private ApplicationDbContext _context;
         public readonly LoginForm _oginForm;
+        private readonly ControlManager _controlManager;
 
-        public LoginForm(ApplicationDbContext context)
+        public LoginForm(ApplicationDbContext context, ControlManager controlManager)
         {
             try
             {
@@ -35,18 +37,19 @@ namespace Store.ApplicationUI.Gui.LoginGui
                 {
                     if (daysLeft < 0)
                     {
-                        LoginGui.KeyActivationForm.KeyActivationForm activationForm = new();
+                        LoginGui.KeyActivationForm.KeyActivationForm activationForm = _controlManager.GetF<KeyActivationForm.KeyActivationForm>();
                         activationForm.ShowDialog();
                     }
                 }
             }
             else
             {
-                LoginGui.KeyActivationForm.KeyActivationForm activationForm = new();
+                LoginGui.KeyActivationForm.KeyActivationForm activationForm = _controlManager.GetF<KeyActivationForm.KeyActivationForm>();
                 activationForm.ShowDialog();
 
             }
 
+            _controlManager = controlManager;
         }
 
 
@@ -86,9 +89,9 @@ namespace Store.ApplicationUI.Gui.LoginGui
             {
                 if (!ValidateActivationKey())
                 {
-                    LoginGui.KeyActivationForm.KeyActivationForm activationForm = new();
+                    LoginGui.KeyActivationForm.KeyActivationForm activationForm = _controlManager.GetF<KeyActivationForm.KeyActivationForm>();
                     activationForm.ShowDialog();
-                    activationForm.Dispose();
+
                     return;
                 }
 
@@ -431,7 +434,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
         private void lblCon_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            ConnectionSettingsForm connectionSettingsForm = new ConnectionSettingsForm();
+            ConnectionSettingsForm connectionSettingsForm = _controlManager.GetF<ConnectionSettingsForm>();
             this.Hide();
             connectionSettingsForm.ShowDialog();
             this.Show();
@@ -443,7 +446,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
             if (e.KeyCode == Keys.F12)
             {
                 ToasterHelper.PlayNotificationSound();
-                ConnectionSettingsForm connectionSettingsForm = new ConnectionSettingsForm();
+                ConnectionSettingsForm connectionSettingsForm = _controlManager.GetF<ConnectionSettingsForm>();
                 this.Hide();
                 connectionSettingsForm.ShowDialog();
                 this.Show();

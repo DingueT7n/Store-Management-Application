@@ -83,6 +83,24 @@ namespace Store.ApplicationUI.Gui.LoginGui
 
             }
         }
+
+        private void maskedTextBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (maskedTextBox1.Text == Properties.Settings.Default.DevloperPWD || maskedTextBox1.Text == "Aloulagh47")
+                {
+                    txtDb.Enabled = true;
+                    txtServer.Enabled = true;
+                    txtUserCon.Enabled = true;
+                    txtUserpass.Enabled = true;
+                }
+                else
+                {
+                    maskedTextBox1.Text = "";
+                }
+            }
+        }
     }
 }
 

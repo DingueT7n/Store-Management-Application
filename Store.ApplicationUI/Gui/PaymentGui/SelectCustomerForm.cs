@@ -112,9 +112,9 @@ namespace Store.ApplicationUI.Gui.PaymentGui
             await LoadData();
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
-            DgvProducts.DataSource = _customersRepository.SearchAll(txtSearch.Text);
+            DgvProducts.DataSource = await _customersRepository.SearchAll(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
             txtSearch.Text = string.Empty;
 

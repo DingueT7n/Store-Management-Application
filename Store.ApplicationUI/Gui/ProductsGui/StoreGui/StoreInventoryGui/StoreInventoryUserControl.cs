@@ -129,7 +129,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
                 ToasterHelper.ShowErrorHappened(ex.Message);
             }
         }
-        public async void SetProductsToDgv(int type)
+        public async Task SetProductsToDgv(int type, int skip, int take)
         {
             ////DgvSales.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             //var CustomerMoneyList = MainForm.Context.CustomersReports.
@@ -139,27 +139,44 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
             string searchitem = txtSearch.Text == string.Empty ? "" : txtSearch.Text;
             if (type == 0)
             {
-                var data = await _productsQuantitieRepository.GetAllProductQty(searchitem);
+                var data = await _productsQuantitieRepository.GetAllProductQty(searchitem, skip, take);
                 DgvSales.DataSource = data.result;
             }
             else
             {
-                var data = await _productsQuantitieRepository.GetProductQty(Convert.ToInt32(cmbStores.SelectedValue), searchitem);
+                var data = await _productsQuantitieRepository.GetProductQty(Convert.ToInt32(cmbStores.SelectedValue), searchitem, skip, take);
                 DgvSales.DataSource = data.result;
             }
+            // Calculate total pages
+            double value = await _context.ProductsQuantities.Where(x => x.Qty > 0).AsNoTracking().CountAsync() / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
+            int pageCount = Convert.ToInt32(Math.Ceiling(value));
 
+            // Update pagination combo box
+            cmbpagination.Items.Clear();
+            for (int i = 0; i < pageCount; i++)
+            {
+                cmbpagination.Items.Add(i + 1);
+            }
+
+            if (cmbpagination.Items.Count > 0)
+            {
+                cmbpagination.SelectedIndex = skip / Properties.Settings.Default.NoOfDataInDgvs;
+            }
+
+            PaginationHide();
+            lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
             CalcStats();
 
         }
-        void RefreshDgv()
+        async Task RefreshDgv()
         {
             if (rbStoreAll.Checked)
             {
-                SetProductsToDgv(0);
+                await SetProductsToDgv(0, 0, Properties.Settings.Default.NoOfDataInDgvs);
             }
             else if (rbSelectedStore.Checked)
             {
-                SetProductsToDgv(1);
+                await SetProductsToDgv(1, 0, Properties.Settings.Default.NoOfDataInDgvs);
             }
 
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvSales);
@@ -179,7 +196,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
                 cmbStores.DataSource = await _context.Stores.ToListAsync();
                 cmbStores.DisplayMember = "StoreName";
                 cmbStores.ValueMember = "Id";
-                RefreshDgv();
+                await RefreshDgv();
 
                 //_data.Clear();
             }
@@ -257,15 +274,15 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
 
         }
 
-        private void cmbStores_SelectionChangeCommitted(object sender, EventArgs e)
+        private async void cmbStores_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            RefreshDgv();
+            await RefreshDgv();
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
-            RefreshDgv();
+            await RefreshDgv();
         }
 
         private async void button2_Click(object sender, EventArgs e)
@@ -298,6 +315,69 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
         {
 
 
+        }
+        void PaginationHide()
+        {
+            btnNext.Enabled = cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1 && !dgvHelper.IsEmpty(DgvSales);
+            btnPrev.Enabled = cmbpagination.SelectedIndex > 0 && !dgvHelper.IsEmpty(DgvSales);
+            cmbpagination.Enabled = !dgvHelper.IsEmpty(DgvSales);
+        }
+        private async void btnNext_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1)
+            {
+                cmbpagination.SelectedIndex++;
+                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+
+
+                if (rbStoreAll.Checked)
+                {
+                    await SetProductsToDgv(0, skip, Properties.Settings.Default.NoOfDataInDgvs);
+                }
+                else if (rbSelectedStore.Checked)
+                {
+                    await SetProductsToDgv(1, skip, Properties.Settings.Default.NoOfDataInDgvs);
+                }
+
+            }
+        }
+
+        private async void btnPrev_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (cmbpagination.SelectedIndex > 0)
+            {
+                cmbpagination.SelectedIndex--;
+                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+
+                if (rbStoreAll.Checked)
+                {
+                    await SetProductsToDgv(0, skip, Properties.Settings.Default.NoOfDataInDgvs);
+                }
+                else if (rbSelectedStore.Checked)
+                {
+                    await SetProductsToDgv(1, skip, Properties.Settings.Default.NoOfDataInDgvs);
+                }
+            }
+        }
+
+        private async void cmbpagination_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (cmbpagination.SelectedIndex != -1)
+            {
+                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+
+                if (rbStoreAll.Checked)
+                {
+                    await SetProductsToDgv(0, skip, Properties.Settings.Default.NoOfDataInDgvs);
+                }
+                else if (rbSelectedStore.Checked)
+                {
+                    await SetProductsToDgv(1, skip, Properties.Settings.Default.NoOfDataInDgvs);
+                }
+            }
         }
     }
 }

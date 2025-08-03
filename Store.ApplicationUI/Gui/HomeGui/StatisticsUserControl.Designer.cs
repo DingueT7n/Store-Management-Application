@@ -84,7 +84,6 @@
             cmbSaleProfit = new ComboBox();
             chartControl6 = new DevExpress.XtraCharts.ChartControl();
             panel9 = new Panel();
-            chartControl9 = new DevExpress.XtraCharts.ChartControl();
             flowLayoutPanel9 = new FlowLayoutPanel();
             label6 = new Label();
             txtTotalDeserved = new TextBox();
@@ -118,6 +117,7 @@
             txtBuySale = new TextBox();
             rbSale = new RadioButton();
             rbBuy = new RadioButton();
+            chartControl9 = new DevExpress.XtraCharts.ChartControl();
             OperationsflowLayoutPanel.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
@@ -158,9 +158,6 @@
             ((System.ComponentModel.ISupportInitialize)series8).BeginInit();
             ((System.ComponentModel.ISupportInitialize)lineSeriesView8).BeginInit();
             panel9.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)chartControl9).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)series9).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)lineSeriesView9).BeginInit();
             flowLayoutPanel9.SuspendLayout();
             flowLayoutPanel7.SuspendLayout();
             flowLayoutPanel8.SuspendLayout();
@@ -169,6 +166,9 @@
             flowLayoutPanel12.SuspendLayout();
             panelZakat.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)chartControl9).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)series9).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)lineSeriesView9).BeginInit();
             SuspendLayout();
             // 
             // OperationsflowLayoutPanel
@@ -366,11 +366,12 @@
             // 
             // chartControl1
             // 
+            chartControl1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             chartControl1.BorderOptions.Color = Color.FromArgb(79, 97, 40);
             chartControl1.BorderOptions.Thickness = 2;
             chartControl1.BorderOptions.Visibility = DevExpress.Utils.DefaultBoolean.True;
-            chartControl1.Dock = DockStyle.Fill;
             chartControl1.Location = new Point(0, 0);
+            chartControl1.Margin = new Padding(8);
             chartControl1.Name = "chartControl1";
             chartControl1.PaletteBaseColorNumber = 4;
             chartControl1.PaletteName = "Solstice";
@@ -383,15 +384,17 @@
     series1
     };
             chartControl1.SeriesTemplate.LegendTextPattern = "yyyy/MM/dd";
-            chartControl1.Size = new Size(509, 529);
+            chartControl1.Size = new Size(1002, 527);
             chartControl1.TabIndex = 11;
             // 
             // panel1
             // 
+            panel1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            panel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             panel1.Controls.Add(chartControl1);
-            panel1.Location = new Point(518, 3);
+            panel1.Location = new Point(10, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(509, 529);
+            panel1.Size = new Size(1004, 529);
             panel1.TabIndex = 12;
             // 
             // flowLayoutPanel10
@@ -417,9 +420,9 @@
             // panel2
             // 
             panel2.Controls.Add(chartControl2);
-            panel2.Location = new Point(3, 3);
+            panel2.Location = new Point(10, 538);
             panel2.Name = "panel2";
-            panel2.Size = new Size(509, 529);
+            panel2.Size = new Size(1004, 529);
             panel2.TabIndex = 13;
             // 
             // chartControl2
@@ -441,15 +444,15 @@
     series2
     };
             chartControl2.SeriesTemplate.LegendTextPattern = "yyyy/MM/dd";
-            chartControl2.Size = new Size(509, 529);
+            chartControl2.Size = new Size(1004, 529);
             chartControl2.TabIndex = 11;
             // 
             // panel4
             // 
             panel4.Controls.Add(chartControl4);
-            panel4.Location = new Point(518, 538);
+            panel4.Location = new Point(10, 1073);
             panel4.Name = "panel4";
-            panel4.Size = new Size(509, 529);
+            panel4.Size = new Size(1004, 529);
             panel4.TabIndex = 15;
             // 
             // chartControl4
@@ -471,15 +474,15 @@
     series3
     };
             chartControl4.SeriesTemplate.LegendTextPattern = "yyyy/MM/dd";
-            chartControl4.Size = new Size(509, 529);
+            chartControl4.Size = new Size(1004, 529);
             chartControl4.TabIndex = 11;
             // 
             // panel8
             // 
             panel8.Controls.Add(chartControl8);
-            panel8.Location = new Point(3, 538);
+            panel8.Location = new Point(10, 1608);
             panel8.Name = "panel8";
-            panel8.Size = new Size(509, 529);
+            panel8.Size = new Size(1004, 529);
             panel8.TabIndex = 19;
             // 
             // chartControl8
@@ -501,15 +504,15 @@
     series4
     };
             chartControl8.SeriesTemplate.LegendTextPattern = "yyyy/MM/dd";
-            chartControl8.Size = new Size(509, 529);
+            chartControl8.Size = new Size(1004, 529);
             chartControl8.TabIndex = 11;
             // 
             // panel7
             // 
             panel7.Controls.Add(chartControl7);
-            panel7.Location = new Point(518, 1073);
+            panel7.Location = new Point(10, 2143);
             panel7.Name = "panel7";
-            panel7.Size = new Size(509, 529);
+            panel7.Size = new Size(1004, 529);
             panel7.TabIndex = 18;
             // 
             // chartControl7
@@ -531,15 +534,15 @@
     series5
     };
             chartControl7.SeriesTemplate.LegendTextPattern = "yyyy/MM/dd";
-            chartControl7.Size = new Size(509, 529);
+            chartControl7.Size = new Size(1004, 529);
             chartControl7.TabIndex = 11;
             // 
             // panel3
             // 
             panel3.Controls.Add(chartControl3);
-            panel3.Location = new Point(3, 1073);
+            panel3.Location = new Point(10, 2678);
             panel3.Name = "panel3";
-            panel3.Size = new Size(509, 529);
+            panel3.Size = new Size(1004, 529);
             panel3.TabIndex = 14;
             // 
             // chartControl3
@@ -562,16 +565,16 @@
     series6
     };
             chartControl3.SeriesTemplate.LegendTextPattern = "yyyy/MM/dd";
-            chartControl3.Size = new Size(509, 529);
+            chartControl3.Size = new Size(1004, 529);
             chartControl3.TabIndex = 11;
             // 
             // panel5
             // 
             panel5.Controls.Add(cmbNbrProductQty);
             panel5.Controls.Add(chartControl5);
-            panel5.Location = new Point(518, 1608);
+            panel5.Location = new Point(10, 3213);
             panel5.Name = "panel5";
-            panel5.Size = new Size(509, 529);
+            panel5.Size = new Size(1004, 529);
             panel5.TabIndex = 16;
             // 
             // cmbNbrProductQty
@@ -579,10 +582,10 @@
             cmbNbrProductQty.Font = new Font("Calibri", 12F, FontStyle.Bold);
             cmbNbrProductQty.FormattingEnabled = true;
             cmbNbrProductQty.Items.AddRange(new object[] { "15", "25", "40", "50" });
-            cmbNbrProductQty.Location = new Point(454, 7);
+            cmbNbrProductQty.Location = new Point(933, 4);
             cmbNbrProductQty.Margin = new Padding(5, 7, 5, 7);
             cmbNbrProductQty.Name = "cmbNbrProductQty";
-            cmbNbrProductQty.Size = new Size(48, 27);
+            cmbNbrProductQty.Size = new Size(49, 27);
             cmbNbrProductQty.TabIndex = 32;
             cmbNbrProductQty.Text = "15";
             cmbNbrProductQty.SelectedIndexChanged += cmbNbrProductQty_SelectedIndexChanged;
@@ -608,16 +611,16 @@
     series7
     };
             chartControl5.SeriesTemplate.LegendTextPattern = "yyyy/MM/dd";
-            chartControl5.Size = new Size(509, 529);
+            chartControl5.Size = new Size(1004, 529);
             chartControl5.TabIndex = 11;
             // 
             // panel6
             // 
             panel6.Controls.Add(cmbSaleProfit);
             panel6.Controls.Add(chartControl6);
-            panel6.Location = new Point(3, 1608);
+            panel6.Location = new Point(10, 3748);
             panel6.Name = "panel6";
-            panel6.Size = new Size(509, 529);
+            panel6.Size = new Size(1004, 529);
             panel6.TabIndex = 17;
             // 
             // cmbSaleProfit
@@ -625,7 +628,7 @@
             cmbSaleProfit.Font = new Font("Calibri", 12F, FontStyle.Bold);
             cmbSaleProfit.FormattingEnabled = true;
             cmbSaleProfit.Items.AddRange(new object[] { "15", "25", "40", "50" });
-            cmbSaleProfit.Location = new Point(451, 7);
+            cmbSaleProfit.Location = new Point(933, 4);
             cmbSaleProfit.Margin = new Padding(5, 7, 5, 7);
             cmbSaleProfit.Name = "cmbSaleProfit";
             cmbSaleProfit.Size = new Size(53, 27);
@@ -654,39 +657,16 @@
     series8
     };
             chartControl6.SeriesTemplate.LegendTextPattern = "yyyy/MM/dd";
-            chartControl6.Size = new Size(509, 529);
+            chartControl6.Size = new Size(1004, 529);
             chartControl6.TabIndex = 11;
             // 
             // panel9
             // 
             panel9.Controls.Add(chartControl9);
-            panel9.Location = new Point(518, 2143);
+            panel9.Location = new Point(10, 4283);
             panel9.Name = "panel9";
-            panel9.Size = new Size(509, 529);
+            panel9.Size = new Size(1004, 529);
             panel9.TabIndex = 20;
-            // 
-            // chartControl9
-            // 
-            chartControl9.AppearanceNameSerializable = "Pastel Kit";
-            chartControl9.BorderOptions.Color = Color.FromArgb(192, 80, 77);
-            chartControl9.BorderOptions.Thickness = 2;
-            chartControl9.BorderOptions.Visibility = DevExpress.Utils.DefaultBoolean.True;
-            chartControl9.Dock = DockStyle.Fill;
-            chartControl9.Location = new Point(0, 0);
-            chartControl9.Name = "chartControl9";
-            chartControl9.PaletteBaseColorNumber = 4;
-            chartControl9.PaletteName = "Pastel Kit";
-            series9.Name = "Series 1";
-            series9.SeriesID = 14;
-            series9.View = lineSeriesView9;
-            series9.Visible = false;
-            chartControl9.SeriesSerializable = new DevExpress.XtraCharts.Series[]
-    {
-    series9
-    };
-            chartControl9.SeriesTemplate.LegendTextPattern = "yyyy/MM/dd";
-            chartControl9.Size = new Size(509, 529);
-            chartControl9.TabIndex = 11;
             // 
             // flowLayoutPanel9
             // 
@@ -1063,6 +1043,29 @@
             rbBuy.UseVisualStyleBackColor = true;
             rbBuy.CheckedChanged += rbBuy_CheckedChanged;
             // 
+            // chartControl9
+            // 
+            chartControl9.AppearanceNameSerializable = "Pastel Kit";
+            chartControl9.BorderOptions.Color = Color.FromArgb(192, 80, 77);
+            chartControl9.BorderOptions.Thickness = 2;
+            chartControl9.BorderOptions.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            chartControl9.Dock = DockStyle.Fill;
+            chartControl9.Location = new Point(0, 0);
+            chartControl9.Name = "chartControl9";
+            chartControl9.PaletteBaseColorNumber = 4;
+            chartControl9.PaletteName = "Pastel Kit";
+            series9.Name = "Series 1";
+            series9.SeriesID = 14;
+            series9.View = lineSeriesView9;
+            series9.Visible = false;
+            chartControl9.SeriesSerializable = new DevExpress.XtraCharts.Series[]
+    {
+    series9
+    };
+            chartControl9.SeriesTemplate.LegendTextPattern = "yyyy/MM/dd";
+            chartControl9.Size = new Size(1004, 529);
+            chartControl9.TabIndex = 11;
+            // 
             // StatisticsUserControl
             // 
             AutoScaleDimensions = new SizeF(8F, 19F);
@@ -1122,9 +1125,6 @@
             ((System.ComponentModel.ISupportInitialize)series8).EndInit();
             ((System.ComponentModel.ISupportInitialize)chartControl6).EndInit();
             panel9.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)lineSeriesView9).EndInit();
-            ((System.ComponentModel.ISupportInitialize)series9).EndInit();
-            ((System.ComponentModel.ISupportInitialize)chartControl9).EndInit();
             flowLayoutPanel9.ResumeLayout(false);
             flowLayoutPanel9.PerformLayout();
             flowLayoutPanel7.ResumeLayout(false);
@@ -1139,6 +1139,9 @@
             panelZakat.ResumeLayout(false);
             panelZakat.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)lineSeriesView9).EndInit();
+            ((System.ComponentModel.ISupportInitialize)series9).EndInit();
+            ((System.ComponentModel.ISupportInitialize)chartControl9).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1196,7 +1199,6 @@
         private Label label8;
         private TextBox txtNetProfits;
         private Panel panel9;
-        private DevExpress.XtraCharts.ChartControl chartControl9;
         private Button button1;
         private Panel panelZakat;
         private RadioButton rbSale;
@@ -1216,5 +1218,6 @@
         private PictureBox pictureBox1;
         private ComboBox cmbNbrProductQty;
         private ComboBox cmbSaleProfit;
+        private DevExpress.XtraCharts.ChartControl chartControl9;
     }
 }

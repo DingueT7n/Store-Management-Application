@@ -222,26 +222,42 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 txtQty.Text = string.Empty;
             }
         }
-        async void OnLoad()
+        async void OnLoad(int skip)
         {
             txtSearchBarCode.Focus();
-
-
             SetColumns();
             if (await _context.Database.CanConnectAsync())
-                DgvQuickProducts.DataSource = _context.ProductQuickAccess.Select(x => new { x.CodeBar, x.ProductName }).ToList();
-            SetQuickColumns();
+                DgvQuickProducts.DataSource = await _context.ProductQuickAccess.Select(x => new { x.CodeBar, x.ProductName }).ToListAsync();
             lblFactureNumber.Text = _salesRepository.GetFactureNumber();
             lblUserName.Text = Properties.Settings.Default.UserName;
 
             lblCustomerName.Text = Properties.Settings.Default.DefaultCustomerSale;
             IdCustomer.Text = Properties.Settings.Default.IdCustomerSale;
+            SetQuickColumns();
             CalculateStatistics();
+
+            double value = await _context.ProductQuickAccess.AsNoTracking().CountAsync() / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
+            int pageCount = Convert.ToInt32(Math.Ceiling(value));
+
+            // Update pagination combo box
+            cmbpagination.Items.Clear();
+            for (int i = 0; i < pageCount; i++)
+            {
+                cmbpagination.Items.Add(i + 1);
+            }
+
+            if (cmbpagination.Items.Count > 0)
+            {
+                cmbpagination.SelectedIndex = skip / Properties.Settings.Default.NoOfDataInDgvs;
+            }
+
+            PaginationHide();
+            lblEmptyData.Visible = dgvHelper.IsEmpty(DgvQuickProducts);
         }
         private void PosUserControl_Load(object sender, EventArgs e)
         {
 
-            OnLoad();
+            OnLoad(0);
             //Add Roles
 
         }
@@ -362,10 +378,14 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             if (e.KeyCode == Keys.Enter)
             {
                 txtSearchBarCode.Text = txtSearchBarCode.Text.Replace("\r\n", "");
-                if (txtSearchBarCode.Text.Replace("\r\n", "").Length > 2)
+                string input = txtSearchBarCode.Text.Trim().Replace("\r", "").Replace("\n", "");
+
+                if (input.Replace("\r\n", "").Length > 2)
                 {
-                    string prefix = txtSearchBarCode.Text.Substring(0, 2);
-                    if (prefix == "21" && txtSearchBarCode.Text.Length >= 5)
+
+                    string prefix = input.Substring(0, 2);
+
+                    if (prefix == "21" && input.Length >= 5)
                     {
                         ParseScaleBarcode(txtSearchBarCode.Text);
                         AddNewRow();
@@ -373,6 +393,16 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                         CalculateStatistics();
                         txtSearchBarCode.Clear();
                         txtSearchBarCode.Focus();
+                    }
+                    else
+                    {
+                        SetProductsToTable();
+                        AddNewRow();
+                        CalculateAmount();
+                        CalculateStatistics();
+                        txtSearchBarCode.Clear();
+                        txtSearchBarCode.Focus();
+                        return;
                     }
                 }
                 else
@@ -382,6 +412,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                     CalculateAmount();
                     CalculateStatistics();
                     txtSearchBarCode.Clear();
+                    txtSearchBarCode.Focus();
                     return;
                 }
 
@@ -720,10 +751,16 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             {
                 btnSearchImage_Click(sender, e);
             }
+            else if ((e.KeyCode == Keys.Escape))
+            {
+                txtSearchBarCode.Clear();
+                txtSearchBarCode.Focus();
+            }
 
         }
         private void SetQuickColumns()
         {
+            //E DgvQuickProducts.DataSource = new List<()new {  >
 
             //DgvQuickProducts.Columns[0].HeaderCell.Value = "معرف المنتوج";
             DgvQuickProducts.Columns[0].HeaderCell.Value = "باركود";
@@ -764,7 +801,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
             // Reset any DataGridView
             DgvِProducts.Rows.Clear();
-            OnLoad();
+            OnLoad(0);
 
 
 
@@ -798,7 +835,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
                 // Reset any DataGridView
                 DgvِProducts.Rows.Clear();
-                OnLoad();
+                OnLoad(0);
 
 
             }
@@ -1119,7 +1156,12 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
             if (product != null)
             {
-                product.Quentity = Math.Max(0, product.Quentity - ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()));
+                product.Quentity -= ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+
+                if (product.Quentity < 0 && !Properties.Settings.Default.StockNeg)
+                    product.Quentity = 0;
+
+                //product.Quentity = Math.Max(0, product.Quentity - ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString()));
             }
 
             ProductDiscount productDiscount = _context.ProductDiscounts.
@@ -1764,6 +1806,45 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 catch (Exception ex) { MessageBox.Show(ex.Message); }
             }
 
+        }
+
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1)
+            {
+                cmbpagination.SelectedIndex++;
+                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+                OnLoad(skip);
+
+            }
+        }
+        void PaginationHide()
+        {
+            btnNext.Enabled = cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1 && !dgvHelper.IsEmpty(DgvQuickProducts);
+            btnPrev.Enabled = cmbpagination.SelectedIndex > 0 && !dgvHelper.IsEmpty(DgvQuickProducts);
+            cmbpagination.Enabled = !dgvHelper.IsEmpty(DgvQuickProducts);
+        }
+        private void btnPrev_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (cmbpagination.SelectedIndex > 0)
+            {
+                cmbpagination.SelectedIndex--;
+                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+
+                OnLoad(skip);
+            }
+        }
+
+        private void cmbpagination_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (cmbpagination.SelectedIndex != -1)
+            {
+                int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+                OnLoad(skip);
+            }
         }
     }
 }

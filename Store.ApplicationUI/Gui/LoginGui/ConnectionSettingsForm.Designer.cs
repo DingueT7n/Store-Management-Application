@@ -31,6 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConnectionSettingsForm));
             label1 = new Label();
             groupBox1 = new GroupBox();
+            label6 = new Label();
+            maskedTextBox1 = new MaskedTextBox();
             button2 = new Button();
             label4 = new Label();
             txtUserpass = new TextBox();
@@ -58,6 +60,8 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label6);
+            groupBox1.Controls.Add(maskedTextBox1);
             groupBox1.Controls.Add(button2);
             groupBox1.Controls.Add(label4);
             groupBox1.Controls.Add(txtUserpass);
@@ -70,21 +74,46 @@
             groupBox1.Controls.Add(rbWide);
             groupBox1.Controls.Add(txtServer);
             groupBox1.Font = new Font("Calibri", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            groupBox1.Location = new Point(12, 84);
+            groupBox1.Location = new Point(25, 71);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(629, 264);
+            groupBox1.Size = new Size(629, 322);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "معلومات الاتصال بالسيرفر";
             // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.BackColor = Color.Transparent;
+            label6.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label6.ForeColor = SystemColors.ControlText;
+            label6.Location = new Point(531, 54);
+            label6.Name = "label6";
+            label6.Size = new Size(63, 19);
+            label6.TabIndex = 14;
+            label6.Text = "كلمة السر";
+            // 
+            // maskedTextBox1
+            // 
+            maskedTextBox1.BackColor = Color.White;
+            maskedTextBox1.BorderStyle = BorderStyle.FixedSingle;
+            maskedTextBox1.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            maskedTextBox1.Location = new Point(270, 49);
+            maskedTextBox1.Name = "maskedTextBox1";
+            maskedTextBox1.PasswordChar = '*';
+            maskedTextBox1.Size = new Size(234, 31);
+            maskedTextBox1.TabIndex = 13;
+            maskedTextBox1.KeyDown += maskedTextBox1_KeyDown;
+            // 
             // button2
             // 
             button2.BackColor = Color.White;
+            button2.Enabled = false;
             button2.FlatStyle = FlatStyle.Flat;
             button2.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             button2.Image = (Image)resources.GetObject("button2.Image");
             button2.ImageAlign = ContentAlignment.MiddleLeft;
-            button2.Location = new Point(473, 199);
+            button2.Location = new Point(473, 274);
             button2.Name = "button2";
             button2.Size = new Size(150, 42);
             button2.TabIndex = 12;
@@ -96,7 +125,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Calibri", 12F, FontStyle.Bold);
-            label4.Location = new Point(228, 148);
+            label4.Location = new Point(228, 223);
             label4.Name = "label4";
             label4.Size = new Size(63, 19);
             label4.TabIndex = 11;
@@ -106,7 +135,7 @@
             // 
             txtUserpass.Enabled = false;
             txtUserpass.Font = new Font("Calibri", 12F, FontStyle.Bold);
-            txtUserpass.Location = new Point(6, 145);
+            txtUserpass.Location = new Point(6, 220);
             txtUserpass.Name = "txtUserpass";
             txtUserpass.PasswordChar = '*';
             txtUserpass.PlaceholderText = "*****";
@@ -120,7 +149,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Calibri", 12F, FontStyle.Bold);
-            label5.Location = new Point(531, 150);
+            label5.Location = new Point(531, 225);
             label5.Name = "label5";
             label5.Size = new Size(92, 19);
             label5.TabIndex = 9;
@@ -130,7 +159,7 @@
             // 
             txtUserCon.Enabled = false;
             txtUserCon.Font = new Font("Calibri", 12F, FontStyle.Bold);
-            txtUserCon.Location = new Point(331, 147);
+            txtUserCon.Location = new Point(331, 222);
             txtUserCon.Name = "txtUserCon";
             txtUserCon.PlaceholderText = "ex.Admin";
             txtUserCon.RightToLeft = RightToLeft.No;
@@ -143,7 +172,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Calibri", 12F, FontStyle.Bold);
-            label2.Location = new Point(228, 102);
+            label2.Location = new Point(228, 177);
             label2.Name = "label2";
             label2.Size = new Size(87, 19);
             label2.TabIndex = 7;
@@ -151,8 +180,9 @@
             // 
             // txtDb
             // 
+            txtDb.Enabled = false;
             txtDb.Font = new Font("Calibri", 12F, FontStyle.Bold);
-            txtDb.Location = new Point(6, 94);
+            txtDb.Location = new Point(6, 169);
             txtDb.Name = "txtDb";
             txtDb.PlaceholderText = "MyDb";
             txtDb.RightToLeft = RightToLeft.No;
@@ -165,7 +195,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Calibri", 12F, FontStyle.Bold);
-            label3.Location = new Point(573, 99);
+            label3.Location = new Point(573, 174);
             label3.Name = "label3";
             label3.Size = new Size(50, 19);
             label3.TabIndex = 5;
@@ -175,8 +205,9 @@
             // 
             rbLocal.AutoSize = true;
             rbLocal.Checked = true;
+            rbLocal.Enabled = false;
             rbLocal.Font = new Font("Calibri", 12F, FontStyle.Bold);
-            rbLocal.Location = new Point(510, 39);
+            rbLocal.Location = new Point(510, 114);
             rbLocal.Name = "rbLocal";
             rbLocal.Size = new Size(94, 23);
             rbLocal.TabIndex = 1;
@@ -188,8 +219,9 @@
             // rbWide
             // 
             rbWide.AutoSize = true;
+            rbWide.Enabled = false;
             rbWide.Font = new Font("Calibri", 12F, FontStyle.Bold);
-            rbWide.Location = new Point(349, 39);
+            rbWide.Location = new Point(349, 114);
             rbWide.Name = "rbWide";
             rbWide.Size = new Size(93, 23);
             rbWide.TabIndex = 0;
@@ -199,8 +231,9 @@
             // 
             // txtServer
             // 
+            txtServer.Enabled = false;
             txtServer.Font = new Font("Calibri", 12F, FontStyle.Bold);
-            txtServer.Location = new Point(331, 99);
+            txtServer.Location = new Point(331, 174);
             txtServer.Name = "txtServer";
             txtServer.PlaceholderText = ".\\SQLEXPRESS";
             txtServer.RightToLeft = RightToLeft.No;
@@ -212,11 +245,12 @@
             // button1
             // 
             button1.BackColor = Color.White;
+            button1.Enabled = false;
             button1.FlatStyle = FlatStyle.Flat;
             button1.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             button1.Image = (Image)resources.GetObject("button1.Image");
             button1.ImageAlign = ContentAlignment.MiddleLeft;
-            button1.Location = new Point(251, 349);
+            button1.Location = new Point(254, 399);
             button1.Name = "button1";
             button1.Size = new Size(150, 42);
             button1.TabIndex = 6;
@@ -229,16 +263,16 @@
             AutoScaleDimensions = new SizeF(8F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(653, 408);
+            ClientSize = new Size(671, 456);
             Controls.Add(groupBox1);
             Controls.Add(button1);
             Controls.Add(label1);
             Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(3, 4, 3, 4);
             MaximizeBox = false;
-            MaximumSize = new Size(669, 447);
+            MaximumSize = new Size(687, 495);
             MinimizeBox = false;
-            MinimumSize = new Size(669, 447);
+            MinimumSize = new Size(687, 495);
             Name = "ConnectionSettingsForm";
             RightToLeft = RightToLeft.Yes;
             RightToLeftLayout = true;
@@ -266,5 +300,7 @@
         private Label label5;
         private TextBox txtUserCon;
         private Button button2;
+        private Label label6;
+        private MaskedTextBox maskedTextBox1;
     }
 }

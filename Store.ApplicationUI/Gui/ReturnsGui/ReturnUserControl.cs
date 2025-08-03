@@ -643,17 +643,17 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
         //    context.Update(productQty);
         //    context.SaveChanges();
         //}
-        async Task SetCaisseBuyRefund(decimal value, ApplicationDbContext context)
+        async Task SetCaisseBuyRefund(decimal value)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
             try
             {
-                Caisse caisse = await context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefaultAsync();
+                Caisse caisse = await _context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefaultAsync();
                 if (caisse is not null)
                 {
                     caisse.MoneyinCaisse += value;
-                    context.Caisses.Update(caisse);
-                    await context.SaveChangesAsync();
+                    _context.Caisses.Update(caisse);
+                    await _context.SaveChangesAsync();
                 }
             }
             catch (Exception ex)
@@ -663,19 +663,19 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
             }
 
         }
-        async Task SetCaisseSaleRefund(decimal value, ApplicationDbContext context)
+        async Task SetCaisseSaleRefund(decimal value)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
             try
             {
 
 
-                Caisse? caisse = await context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefaultAsync();
+                Caisse? caisse = await _context.Caisses.Where(x => x.Id == Properties.Settings.Default.DefaultCaisseId).FirstOrDefaultAsync();
                 if (caisse is not null)
                 {
                     caisse.MoneyinCaisse -= value;
-                    context.Caisses.Update(caisse);
-                    await context.SaveChangesAsync();
+                    _context.Caisses.Update(caisse);
+                    await _context.SaveChangesAsync();
                 }
                 else
                 {
@@ -888,20 +888,19 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                 if (DgvِProducts.Rows.Count <= 0 || !MsgHelper.ShowRefundDialog())
                     return;
 
-                using (var context = new ApplicationDbContext())
-                {
-                    if (rbBuy.Checked)
-                    {
-                        await ProcessBuyRefundAsync(context);
-                    }
-                    else
-                    {
-                        await ProcessSaleRefundAsync(context);
-                    }
 
-                    await LoadData();
-                    ToasterHelper.ShowAddedRefund();
+                if (rbBuy.Checked)
+                {
+                    await ProcessBuyRefundAsync();
                 }
+                else
+                {
+                    await ProcessSaleRefundAsync();
+                }
+
+                await LoadData();
+                ToasterHelper.ShowAddedRefund();
+
                 //}
                 //catch (Exception ex)
                 //{
@@ -915,32 +914,32 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
             }
         }
 
-        private async Task ProcessBuyRefundAsync(ApplicationDbContext context)
+        private async Task ProcessBuyRefundAsync()
         {
-            using (var transaction = await context.Database.BeginTransactionAsync())
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
                     // Remove Buy and BuyDetails
-                    var buy = await context.Buys.FirstOrDefaultAsync(x => x.Id == idfacture);
+                    var buy = await _context.Buys.FirstOrDefaultAsync(x => x.Id == idfacture);
                     if (buy != null)
                     {
-                        context.Buys.Remove(buy);
-                        await context.SaveChangesAsync();
+                        _context.Buys.Remove(buy);
+                        await _context.SaveChangesAsync();
                     }
 
-                    await context.BuyDetails.Where(x => x.Order_ID == idfacture).ExecuteDeleteAsync();
-                    await context.SaveChangesAsync();
+                    await _context.BuyDetails.Where(x => x.Order_ID == idfacture).ExecuteDeleteAsync();
+                    await _context.SaveChangesAsync();
 
                     // Add Refund and RefundDetails
                     var refund = SetRefundBuy();
-                    await context.AddAsync(refund);
-                    await context.SaveChangesAsync();
+                    await _context.AddAsync(refund);
+                    await _context.SaveChangesAsync();
 
-                    await ProcessRefundDetailsAsync(context, refund.Id, true);
+                    await ProcessRefundDetailsAsync(refund.Id, true);
 
                     // Handle Supplier and Caisse
-                    await HandleSupplierAndCaisseAsync(context, refund.TotalOrder, refund.PaidUP, refund.Remain);
+                    await HandleSupplierAndCaisseAsync(refund.TotalOrder, refund.PaidUP, refund.Remain);
 
                     await transaction.CommitAsync();
                 }
@@ -953,37 +952,37 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
             }
         }
 
-        private async Task ProcessSaleRefundAsync(ApplicationDbContext context)
+        private async Task ProcessSaleRefundAsync()
         {
-            using (var transaction = await context.Database.BeginTransactionAsync())
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
                     // Remove SalesProfit, SalesDetails, and Sales
-                    await context.SalesProfits.Where(x => x.Order_ID == idfacture).ExecuteDeleteAsync();
-                    await context.SaveChangesAsync();
+                    await _context.SalesProfits.Where(x => x.Order_ID == idfacture).ExecuteDeleteAsync();
+                    await _context.SaveChangesAsync();
 
-                    var saleDetails = await context.SalesDetails.Where(x => x.Order_ID == idfacture).ToListAsync();
-                    context.SalesDetails.RemoveRange(saleDetails);
-                    await context.SaveChangesAsync();
+                    var saleDetails = await _context.SalesDetails.Where(x => x.Order_ID == idfacture).ToListAsync();
+                    _context.SalesDetails.RemoveRange(saleDetails);
+                    await _context.SaveChangesAsync();
 
-                    var sale = await context.Sales.FirstOrDefaultAsync(x => x.Id == idfacture);
+                    var sale = await _context.Sales.FirstOrDefaultAsync(x => x.Id == idfacture);
                     if (sale != null)
                     {
-                        context.Sales.Remove(sale);
-                        await context.SaveChangesAsync();
+                        _context.Sales.Remove(sale);
+                        await _context.SaveChangesAsync();
                     }
 
                     // Add Refund and RefundDetails
                     var refund = SetRefundSale();
 
-                    await context.AddAsync(refund);
-                    await context.SaveChangesAsync();
+                    await _context.AddAsync(refund);
+                    await _context.SaveChangesAsync();
 
-                    await ProcessRefundDetailsAsync(context, refund.Id, false);
+                    await ProcessRefundDetailsAsync(refund.Id, false);
 
                     // Handle Customer and Caisse
-                    await HandleCustomerAndCaisseAsync(context, refund.TotalOrder, refund.PaidUP, refund.Remain);
+                    await HandleCustomerAndCaisseAsync(refund.TotalOrder, refund.PaidUP, refund.Remain);
 
                     await transaction.CommitAsync();
 
@@ -997,7 +996,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
             }
         }
 
-        private async Task ProcessRefundDetailsAsync(ApplicationDbContext context, int refundId, bool isBuy)
+        private async Task ProcessRefundDetailsAsync(int refundId, bool isBuy)
         {
             try
             {
@@ -1007,19 +1006,19 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                 {
                     var refundDetail = isBuy ? SetRefundBuyDetail(i) : SetRefundSaleDetail(i);
                     refundDetail.Order_ID = refundId;
-                    context.ReturnsDetails.Add(refundDetail);
+                    _context.ReturnsDetails.Add(refundDetail);
 
                     // Update product quantity
                     var productId = isBuy ? DgvِProducts.Rows[i].Cells[7].Value?.ToString() : DgvِProducts.Rows[i].Cells[5].Value?.ToString();
                     if (productId != null)
                     {
-                        var product = await SetProductAsync(i, isBuy, productId, context);
+                        var product = await SetProductAsync(i, isBuy, productId);
                         if (product != null)
-                            context.Update(product);
-                        await SetProductQuantityAsync(i, context);
+                            _context.Update(product);
+                        await SetProductQuantityAsync(i);
                     }
                 }
-                await context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -1027,32 +1026,32 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                 throw;
             }
         }
-        private async Task HandleSupplierAndCaisseAsync(ApplicationDbContext context, decimal totalOrder, decimal paidUp, decimal remain)
+        private async Task HandleSupplierAndCaisseAsync(decimal totalOrder, decimal paidUp, decimal remain)
         {
             try
             {
-                var supplierMoney = await context.SuppliersMoneys.FirstOrDefaultAsync(x => x.Id == idfacture);
+                var supplierMoney = await _context.SuppliersMoneys.FirstOrDefaultAsync(x => x.Id == idfacture);
                 if (supplierMoney != null)
                 {
-                    context.SuppliersMoneys.Remove(supplierMoney);
-                    await context.SaveChangesAsync();
+                    _context.SuppliersMoneys.Remove(supplierMoney);
+                    await _context.SaveChangesAsync();
                 }
                 if (paidUp >= totalOrder)
                 {
-                    await SetCaisseBuyRefund(totalOrder, context);
+                    await SetCaisseBuyRefund(totalOrder);
                     if (totalOrder > 0)
-                        await context.CaissesDeposits.AddAsync(SetCaisseDeposit(totalOrder));
-                    await context.SaveChangesAsync();
+                        await _context.CaissesDeposits.AddAsync(SetCaisseDeposit(totalOrder));
+                    await _context.SaveChangesAsync();
                 }
                 else if (remain > 0)
                 {
 
                     var supplier = await SetSupplier();
                     if (supplier != null)
-                        context.Update(supplier);
-                    await SetCaisseBuyRefund(paidUp, context);
-                    await context.CaissesDeposits.AddAsync(SetCaisseDeposit(paidUp));
-                    await context.SaveChangesAsync();
+                        _context.Update(supplier);
+                    await SetCaisseBuyRefund(paidUp);
+                    await _context.CaissesDeposits.AddAsync(SetCaisseDeposit(paidUp));
+                    await _context.SaveChangesAsync();
                 }
             }
             catch (Exception ex)
@@ -1062,7 +1061,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
             }
         }
 
-        private async Task HandleCustomerAndCaisseAsync(ApplicationDbContext context, decimal totalOrder, decimal paidUp, decimal remain)
+        private async Task HandleCustomerAndCaisseAsync(decimal totalOrder, decimal paidUp, decimal remain)
         {
             try
             {
@@ -1070,32 +1069,32 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
 
                 if (paidUp >= totalOrder)
                 {
-                    var customerMoney = await context.CustomersMoneys.FirstOrDefaultAsync(x => x.Order_ID == idfacture);
+                    var customerMoney = await _context.CustomersMoneys.FirstOrDefaultAsync(x => x.Order_ID == idfacture);
                     if (customerMoney != null)
                     {
-                        context.CustomersMoneys.Remove(customerMoney);
-                        await context.SaveChangesAsync();
+                        _context.CustomersMoneys.Remove(customerMoney);
+                        await _context.SaveChangesAsync();
                     }
 
-                    await SetCaisseSaleRefund(totalOrder, context);
-                    await context.CaissesWithdraws.AddAsync(SetCaisseWithdraw(totalOrder));
-                    await context.SaveChangesAsync();
+                    await SetCaisseSaleRefund(totalOrder);
+                    await _context.CaissesWithdraws.AddAsync(SetCaisseWithdraw(totalOrder));
+                    await _context.SaveChangesAsync();
                 }
                 else if (remain > 0)
                 {
-                    var customerMoney = await context.CustomersMoneys.FirstOrDefaultAsync(x => x.Order_ID == idfacture);
+                    var customerMoney = await _context.CustomersMoneys.FirstOrDefaultAsync(x => x.Order_ID == idfacture);
                     if (customerMoney != null)
                     {
-                        context.CustomersMoneys.Remove(customerMoney);
-                        await context.SaveChangesAsync();
+                        _context.CustomersMoneys.Remove(customerMoney);
+                        await _context.SaveChangesAsync();
                     }
 
                     var customer = await setCustomer();
                     if (customer != null)
-                        context.Update(customer);
-                    await SetCaisseSaleRefund(paidUp, context);
-                    await context.CaissesWithdraws.AddAsync(SetCaisseWithdraw(paidUp));
-                    await context.SaveChangesAsync();
+                        _context.Update(customer);
+                    await SetCaisseSaleRefund(paidUp);
+                    await _context.CaissesWithdraws.AddAsync(SetCaisseWithdraw(paidUp));
+                    await _context.SaveChangesAsync();
                 }
             }
             catch (Exception ex)
@@ -1105,13 +1104,13 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
             }
         }
 
-        private async Task<Product> SetProductAsync(int i, bool isBuy, string productId, ApplicationDbContext context)
+        private async Task<Product> SetProductAsync(int i, bool isBuy, string productId)
         {
             try
             {
 
 
-                var product = await context.Products.FirstOrDefaultAsync(x => x.Id.ToString() == productId);
+                var product = await _context.Products.FirstOrDefaultAsync(x => x.Id.ToString() == productId);
                 if (product != null)
                 {
                     var qty = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value?.ToString());
@@ -1125,18 +1124,18 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                 throw;
             }
         }
-        ProductsQuantitie SetProductQuentity(int i, ApplicationDbContext context)
+        ProductsQuantitie SetProductQuentity(int i)
         {
             //dgvProducts.Rows[i].Cells[0].Value.ToString()
             ProductsQuantitie productQty = new();
             if (rbBuy.Checked)
             {
-                var lis = context.ProductsQuantities.Where(x => x.Id == Convert.ToInt32(DgvِProducts.Rows[i].Cells[7].Value.ToString())).ToList();
+                var lis = _context.ProductsQuantities.Where(x => x.Id == Convert.ToInt32(DgvِProducts.Rows[i].Cells[7].Value.ToString())).ToList();
                 productQty = lis.Last();
             }
             else
             {
-                var lis = context.ProductsQuantities.Where(x => x.Id == Convert.ToInt32(DgvِProducts.Rows[i].Cells[5].Value.ToString())).ToList();
+                var lis = _context.ProductsQuantities.Where(x => x.Id == Convert.ToInt32(DgvِProducts.Rows[i].Cells[5].Value.ToString())).ToList();
                 productQty = lis.Last();
             }
             decimal removeQty = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
@@ -1150,16 +1149,16 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                         {
                             productQty.Qty -= removeQty;
                             removeQty = 0;
-                            context.Update(productQty);
-                            context.SaveChanges();
+                            _context.Update(productQty);
+                            _context.SaveChanges();
                         }
                         else
                         {
                             removeQty -= productQty.Qty;
                             productQty.Qty = 0;
-                            context.Update(productQty);
-                            context.SaveChanges();
-                            productQty = context.ProductsQuantities.FirstOrDefault(x => x.Id == Convert.ToInt32(DgvِProducts.Rows[i].Cells[7].Value.ToString()));
+                            _context.Update(productQty);
+                            _context.SaveChanges();
+                            productQty = _context.ProductsQuantities.FirstOrDefault(x => x.Id == Convert.ToInt32(DgvِProducts.Rows[i].Cells[7].Value.ToString()));
                             removeQty = (productQty == null || productQty.Qty == 0) ? 0 : removeQty;
 
                         }
@@ -1169,17 +1168,17 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                 else
                 {
                     productQty.Qty += removeQty;
-                    context.Update(productQty);
-                    context.SaveChanges();
+                    _context.Update(productQty);
+                    _context.SaveChanges();
 
                 }
             }
             return productQty;
         }
-        private async Task SetProductQuantityAsync(int rowIndex, ApplicationDbContext context)
+        private async Task SetProductQuantityAsync(int rowIndex)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
+            if (_context == null)
+                throw new ArgumentNullException(nameof(_context));
 
             if (rowIndex < 0 || rowIndex >= DgvِProducts.Rows.Count)
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
@@ -1199,9 +1198,9 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                     throw new InvalidOperationException("Invalid quantity value.");
                 ProductsQuantitie productQuantity = new();
 
-                var productQty = rbBuy.Checked ? await context.ProductsQuantities.Where(x => x.Pro_ID == Convert.ToInt32(productId)).OrderByDescending(x => x.Id)
+                var productQty = rbBuy.Checked ? await _context.ProductsQuantities.Where(x => x.Pro_ID == Convert.ToInt32(productId)).OrderByDescending(x => x.Id)
                     .FirstOrDefaultAsync() : await
-                     context.ProductsQuantities.Where(x => x.Pro_ID == Convert.ToInt32(productId)).OrderBy(x => x.Id)
+                     _context.ProductsQuantities.Where(x => x.Pro_ID == Convert.ToInt32(productId)).OrderBy(x => x.Id)
                     .FirstOrDefaultAsync();
                 if (productQty is not null)
                 {
@@ -1213,16 +1212,16 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                             {
                                 productQty.Qty -= quantity;
                                 quantity = 0;
-                                context.Update(productQty);
-                                await context.SaveChangesAsync();
+                                _context.Update(productQty);
+                                await _context.SaveChangesAsync();
                             }
                             else if (productQty is not null)
                             {
                                 quantity -= productQty.Qty;
                                 productQty.Qty = 0;
-                                context.Update(productQty);
-                                await context.SaveChangesAsync();
-                                productQty = await context.ProductsQuantities.FirstOrDefaultAsync(x => x.Pro_ID == Convert.ToInt32(productId));
+                                _context.Update(productQty);
+                                await _context.SaveChangesAsync();
+                                productQty = await _context.ProductsQuantities.FirstOrDefaultAsync(x => x.Pro_ID == Convert.ToInt32(productId));
                                 quantity = (productQty == null || productQty.Qty == 0) ? 0 : quantity;
 
                             }
@@ -1236,8 +1235,8 @@ namespace Store.ApplicationUI.Gui.ReturnsGui
                     else
                     {
                         productQty.Qty += quantity;
-                        context.Update(productQty);
-                        await context.SaveChangesAsync();
+                        _context.Update(productQty);
+                        await _context.SaveChangesAsync();
 
                     }
                 }

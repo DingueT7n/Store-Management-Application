@@ -17,10 +17,10 @@ namespace Store.ApplicationUI.Gui.PaymentGui
 
         private readonly ApplicationDbContext _context;
 
-        public SelectProductsForm(MainForm main, ControlManager controlManager, PosForm posForm)
+        public SelectProductsForm(MainForm main, ControlManager controlManager, PosForm posForm, ApplicationDbContext context)
         {
             InitializeComponent();
-            _context = new ApplicationDbContext();
+            _context = context;
 
 
             _main = main;

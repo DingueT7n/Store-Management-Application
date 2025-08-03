@@ -526,5 +526,29 @@ namespace Store.ApplicationUI.Properties {
                 this["StockNeg"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ALGD")]
+        public string DevloperPWD {
+            get {
+                return ((string)(this["DevloperPWD"]));
+            }
+            set {
+                this["DevloperPWD"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DirectLogin {
+            get {
+                return ((bool)(this["DirectLogin"]));
+            }
+            set {
+                this["DirectLogin"] = value;
+            }
+        }
     }
 }

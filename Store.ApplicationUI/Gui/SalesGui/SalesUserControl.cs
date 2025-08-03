@@ -763,7 +763,8 @@ namespace Store.ApplicationUI.Gui.SalesGui
             if (product != null)
             {
                 product.Quentity -= _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
-                if (product.Quentity < 0)
+
+                if (product.Quentity < 0 && !Properties.Settings.Default.StockNeg)
                     product.Quentity = 0;
 
                 ProductDiscount productDiscount = await _context.ProductDiscounts.

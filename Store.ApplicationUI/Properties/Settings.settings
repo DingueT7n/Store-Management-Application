@@ -128,5 +128,11 @@
     <Setting Name="StockNeg" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="DevloperPWD" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ALGD</Value>
+    </Setting>
+    <Setting Name="DirectLogin" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

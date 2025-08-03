@@ -265,7 +265,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             await LoadData();
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             try
             {
@@ -274,7 +274,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
 
 
-                DgvProducts.DataSource = _productsRepository?.SearchAll(txtSearch.Text, Properties.Settings.Default.NoOfDataInDgvs,
+                DgvProducts.DataSource = await _productsRepository.SearchAll(txtSearch.Text, Properties.Settings.Default.NoOfDataInDgvs,
                     cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs);
                 lblEmptyData.Visible = dgvHelper.IsEmpty(DgvProducts);
 

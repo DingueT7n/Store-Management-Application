@@ -64,6 +64,8 @@
             cblogoStore = new CheckBox();
             tabPageGeneralsettings = new TabPage();
             groupBox1 = new GroupBox();
+            cbDirectLogin = new CheckBox();
+            cbStockNegative = new CheckBox();
             button3 = new Button();
             cbSalePrinterState = new CheckBox();
             cbBuyPrinterState = new CheckBox();
@@ -92,7 +94,6 @@
             label9 = new Label();
             label8 = new Label();
             cmbCustomers = new ComboBox();
-            cbStockNegative = new CheckBox();
             tabControl.SuspendLayout();
             tabPagePrintersSettings.SuspendLayout();
             tabPageFacturesSettings.SuspendLayout();
@@ -483,6 +484,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(cbDirectLogin);
             groupBox1.Controls.Add(cbStockNegative);
             groupBox1.Controls.Add(button3);
             groupBox1.Controls.Add(cbSalePrinterState);
@@ -502,6 +504,26 @@
             groupBox1.TabIndex = 10;
             groupBox1.TabStop = false;
             groupBox1.Text = "معلومات اختيارية";
+            // 
+            // cbDirectLogin
+            // 
+            cbDirectLogin.AutoSize = true;
+            cbDirectLogin.Location = new Point(214, 349);
+            cbDirectLogin.Name = "cbDirectLogin";
+            cbDirectLogin.Size = new Size(192, 23);
+            cbDirectLogin.TabIndex = 24;
+            cbDirectLogin.Text = "الدخول المباشر بدون التسجيل";
+            cbDirectLogin.UseVisualStyleBackColor = true;
+            // 
+            // cbStockNegative
+            // 
+            cbStockNegative.AutoSize = true;
+            cbStockNegative.Location = new Point(228, 309);
+            cbStockNegative.Name = "cbStockNegative";
+            cbStockNegative.Size = new Size(178, 23);
+            cbStockNegative.TabIndex = 23;
+            cbStockNegative.Text = "الكمية بالسالب في المنتجات";
+            cbStockNegative.UseVisualStyleBackColor = true;
             // 
             // button3
             // 
@@ -804,16 +826,6 @@
             cmbCustomers.Size = new Size(151, 27);
             cmbCustomers.TabIndex = 6;
             // 
-            // cbStockNegative
-            // 
-            cbStockNegative.AutoSize = true;
-            cbStockNegative.Location = new Point(228, 309);
-            cbStockNegative.Name = "cbStockNegative";
-            cbStockNegative.Size = new Size(178, 23);
-            cbStockNegative.TabIndex = 23;
-            cbStockNegative.Text = "الكمية بالسالب في المنتجات";
-            cbStockNegative.UseVisualStyleBackColor = true;
-            // 
             // ApplicationSettingsForm
             // 
             AutoScaleDimensions = new SizeF(8F, 19F);
@@ -920,5 +932,6 @@
         private CheckBox cbEditSalePrice;
         private CheckBox cbEditBuyPrice;
         private CheckBox cbStockNegative;
+        private CheckBox cbDirectLogin;
     }
 }

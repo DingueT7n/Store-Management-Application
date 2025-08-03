@@ -113,6 +113,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
                 cbEditWholeSaleprice.Checked = Properties.Settings.Default.ApplyWholeSale;
                 cbEditSalePrice.Checked = Properties.Settings.Default.ApplySalePrice;
                 cbStockNegative.Checked = Properties.Settings.Default.StockNeg;
+                cbDirectLogin.Checked = Properties.Settings.Default.DirectLogin;
 
 
                 txtSentenceUnderFacture.Text = Properties.Settings.Default.SentenceUnderFacture;
@@ -336,6 +337,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui
             Properties.Settings.Default.IdCustomerSale = Convert.ToInt32(cmbCustomers.SelectedValue).ToString();
 
             Properties.Settings.Default.StockNeg = cbStockNegative.Checked;
+            Properties.Settings.Default.DirectLogin = cbDirectLogin.Checked;
             Properties.Settings.Default.Save();
 
 

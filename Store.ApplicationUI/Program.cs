@@ -36,18 +36,25 @@ namespace Store.ApplicationUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            var loginForm = serviceProvider.GetRequiredService<LoginForm>();
-            var mainForm = serviceProvider.GetRequiredService<MainForm>();
-            Application.Run(mainForm);
-            //if (loginForm.ShowDialog() == DialogResult.OK)
-            //{
-            //    loginForm.Dispose();
-            //}
-            //else
-            //{
-            //    Application.Exit();
-            //}
-
+            if (Properties.Settings.Default.DirectLogin)
+            {
+                var mainForm = serviceProvider.GetRequiredService<MainForm>();
+                Application.Run(mainForm);
+            }
+            else
+            {
+                var loginForm = serviceProvider.GetRequiredService<LoginForm>();
+                if (loginForm.ShowDialog() == DialogResult.OK)
+                {
+                    var mainForm = serviceProvider.GetRequiredService<MainForm>();
+                    loginForm.Dispose();
+                    Application.Run(mainForm);
+                }
+                else
+                {
+                    Application.Exit();
+                }
+            }
 
         }
         private static void GlobalExceptionHandler(object sender, ThreadExceptionEventArgs e)
