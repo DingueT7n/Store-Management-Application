@@ -128,6 +128,11 @@ namespace Store.ApplicationUI.Code.Helper
         {
             ToastForm.Instance("اتصال بالسيريفر", $"لم يتم الاتصال بالسيرفر بسبب :{error}", Color.Red).Show();
         }
+        public static void ShowAssociationMustBeDeletedFirst()
+        {
+            ToastForm.Instance("خطأ في الحذف", $"لا يمكن الحذف مادام مرتبط بجداول اخرى ,حاول حذف الجداول المرتبطة به.", Color.Orange).Show();
+            MessageBox.Show($"لا يمكن الحذف مادام مرتبط بجداول اخرى ,حاول حذف الجداول المرتبطة به.");
+        }
         public static void ShowErrorHappened(string error)
         {
             ToastForm.Instance("للاسف فشلت العملية", $"لقد حدث خطأ :{error}", Color.Red).Show();

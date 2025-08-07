@@ -39,7 +39,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
         //    }
         //    return _addCategoryForm;
         //}
-        public async void SetCategoryToDgv()
+        public async Task SetCategoryToDgv()
         {
             DgvCategory.DataSource = new List<Store.Core.Entities.Products.Category>();
 
@@ -55,7 +55,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
             LoadingForm.Instance(_main).Show();
             if (await _context.Database.CanConnectAsync())
             {
-                SetCategoryToDgv();
+                await SetCategoryToDgv();
                 SetColumns();
 
             }
@@ -71,10 +71,10 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
             // Show EmptyDAta
 
         }
-        void vider()
+        async void vider()
         {
             txtNameِCategory.Text = "";
-            SetCategoryToDgv();
+            await SetCategoryToDgv();
         }
 
         private void SetColumns()
@@ -108,7 +108,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
                 {
                     Code.Helper.ToasterHelper.ShowAddToast();
                     vider(); // Clear the form after success
-                    SetCategoryToDgv(); // Refresh the DataGridView
+                    await SetCategoryToDgv(); // Refresh the DataGridView
                 }
                 else
                 {
@@ -171,7 +171,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
                     {
                         Code.Helper.ToasterHelper.ShowEditToast();
                         vider();
-                        SetCategoryToDgv(); // await if method is async
+                        await SetCategoryToDgv(); // await if method is async
                     }
                     else
                     {
@@ -211,7 +211,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
                     if (cate == "1")
                         Code.Helper.ToasterHelper.ShowDeletedToast();
 
-                    SetCategoryToDgv(); // Await this to update the UI properly
+                    await SetCategoryToDgv(); // Await this to update the UI properly
                 }
                 catch (Exception ex)
                 {

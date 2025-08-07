@@ -24,7 +24,7 @@ namespace Store.Infrastructure.Repositories
                 x.Notes.Contains(searchIteam)
 
                 )
-                    .OrderByDescending(x => x.Id).ToListAsync();
+                    .OrderBy(x => x.Id).ToListAsync();
 
             }
             catch

@@ -183,7 +183,39 @@ namespace Store.ApplicationUI.Gui.CustomersGui
                 ToasterHelper.PlayNotificationSound();
                 if (MsgHelper.ShowDeleteDialog())
                 {
-                    var customer = await _customersRepository.DeleteAsync(DgvِCustomer.CurrentRow.Cells[6].Value.ToString());
+                    var customerId = Convert.ToInt32(DgvِCustomer.CurrentRow.Cells[6].Value);
+
+                    // Step 1: Load all ProformaInvoices for this customer
+                    var invoices = await _context.ProformaInvoices
+                        .Where(p => p.CustomerId == customerId)
+                        .ToListAsync();
+
+                    if (invoices.Any())
+                    {
+                        // Step 2: Extract all invoice IDs
+                        var invoiceIds = invoices.Select(i => i.Id).ToList();
+
+                        // Step 3: Load and delete all ProformaInvoiceDetails first
+                        var details = await _context.ProformaInvoiceDetails
+                            .Where(d => invoiceIds.Contains(d.ProformaId))
+                            .ToListAsync();
+
+                        _context.ProformaInvoiceDetails.RemoveRange(details);
+                        await _context.SaveChangesAsync();
+
+                        // Step 4: Delete ProformaInvoices
+                        _context.ProformaInvoices.RemoveRange(invoices);
+                        await _context.SaveChangesAsync();
+                    }
+
+
+                    // Step 2: Now safely delete the customer
+                    var customer = await _customersRepository.GetByIdAsync(customerId);
+                    if (customer != null)
+                    {
+                        await _customersRepository.DeleteAsync(customerId.ToString());
+                        await _context.SaveChangesAsync();
+                    }
 
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 

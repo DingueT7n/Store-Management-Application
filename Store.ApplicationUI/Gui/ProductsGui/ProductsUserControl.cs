@@ -34,7 +34,6 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
 
         }
-
         private async void btnAddProduct_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
@@ -208,6 +207,14 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             //DgvProducts.Columns[14].Visible = false;
             //DgvProducts.Columns[13].Visible = false;
             //DgvProducts.Columns[15].Visible = false;
+            // Enable sorting for visible columns
+            foreach (DataGridViewColumn column in DgvProducts.Columns)
+            {
+                if (column.Visible)
+                {
+                    column.SortMode = DataGridViewColumnSortMode.Programmatic;
+                }
+            }
         }
 
         private async void btnRefresh_Click(object sender, EventArgs e)
@@ -288,12 +295,12 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             }
         }
 
-        private void btnAddCategory_Click(object sender, EventArgs e)
+        private async void btnAddCategory_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
 
 
-            var form = _controlManager.GetF<AddCategoryForm>();
+            var form = await _controlManager.GetFAsync<AddCategoryForm>();
 
             if (!form.Visible)
             {
@@ -305,11 +312,11 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             }
         }
 
-        private void btnAddStore_Click(object sender, EventArgs e)
+        private async void btnAddStore_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
 
-            var form = _controlManager.GetF<AddStoreForm>();
+            var form = await _controlManager.GetFAsync<AddStoreForm>();
 
             if (!form.Visible)
             {

@@ -58,7 +58,7 @@ namespace Store.Infrastructure.Data.Config
 
             builder.HasOne(x => x.Customer)
                 .WithMany()
-                .HasForeignKey(x => x.CustomerId).OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(x => x.CustomerId).OnDelete(DeleteBehavior.NoAction);
             builder.Property(p => p.TotalFaacture).HasColumnType("decimal(18,2)");
 
         }

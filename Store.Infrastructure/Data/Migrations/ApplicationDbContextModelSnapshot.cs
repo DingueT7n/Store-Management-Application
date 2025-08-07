@@ -53,7 +53,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("Deserveds");
+                    b.ToTable("Deserveds", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.AllDeserved.DeservedType", b =>
@@ -69,7 +69,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DeservedsTypes");
+                    b.ToTable("DeservedsTypes", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.AllDeserved.TaxesReport", b =>
@@ -112,7 +112,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TaxesReports");
+                    b.ToTable("TaxesReports", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Banks.Bank", b =>
@@ -129,7 +129,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Banks");
+                    b.ToTable("Banks", (string)null);
 
                     b.HasData(
                         new
@@ -168,7 +168,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BankDeposits");
+                    b.ToTable("BankDeposits", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Banks.BankWithdraw", b =>
@@ -200,7 +200,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BankWithdraws");
+                    b.ToTable("BankWithdraws", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Buys.Buy", b =>
@@ -240,7 +240,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("SupplierId");
 
-                    b.ToTable("Buys");
+                    b.ToTable("Buys", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Buys.BuyDetail", b =>
@@ -292,7 +292,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Sup_ID");
 
-                    b.ToTable("BuyDetails");
+                    b.ToTable("BuyDetails", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Caisses.Caisse", b =>
@@ -316,7 +316,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Caisses");
+                    b.ToTable("Caisses", (string)null);
 
                     b.HasData(
                         new
@@ -371,7 +371,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CaissesBankTransferes");
+                    b.ToTable("CaissesBankTransferes", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Caisses.CaisseDeposit", b =>
@@ -408,7 +408,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Caisse_ID");
 
-                    b.ToTable("CaissesDeposits");
+                    b.ToTable("CaissesDeposits", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Caisses.CaisseOperation", b =>
@@ -483,7 +483,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("CaisseStatusDetailId");
 
-                    b.ToTable("CaisseOperations");
+                    b.ToTable("CaisseOperations", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Caisses.CaisseStatusDetail", b =>
@@ -546,7 +546,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("CaisseId1");
 
-                    b.ToTable("CaisseStatusDetails");
+                    b.ToTable("CaisseStatusDetails", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Caisses.CaisseTransfere", b =>
@@ -585,7 +585,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Caisse_To");
 
-                    b.ToTable("CaissesTransferes");
+                    b.ToTable("CaissesTransferes", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Caisses.CaisseWithdraw", b =>
@@ -622,7 +622,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Caisse_ID");
 
-                    b.ToTable("CaissesWithdraws");
+                    b.ToTable("CaissesWithdraws", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Customers.Customer", b =>
@@ -657,7 +657,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
 
                     b.HasData(
                         new
@@ -739,7 +739,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Order_ID");
 
-                    b.ToTable("CustomersMoneys");
+                    b.ToTable("CustomersMoneys", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Customers.CustomerReport", b =>
@@ -776,7 +776,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Order_ID");
 
-                    b.ToTable("CustomersReports");
+                    b.ToTable("CustomersReports", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Employees.Employee", b =>
@@ -812,7 +812,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Employees.EmployeeBorrowItem", b =>
@@ -848,7 +848,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Item_Id");
 
-                    b.ToTable("EmployeesBorrowItems");
+                    b.ToTable("EmployeesBorrowItems", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Employees.EmployeeBorrowMoney", b =>
@@ -888,7 +888,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Emp_Id");
 
-                    b.ToTable("EmployeesBorrowMonies");
+                    b.ToTable("EmployeesBorrowMonies", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Employees.EmployeeSalary", b =>
@@ -930,7 +930,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Emp_ID");
 
-                    b.ToTable("EmployeesSalaries");
+                    b.ToTable("EmployeesSalaries", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Employees.EmployeeSalaryMinus", b =>
@@ -964,7 +964,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Emp_ID");
 
-                    b.ToTable("EmployeesSalaryMinus");
+                    b.ToTable("EmployeesSalaryMinus", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Helpers.AlertTable", b =>
@@ -1004,7 +1004,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AlertsTable");
+                    b.ToTable("AlertsTable", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Helpers.BarcodePrint", b =>
@@ -1029,7 +1029,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BarcodePrints");
+                    b.ToTable("BarcodePrints", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Helpers.OrderPrintData", b =>
@@ -1075,7 +1075,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OrderPrintData");
+                    b.ToTable("OrderPrintData", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Helpers.RandomBarcode", b =>
@@ -1083,7 +1083,7 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<double>("Barcode")
                         .HasColumnType("float");
 
-                    b.ToTable("RandomBarcode");
+                    b.ToTable("RandomBarcode", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Products.Category", b =>
@@ -1100,7 +1100,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
 
                     b.HasData(
                         new
@@ -1224,7 +1224,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Products.ProductDiscount", b =>
@@ -1267,7 +1267,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Store_Id");
 
-                    b.ToTable("ProductDiscounts");
+                    b.ToTable("ProductDiscounts", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Products.ProductFamily", b =>
@@ -1294,7 +1294,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductFamilies");
+                    b.ToTable("ProductFamilies", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Products.ProductOutStore", b =>
@@ -1337,7 +1337,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Pro_ID");
 
-                    b.ToTable("ProductsOutStore");
+                    b.ToTable("ProductsOutStore", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Products.ProductQuickAccess", b =>
@@ -1365,7 +1365,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Pro_Id");
 
-                    b.ToTable("ProductQuickAccess");
+                    b.ToTable("ProductQuickAccess", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Products.ProductTransfer", b =>
@@ -1416,7 +1416,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Pro_ID");
 
-                    b.ToTable("ProductsTransfers");
+                    b.ToTable("ProductsTransfers", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Products.ProductsQuantitie", b =>
@@ -1458,7 +1458,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Store_ID");
 
-                    b.ToTable("ProductsQuantities");
+                    b.ToTable("ProductsQuantities", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Returns.Return", b =>
@@ -1495,7 +1495,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Returns");
+                    b.ToTable("Returns", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Returns.ReturnDetail", b =>
@@ -1547,7 +1547,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Pro_ID");
 
-                    b.ToTable("ReturnsDetails");
+                    b.ToTable("ReturnsDetails", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Sales.ProformaInvoice", b =>
@@ -1581,7 +1581,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("ProformaInvoices");
+                    b.ToTable("ProformaInvoices", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Sales.ProformaInvoiceDetails", b =>
@@ -1628,7 +1628,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("ProformaInvoiceId");
 
-                    b.ToTable("ProformaInvoiceDetails");
+                    b.ToTable("ProformaInvoiceDetails", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Sales.Sale", b =>
@@ -1668,7 +1668,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Sales");
+                    b.ToTable("Sales", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Sales.SaleDetail", b =>
@@ -1720,7 +1720,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Pro_ID");
 
-                    b.ToTable("SalesDetails");
+                    b.ToTable("SalesDetails", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Sales.SaleProfit", b =>
@@ -1777,7 +1777,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Pro_ID");
 
-                    b.ToTable("SalesProfits");
+                    b.ToTable("SalesProfits", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Sales.sale8cm", b =>
@@ -1828,7 +1828,7 @@ namespace Store.Infrastructure.Data.Migrations
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("sale8cms");
+                    b.ToTable("sale8cms", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Stores.Store", b =>
@@ -1844,7 +1844,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Stores");
+                    b.ToTable("Stores", (string)null);
 
                     b.HasData(
                         new
@@ -1886,7 +1886,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Suppliers");
+                    b.ToTable("Suppliers", (string)null);
 
                     b.HasData(
                         new
@@ -1958,7 +1958,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Sup_ID");
 
-                    b.ToTable("SuppliersMoneys");
+                    b.ToTable("SuppliersMoneys", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Suppliers.SupplierReport", b =>
@@ -1995,7 +1995,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("Sup_ID");
 
-                    b.ToTable("SuppliersReports");
+                    b.ToTable("SuppliersReports", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Users.User", b =>
@@ -2074,7 +2074,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("UserSupplierId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Users.UserBuy", b =>
@@ -2098,7 +2098,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("User_Id");
 
-                    b.ToTable("UserBuys");
+                    b.ToTable("UserBuys", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Users.UserCaisseAndBank", b =>
@@ -2137,7 +2137,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("User_Id");
 
-                    b.ToTable("UserCaissesAndBanks");
+                    b.ToTable("UserCaissesAndBanks", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Users.UserCustomer", b =>
@@ -2167,7 +2167,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("User_Id");
 
-                    b.ToTable("UserCustomers");
+                    b.ToTable("UserCustomers", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Users.UserDeservedAndTax", b =>
@@ -2191,7 +2191,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("User_Id");
 
-                    b.ToTable("UserDeservedAndTaxs");
+                    b.ToTable("UserDeservedAndTaxs", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Users.UserEmployee", b =>
@@ -2233,7 +2233,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("User_Id");
 
-                    b.ToTable("UserEmployees");
+                    b.ToTable("UserEmployees", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Users.UserProductAndStore", b =>
@@ -2272,7 +2272,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("User_Id");
 
-                    b.ToTable("UserProductsAndStores");
+                    b.ToTable("UserProductsAndStores", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Users.UserRefund", b =>
@@ -2296,7 +2296,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("User_Id");
 
-                    b.ToTable("UserRefunds");
+                    b.ToTable("UserRefunds", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Users.UserSale", b =>
@@ -2323,7 +2323,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("User_Id");
 
-                    b.ToTable("UserSales");
+                    b.ToTable("UserSales", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Users.UserSetting", b =>
@@ -2362,7 +2362,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("User_Id");
 
-                    b.ToTable("UserSettings");
+                    b.ToTable("UserSettings", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Users.UserSupplier", b =>
@@ -2392,7 +2392,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasIndex("User_Id");
 
-                    b.ToTable("UserSuppliers");
+                    b.ToTable("UserSuppliers", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Vouchers.ReceiptVoucher", b =>
@@ -2424,7 +2424,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReceiptVouchers");
+                    b.ToTable("ReceiptVouchers", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Vouchers.SendVoucher", b =>
@@ -2456,7 +2456,7 @@ namespace Store.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SendVouchers");
+                    b.ToTable("SendVouchers", (string)null);
                 });
 
             modelBuilder.Entity("Store.Core.Entities.AllDeserved.Deserved", b =>
