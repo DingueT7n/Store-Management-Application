@@ -36,9 +36,9 @@ namespace Store.ApplicationUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            var mainForm = serviceProvider.GetRequiredService<MainForm>();
             if (Properties.Settings.Default.DirectLogin)
             {
-                var mainForm = serviceProvider.GetRequiredService<MainForm>();
                 Application.Run(mainForm);
             }
             else
@@ -46,7 +46,7 @@ namespace Store.ApplicationUI
                 var loginForm = serviceProvider.GetRequiredService<LoginForm>();
                 if (loginForm.ShowDialog() == DialogResult.OK)
                 {
-                    var mainForm = serviceProvider.GetRequiredService<MainForm>();
+
                     loginForm.Dispose();
                     Application.Run(mainForm);
                 }

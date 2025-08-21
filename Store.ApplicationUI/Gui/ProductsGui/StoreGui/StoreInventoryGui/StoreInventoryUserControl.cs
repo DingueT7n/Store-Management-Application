@@ -379,5 +379,32 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
                 }
             }
         }
+
+        private async void تحويلالمنتجاتبينالمخازنToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            var form = await _controlManager.GetFAsync<StoreTransfertForm>();
+
+
+            form.ShowDialog();
+        }
+
+        private async void اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            var form = await _controlManager.GetFAsync<StoreDamagedProductForm>();
+            form.ShowDialog();
+        }
+
+        private async void جردالسلعاضافةتعديلاطلاعToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            InverntoryOperationsForm form = await _controlManager.GetFAsync<InverntoryOperationsForm>();
+            form.ShowDialog();
+        }
+
+        private void تصديرالىملفExcelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

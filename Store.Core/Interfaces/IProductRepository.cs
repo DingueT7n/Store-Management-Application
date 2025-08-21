@@ -10,8 +10,8 @@ namespace Store.Core.Interfaces
         //Task<bool> DeleteAsyncWithPicture(int id);
         //Task<int> CountProductsAsync(Product ProdParam);
         public Product GetProductBarCode(string barCode);
-        public Task<List<ProductOutdated>> GetAllProductOutdated();
-        public Task<List<ProductMinQty>> GetAllProductMinQty(int skip, int take);
+        public Task<List<ProductOutdated>> GetAllProductOutdated(int skip, int take);
+        public Task<PaginatedResult<ProductMinQty>> GetAllProductMinQty(int skip, int take);
         public Task<List<Product>> SearchAll(string searchItem, int pageSize, int skip);
         public List<Product> SearchByUser(string userId, string searchIteam);
 

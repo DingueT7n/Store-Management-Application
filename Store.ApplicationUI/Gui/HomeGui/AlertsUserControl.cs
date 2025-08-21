@@ -38,6 +38,8 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 SetColumns();
                 await SetAlertsToPanel();
                 await SetProductsToDgv(0);
+                await SetProductsToDgvToProductminQty(0);
+                await SetProductsToDgvToProductOutdated(0);
                 //_data.Clear();
             }
             else
@@ -114,10 +116,10 @@ namespace Store.ApplicationUI.Gui.HomeGui
         {
             try
             {
-                var data = await _repository.GetAllProductMinQty(skip, Properties.Settings.Default.NoOfDataInDgvs);
-                DgvProducts.DataSource = data;
-                var dataOutDated = await _repository.GetAllProductOutdated();
-                dgvDataOutdated.DataSource = dataOutDated;
+                //var data = await _repository.GetAllProductMinQty(skip, Properties.Settings.Default.NoOfDataInDgvs);
+                //DgvProducts.DataSource = data;
+                //var dataOutDated = await _repository.GetAllProductOutdated(skip, Properties.Settings.Default.NoOfDataInDgvs);
+                //dgvDataOutdated.DataSource = dataOutDated;
 
                 var dataReminderDateIsUpSupplier = await GetAllDebtSuppliers();
                 dataDebtSuppliers.DataSource = dataReminderDateIsUpSupplier;
@@ -125,11 +127,46 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 var dataReminderDateIsUpCustomer = await GetAllDebtCustomer();
                 dataCustomerDebts.DataSource = dataReminderDateIsUpCustomer;
 
-                double value = await _context.Products.AsNoTracking()
-     .Where(x => x.Quentity <= x.MinQty)
-     .Select(x => x.Id) // Only select ID, avoids loading full objects
-     .CountAsync() / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
-                int pageCount = Convert.ToInt32(Math.Ceiling(value));
+                //           double value = await _context.Products.AsNoTracking()
+                //.Where(x => x.Quentity <= x.MinQty)
+                //.Select(x => x.Id) // Only select ID, avoids loading full objects
+                //.CountAsync() / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
+                //           int pageCount = Convert.ToInt32(Math.Ceiling(value));
+
+                // Update pagination combo box
+                //cmbpagination.Items.Clear();
+                //for (int i = 0; i < pageCount; i++)
+                //{
+                //    cmbpagination.Items.Add(i + 1);
+                //}
+
+                //if (cmbpagination.Items.Count > 0)
+                //{
+                //    cmbpagination.SelectedIndex = skip / Properties.Settings.Default.NoOfDataInDgvs;
+                //}
+
+                //PaginationHide();
+                //PaginationHide2();
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
+        }
+        public async Task SetProductsToDgvToProductminQty(int skip)
+        {
+            try
+            {
+                int take = Properties.Settings.Default.NoOfDataInDgvs;
+
+                var result = await _repository.GetAllProductMinQty(skip, take);
+
+                // Bind data
+                DgvProducts.DataSource = result.Items;
+
+                // Calculate total pages
+                int pageCount = (int)Math.Ceiling(result.TotalCount / (double)take);
 
                 // Update pagination combo box
                 cmbpagination.Items.Clear();
@@ -140,10 +177,45 @@ namespace Store.ApplicationUI.Gui.HomeGui
 
                 if (cmbpagination.Items.Count > 0)
                 {
-                    cmbpagination.SelectedIndex = skip / Properties.Settings.Default.NoOfDataInDgvs;
+                    cmbpagination.SelectedIndex = skip / take;
                 }
 
                 PaginationHide();
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
+            }
+        }
+        public async Task SetProductsToDgvToProductOutdated(int skip)
+        {
+            try
+            {
+                var dataOutDated = await _repository.GetAllProductOutdated(skip, Properties.Settings.Default.NoOfDataInDgvs);
+                dgvDataOutdated.DataSource = dataOutDated;
+
+                double value = await _context.ProductsQuantities.AsNoTracking()
+                    .Include(x => x.Product)
+                                .Where(x => x.DateExpiration <= DateTime.Now && x.Qty > 0)
+     .Select(x => x.Id) // Only select ID, avoids loading full objects
+     .CountAsync() / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
+                int pageCount = Convert.ToInt32(Math.Ceiling(value));
+
+                // Update pagination combo box
+                cmbpagination1.Items.Clear();
+                for (int i = 0; i < pageCount; i++)
+                {
+                    cmbpagination1.Items.Add(i + 1);
+                }
+
+                if (cmbpagination1.Items.Count > 0)
+                {
+                    cmbpagination1.SelectedIndex = skip / Properties.Settings.Default.NoOfDataInDgvs;
+                }
+
+                PaginationHide2();
+
             }
             catch (Exception ex)
             {
@@ -156,6 +228,12 @@ namespace Store.ApplicationUI.Gui.HomeGui
             btnNext.Enabled = cmbpagination.SelectedIndex < cmbpagination.Items.Count - 1 && !dgvHelper.IsEmpty(DgvProducts);
             btnPrev.Enabled = cmbpagination.SelectedIndex > 0 && !dgvHelper.IsEmpty(DgvProducts);
             cmbpagination.Enabled = !dgvHelper.IsEmpty(DgvProducts);
+        }
+        void PaginationHide2()
+        {
+            btnNext2.Enabled = cmbpagination1.SelectedIndex < cmbpagination1.Items.Count - 1 && !dgvHelper.IsEmpty(dgvDataOutdated);
+            btnPrev2.Enabled = cmbpagination1.SelectedIndex > 0 && !dgvHelper.IsEmpty(dgvDataOutdated);
+            cmbpagination1.Enabled = !dgvHelper.IsEmpty(dgvDataOutdated);
         }
         public async Task SetAlertsToPanel()
         {
@@ -386,7 +464,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
             {
                 cmbpagination.SelectedIndex++;
                 int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
-                await SetProductsToDgv(skip);
+                await SetProductsToDgvToProductminQty(skip);
 
             }
         }
@@ -399,7 +477,7 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 cmbpagination.SelectedIndex--;
                 int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
 
-                await SetProductsToDgv(skip);
+                await SetProductsToDgvToProductminQty(skip);
             }
         }
 
@@ -409,13 +487,47 @@ namespace Store.ApplicationUI.Gui.HomeGui
             if (cmbpagination.SelectedIndex != -1)
             {
                 int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
-                await SetProductsToDgv(skip);
+                await SetProductsToDgvToProductminQty(skip);
             }
         }
 
         private void AlertsUserControl_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private async void btnNext2_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (cmbpagination1.SelectedIndex < cmbpagination1.Items.Count - 1)
+            {
+                cmbpagination1.SelectedIndex++;
+                int skip = cmbpagination1.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+                await SetProductsToDgvToProductOutdated(skip);
+
+            }
+        }
+
+        private async void btnPrev2_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (cmbpagination1.SelectedIndex > 0)
+            {
+                cmbpagination1.SelectedIndex--;
+                int skip = cmbpagination1.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+
+                await SetProductsToDgvToProductOutdated(skip);
+            }
+        }
+
+        private async void cmbpagination1_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (cmbpagination1.SelectedIndex != -1)
+            {
+                int skip = cmbpagination1.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
+                await SetProductsToDgvToProductOutdated(skip);
+            }
         }
     }
 }

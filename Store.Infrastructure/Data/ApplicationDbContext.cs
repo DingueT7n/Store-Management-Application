@@ -153,6 +153,9 @@ namespace Store.Infrastructure.Data
         public DbSet<ProformaInvoiceDetails> ProformaInvoiceDetails { get; set; }
 
         public DbSet<Core.Entities.Stores.Store> Stores { get; set; }
+        public DbSet<Core.Entities.Stores.InventoryCheck> InventoryChecks { get; set; }
+        public DbSet<Core.Entities.Stores.InventorySession> InventorySessions { get; set; }
+
         public DbSet<Caisse> Caisses { get; set; }
         public DbSet<CaisseOperation> CaisseOperations { get; set; }
         public DbSet<CaisseStatusDetail> CaisseStatusDetails { get; set; }

@@ -126,6 +126,8 @@ namespace Store.ApplicationUI.Code.System
 
 
             services.AddScoped<IStoresRepository, StoresRepository>();
+            services.AddScoped<IInventoryCheckRepository, InventoryCheckRepository>();
+            services.AddScoped<IInventorySessionRepository, InventorySessionRepository>();
             services.AddScoped<IReceiptVoucherRepository, ReceiptVoucherRepository>();
             services.AddScoped<ISendVoucherRepository, SendVoucherRepository>();
 
@@ -212,6 +214,7 @@ namespace Store.ApplicationUI.Code.System
             services.AddScoped<StoreDamagedProductUserControl>();
             services.AddScoped<StoreDamagedProductForm>();
             services.AddScoped<AddStoreForm>();
+            services.AddScoped<InverntoryOperationsForm>();
             services.AddScoped<StoreInventoryUserControl>();
             services.AddScoped<StoreTransfertReportUserControl>();
             services.AddScoped<StoreTransfertForm>();

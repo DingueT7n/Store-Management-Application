@@ -29,10 +29,18 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StoreInventoryUserControl));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            tabControl1 = new TabControl();
+            tabPage1 = new TabPage();
+            PanelPagination = new Panel();
+            cmbpagination = new ComboBox();
+            btnPrev = new Button();
+            btnNext = new Button();
+            lblEmptyData = new Label();
+            DgvSales = new DataGridView();
             OperationsflowLayoutPanel = new FlowLayoutPanel();
             gbPayChoiches = new GroupBox();
             flowLayoutPanelreturnsoption = new FlowLayoutPanel();
@@ -51,11 +59,12 @@
             lblQtyInTable = new Label();
             lblProductInTables = new Label();
             panelButtons = new Panel();
-            button1 = new Button();
-            button2 = new Button();
-            btnExportCustomer = new Button();
-            lblEmptyData = new Label();
-            DgvSales = new DataGridView();
+            menuStrip1 = new MenuStrip();
+            عملياتالجردالمتاحةToolStripMenuItem = new ToolStripMenuItem();
+            تحويلالمنتجاتبينالمخازنToolStripMenuItem = new ToolStripMenuItem();
+            اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem = new ToolStripMenuItem();
+            جردالسلعاضافةتعديلاطلاعToolStripMenuItem = new ToolStripMenuItem();
+            تصديرالىملفExcelToolStripMenuItem = new ToolStripMenuItem();
             flowLayoutPanelStats = new FlowLayoutPanel();
             panel1 = new Panel();
             txtAllProducts = new TextBox();
@@ -78,10 +87,11 @@
             panel3 = new Panel();
             txtCapital = new TextBox();
             label3 = new Label();
-            PanelPagination = new Panel();
-            cmbpagination = new ComboBox();
-            btnPrev = new Button();
-            btnNext = new Button();
+            tabPage2 = new TabPage();
+            tabControl1.SuspendLayout();
+            tabPage1.SuspendLayout();
+            PanelPagination.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)DgvSales).BeginInit();
             OperationsflowLayoutPanel.SuspendLayout();
             gbPayChoiches.SuspendLayout();
             flowLayoutPanelreturnsoption.SuspendLayout();
@@ -89,7 +99,7 @@
             panelstatisticsandOperations.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             panelButtons.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)DgvSales).BeginInit();
+            menuStrip1.SuspendLayout();
             flowLayoutPanelStats.SuspendLayout();
             panel1.SuspendLayout();
             panel7.SuspendLayout();
@@ -98,8 +108,140 @@
             panel5.SuspendLayout();
             panel6.SuspendLayout();
             panel3.SuspendLayout();
-            PanelPagination.SuspendLayout();
             SuspendLayout();
+            // 
+            // tabControl1
+            // 
+            tabControl1.Controls.Add(tabPage1);
+            tabControl1.Controls.Add(tabPage2);
+            tabControl1.Dock = DockStyle.Fill;
+            tabControl1.Location = new Point(0, 0);
+            tabControl1.Name = "tabControl1";
+            tabControl1.RightToLeftLayout = true;
+            tabControl1.SelectedIndex = 0;
+            tabControl1.Size = new Size(1034, 681);
+            tabControl1.TabIndex = 0;
+            // 
+            // tabPage1
+            // 
+            tabPage1.BackColor = Color.White;
+            tabPage1.Controls.Add(PanelPagination);
+            tabPage1.Controls.Add(lblEmptyData);
+            tabPage1.Controls.Add(DgvSales);
+            tabPage1.Controls.Add(OperationsflowLayoutPanel);
+            tabPage1.Controls.Add(flowLayoutPanelStats);
+            tabPage1.Location = new Point(4, 28);
+            tabPage1.Name = "tabPage1";
+            tabPage1.Padding = new Padding(3);
+            tabPage1.Size = new Size(1026, 649);
+            tabPage1.TabIndex = 0;
+            tabPage1.Text = "شاشة تفاصيل المخازن";
+            // 
+            // PanelPagination
+            // 
+            PanelPagination.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            PanelPagination.Controls.Add(cmbpagination);
+            PanelPagination.Controls.Add(btnPrev);
+            PanelPagination.Controls.Add(btnNext);
+            PanelPagination.Location = new Point(6, 520);
+            PanelPagination.Name = "PanelPagination";
+            PanelPagination.Size = new Size(169, 40);
+            PanelPagination.TabIndex = 38;
+            // 
+            // cmbpagination
+            // 
+            cmbpagination.Dock = DockStyle.Fill;
+            cmbpagination.Font = new Font("Calibri", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            cmbpagination.FormattingEnabled = true;
+            cmbpagination.Location = new Point(50, 0);
+            cmbpagination.Name = "cmbpagination";
+            cmbpagination.Size = new Size(69, 37);
+            cmbpagination.TabIndex = 28;
+            // 
+            // btnPrev
+            // 
+            btnPrev.Dock = DockStyle.Left;
+            btnPrev.Image = (Image)resources.GetObject("btnPrev.Image");
+            btnPrev.ImeMode = ImeMode.NoControl;
+            btnPrev.Location = new Point(0, 0);
+            btnPrev.Name = "btnPrev";
+            btnPrev.Size = new Size(50, 40);
+            btnPrev.TabIndex = 26;
+            btnPrev.UseVisualStyleBackColor = true;
+            // 
+            // btnNext
+            // 
+            btnNext.Dock = DockStyle.Right;
+            btnNext.Image = (Image)resources.GetObject("btnNext.Image");
+            btnNext.ImeMode = ImeMode.NoControl;
+            btnNext.Location = new Point(119, 0);
+            btnNext.Name = "btnNext";
+            btnNext.Size = new Size(50, 40);
+            btnNext.TabIndex = 25;
+            btnNext.UseVisualStyleBackColor = true;
+            // 
+            // lblEmptyData
+            // 
+            lblEmptyData.Anchor = AnchorStyles.None;
+            lblEmptyData.AutoSize = true;
+            lblEmptyData.BackColor = Color.Transparent;
+            lblEmptyData.Font = new Font("Calibri", 12F, FontStyle.Bold);
+            lblEmptyData.ForeColor = Color.Crimson;
+            lblEmptyData.ImeMode = ImeMode.NoControl;
+            lblEmptyData.Location = new Point(451, 353);
+            lblEmptyData.Name = "lblEmptyData";
+            lblEmptyData.Size = new Size(133, 19);
+            lblEmptyData.TabIndex = 35;
+            lblEmptyData.Text = "لا توجد بيانات لعرضها";
+            lblEmptyData.TextAlign = ContentAlignment.MiddleCenter;
+            lblEmptyData.Visible = false;
+            // 
+            // DgvSales
+            // 
+            DgvSales.AllowUserToAddRows = false;
+            DgvSales.AllowUserToResizeColumns = false;
+            DgvSales.AllowUserToResizeRows = false;
+            dataGridViewCellStyle5.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvSales.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
+            DgvSales.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            DgvSales.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            DgvSales.BackgroundColor = Color.White;
+            DgvSales.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            DgvSales.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle6.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle6.ForeColor = Color.White;
+            dataGridViewCellStyle6.SelectionBackColor = Color.DodgerBlue;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            DgvSales.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            DgvSales.ColumnHeadersHeight = 40;
+            DgvSales.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.BackColor = SystemColors.Window;
+            dataGridViewCellStyle7.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle7.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.False;
+            DgvSales.DefaultCellStyle = dataGridViewCellStyle7;
+            DgvSales.Dock = DockStyle.Fill;
+            DgvSales.EnableHeadersVisualStyles = false;
+            DgvSales.GridColor = SystemColors.ControlDark;
+            DgvSales.Location = new Point(3, 196);
+            DgvSales.MultiSelect = false;
+            DgvSales.Name = "DgvSales";
+            DgvSales.ReadOnly = true;
+            DgvSales.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            DgvSales.RowHeadersVisible = false;
+            DgvSales.RowHeadersWidth = 21;
+            DgvSales.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dataGridViewCellStyle8.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvSales.RowsDefaultCellStyle = dataGridViewCellStyle8;
+            DgvSales.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            DgvSales.Size = new Size(1020, 370);
+            DgvSales.TabIndex = 36;
             // 
             // OperationsflowLayoutPanel
             // 
@@ -108,20 +250,19 @@
             OperationsflowLayoutPanel.Controls.Add(panelstatisticsandOperations);
             OperationsflowLayoutPanel.Controls.Add(panelButtons);
             OperationsflowLayoutPanel.Dock = DockStyle.Top;
-            OperationsflowLayoutPanel.FlowDirection = FlowDirection.TopDown;
-            OperationsflowLayoutPanel.Location = new Point(0, 0);
+            OperationsflowLayoutPanel.Location = new Point(3, 3);
             OperationsflowLayoutPanel.Margin = new Padding(5);
             OperationsflowLayoutPanel.Name = "OperationsflowLayoutPanel";
-            OperationsflowLayoutPanel.Size = new Size(1034, 164);
-            OperationsflowLayoutPanel.TabIndex = 15;
+            OperationsflowLayoutPanel.Size = new Size(1020, 193);
+            OperationsflowLayoutPanel.TabIndex = 34;
             // 
             // gbPayChoiches
             // 
             gbPayChoiches.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             gbPayChoiches.Controls.Add(flowLayoutPanelreturnsoption);
-            gbPayChoiches.Location = new Point(574, 3);
+            gbPayChoiches.Location = new Point(594, 3);
             gbPayChoiches.Name = "gbPayChoiches";
-            gbPayChoiches.Size = new Size(457, 158);
+            gbPayChoiches.Size = new Size(423, 176);
             gbPayChoiches.TabIndex = 8;
             gbPayChoiches.TabStop = false;
             gbPayChoiches.Text = "اختيارات البحث";
@@ -135,7 +276,7 @@
             flowLayoutPanelreturnsoption.Dock = DockStyle.Top;
             flowLayoutPanelreturnsoption.Location = new Point(3, 23);
             flowLayoutPanelreturnsoption.Name = "flowLayoutPanelreturnsoption";
-            flowLayoutPanelreturnsoption.Size = new Size(451, 129);
+            flowLayoutPanelreturnsoption.Size = new Size(417, 147);
             flowLayoutPanelreturnsoption.TabIndex = 28;
             // 
             // rbStoreAll
@@ -143,7 +284,7 @@
             rbStoreAll.AutoSize = true;
             rbStoreAll.Checked = true;
             rbStoreAll.ImeMode = ImeMode.NoControl;
-            rbStoreAll.Location = new Point(348, 15);
+            rbStoreAll.Location = new Point(314, 15);
             rbStoreAll.Margin = new Padding(15, 15, 15, 3);
             rbStoreAll.Name = "rbStoreAll";
             rbStoreAll.Size = new Size(88, 23);
@@ -151,7 +292,6 @@
             rbStoreAll.TabStop = true;
             rbStoreAll.Text = "كل المخازن";
             rbStoreAll.UseVisualStyleBackColor = true;
-            rbStoreAll.CheckedChanged += rbStoreAll_CheckedChanged;
             // 
             // rbSelectedStore
             // 
@@ -159,31 +299,29 @@
             rbSelectedStore.BackColor = Color.White;
             rbSelectedStore.ForeColor = Color.Green;
             rbSelectedStore.ImeMode = ImeMode.NoControl;
-            rbSelectedStore.Location = new Point(226, 15);
+            rbSelectedStore.Location = new Point(192, 15);
             rbSelectedStore.Margin = new Padding(15, 15, 15, 3);
             rbSelectedStore.Name = "rbSelectedStore";
             rbSelectedStore.Size = new Size(92, 23);
             rbSelectedStore.TabIndex = 7;
             rbSelectedStore.Text = "مخزن محدد";
             rbSelectedStore.UseVisualStyleBackColor = false;
-            rbSelectedStore.CheckedChanged += rbSelectedStore_CheckedChanged;
             // 
             // cmbStores
             // 
             cmbStores.Enabled = false;
             cmbStores.FormattingEnabled = true;
-            cmbStores.Location = new Point(16, 15);
+            cmbStores.Location = new Point(10, 15);
             cmbStores.Margin = new Padding(3, 15, 3, 3);
             cmbStores.Name = "cmbStores";
-            cmbStores.Size = new Size(192, 27);
+            cmbStores.Size = new Size(164, 27);
             cmbStores.TabIndex = 8;
-            cmbStores.SelectionChangeCommitted += cmbStores_SelectionChangeCommitted;
             // 
             // SearchPanel
             // 
             SearchPanel.Controls.Add(txtSearch);
             SearchPanel.Controls.Add(btnSearch);
-            SearchPanel.Location = new Point(97, 60);
+            SearchPanel.Location = new Point(63, 60);
             SearchPanel.Margin = new Padding(60, 15, 3, 3);
             SearchPanel.Name = "SearchPanel";
             SearchPanel.Size = new Size(294, 40);
@@ -200,7 +338,6 @@
             txtSearch.Size = new Size(244, 40);
             txtSearch.TabIndex = 9;
             txtSearch.TextAlign = HorizontalAlignment.Center;
-            txtSearch.KeyDown += txtSearch_KeyDown;
             // 
             // btnSearch
             // 
@@ -212,15 +349,14 @@
             btnSearch.Size = new Size(50, 40);
             btnSearch.TabIndex = 7;
             btnSearch.UseVisualStyleBackColor = true;
-            btnSearch.Click += btnSearch_Click;
             // 
             // panelstatisticsandOperations
             // 
             panelstatisticsandOperations.Controls.Add(lblTitleForm);
             panelstatisticsandOperations.Controls.Add(flowLayoutPanel1);
-            panelstatisticsandOperations.Location = new Point(268, 3);
+            panelstatisticsandOperations.Location = new Point(252, 3);
             panelstatisticsandOperations.Name = "panelstatisticsandOperations";
-            panelstatisticsandOperations.Size = new Size(300, 158);
+            panelstatisticsandOperations.Size = new Size(336, 179);
             panelstatisticsandOperations.TabIndex = 10;
             // 
             // lblTitleForm
@@ -229,12 +365,11 @@
             lblTitleForm.Font = new Font("Calibri", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblTitleForm.ForeColor = Color.Red;
             lblTitleForm.ImeMode = ImeMode.NoControl;
-            lblTitleForm.Location = new Point(79, 5);
+            lblTitleForm.Location = new Point(75, 5);
             lblTitleForm.Margin = new Padding(3);
             lblTitleForm.Name = "lblTitleForm";
-            lblTitleForm.Size = new Size(127, 23);
+            lblTitleForm.Size = new Size(0, 23);
             lblTitleForm.TabIndex = 13;
-            lblTitleForm.Text = "شاشة جرد المخازن";
             // 
             // flowLayoutPanel1
             // 
@@ -245,16 +380,16 @@
             flowLayoutPanel1.Controls.Add(lblQtyInTable);
             flowLayoutPanel1.Controls.Add(lblProductInTables);
             flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
-            flowLayoutPanel1.Location = new Point(3, 46);
+            flowLayoutPanel1.Location = new Point(3, 5);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(294, 109);
+            flowLayoutPanel1.Size = new Size(326, 171);
             flowLayoutPanel1.TabIndex = 12;
             // 
             // lblBuys
             // 
             lblBuys.AutoSize = true;
             lblBuys.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblBuys.Location = new Point(200, 10);
+            lblBuys.Location = new Point(232, 10);
             lblBuys.Margin = new Padding(10);
             lblBuys.Name = "lblBuys";
             lblBuys.Size = new Size(84, 19);
@@ -265,7 +400,7 @@
             // 
             lblSales.AutoSize = true;
             lblSales.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblSales.Location = new Point(207, 49);
+            lblSales.Location = new Point(239, 49);
             lblSales.Margin = new Padding(10);
             lblSales.Name = "lblSales";
             lblSales.Size = new Size(77, 19);
@@ -276,7 +411,7 @@
             // 
             lblProfitExpected.AutoSize = true;
             lblProfitExpected.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblProfitExpected.Location = new Point(85, 10);
+            lblProfitExpected.Location = new Point(221, 88);
             lblProfitExpected.Margin = new Padding(10);
             lblProfitExpected.Name = "lblProfitExpected";
             lblProfitExpected.Size = new Size(95, 19);
@@ -287,7 +422,7 @@
             // 
             lblQtyInTable.AutoSize = true;
             lblQtyInTable.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblQtyInTable.Location = new Point(86, 49);
+            lblQtyInTable.Location = new Point(222, 127);
             lblQtyInTable.Margin = new Padding(10);
             lblQtyInTable.Name = "lblQtyInTable";
             lblQtyInTable.Size = new Size(94, 19);
@@ -298,128 +433,68 @@
             // 
             lblProductInTables.AutoSize = true;
             lblProductInTables.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblProductInTables.Location = new Point(17, 10);
+            lblProductInTables.Location = new Point(113, 10);
             lblProductInTables.Margin = new Padding(10);
             lblProductInTables.Name = "lblProductInTables";
-            lblProductInTables.Size = new Size(48, 57);
+            lblProductInTables.Size = new Size(88, 19);
             lblProductInTables.TabIndex = 5;
             lblProductInTables.Text = "عدد المنتجات";
             // 
             // panelButtons
             // 
-            panelButtons.Controls.Add(button1);
-            panelButtons.Controls.Add(button2);
-            panelButtons.Controls.Add(btnExportCustomer);
-            panelButtons.Location = new Point(3, 3);
+            panelButtons.Controls.Add(menuStrip1);
+            panelButtons.Location = new Point(23, 3);
             panelButtons.Name = "panelButtons";
-            panelButtons.Size = new Size(259, 158);
+            panelButtons.Padding = new Padding(25);
+            panelButtons.Size = new Size(223, 179);
             panelButtons.TabIndex = 9;
             // 
-            // button1
+            // menuStrip1
             // 
-            button1.Anchor = AnchorStyles.None;
-            button1.Image = (Image)resources.GetObject("button1.Image");
-            button1.ImageAlign = ContentAlignment.MiddleLeft;
-            button1.ImeMode = ImeMode.NoControl;
-            button1.Location = new Point(3, 50);
-            button1.Name = "button1";
-            button1.Size = new Size(249, 40);
-            button1.TabIndex = 9;
-            button1.Text = "اخراج المنتجات التالفة من مخزن";
-            button1.TextAlign = ContentAlignment.MiddleRight;
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            menuStrip1.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            menuStrip1.Items.AddRange(new ToolStripItem[] { عملياتالجردالمتاحةToolStripMenuItem });
+            menuStrip1.Location = new Point(25, 25);
+            menuStrip1.Margin = new Padding(25);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Padding = new Padding(5);
+            menuStrip1.Size = new Size(173, 33);
+            menuStrip1.TabIndex = 11;
+            menuStrip1.Text = "العمليات المتاحة";
             // 
-            // button2
+            // عملياتالجردالمتاحةToolStripMenuItem
             // 
-            button2.Anchor = AnchorStyles.None;
-            button2.Image = (Image)resources.GetObject("button2.Image");
-            button2.ImageAlign = ContentAlignment.MiddleLeft;
-            button2.ImeMode = ImeMode.NoControl;
-            button2.Location = new Point(3, 0);
-            button2.Name = "button2";
-            button2.Size = new Size(249, 40);
-            button2.TabIndex = 8;
-            button2.Text = "تحويل المنتجات بين المخازن";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
+            عملياتالجردالمتاحةToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { تحويلالمنتجاتبينالمخازنToolStripMenuItem, اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem, جردالسلعاضافةتعديلاطلاعToolStripMenuItem, تصديرالىملفExcelToolStripMenuItem });
+            عملياتالجردالمتاحةToolStripMenuItem.Name = "عملياتالجردالمتاحةToolStripMenuItem";
+            عملياتالجردالمتاحةToolStripMenuItem.Size = new Size(139, 23);
+            عملياتالجردالمتاحةToolStripMenuItem.Text = "عمليات الجرد المتاحة";
             // 
-            // btnExportCustomer
+            // تحويلالمنتجاتبينالمخازنToolStripMenuItem
             // 
-            btnExportCustomer.Anchor = AnchorStyles.None;
-            btnExportCustomer.Image = (Image)resources.GetObject("btnExportCustomer.Image");
-            btnExportCustomer.ImageAlign = ContentAlignment.MiddleLeft;
-            btnExportCustomer.ImeMode = ImeMode.NoControl;
-            btnExportCustomer.Location = new Point(3, 99);
-            btnExportCustomer.Name = "btnExportCustomer";
-            btnExportCustomer.Size = new Size(244, 40);
-            btnExportCustomer.TabIndex = 6;
-            btnExportCustomer.Text = "   تصدير/طباعة الفاتورة";
-            btnExportCustomer.UseVisualStyleBackColor = true;
-            btnExportCustomer.Visible = false;
+            تحويلالمنتجاتبينالمخازنToolStripMenuItem.Name = "تحويلالمنتجاتبينالمخازنToolStripMenuItem";
+            تحويلالمنتجاتبينالمخازنToolStripMenuItem.Size = new Size(262, 24);
+            تحويلالمنتجاتبينالمخازنToolStripMenuItem.Text = "تحويل المنتجات بين المخازن";
+            تحويلالمنتجاتبينالمخازنToolStripMenuItem.Click += تحويلالمنتجاتبينالمخازنToolStripMenuItem_Click;
             // 
-            // lblEmptyData
+            // اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem
             // 
-            lblEmptyData.Anchor = AnchorStyles.None;
-            lblEmptyData.AutoSize = true;
-            lblEmptyData.BackColor = Color.Transparent;
-            lblEmptyData.Font = new Font("Calibri", 12F, FontStyle.Bold);
-            lblEmptyData.ForeColor = Color.Crimson;
-            lblEmptyData.ImeMode = ImeMode.NoControl;
-            lblEmptyData.Location = new Point(451, 353);
-            lblEmptyData.Name = "lblEmptyData";
-            lblEmptyData.Size = new Size(133, 19);
-            lblEmptyData.TabIndex = 26;
-            lblEmptyData.Text = "لا توجد بيانات لعرضها";
-            lblEmptyData.TextAlign = ContentAlignment.MiddleCenter;
-            lblEmptyData.Visible = false;
+            اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem.Name = "اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem";
+            اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem.Size = new Size(262, 24);
+            اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem.Text = "اخراج المنتجات التالفة من المخزن";
+            اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem.Click += اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem_Click;
             // 
-            // DgvSales
+            // جردالسلعاضافةتعديلاطلاعToolStripMenuItem
             // 
-            DgvSales.AllowUserToAddRows = false;
-            DgvSales.AllowUserToResizeColumns = false;
-            DgvSales.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvSales.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            DgvSales.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            DgvSales.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            DgvSales.BackgroundColor = Color.White;
-            DgvSales.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-            DgvSales.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle2.ForeColor = Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = Color.DodgerBlue;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            DgvSales.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            DgvSales.ColumnHeadersHeight = 40;
-            DgvSales.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Window;
-            dataGridViewCellStyle3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
-            DgvSales.DefaultCellStyle = dataGridViewCellStyle3;
-            DgvSales.Dock = DockStyle.Fill;
-            DgvSales.EnableHeadersVisualStyles = false;
-            DgvSales.GridColor = SystemColors.ControlDark;
-            DgvSales.Location = new Point(0, 164);
-            DgvSales.MultiSelect = false;
-            DgvSales.Name = "DgvSales";
-            DgvSales.ReadOnly = true;
-            DgvSales.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            DgvSales.RowHeadersVisible = false;
-            DgvSales.RowHeadersWidth = 21;
-            DgvSales.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle4.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvSales.RowsDefaultCellStyle = dataGridViewCellStyle4;
-            DgvSales.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DgvSales.Size = new Size(1034, 437);
-            DgvSales.TabIndex = 27;
+            جردالسلعاضافةتعديلاطلاعToolStripMenuItem.Name = "جردالسلعاضافةتعديلاطلاعToolStripMenuItem";
+            جردالسلعاضافةتعديلاطلاعToolStripMenuItem.Size = new Size(262, 24);
+            جردالسلعاضافةتعديلاطلاعToolStripMenuItem.Text = "جرد السلع اضافة/تعديل/اطلاع";
+            جردالسلعاضافةتعديلاطلاعToolStripMenuItem.Click += جردالسلعاضافةتعديلاطلاعToolStripMenuItem_Click;
+            // 
+            // تصديرالىملفExcelToolStripMenuItem
+            // 
+            تصديرالىملفExcelToolStripMenuItem.Name = "تصديرالىملفExcelToolStripMenuItem";
+            تصديرالىملفExcelToolStripMenuItem.Size = new Size(262, 24);
+            تصديرالىملفExcelToolStripMenuItem.Text = "تصدير الى ملف Excel";
+            تصديرالىملفExcelToolStripMenuItem.Click += تصديرالىملفExcelToolStripMenuItem_Click;
             // 
             // flowLayoutPanelStats
             // 
@@ -431,16 +506,16 @@
             flowLayoutPanelStats.Controls.Add(panel6);
             flowLayoutPanelStats.Controls.Add(panel3);
             flowLayoutPanelStats.Dock = DockStyle.Bottom;
-            flowLayoutPanelStats.Location = new Point(0, 601);
+            flowLayoutPanelStats.Location = new Point(3, 566);
             flowLayoutPanelStats.Name = "flowLayoutPanelStats";
-            flowLayoutPanelStats.Size = new Size(1034, 80);
-            flowLayoutPanelStats.TabIndex = 32;
+            flowLayoutPanelStats.Size = new Size(1020, 80);
+            flowLayoutPanelStats.TabIndex = 37;
             // 
             // panel1
             // 
             panel1.Controls.Add(txtAllProducts);
             panel1.Controls.Add(label1);
-            panel1.Location = new Point(863, 5);
+            panel1.Location = new Point(849, 5);
             panel1.Margin = new Padding(5);
             panel1.Name = "panel1";
             panel1.Size = new Size(166, 74);
@@ -472,7 +547,7 @@
             // 
             panel7.Controls.Add(txtProductSum);
             panel7.Controls.Add(label7);
-            panel7.Location = new Point(725, 5);
+            panel7.Location = new Point(711, 5);
             panel7.Margin = new Padding(5);
             panel7.Name = "panel7";
             panel7.Size = new Size(128, 74);
@@ -504,7 +579,7 @@
             // 
             panel2.Controls.Add(txtAllQty);
             panel2.Controls.Add(label2);
-            panel2.Location = new Point(587, 5);
+            panel2.Location = new Point(573, 5);
             panel2.Margin = new Padding(5);
             panel2.Name = "panel2";
             panel2.Size = new Size(128, 74);
@@ -536,7 +611,7 @@
             // 
             panel4.Controls.Add(txttotalBuy);
             panel4.Controls.Add(label4);
-            panel4.Location = new Point(444, 5);
+            panel4.Location = new Point(430, 5);
             panel4.Margin = new Padding(5);
             panel4.Name = "panel4";
             panel4.Size = new Size(133, 74);
@@ -568,7 +643,7 @@
             // 
             panel5.Controls.Add(txttotalSell);
             panel5.Controls.Add(label5);
-            panel5.Location = new Point(301, 5);
+            panel5.Location = new Point(287, 5);
             panel5.Margin = new Padding(5);
             panel5.Name = "panel5";
             panel5.Size = new Size(133, 74);
@@ -600,7 +675,7 @@
             // 
             panel6.Controls.Add(txtTotalProfitExpected);
             panel6.Controls.Add(label6);
-            panel6.Location = new Point(158, 5);
+            panel6.Location = new Point(144, 5);
             panel6.Margin = new Padding(5);
             panel6.Name = "panel6";
             panel6.Size = new Size(133, 74);
@@ -632,7 +707,7 @@
             // 
             panel3.Controls.Add(txtCapital);
             panel3.Controls.Add(label3);
-            panel3.Location = new Point(15, 5);
+            panel3.Location = new Point(882, 89);
             panel3.Margin = new Padding(5);
             panel3.Name = "panel3";
             panel3.Size = new Size(133, 74);
@@ -660,68 +735,33 @@
             label3.TabIndex = 0;
             label3.Text = "رأس المال";
             // 
-            // PanelPagination
+            // tabPage2
             // 
-            PanelPagination.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            PanelPagination.Controls.Add(cmbpagination);
-            PanelPagination.Controls.Add(btnPrev);
-            PanelPagination.Controls.Add(btnNext);
-            PanelPagination.Location = new Point(3, 558);
-            PanelPagination.Name = "PanelPagination";
-            PanelPagination.Size = new Size(169, 40);
-            PanelPagination.TabIndex = 33;
-            // 
-            // cmbpagination
-            // 
-            cmbpagination.Dock = DockStyle.Fill;
-            cmbpagination.Font = new Font("Calibri", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            cmbpagination.FormattingEnabled = true;
-            cmbpagination.Location = new Point(50, 0);
-            cmbpagination.Name = "cmbpagination";
-            cmbpagination.Size = new Size(69, 37);
-            cmbpagination.TabIndex = 28;
-            cmbpagination.SelectionChangeCommitted += cmbpagination_SelectionChangeCommitted;
-            // 
-            // btnPrev
-            // 
-            btnPrev.Dock = DockStyle.Left;
-            btnPrev.Image = (Image)resources.GetObject("btnPrev.Image");
-            btnPrev.ImeMode = ImeMode.NoControl;
-            btnPrev.Location = new Point(0, 0);
-            btnPrev.Name = "btnPrev";
-            btnPrev.Size = new Size(50, 40);
-            btnPrev.TabIndex = 26;
-            btnPrev.UseVisualStyleBackColor = true;
-            btnPrev.Click += btnPrev_Click;
-            // 
-            // btnNext
-            // 
-            btnNext.Dock = DockStyle.Right;
-            btnNext.Image = (Image)resources.GetObject("btnNext.Image");
-            btnNext.ImeMode = ImeMode.NoControl;
-            btnNext.Location = new Point(119, 0);
-            btnNext.Name = "btnNext";
-            btnNext.Size = new Size(50, 40);
-            btnNext.TabIndex = 25;
-            btnNext.UseVisualStyleBackColor = true;
-            btnNext.Click += btnNext_Click;
+            tabPage2.Location = new Point(4, 28);
+            tabPage2.Name = "tabPage2";
+            tabPage2.Padding = new Padding(3);
+            tabPage2.Size = new Size(1026, 649);
+            tabPage2.TabIndex = 1;
+            tabPage2.Text = "tabPage2";
+            tabPage2.UseVisualStyleBackColor = true;
             // 
             // StoreInventoryUserControl
             // 
             AutoScaleDimensions = new SizeF(8F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            Controls.Add(PanelPagination);
-            Controls.Add(lblEmptyData);
-            Controls.Add(DgvSales);
-            Controls.Add(OperationsflowLayoutPanel);
-            Controls.Add(flowLayoutPanelStats);
+            Controls.Add(tabControl1);
             Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(3, 4, 3, 4);
             Name = "StoreInventoryUserControl";
             RightToLeft = RightToLeft.Yes;
             Size = new Size(1034, 681);
             Load += StoreInventoryUserControl_Load;
+            tabControl1.ResumeLayout(false);
+            tabPage1.ResumeLayout(false);
+            tabPage1.PerformLayout();
+            PanelPagination.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)DgvSales).EndInit();
             OperationsflowLayoutPanel.ResumeLayout(false);
             gbPayChoiches.ResumeLayout(false);
             flowLayoutPanelreturnsoption.ResumeLayout(false);
@@ -733,7 +773,9 @@
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
             panelButtons.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)DgvSales).EndInit();
+            panelButtons.PerformLayout();
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             flowLayoutPanelStats.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
@@ -749,31 +791,37 @@
             panel6.PerformLayout();
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
-            PanelPagination.ResumeLayout(false);
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
 
+        private TabControl tabControl1;
+        private TabPage tabPage1;
+        private Panel PanelPagination;
+        private ComboBox cmbpagination;
+        private Button btnPrev;
+        private Button btnNext;
+        private Label lblEmptyData;
+        private DataGridView DgvSales;
         private FlowLayoutPanel OperationsflowLayoutPanel;
         private GroupBox gbPayChoiches;
         private FlowLayoutPanel flowLayoutPanelreturnsoption;
         private RadioButton rbStoreAll;
-        private Panel panelstatisticsandOperations;
-        private Label lblTitleForm;
-        private FlowLayoutPanel flowLayoutPanel1;
+        private RadioButton rbSelectedStore;
+        private ComboBox cmbStores;
         private Panel SearchPanel;
         private TextBox txtSearch;
         private Button btnSearch;
+        private Panel panelstatisticsandOperations;
+        private Label lblTitleForm;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private Label lblBuys;
+        private Label lblSales;
+        private Label lblProfitExpected;
+        private Label lblQtyInTable;
+        private Label lblProductInTables;
         private Panel panelButtons;
-        private Button button2;
-        private Button btnExportCustomer;
-        private Label lblEmptyData;
-        private DataGridView DgvSales;
-        private RadioButton rbSelectedStore;
-        private ComboBox cmbStores;
-        private Button button1;
         private FlowLayoutPanel flowLayoutPanelStats;
         private Panel panel1;
         private TextBox txtAllProducts;
@@ -793,17 +841,15 @@
         private Panel panel6;
         private TextBox txtTotalProfitExpected;
         private Label label6;
-        private Label lblBuys;
-        private Label lblSales;
-        private Label lblProfitExpected;
-        private Label lblQtyInTable;
-        private Label lblProductInTables;
         private Panel panel3;
         private TextBox txtCapital;
         private Label label3;
-        private Panel PanelPagination;
-        private ComboBox cmbpagination;
-        private Button btnPrev;
-        private Button btnNext;
+        private TabPage tabPage2;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem عملياتالجردالمتاحةToolStripMenuItem;
+        private ToolStripMenuItem تحويلالمنتجاتبينالمخازنToolStripMenuItem;
+        private ToolStripMenuItem اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem;
+        private ToolStripMenuItem جردالسلعاضافةتعديلاطلاعToolStripMenuItem;
+        private ToolStripMenuItem تصديرالىملفExcelToolStripMenuItem;
     }
 }

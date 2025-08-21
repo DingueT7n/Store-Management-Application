@@ -68,7 +68,7 @@ namespace Store.Infrastructure.Repositories
         //}
 
 
-        public async Task<List<ProductOutdated>> GetAllProductOutdated()
+        public async Task<List<ProductOutdated>> GetAllProductOutdated(int skip, int take)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace Store.Infrastructure.Repositories
                         ProductName = bd.Product.ProductName, // Assuming `Name` is the property for the supplier's name
                         StoreName = bd.StoreName,
                         Quentity = bd.Qty
-                    })
+                    }).Skip(skip).Take(take)
                     .ToListAsync();
                 return products;
             }
@@ -94,29 +94,41 @@ namespace Store.Infrastructure.Repositories
                 throw new Exception("Error retrieving the buyFactures", ex);
             }
         }
-        public async Task<List<ProductMinQty>> GetAllProductMinQty(int skip, int take)
+        public async Task<PaginatedResult<ProductMinQty>> GetAllProductMinQty(int skip, int take)
         {
             try
             {
+                // Query base
+                var query = _context.Products.AsNoTracking()
+                    .Where(x => x.Quentity <= x.MinQty);
 
+                // Get total count in one go
+                var totalCount = await query.CountAsync();
 
-                var products = await _context.Products.AsNoTracking()
-                                .Where(x => x.Quentity <= x.MinQty)
+                // Fetch paginated data
+                var products = await query
+                    .OrderBy(x => x.Id) // always keep deterministic ordering
+                    .Skip(skip)
+                    .Take(take)
                     .Select(bd => new ProductMinQty
                     {
                         CodeBar = bd.CodeBar,
                         DateExperation = bd.DateExperation,
-                        ProductName = bd.ProductName, // Assuming `Name` is the property for the supplier's name
+                        ProductName = bd.ProductName,
                         CategoryName = bd.Category.CategoryName,
                         Quentity = bd.Quentity
-                    }).Skip(skip).Take(take)
+                    })
                     .ToListAsync();
-                return products;
+
+                return new PaginatedResult<ProductMinQty>
+                {
+                    Items = products,
+                    TotalCount = totalCount
+                };
             }
             catch (Exception ex)
             {
-
-                throw new Exception("Error retrieving the buyFactures", ex);
+                throw new Exception("Error retrieving ProductMinQty list", ex);
             }
         }
         public async Task<List<Product>> SearchAll(string searchItem, int pageSize, int skip)
