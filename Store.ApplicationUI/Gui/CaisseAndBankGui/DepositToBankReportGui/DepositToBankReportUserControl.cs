@@ -116,28 +116,43 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToBankReportGui
             try
             {
                 ToasterHelper.PlayNotificationSound();
+
                 if (MsgHelper.ShowDeleteDialog())
                 {
-                    for (int i = 0; i <= DgvSales.Rows.Count - 1; i++)
+                    List<int> idsToDelete = new List<int>();
+
+                    // Collect IDs safely from column index 6
+                    foreach (DataGridViewRow row in DgvSales.Rows)
                     {
-                        var deleteedRefund = await _context.BankDeposits.Where(x => x.Id ==
-                        Convert.ToInt32(DgvSales.Rows[i].Cells[6].Value.ToString())).FirstOrDefaultAsync();
-                        if (deleteedRefund != null)
+                        if (row.Cells[6].Value != null && int.TryParse(row.Cells[6].Value.ToString(), out int id))
                         {
-                            _context.Remove(deleteedRefund);
-                            await _context.SaveChangesAsync();
+                            idsToDelete.Add(id);
                         }
                     }
+
+                    // Fetch all matching entities at once
+                    var entitiesToDelete = await _context.BankDeposits
+                        .Where(x => idsToDelete.Contains(x.Id))
+                        .ToListAsync();
+
+                    if (entitiesToDelete.Any())
+                    {
+                        _context.BankDeposits.RemoveRange(entitiesToDelete);
+                        await _context.SaveChangesAsync(); // One DB call
+                    }
+
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
-                    DgvSales.DataSource = null;
+                    // Refresh DataGridView
                     await RefreshDgv();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                ToasterHelper.ShowErrorHappened(ex.Message);
                 throw;
             }
+
         }
 
         private void txtSearch_KeyDown(object sender, KeyEventArgs e)

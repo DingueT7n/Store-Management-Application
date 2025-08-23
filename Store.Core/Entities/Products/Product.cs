@@ -43,6 +43,23 @@ namespace Store.Core.Entities.Products
         }
 
     }
+    public class ProductDTO
+    {
+
+        public string CodeBar { get; set; }
+        public string ProductName { get; set; }
+        public decimal Quentity { get; set; }
+        public decimal BuyPrice { get; set; } = 0;
+        public decimal SalePrice { get; set; } = 0;
+        public decimal SalePriceSeconde { get; set; } = 0;
+        public decimal WholesalePrice { get; set; } = 0;
+        public decimal MinQty { get; set; } = 0;
+        public virtual Category Category { get; set; }
+        public int Id { get; set; }
+
+
+    }
+
 
     public class ProductFamily : BaseEntity<int>
     {

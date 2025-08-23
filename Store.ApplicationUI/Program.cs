@@ -37,7 +37,7 @@ namespace Store.ApplicationUI
             Application.SetCompatibleTextRenderingDefault(false);
 
             var mainForm = serviceProvider.GetRequiredService<MainForm>();
-            if (Properties.Settings.Default.DirectLogin)
+            if (mainForm.DirectLoginUserCredential())
             {
                 Application.Run(mainForm);
             }

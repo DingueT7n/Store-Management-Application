@@ -134,34 +134,48 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.DepositToCaisseReportGui
         private void btnSearch_Click(object sender, EventArgs e) => RefreshDgvAsync(0);
         private void cmbCaisse_SelectionChangeCommitted(object sender, EventArgs e) => RefreshDgvAsync(0);
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
             try
             {
                 ToasterHelper.PlayNotificationSound();
+
                 if (MsgHelper.ShowDeleteDialog())
                 {
+                    List<int> idsToDelete = new List<int>();
+
+                    // Collect IDs safely from column index 8
                     foreach (DataGridViewRow row in DgvSales.Rows)
                     {
-                        int id = Convert.ToInt32(row.Cells[8].Value);
-                        var deposit = _context.CaissesDeposits.FirstOrDefault(x => x.Id == id);
-
-                        if (deposit != null)
+                        if (row.Cells[8].Value != null && int.TryParse(row.Cells[8].Value.ToString(), out int id))
                         {
-                            _context.CaissesDeposits.Remove(deposit);
-                            _context.SaveChanges();
+                            idsToDelete.Add(id);
                         }
                     }
+
+                    // Fetch all matching entities at once
+                    var entitiesToDelete = await _context.CaissesDeposits
+                        .Where(x => idsToDelete.Contains(x.Id))
+                        .ToListAsync();
+
+                    if (entitiesToDelete.Any())
+                    {
+                        _context.CaissesDeposits.RemoveRange(entitiesToDelete);
+                        await _context.SaveChangesAsync(); // One DB call
+                    }
+
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
-                    DgvSales.DataSource = null;
+                    // Refresh DataGridView
                     RefreshDgvAsync(0);
                 }
             }
             catch (Exception ex)
             {
                 ToasterHelper.ShowErrorHappened(ex.Message);
+                throw;
             }
+
         }
 
         void PaginationHide()

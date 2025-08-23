@@ -375,6 +375,9 @@ namespace Store.ApplicationUI.Gui.LoginGui
             //MainForm mainForm = new MainForm();
 
             //mainForm.Show();
+            Properties.Settings.Default.UserName = txtUsername.Text;
+            Properties.Settings.Default.Password = txtPassowrd.Text;
+            Properties.Settings.Default.Save();
             _oginForm.DialogResult = DialogResult.OK;
             _oginForm.Close();
             _oginForm.Dispose();

@@ -122,30 +122,45 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenCaisseReportG
         private async void button2_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
+
             try
             {
                 if (MsgHelper.ShowDeleteDialog())
                 {
-                    for (int i = 0; i <= DgvSales.Rows.Count - 1; i++)
+                    List<int> idsToDelete = new List<int>();
+
+                    // Collect IDs from DataGridView (column index 9)
+                    foreach (DataGridViewRow row in DgvSales.Rows)
                     {
-                        var deleteedRefund = await _context.CaissesTransferes.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i]
-                            .Cells[9].Value.ToString())).FirstOrDefaultAsync();
-                        if (deleteedRefund != null)
+                        if (row.Cells[9].Value != null && int.TryParse(row.Cells[9].Value.ToString(), out int id))
                         {
-                            _context.Remove(deleteedRefund);
-                            await _context.SaveChangesAsync();
+                            idsToDelete.Add(id);
                         }
                     }
 
+                    // Fetch all entities at once
+                    var entitiesToDelete = await _context.CaissesTransferes
+                        .Where(x => idsToDelete.Contains(x.Id))
+                        .ToListAsync();
+
+                    if (entitiesToDelete.Any())
+                    {
+                        _context.CaissesTransferes.RemoveRange(entitiesToDelete);
+                        await _context.SaveChangesAsync(); // Single DB call
+                    }
+
                     Code.Helper.ToasterHelper.ShowDeletedToast();
-                    DgvSales.DataSource = null;
+
+                    // Refresh DataGridView (no need to set DataSource = null first)
                     await RefreshDgv();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                ToasterHelper.ShowErrorHappened(ex.Message);
                 throw;
             }
+
         }
 
         private void txtSearch_KeyDown(object sender, KeyEventArgs e)

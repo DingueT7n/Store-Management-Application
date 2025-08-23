@@ -137,22 +137,22 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 else
                     _main.btnStatusAlert.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
 
-                if (LocalUser.User is null)
-                {
-                    var result = await _context.Users.AsNoTracking()
-                                .Include(u => u.UserBuy)
-                                .Include(u => u.UserCaisseAndBank)
-                                .Include(u => u.UserCustomer)
-                                .Include(u => u.UserDeservedAndTax)
-                                .Include(u => u.UserEmployee)
-                                .Include(u => u.UserProductAndStore)
-                                .Include(u => u.UserRefund)
-                                .Include(u => u.UserSale)
-                                .Include(u => u.UserSetting)
-                                .Include(u => u.UserSupplier)
-                                .FirstOrDefaultAsync(u => u.UserName == "Admin" && u.Password == "123");
-                    LocalUser.User = result;
-                }
+                //if (LocalUser.User is null)
+                //{
+                //    var result = await _context.Users.AsNoTracking()
+                //                .Include(u => u.UserBuy)
+                //                .Include(u => u.UserCaisseAndBank)
+                //                .Include(u => u.UserCustomer)
+                //                .Include(u => u.UserDeservedAndTax)
+                //                .Include(u => u.UserEmployee)
+                //                .Include(u => u.UserProductAndStore)
+                //                .Include(u => u.UserRefund)
+                //                .Include(u => u.UserSale)
+                //                .Include(u => u.UserSetting)
+                //                .Include(u => u.UserSupplier)
+                //                .FirstOrDefaultAsync(u => u.UserName == "Admin" && u.Password == "123");
+                //    LocalUser.User = result;
+                //}
                 _main.lblUserName.Caption = LocalUser.User.UserName;
             }
             catch (Exception ex)

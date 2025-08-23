@@ -85,77 +85,173 @@ namespace Store.ApplicationUI
 
                 isPanelNull = true;
                 //btnStatistics.Enabled = LocalUser.User.UserName
-                if (LocalUser.User is not null && Code.Helper.VerificationSettingsHelper.ValidateActivationKey())
-                {
-                    btnAllProducts.Enabled = LocalUser.User.UserProductAndStore.AllProducts;
-                    btnAllStores.Enabled = LocalUser.User.UserProductAndStore.allStores;
-                    btnAddProduct.Enabled = LocalUser.User.UserProductAndStore.AddProduct && !Properties.Settings.Default.TrialVersion;
-                    btnAllCategories.Enabled = LocalUser.User.UserProductAndStore.AllCategories;
-                    btnStoreInventory.Enabled = LocalUser.User.UserProductAndStore.StoreInventory;
-                    btnProductTransfertReport.Enabled = LocalUser.User.UserProductAndStore.TransfertReport;
-                    btnProductOutStoreReport.Enabled = LocalUser.User.UserProductAndStore.ProductOutStoreReport;
 
-
-                    btnAllCustomers.Enabled = LocalUser.User.UserCustomer.AllCustomers;
-                    btnAddCustomer.Enabled = LocalUser.User.UserCustomer.AddCustomer && !Properties.Settings.Default.TrialVersion;
-                    btnCustomerAccount.Enabled = LocalUser.User.UserCustomer.CustomerAccount;
-                    btnCustomerReport.Enabled = LocalUser.User.UserCustomer.CustomerReport;
-
-
-                    btnAllSuppliers.Enabled = LocalUser.User.UserSupplier.AllSuppliers;
-                    btnAddSupplier.Enabled = LocalUser.User.UserSupplier.AddSuppliers && !Properties.Settings.Default.TrialVersion;
-                    btnSupplierAccount.Enabled = LocalUser.User.UserSupplier.SuppliersAccount;
-                    btnSupplierReports.Enabled = LocalUser.User.UserSupplier.SuppliersReport;
-
-
-                    btnNewBuy.Enabled = LocalUser.User.UserBuy.NewBuy;
-                    btnBuysReports.Enabled = LocalUser.User.UserBuy.BuyReports && !Properties.Settings.Default.TrialVersion;
-
-
-                    btnNewSale.Enabled = LocalUser.User.UserSale.NewSale;
-                    btnSalesReport.Enabled = LocalUser.User.UserSale.SaleReports;
-                    btnProfitReport.Enabled = LocalUser.User.UserSale.SaleProfits;
-
-                    btnCaisseAndBank.Enabled = LocalUser.User.UserCaisseAndBank.CaissesAndBanks;
-                    btnDepositToCaisseReport.Enabled = LocalUser.User.UserCaisseAndBank.DepositToCaisse;
-                    btnDepositToBankReport.Enabled = LocalUser.User.UserCaisseAndBank.DepositToBank;
-                    btnWithdrawToCaisseReport.Enabled = LocalUser.User.UserCaisseAndBank.WithdrawFromCaisse;
-                    btnWithdrawBankReport.Enabled = LocalUser.User.UserCaisseAndBank.WithdrawFromBank;
-                    btnTransfertCaisse.Enabled = LocalUser.User.UserCaisseAndBank.TransfertBetweenCaisse;
-                    btnTreansfertBankCaisse.Enabled = LocalUser.User.UserCaisseAndBank.TransfertBetweenCaisseAndBank;
-
-                    btnAllDeserved.Enabled = LocalUser.User.UserDeservedAndTax.Deserved;
-                    btnVouchers.Enabled = LocalUser.User.UserDeservedAndTax.Vouchers;
-                    btnVouchersReport.Enabled = LocalUser.User.UserDeservedAndTax.Vouchers;
-
-
-                    btnAddRefund.Enabled = LocalUser.User.UserRefund.RefundProduct;
-                    btnRefundReport.Enabled = LocalUser.User.UserRefund.RefundReport;
-                    btnAllEmployees.Enabled = LocalUser.User.UserEmployee.AllEmployee;
-                    btnNewEmployee.Enabled = LocalUser.User.UserEmployee.AddEmployee;
-                    btnEmployeeBorrowItems.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowItem;
-                    btnBorrowMonies.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowMoney;
-                    btnSalaries.Enabled = LocalUser.User.UserEmployee.EmployeeSalaries;
-                    btnBorrowItemsReport.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowItemsReport;
-                    btnBorrowMoniesReport.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowMoneyReport;
-                    btnSalariesReport.Enabled = LocalUser.User.UserEmployee.EmployeeSalariesReport;
-
-                    btnApplicationSettings.Enabled = LocalUser.User.UserSetting.ApplicationSettings;
-                    btnUsersRoles.Enabled = LocalUser.User.UserSetting.UserPermession && !Properties.Settings.Default.TrialVersion;
-                    btnProductDiscount.Enabled = LocalUser.User.UserSetting.ProductDiscounts;
-                    btnComptoire.Enabled = LocalUser.User.UserSetting.Pos;
-                    btnStatistics.Enabled = LocalUser.User.UserSetting.Statistics;
-                    btnBackUp.Enabled = LocalUser.User.UserSetting.BackUp && !Properties.Settings.Default.TrialVersion;
-                    btnRestore.Enabled = LocalUser.User.UserSetting.Restore && !Properties.Settings.Default.TrialVersion;
-                    btnBackUp.Visible = LocalUser.User.UserSetting.BackUp && !Properties.Settings.Default.TrialVersion;
-                    btnRestore.Visible = LocalUser.User.UserSetting.Restore && !Properties.Settings.Default.TrialVersion;
-                }
             }
             catch (Exception ex)
             {
 
                 ToasterHelper.ShowErrorHappened(ex.Message);
 
+            }
+        }
+        public bool DirectLoginUserCredential()
+        {
+            if (!Properties.Settings.Default.DirectLogin)
+                return false;
+            Code.Helper.ConStringHelper.SetConString();
+
+            if (!Context.Database.CanConnect())
+            {
+                ToasterHelper.ShowConnectionIsNotEstablished();
+                return false;
+            }
+            if (Context.Users.AsNoTracking().Count() > 0)
+            {
+                var user = Context.Users
+                .Include(u => u.UserBuy)
+                .Include(u => u.UserCaisseAndBank)
+                .Include(u => u.UserCustomer)
+                .Include(u => u.UserDeservedAndTax)
+                .Include(u => u.UserEmployee)
+                .Include(u => u.UserProductAndStore)
+                .Include(u => u.UserRefund)
+                .Include(u => u.UserSale)
+                .Include(u => u.UserSetting)
+                .Include(u => u.UserSupplier)
+                .FirstOrDefault(u => u.UserName == Properties.Settings.Default.UserName
+                        && u.Password == Properties.Settings.Default.Password);
+                LocalUser.User = user;
+                return user != null;
+            }
+            return false;
+
+        }
+        public void ApplyAcces()
+        {
+
+            if (LocalUser.User is not null && Code.Helper.VerificationSettingsHelper.ValidateActivationKey())
+            {
+                btnAllProducts.Enabled = LocalUser.User.UserProductAndStore.AllProducts;
+                btnAllStores.Enabled = LocalUser.User.UserProductAndStore.allStores;
+                btnAddProduct.Enabled = LocalUser.User.UserProductAndStore.AddProduct && !Properties.Settings.Default.TrialVersion;
+                btnAllCategories.Enabled = LocalUser.User.UserProductAndStore.AllCategories;
+                btnStoreInventory.Enabled = LocalUser.User.UserProductAndStore.StoreInventory;
+                btnProductTransfertReport.Enabled = LocalUser.User.UserProductAndStore.TransfertReport;
+                btnProductOutStoreReport.Enabled = LocalUser.User.UserProductAndStore.ProductOutStoreReport;
+
+
+                btnAllCustomers.Enabled = LocalUser.User.UserCustomer.AllCustomers;
+                btnAddCustomer.Enabled = LocalUser.User.UserCustomer.AddCustomer && !Properties.Settings.Default.TrialVersion;
+                btnCustomerAccount.Enabled = LocalUser.User.UserCustomer.CustomerAccount;
+                btnCustomerReport.Enabled = LocalUser.User.UserCustomer.CustomerReport;
+
+
+                btnAllSuppliers.Enabled = LocalUser.User.UserSupplier.AllSuppliers;
+                btnAddSupplier.Enabled = LocalUser.User.UserSupplier.AddSuppliers && !Properties.Settings.Default.TrialVersion;
+                btnSupplierAccount.Enabled = LocalUser.User.UserSupplier.SuppliersAccount;
+                btnSupplierReports.Enabled = LocalUser.User.UserSupplier.SuppliersReport;
+
+
+                btnNewBuy.Enabled = LocalUser.User.UserBuy.NewBuy;
+                btnBuysReports.Enabled = LocalUser.User.UserBuy.BuyReports && !Properties.Settings.Default.TrialVersion;
+
+
+                btnNewSale.Enabled = LocalUser.User.UserSale.NewSale;
+                btnSalesReport.Enabled = LocalUser.User.UserSale.SaleReports;
+                btnProfitReport.Enabled = LocalUser.User.UserSale.SaleProfits;
+
+                btnCaisseAndBank.Enabled = LocalUser.User.UserCaisseAndBank.CaissesAndBanks;
+                btnDepositToCaisseReport.Enabled = LocalUser.User.UserCaisseAndBank.DepositToCaisse;
+                btnDepositToBankReport.Enabled = LocalUser.User.UserCaisseAndBank.DepositToBank;
+                btnWithdrawToCaisseReport.Enabled = LocalUser.User.UserCaisseAndBank.WithdrawFromCaisse;
+                btnWithdrawBankReport.Enabled = LocalUser.User.UserCaisseAndBank.WithdrawFromBank;
+                btnTransfertCaisse.Enabled = LocalUser.User.UserCaisseAndBank.TransfertBetweenCaisse;
+                btnTreansfertBankCaisse.Enabled = LocalUser.User.UserCaisseAndBank.TransfertBetweenCaisseAndBank;
+
+                btnAllDeserved.Enabled = LocalUser.User.UserDeservedAndTax.Deserved;
+                btnVouchers.Enabled = LocalUser.User.UserDeservedAndTax.Vouchers;
+                btnVouchersReport.Enabled = LocalUser.User.UserDeservedAndTax.Vouchers;
+
+
+                btnAddRefund.Enabled = LocalUser.User.UserRefund.RefundProduct;
+                btnRefundReport.Enabled = LocalUser.User.UserRefund.RefundReport;
+                btnAllEmployees.Enabled = LocalUser.User.UserEmployee.AllEmployee;
+                btnNewEmployee.Enabled = LocalUser.User.UserEmployee.AddEmployee;
+                btnEmployeeBorrowItems.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowItem;
+                btnBorrowMonies.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowMoney;
+                btnSalaries.Enabled = LocalUser.User.UserEmployee.EmployeeSalaries;
+                btnBorrowItemsReport.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowItemsReport;
+                btnBorrowMoniesReport.Enabled = LocalUser.User.UserEmployee.EmployeeBorrowMoneyReport;
+                btnSalariesReport.Enabled = LocalUser.User.UserEmployee.EmployeeSalariesReport;
+
+                btnApplicationSettings.Enabled = LocalUser.User.UserSetting.ApplicationSettings;
+                btnUsersRoles.Enabled = LocalUser.User.UserSetting.UserPermession && !Properties.Settings.Default.TrialVersion;
+                btnProductDiscount.Enabled = LocalUser.User.UserSetting.ProductDiscounts;
+                btnComptoire.Enabled = LocalUser.User.UserSetting.Pos;
+                btnStatistics.Enabled = LocalUser.User.UserSetting.Statistics;
+                btnBackUp.Enabled = LocalUser.User.UserSetting.BackUp && !Properties.Settings.Default.TrialVersion;
+                btnRestore.Enabled = LocalUser.User.UserSetting.Restore && !Properties.Settings.Default.TrialVersion;
+                btnBackUp.Enabled = LocalUser.User.UserSetting.BackUp && !Properties.Settings.Default.TrialVersion;
+                btnRestore.Enabled = LocalUser.User.UserSetting.Restore && !Properties.Settings.Default.TrialVersion;
+            }
+            else
+            {  // 🔴 Disable ALL buttons if user is null or activation invalid
+                btnAllProducts.Enabled = false;
+                btnAllStores.Enabled = false;
+                btnAddProduct.Enabled = false;
+                btnAllCategories.Enabled = false;
+                btnStoreInventory.Enabled = false;
+                btnProductTransfertReport.Enabled = false;
+                btnProductOutStoreReport.Enabled = false;
+
+                btnAllCustomers.Enabled = false;
+                btnAddCustomer.Enabled = false;
+                btnCustomerAccount.Enabled = false;
+                btnCustomerReport.Enabled = false;
+
+                btnAllSuppliers.Enabled = false;
+                btnAddSupplier.Enabled = false;
+                btnSupplierAccount.Enabled = false;
+                btnSupplierReports.Enabled = false;
+
+                btnNewBuy.Enabled = false;
+                btnBuysReports.Enabled = false;
+
+                btnNewSale.Enabled = false;
+                btnSalesReport.Enabled = false;
+                btnProfitReport.Enabled = false;
+
+                btnCaisseAndBank.Enabled = false;
+                btnDepositToCaisseReport.Enabled = false;
+                btnDepositToBankReport.Enabled = false;
+                btnWithdrawToCaisseReport.Enabled = false;
+                btnWithdrawBankReport.Enabled = false;
+                btnTransfertCaisse.Enabled = false;
+                btnTreansfertBankCaisse.Enabled = false;
+
+                btnAllDeserved.Enabled = false;
+                btnVouchers.Enabled = false;
+                btnVouchersReport.Enabled = false;
+
+                btnAddRefund.Enabled = false;
+                btnRefundReport.Enabled = false;
+
+                btnAllEmployees.Enabled = false;
+                btnNewEmployee.Enabled = false;
+                btnEmployeeBorrowItems.Enabled = false;
+                btnBorrowMonies.Enabled = false;
+                btnSalaries.Enabled = false;
+                btnBorrowItemsReport.Enabled = false;
+                btnBorrowMoniesReport.Enabled = false;
+                btnSalariesReport.Enabled = false;
+
+                btnApplicationSettings.Enabled = false;
+                btnUsersRoles.Enabled = false;
+                btnProductDiscount.Enabled = false;
+                btnComptoire.Enabled = false;
+                btnStatistics.Enabled = false;
+                btnBackUp.Enabled = false;
+                btnRestore.Enabled = false;
             }
         }
         private void SetScreenState(bool isMax)
@@ -945,6 +1041,7 @@ namespace Store.ApplicationUI
         private async void MainForm_Load(object sender, EventArgs e)
         {
             pageHelper.SetNewPage(await _controlManager.GetAsync<HomeUserControl>());
+            ApplyAcces();
 
         }
         public UserControl GetUserControl()

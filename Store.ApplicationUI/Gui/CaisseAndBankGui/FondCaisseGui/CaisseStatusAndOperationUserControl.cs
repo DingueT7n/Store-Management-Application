@@ -337,21 +337,30 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
                 ToasterHelper.PlayNotificationSound();
                 if (MsgHelper.ShowDeleteDialog())
                 {
+                    List<int> idsToDelete = new List<int>();
+
+                    // Collect IDs from column 14
                     foreach (DataGridViewRow row in Dgv1.Rows)
                     {
-                        int id = Convert.ToInt32(row.Cells[14].Value);
-                        var deposit = await _context.CaisseStatusDetails.FirstOrDefaultAsync(x => x.Id == id);
-
-                        if (deposit != null && deposit.Status == Core.Entities.Caisses.CaisseStatus.Closed)
+                        if (row.Cells[14].Value != null && int.TryParse(row.Cells[14].Value.ToString(), out int id))
                         {
-
-                            _context.CaisseStatusDetails.Remove(deposit);
-                            await _context.SaveChangesAsync();
+                            idsToDelete.Add(id);
                         }
                     }
+
+                    // Fetch only CLOSED CaisseStatusDetails that match IDs
+                    var entitiesToDelete = await _context.CaisseStatusDetails
+                        .Where(x => idsToDelete.Contains(x.Id) && x.Status == Core.Entities.Caisses.CaisseStatus.Closed)
+                        .ToListAsync();
+
+                    if (entitiesToDelete.Any())
+                    {
+                        _context.CaisseStatusDetails.RemoveRange(entitiesToDelete);
+                        await _context.SaveChangesAsync(); // One DB call
+                    }
+
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
-                    Dgv1.DataSource = null;
                     await RefreshDgvAsync1(0);
                 }
             }
@@ -368,27 +377,36 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
                 ToasterHelper.PlayNotificationSound();
                 if (MsgHelper.ShowDeleteDialog())
                 {
+                    List<int> idsToDelete = new List<int>();
+
+                    // Collect IDs from column 16
                     foreach (DataGridViewRow row in Dgv2.Rows)
                     {
-                        int id = Convert.ToInt32(row.Cells[16].Value);
-                        var deposit = await _context.CaisseOperations.FirstOrDefaultAsync(x => x.Id == id);
-
-                        if (deposit != null)
+                        if (row.Cells[16].Value != null && int.TryParse(row.Cells[16].Value.ToString(), out int id))
                         {
-                            _context.CaisseOperations.Remove(deposit);
-                            await _context.SaveChangesAsync();
+                            idsToDelete.Add(id);
                         }
                     }
+
+                    // Fetch matching CaisseOperations
+                    var entitiesToDelete = await _context.CaisseOperations
+                        .Where(x => idsToDelete.Contains(x.Id))
+                        .ToListAsync();
+
+                    if (entitiesToDelete.Any())
+                    {
+                        _context.CaisseOperations.RemoveRange(entitiesToDelete);
+                        await _context.SaveChangesAsync(); // One DB call
+                    }
+
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
-                    Dgv2.DataSource = null;
                     await RefreshDgvAsync2(0);
                 }
             }
             catch (Exception ex)
             {
                 ToasterHelper.ShowErrorHappened(ex.Message);
-
             }
         }
     }

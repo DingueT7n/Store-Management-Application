@@ -131,7 +131,7 @@ namespace Store.Infrastructure.Repositories
                 throw new Exception("Error retrieving ProductMinQty list", ex);
             }
         }
-        public async Task<List<Product>> SearchAll(string searchItem, int pageSize, int skip)
+        public async Task<List<ProductDTO>> SearchAll(string searchItem, int pageSize, int skip)
         {
 
             try
@@ -143,21 +143,34 @@ namespace Store.Infrastructure.Repositories
 
                 if (!string.IsNullOrEmpty(searchItem))
                 {
-                    query = query.Where(x => x.Id.ToString() == searchItem ||
+                    query = query.Where(x => /*x.Id.ToString() == searchItem ||*/
                                              x.CodeBar == searchItem ||
                                              x.ColisageBareCode == searchItem ||
                                              x.ProductName.Contains(searchItem) ||
-                                             x.IsTaxed.ToString() == searchItem ||
+                                             //x.IsTaxed.ToString() == searchItem ||
                                              x.SalePrice.ToString() == searchItem ||
                                              x.Category.CategoryName.Contains(searchItem));
                 }
 
                 // Apply pagination
-                var result = await query.OrderBy(x => x.Id)
+                var result = await query.OrderBy(x => x.Id).OrderBy(x => x.CodeBar)
                                   .Skip(skip)
                                   .Take(pageSize)
                                    .Include(x => x.Category)
-                                    .Include(x => x.ProductFamilies)
+                                    .Select(x => new ProductDTO
+                                    {
+                                        CodeBar = x.CodeBar,
+                                        ProductName = x.ProductName,
+                                        Quentity = x.Quentity,
+                                        BuyPrice = x.BuyPrice,
+                                        SalePrice = x.SalePrice,
+                                        SalePriceSeconde = x.SalePriceSeconde,
+                                        WholesalePrice = x.WholesalePrice,
+                                        MinQty = x.MinQty,
+                                        Category = x.Category,
+                                        Id = x.Id,
+
+                                    })
                                   .ToListAsync();
 
                 // Add product family search result if applicable
@@ -165,10 +178,24 @@ namespace Store.Infrastructure.Repositories
                 {
                     var pf = await _context.ProductFamilies
                         .Include(x => x.Product)
+                           .Select(x => new ProductDTO
+                           {
+                               CodeBar = x.CodeBar,
+                               ProductName = x.Product.ProductName,
+                               Quentity = x.Product.Quentity,
+                               BuyPrice = x.Product.BuyPrice,
+                               SalePrice = x.Product.SalePrice,
+                               SalePriceSeconde = x.Product.SalePriceSeconde,
+                               WholesalePrice = x.Product.WholesalePrice,
+                               MinQty = x.Product.MinQty,
+                               Category = x.Product.Category,
+                               Id = x.Product.Id,
+
+                           })
                         .FirstOrDefaultAsync(x => x.CodeBar == searchItem);
-                    if (pf != null && !result.Contains(pf.Product))
+                    if (pf != null && !result.Contains(pf))
                     {
-                        result.Add(pf.Product);
+                        result.Add(pf);
                     }
                 }
 
@@ -176,7 +203,7 @@ namespace Store.Infrastructure.Repositories
             }
             catch
             {
-                return new List<Product>();
+                return new List<ProductDTO>();
             }
         }
 

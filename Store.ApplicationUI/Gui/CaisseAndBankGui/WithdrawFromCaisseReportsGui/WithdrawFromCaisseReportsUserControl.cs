@@ -160,17 +160,31 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseReportsGui
             {
                 if (MsgHelper.ShowDeleteDialog())
                 {
-                    for (int i = 0; i <= DgvSales.Rows.Count - 1; i++)
+                    List<int> idsToDelete = new List<int>();
+
+                    // Collect IDs from DataGridView
+                    foreach (DataGridViewRow row in DgvSales.Rows)
                     {
-                        var deleteedRefund = await _context.CaissesWithdraws.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i].Cells[8].Value.ToString())).FirstOrDefaultAsync();
-                        if (deleteedRefund != null)
+                        if (row.Cells[8].Value != null && int.TryParse(row.Cells[8].Value.ToString(), out int id))
                         {
-                            _context.Remove(deleteedRefund);
-                            await _context.SaveChangesAsync();
+                            idsToDelete.Add(id);
                         }
                     }
+
+                    // Fetch all matching entities at once
+                    var entitiesToDelete = await _context.CaissesWithdraws
+                        .Where(x => idsToDelete.Contains(x.Id))
+                        .ToListAsync();
+
+                    if (entitiesToDelete.Any())
+                    {
+                        _context.CaissesWithdraws.RemoveRange(entitiesToDelete);
+                        await _context.SaveChangesAsync(); // Single DB call
+                    }
+
                     Code.Helper.ToasterHelper.ShowDeletedToast();
-                    DgvSales.DataSource = null;
+
+                    // Refresh DataGridView
                     RefreshDgv(0);
                 }
             }
@@ -179,6 +193,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.WithdrawFromCaisseReportsGui
                 ToasterHelper.ShowErrorHappened(ex.Message);
                 throw;
             }
+
         }
 
         private void txtSearch_KeyDown(object sender, KeyEventArgs e)

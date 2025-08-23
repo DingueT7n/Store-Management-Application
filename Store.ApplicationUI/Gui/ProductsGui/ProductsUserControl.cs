@@ -66,11 +66,23 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         public async Task SetProductsToDgv(int skip)
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            DgvProducts.DataSource = new List<Product>();
-            DgvProducts.DataSource = await _context.Products.
-                Include(x => x.Category).Skip(skip).Take(Properties.Settings.Default.NoOfDataInDgvs).AsNoTracking().ToListAsync();
-            // Set data source
+            var dataRecived = await _context.Products.OrderBy(x => x.CodeBar).Include(x => x.Category).Select(x => new ProductDTO
+            {
+                CodeBar = x.CodeBar,
+                ProductName = x.ProductName,
+                Quentity = x.Quentity,
+                BuyPrice = x.BuyPrice,
+                SalePrice = x.SalePrice,
+                SalePriceSeconde = x.SalePriceSeconde,
+                WholesalePrice = x.WholesalePrice,
+                MinQty = x.MinQty,
+                Category = x.Category,
+                Id = x.Id,
 
+            }).Skip(skip).Take(Properties.Settings.Default.NoOfDataInDgvs).AsNoTracking().ToListAsync();
+            // Set data source
+            SetColumns();
+            DgvProducts.DataSource = dataRecived;
 
             // Calculate total pages
             double value = await _context.Products.AsNoTracking().CountAsync() / Convert.ToDouble(Properties.Settings.Default.NoOfDataInDgvs);
@@ -105,6 +117,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 //Start Load Data
 
                 // if its an admin or Normal user 
+                DgvProducts.DataSource = new List<ProductDTO>();
 
                 await SetProductsToDgv(0);
                 SetColumns();
@@ -171,20 +184,9 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             DgvProducts.Columns[4].HeaderCell.Value = "سعر البيع";
             DgvProducts.Columns[5].HeaderCell.Value = "سعر البيع 2";
             DgvProducts.Columns[6].HeaderCell.Value = "سعر الجملة";
-            DgvProducts.Columns[7].HeaderCell.Value = "قيمة الضريبة";
-            DgvProducts.Columns[8].HeaderCell.Value = "سعر البيع باحتساب الضريبة";
-            DgvProducts.Columns[9].HeaderCell.Value = "خاضع للضريبة؟";
-            DgvProducts.Columns[10].HeaderCell.Value = "تاريخ انتهاء الصلاحية";
-            DgvProducts.Columns[11].HeaderCell.Value = "كمية التنبيه";
-            DgvProducts.Columns[12].HeaderCell.Value = "اقصى تخفيض";
-            DgvProducts.Columns[13].HeaderCell.Value = "كمية الوحدات في الكرتونة";
-            DgvProducts.Columns[14].HeaderCell.Value = "باركود الكرتونة";
-            DgvProducts.Columns[15].HeaderCell.Value = "صورة المنتج";
-            DgvProducts.Columns[16].HeaderCell.Value = "معرف الصنف";
-            DgvProducts.Columns[17].HeaderCell.Value = "اسم الصنف";
-            DgvProducts.Columns[18].HeaderCell.Value = "معرف المنتج";
-            DgvProducts.Columns[19].HeaderCell.Value = "وزن المنتج";
-            DgvProducts.Columns[20].HeaderCell.Value = "معرف المنتج";
+            DgvProducts.Columns[7].HeaderCell.Value = "كمية التنبيه";
+            DgvProducts.Columns[8].HeaderCell.Value = "اسم الصنف";
+            DgvProducts.Columns[9].HeaderCell.Value = "معرف المنتج";
 
 
 
@@ -192,29 +194,25 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
             // Visible of Columns
             //DgvProducts.Columns[0].Visible = false;
-            DgvProducts.Columns[7].Visible = false;
-            DgvProducts.Columns[10].Visible = false;
+
+            //DgvProducts.Columns[7].Visible = false;
+            //DgvProducts.Columns[10].Visible = false;
             DgvProducts.Columns[9].Visible = false;
-            DgvProducts.Columns[12].Visible = false;
-            DgvProducts.Columns[13].Visible = false;
-            DgvProducts.Columns[14].Visible = false;
-            DgvProducts.Columns[16].Visible = false;
-            DgvProducts.Columns[18].Visible = false;
-            DgvProducts.Columns[20].Visible = false;
-            DgvProducts.Columns[15].Visible = false;
-            DgvProducts.Columns[13].Visible = false;
+            //DgvProducts.Columns[12].Visible = false;
+            //DgvProducts.Columns[13].Visible = false;
+            //DgvProducts.Columns[14].Visible = false;
+            //DgvProducts.Columns[16].Visible = false;
+            //DgvProducts.Columns[18].Visible = false;
+            //DgvProducts.Columns[20].Visible = false;
+            //DgvProducts.Columns[15].Visible = false;
+            //DgvProducts.Columns[13].Visible = false;
+
             //DgvProducts.Columns[13].Visible = false;
             //DgvProducts.Columns[14].Visible = false;
             //DgvProducts.Columns[13].Visible = false;
             //DgvProducts.Columns[15].Visible = false;
             // Enable sorting for visible columns
-            foreach (DataGridViewColumn column in DgvProducts.Columns)
-            {
-                if (column.Visible)
-                {
-                    column.SortMode = DataGridViewColumnSortMode.Programmatic;
-                }
-            }
+
         }
 
         private async void btnRefresh_Click(object sender, EventArgs e)
@@ -246,7 +244,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 //       Convert.ToDateTime(DgvProducts.CurrentRow.Cells[10].Value),
                 //        DgvProducts.CurrentRow.Cells[12].Value?.ToString(),
                 //        DgvProducts.CurrentRow.Cells[8].Value.ToString(),
-                //        DgvProducts.CurrentRow.Cells[20].Value.ToString(),
+                //        DgvProducts.CurrentRow.Cells[9].Value.ToString(),
                 //        (byte[])DgvProducts.CurrentRow.Cells[15].Value,
                 //          DgvProducts.CurrentRow.Cells[16].Value.ToString()
                 //          , DgvProducts.CurrentRow.Cells[5].Value.ToString()
@@ -254,7 +252,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 //          , DgvProducts.CurrentRow.Cells[14].Value.ToString()
                 //          , DgvProducts.CurrentRow.Cells[19].Value.ToString()
                 //        );
-                await form.SetDataToEditFromId(Convert.ToInt32(DgvProducts.CurrentRow.Cells[20].Value.ToString()));
+                await form.SetDataToEditFromId(Convert.ToInt32(DgvProducts.CurrentRow.Cells[9].Value.ToString()));
                 form.ShowDialog();
 
             }
@@ -265,7 +263,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
-                await _productsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[20].Value.ToString());
+                await _productsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[9].Value.ToString());
                 Code.Helper.ToasterHelper.ShowDeletedToast();
 
             }
@@ -350,7 +348,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                     //  Convert.ToDateTime(DgvProducts.CurrentRow.Cells[10].Value),
                     //   DgvProducts.CurrentRow.Cells[12].Value?.ToString(),
                     //   DgvProducts.CurrentRow.Cells[8].Value.ToString(),
-                    //   DgvProducts.CurrentRow.Cells[20].Value.ToString(),
+                    //   DgvProducts.CurrentRow.Cells[9].Value.ToString(),
                     //   (byte[])DgvProducts.CurrentRow.Cells[15].Value,
                     //     DgvProducts.CurrentRow.Cells[16].Value.ToString()
                     //     , DgvProducts.CurrentRow.Cells[5].Value.ToString()
@@ -358,7 +356,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                     //     , DgvProducts.CurrentRow.Cells[14].Value.ToString()
                     //     , DgvProducts.CurrentRow.Cells[19].Value.ToString()
                     //   );
-                    await form.SetSimilaireDataToAddFromId(Convert.ToInt32(DgvProducts.CurrentRow.Cells[20].Value.ToString()));
+                    await form.SetSimilaireDataToAddFromId(Convert.ToInt32(DgvProducts.CurrentRow.Cells[9].Value.ToString()));
 
                     form.ShowDialog();
                 }

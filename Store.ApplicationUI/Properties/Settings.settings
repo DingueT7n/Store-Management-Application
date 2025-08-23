@@ -15,7 +15,7 @@
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="UserName" Type="System.String" Scope="User">
-      <Value Profile="(Default)">AdminAlaa</Value>
+      <Value Profile="(Default)">Admin</Value>
     </Setting>
     <Setting Name="DefaultCustomerSale" Type="System.String" Scope="User">
       <Value Profile="(Default)">مشتري عادي</Value>
@@ -133,6 +133,9 @@
     </Setting>
     <Setting Name="DirectLogin" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="Password" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

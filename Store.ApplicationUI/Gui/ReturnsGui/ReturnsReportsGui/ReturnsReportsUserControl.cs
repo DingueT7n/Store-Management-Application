@@ -165,26 +165,44 @@ namespace Store.ApplicationUI.Gui.ReturnsGui.ReturnsReportsGui
             try
             {
                 ToasterHelper.PlayNotificationSound();
+
                 if (MsgHelper.ShowDeleteDialog())
                 {
-                    for (int i = 0; i < DgvSales.Rows.Count - 1; i++)
+                    List<int> idsToDelete = new List<int>();
+
+                    // Collect IDs from column 0 (Invoice Id)
+                    foreach (DataGridViewRow row in DgvSales.Rows)
                     {
-                        var deleteedRefund = await _context.Returns.Where(x => x.Id == Convert.ToInt32(DgvSales.Rows[i].Cells[0].Value.ToString())).
-                            FirstOrDefaultAsync();
-                        if (deleteedRefund != null)
+                        if (row.Cells[0].Value != null && int.TryParse(row.Cells[0].Value.ToString(), out int id))
                         {
-                            _context.Remove(deleteedRefund);
-                            await _context.SaveChangesAsync();
+                            idsToDelete.Add(id);
                         }
                     }
+
+                    if (idsToDelete.Any())
+                    {
+                        // Fetch all entities at once
+                        var entitiesToDelete = await _context.Returns
+                            .Where(x => idsToDelete.Contains(x.Id))
+                            .ToListAsync();
+
+                        if (entitiesToDelete.Any())
+                        {
+                            _context.Returns.RemoveRange(entitiesToDelete);
+                            await _context.SaveChangesAsync(); // one database call
+                        }
+                    }
+
                     Code.Helper.ToasterHelper.ShowDeletedToast();
 
+                    // Refresh DataGridView
+                    DgvSales.DataSource = null;
+                    RefreshDgv();  // optional, reloads data if needed
                 }
-                DgvSales.DataSource = null;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                ToasterHelper.ShowErrorHappened(ex.Message);
                 throw;
             }
 
