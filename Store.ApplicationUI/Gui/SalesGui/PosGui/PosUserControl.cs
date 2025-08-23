@@ -1640,6 +1640,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                     {
                         DataTable sellDetailsTable = new DataTable();
                         sellDetailsTable.Load(reader);
+                        await connection.CloseAsync();
+
                         return sellDetailsTable;
                     }
                 }

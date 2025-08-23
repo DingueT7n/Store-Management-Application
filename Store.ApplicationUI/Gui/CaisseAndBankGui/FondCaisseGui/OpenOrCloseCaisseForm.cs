@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.Models;
-using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.SalesGui.PosGui;
 using Store.Core.Entities.Helpers;
 using Store.Core.Interfaces;
@@ -16,19 +15,16 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.FondCaisseGui
         private readonly ICaisseStatusDetailRepository _repository;
         private MainForm _main;
         private PosForm _pos;
-        private readonly ControlManager _controlManager;
 
         public OpenOrCloseCaisseForm(
        ApplicationDbContext context,
-       ICaisseStatusDetailRepository repository, ControlManager controlManager
+       ICaisseStatusDetailRepository repository
        , MainForm main, PosForm pos)
         {
             InitializeComponent();
 
             _context = context;
             _repository = repository;
-
-            _controlManager = controlManager;
             _main = main;
             _pos = pos;
 

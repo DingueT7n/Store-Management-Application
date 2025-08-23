@@ -59,17 +59,17 @@ namespace Store.ApplicationUI
         }
         private static void GlobalExceptionHandler(object sender, ThreadExceptionEventArgs e)
         {
-            MessageBox.Show($"Unhandled exception: {e.Exception.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //MessageBox.Show($"Unhandled exception: {e.Exception.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private static void GlobalFatalErrorHandler(object sender, UnhandledExceptionEventArgs e)
         {
-            var ex = e.ExceptionObject as Exception;
-            MessageBox.Show($"Fatal error: {ex?.Message}", "Critical Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //var ex = e.ExceptionObject as Exception;
+            //MessageBox.Show($"Fatal error: {ex?.Message}", "Critical Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         private static void SetCultureInfo()
         {
-            CultureInfo culture = new("en-US"); // or "fr-FR", "ar-DZ", etc.
+            CultureInfo culture = new("ar-DZ"); // or "fr-FR", "ar-DZ", etc.
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
         }

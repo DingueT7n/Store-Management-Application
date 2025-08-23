@@ -8,16 +8,15 @@ namespace Store.ApplicationUI.Gui.LoginGui
         public ConnectionSettingsForm()
         {
             InitializeComponent();
-            txtServer.Text = Properties.Settings.Default.Server;
-            txtDb.Text = Properties.Settings.Default.DataBase;
+            txtDb.Enabled = false;
+            txtServer.Enabled = false;
+            txtUserCon.Enabled = false;
+            txtUserpass.Enabled = false;
+            rbLocal.Enabled = false;
+            rbWide.Enabled = false;
+            button1.Enabled = false;
+            button2.Enabled = false;
 
-
-            if (Properties.Settings.Default.ConType != "local")
-            {
-                rbWide.Checked = true;
-                txtUserCon.Text = Properties.Settings.Default.UserCon;
-                txtUserpass.Text = Properties.Settings.Default.PassCon;
-            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -33,6 +32,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
                 Properties.Settings.Default.ConType = "Wide";
                 Properties.Settings.Default.UserCon = txtUserCon.Text;
                 Properties.Settings.Default.PassCon = txtUserpass.Text;
+                Properties.Settings.Default.Save();
 
 
 
@@ -40,8 +40,11 @@ namespace Store.ApplicationUI.Gui.LoginGui
             else
             {
                 Properties.Settings.Default.ConType = "local";
+                Properties.Settings.Default.Save();
+
             }
             Properties.Settings.Default.Save();
+            Code.Helper.ConStringHelper.SetConString();
             Code.Helper.ToasterHelper.ShowAddToast();
 
         }
@@ -90,10 +93,25 @@ namespace Store.ApplicationUI.Gui.LoginGui
             {
                 if (maskedTextBox1.Text == Properties.Settings.Default.DevloperPWD || maskedTextBox1.Text == "Aloulagh47")
                 {
+                    txtServer.Text = Properties.Settings.Default.Server;
+                    txtDb.Text = Properties.Settings.Default.DataBase;
+
+
+                    if (Properties.Settings.Default.ConType != "local")
+                    {
+                        rbWide.Checked = true;
+                        txtUserCon.Text = Properties.Settings.Default.UserCon;
+                        txtUserpass.Text = Properties.Settings.Default.PassCon;
+
+
+                    }
                     txtDb.Enabled = true;
                     txtServer.Enabled = true;
-                    txtUserCon.Enabled = true;
-                    txtUserpass.Enabled = true;
+                    rbLocal.Enabled = true;
+                    rbWide.Enabled = true;
+                    button1.Enabled = true;
+                    button2.Enabled = true;
+
                 }
                 else
                 {

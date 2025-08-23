@@ -12,7 +12,7 @@ namespace Store.ApplicationUI.Gui.LoginGui
 {
     public partial class LoginForm : Form
     {
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
         public readonly LoginForm _oginForm;
         private readonly ControlManager _controlManager;
 
@@ -110,168 +110,85 @@ namespace Store.ApplicationUI.Gui.LoginGui
             {
                 ClearFormFields();
             }
-            //try
-            //{
-            //    SKGL.Validate validate = new SKGL.Validate();
-            //    validate.secretPhase = Properties.Settings.Default.Key_crypt;
-            //    validate.Key = Properties.Settings.Default.Key;
-            //    try
-            //    {
-            //        double daysLeft = Convert.ToDouble(Properties.Settings.Default.Days_left);
-            //        DateTime dateTimeCreate = Convert.ToDateTime(Properties.Settings.Default.Creation);
-            //        DateTime dateTimeExp = Convert.ToDateTime(Properties.Settings.Default.Expiration);
-            //        if (DateTime.Now.Date < dateTimeCreate.Date)
-            //            return;
-            //        if (DateTime.Now.Date > dateTimeExp.Date)
-            //        {
-            //            Properties.Settings.Default.Days_left = "0";
-            //            Properties.Settings.Default.Save();
-            //        }
-            //        if (daysLeft < 0)
-            //        {
-            //            ToasterHelper.ShowActivationCompleted();
-            //            MessageBox.Show("يرجى الاتصال بالمطور", "التفعيل", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //            return;
-            //        }
-
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        ToasterHelper.ShowErrorHappened(ex.Message);
-            //        throw;
-            //    }
-
-            //    ToasterHelper.PlayNotificationSound();
-            //    Code.Helper.ConStringHelper.SetConString();
-            //    this._context = new ApplicationDbContext();
-            //    if (string.IsNullOrWhiteSpace(txtUsername.Text) || string.IsNullOrWhiteSpace(txtPassowrd.Text))
-            //    {
-            //        MessageBox.Show("من فضلك ادخل اسم المستخدم وكلمة السر");
-            //        return;
-            //    }
-            //    if (await _context.Database.CanConnectAsync())
-            //    {
-            //        if (_context.Users.Count() > 0)
-            //        {
-            //            var result = await _context.Users
-            //             .Include(u => u.UserBuy)
-            //            .Include(u => u.UserCaisseAndBank)
-            //            .Include(u => u.UserCustomer)
-            //            .Include(u => u.UserDeservedAndTax)
-            //            .Include(u => u.UserEmployee)
-            //            .Include(u => u.UserProductAndStore)
-            //            .Include(u => u.UserRefund)
-            //            .Include(u => u.UserSale)
-            //            .Include(u => u.UserSetting)
-            //            .Include(u => u.UserSupplier)
-            //            .FirstOrDefaultAsync(u => u.UserName == txtUsername.Text && u.Password == txtPassowrd.Text);
-            //            if (result == null)
-            //            {
-
-            //                ToasterHelper.ShowLoginFailed();
-
-            //            }
-            //            else
-            //            {
-            //                ToasterHelper.ShowLoginSucceded();
-
-            //                _oginForm.Hide();
-            //                Code.Models.LocalUser.User = result;
-            //                MainForm mainForm = new MainForm();
-            //                Properties.Settings.Default.UserName = txtUsername.Text;
-            //                Properties.Settings.Default.Save();
-            //                mainForm.Show();
-
-            //            }
-            //        }
-            //        else
-            //        {
-            //            User user = new()
-            //            {
-            //                UserName = "ALGD",
-            //                Password = "ALGD2025",
-            //                UserProfit = 0.00m,
-            //                Stock_Id = 1,
-            //                type = "مدير"
-            //            };
-            //            if (_context.Caisses.Count() > 0)
-            //            {
-            //                if (_context.Caisses.FirstOrDefault(x => x.Id == Properties.Settings.Default.DefaultCaisseId) is not null)
-            //                    user.Stock_Id = Properties.Settings.Default.DefaultCaisseId;
-            //                else
-            //                {
-            //                    Caisse caisse = new()
-            //                    {
-            //                        CaisseName = "الصندوق الاول",
-            //                        MoneyinCaisse = 0
-
-            //                    };
-            //                    _context.Add(caisse);
-            //                    _context.SaveChanges();
-            //                    user.Stock_Id = caisse.Id;
-            //                }
-            //            }
-            //            _context.Add(user);
-            //            _context.SaveChanges();
-            //            AddUserRelatedEntities(user, true);
-
-
-            //        }
-            //    }
-            //    else
-            //    {
-            //        ToasterHelper.ShowConnectionIsNotEstablished();
-
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    ToasterHelper.ShowErrorHappened(ex.Message);
-            //    throw;
-            //}
-            //txtUsername.Text = string.Empty;
-            //txtPassowrd.Text = string.Empty;
         }
         private bool ValidateActivationKey()
         {
-            SKGL.Validate validate = new SKGL.Validate
+            try
             {
-                secretPhase = Properties.Settings.Default.Key_crypt,
-                Key = Properties.Settings.Default.Key
-            };
+                // Initialize validator
+                var validate = new SKGL.Validate
+                {
+                    secretPhase = Properties.Settings.Default.Key_crypt,
+                    Key = Properties.Settings.Default.Key
+                };
 
-            double daysLeft = Convert.ToDouble(Properties.Settings.Default.Days_left);
-            DateTime dateTimeCreate = Convert.ToDateTime(Properties.Settings.Default.Creation);
-            DateTime dateTimeExp = Convert.ToDateTime(Properties.Settings.Default.Expiration);
+                // Load stored settings
+                DateTime creationDate;
+                DateTime expirationDate;
+                double storedDaysLeft;
 
-            if (DateTime.Now.Date < dateTimeCreate.Date)
-            {
-                return false;
-            }
+                if (!DateTime.TryParse(Properties.Settings.Default.Creation, out creationDate))
+                    creationDate = DateTime.MinValue;
 
-            if (DateTime.Now.Date > dateTimeExp.Date)
-            {
-                Properties.Settings.Default.Days_left = "0";
+                if (!DateTime.TryParse(Properties.Settings.Default.Expiration, out expirationDate))
+                    expirationDate = DateTime.MinValue;
+
+                if (!double.TryParse(Properties.Settings.Default.Days_left, out storedDaysLeft))
+                    storedDaysLeft = 0;
+
+                // 1. Safety check: system clock tampering (date earlier than creation)
+                if (DateTime.Now.Date < creationDate.Date)
+                {
+                    MessageBox.Show("تم اكتشاف مشكلة في التاريخ. يرجى التحقق من إعدادات النظام.",
+                        "خطأ التفعيل", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return false;
+                }
+
+                // 2. Expired by saved expiration
+                if (DateTime.Now.Date > expirationDate.Date)
+                {
+                    Properties.Settings.Default.Days_left = "0";
+                    Properties.Settings.Default.Save();
+                    MessageBox.Show("انتهت صلاحية المفتاح. يرجى الاتصال بالمطور.",
+                        "التفعيل", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return false;
+                }
+
+                // 3. Days left check from stored value
+                if (storedDaysLeft <= 0)
+                {
+                    ToasterHelper.ShowActivationCompleted();
+                    MessageBox.Show("انتهت صلاحية المفتاح. يرجى الاتصال بالمطور.",
+                        "التفعيل", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return false;
+                }
+
+                // 4. Validate using SKGL
+                var daysLeft = (validate.ExpireDate.Date - DateTime.Now.Date).TotalDays;
+
+                if (daysLeft < 0 || !validate.IsValid)
+                {
+                    ToasterHelper.ShowActivationCompleted();
+                    MessageBox.Show("انتهت صلاحية المفتاح. يرجى الاتصال بالمطور.",
+                        "التفعيل", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return false;
+                }
+
+                // Update settings safely
+                Properties.Settings.Default.Days_left = daysLeft.ToString("F0");
                 Properties.Settings.Default.Save();
-            }
 
-            if (daysLeft < 0)
+                return true;
+            }
+            catch (Exception ex)
             {
-                ToasterHelper.ShowActivationCompleted();
-                MessageBox.Show("يرجى الاتصال بالمطور", "التفعيل", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // Centralized error handling for unexpected failures
+                MessageBox.Show($"حدث خطأ أثناء التحقق من التفعيل:\n{ex.Message}",
+                    "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-            var daysleft = (validate.ExpireDate.Date - DateTime.Now.Date).TotalDays;
-            if (daysleft < 0)
-            {
-                ToasterHelper.ShowActivationCompleted();
-                MessageBox.Show("يرجى الاتصال بالمطور", "التفعيل", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return false;
-            }
-            Properties.Settings.Default.Days_left = daysleft.ToString();
-            Properties.Settings.Default.Save();
-            return (validate.IsValid && validate.ExpireDate >= DateTime.Now.Date);
         }
+
 
         private async Task<bool> ValidateUserCredentialsAsync()
         {
@@ -468,6 +385,42 @@ namespace Store.ApplicationUI.Gui.LoginGui
         {
             LoginGui.KeyActivationForm.KeyActivationForm activationForm = new();
             activationForm.ShowDialog();
+        }
+
+        private async void button2_Click_1(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            Close();
+            Application.Exit();
+        }
+
+        private async void button1_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!ValidateActivationKey())
+                {
+                    LoginGui.KeyActivationForm.KeyActivationForm activationForm = _controlManager.GetF<KeyActivationForm.KeyActivationForm>();
+                    activationForm.ShowDialog();
+
+                    return;
+                }
+
+                if (!await ValidateUserCredentialsAsync())
+                {
+                    return;
+                }
+
+                NavigateToMainForm();
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+            }
+            finally
+            {
+                ClearFormFields();
+            }
         }
     }
 }

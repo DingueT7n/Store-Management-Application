@@ -380,7 +380,8 @@ namespace Store.Infrastructure.Repositories
                     .FirstOrDefault();
 
                 if (lastStatus == null)
-                    throw new InvalidOperationException("No open session found for this caisse.");
+                    return 0;
+                //throw new InvalidOperationException("No open session found for this caisse.");
 
                 var caisseDeposits = _context.CaissesDeposits.Where(x => x.Caisse_ID ==
                 caisse.Id && (x.Date >= lastStatus.OpeningTime && x.Date <= DateTime.Now)).Sum(x => x.Money);
@@ -419,7 +420,8 @@ namespace Store.Infrastructure.Repositories
                     .FirstOrDefault();
 
                 if (lastStatus == null)
-                    throw new InvalidOperationException("No open session found for this caisse.");
+                    return 0;
+                // throw new InvalidOperationException("No open session found for this caisse.");
 
                 var caisseDeposits = _context.CaissesDeposits.Where(x => x.Caisse_ID ==
                 caisse.Id && (x.Date >= lastStatus.OpeningTime && x.Date <= DateTime.Now)).Sum(x => x.Money);
@@ -484,6 +486,7 @@ namespace Store.Infrastructure.Repositories
                         .FirstOrDefaultAsync();
 
                     if (lastStatus == null)
+
                         throw new InvalidOperationException("No open session found for this caisse.");
 
                     caisse.Status = CaisseStatus.Closed;
@@ -537,6 +540,7 @@ namespace Store.Infrastructure.Repositories
                 catch (Exception ex)
                 {
                     await transaction.RollbackAsync();
+                    throw new InvalidOperationException(ex.Message);
 
 
                 }
