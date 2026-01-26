@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StoreInventoryUserControl));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle13 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle14 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle15 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle16 = new DataGridViewCellStyle();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
             PanelPagination = new Panel();
@@ -65,6 +65,7 @@
             اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem = new ToolStripMenuItem();
             جردالسلعاضافةتعديلاطلاعToolStripMenuItem = new ToolStripMenuItem();
             تصديرالىملفExcelToolStripMenuItem = new ToolStripMenuItem();
+            حذفجميعالمعلوماتToolStripMenuItem = new ToolStripMenuItem();
             flowLayoutPanelStats = new FlowLayoutPanel();
             panel1 = new Panel();
             txtAllProducts = new TextBox();
@@ -201,31 +202,31 @@
             DgvSales.AllowUserToAddRows = false;
             DgvSales.AllowUserToResizeColumns = false;
             DgvSales.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvSales.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle13.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvSales.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle13;
             DgvSales.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             DgvSales.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             DgvSales.BackgroundColor = Color.White;
             DgvSales.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             DgvSales.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle2.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle2.ForeColor = Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = Color.DodgerBlue;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            DgvSales.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle14.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle14.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle14.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle14.ForeColor = Color.White;
+            dataGridViewCellStyle14.SelectionBackColor = Color.DodgerBlue;
+            dataGridViewCellStyle14.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle14.WrapMode = DataGridViewTriState.True;
+            DgvSales.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle14;
             DgvSales.ColumnHeadersHeight = 40;
             DgvSales.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Window;
-            dataGridViewCellStyle3.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
-            DgvSales.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle15.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle15.BackColor = SystemColors.Window;
+            dataGridViewCellStyle15.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle15.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle15.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle15.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle15.WrapMode = DataGridViewTriState.False;
+            DgvSales.DefaultCellStyle = dataGridViewCellStyle15;
             DgvSales.Dock = DockStyle.Fill;
             DgvSales.EnableHeadersVisualStyles = false;
             DgvSales.GridColor = SystemColors.ControlDark;
@@ -237,8 +238,8 @@
             DgvSales.RowHeadersVisible = false;
             DgvSales.RowHeadersWidth = 21;
             DgvSales.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle4.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
-            DgvSales.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle16.Font = new Font("Sakkal Majalla", 14.25F, FontStyle.Bold);
+            DgvSales.RowsDefaultCellStyle = dataGridViewCellStyle16;
             DgvSales.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DgvSales.Size = new Size(1020, 370);
             DgvSales.TabIndex = 36;
@@ -292,6 +293,7 @@
             rbStoreAll.TabStop = true;
             rbStoreAll.Text = "كل المخازن";
             rbStoreAll.UseVisualStyleBackColor = true;
+            rbStoreAll.CheckedChanged += rbStoreAll_CheckedChanged;
             // 
             // rbSelectedStore
             // 
@@ -306,6 +308,7 @@
             rbSelectedStore.TabIndex = 7;
             rbSelectedStore.Text = "مخزن محدد";
             rbSelectedStore.UseVisualStyleBackColor = false;
+            rbSelectedStore.CheckedChanged += rbSelectedStore_CheckedChanged;
             // 
             // cmbStores
             // 
@@ -316,6 +319,7 @@
             cmbStores.Name = "cmbStores";
             cmbStores.Size = new Size(164, 27);
             cmbStores.TabIndex = 8;
+            cmbStores.SelectionChangeCommitted += cmbStores_SelectionChangeCommitted;
             // 
             // SearchPanel
             // 
@@ -443,6 +447,7 @@
             // panelButtons
             // 
             panelButtons.Controls.Add(menuStrip1);
+            panelButtons.Font = new Font("Calibri", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             panelButtons.Location = new Point(23, 3);
             panelButtons.Name = "panelButtons";
             panelButtons.Padding = new Padding(25);
@@ -451,19 +456,21 @@
             // 
             // menuStrip1
             // 
+            menuStrip1.BackColor = SystemColors.ButtonFace;
             menuStrip1.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             menuStrip1.Items.AddRange(new ToolStripItem[] { عملياتالجردالمتاحةToolStripMenuItem });
             menuStrip1.Location = new Point(25, 25);
             menuStrip1.Margin = new Padding(25);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Padding = new Padding(5);
+            menuStrip1.RenderMode = ToolStripRenderMode.Professional;
             menuStrip1.Size = new Size(173, 33);
             menuStrip1.TabIndex = 11;
             menuStrip1.Text = "العمليات المتاحة";
             // 
             // عملياتالجردالمتاحةToolStripMenuItem
             // 
-            عملياتالجردالمتاحةToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { تحويلالمنتجاتبينالمخازنToolStripMenuItem, اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem, جردالسلعاضافةتعديلاطلاعToolStripMenuItem, تصديرالىملفExcelToolStripMenuItem });
+            عملياتالجردالمتاحةToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { تحويلالمنتجاتبينالمخازنToolStripMenuItem, اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem, جردالسلعاضافةتعديلاطلاعToolStripMenuItem, تصديرالىملفExcelToolStripMenuItem, حذفجميعالمعلوماتToolStripMenuItem });
             عملياتالجردالمتاحةToolStripMenuItem.Name = "عملياتالجردالمتاحةToolStripMenuItem";
             عملياتالجردالمتاحةToolStripMenuItem.Size = new Size(139, 23);
             عملياتالجردالمتاحةToolStripMenuItem.Text = "عمليات الجرد المتاحة";
@@ -471,30 +478,37 @@
             // تحويلالمنتجاتبينالمخازنToolStripMenuItem
             // 
             تحويلالمنتجاتبينالمخازنToolStripMenuItem.Name = "تحويلالمنتجاتبينالمخازنToolStripMenuItem";
-            تحويلالمنتجاتبينالمخازنToolStripMenuItem.Size = new Size(262, 24);
+            تحويلالمنتجاتبينالمخازنToolStripMenuItem.Size = new Size(358, 24);
             تحويلالمنتجاتبينالمخازنToolStripMenuItem.Text = "تحويل المنتجات بين المخازن";
             تحويلالمنتجاتبينالمخازنToolStripMenuItem.Click += تحويلالمنتجاتبينالمخازنToolStripMenuItem_Click;
             // 
             // اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem
             // 
             اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem.Name = "اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem";
-            اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem.Size = new Size(262, 24);
+            اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem.Size = new Size(358, 24);
             اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem.Text = "اخراج المنتجات التالفة من المخزن";
             اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem.Click += اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem_Click;
             // 
             // جردالسلعاضافةتعديلاطلاعToolStripMenuItem
             // 
             جردالسلعاضافةتعديلاطلاعToolStripMenuItem.Name = "جردالسلعاضافةتعديلاطلاعToolStripMenuItem";
-            جردالسلعاضافةتعديلاطلاعToolStripMenuItem.Size = new Size(262, 24);
+            جردالسلعاضافةتعديلاطلاعToolStripMenuItem.Size = new Size(358, 24);
             جردالسلعاضافةتعديلاطلاعToolStripMenuItem.Text = "جرد السلع اضافة/تعديل/اطلاع";
             جردالسلعاضافةتعديلاطلاعToolStripMenuItem.Click += جردالسلعاضافةتعديلاطلاعToolStripMenuItem_Click;
             // 
             // تصديرالىملفExcelToolStripMenuItem
             // 
             تصديرالىملفExcelToolStripMenuItem.Name = "تصديرالىملفExcelToolStripMenuItem";
-            تصديرالىملفExcelToolStripMenuItem.Size = new Size(262, 24);
+            تصديرالىملفExcelToolStripMenuItem.Size = new Size(358, 24);
             تصديرالىملفExcelToolStripMenuItem.Text = "تصدير الى ملف Excel";
             تصديرالىملفExcelToolStripMenuItem.Click += تصديرالىملفExcelToolStripMenuItem_Click;
+            // 
+            // حذفجميعالمعلوماتToolStripMenuItem
+            // 
+            حذفجميعالمعلوماتToolStripMenuItem.Name = "حذفجميعالمعلوماتToolStripMenuItem";
+            حذفجميعالمعلوماتToolStripMenuItem.Size = new Size(358, 24);
+            حذفجميعالمعلوماتToolStripMenuItem.Text = "حذف جميع المعلومات(لا يمكن استرجاع المعلومات)";
+            حذفجميعالمعلوماتToolStripMenuItem.Click += حذفجميعالمعلوماتToolStripMenuItem_Click;
             // 
             // flowLayoutPanelStats
             // 
@@ -851,5 +865,6 @@
         private ToolStripMenuItem اخراجالمنتجاتالتالفةمنالمخزنToolStripMenuItem;
         private ToolStripMenuItem جردالسلعاضافةتعديلاطلاعToolStripMenuItem;
         private ToolStripMenuItem تصديرالىملفExcelToolStripMenuItem;
+        private ToolStripMenuItem حذفجميعالمعلوماتToolStripMenuItem;
     }
 }

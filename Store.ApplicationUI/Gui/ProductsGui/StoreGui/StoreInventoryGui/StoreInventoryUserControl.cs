@@ -406,5 +406,26 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
         {
 
         }
+
+        private async void حذفجميعالمعلوماتToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToasterHelper.PlayNotificationSound();
+            if (MsgHelper.ShowDeleteDialog())
+            {
+                try
+                {
+                    await _context.Database.ExecuteSqlRawAsync($"DELETE FROM [ProductsQuantities]");
+                    Code.Helper.ToasterHelper.ShowDeletedToast();
+
+
+                    await RefreshDgv();
+                }
+                catch (Exception ex)
+                {
+                    // Handle or log the exception
+                    MessageBox.Show($"لقد حدث خطأ {ex.Message}", "خطأ برمجي", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
     }
 }

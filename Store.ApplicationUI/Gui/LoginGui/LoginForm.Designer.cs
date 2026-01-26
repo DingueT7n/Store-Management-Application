@@ -72,6 +72,7 @@
             lblActivation.TabIndex = 6;
             lblActivation.Text = "شاشة التفعيل";
             lblActivation.Visible = false;
+            lblActivation.Click += label5_Click;
             // 
             // lblCon
             // 
@@ -85,6 +86,7 @@
             lblCon.TabIndex = 5;
             lblCon.Text = "تعديل اعدادات الاتصال";
             lblCon.Visible = false;
+            lblCon.Click += lblCon_Click;
             // 
             // button2
             // 
@@ -151,6 +153,7 @@
             txtPassowrd.TabIndex = 2;
             txtPassowrd.TextAlign = HorizontalAlignment.Center;
             txtPassowrd.WordWrap = false;
+            txtPassowrd.KeyPress += txtPassowrd_KeyPress;
             // 
             // label3
             // 
@@ -173,6 +176,8 @@
             txtUsername.TabIndex = 0;
             txtUsername.TextAlign = HorizontalAlignment.Center;
             txtUsername.WordWrap = false;
+            txtUsername.KeyDown += txtUsername_KeyDown;
+            txtUsername.KeyPress += txtUsername_KeyPress;
             // 
             // label2
             // 
@@ -205,6 +210,7 @@
             Controls.Add(panel1);
             Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             FormBorderStyle = FormBorderStyle.None;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             KeyPreview = true;
             Margin = new Padding(3, 4, 3, 4);
             MaximizeBox = false;

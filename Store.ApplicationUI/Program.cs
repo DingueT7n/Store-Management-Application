@@ -28,6 +28,7 @@ namespace Store.ApplicationUI
 
             SetCultureInfo();
 
+
             // Optional: Persist decimal separator
             NumberFormatInfo numberFormat = CultureInfo.CurrentCulture.NumberFormat;
             Properties.Settings.Default.DecimalSEP = numberFormat.NumberDecimalSeparator;
@@ -69,7 +70,7 @@ namespace Store.ApplicationUI
         }
         private static void SetCultureInfo()
         {
-            CultureInfo culture = new("ar-DZ"); // or "fr-FR", "ar-DZ", etc.
+            CultureInfo culture = new("en-US"); // or "fr-FR", "ar-DZ", etc.
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
         }

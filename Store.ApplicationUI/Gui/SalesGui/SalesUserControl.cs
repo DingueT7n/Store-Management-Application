@@ -1237,5 +1237,16 @@ namespace Store.ApplicationUI.Gui.SalesGui
 
         }
 
+        private void txtSearchBarCode_TextChanged(object sender, EventArgs e)
+        {
+            string cleaned = System.Text.RegularExpressions.Regex.Replace(txtSearchBarCode.Text, @"[\r\n\t]", "").Trim();
+
+            if (txtSearchBarCode.Text != cleaned)
+            {
+                int cursorPos = txtSearchBarCode.SelectionStart;
+                txtSearchBarCode.Text = cleaned;
+                txtSearchBarCode.SelectionStart = Math.Min(cursorPos, txtSearchBarCode.Text.Length);
+            }
+        }
     }
 }

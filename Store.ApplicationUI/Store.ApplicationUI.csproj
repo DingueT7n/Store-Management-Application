@@ -9,6 +9,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Store-Application</Title>
     <PlatformTarget>x86</PlatformTarget>
+    <ApplicationIcon>onlineshop_78377.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="onlineshop_78377.ico" />
     <Content Include="Resources\People.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -666,7 +666,6 @@
         private Label label1;
         private TextBox txtNameProduct;
         private Label label2;
-        private TextBox txtBarCode;
         private Label label16;
         private Label label15;
         private Label label14;
@@ -723,5 +722,6 @@
         private Label label27;
         private TextBox txtWeights;
         private Label label28;
+        public TextBox txtBarCode;
     }
 }

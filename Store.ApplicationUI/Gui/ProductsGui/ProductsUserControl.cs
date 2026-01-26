@@ -129,16 +129,18 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 ToolStripMenuItem editItem = new ToolStripMenuItem("التعديل");
                 ToolStripMenuItem deleteItem = new ToolStripMenuItem("الحذف");
                 ToolStripMenuItem similarItem = new ToolStripMenuItem("اضافة منتج مماثل");
+                ToolStripMenuItem deleteCurrentPage = new ToolStripMenuItem("حذف منتجات الصفحة الحالية");
 
 
                 // Add click events
                 editItem.Click += EditItem_Click;
                 deleteItem.Click += DeleteItem_Click;
                 similarItem.Click += similarItem_Click;
+                deleteCurrentPage.Click += deleteCurrentPage_Click;
 
 
                 // Add items to the menu
-                contextMenu.Items.AddRange(new ToolStripItem[] { editItem, deleteItem, similarItem });
+                contextMenu.Items.AddRange(new ToolStripItem[] { editItem, deleteItem, similarItem, deleteCurrentPage });
 
                 // Assign context menu to DataGridView
                 DgvProducts.ContextMenuStrip = contextMenu;
@@ -171,6 +173,43 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         {
             //MessageBox.Show("Delete option clicked");
             btnAddSimilareProduct_Click(sender, e);
+
+        }
+        private async void deleteCurrentPage_Click(object sender, EventArgs e)
+        {
+
+            ToasterHelper.PlayNotificationSound();
+
+            if (DgvProducts.Rows.Count == 0)
+            {
+                MsgHelper.ShowEmptyDataGridView();
+                return;
+            }
+
+            if (!MsgHelper.ShowDeleteDialog())
+                return;
+
+            try
+            {
+                // Collect product IDs from the current page
+                var idsToDelete = DgvProducts.Rows
+                    .Cast<DataGridViewRow>()
+                    .Where(r => r.Cells[9].Value != null) // Column 9 = Product Id (you hid it in SetColumns)
+                    .Select(r => r.Cells[9].Value.ToString())
+                    .ToList();
+
+                foreach (var id in idsToDelete)
+                {
+                    await _productsRepository.DeleteAsync(id);
+                }
+
+                Code.Helper.ToasterHelper.ShowDeletedToast();
+                await LoadData(); // reload grid after deletion
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened(ex.Message);
+            }
 
         }
 

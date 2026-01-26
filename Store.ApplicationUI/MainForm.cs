@@ -93,6 +93,7 @@ namespace Store.ApplicationUI
                 ToasterHelper.ShowErrorHappened(ex.Message);
 
             }
+
         }
         public bool DirectLoginUserCredential()
         {

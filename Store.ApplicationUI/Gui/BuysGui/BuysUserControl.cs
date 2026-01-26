@@ -5,6 +5,7 @@ using Store.ApplicationUI.Code.Helper;
 using Store.ApplicationUI.Code.System;
 using Store.ApplicationUI.Gui.LoadingGui;
 using Store.ApplicationUI.Gui.PaymentGui;
+using Store.ApplicationUI.Gui.ProductsGui;
 using Store.ApplicationUI.Reports.BuysReports;
 using Store.Core.Entities.Buys;
 using Store.Core.Entities.Caisses;
@@ -210,28 +211,28 @@ namespace Store.ApplicationUI.Gui.BuysGui
             }
         }
         private Product _product;
-        public void SetProductsToTable()
+        public async void SetProductsToTable()
         {
             try
             {
-
-
                 //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
                 _product = _buysRepository.GetProductBarCode(txtSearchBarCode.Text);
                 if (_product is not null)
                 {
                     InitializeTextBoxesAndLables(_product);
-
-
                     txtQty.Focus();
                     txtQty.SelectAll();
                     CalculateAmount();
                 }
                 else
                 {
-                    MsgHelper.ShowEmptyResult();
+                    if (MsgHelper.ShowEmptyResultDialog())
+                    {
+                        AddProductForm addProductForm = await _controlManager.GetFAsync<AddProductForm>();
+                        addProductForm.txtBarCode.Text = txtSearchBarCode.Text.Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
+                        addProductForm.ShowDialog();
+                    }
                     txtSearchBarCode.Focus();
-
                 }
                 txtSearchBarCode.Clear();
             }
@@ -1330,6 +1331,23 @@ namespace Store.ApplicationUI.Gui.BuysGui
 
             selectProductsForm.SetBuy();
             selectProductsForm.ShowDialog();
+        }
+
+        private void txtWholeSalePrice_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void txtSearchBarCode_TextChanged(object sender, EventArgs e)
+        {
+            string cleaned = System.Text.RegularExpressions.Regex.Replace(txtSearchBarCode.Text, @"[\r\n\t]", "").Trim();
+
+            if (txtSearchBarCode.Text != cleaned)
+            {
+                int cursorPos = txtSearchBarCode.SelectionStart;
+                txtSearchBarCode.Text = cleaned;
+                txtSearchBarCode.SelectionStart = Math.Min(cursorPos, txtSearchBarCode.Text.Length);
+            }
         }
     }
 }

@@ -948,8 +948,17 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
         private void txtBarCode_TextChanged(object sender, EventArgs e)
         {
+
             try
             {
+                string cleaned = System.Text.RegularExpressions.Regex.Replace(txtBarCode.Text, @"[\r\n\t]", "").Trim();
+
+                if (txtBarCode.Text != cleaned)
+                {
+                    int cursorPos = txtBarCode.SelectionStart;
+                    txtBarCode.Text = cleaned;
+                    txtBarCode.SelectionStart = Math.Min(cursorPos, txtBarCode.Text.Length);
+                }
                 if (sender is TextBox textBox)
                 {
                     if (!MsgHelper.ShowBareCodeDuplicatedWithoutMessages(_context, textBox.Text))

@@ -89,8 +89,9 @@ namespace Store.ApplicationUI.Gui.LoginGui
             {
                 if (!ValidateActivationKey())
                 {
-                    LoginGui.KeyActivationForm.KeyActivationForm activationForm = _controlManager.GetF<KeyActivationForm.KeyActivationForm>();
+                    LoginGui.KeyActivationForm.KeyActivationForm activationForm = await _controlManager.GetFAsync<KeyActivationForm.KeyActivationForm>();
                     activationForm.ShowDialog();
+                    Application.Restart();
 
                     return;
                 }
@@ -351,10 +352,10 @@ namespace Store.ApplicationUI.Gui.LoginGui
             }
         }
 
-        private void lblCon_Click(object sender, EventArgs e)
+        private async void lblCon_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            ConnectionSettingsForm connectionSettingsForm = _controlManager.GetF<ConnectionSettingsForm>();
+            ConnectionSettingsForm connectionSettingsForm = await _controlManager.GetFAsync<ConnectionSettingsForm>();
             this.Hide();
             connectionSettingsForm.ShowDialog();
             this.Show();
@@ -381,10 +382,15 @@ namespace Store.ApplicationUI.Gui.LoginGui
 
         }
 
-        private void label5_Click(object sender, EventArgs e)
+        private async void label5_Click(object sender, EventArgs e)
         {
-            LoginGui.KeyActivationForm.KeyActivationForm activationForm = new();
+
+            LoginGui.KeyActivationForm.KeyActivationForm activationForm = await _controlManager.GetFAsync<KeyActivationForm.KeyActivationForm>();
+
             activationForm.ShowDialog();
+            Application.Restart();
+            Close();
+
         }
 
         private async void button2_Click_1(object sender, EventArgs e)
@@ -400,8 +406,9 @@ namespace Store.ApplicationUI.Gui.LoginGui
             {
                 if (!ValidateActivationKey())
                 {
-                    LoginGui.KeyActivationForm.KeyActivationForm activationForm = _controlManager.GetF<KeyActivationForm.KeyActivationForm>();
+                    LoginGui.KeyActivationForm.KeyActivationForm activationForm = await _controlManager.GetFAsync<KeyActivationForm.KeyActivationForm>();
                     activationForm.ShowDialog();
+                    Application.Restart();
 
                     return;
                 }

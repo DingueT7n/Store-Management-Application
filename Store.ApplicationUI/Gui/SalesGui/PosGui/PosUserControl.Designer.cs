@@ -323,6 +323,7 @@
             txtSearchBarCode.Size = new Size(248, 36);
             txtSearchBarCode.TabIndex = 1;
             txtSearchBarCode.TextAlign = HorizontalAlignment.Center;
+            txtSearchBarCode.TextChanged += txtSearchBarCode_TextChanged;
             txtSearchBarCode.KeyDown += txtSearchBarCode_KeyDown;
             txtSearchBarCode.KeyPress += txtSearchBarCode_KeyPress;
             // 

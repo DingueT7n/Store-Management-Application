@@ -238,6 +238,18 @@ namespace Store.ApplicationUI.Code.Helper
                   "لا يوجد بيانات"
                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+        public static bool ShowEmptyResultDialog()
+        {
+            DialogResult result = MessageBox.Show(
+                "لا توجد بيانات، هل تريد إضافة البيانات؟",
+                "لا يوجد بيانات",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
+            return result == DialogResult.Yes;
+        }
+
 
         public static void ShowDeleteSelectRow()
         {

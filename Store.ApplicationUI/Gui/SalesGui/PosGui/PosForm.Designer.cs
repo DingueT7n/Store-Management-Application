@@ -247,6 +247,7 @@
             ClientSize = new Size(1350, 749);
             Controls.Add(ContainerPanel);
             Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             KeyPreview = true;
             Margin = new Padding(3, 4, 3, 4);
             MinimizeBox = false;

@@ -47,6 +47,8 @@
             DevExpress.XtraCharts.LineSeriesView lineSeriesView8 = new DevExpress.XtraCharts.LineSeriesView();
             DevExpress.XtraCharts.Series series9 = new DevExpress.XtraCharts.Series();
             DevExpress.XtraCharts.LineSeriesView lineSeriesView9 = new DevExpress.XtraCharts.LineSeriesView();
+            DevExpress.XtraCharts.Series series10 = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.LineSeriesView lineSeriesView10 = new DevExpress.XtraCharts.LineSeriesView();
             OperationsflowLayoutPanel = new FlowLayoutPanel();
             flowLayoutPanel1 = new FlowLayoutPanel();
             lblFrom = new Label();
@@ -84,6 +86,7 @@
             cmbSaleProfit = new ComboBox();
             chartControl6 = new DevExpress.XtraCharts.ChartControl();
             panel9 = new Panel();
+            chartControl9 = new DevExpress.XtraCharts.ChartControl();
             flowLayoutPanel9 = new FlowLayoutPanel();
             label6 = new Label();
             txtTotalDeserved = new TextBox();
@@ -117,7 +120,8 @@
             txtBuySale = new TextBox();
             rbSale = new RadioButton();
             rbBuy = new RadioButton();
-            chartControl9 = new DevExpress.XtraCharts.ChartControl();
+            panel10 = new Panel();
+            chartControl10 = new DevExpress.XtraCharts.ChartControl();
             OperationsflowLayoutPanel.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
@@ -158,6 +162,9 @@
             ((System.ComponentModel.ISupportInitialize)series8).BeginInit();
             ((System.ComponentModel.ISupportInitialize)lineSeriesView8).BeginInit();
             panel9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)chartControl9).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)series9).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)lineSeriesView9).BeginInit();
             flowLayoutPanel9.SuspendLayout();
             flowLayoutPanel7.SuspendLayout();
             flowLayoutPanel8.SuspendLayout();
@@ -166,9 +173,10 @@
             flowLayoutPanel12.SuspendLayout();
             panelZakat.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)chartControl9).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)series9).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)lineSeriesView9).BeginInit();
+            panel10.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)chartControl10).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)series10).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)lineSeriesView10).BeginInit();
             SuspendLayout();
             // 
             // OperationsflowLayoutPanel
@@ -410,6 +418,7 @@
             flowLayoutPanel10.Controls.Add(panel5);
             flowLayoutPanel10.Controls.Add(panel6);
             flowLayoutPanel10.Controls.Add(panel9);
+            flowLayoutPanel10.Controls.Add(panel10);
             flowLayoutPanel10.Dock = DockStyle.Fill;
             flowLayoutPanel10.Location = new Point(0, 126);
             flowLayoutPanel10.Name = "flowLayoutPanel10";
@@ -667,6 +676,29 @@
             panel9.Name = "panel9";
             panel9.Size = new Size(1004, 529);
             panel9.TabIndex = 20;
+            // 
+            // chartControl9
+            // 
+            chartControl9.AppearanceNameSerializable = "Pastel Kit";
+            chartControl9.BorderOptions.Color = Color.FromArgb(192, 80, 77);
+            chartControl9.BorderOptions.Thickness = 2;
+            chartControl9.BorderOptions.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            chartControl9.Dock = DockStyle.Fill;
+            chartControl9.Location = new Point(0, 0);
+            chartControl9.Name = "chartControl9";
+            chartControl9.PaletteBaseColorNumber = 4;
+            chartControl9.PaletteName = "Pastel Kit";
+            series9.Name = "Series 1";
+            series9.SeriesID = 14;
+            series9.View = lineSeriesView9;
+            series9.Visible = false;
+            chartControl9.SeriesSerializable = new DevExpress.XtraCharts.Series[]
+    {
+    series9
+    };
+            chartControl9.SeriesTemplate.LegendTextPattern = "yyyy/MM/dd";
+            chartControl9.Size = new Size(1004, 529);
+            chartControl9.TabIndex = 11;
             // 
             // flowLayoutPanel9
             // 
@@ -1043,28 +1075,36 @@
             rbBuy.UseVisualStyleBackColor = true;
             rbBuy.CheckedChanged += rbBuy_CheckedChanged;
             // 
-            // chartControl9
+            // panel10
             // 
-            chartControl9.AppearanceNameSerializable = "Pastel Kit";
-            chartControl9.BorderOptions.Color = Color.FromArgb(192, 80, 77);
-            chartControl9.BorderOptions.Thickness = 2;
-            chartControl9.BorderOptions.Visibility = DevExpress.Utils.DefaultBoolean.True;
-            chartControl9.Dock = DockStyle.Fill;
-            chartControl9.Location = new Point(0, 0);
-            chartControl9.Name = "chartControl9";
-            chartControl9.PaletteBaseColorNumber = 4;
-            chartControl9.PaletteName = "Pastel Kit";
-            series9.Name = "Series 1";
-            series9.SeriesID = 14;
-            series9.View = lineSeriesView9;
-            series9.Visible = false;
-            chartControl9.SeriesSerializable = new DevExpress.XtraCharts.Series[]
+            panel10.Controls.Add(chartControl10);
+            panel10.Location = new Point(10, 4818);
+            panel10.Name = "panel10";
+            panel10.Size = new Size(1004, 529);
+            panel10.TabIndex = 21;
+            // 
+            // chartControl10
+            // 
+            chartControl10.AppearanceNameSerializable = "Pastel Kit";
+            chartControl10.BorderOptions.Color = Color.FromArgb(192, 80, 77);
+            chartControl10.BorderOptions.Thickness = 2;
+            chartControl10.BorderOptions.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            chartControl10.Dock = DockStyle.Fill;
+            chartControl10.Location = new Point(0, 0);
+            chartControl10.Name = "chartControl10";
+            chartControl10.PaletteBaseColorNumber = 4;
+            chartControl10.PaletteName = "Pastel Kit";
+            series10.Name = "Series 1";
+            series10.SeriesID = 14;
+            series10.View = lineSeriesView10;
+            series10.Visible = false;
+            chartControl10.SeriesSerializable = new DevExpress.XtraCharts.Series[]
     {
-    series9
+    series10
     };
-            chartControl9.SeriesTemplate.LegendTextPattern = "yyyy/MM/dd";
-            chartControl9.Size = new Size(1004, 529);
-            chartControl9.TabIndex = 11;
+            chartControl10.SeriesTemplate.LegendTextPattern = "yyyy/MM/dd";
+            chartControl10.Size = new Size(1004, 529);
+            chartControl10.TabIndex = 11;
             // 
             // StatisticsUserControl
             // 
@@ -1125,6 +1165,9 @@
             ((System.ComponentModel.ISupportInitialize)series8).EndInit();
             ((System.ComponentModel.ISupportInitialize)chartControl6).EndInit();
             panel9.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)lineSeriesView9).EndInit();
+            ((System.ComponentModel.ISupportInitialize)series9).EndInit();
+            ((System.ComponentModel.ISupportInitialize)chartControl9).EndInit();
             flowLayoutPanel9.ResumeLayout(false);
             flowLayoutPanel9.PerformLayout();
             flowLayoutPanel7.ResumeLayout(false);
@@ -1139,9 +1182,10 @@
             panelZakat.ResumeLayout(false);
             panelZakat.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)lineSeriesView9).EndInit();
-            ((System.ComponentModel.ISupportInitialize)series9).EndInit();
-            ((System.ComponentModel.ISupportInitialize)chartControl9).EndInit();
+            panel10.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)lineSeriesView10).EndInit();
+            ((System.ComponentModel.ISupportInitialize)series10).EndInit();
+            ((System.ComponentModel.ISupportInitialize)chartControl10).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1219,5 +1263,7 @@
         private ComboBox cmbNbrProductQty;
         private ComboBox cmbSaleProfit;
         private DevExpress.XtraCharts.ChartControl chartControl9;
+        private Panel panel10;
+        private DevExpress.XtraCharts.ChartControl chartControl10;
     }
 }

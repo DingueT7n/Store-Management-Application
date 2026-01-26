@@ -343,7 +343,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
                 {
                     txtSaleDiscount.Text = "0";
                 }
-                if (btnPrices.Text == "سعر 1")
+                if (btnPrices.Text == "سعر 1" || btnPrices.Text == "سعر 1 (F7)")
                 {
                     txtSalePrice.Text = (product.SalePriceTax).ToString();
                     txtTotalSaleProduct.Text = (product.SalePriceTax * weight).ToString();
@@ -375,6 +375,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
         private void txtSearchBarCode_KeyDown(object sender, KeyEventArgs e)
         {
+
             if (e.KeyCode == Keys.Enter)
             {
                 txtSearchBarCode.Text = txtSearchBarCode.Text.Replace("\r\n", "");
@@ -462,6 +463,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         }
         public async void InitializeTextBoxesAndLables(Product product)
         {
+            txtQty.Text = "0";
             var idstore = Properties.Settings.Default.FastSaleStore;
             ProductDiscount productDiscount = _context.ProductDiscounts.
                 Where(x => x.Pro_Id.ToString() == product.Id.ToString() && x.Quentity > 0
@@ -486,15 +488,21 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
             if (txtQty.Text != string.Empty)
             {
-                txtQty.Text = !product.ColisageBareCode.IsNullOrEmpty() && product.ColisageBareCode == txtSearchBarCode.Text ?
-                    (ConvertToFloat(txtQty.Text) + product.NbrProductInColis).ToString() : "1";
+                bool isColisageMatch =
+                 !string.IsNullOrEmpty(product.ColisageBareCode) &&
+                 product.ColisageBareCode == txtSearchBarCode.Text;
 
+                decimal qty = ConvertToFloat(txtQty.Text);
+
+                txtQty.Text = isColisageMatch
+                    ? (qty + product.NbrProductInColis).ToString()
+                    : "1";
             }
             else
             {
                 txtQty.Text = !product.ColisageBareCode.IsNullOrEmpty() && product.ColisageBareCode == txtSearchBarCode.Text ? product.NbrProductInColis.ToString() : "1";
             }
-            if (btnPrices.Text == "سعر 1")
+            if (btnPrices.Text == "سعر 1" || btnPrices.Text == "سعر 1 (F7)")
             {
                 txtTotalSaleProduct.Text = product.SalePriceTax.ToString();
                 txtSalePrice.Text = product.SalePriceTax.ToString();
@@ -515,8 +523,6 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
 
             }
-
-
         }
         public void ClearBoxes()
         {
@@ -693,18 +699,19 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         public async void EditUsingPlusMinus(object sender, KeyEventArgs e)
         {
 
-            if (e.KeyCode == Keys.Oemplus)
+            if (e.KeyCode == Keys.Oemplus || e.KeyCode == Keys.Add)
             {
                 EditFromTable(1);
                 CalculateAmount();
                 AddNewRow();
             }
-            else if (e.KeyCode == Keys.OemMinus)
+            else if (e.KeyCode == Keys.OemMinus || e.KeyCode == Keys.Subtract)
             {
                 EditFromTable(-1);
                 CalculateAmount();
                 AddNewRow();
             }
+            int x = 10;
         }
         public void Arrows(object sender, KeyEventArgs e)
         {
@@ -958,10 +965,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
         private void txtSearchBarCode_KeyPress(object sender, KeyPressEventArgs e)
         {
-            //if (!char.IsDigit(e.KeyChar) && e.KeyChar != Properties.Settings.Default.DecimalSEP[0] && e.KeyChar != 8)
-            //{
-            //    e.Handled = true;
-            //}
+
+
 
         }
 
@@ -1701,7 +1706,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         private void btnPrices_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            if (btnPrices.Text == "سعر 1")
+            if (btnPrices.Text == "سعر 1" || btnPrices.Text == "سعر 1 (F7)")
             {
                 btnPrices.BackColor = Color.Yellow;
                 btnPrices.Text = "سعر 2";
@@ -1846,6 +1851,25 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             {
                 int skip = cmbpagination.SelectedIndex * Properties.Settings.Default.NoOfDataInDgvs;
                 OnLoad(skip);
+            }
+        }
+
+        private void txtSearchBarCode_TextChanged(object sender, EventArgs e)
+        {
+            if (txtSearchBarCode.Text.Contains("-") || txtSearchBarCode.Text.Contains("+")
+                || txtSearchBarCode.Text.Contains("="))
+            {
+                txtSearchBarCode.Text = txtSearchBarCode.Text.Replace("-", "").Replace("+", "").Replace("=", "");
+
+            }
+            txtSearchBarCode.Text.Replace("-", "").Replace("+", "").Replace("/", "");
+            string cleaned = System.Text.RegularExpressions.Regex.Replace(txtSearchBarCode.Text, @"[\r\n\t]", "").Trim();
+
+            if (txtSearchBarCode.Text != cleaned)
+            {
+                int cursorPos = txtSearchBarCode.SelectionStart;
+                txtSearchBarCode.Text = cleaned;
+                txtSearchBarCode.SelectionStart = Math.Min(cursorPos, txtSearchBarCode.Text.Length);
             }
         }
     }

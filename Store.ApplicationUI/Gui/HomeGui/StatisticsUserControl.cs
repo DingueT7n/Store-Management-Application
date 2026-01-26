@@ -208,6 +208,8 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 await VisualizeTopProductsByQuantityAsync();
                 await VisualizeNetProfitAsync();
                 await VisualizeProfitAsync();
+                await VisualizeIncomingMoneyByCategoryAsync(chartControl10);
+
 
             }
             catch (Exception ex)
@@ -216,6 +218,62 @@ namespace Store.ApplicationUI.Gui.HomeGui
                 throw;
             }
 
+        }
+        private async Task VisualizeIncomingMoneyByCategoryAsync(ChartControl chartControl)
+        {
+            try
+            {
+                chartControl.Series.Clear();
+                chartControl.RightToLeft = RightToLeft.Yes;
+
+                // Query total incoming money grouped by category
+                var categoryIncomes = await _context.SalesDetails
+                    .Where(x => x.Sale.Date >= dtpFrom.Value.Date && x.Sale.Date <= dtpTo.Value.Date)
+                    .GroupBy(x => x.Product.Category.CategoryName)
+                    .Select(g => new
+                    {
+                        CategoryName = g.Key,
+                        TotalIncome = g.Sum(x => x.Total)
+                    })
+                    .OrderByDescending(x => x.TotalIncome)
+                    .ToListAsync();
+
+                // Create a Pie chart to visualize the category income
+                Series series = new Series("الدخل حسب الفئات", ViewType.Pie);
+
+                foreach (var cat in categoryIncomes)
+                {
+                    series.Points.Add(new SeriesPoint(cat.CategoryName, cat.TotalIncome));
+                }
+
+                // Customize appearance
+                series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
+                PieSeriesLabel label = (PieSeriesLabel)series.Label;
+
+                label.TextPattern = "{A}: {VP:p1} ({V:F2} دج)";
+                label.Position = PieSeriesLabelPosition.TwoColumns;
+
+                chartControl.Series.Add(series);
+
+                // Add title
+                chartControl.Titles.Clear();
+                chartControl.Titles.Add(new ChartTitle
+                {
+                    Text = "الدخل حسب فئات المنتجات",
+                    Font = new Font("Calibri", 16, FontStyle.Bold),
+                    Alignment = StringAlignment.Center,
+                    TextColor = Color.Black
+                });
+
+                // Configure legend
+                chartControl.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
+                chartControl.Legend.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+                chartControl9.Legend.AlignmentVertical = LegendAlignmentVertical.Bottom;
+            }
+            catch (Exception ex)
+            {
+                ToasterHelper.ShowErrorHappened($"خطأ أثناء تحميل بيانات الفئات: {ex.Message}");
+            }
         }
         private async Task PieBuysSalesAsync(List<(DateTime, decimal Total)> salesData,
                                           List<(DateTime, decimal Total)> buysData,
