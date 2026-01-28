@@ -175,7 +175,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui
 
         private async void btnSearch_Click(object sender, EventArgs e)
         {
-            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "").Trim();
 
             DgvCaisser.DataSource = await _context.Caisses.Where(x => x.Id.ToString() == txtSearch.Text ||
             x.CaisseName.Contains(txtSearch.Text)).ToListAsync();

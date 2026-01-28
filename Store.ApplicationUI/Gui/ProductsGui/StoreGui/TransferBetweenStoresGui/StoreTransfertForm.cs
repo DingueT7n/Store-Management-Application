@@ -13,7 +13,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.TransferBetweenStoresGui
         private readonly MainForm _main;
         private readonly ApplicationDbContext _context;
         private readonly IProductRepository productsRepository;
-        private Product _product;
+        private Product _product = null;
         public StoreTransfertForm(MainForm main, ApplicationDbContext context, IProductRepository productsRepository)
         {
             InitializeComponent();
@@ -110,7 +110,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.TransferBetweenStoresGui
                 SetProductsToTable();
             }
         }
-        public async void SetProductsToTable()
+        public void SetProductsToTable()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
             _product = productsRepository.GetProductBarCode(txtBareCode.Text);
@@ -130,8 +130,6 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.TransferBetweenStoresGui
         async Task<bool> SetProductQuentity(decimal quentity)
         {
             var proId = _product.Id;
-            decimal totalBuyPrice = 0;
-            int count = 0;
 
             while (quentity > 0)
             {
@@ -226,7 +224,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.TransferBetweenStoresGui
                 ToasterHelper.PlayNotificationSound();
                 if (txtQtyTransfert.Text == string.Empty || txtProductName.Text == string.Empty)
                     return;
-                if (cmbStoresFrom.SelectedValue.ToString() == cmbStoreTo.SelectedValue.ToString())
+                if (cmbStoresFrom.SelectedValue?.ToString() == cmbStoreTo.SelectedValue?.ToString())
                 { MsgHelper.ShowSameDirectionTransfert(); return; }
 
                 if (Convert.ToDecimal(txtQtyTransfert.Text) <= 0 || Convert.ToDecimal(txtQtyTransfert.Text) > Convert.ToDecimal(txtTotalQty.Text))

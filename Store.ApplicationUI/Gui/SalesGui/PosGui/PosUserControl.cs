@@ -378,8 +378,8 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
 
             if (e.KeyCode == Keys.Enter)
             {
-                txtSearchBarCode.Text = txtSearchBarCode.Text.Replace("\r\n", "");
-                string input = txtSearchBarCode.Text.Trim().Replace("\r", "").Replace("\n", "");
+                txtSearchBarCode.Text = txtSearchBarCode.Text.Replace("\r\n", "").Trim();
+                string input = txtSearchBarCode.Text.Trim().Replace("\r", "").Replace("\n", "").Trim();
 
                 if (input.Replace("\r\n", "").Length > 2)
                 {
@@ -431,7 +431,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
         public void SetProductsToTable()
         {
             //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-            _product = _salesRepository.GetProductBarCode(txtSearchBarCode.Text.Replace("\r\n", ""));
+            _product = _salesRepository.GetProductBarCode(txtSearchBarCode.Text.Replace("\r\n", "").Trim());
             if (_product is not null)
             {
 
@@ -1859,7 +1859,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.PosGui
             if (txtSearchBarCode.Text.Contains("-") || txtSearchBarCode.Text.Contains("+")
                 || txtSearchBarCode.Text.Contains("="))
             {
-                txtSearchBarCode.Text = txtSearchBarCode.Text.Replace("-", "").Replace("+", "").Replace("=", "");
+                txtSearchBarCode.Text = txtSearchBarCode.Text.Replace("-", "").Replace("+", "").Replace("=", "").Trim();
 
             }
             txtSearchBarCode.Text.Replace("-", "").Replace("+", "").Replace("/", "");

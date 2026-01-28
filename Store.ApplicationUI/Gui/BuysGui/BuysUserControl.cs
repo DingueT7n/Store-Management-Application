@@ -70,7 +70,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 dtpReminderDate.Value = DateTime.Now.AddDays(Properties.Settings.Default.DaysAddDebt);
 
                 cmbStores.SelectedValue = Properties.Settings.Default.StoreIdDefault;
-                cmbStores.Text = (await _context.Stores.FirstOrDefaultAsync(x => x.Id == Properties.Settings.Default.StoreIdDefault)).StoreName;
+                cmbStores.Text = (await _context.Stores.FirstOrDefaultAsync(x => x.Id == Properties.Settings.Default.StoreIdDefault))?.StoreName;
 
 
 
@@ -216,7 +216,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
             try
             {
                 //DgvProducts.DataSource = await Task.Run(() => productsRepository.GetAll(p => p.Category));
-                _product = _buysRepository.GetProductBarCode(txtSearchBarCode.Text);
+                _product = _buysRepository.GetProductBarCode(txtSearchBarCode.Text.Trim());
                 if (_product is not null)
                 {
                     InitializeTextBoxesAndLables(_product);
@@ -229,6 +229,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
                     if (MsgHelper.ShowEmptyResultDialog())
                     {
                         AddProductForm addProductForm = await _controlManager.GetFAsync<AddProductForm>();
+                        addProductForm.txtBarCode.Text = txtSearchBarCode.Text.Trim();
                         addProductForm.txtBarCode.Text = txtSearchBarCode.Text.Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
                         addProductForm.ShowDialog();
                     }
@@ -319,7 +320,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
 
                     for (int i = 0; i < DgvِProducts.Rows.Count; i++)
                     {
-                        if (DgvِProducts.Rows[i].Cells[8].Value.ToString() == _product.Id.ToString())
+                        if (DgvِProducts.Rows[i].Cells[8].Value?.ToString() == _product.Id.ToString())
                         {
                             MsgHelper.ShowDuplicatedItems();
                             txtSearchBarCode.Focus();
@@ -482,15 +483,15 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 {
                     lblTotalPriceinFacture.Text = "المبلغ الاجمالي في الفاتورة :" +
                                          (from DataGridViewRow row in DgvِProducts.Rows
-                                          where row.Cells[3].FormattedValue.ToString() != string.Empty
+                                          where row.Cells[3].FormattedValue?.ToString() != string.Empty
                                           select Convert.ToDecimal(row.Cells[3].FormattedValue)).Sum()
                                           .ToString("f2");
                     TotalFacture = (from DataGridViewRow row in DgvِProducts.Rows
-                                    where row.Cells[3].FormattedValue.ToString() != string.Empty
+                                    where row.Cells[3].FormattedValue?.ToString() != string.Empty
                                     select Convert.ToDecimal(row.Cells[3].FormattedValue)).Sum();
                     lblTotalQuentity.Text = "اجمالي الكميات في الجدول :" +
                               (from DataGridViewRow row in DgvِProducts.Rows
-                               where row.Cells[2].FormattedValue.ToString() != string.Empty
+                               where row.Cells[2].FormattedValue?.ToString() != string.Empty
                                select Convert.ToDecimal(row.Cells[2].FormattedValue)).Sum()
                                .ToString("f2");
                     lblTotalProductsInTable.Text = $"مجموع المنتجات في الجدول: {DgvِProducts.Rows.Count}";
@@ -654,12 +655,12 @@ namespace Store.ApplicationUI.Gui.BuysGui
                 BuyDetail buyDetail = new BuyDetail();
                 buyDetail.Order_ID = Convert.ToInt32(txtFactureNumber.Text);
                 buyDetail.Sup_ID = Convert.ToInt32(cmbSuppliers.SelectedValue);
-                buyDetail.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[8].Value.ToString());
-                buyDetail.Quentity = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
-                buyDetail.Price = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
-                buyDetail.Total = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[3].Value.ToString());
+                buyDetail.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[8].Value?.ToString());
+                buyDetail.Quentity = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value?.ToString());
+                buyDetail.Price = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value?.ToString());
+                buyDetail.Total = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[3].Value?.ToString());
                 buyDetail.TaxValue = Properties.Settings.Default.TaxValue;
-                buyDetail.PriceWithTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
+                buyDetail.PriceWithTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value?.ToString());
                 return buyDetail;
             }
             catch (Exception ex)
@@ -674,21 +675,21 @@ namespace Store.ApplicationUI.Gui.BuysGui
             {
 
                 //dgvProducts.Rows[i].Cells[0].Value.ToString()
-                var proId = DgvِProducts.Rows[i].Cells[8].Value.ToString();
-                Product product = _context.Products.Where(x => x.Id.ToString() == proId).FirstOrDefault();
+                var proId = DgvِProducts.Rows[i].Cells[8].Value?.ToString();
+                Product? product = _context.Products.Where(x => x.Id.ToString() == proId).FirstOrDefault();
                 if (product is not null)
                 {
-                    product.Quentity = product.Quentity + _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
+                    product.Quentity = product.Quentity + _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value?.ToString());
                     if (Properties.Settings.Default.ApplyWholeSale)
-                        product.WholesalePrice = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[5].Value.ToString());
+                        product.WholesalePrice = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[5].Value?.ToString());
                     if (Properties.Settings.Default.ApplySalePrice)
                     {
-                        product.SalePrice = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
-                        product.SalePriceTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
-                        product.SalePriceSeconde = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
+                        product.SalePrice = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value?.ToString());
+                        product.SalePriceTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value?.ToString());
+                        product.SalePriceSeconde = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value?.ToString());
                     }
                     if (Properties.Settings.Default.ApplyBuyPrice)
-                        product.BuyPrice = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
+                        product.BuyPrice = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value?.ToString());
 
                 }
                 return product;
@@ -700,15 +701,15 @@ namespace Store.ApplicationUI.Gui.BuysGui
             }
 
         }
-        Supplier SetSupplier()
+        Supplier? SetSupplier()
         {
             try
             {
 
 
-                //dgvProducts.Rows[i].Cells[0].Value.ToString()
+                //dgvProducts.Rows[i].Cells[0].Value?.ToString()
                 var supId = Convert.ToInt32(cmbSuppliers.SelectedValue);
-                Supplier supplier = _context.Suppliers.Where(x => x.Id == supId).FirstOrDefault();
+                Supplier? supplier = _context.Suppliers.Where(x => x.Id == supId).FirstOrDefault();
                 if (supplier is not null)
                 {
                     supplier.TotalDebts = supplier.TotalDebts + Remain;
@@ -728,15 +729,15 @@ namespace Store.ApplicationUI.Gui.BuysGui
             {
 
 
-                //dgvProducts.Rows[i].Cells[0].Value.ToString()
+                //dgvProducts.Rows[i].Cells[0].Value?.ToString()
                 ProductsQuantitie productQty = new();
 
-                productQty.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[8].Value.ToString());
+                productQty.Pro_ID = Convert.ToInt32(DgvِProducts.Rows[i].Cells[8].Value?.ToString());
                 productQty.Store_ID = Convert.ToInt32(cmbStores.SelectedValue);
                 productQty.StoreName = cmbStores.Text;
-                productQty.Qty = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value.ToString());
-                productQty.Buy_Price = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value.ToString());
-                productQty.Sale_PriceTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value.ToString());
+                productQty.Qty = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[2].Value?.ToString());
+                productQty.Buy_Price = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[1].Value?.ToString());
+                productQty.Sale_PriceTax = _main.ConvertToFloat(DgvِProducts.Rows[i].Cells[6].Value?.ToString());
                 productQty.DateExpiration = Convert.ToDateTime(DgvِProducts.Rows[i].Cells[7].Value);
                 return productQty;
             }
@@ -748,7 +749,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
         }
         Caisse SetCaisse(decimal value)
         {
-            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+            //dgvProducts.Rows[i].Cells[0].Value?.ToString()
             try
             {
 
@@ -769,7 +770,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
         }
         CaisseWithdraw SetCaisseWithdraw(decimal value)
         {
-            //dgvProducts.Rows[i].Cells[0].Value.ToString()
+            //dgvProducts.Rows[i].Cells[0].Value?.ToString()
 
 
             var caisseWithdraw = new CaisseWithdraw
@@ -926,7 +927,7 @@ namespace Store.ApplicationUI.Gui.BuysGui
                     supplierMoney.Order_ID = buy.Id;
                     await _context.AddAsync(supplierMoney);
 
-                    _context.Update(SetSupplier());
+                    _context.Update(SetSupplier()!);
                     await _context.SaveChangesAsync();
 
                 }
@@ -1276,14 +1277,14 @@ namespace Store.ApplicationUI.Gui.BuysGui
             {
                 if (!dgvHelper.IsEmpty(DgvِProducts))
                 {
-                    txtProductName.Text = this.DgvِProducts.CurrentRow.Cells[0].Value.ToString();
-                    txtBuyPrice.Text = this.DgvِProducts.CurrentRow.Cells[1].Value.ToString();
-                    txtQty.Text = this.DgvِProducts.CurrentRow.Cells[2].Value.ToString();
-                    txtTotalBuyProduct.Text = this.DgvِProducts.CurrentRow.Cells[3].Value.ToString();
-                    txtSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[4].Value.ToString();
-                    txtWholeSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[5].Value.ToString();
-                    txtPriceWithTax.Text = this.DgvِProducts.CurrentRow.Cells[6].Value.ToString();
-                    dtpDateExpiration.Value = Convert.ToDateTime(this.DgvِProducts.CurrentRow.Cells[7].Value.ToString());
+                    txtProductName.Text = this.DgvِProducts.CurrentRow.Cells[0].Value?.ToString();
+                    txtBuyPrice.Text = this.DgvِProducts.CurrentRow.Cells[1].Value?.ToString();
+                    txtQty.Text = this.DgvِProducts.CurrentRow.Cells[2].Value?.ToString();
+                    txtTotalBuyProduct.Text = this.DgvِProducts.CurrentRow.Cells[3].Value?.ToString();
+                    txtSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[4].Value?.ToString();
+                    txtWholeSalePrice.Text = this.DgvِProducts.CurrentRow.Cells[5].Value?.ToString();
+                    txtPriceWithTax.Text = this.DgvِProducts.CurrentRow.Cells[6].Value?.ToString();
+                    dtpDateExpiration.Value = Convert.ToDateTime(this.DgvِProducts.CurrentRow.Cells[7].Value?.ToString());
                     DgvِProducts.Rows.RemoveAt(DgvِProducts.CurrentRow.Index);
 
                     txtQty.Focus();

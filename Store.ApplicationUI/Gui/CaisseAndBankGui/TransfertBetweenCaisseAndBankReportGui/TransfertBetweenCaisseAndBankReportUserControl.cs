@@ -138,7 +138,7 @@ namespace Store.ApplicationUI.Gui.CaisseAndBankGui.TransfertBetweenCaisseAndBank
 
         private async void btnSearch_Click(object sender, EventArgs e)
         {
-            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "").Trim();
             await RefreshDgv();
         }
 

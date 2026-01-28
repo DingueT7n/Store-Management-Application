@@ -143,7 +143,7 @@ namespace Store.ApplicationUI.Gui.ReturnsGui.ReturnsReportsGui
         }
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "").Trim();
             int type = rbRefundBuys.Checked ? 2 : 1;
             if (rbRefundAll.Checked) type = 0;
 

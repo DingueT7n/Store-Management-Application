@@ -128,7 +128,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerReportsGui
             try
             {
 
-                txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+                txtSearch.Text = txtSearch.Text.Replace("\r\n", "").Trim();
 
                 int take = Properties.Settings.Default.NoOfDataInDgvs;
                 int selectedi = cmbpagination.SelectedIndex;

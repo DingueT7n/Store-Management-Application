@@ -340,7 +340,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.ProformaGui
         {
             if (e.KeyCode == Keys.Enter)
             {
-                string input = txtSearchBarCode.Text.Trim().Replace("\r", "").Replace("\n", "");
+                string input = txtSearchBarCode.Text.Trim().Replace("\r", "").Replace("\n", "").Trim();
 
                 if (input.Length >= 2)
                 {

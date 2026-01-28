@@ -116,6 +116,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
 
         private async void btnSearch_Click(object sender, EventArgs e)
         {
+            txtSearch.Text = txtSearch.Text.Trim();
             txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
             DgvِCustomer.DataSource = await _supplierMoneyRepository.SearchAll(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);
@@ -375,7 +376,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierAccountGui
                 ToasterHelper.PlayNotificationSound();
                 if (DgvِCustomer.SelectedRows.Count > 0)
                 {
-                    DataTable buyDetailsTable = await FactureHelper.GetBuyDetailsDataTableAsync(Convert.ToInt32(DgvِCustomer.CurrentRow.Cells[1].Value.ToString()));
+                    DataTable buyDetailsTable = await FactureHelper.GetBuyDetailsDataTableAsync(Convert.ToInt32(DgvِCustomer.CurrentRow?.Cells[1].Value?.ToString()));
                     Reports.BuysReports.buyA4 buyA4 = _controlManager.GetR<Reports.BuysReports.buyA4>();
                     buyA4.DataSource = buyDetailsTable;
 

@@ -143,7 +143,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui.SupplierReportsGui
 
         private async void btnSearch_Click(object sender, EventArgs e)
         {
-            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "").Trim();
 
             int take = Properties.Settings.Default.NoOfDataInDgvs;
             int selectedi = cmbpagination.SelectedIndex;

@@ -36,7 +36,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowMoneyReport
         }
         void RefreshDgv()
         {
-            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "").Trim();
             string t1 = string.Empty;
 
             if (rbStoresFrom.Checked) t1 = cmbEmployees.Text;
@@ -143,13 +143,13 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowMoneyReport
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "").Trim();
             RefreshDgv();
         }
 
         private void cmbEmployees_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "").Trim();
             RefreshDgv();
         }
 
@@ -157,7 +157,7 @@ namespace Store.ApplicationUI.Gui.EmployeesGui.EmployeeBorrowMoneyReport
         {
             if (e.KeyCode == Keys.Enter)
             {
-                txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+                txtSearch.Text = txtSearch.Text.Replace("\r\n", "").Trim();
                 btnSearch_Click(sender, e);
             }
         }

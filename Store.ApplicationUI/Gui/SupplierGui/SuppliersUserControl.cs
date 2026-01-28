@@ -187,7 +187,7 @@ namespace Store.ApplicationUI.Gui.SupplierGui
         private async void btnSearch_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "").Trim();
 
             DgvِSupplier.DataSource = await _suppliersRepository.SearchAll(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِSupplier);

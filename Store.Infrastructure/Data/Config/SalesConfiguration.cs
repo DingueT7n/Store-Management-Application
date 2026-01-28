@@ -11,11 +11,13 @@ namespace Store.Infrastructure.Data.Config
             builder.Property(x => x.Id).IsRequired();
             builder.HasKey(x => x.Id);
             builder.Property(x => x.User_Name).HasMaxLength(50);
-            builder.HasOne(x => x.Customer).WithMany().HasForeignKey(x => x.CustomerId);
+            builder.HasOne(x => x.Customer).WithMany().HasForeignKey(x => x.CustomerId).OnDelete(DeleteBehavior.Restrict); // keep sales history;
             builder.Property(p => p.Remain).HasColumnType("decimal(18,2)");
             builder.Property(p => p.TotalOrder).HasColumnType("decimal(18,2)");
             builder.Property(p => p.PaidUP).HasColumnType("decimal(18,2)");
 
+            builder.HasIndex(x => x.Date);
+            builder.HasIndex(x => x.CustomerId);
         }
     }
     public class SaleDetailConfiguration : IEntityTypeConfiguration<SaleDetail>
@@ -29,7 +31,8 @@ namespace Store.Infrastructure.Data.Config
                 .HasForeignKey(x => x.Cust_ID).OnDelete(DeleteBehavior.Restrict);
             builder.HasOne(x => x.Sale)
                 .WithMany()
-                .HasForeignKey(x => x.Order_ID).OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(x => x.Order_ID).OnDelete(DeleteBehavior.Cascade);
+
             builder.HasOne(x => x.Product)
                 .WithMany()
                 .HasForeignKey(x => x.Pro_ID).OnDelete(DeleteBehavior.Restrict);
@@ -52,13 +55,12 @@ namespace Store.Infrastructure.Data.Config
                 .WithOne(i => i.ProformaInvoice)
                 .HasForeignKey(i => i.ProformaId)
                 .OnDelete(DeleteBehavior.Cascade);
+
             builder.HasOne(p => p.Customer)
                     .WithMany() // or .WithMany(c => c.ProformaInvoices) if you want
-                    .HasForeignKey(p => p.CustomerId);
+                    .HasForeignKey(p => p.CustomerId).OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(x => x.Customer)
-                .WithMany()
-                .HasForeignKey(x => x.CustomerId).OnDelete(DeleteBehavior.NoAction);
+
             builder.Property(p => p.TotalFaacture).HasColumnType("decimal(18,2)");
 
         }
@@ -72,11 +74,9 @@ namespace Store.Infrastructure.Data.Config
 
             builder.HasOne(p => p.Product)
                     .WithMany() // or .WithMany(c => c.ProformaInvoices) if you want
-                    .HasForeignKey(p => p.ProductId);
+                    .HasForeignKey(p => p.ProductId).OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(x => x.ProformaInvoice)
-                .WithMany()
-                .HasForeignKey(x => x.ProformaId).OnDelete(DeleteBehavior.Restrict);
+
 
             builder.Property(p => p.Quentity).HasColumnType("decimal(18,2)");
             builder.Property(p => p.Total).HasColumnType("decimal(18,2)");
@@ -90,7 +90,7 @@ namespace Store.Infrastructure.Data.Config
         public void Configure(EntityTypeBuilder<SaleProfit> builder)
         {
             builder.HasKey(bd => bd.Id);
-            builder.HasOne(x => x.Sale).WithMany().HasForeignKey(x => x.Order_ID);
+            builder.HasOne(x => x.Sale).WithMany().HasForeignKey(x => x.Order_ID).OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(x => x.Product).WithMany().HasForeignKey(x => x.Pro_ID);
             builder.Property(p => p.Total).HasColumnType("decimal(18,2)");
             builder.Property(p => p.Quentity).HasColumnType("decimal(18,2)");

@@ -195,7 +195,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 var idsToDelete = DgvProducts.Rows
                     .Cast<DataGridViewRow>()
                     .Where(r => r.Cells[9].Value != null) // Column 9 = Product Id (you hid it in SetColumns)
-                    .Select(r => r.Cells[9].Value.ToString())
+                    .Select(r => r.Cells[9].Value?.ToString())
                     .ToList();
 
                 foreach (var id in idsToDelete)
@@ -291,7 +291,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                 //          , DgvProducts.CurrentRow.Cells[14].Value.ToString()
                 //          , DgvProducts.CurrentRow.Cells[19].Value.ToString()
                 //        );
-                await form.SetDataToEditFromId(Convert.ToInt32(DgvProducts.CurrentRow.Cells[9].Value.ToString()));
+                await form.SetDataToEditFromId(Convert.ToInt32(DgvProducts.CurrentRow?.Cells[9].Value?.ToString()));
                 form.ShowDialog();
 
             }
@@ -302,7 +302,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
-                await _productsRepository.DeleteAsync(DgvProducts.CurrentRow.Cells[9].Value.ToString());
+                await _productsRepository.DeleteAsync(DgvProducts.CurrentRow?.Cells[9].Value?.ToString());
                 Code.Helper.ToasterHelper.ShowDeletedToast();
 
             }
@@ -315,7 +315,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             {
 
 
-                txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+                txtSearch.Text = txtSearch.Text.Replace("\r\n", "").Trim();
 
 
                 DgvProducts.DataSource = await _productsRepository.SearchAll(txtSearch.Text, Properties.Settings.Default.NoOfDataInDgvs,
@@ -395,7 +395,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                     //     , DgvProducts.CurrentRow.Cells[14].Value.ToString()
                     //     , DgvProducts.CurrentRow.Cells[19].Value.ToString()
                     //   );
-                    await form.SetSimilaireDataToAddFromId(Convert.ToInt32(DgvProducts.CurrentRow.Cells[9].Value.ToString()));
+                    await form.SetSimilaireDataToAddFromId(Convert.ToInt32(DgvProducts.CurrentRow?.Cells[9].Value?.ToString()));
 
                     form.ShowDialog();
                 }
@@ -481,49 +481,49 @@ namespace Store.ApplicationUI.Gui.ProductsGui
         }
         private DataTable arrangedDataTable(DataTable dataTable)
         {
-            dataTable.Columns["Id"].SetOrdinal(0);
+            dataTable.Columns["Id"]?.SetOrdinal(0);
             dataTable.Columns["Id"].ColumnName = "معرف";
 
-            dataTable.Columns["CodeBar"].SetOrdinal(1);
+            dataTable.Columns["CodeBar"]?.SetOrdinal(1);
             dataTable.Columns["CodeBar"].ColumnName = "الباركود";
 
 
-            dataTable.Columns["ProductName"].SetOrdinal(2);
+            dataTable.Columns["ProductName"]?.SetOrdinal(2);
             dataTable.Columns["ProductName"].ColumnName = "اسم المستخدم";
 
 
-            dataTable.Columns["Quentity"].SetOrdinal(3);
+            dataTable.Columns["Quentity"]?.SetOrdinal(3);
             dataTable.Columns["Quentity"].ColumnName = "الكمية";
 
-            dataTable.Columns["BuyPrice"].SetOrdinal(4);
+            dataTable.Columns["BuyPrice"]?.SetOrdinal(4);
             dataTable.Columns["BuyPrice"].ColumnName = "سعر الشراء";
 
-            dataTable.Columns["SalePrice"].SetOrdinal(5);
+            dataTable.Columns["SalePrice"]?.SetOrdinal(5);
             dataTable.Columns["SalePrice"].ColumnName = "سعر البيع";
 
-            dataTable.Columns["WholesalePrice"].SetOrdinal(6);
+            dataTable.Columns["WholesalePrice"]?.SetOrdinal(6);
             dataTable.Columns["WholesalePrice"].ColumnName = "سعر الجملة";
 
-            dataTable.Columns["DateExperation"].SetOrdinal(7);
+            dataTable.Columns["DateExperation"]?.SetOrdinal(7);
             dataTable.Columns["DateExperation"].ColumnName = "تاريخ انتهاء الصلاحية";
 
 
-            dataTable.Columns["MinQty"].SetOrdinal(8);
+            dataTable.Columns["MinQty"]?.SetOrdinal(8);
             dataTable.Columns["MinQty"].ColumnName = "كمية التنبيه";
 
 
-            dataTable.Columns["Category"].SetOrdinal(9);
+            dataTable.Columns["Category"]?.SetOrdinal(9);
             dataTable.Columns["Category"].ColumnName = "الصنف";
 
 
-            dataTable.Columns["IsTaxed"].SetOrdinal(10);
+            dataTable.Columns["IsTaxed"]?.SetOrdinal(10);
             dataTable.Columns["IsTaxed"].ColumnName = "عليه ضريبة";
 
 
-            dataTable.Columns["NbrProductInColis"].SetOrdinal(11);
+            dataTable.Columns["NbrProductInColis"]?.SetOrdinal(11);
             dataTable.Columns["NbrProductInColis"].ColumnName = "عدد المنتجات في الكرتونة";
 
-            dataTable.Columns["ColisageBareCode"].SetOrdinal(12);
+            dataTable.Columns["ColisageBareCode"]?.SetOrdinal(12);
             dataTable.Columns["ColisageBareCode"].ColumnName = "باركود الكرتونة";
 
 

@@ -131,7 +131,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
         private async void btnSearch_Click(object sender, EventArgs e)
         {
-            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "").Trim();
             List<Deserved> a = new();
             DgvProducts.DataSource = new List<Deserved>();
             if (rbBoth.Checked)

@@ -230,7 +230,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.Category
 
         private async void btnSearch_Click(object sender, EventArgs e)
         {
-            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "").Trim();
 
             DgvCategory.DataSource = await _context.Categories.Where(x => x.Id.ToString() == txtSearch.Text ||
             x.CategoryName.Contains(txtSearch.Text)).ToListAsync();

@@ -122,8 +122,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
             ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowEditDialog())
             {
-                int? id = Convert.ToInt32(DgvStore.CurrentRow.Cells[0].Value.ToString());
-                Store.Core.Entities.Stores.InventorySession obj = await _context.InventorySessions.FirstOrDefaultAsync(x => x.Id == id);
+                int? id = Convert.ToInt32(DgvStore.CurrentRow?.Cells[0].Value?.ToString());
+                Store.Core.Entities.Stores.InventorySession? obj = await _context.InventorySessions.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (obj != null)
                 {
@@ -150,7 +150,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
             ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowDeleteDialog())
             {
-                int? id = Convert.ToInt32(DgvStore.CurrentRow.Cells[0].Value.ToString());
+                int? id = Convert.ToInt32(DgvStore.CurrentRow?.Cells[0].Value?.ToString());
 
                 var obj = await _context.InventorySessions.FirstOrDefaultAsync(x => x.Id == id);
                 if (obj != null)
@@ -208,20 +208,20 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
             if (DgvStore.SelectedRows.Count > 0)
                 try
                 {
-                    txtPerformedBy.Text = DgvStore.CurrentRow.Cells[2].Value.ToString();
-                    lblCategoryId.Text = DgvStore.CurrentRow.Cells[0].Value.ToString();
-                    dtpFrom.Value = Convert.ToDateTime(DgvStore.CurrentRow.Cells[3].Value.ToString());
+                    txtPerformedBy.Text = DgvStore.CurrentRow?.Cells[2].Value?.ToString();
+                    lblCategoryId.Text = DgvStore.CurrentRow?.Cells[0].Value?.ToString();
+                    dtpFrom.Value = Convert.ToDateTime(DgvStore.CurrentRow?.Cells[3].Value?.ToString());
 
-                    lblCategoryId.Text = DgvStore.CurrentRow.Cells[0].Value.ToString();
-                    txtNotes.Text = DgvStore.CurrentRow.Cells[7].Value.ToString();
+                    lblCategoryId.Text = DgvStore.CurrentRow?.Cells[0].Value?.ToString();
+                    txtNotes.Text = DgvStore.CurrentRow?.Cells[7].Value?.ToString();
 
-                    bool isAllStores = !Convert.ToBoolean(DgvStore.CurrentRow.Cells[5].Value);
+                    bool isAllStores = !Convert.ToBoolean(DgvStore.CurrentRow?.Cells[5].Value);
                     rbStoresFromAll.Checked = isAllStores;
                     rbStoresFrom.Checked = !isAllStores;
                     cmbStoresFrom.Enabled = !isAllStores;
-                    if (!isAllStores && DgvStore.CurrentRow.Cells[1].Value != DBNull.Value)
+                    if (!isAllStores && DgvStore.CurrentRow?.Cells[1].Value != DBNull.Value)
                     {
-                        cmbStoresFrom.SelectedValue = Convert.ToInt32(DgvStore.CurrentRow.Cells[1].Value);
+                        cmbStoresFrom.SelectedValue = Convert.ToInt32(DgvStore.CurrentRow?.Cells[1].Value);
                     }
 
                     btnAddStore.Enabled = false;

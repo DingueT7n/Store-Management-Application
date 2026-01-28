@@ -38,12 +38,12 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
                     // Calculate total buys
                     var totalBuy = DgvSales.Rows
                         .Cast<DataGridViewRow>()
-                        .Where(row => !string.IsNullOrEmpty(row.Cells[4].FormattedValue.ToString()) &&
-                                      !string.IsNullOrEmpty(row.Cells[3].FormattedValue.ToString()))
+                        .Where(row => !string.IsNullOrEmpty(row.Cells[4].FormattedValue?.ToString()) &&
+                                      !string.IsNullOrEmpty(row.Cells[3].FormattedValue?.ToString()))
                         .Sum(row =>
                         {
-                            decimal.TryParse(row.Cells[4].FormattedValue.ToString(), out decimal cell4);
-                            decimal.TryParse(row.Cells[3].FormattedValue.ToString(), out decimal cell3);
+                            decimal.TryParse(row.Cells[4].FormattedValue?.ToString(), out decimal cell4);
+                            decimal.TryParse(row.Cells[3].FormattedValue?.ToString(), out decimal cell3);
                             return cell4 * cell3;
                         })
                         .ToString("f2");
@@ -51,29 +51,29 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
                     // Calculate total income
                     var totalSales = DgvSales.Rows
                         .Cast<DataGridViewRow>()
-                        .Where(row => !string.IsNullOrEmpty(row.Cells[5].FormattedValue.ToString()) &&
-                      !string.IsNullOrEmpty(row.Cells[3].FormattedValue.ToString())
+                        .Where(row => !string.IsNullOrEmpty(row.Cells[5].FormattedValue?.ToString()) &&
+                      !string.IsNullOrEmpty(row.Cells[3].FormattedValue?.ToString())
                         )
 
                         .Sum(row =>
                         {
-                            decimal.TryParse(row.Cells[5].FormattedValue.ToString(), out decimal cell5);
-                            decimal.TryParse(row.Cells[3].FormattedValue.ToString(), out decimal cell3);
+                            decimal.TryParse(row.Cells[5].FormattedValue?.ToString(), out decimal cell5);
+                            decimal.TryParse(row.Cells[3].FormattedValue?.ToString(), out decimal cell3);
                             return cell5 * cell3;
                         })
                         .ToString("f2");
                     var expectedSales = DgvSales.Rows
                        .Cast<DataGridViewRow>()
-                       .Where(row => !string.IsNullOrEmpty(row.Cells[5].FormattedValue.ToString()) &&
-                       !string.IsNullOrEmpty(row.Cells[4].FormattedValue.ToString()) &&
-                     !string.IsNullOrEmpty(row.Cells[3].FormattedValue.ToString())
+                       .Where(row => !string.IsNullOrEmpty(row.Cells[5].FormattedValue?.ToString()) &&
+                       !string.IsNullOrEmpty(row.Cells[4].FormattedValue?.ToString()) &&
+                     !string.IsNullOrEmpty(row.Cells[3].FormattedValue?.ToString())
                        )
 
                        .Sum(row =>
                        {
-                           decimal.TryParse(row.Cells[5].FormattedValue.ToString(), out decimal cell5);
-                           decimal.TryParse(row.Cells[4].FormattedValue.ToString(), out decimal cell4);
-                           decimal.TryParse(row.Cells[3].FormattedValue.ToString(), out decimal cell3);
+                           decimal.TryParse(row.Cells[5].FormattedValue?.ToString(), out decimal cell5);
+                           decimal.TryParse(row.Cells[4].FormattedValue?.ToString(), out decimal cell4);
+                           decimal.TryParse(row.Cells[3].FormattedValue?.ToString(), out decimal cell3);
                            return (cell5 - cell4) * cell3;
                        })
                        .ToString("f2");
@@ -81,10 +81,10 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
                     // Calculate total profit
                     var totalQty = DgvSales.Rows
                         .Cast<DataGridViewRow>()
-                        .Where(row => !string.IsNullOrEmpty(row.Cells[3].FormattedValue.ToString()))
+                        .Where(row => !string.IsNullOrEmpty(row.Cells[3].FormattedValue?.ToString()))
                         .Sum(row =>
                         {
-                            decimal.TryParse(row.Cells[3].FormattedValue.ToString(), out decimal cell3);
+                            decimal.TryParse(row.Cells[3].FormattedValue?.ToString(), out decimal cell3);
                             return cell3;
                         })
                         .ToString("f2");
@@ -92,10 +92,10 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
                     // Calculate total profit
                     var totalProduct = DgvSales.Rows
                         .Cast<DataGridViewRow>()
-                        .Where(row => !string.IsNullOrEmpty(row.Cells[0].FormattedValue.ToString()))
+                        .Where(row => !string.IsNullOrEmpty(row.Cells[0].FormattedValue?.ToString()))
                         .Select(row =>
                         {
-                            decimal.TryParse(row.Cells[0].FormattedValue.ToString(), out decimal cell0);
+                            decimal.TryParse(row.Cells[0].FormattedValue?.ToString(), out decimal cell0);
                             return cell0;
                         })
                         .Distinct()
@@ -281,7 +281,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreInventoryGui
 
         private async void btnSearch_Click(object sender, EventArgs e)
         {
-            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "").Trim();
             await RefreshDgv();
         }
 

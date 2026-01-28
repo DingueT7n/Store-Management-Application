@@ -146,7 +146,7 @@ namespace Store.ApplicationUI.Gui.CustomersGui.CustomerAccountGui
 
         private async void btnSearch_Click(object sender, EventArgs e)
         {
-            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "").Trim();
 
             DgvِCustomer.DataSource = await _customerMoneyRepository.SearchAll(txtSearch.Text);
             lblEmptyData.Visible = dgvHelper.IsEmpty(DgvِCustomer);

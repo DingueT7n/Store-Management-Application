@@ -145,7 +145,7 @@ namespace Store.ApplicationUI.Gui.DeservedGui
 
         private async void btnSearch_Click(object sender, EventArgs e)
         {
-            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "").Trim();
 
             DgvTypes.DataSource = await _context.DeservedsTypes.Where(x => x.Id.ToString() == txtSearch.Text ||
            x.Description.Contains(txtSearch.Text)).ToListAsync();

@@ -150,7 +150,7 @@ namespace Store.ApplicationUI.Gui.SalesGui.SaleProfitGui
         {
             try
             {
-                txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+                txtSearch.Text = txtSearch.Text.Replace("\r\n", "").Trim();
 
 
                 int take = Properties.Settings.Default.NoOfDataInDgvs;

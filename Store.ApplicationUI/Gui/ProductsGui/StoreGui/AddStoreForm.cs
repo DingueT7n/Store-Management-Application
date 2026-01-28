@@ -94,7 +94,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
             ToasterHelper.PlayNotificationSound();
             if (MsgHelper.ShowEditDialog())
             {
-                Store.Core.Entities.Stores.Store store = await _context.Stores.FirstOrDefaultAsync(x => x.Id ==
+                Store.Core.Entities.Stores.Store? store = await _context.Stores.FirstOrDefaultAsync(x => x.Id ==
                 Convert.ToInt32(DgvStore.CurrentRow.Cells[1].Value.ToString())
                 );
                 if (store != null)
@@ -146,7 +146,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
         private async void btnSearch_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "").Trim();
 
             DgvStore.DataSource = await _context.Stores.Where(x => x.Id.ToString() == txtSearch.Text ||
             x.StoreName.Contains(txtSearch.Text)).ToListAsync();
@@ -173,8 +173,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui
                 try
                 {
                     btnAddStore.Enabled = false;
-                    txtNameِCategory.Text = DgvStore.CurrentRow.Cells[0].Value.ToString();
-                    lblCategoryId.Text = DgvStore.CurrentRow.Cells[1].Value.ToString();
+                    txtNameِCategory.Text = DgvStore.CurrentRow?.Cells[0].Value?.ToString();
+                    lblCategoryId.Text = DgvStore.CurrentRow?.Cells[1].Value?.ToString();
                     btnEditStore.Enabled = true;
                     //btnRefresh.Enabled = true;
                 }

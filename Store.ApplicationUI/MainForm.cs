@@ -484,7 +484,7 @@ namespace Store.ApplicationUI
 
 
         }
-        public decimal ConvertToFloat(string value)
+        public decimal ConvertToFloat(string? value)
         {
             //decimal quantity;
             //if (float.TryParse(value, out quantity))

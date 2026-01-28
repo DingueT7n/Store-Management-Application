@@ -141,7 +141,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreTrensfertReportGui
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "").Trim();
             RefreshDgv();
         }
 

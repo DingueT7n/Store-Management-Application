@@ -307,7 +307,7 @@ namespace Store.ApplicationUI.Gui.GeneralSettingsGui.UserRolesGui
 
         private async void btnSearch_Click(object sender, EventArgs e)
         {
-            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "").Trim();
             ToasterHelper.PlayNotificationSound();
             Dgv.DataSource = await _context.Users.Where(x => x.Id.ToString() == txtSearch.Text ||
            x.UserName == (txtSearch.Text)).ToListAsync();

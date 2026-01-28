@@ -2,6 +2,6 @@
 {
     public static class AppContainer
     {
-        public static IServiceProvider Services { get; set; }
+        public static IServiceProvider? Services { get; set; }
     }
 }

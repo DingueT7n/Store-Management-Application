@@ -12,7 +12,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDeleteDamagedProduct
         private readonly MainForm _main;
         private readonly ApplicationDbContext _context;
         private readonly IProductRepository productsRepository;
-        private Product _product;
+        private Product _product = null;
         public StoreDamagedProductForm(MainForm main, IProductRepository productsRepository, ApplicationDbContext applicationDbContext)
         {
             InitializeComponent();
@@ -214,7 +214,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui.StoreGui.StoreDeleteDamagedProduct
         {
             if (_product is not null)
             {
-                string selectedStoreName = cmbStoresFrom.SelectedValue?.ToString(); // safer
+                string? selectedStoreName = cmbStoresFrom.SelectedValue?.ToString(); // safer
                 if (!string.IsNullOrWhiteSpace(selectedStoreName))
                 {
                     var productQty = _context.ProductsQuantities

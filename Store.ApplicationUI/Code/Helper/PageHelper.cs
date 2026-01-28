@@ -85,7 +85,7 @@ namespace Store.ApplicationUI.Code.Helper
             //loadDataMethod?.Invoke(pageUserControl, null);
         }
 
-        public UserControl CurrentUserControl()
+        public UserControl? CurrentUserControl()
         {
             return _main.ContainerPanel.Controls.OfType<UserControl>().FirstOrDefault();
         }

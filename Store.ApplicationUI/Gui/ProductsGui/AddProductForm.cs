@@ -515,7 +515,8 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
                         if (_controlManager.TryGet<ProductsUserControl>(out var productsUC))
                         {
-                            await productsUC.LoadData();
+                            if (productsUC is not null)
+                                await productsUC.LoadData();
                         }
 
                         if (cbFavorite.Checked)
@@ -592,7 +593,9 @@ namespace Store.ApplicationUI.Gui.ProductsGui
 
                             if (_controlManager.TryGet<ProductsUserControl>(out var productsUC))
                             {
-                                await productsUC.LoadData();
+                                if (productsUC is not null)
+
+                                    await productsUC.LoadData();
                             }
 
                             if (cbFavorite.Checked)
@@ -701,7 +704,9 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                         }
                         if (_controlManager.TryGet<ProductsUserControl>(out var productsUC))
                         {
-                            await productsUC.LoadData();
+                            if (productsUC is not null)
+
+                                await productsUC.LoadData();
                         }
                         if (cbFavorite.Checked)
                         {
@@ -788,7 +793,10 @@ namespace Store.ApplicationUI.Gui.ProductsGui
                         }
                         if (_controlManager.TryGet<ProductsUserControl>(out var productsUC))
                         {
-                            await productsUC.LoadData();
+                            if (productsUC is not null)
+
+                                await productsUC.LoadData();
+
                         }
 
                         if (cbFavorite.Checked)
@@ -850,7 +858,7 @@ namespace Store.ApplicationUI.Gui.ProductsGui
             try
             {
                 MemoryStream ms = new MemoryStream();
-                PbImageProduct.Image.Save(ms, PbImageProduct.Image.RawFormat);
+                PbImageProduct.Image?.Save(ms, PbImageProduct.Image.RawFormat);
                 byte[] byteImage = ms.ToArray();
                 return byteImage;
             }

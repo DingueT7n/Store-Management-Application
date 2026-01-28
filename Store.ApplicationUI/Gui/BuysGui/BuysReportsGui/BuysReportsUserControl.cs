@@ -123,7 +123,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
         private async void btnSearch_Click(object sender, EventArgs e)
         {
             ToasterHelper.PlayNotificationSound();
-            txtSearch.Text = txtSearch.Text.Replace("\r\n", "");
+            txtSearch.Text = txtSearch.Text.Replace("\r\n", "").Trim();
 
             int take = Properties.Settings.Default.NoOfDataInDgvs;
             int selectedi = cmbpagination.SelectedIndex;
@@ -229,7 +229,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
                 ToasterHelper.PlayNotificationSound();
                 if (DgvBuys.SelectedRows.Count > 0)
                 {
-                    DataTable buyDetailsTable = await FactureHelper.GetBuyDetailsDataTableAsync(Convert.ToInt32(DgvBuys.CurrentRow.Cells[0].Value.ToString()));
+                    DataTable buyDetailsTable = await FactureHelper.GetBuyDetailsDataTableAsync(Convert.ToInt32(DgvBuys.CurrentRow?.Cells[0].Value?.ToString()));
                     Reports.BuysReports.buy8cm buy8cm = _controlManager.GetR<Reports.BuysReports.buy8cm>();
                     buy8cm.DataSource = buyDetailsTable;
                     Reports.ReportPerviwGui.PerviweForm perv = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
@@ -275,7 +275,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
                 ToasterHelper.PlayNotificationSound();
                 if (DgvBuys.SelectedRows.Count > 0)
                 {
-                    DataTable buyDetailsTable = await FactureHelper.GetBuyDetailsDataTableAsync(Convert.ToInt32(DgvBuys.CurrentRow.Cells[0].Value.ToString()));
+                    DataTable buyDetailsTable = await FactureHelper.GetBuyDetailsDataTableAsync(Convert.ToInt32(DgvBuys.CurrentRow?.Cells[0].Value?.ToString()));
                     Reports.BuysReports.buyA4 buyA4 = _controlManager.GetR<Reports.BuysReports.buyA4>();
                     buyA4.DataSource = buyDetailsTable;
                     Reports.ReportPerviwGui.PerviweForm perv = _controlManager.GetF<Reports.ReportPerviwGui.PerviweForm>();
@@ -303,7 +303,7 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
             {
                 for (int i = 0; i < DgvBuys.Rows.Count; i++)
                 {
-                    await buysRepository.DeleteAsync(DgvBuys.Rows[i].Cells[0].Value.ToString());
+                    await buysRepository.DeleteAsync(DgvBuys.Rows[i].Cells[0].Value?.ToString());
                 }
             }
             Code.Helper.ToasterHelper.ShowDeletedToast();
@@ -434,49 +434,49 @@ namespace Store.ApplicationUI.Gui.BuysGui.BuysReportsGui
         private DataTable arrangedDataTable(DataTable dataTable)
         {
 
-            dataTable.Columns["Order_ID"].SetOrdinal(0);
+            dataTable.Columns["Order_ID"]?.SetOrdinal(0);
             dataTable.Columns["Order_ID"].ColumnName = "معرف الفاتورة";
 
-            dataTable.Columns["SupplierName"].SetOrdinal(1);
+            dataTable.Columns["SupplierName"]?.SetOrdinal(1);
             dataTable.Columns["SupplierName"].ColumnName = "اسم المورد";
 
 
-            dataTable.Columns["Date"].SetOrdinal(2);
+            dataTable.Columns["Date"]?.SetOrdinal(2);
             dataTable.Columns["Date"].ColumnName = "تاريخ الفاتورة";
 
 
-            dataTable.Columns["Time"].SetOrdinal(3);
+            dataTable.Columns["Time"]?.SetOrdinal(3);
             dataTable.Columns["Time"].ColumnName = "وقت الفاتورة";
 
-            dataTable.Columns["ProductName"].SetOrdinal(4);
+            dataTable.Columns["ProductName"]?.SetOrdinal(4);
             dataTable.Columns["ProductName"].ColumnName = "اسم المنتج";
 
-            dataTable.Columns["Quantity"].SetOrdinal(5);
+            dataTable.Columns["Quantity"]?.SetOrdinal(5);
             dataTable.Columns["Quantity"].ColumnName = "الكمية";
 
-            dataTable.Columns["PriceWithTax"].SetOrdinal(6);
+            dataTable.Columns["PriceWithTax"]?.SetOrdinal(6);
             dataTable.Columns["PriceWithTax"].ColumnName = "سعر المنتج";
 
-            dataTable.Columns["Discount"].SetOrdinal(7);
+            dataTable.Columns["Discount"]?.SetOrdinal(7);
             dataTable.Columns["Discount"].ColumnName = "التخفيض";
 
 
-            dataTable.Columns["TotalPrice"].SetOrdinal(8);
+            dataTable.Columns["TotalPrice"]?.SetOrdinal(8);
             dataTable.Columns["TotalPrice"].ColumnName = "السعر الاجمالي";
 
 
-            dataTable.Columns["User_Name"].SetOrdinal(9);
+            dataTable.Columns["User_Name"]?.SetOrdinal(9);
             dataTable.Columns["User_Name"].ColumnName = "المشتري";
 
 
-            dataTable.Columns["TotalFacture"].SetOrdinal(10);
+            dataTable.Columns["TotalFacture"]?.SetOrdinal(10);
             dataTable.Columns["TotalFacture"].ColumnName = "حسبة الفاتورة";
 
 
-            dataTable.Columns["PaidUp"].SetOrdinal(11);
+            dataTable.Columns["PaidUp"]?.SetOrdinal(11);
             dataTable.Columns["PaidUp"].ColumnName = "المدفوع";
 
-            dataTable.Columns["Remain"].SetOrdinal(12);
+            dataTable.Columns["Remain"]?.SetOrdinal(12);
             dataTable.Columns["Remain"].ColumnName = "الباقي";
             return dataTable;
         }

@@ -83,9 +83,8 @@ namespace Store.Infrastructure.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string conString = ConString.ConStringValue;
-            //string conString = @"Server=.\SQLEXPRESS; Database=StoreDbEFCore;Encrypt=false; Integrated Security = true;";
-            optionsBuilder.UseSqlServer(conString).EnableSensitiveDataLogging() // Enables detailed logging
-                  .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information); ;
+            conString = @"Server=.\SQLEXPRESS; Database=StoreDbEFCoreTEST1;Encrypt=false; Integrated Security = true;";
+            optionsBuilder.UseSqlServer(conString);
             base.OnConfiguring(optionsBuilder);
             //     string conString = "Server=localhost;Database=StoreDbEFCore;User=root;Password=admin;";
             //optionsBuilder.UseMySql(conString, new MySqlServerVersion(new Version(8, 0, 21))) // Replace with your MySQL version
