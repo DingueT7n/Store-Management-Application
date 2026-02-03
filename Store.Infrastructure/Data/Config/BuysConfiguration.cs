@@ -12,7 +12,7 @@ namespace Store.Infrastructure.Data.Config
             builder.Property(x => x.Id).IsRequired();
             builder.HasKey(x => x.Id);
             builder.Property(x => x.User_Name).HasMaxLength(50);
-            builder.HasOne(x => x.Supplier).WithMany().HasForeignKey(x => x.SupplierId);
+            builder.HasOne(x => x.Supplier).WithMany().HasForeignKey(x => x.SupplierId).OnDelete(DeleteBehavior.Restrict);
             builder.Property(p => p.Total).HasColumnType("decimal(18,2)");
             builder.Property(p => p.PaidUP).HasColumnType("decimal(18,2)");
             builder.Property(p => p.Remain).HasColumnType("decimal(18,2)");
@@ -26,9 +26,9 @@ namespace Store.Infrastructure.Data.Config
         {
             builder.HasKey(x => x.Id);
 
-            builder.HasOne(x => x.Supplier).WithMany().HasForeignKey(x => x.Sup_ID);
-            builder.HasOne(x => x.Buy).WithMany().HasForeignKey(x => x.Order_ID);
-            builder.HasOne(x => x.Product).WithMany().HasForeignKey(x => x.Pro_ID);
+            builder.HasOne(x => x.Supplier).WithMany().HasForeignKey(x => x.Sup_ID).OnDelete(DeleteBehavior.Restrict); ;
+            builder.HasOne(x => x.Buy).WithMany().HasForeignKey(x => x.Order_ID).OnDelete(DeleteBehavior.Cascade); ;
+            builder.HasOne(x => x.Product).WithMany().HasForeignKey(x => x.Pro_ID).OnDelete(DeleteBehavior.Restrict); ;
             builder.Property(p => p.Total).HasColumnType("decimal(18,2)");
             builder.Property(p => p.Quentity).HasColumnType("decimal(18,2)");
             builder.Property(p => p.Price).HasColumnType("decimal(18,2)");

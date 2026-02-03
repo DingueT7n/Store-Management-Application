@@ -72,6 +72,9 @@ namespace Store.Infrastructure.Data
               .WithMany()
               .HasForeignKey(ub => ub.User_Id);
 
+            //CategorySeed.Seed(modelBuilder);
+            //CaisseSeed.Seed(modelBuilder);
+            //  ProductSeed.Seed(modelBuilder);
 
         }
         protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
